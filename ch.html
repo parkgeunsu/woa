@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="en">
+	<head>
+	<meta charset="UTF-8">
+	<meta name="Generator" content="EditPlus®">
+	<meta name="Author" content="">
+	<meta name="Keywords" content="">
+	<meta name="Description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>webview</title>
+	<link rel="stylesheet" type="text/css" href="./css/root.css"/>
+	<link rel="stylesheet" type="text/css" href="./css/css.css"/>
+	<link rel="stylesheet" type="text/css" href="./css/ch.css"/>
+	<script src="./js/hammer.min.js"></script>
+	<script src="./js/heros.js"></script>
+	<script src="./js/animals.js"></script>
+	<script src="./js/exp.js"></script>
+	<script src="./js/items.js"></script>
+	<script src="./js/skill.js"></script>
+	<script src="./js/relation.js"></script>
+	<script src="./js/lineup.js"></script>
+	<script src="./js/common.js"></script>
+</head>
+<body>
+	<div class="root"><!--main,ch,battle-->
+		<div class="header">
+			<ul class="default">
+				<li class="back"><span class="ico"></span></li>
+				<li class="lv"><span class="ico"><span class="txt number">11</span></span><span class="txt">ID</span></li>
+				<li class="diamond"><span class="ico"></span><span class="txt won number_w">91991</span></li>
+				<li class="money"><span class="ico"></span><span class="txt won number_w">987</span></li>
+				<li class="setup"><span class="ico"></span></li>
+				<li class="chat"><span class="ico"></span></li>
+				<!-- <span class="frame_bar"><span class="bar"></span><span class="txt number_w">80</span></span> -->
+			</ul>
+		</div>
+		<div class="content">
+			<div class="main_wrap">
+				<div class="main_menu transition">
+					<ul class="menu">
+						<li><button>Character</button></li>
+						<li><button>Gacha</button></li>
+						<li><button>Lineup</button></li>
+						<li><button>Battle</button></li>
+					</ul>
+				</div>
+			</div>
+			<div class="ch_wrap page0"><!--page0(카드디자인),page1(능력치),page2(스킬),page3(인연),page4(장비),page5(적용치)-->
+				<div class="ch_card transition">
+					<img src="./images/ring/ring_.png"/>
+					<ul class="ch_detail transition">
+						<li class="name_lv">
+							<img class="img" src="./images/card/card_name.png"/>
+							<span class="lv">99</span>
+							<span class="name_"></span>
+							<span class="name"></span>
+						</li>
+						<li class="ch transition"></li>
+						<li class="ch_style transition"></li>
+						<li class="ring"></li>
+						<li class="element"></li>
+						<li class="element_1"></li>
+						<li class="element_2"></li>
+						<li class="star"></li>
+						<li class="frame"></li>
+					</ul>
+					<div class="ch_back transition"></div>
+				</div>
+				<div class="ch_list scroll-x"></div>
+				<div class="ch_header transition">
+					<ul>
+						<li class="stateType_actionPoint" flex>
+							<span class="state_type"></span>
+							<span class="action_point">
+								<span class="current"></span><span class="bar">/</span><span class="max"></span>
+							</span>
+						</li>
+						<li class="exp" flex-h>
+							<div class="gauge" flex-center>
+								<span class="na">경험치</span>
+								<span class="exp_bar">
+									<span class="gradient_dark transition"></span>
+								</span>
+							</div>
+							<div class="txt">
+								<span class="current"></span><span class="bar">/</span><span class="max"></span>
+							</div>
+						</li>
+						<li class="has_exp" flex-h>
+							<div class="gauge" flex-center>
+								<span class="na">누적경험치</span>
+								<span class="exp_bar">
+									<span class="gradient_dark transition"></span>
+								</span>
+							</div>
+							<div class="txt">
+								<span class="current"></span><span class="bar">/</span><span class="max"></span>
+							</div>
+						</li>
+					</ul>
+					<div class="ch_menu transition">
+						<button title="카드기본">0</button>
+						<button title="능력치">1</button>
+						<button title="스킬">2</button>
+						<button title="인연">3</button>
+						<button title="장비">4</button>
+						<button title="적용치">5</button>
+					</div>
+				</div>
+				<div class="ch_info transition">
+					<div class="state">
+						<dl class="info_group ch_group">
+							<dt>STATE<span>(스탯)</span></dt>
+							<dd class="scroll-y">
+								<div class="st st0" flex>
+									<span class="name">통솔</span>
+									<span class="total_bar">
+										<span class="frame_bar transition gradient_light">
+											<span class="bar transition gradient_dark_y">
+												<span class="ico"></span>
+												<!-- <span class="txt_current">0</span> -->
+											</span>
+										</span>
+										<span class="back_bar transition"></span>
+									</span>
+									<span class="txt_total" title="통솔">0</span>
+								</div>
+								<div class="st st1" flex>
+									<span class="name">체력</span>
+									<span class="total_bar">
+										<span class="frame_bar transition gradient_light">
+											<span class="bar transition gradient_dark_y">
+												<span class="ico"></span>
+												<!-- <span class="txt_current">0</span> -->
+											</span>
+										</span>
+										<span class="back_bar transition"></span>
+									</span>
+									<span class="txt_total" title="체력">0</span>
+								</div>
+								<div class="st st2" flex>
+									<span class="name">완력</span>
+									<span class="total_bar">
+										<span class="frame_bar transition gradient_light">
+											<span class="bar transition gradient_dark_y">
+												<span class="ico"></span>
+												<!-- <span class="txt_current">0</span> -->
+											</span>
+										</span>
+										<span class="back_bar transition"></span>
+									</span>
+									<span class="txt_total" title="완력">0</span>
+								</div>
+								<div class="st st3" flex>
+									<span class="name">민첩</span>
+									<span class="total_bar">
+										<span class="frame_bar transition gradient_light">
+											<span class="bar transition gradient_dark_y">
+												<span class="ico"></span>
+												<!-- <span class="txt_current">0</span> -->
+											</span>
+										</span>
+										<span class="back_bar transition"></span>
+									</span>
+									<span class="txt_total" title="순발">0</span>
+								</div>
+								<div class="st st4" flex>
+									<span class="name">지력</span>
+									<span class="total_bar">
+										<span class="frame_bar transition gradient_light">
+											<span class="bar transition gradient_dark_y">
+												<span class="ico"></span>
+												<!-- <span class="txt_current">0</span> -->
+											</span>
+										</span>
+										<span class="back_bar transition"></span>
+									</span>
+									<span class="txt_total" title="지력">0</span>
+								</div>
+								<div class="st st5" flex>
+									<span class="name">정신</span>
+									<span class="total_bar">
+										<span class="frame_bar transition gradient_light">
+											<span class="bar transition gradient_dark_y">
+												<span class="ico"></span>
+												<!-- <span class="txt_current">0</span> -->
+											</span>
+										</span>
+										<span class="back_bar transition"></span>
+									</span>
+									<span class="txt_total" title="정신">0</span>
+								</div>
+								<div class="st st6" flex>
+									<span class="name">매력</span>
+									<span class="total_bar">
+										<span class="frame_bar transition gradient_light">
+											<span class="bar transition gradient_dark_y">
+												<span class="ico"></span>
+												<!-- <span class="txt_current">0</span> -->
+											</span>
+										</span>
+										<span class="back_bar transition"></span>
+									</span>
+									<span class="txt_total" title="매력">0</span>
+								</div>
+							</dd>
+						</dl>
+					</div>
+					<div class="skill">
+						<dl class="info_group sk_group">
+							<dt>SKILL<span>(스킬)</span></dt>
+							<dd class="scroll-y"></dd>
+						</dl>
+					</div>
+					<div class="relation">
+						<dl class="info_group rt_group">
+							<dt>RELATION<span>(인연)</span></dt>
+							<dd class="scroll-y"></dd>
+						</dl>
+					</div>
+					<div class="items">
+						<dl class="info_group it_group">
+							<dt>ITEM<span>(아이템 착용)</span></dt>
+							<dd>
+								<div class="equip_items">
+									<div class="animal_item_pic">
+										<span class="line line1"><span class="l1"></span><span class="l2"></span><span class="dot"></span></span>
+										<span class="line line2"><span class="l1"></span><span class="l2"></span><span class="dot"></span></span>
+										<span class="line line3"><span class="l1"></span><span class="l2"></span><span class="dot"></span></span>
+										<span class="line line4"><span class="l1"></span><span class="l2"></span><span class="dot"></span></span>
+										<span class="line line5"><span class="l1"></span><span class="l2"></span><span class="dot"></span></span>
+										<span class="line line6"><span class="l1"></span><span class="l2"></span><span class="dot"></span></span>
+										<span class="line line7"><span class="l1"></span><span class="l2"></span><span class="dot"></span></span>
+										<span class="line line8"><span class="l1"></span><span class="l2"></span><span class="dot"></span></span>
+									</div>
+									<ul class="e_items">
+										<li class="item0"></li>
+										<li class="item1"></li>
+										<li class="item2"></li>
+										<li class="item3"></li>
+										<li class="item4"></li>
+										<li class="item5"></li>
+										<li class="item6"></li>
+										<li class="item7"></li>
+									</ul>
+								</div>
+								<div class="has_items scroll-y">
+									<ul class="h_items">
+										<li class="item1"></li>
+										<li class="item1"></li>
+										<li class="item2"></li>
+										<li class="item4"></li>
+										<li class="item5"></li>
+										<li class="item5"></li>
+										<li class="item3"></li>
+										<li class="item2"></li>
+										<li class="item5"></li>
+									</ul>
+								</div>
+							</dd>
+						</dl>
+					</div>
+					<div class="apply_state">
+						<dl class="info_group ach_group">
+							<dt>TOTAL STATE<span>(총스탯)</span></dt>
+							<dd class="scroll-y">
+								<ul class="total_states">
+								</ul>
+							</dd>
+						</dl>
+					</div>
+				</div>
+				<div class="item_enhance transition">
+					<dl class="info_group it_group">
+						<dt>ITEM<span>(아이템 강화)</span></dt>
+						<dd>
+							<div class="hole_item" flex-h>
+								<div class="item_target"></div>
+								<div class="item_info scroll-y"></div>
+							</div>
+							<div class="has_items scroll-y">
+								<ul class="h_items">
+									<li class="item1"></li>
+									<li class="item1"></li>
+									<li class="item2"></li>
+									<li class="item4"></li>
+									<li class="item5"></li>
+									<li class="item5"></li>
+									<li class="item3"></li>
+									<li class="item2"></li>
+									<li class="item5"></li>
+									<li class="item1"></li>
+									<li class="item2"></li>
+									<li class="item4"></li>
+									<li class="item5"></li>
+									<li class="item5"></li>
+									<li class="item3"></li>
+									<li class="item2"></li>
+									<li class="item5"></li>
+									<li class="item3"></li>
+									<li class="item2"></li>
+									<li class="item5"></li>
+									<li class="item1"></li>
+									<li class="item2"></li>
+									<li class="item4"></li>
+									<li class="item5"></li>
+									<li class="item5"></li>
+									<li class="item3"></li>
+									<li class="item2"></li>
+									<li class="item5"></li>
+								</ul>
+							</div>
+							<div class="has_stones scroll-y">
+								<ul class="h_items">
+									<li class="item1"></li>
+									<li class="item1"></li>
+									<li class="item2"></li>
+									<li class="item4"></li>
+									<li class="item5"></li>
+									<li class="item5"></li>
+									<li class="item3"></li>
+									<li class="item1"></li>
+									<li class="item1"></li>
+									<li class="item2"></li>
+									<li class="item4"></li>
+									<li class="item5"></li>
+									<li class="item5"></li>
+									<li class="item3"></li>
+									<li class="item2"></li>
+									<li class="item1"></li>
+									<li class="item1"></li>
+									<li class="item2"></li>
+									<li class="item4"></li>
+									<li class="item5"></li>
+									<li class="item5"></li>
+									<li class="item3"></li>
+									<li class="item2"></li>
+									<li class="item1"></li>
+									<li class="item1"></li>
+									<li class="item2"></li>
+									<li class="item4"></li>
+									<li class="item5"></li>
+									<li class="item5"></li>
+									<li class="item3"></li>
+									<li class="item2"></li>
+									<li class="item1"></li>
+									<li class="item1"></li>
+									<li class="item2"></li>
+									<li class="item4"></li>
+									<li class="item5"></li>
+									<li class="item5"></li>
+									<li class="item3"></li>
+									<li class="item2"></li>
+									<li class="item2"></li>
+									<li class="item5"></li>
+								</ul>
+							</div>
+						</dd>
+					</dl>
+				</div>
+				<div class="ch_enhance">
+					<dl class="info_group it_group">
+						<dt>HERO<span>(캐릭터 강화)</span></dt>
+						<dd></dd>
+					</dl>
+				</div>
+			</div>
+			<div class="gacha_wrap">
+				<div class="gacha_menu transition">
+				</div>
+				<div class="gacha_area">
+					<div class="cards"></div>
+					<div class="bg"></div>
+					<div class="effect"></div>
+					<div class="touch"></div>
+				</div>
+				<div class="gacha_info">
+					<div class="ch_card">
+						<img src="./images/ring/ring_.png"/>
+						<ul class="ch_detail"></ul>
+					</div>
+					<div class="ch_graph">
+						<canvas></canvas>
+					</div>
+					<div class="ch_state scroll-y"></div>
+				</div>
+			</div>
+			<div class="lineup_wrap">
+				<div class="lineup_save">
+					<dl flex-center>
+						<dt>저장슬롯</dt>
+						<dd>
+							<ul>
+								<li><button class="save_slot">1</button></li>
+								<li><button class="save_slot">2</button></li>
+								<li><button class="save_slot">3</button></li>
+								<li><button class="save_slot">4</button></li>
+								<li><button class="save_slot">5</button></li>
+								<li><button class="save_slot">6</button></li>
+								<li><button class="save_slot">7</button></li>
+								<li><button class="save_slot">8</button></li>
+							</ul>
+							<button class="save_submit">저장</button>
+						</dd>
+					</dl>
+				</div>
+				<div class="lineup_middle">
+					<div class="lineup_list scroll-y">
+						<ul>
+							<li class="lineup_cate lineup_pos"><!--기본-->
+								<span e4 class="l1"></span><span e4 class="l2"></span><span e4 class="l3"></span><span e4 class="l4"></span><span e4 class="l5"></span>
+								<span e4 class="l6"></span><span e4 class="l7"></span><span e4 class="l8"></span><span e4 class="l9"></span><span e4 class="l10"></span>
+								<span e2 class="l11"></span><span e2 class="l12"></span><span e1 class="l13"></span><span e2 class="l14"></span><span e2 class="l15"></span>
+								<span e4 class="l16"></span><span e4 class="l17"></span><span e4 class="l18"></span><span e4 class="l19"></span><span e4 class="l20"></span>
+								<span e4 class="l21"></span><span e4 class="l22"></span><span e4 class="l23"></span><span e4 class="l24"></span><span e4 class="l25"></span>
+							</li>
+							<li class="lineup_cate lineup_pos"><!--학익진-->
+								<span class="l1"></span><span class="l2"></span><span e1 class="l3"></span><span class="l4"></span><span class="l5"></span>
+								<span class="l6"></span><span e2 class="l7"></span><span e4 class="l8"></span><span e2 class="l9"></span><span class="l10"></span>
+								<span e3 class="l11"></span><span class="l12"></span><span class="l13"></span><span class="l14"></span><span e3 class="l15"></span>
+								<span e3 class="l16"></span><span class="l17"></span><span class="l18"></span><span class="l19"></span><span e3 class="l20"></span>
+								<span e4 class="l21"></span><span class="l22"></span><span class="l23"></span><span class="l24"></span><span e4 class="l25"></span>
+							</li>
+							<li class="lineup_cate lineup_pos"><!--어린진-->
+								<span e4 class="l1"></span><span class="l2"></span><span class="l3"></span><span class="l4"></span><span e4 class="l5"></span>
+								<span e3 class="l6"></span><span class="l7"></span><span class="l8"></span><span class="l9"></span><span e3 class="l10"></span>
+								<span class="l11"></span><span e3 class="l12"></span><span class="l13"></span><span e3 class="l14"></span><span class="l15"></span>
+								<span class="l16"></span><span e2 class="l17"></span><span e2 class="l18"></span><span e2 class="l19"></span><span class="l20"></span>
+								<span class="l21"></span><span class="l22"></span><span e1 class="l23"></span><span class="l24"></span><span class="l25"></span>
+							</li>
+							<li class="lineup_cate lineup_pos"><!--언월진-->
+								<span class="l1"></span><span e3 class="l2"></span><span e2 class="l3"></span><span e4 class="l4"></span><span class="l5"></span>
+								<span e3 class="l6"></span><span class="l7"></span><span class="l8"></span><span e1 class="l9"></span><span e4 class="l10"></span>
+								<span class="l11"></span><span class="l12"></span><span class="l13"></span><span e2 class="l14"></span><span class="l15"></span>
+								<span class="l16"></span><span class="l17"></span><span class="l18"></span><span e2 class="l19"></span><span class="l20"></span>
+								<span class="l21"></span><span e3 class="l22"></span><span e2 class="l23"></span><span class="l24"></span><span class="l25"></span>
+							</li>
+							<li class="lineup_cate lineup_pos"><!--봉시진-->
+								<span class="l1"></span><span class="l2"></span><span e3 class="l3"></span><span class="l4"></span><span class="l5"></span>
+								<span e4 class="l6"></span><span class="l7"></span><span e3 class="l8"></span><span class="l9"></span><span e4 class="l10"></span>
+								<span e2 class="l11"></span><span class="l12"></span><span e3 class="l13"></span><span class="l14"></span><span e2 class="l15"></span>
+								<span class="l16"></span><span e2 class="l17"></span><span class="l18"></span><span e2 class="l19"></span><span class="l20"></span>
+								<span class="l21"></span><span class="l22"></span><span e1 class="l23"></span><span class="l24"></span><span class="l25"></span>
+							</li>
+							<li class="lineup_cate lineup_pos"><!--방원진-->
+								<span class="l1"></span><span class="l2"></span><span e4 class="l3"></span><span class="l4"></span><span class="l5"></span>
+								<span class="l6"></span><span e3 class="l7"></span><span e2 class="l8"></span><span e3 class="l9"></span><span class="l10"></span>
+								<span e4 class="l11"></span><span e2 class="l12"></span><span e1 class="l13"></span><span e2 class="l14"></span><span e4 class="l15"></span>
+								<span class="l16"></span><span e3 class="l17"></span><span e2 class="l18"></span><span e3 class="l19"></span><span class="l20"></span>
+								<span class="l21"></span><span class="l22"></span><span e4 class="l23"></span><span class="l24"></span><span class="l25"></span>
+							</li>
+							<li class="lineup_cate lineup_pos"><!--안행진-->
+								<span class="l1"></span><span class="l2"></span><span e2 class="l3"></span><span class="l4"></span><span class="l5"></span>
+								<span class="l6"></span><span class="l7"></span><span e1 class="l8"></span><span class="l9"></span><span class="l10"></span>
+								<span class="l11"></span><span e2 class="l12"></span><span class="l13"></span><span e2 class="l14"></span><span class="l15"></span>
+								<span e4 class="l16"></span><span e3 class="l17"></span><span class="l18"></span><span e3 class="l19"></span><span e4 class="l20"></span>
+								<span e3 class="l21"></span><span class="l22"></span><span class="l23"></span><span class="l24"></span><span e3 class="l25"></span>
+							</li>
+							<li class="lineup_cate lineup_pos"><!--장사진-->
+								<span class="l1"></span><span class="l2"></span><span class="l3"></span><span e3 class="l4"></span><span e4 class="l5"></span>
+								<span class="l6"></span><span class="l7"></span><span e4 class="l8"></span><span e2 class="l9"></span><span class="l10"></span>
+								<span class="l11"></span><span class="l12"></span><span e1 class="l13"></span><span e4 class="l14"></span><span class="l15"></span>
+								<span class="l16"></span><span e2 class="l17"></span><span e4 class="l18"></span><span class="l19"></span><span class="l20"></span>
+								<span e4 class="l21"></span><span e3 class="l22"></span><span class="l23"></span><span class="l24"></span><span class="l25"></span>
+							</li>
+							<li class="lineup_cate lineup_pos"><!--형액진-->
+								<span class="l1"></span><span class="l2"></span><span e3 class="l3"></span><span class="l4"></span><span class="l5"></span>
+								<span e4 class="l6"></span><span e3 class="l7"></span><span class="l8"></span><span e3 class="l9"></span><span e4 class="l10"></span>
+								<span class="l11"></span><span class="l12"></span><span e1 class="l13"></span><span class="l14"></span><span class="l15"></span>
+								<span class="l16"></span><span e2 class="l17"></span><span class="l18"></span><span e2 class="l19"></span><span class="l20"></span>
+								<span class="l21"></span><span e2 class="l22"></span><span class="l23"></span><span e2 class="l24"></span><span class="l25"></span>
+							</li>
+							<li class="lineup_cate lineup_pos"><!--추행진-->
+								<span class="l1"></span><span class="l2"></span><span class="l3"></span><span class="l4"></span><span class="l5"></span>
+								<span class="l6"></span><span class="l7"></span><span e4 class="l8"></span><span class="l9"></span><span class="l10"></span>
+								<span e3 class="l11"></span><span e3 class="l12"></span><span e3 class="l13"></span><span e3 class="l14"></span><span e3 class="l15"></span>
+								<span class="l16"></span><span e2 class="l17"></span><span e1 class="l18"></span><span e2 class="l19"></span><span class="l20"></span>
+								<span class="l21"></span><span class="l22"></span><span e2 class="l23"></span><span class="l24"></span><span class="l25"></span>
+							</li>
+						</ul>
+					</div>
+					<div class="lineup_area">
+						<div class="lineup_info"><div class="lineup_na">기본</div><div class="lineup_cost"><span class="cost_current">0</span><span class="bar"></span><span class="cost_total">0</span></div></div>
+						<div class="lineup_map lineup_pos">
+							<span class="mapCh l1" data-mapnum="0"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l2" data-mapnum="1"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l3" data-mapnum="2"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l4" data-mapnum="3"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l5" data-mapnum="4"><span class="mapEff"></span><span class="mapCh_"></span></span>
+							<span class="mapCh l6" data-mapnum="5"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l7" data-mapnum="6"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l8" data-mapnum="7"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l9" data-mapnum="8"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l10" data-mapnum="9"><span class="mapEff"></span><span class="mapCh_"></span></span>
+							<span class="mapCh l11" data-mapnum="10"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l12" data-mapnum="11"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l13" data-mapnum="12"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l14" data-mapnum="13"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l15" data-mapnum="14"><span class="mapEff"></span><span class="mapCh_"></span></span>
+							<span class="mapCh l16" data-mapnum="15"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l17" data-mapnum="16"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l18" data-mapnum="17"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l19" data-mapnum="18"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l20" data-mapnum="19"><span class="mapEff"></span><span class="mapCh_"></span></span>
+							<span class="mapCh l21" data-mapnum="20"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l22" data-mapnum="21"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l23" data-mapnum="22"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l24" data-mapnum="23"><span class="mapEff"></span><span class="mapCh_"></span></span><span class="mapCh l25" data-mapnum="24"><span class="mapEff"></span><span class="mapCh_"></span></span>
+						</div>
+						<div class="lineup_chInfo scroll-y">
+							<ul>
+								<li><span class="na"></span><span class="txt"></span><span class="add_txt"></span></li>
+								<li><span class="na"></span><span class="txt"></span><span class="add_txt"></span></li>
+								<li><span class="na"></span><span class="txt"></span><span class="add_txt"></span></li>
+								<li><span class="na"></span><span class="txt"></span><span class="add_txt"></span></li>
+								<li><span class="na"></span><span class="txt"></span><span class="add_txt"></span></li>
+								<li><span class="na"></span><span class="txt"></span><span class="add_txt"></span></li>
+								<li><span class="na"></span><span class="txt"></span><span class="add_txt"></span></li>
+								<li><span class="na"></span><span class="txt"></span><span class="add_txt"></span></li>
+								<li><span class="na"></span><span class="txt"></span><span class="add_txt"></span></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="lineup_ch scroll-y"></div>
+			</div>
+			<div class="battle_wrap">
+				<div class="battle_area">
+					<div class="battle_units">
+						<div class="units_ally"></div>
+						<div class="units_enemy"></div>
+					</div>
+					<div class="battle_land">
+						<div class="land_ally"></div>
+						<div class="land_enemy"></div>
+					</div>
+					<div class="battle_order">
+						<div class="battle_msg">김세존!<br/>현!실!타!격!</div>
+					</div>
+				</div>
+				<div class="battle_menu">
+					<ul>
+						<li><button>Attack</button></li>
+						<li><button>Skill</button></li>
+						<li><button>defense</button></li>
+					</ul>
+				</div>
+			</div>
+			<div class="enhancement_wrap"></div>
+		</div>
+	</div>
+	<div class="popup transition"></div>
+	<div class="modal transition"></div>
+	<div class="preload"></div>
+	<script src="./ch.js"></script>
+</body>
+</html>
