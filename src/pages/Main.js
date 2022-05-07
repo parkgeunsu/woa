@@ -1,10 +1,11 @@
 import React from 'react';
+import Battle from 'pages/Battle';
 
 const Main = () => {
   return (
-    <div className="woa">
+    <>
       Main
-    </div>
+    </>
   );
 }
 
