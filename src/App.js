@@ -1,24 +1,47 @@
 import React from 'react';
-import { Route, Routes, Link } from 'react-router-dom';
-import Main from './pages/Main';
-import Character from './pages/Character';
-import Battle from './pages/Battle';
-import Gacha from './pages/Gacha';
+import { Route, Routes } from 'react-router-dom';
+import styled from 'styled-components';
+import Menu from 'components/Menu';
+import Main from 'components/Main';
+import Character from 'components/Character';
+import Gacha from 'components/Gacha';
+import Lineup from 'components/Lineup';
+import Battle from 'components/Battle';
+import 'css/root.css';
+
+const RootContainer = styled.div`
+  height: 100%;
+  overflow-y: overlay;
+  overflow-x: hidden;
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+  position: relative;
+  flex: 1;
+  height: 100%;
+  background: #fec;
+  overflow: hidden;
+`;
+const FooterContainer = styled.div`
+  min-height: 35px;
+`;
 
 const App = () => {
   return (
-    <div className="woa">
-      <Link to="/">메인</Link>
-      <Link to="/character">캐릭</Link>
-      <Link to="/battle">전투</Link>
-      <Link to="/gacha">뽑기</Link>
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/character" element={<Character />} />
-        <Route path="/battle" element={<Battle />} />
-        <Route path="/gacha" element={<Gacha />} />
-      </Routes>
-    </div>
+    <RootContainer className="root">
+      <Menu />
+      <ContentContainer className="content">
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/character" element={<Character />} />
+          <Route path="/gacha" element={<Gacha />} />
+          <Route path="/lineup" element={<Lineup />} />
+          <Route path="/battle" element={<Battle />} />
+        </Routes>
+      </ContentContainer>
+      <FooterContainer/>
+    </RootContainer>
   );
 }
 

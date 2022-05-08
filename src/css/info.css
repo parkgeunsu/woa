@@ -6,41 +6,6 @@
 .content{display:flex;display:-webkit-flex;position:relative;-webkit-box-flex:1;flex:1;height:100%;background:#fec;overflow:hidden;z-index:1;}
 .footer{min-height:35px;}
 
-/*header*/
-.header .default{flex:1;padding:0 10px;}
-.header .default > li{display:none;position:relative;float:left;margin:0 0 0 5px;padding:5px 0;}
-.header .default > li:first-of-type{margin:0;}
-.header li .ico{display:inline-block;width:39px;height:34px;}
-.header li .txt{display:inline-block;}
-.header li.back .ico{width:30px;background:url(../images/ico/ico_back.png) no-repeat center center;background-size:39px;}
-.header li.id{width:110px;height:34px;}
-.header li.id{font-weight:bold;font-family:'Noto Sans Black';font-size: 14px;line-height:34px;background:-webkit-linear-gradient(#ffcd9b, #e17000);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.header li.id .txt1{}
-.header li.id .txt2{margin:0 5px;}
-.header li.chat{float:right;}
-.header li.chat .ico{width:37px;background:url(../images/ico/ico_chat.png) no-repeat center center;background-size:45px;}
-.header li.setup{float:right;margin:0;}
-.header li.setup .ico{width:30px;background:url(../images/ico/ico_setup.png) no-repeat center center;background-size:45px;}
-.header li.lv{float:right;}
-.header li.lv .ico{position:absolute;width:28px;background:url(../images/ico/ico_lv.png) no-repeat center center;background-size:39px;text-align:center;line-height:32px;z-index:2;}
-.header li.lv .frame_bar{display:inline-block;position:relative;width:50px;height:19px;margin:4px 0 0 10px;padding:0 5px 0 8px;background:url(../images/frame/bar0.png) repeat-x 0 center;background-size:100% 22px;border-radius:5px;border:3px solid transparent;border-image:url(../images/frame/frame_main.png) 6 stretch;}
-.header li.lv .txt{}
-.header li.lv .ico .txt{margin:-4px 0 0 0;}
-.header li.lv .frame_bar .bar{display:inline-block;position:absolute;margin:auto 0;left:0;right:0;top:0;bottom:0;width:50%;height:90%;background:url(../images/frame/bar1.png) repeat-x 0 center;}
-.header li.lv .frame_bar .txt{position:absolute;left:20px;top:1px;}
-.header li.diamond{float:right;}
-.header li.diamond .ico{position:absolute;width:26px;background:url(../images/ico/ico_dia.png) no-repeat center center;background-size:42px;}
-.header li.diamond .txt{margin:4px 0 0 10px;padding:0 5px 0 15px;width:49px;height:19px;background:url(../images/frame/bar0.png) repeat-x 0 center;background-size:100% 22px;border-radius:5px;border:3px solid transparent;border-image:url(../images/frame/frame_main.png) 6 stretch;text-align:right;}
-.header li.money{float:right;}
-.header li.money .ico{position:absolute;width:26px;background:url(../images/ico/ico_gold.png) no-repeat center center;background-size:42px;}
-.header li.money .txt{margin:4px 0 0 10px;padding:0 5px 0 15px;width:77px;height:19px;background:url(../images/frame/bar0.png) repeat-x 0 center;background-size:100% 22px;border-radius:5px;border:3px solid transparent;border-image:url(../images/frame/frame_main.png) 6 stretch;text-align:right;}
-.header li.menu{float:right;overflow:hidden;}
-.header li.menu li{position:relative;float:left;visibility:hidden;height:100%;text-align:center;}
-.header li.menu li.used{visibility:visible;}
-.header li.menu li.view_type{margin:0 5px 0 0;width:20px;height:33px;background:url(../images/ico/ico_allview.png) no-repeat center center;background-size:50px;}
-.header li.menu li:last-of-type{margin:0;}
-.header li.menu li.view_type.on{background-image:url(../images/ico/ico_largeview.png);background-size:50px;}
-
 .root.ch .header  li.back{display:block;}
 .root.ch .header  li.menu{display:block;}
 .root.ch .header  li.menu button{width:40px;height:40px;font-size:0;}

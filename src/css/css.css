@@ -1,48 +1,5 @@
 @charset "utf-8";
 
-.root{height:100%;overflow-y: overlay;overflow-x: hidden;}
-
-.header{position:absolute;left:0;right:0;top:0;min-height:44px;z-index:2;}
-.content{display:flex;display:-webkit-flex;position:relative;-webkit-box-flex:1;flex:1;height:100%;background:#fec;overflow:hidden;}
-.footer{min-height:35px;}
-
-/*menu button*/
-.menu{padding:0 20px;}
-.menu li{margin:0 0 10px 0;}
-.menu li:last-of-type{margin:0;}
-.menu button{padding:10px 0;width:100%;background:rgba(0,0,0,.7);border-radius:20px;color:#fff;}
-.menu.white button{background:rgba(255,255,255,.5);color:#000;}
-
-/*header*/
-.header .default{display:flex;justify-content:space-between;padding:0 20px 0 10px;}
-.header .default > li{position:relative;float:left;margin:0 0 0 5px;padding:5px 0;}
-.header .default > li:first-of-type{margin:0;}
-.header li .ico{display:inline-block;width:40px;height:40px;background-size:40px;background-repeat:no-repeat;background-position:center center;}
-.header li .txt{display:block;margin:7px 0 7px 24px;padding:0 5px 0 8px;height:25px;background:url(../images/frame/bar0.png) repeat-x 0 center;background-size:100% 22px;border-radius:5px;border:3px solid transparent;border-image:url(../images/frame/frame_main.png) 6 stretch;line-height:19px;box-sizing:border-box;overflow:hidden;}
-.header li.back{flex-grow:0;}
-.header li.back .ico{background-image:url(../images/ico/ico_back.png);}
-.header li.chat{float:right;}
-.header li.chat .ico{background-image:url(../images/ico/ico_chat.png);}
-.header li.setup{float:right;margin:0;}
-.header li.setup .ico{background-image:url(../images/ico/ico_setup.png);}
-.header li.lv{flex-grow:1;}
-.header li.lv .ico{position:absolute;background-image:url(../images/ico/ico_lv.png);text-align:center;line-height:32px;z-index:2;}
-.header li.lv .ico .txt{display:inline-block;margin:0;padding:0;background:none;border:none;line-height:25px;}
-.header li.lv > .txt{text-align:center;}
-
-.header li.diamond{flex-grow:0;}
-.header li.diamond .ico{position:absolute;background-image:url(../images/ico/ico_dia.png);}
-.header li.diamond .txt{width:60px;text-align:right;}
-.header li.money{flex-grow:0;}
-.header li.money .ico{position:absolute;background-image:url(../images/ico/ico_gold.png);}
-.header li.money .txt{width:80px;text-align:right;}
-.header li.menu{float:right;overflow:hidden;}
-.header li.menu li{position:relative;float:left;visibility:hidden;height:100%;text-align:center;}
-.header li.menu li.used{visibility:visible;}
-.header li.menu li.view_type{margin:0 5px 0 0;width:20px;height:33px;background:url(../images/ico/ico_allview.png) no-repeat center center;background-size:50px;}
-.header li.menu li:last-of-type{margin:0;}
-.header li.menu li.view_type.on{background-image:url(../images/ico/ico_largeview.png);background-size:50px;}
-
 .root.noback li.back{display:none;}
 .root.main .header  li.back{display:none;}
 /* .root.main .header  li.setup{display:none;} */
@@ -334,11 +291,6 @@
 .ch_wrap .ch_list ul li.g5.on{box-shadow:0 0 8px #a800ff,0 0 3px #a800ff;}
 .ch_wrap .ch_list ul li.g6.on{box-shadow:0 0 8px #ff8000,0 0 3px #ff8000;}
 .ch_wrap .ch_list ul li.g7.on{box-shadow:0 0 8px #ff2a00,0 0 3px #ff2a00;}
-
-/*main*/
-.main_wrap{display:none;padding:44px 0 0 0;flex-direction:column;width:100%;height:100%;box-sizing:border-box;overflow:hidden;}
-.root.main .main_wrap{display:flex;position:absolute;left:0;right:0;top:0;bottom:0;background:url(../images/back/back2.jpg);background-size:cover;}
-.main_menu{flex-grow:0;overflow:hidden;}
 
 /*gacha*/
 .gacha_wrap{display:none;flex-direction:column;padding:44px 0 0 0;width:100%;height:100%;box-sizing:border-box;overflow:hidden;}
