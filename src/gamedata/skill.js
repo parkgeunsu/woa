@@ -5,7 +5,7 @@
 //ta getEffectArea 효과범위
 //num 효과
 //sp 행동력
-const skill = [
+export const skill = [
     {idx:0,na:'강타',cate:[3],txt:'<u>단일</u>, <b dmg>200%</b>의 <i el el0>치기</i>로 강한 타격을 한다.',eff:[{ta_:1,ta:1,type:13,num:'200%'}],sp:4},
     {idx:1,na:'물대포',cate:[3],txt:'<u>가로한줄</u>, <b dmg>70%</b>의 <i el el4>수</i>속성 공격을 한다.',eff:[{ta_:1,ta:6,type:22,num:'70%'}],sp:6},
     {idx:2,na:'학익진 강화',cate:[1],txt:'<u>학익진</u> 사용시 효과가 <b buff>20%</b> <i icon up>증가</i> 한다.',eff:[{ta_:0,ta:20,type:100,num:'20%'}],sp:0},

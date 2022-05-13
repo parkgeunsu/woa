@@ -1,4 +1,4 @@
-const items = {
+export const items = {
     enhance_n:[3,3,5,5,7,7],//아이템 등급별 최대강화
     grade_up:[],//등급업시 능력치 업 단계당 10%증가
     set_type:[//셋트아이템 효과
