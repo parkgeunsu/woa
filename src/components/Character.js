@@ -253,24 +253,32 @@ const Character = () => {
   //    from: () => [x.get(), 0],
   // });
   const gestureBind = useGesture({
-    onDrag: ({ active, down, movement: [mx, my], direction: [xDir], cancel}) => {
-      console.log(active, xDir);
-      if (active && Math.abs(mx) > 50) {
-        console.log("active");
-      } else{
-        console.log("cancel");
-      }
-      api.start(
-        () => {
-          return (
-            { 
-              x: down ? mx: 0, 
-              // y: down ? my: 0, 
-              immediate: down
-            }
-          )
+    onDrag: ({ active, down, movement: [mx, my], direction: [xDir, yDir], cancel}) => {
+      if (!active && yDir < 0 && Math.abs(my) > 50) { // 위로
+        setChPage((prevPage) => {
+          return prevPage < 6 ? ++prevPage : 0;
+        });
+      } else if (!active && yDir > 0 && Math.abs(my) > 50){ //아래로
+        setChPage(0);
+      };
+      if (chPage === 0){
+        if (active && Math.abs(mx) > 50) {
+          console.log("active");
+        } else{
+          console.log("cancel");
         }
-      )
+        api.start(
+          () => {
+            return (
+              { 
+                x: down ? mx: 0, 
+                // y: down ? my: 0, 
+                immediate: down
+              }
+            )
+          }
+        )
+      }
     },
   });
   return (
