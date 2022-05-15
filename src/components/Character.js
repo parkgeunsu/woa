@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useGesture, useDrag } from '@use-gesture/react';
+import { useSpring, animated } from '@react-spring/web';
 
 import CharacterState from 'components/CharacterState';
 import CharacterSkill from 'components/CharacterSkill';
@@ -158,6 +160,14 @@ const ChWrap = styled.div`
   .h_items li{position:relative;margin:0 4.5px 4.5px 0;width:calc(12.5% - 4px);padding-top:calc(12.5% - 4px);box-sizing:border-box;border:1px solid #fff;background-position:center center;background-repeat:no-repeat;}
   .h_items li:nth-of-type(8n){margin:0 0 4.5px 0;}
 `;
+const AnimatedCard = styled(animated.div)`
+  touch-action:none;
+  transform-origin:0 0;
+  position:absolute;
+  left:7.5%;
+  padding-top:120%;
+  width:85%;
+`;
 const ChCard = styled.div`
   position:absolute;
   left:28%;
@@ -208,15 +218,72 @@ const Character = () => {
   const slotIdx = 1;
   const [chPage, setChPage] = useState(0);
   const iconState = [iconState0, iconState1, iconState2, iconState3, iconState4, iconState5, iconState6]
+  
+  const [{x, y}, api] = useSpring(() => {
+    return (
+      {
+        x: 0,
+        y: 0
+      }
+    )
+  });
+  // const dragBind = useDrag(({ down, tap, movement: [mx, my]}) => {
+  //   console.log(mx, my, tap);
+  //   if( mx > 10 ){
+  //     console.log("x: right");
+  //   } else if ( mx < -10 ){
+  //     console.log("x: left");
+  //   }
+  //   api.start(
+  //     () => {
+  //       return (
+  //         { 
+  //           x: down ? mx: 0, 
+  //           // y: down ? my: 0, 
+  //           immediate: down
+  //         }
+  //       )
+  //     }
+  //   )
+  // },
+  // { 
+  //    axis: 'lock',
+  //    bounds: { left: -100, right: 100, top: -50, bottom: 50 },
+  //    delay: 1000,
+  //    from: () => [x.get(), 0],
+  // });
+  const gestureBind = useGesture({
+    onDrag: ({ active, down, movement: [mx, my], direction: [xDir], cancel}) => {
+      console.log(active, xDir);
+      if (active && Math.abs(mx) > 50) {
+        console.log("active");
+      } else{
+        console.log("cancel");
+      }
+      api.start(
+        () => {
+          return (
+            { 
+              x: down ? mx: 0, 
+              // y: down ? my: 0, 
+              immediate: down
+            }
+          )
+        }
+      )
+    },
+  });
   return (
     <>
       <ChWrap backImg={imgBack} stateIcon={iconState} className={`ch_wrap page${chPage}`}>
       {/* page0(카드디자인),page1(능력치),page2(스킬),page3(인연),page4(장비),page5(적용치) */}
-				<ChCard className="ch_card transition">
-					<Img imgurl={imgRing} />
-          <CharacterCard slotIdx={slotIdx} />
-					<ChBack cardBack={imgCardBack} className="ch_back transition" />
-				</ChCard>
+				<AnimatedCard {...gestureBind()} style={{x, y}}>
+          <ChCard className="ch_card transition">
+            <Img imgurl={imgRing} />
+            <CharacterCard slotIdx={slotIdx} />
+            <ChBack cardBack={imgCardBack} className="ch_back transition" />
+          </ChCard>
+				</AnimatedCard>
         <CharacterList />
         <CharacterHeader />
 				<ChInfo stateBack={stateBack} frameBack={frameChBack} className="ch_info transition">

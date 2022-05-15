@@ -22,13 +22,12 @@ const CharacterRelation = ({
         <dl className="info_group rt_group">
           <dt>RELATION<span>(인연)</span></dt>
           <dd className="scroll-y">
-            { gameRelation && gameRelation.forEach((rtData, idx) => {
+            { gameRelation && gameRelation.map((rtData, idx) => {
               const rtData_ = gameData.relation[rtData.idx];
-              console.log(rtData_);
               return (
-                <div className="rt" flex="true">
-                  <span className="name">{rtData_.tag}</span>
-                  <span className="txt">{rtData_.txt}</span>
+                <div key={idx} className="rt" flex="true">
+                  <span className="name" dangerouslySetInnerHTML={{__html: rtData_.tag}} />
+                  <span className="txt" dangerouslySetInnerHTML={{__html: rtData_.txt}} />
                 </div>
               )
             })}

@@ -56,20 +56,20 @@ const CharacterSkill = ({
         <dl className="info_group sk_group">
           <dt>SKILL<span>(스킬)</span></dt>
           <dd className="scroll-y" >
-            { saveSkill && saveSkill.forEach((skData, idx) => {
+            { saveSkill && saveSkill.map((skData, idx) => {
               const skData_ = gameData.skill[skData.idx];
               const cate = skData_.cate.reduce((v1,v2)=>v1+v2);
               return (
-                <SkillDetail className={`sk cate${cate}`} flex-h="true">
+                <SkillDetail key={idx} className={`sk cate${cate}`} flex-h="true">
                   <SkillInfo className="sk_info" flex="true">
                     <SkillElement className={`sk_element el${skData_.dmg_type}`} />
                     <span className="name">{skData_.na}</span>
-                    <span className="txt">{skData_.txt}</span>
+                    <span className="txt" dangerouslySetInnerHTML={{__html: skData_.txt}} />
                   </SkillInfo>
                   <div flex="true" className="lv_exp">
                     <span className="lv">LV.{skData.lv}</span>
                     <span className="exp">
-                      <span className="gradient_dark" skData={skData} style={{width:`${skData.exp || 0}%;`}}></span>
+                      <span className="gradient_dark" skdata={skData} style={{width:`${skData.exp || 0}%`}}></span>
                     </span>
                   </div>
                 </SkillDetail>
