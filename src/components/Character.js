@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import styled from 'styled-components';
 import { useGesture, useDrag } from '@use-gesture/react';
 import { useSpring, animated } from '@react-spring/web';
@@ -14,7 +14,7 @@ import CharacterList from 'components/CharacterList';
 import CharacterHeader from 'components/CharacterHeader';
 import CharacterCard from 'components/CharacterCard';
 
-import { Util, Fn } from 'components/Libs';
+import { util, fn } from 'components/Libs';
 
 import imgRing from 'images/ring/ring_.png';
 import imgBack from 'images/back/back0.jpg';
@@ -47,6 +47,7 @@ const ChWrap = styled.div`
   overflow: hidden;
   background:url(${({backImg}) => backImg});
   background-size:cover;
+  touch-action:none;
   &.page0{
     .ch_card{
       left:50%;top:50%;transform:translate(-50%,-50%) scale(1);
@@ -160,14 +161,14 @@ const ChWrap = styled.div`
   .h_items li{position:relative;margin:0 4.5px 4.5px 0;width:calc(12.5% - 4px);padding-top:calc(12.5% - 4px);box-sizing:border-box;border:1px solid #fff;background-position:center center;background-repeat:no-repeat;}
   .h_items li:nth-of-type(8n){margin:0 0 4.5px 0;}
 `;
-const AnimatedCard = styled(animated.div)`
-  touch-action:none;
-  transform-origin:0 0;
-  position:absolute;
-  left:7.5%;
-  padding-top:120%;
-  width:85%;
-`;
+// const AnimatedCard = styled(animated.div)`
+//   touch-action:none;
+//   transform-origin:0 0;
+//   position:absolute;
+//   left:7.5%;
+//   padding-top:120%;
+//   width:85%;
+// `;
 const ChCard = styled.div`
   position:absolute;
   left:28%;
@@ -200,7 +201,7 @@ const ChBack = styled.div`
   box-shadow:0 0 1px #ff0,0 0 2px #fff,0 0 10px #000;
   border-radius:20px;
   overflow:hidden;
-  transform:rotateY(-180deg);
+  transform:translate(-50%,-50%) rotateY(-180deg);
 `;
 
 const ChInfo = styled.div`
@@ -215,10 +216,16 @@ const ChInfo = styled.div`
 `;
 
 const Character = () => {
-  const slotIdx = 1;
+  const saveData = util.loadData("savedata");
+  const chLength = saveData.ch.length;
+  console.log(chLength);
+  const [slotIdx, setSlotIdx] = useState(1);
   const [chPage, setChPage] = useState(0);
+  const chRef = useRef(null);
   const iconState = [iconState0, iconState1, iconState2, iconState3, iconState4, iconState5, iconState6]
   
+  // useLayoutEffect(() => {
+  // }, [chRef])
   const [{x, y}, api] = useSpring(() => {
     return (
       {
@@ -227,71 +234,91 @@ const Character = () => {
       }
     )
   });
-  // const dragBind = useDrag(({ down, tap, movement: [mx, my]}) => {
-  //   console.log(mx, my, tap);
-  //   if( mx > 10 ){
-  //     console.log("x: right");
-  //   } else if ( mx < -10 ){
-  //     console.log("x: left");
-  //   }
-  //   api.start(
-  //     () => {
-  //       return (
-  //         { 
-  //           x: down ? mx: 0, 
-  //           // y: down ? my: 0, 
-  //           immediate: down
-  //         }
-  //       )
+  // const dragBind = useDrag(({ active, down, movement: [mx, my], direction: [xDir, yDir], cancel}) => {
+  //   if (!active && yDir < 0 && Math.abs(my) > swipeDistance) { // 위로
+  //     console.log("a");
+  //     setChPage((prevPage) => {
+  //       return prevPage < 6 ? ++prevPage : 0;
+  //     });
+  //     return;
+  //   } else if (!active && yDir > 0 && Math.abs(my) > swipeDistance){ //아래로
+  //     console.log("b");
+  //     setChPage(0);
+  //     return;
+  //   };
+  //   if (chPage === 0){
+  //     if (!active && xDir > 0 && Math.abs(mx) > swipeDistance) {
+  //       console.log("c");
+  //       setSlotIdx((prevSlot) => {
+  //         chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
+  //         return prevSlot < 0 ? 0 : --prevSlot;
+  //       });
+  //       return;
+  //     } else if(!active && xDir < 0 && Math.abs(mx) > swipeDistance){
+  //       console.log("d");
+  //       setSlotIdx((prevSlot) => {
+  //         chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
+  //         return ++prevSlot;
+  //       });
+  //       return;
   //     }
-  //   )
+  //     api.start(
+  //       () => {
+  //         return (
+  //           { 
+  //             x: down ? mx: 0, 
+  //             // y: down ? my: 0, 
+  //             immediate: down
+  //           }
+  //         )
+  //       }
+  //     )
+  //   }
   // },
   // { 
-  //    axis: 'lock',
-  //    bounds: { left: -100, right: 100, top: -50, bottom: 50 },
+  //   //  axis: 'lock',
+  //    bounds: { left: -50, right: 50 },
   //    delay: 1000,
   //    from: () => [x.get(), 0],
   // });
+  const gestureDistance = 30;
   const gestureBind = useGesture({
-    onDrag: ({ active, down, movement: [mx, my], direction: [xDir, yDir], cancel}) => {
-      if (!active && yDir < 0 && Math.abs(my) > 50) { // 위로
-        setChPage((prevPage) => {
-          return prevPage < 6 ? ++prevPage : 0;
-        });
-      } else if (!active && yDir > 0 && Math.abs(my) > 50){ //아래로
-        setChPage(0);
-      };
-      if (chPage === 0){
-        if (active && Math.abs(mx) > 50) {
-          console.log("active");
-        } else{
-          console.log("cancel");
+    onDrag: ({ active, movement: [mx, my], direction: [xDir, yDir], cancel}) => {
+      if (Math.abs(mx) <= gestureDistance){
+        if (!active && yDir < 0 && Math.abs(my) > gestureDistance) { // 위로
+          setChPage((prevPage) => {
+            return prevPage < 6 ? ++prevPage : 0;
+          });
+        } else if (!active && yDir > 0 && Math.abs(my) > gestureDistance){ //아래로
+          setChPage(0);
+        };
+      }
+      if(Math.abs(my) <= gestureDistance){
+        if (!active && xDir > 0 && Math.abs(mx) > gestureDistance) { //오른쪽
+          setSlotIdx((prevSlot) => {
+            chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
+            prevSlot++;
+            return prevSlot > chLength - 1 ? 0 : prevSlot;
+          });
+        } else if(!active && xDir < 0 && Math.abs(mx) > gestureDistance){ //왼쪽
+          setSlotIdx((prevSlot) => {
+            chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
+            prevSlot--;
+            return prevSlot < 0 ? chLength - 1 : prevSlot;
+          });
         }
-        api.start(
-          () => {
-            return (
-              { 
-                x: down ? mx: 0, 
-                // y: down ? my: 0, 
-                immediate: down
-              }
-            )
-          }
-        )
       }
     },
   });
   return (
     <>
-      <ChWrap backImg={imgBack} stateIcon={iconState} className={`ch_wrap page${chPage}`}>
+      <ChWrap {...gestureBind()} style={{x, y}} backImg={imgBack} stateIcon={iconState} className={`ch_wrap page${chPage}`}>
       {/* page0(카드디자인),page1(능력치),page2(스킬),page3(인연),page4(장비),page5(적용치) */}
-				<AnimatedCard {...gestureBind()} style={{x, y}}>
-          <ChCard className="ch_card transition">
-            <Img imgurl={imgRing} />
-            <CharacterCard slotIdx={slotIdx} />
-            <ChBack cardBack={imgCardBack} className="ch_back transition" />
-          </ChCard>
-				</AnimatedCard>
+        <ChCard ref={chRef} className="ch_card transition">
+          <Img imgurl={imgRing} />
+          <CharacterCard slotIdx={slotIdx} />
+          <ChBack cardBack={imgCardBack} className="ch_back transition" />
+        </ChCard>
         <CharacterList />
         <CharacterHeader />
 				<ChInfo stateBack={stateBack} frameBack={frameChBack} className="ch_info transition">

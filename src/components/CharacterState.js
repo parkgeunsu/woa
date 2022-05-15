@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import styled from 'styled-components';
 import { util } from 'components/Libs';
 
@@ -50,9 +50,12 @@ const CharacterState = ({
   const gameData = util.loadData("gamedata");
   const saveData = util.loadData("savedata");
   const stateArr = gameData.stateName;
-  const saveCh = saveData.ch[slotIdx];
-  const chIdx = saveCh.idx;
-  util.saveLvState(1);
+  const [slotCh, setSlotCh] = useState(saveData.ch[slotIdx]);
+  // const chIdx = saveCh.idx;
+  // util.saveLvState(0);
+  useLayoutEffect(() => {
+    setSlotCh(saveData.ch[slotIdx]);
+  }, [slotIdx]);
   return (
     <>
       <State className="state">
@@ -64,16 +67,16 @@ const CharacterState = ({
                 <div key={`chst${idx}`} className={`st st${idx}`} flex="true">
                   <span className="name">{data.title}</span>
                   <span className="total_bar">
-                    <FrameBar chMaxSt={saveCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="frame_bar transition gradient_light">
-                      <Bar rSt={saveCh['rSt'+idx]} chMaxSt={saveCh['maxSt'+idx]} className="bar transition gradient_dark_y">
+                    <FrameBar chMaxSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="frame_bar transition gradient_light">
+                      <Bar rSt={slotCh['rSt'+idx]} chMaxSt={slotCh['maxSt'+idx]} className="bar transition gradient_dark_y">
                         <span className="ico"></span>
                         {/* <span className="txt_current">0</span> */}
                       </Bar>
                     </FrameBar>
-                    <BackBar stateBack={stateBack} chMaxSt={saveCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="back_bar transition" />
+                    <BackBar stateBack={stateBack} chMaxSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="back_bar transition" />
                   </span>
-                  <TextTotal rSt={saveCh['rSt'+idx]} chMaxSt={saveCh['maxSt'+idx]} className="txt_total" title={data.title}>
-                    {saveCh['rSt'+idx]}
+                  <TextTotal rSt={slotCh['rSt'+idx]} chMaxSt={slotCh['maxSt'+idx]} className="txt_total" title={data.title}>
+                    {slotCh['rSt'+idx]}
                   </TextTotal>
                 </div>
               )
