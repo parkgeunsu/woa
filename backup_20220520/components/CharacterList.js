@@ -70,15 +70,14 @@ const ChracterHeader = ({
           { saveData.ch && saveData.ch.map((data, idx) => {
             const saveCh = saveData.ch[idx];
             const chData = gameData.ch[saveCh.idx];
-            console.log(chData);
             return (
               <li className={`g${chData.grade} ${slotIdx === idx ? 'on' : ''}`} key={idx} onClick={() => {changeChSlot(idx)}}>
                 <ListRing className="list_ring" imgRingBack={imgRingBack} />
                 <ListCh className="list_ch" chDisplay={imgSet.chImg[chData.display]} />
-                <ListChStyle className="list_chstyle" styleDisplay={imgSet.chStyleImg[chData.style]} />
+                <ListChStyle className="list_chstyle" styleDisplay={imgSet.chStyleImg[chData.display]} />
               </li>
             )
-          })}e
+          })}
         </ChListUl>
       </ChList>
     </>
