@@ -156,8 +156,18 @@ const CardElement = styled.li`
 	background-repeat:no-repeat;background-position:center center;background-size:100%;z-index:1;pointer-events:none;
 `;
 const CardStar = styled.li`
-	left:0;bottom:22%;width:100%;height:12px;z-index:5;text-align:center;
-	span{display:inline-block;width:12px;height:12px;}
+	left:0;bottom:22%;width:100%;height:${({type}) => {
+		return (
+			type === 'open' ? 'height:25px' : 'height:12px'
+		);
+	}};z-index:5;text-align:center;
+	span{display:inline-block;
+		${({type}) => {
+			return (
+				type === 'open' ? 'width:25px;height:25px' : 'width:12px;height:12px'
+			);
+		}}
+	}
 	span:first-of-type{background:url(${({starIcon}) => starIcon[0]}) no-repeat center center;background-size:100%}
 	span:nth-of-type(2){background:url(${({starIcon}) => starIcon[1]}) no-repeat center center;background-size:100%;}
 	span:nth-of-type(3){background:url(${({starIcon}) => starIcon[2]}) no-repeat center center;background-size:100%;}
@@ -369,45 +379,49 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 	const cardGrade = getGrade(num, gachaType);
 	for (let i = 0; i < num; ++i) {
 		const newIdx = getCardIdx(cardGrade.arr[i]);		
-
+		console.log(cardGrade[i], typeof cardGrade[i]);
 		const addGrade = Math.random();
 		let luckyGradePoint = 0;
-		if (cardGrade === 1) {
-			if (addGrade < .005) {
-				luckyGradePoint = 5;
-			} else if (addGrade < .01) {
-				luckyGradePoint = 4;
-			} else if (addGrade < .05) {
-				luckyGradePoint = 3;
-			} else if (addGrade < .1) {
-				luckyGradePoint = 2;
-			} else if (addGrade < .3) {
-				luckyGradePoint = 1;
-			}
-		} else if (cardGrade === 2) {
-			if (addGrade < .005) {
-				luckyGradePoint = 4;
-			} else if (addGrade < .01) {
-				luckyGradePoint = 3;
-			} else if (addGrade < .05) {
-				luckyGradePoint = 2;
-			} else if (addGrade < .1) {
-				luckyGradePoint = 1;
-			}
-		} else if (cardGrade === 3) {
-			if (addGrade < .005) {
-				luckyGradePoint = 3;
-			} else if (addGrade < .01) {
-				luckyGradePoint = 2;
-			} else if (addGrade < .05) {
-				luckyGradePoint = 1;
-			}
-		} else if (cardGrade === 4) {
-			if (addGrade < .005) {
-				luckyGradePoint = 2;
-			} else if (addGrade < .01) {
-				luckyGradePoint = 1;
-			}
+		// if (cardGrade === 1) {
+		// 	if (addGrade < .005) {
+		// 		luckyGradePoint = 5;
+		// 	} else if (addGrade < .01) {
+		// 		luckyGradePoint = 4;
+		// 	} else if (addGrade < .05) {
+		// 		luckyGradePoint = 3;
+		// 	} else if (addGrade < .1) {
+		// 		luckyGradePoint = 2;
+		// 	} else if (addGrade < .3) {
+		// 		luckyGradePoint = 1;
+		// 	}
+		// } else if (cardGrade === 2) {
+		// 	if (addGrade < .005) {
+		// 		luckyGradePoint = 4;
+		// 	} else if (addGrade < .01) {
+		// 		luckyGradePoint = 3;
+		// 	} else if (addGrade < .05) {
+		// 		luckyGradePoint = 2;
+		// 	} else if (addGrade < .1) {
+		// 		luckyGradePoint = 1;
+		// 	}
+		// } else if (cardGrade === 3) {
+		// 	if (addGrade < .005) {
+		// 		luckyGradePoint = 3;
+		// 	} else if (addGrade < .01) {
+		// 		luckyGradePoint = 2;
+		// 	} else if (addGrade < .05) {
+		// 		luckyGradePoint = 1;
+		// 	}
+		// } else if (cardGrade === 4) {
+		// 	if (addGrade < .005) {
+		// 		luckyGradePoint = 2;
+		// 	} else if (addGrade < .01) {
+		// 		luckyGradePoint = 1;
+		// 	}
+		// }
+		if (cardGrade[i] === 2){
+			luckyGradePoint = 3;
+			console.log('a');
 		}
 		const cardG = cardGrade + luckyGradePoint;
 		chArr.push({
@@ -785,7 +799,7 @@ const Gacha = ({
 							<CardStyle className="ch_style" styleDisplay={imgSet.chStyleImg[gameData.ch[infoIdx].style]} />
 							<CardRing className="ring" ringBack={imgRingBack}></CardRing>
 							<CardElement className="element" ringDisplay={imgSet.ringImg[gameData.ch[infoIdx].element]} />
-							<CardStar className="star" starIcon={iconStar}>
+							<CardStar  type={'open'} className="star" starIcon={iconStar}>
 								{gameData.ch[infoIdx].grade && makeStar(gameData.ch[infoIdx].grade)}
 							</CardStar>
 							<CardFrame className="frame" cardFrame={imgCardFrame} />
