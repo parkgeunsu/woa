@@ -2,6 +2,7 @@ import React, { useState, useContext, useLayoutEffect, useRef, useCallback } fro
 import { AppContext } from 'App';
 import styled from 'styled-components';
 
+import { util } from 'components/Libs';
 import ModalContainer from 'components/ModalContainer';
 import Modal from 'components/Modal';
 
@@ -303,7 +304,7 @@ const GachaInGraph = styled.div`
 	position:absolute;left:35%;top:10%;width:60%;padding-top:60%;font-size:0;z-index:1;
 	canvas{position:absolute;left:0;top:0;width:100%;}
 `;
-const makeCard = (num, gachaType, gameData) => { //가챠횟수
+const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가챠횟수
   const separationGrade = () => { // 캐릭 등급분리
 		let gradeChArr = [[],[],[],[],[],[],[]];
     for(const v of gameData.ch){
@@ -364,14 +365,81 @@ const makeCard = (num, gachaType, gameData) => { //가챠횟수
 		};
   }
 	let chArr = [];
+	let saveArr = [];
 	const cardGrade = getGrade(num, gachaType);
 	for (let i = 0; i < num; ++i) {
+		const newIdx = getCardIdx(cardGrade.arr[i]);		
+
+		const addGrade = Math.random();
+		let luckyGradePoint = 0;
+		if (cardGrade === 1) {
+			if (addGrade < .005) {
+				luckyGradePoint = 5;
+			} else if (addGrade < .01) {
+				luckyGradePoint = 4;
+			} else if (addGrade < .05) {
+				luckyGradePoint = 3;
+			} else if (addGrade < .1) {
+				luckyGradePoint = 2;
+			} else if (addGrade < .3) {
+				luckyGradePoint = 1;
+			}
+		} else if (cardGrade === 2) {
+			if (addGrade < .005) {
+				luckyGradePoint = 4;
+			} else if (addGrade < .01) {
+				luckyGradePoint = 3;
+			} else if (addGrade < .05) {
+				luckyGradePoint = 2;
+			} else if (addGrade < .1) {
+				luckyGradePoint = 1;
+			}
+		} else if (cardGrade === 3) {
+			if (addGrade < .005) {
+				luckyGradePoint = 3;
+			} else if (addGrade < .01) {
+				luckyGradePoint = 2;
+			} else if (addGrade < .05) {
+				luckyGradePoint = 1;
+			}
+		} else if (cardGrade === 4) {
+			if (addGrade < .005) {
+				luckyGradePoint = 2;
+			} else if (addGrade < .01) {
+				luckyGradePoint = 1;
+			}
+		}
+		const cardG = cardGrade + luckyGradePoint;
 		chArr.push({
-			idx: getCardIdx(cardGrade.arr[i]),
+			idx: newIdx,
+			grade: cardG,
 			posX: Math.random() * 100,
 			posY: Math.random() * 40 + 60,
 			rotate: Math.random() * 360,
 		});
+		const itemEff = util.getItemEff();
+		saveData.ch.push(util.saveLvState('', {
+			itemEff: itemEff,
+			grade: '',
+			newState: {
+				actionPoint: 20,
+				exp: 0,
+				hasExp: 0,
+				grade: cardG,
+				idx: newIdx,
+				items: [{}, {}, {}, {}, {}, {}, {}, {}],
+				lv: 1,
+				sk: [{idx: 0, lv: 1}],
+				stateType: Math.floor(Math.random()*4),
+			},
+		}, saveData, gameData));
+		changeSaveData(saveData); //캐릭터 세이브
+		// saveArr.push(util.saveCharacter({ 
+		// 	saveData: saveData, 
+		// 	slotIdx: '',
+		// 	gameData: gameData,
+		// 	newCh: newIdx,
+		// }));
 	}
 	return {
 		chArr: chArr,
@@ -421,7 +489,7 @@ const Gacha = ({
 				sData.info.money -= data.price; //돈 계산
 			}
 			changeSaveData(sData);
-			const cardList = makeCard(data.num, data.type, gameData);
+			const cardList = makeCard(data.num, data.type, gameData, saveData, changeSaveData);
 			maxCardGrade.current = cardList.maxCard;
 			setGachaCard(cardList.chArr);
 		}
@@ -668,7 +736,6 @@ const Gacha = ({
 								<GachaCard onClick={() => {
 									setInfoIdx(data.idx);
 									infoRef.current.classList.add('on');
-									console.log(gameData.ch[infoIdx]);
 									popCard(gameData.ch[infoIdx]);
 								}} ref={(element) => {cardRef.current[idx] = element}} key={`gachaCard${idx}`} posX={data.posX} posY={data.posY} rotate={data.rotate} className="card ready" data-grade={ch.grade}>
 									<GachaFront className="front" idx={data.idx} gameData={gameData}>
@@ -729,35 +796,45 @@ const Gacha = ({
 					</GachaInGraph>
 					<div className="ch_state scroll-y">
 						<ul>
+							<li>
+								<dl>
+									<dt>State (능력치)</dt>
+									<dd>
+											<span className="st st0">{`${gameData.ch[infoIdx].st0} (${gameData.stateName[0]})`} </span>
+											<span className="st st1">{`${gameData.ch[infoIdx].st1} (${gameData.stateName[1]})`} </span>
+											<span className="st st2">{`${gameData.ch[infoIdx].st2} (${gameData.stateName[2]})`} </span>
+											<span className="st st3">{`${gameData.ch[infoIdx].st3} (${gameData.stateName[3]})`} </span>
+											<span className="st st4">{`${gameData.ch[infoIdx].st4} (${gameData.stateName[4]})`} </span>
+											<span className="st st5">{`${gameData.ch[infoIdx].st5} (${gameData.stateName[5]})`} </span>
+											<span className="st st6">{`${gameData.ch[infoIdx].st6} (${gameData.stateName[6]})`} </span>
+									</dd>
+								</dl>
+							</li>
+							<li>
+								<dl>
+									<dt>Growth (성장)</dt>
+									{/* <dd><span>{gameData.stateType[gameData.ch[infoIdx].stateType].na}</span></dd> */}
+								</dl>
+							</li>
+							<li>
+								<dl>
+									<dt>Relation (인연)</dt>
+									<dd>
+										{gameData.ch[infoIdx].relation && gameData.ch[infoIdx].relation.map((data, idx) => {
+											return (
+												<span key={idx}>{gameData.relation[data.idx].na}</span>
+											);
+										})}
+									</dd>
+								</dl>
+							</li>
+							<li>
+								<dl>
+									<dt>Skill (스킬)</dt>
+									<dd><span>스킬1</span></dd>
+								</dl>
+							</li>
 						</ul>
-						{/* 
-						html.state += '<li><dl>';
-						html.state +=   '<dt>State (능력치)</dt>';
-						html.state +=   '<dd>';
-						for(let i = 0;i < 7; ++i){
-							html.state +=   '<span class="st st'+i+'">'+chData['st'+i]+' ('+st_t[i]+')</span>';
-						}
-						html.state +=   '</dd>';
-						html.state += '</dt></li>';
-						html.state += '</li>';
-						html.state += '<li><dl>';
-						html.state +=   '<dt>Growth (성장)</dt>';
-						html.state +=   '<dd><span>'+gameData.stateType[chData.stateType].na+'</span></dd>';
-						html.state += '</dt></li>';
-						html.state += '</li>';
-						html.state += '<li><dl>';
-						html.state +=   '<dt>Relation (인연)</dt>';
-						html.state +=   '<dd>';
-						chData.relation.forEach((v)=>{
-							html.state += '<span>'+gameData.relation[v.idx].na +'</span>';
-						});
-						html.state +=   '</dd>';
-						html.state += '</li>';
-						html.state += '<li><dl>';
-						html.state +=   '<dt>Skill (스킬)</dt>';
-						html.state +=   '<dd><span>스킬1</span></dd>';
-						html.state += '</li>';
-						this.el.gacha_infoState.innerHTML = html.state; */}
 					</div>
 				</GachaInfo>
 			</GachaWrap>

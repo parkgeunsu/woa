@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useState, createContext } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 import { version, gameData } from 'gamedata/data';
-import { util, fn } from 'components/Libs';
+import { util } from 'components/Libs';
 import { save } from 'gamedata/savedata';
 import Menu from 'components/Menu';
 import Main from 'components/Main';
@@ -54,7 +54,7 @@ const App = () => {
     }
   }
   const [page, setPage] = useState("main");
-  const slotIdx = '';
+  const slotIdx = 'all';
   const changePage = (pagename) => {
     setPage(pagename);
   }
@@ -69,17 +69,18 @@ const App = () => {
     util.saveData('version', version);
   }
 
-  const [saveData, setSaveData] = useState(util.saveItemEff({
+  const [saveData, setSaveData] = useState(util.saveCharacter({
     saveData: useSaveData, 
     slotIdx: slotIdx,
     gameData: gameData,
   }));
   const changeSaveData = (objData) => {
-    setSaveData(util.saveItemEff({
-      saveData: objData,
-      slotIdx: slotIdx,
-      gameData: gameData,
-    }));
+    setSaveData(objData);
+    // setSaveData(util.saveCharacter({
+    //   saveData: objData,
+    //   slotIdx: slotIdx,
+    //   gameData: gameData,
+    // }));
     util.saveData('saveData', objData);
   }
   return (

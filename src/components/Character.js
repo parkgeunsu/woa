@@ -1,4 +1,4 @@
-import React, { useState, useRef, useLayoutEffect } from 'react';
+import React, { useState, useRef, useLyoutEffect } from 'react';
 import styled from 'styled-components';
 import { useGesture, useDrag } from '@use-gesture/react';
 import { useSpring, animated } from '@react-spring/web';
@@ -237,6 +237,7 @@ const Character = ({
       }
     )
   });
+  const test = {
   // const dragBind = useDrag(({ active, down, movement: [mx, my], direction: [xDir, yDir], cancel}) => {
   //   if (!active && yDir < 0 && Math.abs(my) > swipeDistance) { // 위로
   //     console.log("a");
@@ -284,6 +285,7 @@ const Character = ({
   //    delay: 1000,
   //    from: () => [x.get(), 0],
   // });
+  }
   const gestureDistance = 30;
   const gestureBind = useGesture({
     onDrag: ({ active, movement: [mx, my], direction: [xDir, yDir], cancel}) => {

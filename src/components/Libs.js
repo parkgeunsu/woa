@@ -54,7 +54,7 @@ export const util = { //this.loadImage();
   saveLvState: (saveSlot, obj, saveData, gameData) => {//카드 획득시 레벨당 능력치 저장(캐릭터 저장된 슬롯번호, {카드등급, 아이템 이펙트등...})
     const stateArr = gameData.stateName;
     let battleState_ = [];
-    let saveChSlot = saveData.ch[saveSlot];
+    let saveChSlot = saveData.ch[saveSlot] || obj.newState;
     stateArr.forEach((el,index)=>{
       const st = gameData.ch[saveChSlot.idx]['st'+index],//실제 능력치
       per_current = gameData.stateType[saveChSlot.stateType].arr[saveChSlot.lv-1]*0.01,//성장타입에 따른 LV당 %
@@ -84,7 +84,7 @@ export const util = { //this.loadImage();
     }
     return saveChSlot;
   },
-  saveItemEff: (dataObj) => { //아이템 변경시 스텟저장
+  saveCharacter: (dataObj) => { //아이템 변경시 스텟저장
     // console.log(dataObj);
     const gameData = dataObj.gameData;
     const saveData = dataObj.saveData;
@@ -92,55 +92,20 @@ export const util = { //this.loadImage();
     let saveCh = [
       ...dataObj.saveData.ch,
     ];
-    const getItemEff = (idx, saveCh) => {
-      const saveItems = saveCh[idx].items;
-      //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MATK(5), 술방MDEF(6), 회복RCV(7), 속도SPD(8), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(20),암(21),수(22),화(23),풍(24),지(25), 진형(100)
-      let effData = [];
-      saveItems.forEach((item) => {
-        if(item.idx !== undefined){
-          gameItem.equip[item.idx].eff.forEach((eff)=>{
-            if(effData[eff.type] === undefined) {
-              effData[eff.type] = {percent:0, number:0};
-            }
-            if(eff.num[item.upgrade].indexOf('%') > 0){
-              effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num[item.upgrade]);
-            }else{
-              effData[eff.type].number = effData[eff.type].number + parseInt(eff.num[item.upgrade]);
-            }
-          });
-        }
-        if(item.hole){
-          item.hole.forEach((holeNum)=>{//stone 정보
-            const stone = gameItem.hole[holeNum];
-            if(holeNum !== 0){
-              stone.eff.forEach((eff)=>{
-                if(effData[eff.type] === undefined) {
-                  effData[eff.type] = {percent:0, number:0};
-                }
-                if(eff.num.indexOf('%') > 0){
-                  effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num);
-                }else{
-                  effData[eff.type].number = effData[eff.type].number + parseInt(eff.num);
-                }
-              });
-            }
-          });
-        }
-      });
-      return effData;
-    }
     if (typeof dataObj.slotIdx === "number") { //슬롯설정이 되면 개별 캐릭만 실행
-      const itemEff = getItemEff(dataObj.slotIdx, saveCh);
+      const itemEff = util.getItemEff(dataObj.slotIdx, saveCh, gameItem);
       saveCh[dataObj.slotIdx] = util.saveLvState(dataObj.slotIdx, {
         itemEff: itemEff,
         grade: gameData.ch[saveCh[dataObj.slotIdx].idx].grade,
+        newState: {},
       }, saveData, gameData)
-    } else { //슬롯설정이 없으면 전체 캐릭 실행
+    } else if (dataObj.slotIdx === "all") { //슬롯설정이 없으면 전체 캐릭 실행
       saveCh.forEach((chData, idx) => {
-        const itemEff = getItemEff(idx, saveCh);
+        const itemEff = util.getItemEff(idx, saveCh, gameItem);
         saveCh[idx] = util.saveLvState(idx, {
           itemEff: itemEff,
           grade: gameData.ch[saveCh[idx].idx].grade,
+          newState: {},
         }, saveData, gameData);
       });
     }
@@ -148,6 +113,43 @@ export const util = { //this.loadImage();
       ...saveData,
       ch: saveCh,
     }
+  },
+  getItemEff: (idx, saveCh, gameItem) => {
+    const saveItems = typeof idx === 'number' ? saveCh[idx].items : [{}, {}, {}, {}, {}, {}, {}, {}];
+    //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MATK(5), 술방MDEF(6), 회복RCV(7), 속도SPD(8), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(20),암(21),수(22),화(23),풍(24),지(25), 진형(100)
+    let effData = [];
+    saveItems.forEach((item) => {
+      if(item.idx !== undefined){
+        gameItem.equip[item.idx].eff.forEach((eff)=>{
+          if(effData[eff.type] === undefined) {
+            effData[eff.type] = {percent:0, number:0};
+          }
+          if(eff.num[item.upgrade].indexOf('%') > 0){
+            effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num[item.upgrade]);
+          }else{
+            effData[eff.type].number = effData[eff.type].number + parseInt(eff.num[item.upgrade]);
+          }
+        });
+      }
+      if(item.hole){
+        item.hole.forEach((holeNum)=>{//stone 정보
+          const stone = gameItem.hole[holeNum];
+          if(holeNum !== 0){
+            stone.eff.forEach((eff)=>{
+              if(effData[eff.type] === undefined) {
+                effData[eff.type] = {percent:0, number:0};
+              }
+              if(eff.num.indexOf('%') > 0){
+                effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num);
+              }else{
+                effData[eff.type].number = effData[eff.type].number + parseInt(eff.num);
+              }
+            });
+          }
+        });
+      }
+    });
+    return effData;
   },
   getTotalState: (state) => {
     let stateArr = [];
