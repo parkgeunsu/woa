@@ -1,21 +1,4 @@
 'use strict';
-
-class Touch{
-  constructor(){
-    this.el = {}
-    this.type = '';
-    this.set_element();
-  }
-  set_element(){
-    this.el.hammertime = new Hammer(document.querySelector('.content'));
-  }
-  set_touch(type){
-    this.reset();
-    this.type = type;
-    this.touch_event();
-  }
-}
-
 class Data{//1
   constructor(data){
     if(!data || Object.keys(data).length === 0){
@@ -81,60 +64,7 @@ class Data{//1
     this.save_data(data);
     return save_idx;
   }
-  get_data(){
-    let data = {}
-    data.ch = JSON.parse(localStorage.getItem('ch'));
-    data.items = JSON.parse(localStorage.getItem('items'));
-    data.info = JSON.parse(localStorage.getItem('info'));
-    data.lineup = JSON.parse(localStorage.getItem('lineup'));
-    return data;
-  }
-  save_data(data){
-    let _data = {};
-    if(!data){
-      _data.info = this.userData.info;
-      _data.ch = this.userData.ch;
-      _data.items = this.userData.items;
-      _data.lineup = this.userData.lineup;
-    }else{
-      _data = data;
-    }
-    localStorage.setItem('info',JSON.stringify(_data.info));
-    localStorage.setItem('ch',JSON.stringify(_data.ch));
-    localStorage.setItem('items',JSON.stringify(_data.items));
-    localStorage.setItem('lineup',JSON.stringify(_data.lineup));
-    this.userData.info = _data.info;
-    this.userData.ch = _data.ch;
-    this.userData.items = _data.items;
-    this.userData.lineup = _data.lineup;
-  }
 }
-
-class Header{//2
-  constructor(){
-    this.el = {}
-    this.set_element();
-    this.set_info();
-    awb.fn = new Fn();
-    awb.util = new Util();
-    awb.menu = new Menu('main');
-    awb.main = new Main();
-  }
-  set_element(){
-    this.el.id = document.querySelector('.header .lv > .txt');
-    this.el.lv = document.querySelector('.header .lv .ico .txt');
-    this.el.money = document.querySelector('.header .money .txt');
-    this.el.diamond = document.querySelector('.header .diamond .txt');
-  }
-  set_info(){
-    let info = JSON.parse(localStorage.getItem('info'))
-    this.el.id.innerHTML = info.id;//아이디 셋팅
-    this.el.lv.innerHTML = info.lv;//레벨 셋팅
-    this.el.diamond.innerHTML = info.diamond;//다이아 셋팅
-    this.el.money.innerHTML = info.money;//돈 셋팅
-  }
-}
-
 class Ch{//4
   constructor(){
     this.el = {};
@@ -298,30 +228,16 @@ class Gacha{
   constructor(){
     this.el = {}
     this.setT = null;
-    this.gacha_list = [
-      {na:'Premium 10',type:'p10',num:10,price:1400},
-      {na:'Premium 1',type:'p1',num:1,price:150},
-      {na:'Normal 10',type:'n10',num:10,price:20000},
-      {na:'Normal 1',type:'n1',num:1,price:2000}
-    ]
     this.separation_grade();
     this.set_element();
     this.display();
     this.selectCard = 0;
     this.arr_ch = [];
     this.ch_saveIdx = [];
-    this.el.touch.addEventListener('click',(e)=>{
-      this.openCard(this);
-    });
     this.el.gacha_info.addEventListener('click',(e)=>{
       this.el.gacha_info.classList.remove('on');
     });
     window.addEventListener('resize', this.reset.bind(this), false);
-  }
-  separation_grade(){
-    for(const v of gameData.ch){
-      gameData.chOfGrade[v.grade-1].push(v);
-    }
   }
   set_element(){
     this.el.container = document.querySelector('.gacha_wrap');
@@ -337,23 +253,6 @@ class Gacha{
     this.el.gacha_can = this.el.gacha_infoGraph.querySelector('canvas');
     this.el.gacha_infoState = this.el.gacha_info.querySelector('.ch_state');
   }
-  display(){
-    let html_bt = '';
-    html_bt += '<ul class="menu white">';
-    this.gacha_list.forEach((v)=>{
-      html_bt += '<li><button>'+v.na+' Gacha <span class="price '+(v.type.indexOf('p') < 0 ? 'gold' : 'dia')+'">'+v.price+'</span></button></li>';
-    });
-    html_bt += '</ul>';
-    this.el.gacha_menu.innerHTML = html_bt;
-    this.el.gacha_bt = this.el.gacha_menu.querySelectorAll('button');
-    this.el.gacha_bt.forEach((el,idx)=>{
-      el.addEventListener('click',(e)=>{
-        let gacha_type = this.gacha_list[idx];
-        this.chkMoney(gacha_type);
-      });
-    });
-    this.el.gacha_menu.style.height = this.gacha_list.length*45-10+'px';
-  }
   reset(){
     clearTimeout(this.setT);
     this.el.container.classList.value = 'gacha_wrap';
@@ -364,303 +263,7 @@ class Gacha{
     this.arr_ch = [];
     this.selectCard = 0;
   }
-  chkMoney(gacha_type){
-    const type = (gacha_type.type.indexOf('p') >= 0) ? 'dia' : 'gold',
-        price = gacha_type.price,
-        num = gacha_type.num;
-    if(type >= 0){
-      awb.fn.modal({txt:'발바닥 '+price+'을 사용하시겠습니까?',bt:[{txt:'사용',fn:'gacha'},{txt:'취소',fn:'popClose'}],gachaData:{type:type,num:num,price:price}},'confirm');
-    }else{
-      awb.fn.modal({txt:'골드 '+price+'을 사용하시겠습니까?',bt:[{txt:'사용',fn:'gacha'},{txt:'취소',fn:'popClose'}],gachaData:{type:type,num:num,price:price}},'confirm');
-    }
-  }
-  startGacha(n,type){
-    const gacha_list = this.getGrade(n,type);
-    this.el.container.classList.add('start');
-    this.el.gacha_cards.innerHTML = this.makeCard(n,gacha_list.arr);
-      this.el.card = this.el.gacha_cards.querySelectorAll('.card');
-      this.setT = setTimeout(()=>{
-        this.el.card.forEach((el)=>{
-          el.classList.add('ready');
-        });
-      },500);
-      this.el.card.forEach((el,idx)=>{
-        this.setT = setTimeout(()=>{
-          el.classList.add('on');
-        },200*idx+1000);
-      });
-      new Promise((res,rej)=>{
-        this.setT = setTimeout(()=>{
-          this.el.gacha_eff.classList.add('grade'+gacha_list.maxGrade);
-          res();
-        },n*200+1500);
-      }).then(()=>{
-        if(n === 1){
-          this.el.gacha_cards.classList.add('pos_one');
-        }else{
-          this.el.gacha_cards.classList.add('pos');
-        }
-        this.el.touch.classList.add('on');
-      }).then(()=>{
-        this.el.card.forEach((el)=>{
-          el.classList.remove('on');
-        });
-      });
-  }
-  openCard(){
-    if(this.el.card[this.selectCard]){
-      if(this.el.card[this.selectCard].dataset['grade'] > 5){//고급 등급 효과 추가
-        this.el.card[this.selectCard].classList.add('special');
-      }
-      this.el.card[this.selectCard].classList.add('open');
-      this.selectCard++;
-    }else{
-      this.el.touch.classList.remove('on');
-      awb.main.el.root.classList.remove('noback');
-      this.el.card.forEach((el,card_idx)=>{
-        el.addEventListener('click',(e)=>{
-          this.el.gacha_info.classList.add('on');
-          this.popCard(this.ch_saveIdx[card_idx]);
-        });
-      });
-    }
-  }
-  popCard(idx){
-    const ch_data = awb.data.userData.ch[idx];
-    let html = {};
-    html.card = '';
-    html.card += '<li class="name_lv">';
-    html.card +=   '<img class="img" src="./images/card/card_name.png">';
-    html.card +=   '<span class="lv">1</span>';
-    html.card +=   '<span class="name_">'+ch_data.na3+'</span>';
-    html.card +=   '<span class="name">'+ch_data.na1+' '+ch_data.na2+'</span>';
-    html.card += '</li>';
-    html.card += '<li class="ch transition" style="background-image: url(./images/ch/ch'+ch_data.display+'.png);"></li>';
-    html.card += '<li class="ch_style transition" style="background-image: url(./images/ch_style/ch_style'+ch_data.style+'.png);"></li>';
-    html.card += '<li class="ring"></li>';
-    html.card += '<li class="element" style="background-image: url(./images/ring/ring'+ch_data.element+'.png);"></li>';
-    html.card += '<li class="star">'+awb.ch.makeStar(ch_data.grade)+'</li>';
-    html.card += '<li class="frame"></li>';
-    this.el.gacha_infoCard.innerHTML = html.card;
-
-    const state_per = [125,200,200,100,200,100,100],
-          st_t = ['통솔','체력','무력','민첩','지력','정치','매력'],
-          st_c = ['#037ace','#f3004e','#ff5326','#77b516','#f9c215','#5f3dc4','#ce20c2'],
-          ctx_w = this.el.gacha_infoGraph.getBoundingClientRect().width,
-          arc_r = Math.PI*2/7,
-          ctx_c = ctx_w*.5,
-          circle_r = ctx_c*.75,
-          ctx = this.el.gacha_can.getContext('2d');
-    let arc_c = 0,
-        arr = [{},{},{},{},{},{},{}],
-        st = [];
-    this.el.gacha_can.setAttribute('width',ctx_w+'px');
-    this.el.gacha_can.setAttribute('height',ctx_w+'px');
-    let grd = ctx.createLinearGradient(15, ctx_w-30, ctx_w-30, 15);
-    grd.addColorStop(0, "rgb(0,147,255)");
-    grd.addColorStop(1, "rgb(0,255,199)");
-    for(let i = 0; i < 7; ++i){
-      st[i] = ch_data['st'+i];
-      arc_c = st[i]/state_per[i]*circle_r;
-      arr[i].x = Math.cos(arc_r*i)*arc_c+ctx_c;
-      arr[i].y = Math.sin(arc_r*i)*arc_c+ctx_c;
-      arr[i].x_ = Math.cos(arc_r*i)*ctx_c;
-      arr[i].y_ = Math.sin(arc_r*i)*ctx_c;
-    }
-
-    //배경1
-    ctx.beginPath();
-    ctx.fillStyle = 'rgb(50,50,50)';
-    for(let i = 0; i < 7; ++i){
-      const tx = arr[i].x_+ctx_c,
-            ty = arr[i].y_+ctx_c;
-      ctx.lineTo(tx,ty);
-    }
-    ctx.lineTo(arr[0].x_+ctx_c,arr[0].y_+ctx_c);
-    ctx.closePath();
-    ctx.fill();
-
-    //배경2
-    ctx.beginPath();
-    ctx.fillStyle = 'rgb(25,25,25)';
-    for(let i = 0; i < 7; ++i){
-      const tx = arr[i].x_*.9+ctx_c,
-            ty = arr[i].y_*.9+ctx_c;
-      ctx.lineTo(tx,ty);
-    }
-    ctx.lineTo(arr[0].x_*.9+ctx_c,arr[0].y_*.9+ctx_c);
-    ctx.closePath();
-    ctx.fill();
-
-    //배경3
-    ctx.beginPath();
-    ctx.fillStyle = 'rgb(0,0,0)';
-    for(let i = 0; i < 7; ++i){
-      const tx = arr[i].x_*.8+ctx_c,
-            ty = arr[i].y_*.8+ctx_c;
-      ctx.lineTo(tx,ty);
-    }
-    ctx.lineTo(arr[0].x_*.8+ctx_c,arr[0].y_*.8+ctx_c);
-    ctx.closePath();
-    ctx.fill();
-
-    //능력치 면
-    ctx.beginPath();
-    ctx.fillStyle = grd;
-    for(let i = 0; i < 7; ++i){
-      ctx.lineTo(arr[i].x,arr[i].y);
-    }
-    ctx.lineTo(arr[0].x,arr[0].y);
-    ctx.fill();
-
-    //색상 라인
-    // ctx.lineWidth = 1;
-    // for(let i = 0; i < 7; ++i){
-    //   ctx.beginPath();
-    //   ctx.strokeStyle = st_c[i];
-    //   ctx.moveTo(ctx_c,ctx_c);
-    //   ctx.lineTo(arr[i].x,arr[i].y);
-    //   ctx.stroke();
-    // }
-
-    //글씨 배경
-    ctx.shadowColor = '#000';
-    ctx.shadowOffsetX = 2;
-    ctx.shadowOffsetY = 2;
-    ctx.shadowBlur = 4;
-    for(let i = 0; i < 7; ++i){
-      ctx.beginPath();
-      ctx.fillStyle = st_c[i];
-      const tx = arr[i].x_*.85+ctx_c,
-            ty = arr[i].y_*.85+ctx_c;
-      ctx.roundedRectangle(tx-13,ty-9,26,16,8);
-      ctx.fill();
-    }
-
-    //원형
-    ctx.fillStyle = '#fff';
-    for(let i = 0; i < 7; ++i){
-      ctx.beginPath();
-      ctx.fillStyle = st_c[i];
-      ctx.arc(arr[i].x,arr[i].y,2.5,0,Math.PI*2);
-      ctx.fill();
-    }
-    ctx.restore();
-
-    //글씨
-    ctx.beginPath();
-    ctx.font = '11px Arial';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#fff';
-    for(let i = 0; i < 7; ++i){
-      const tx = arr[i].x_*.85+ctx_c,
-            ty = arr[i].y_*.85+ctx_c;
-      ctx.fillText(st_t[i],tx,ty);
-    }
-
-    // ctx.beginPath();
-    // ctx.font = '13px Arial';
-    // ctx.fillStyle = '#f60';
-    // ctx.textAlign = 'center';
-    // for(let i = 0; i < 7; ++i){
-    //   ctx.fillText(st[i],arr[i].x,arr[i].y);//능력치 글씨
-    // }
-    
-    html.state = '';
-    html.state += '<ul>';
-    html.state += '<li><dl>';
-    html.state +=   '<dt>State (능력치)</dt>';
-    html.state +=   '<dd>';
-    for(let i = 0;i < 7; ++i){
-      html.state +=   '<span class="st st'+i+'">'+ch_data['st'+i]+' ('+st_t[i]+')</span>';
-    }
-    html.state +=   '</dd>';
-    html.state += '</dt></li>';
-    html.state += '</li>';
-    html.state += '<li><dl>';
-    html.state +=   '<dt>Growth (성장)</dt>';
-    html.state +=   '<dd><span>'+gameData.stateType[ch_data.stateType].na+'</span></dd>';
-    html.state += '</dt></li>';
-    html.state += '</li>';
-    html.state += '<li><dl>';
-    html.state +=   '<dt>Relation (인연)</dt>';
-    html.state +=   '<dd>';
-    ch_data.relation.forEach((v)=>{
-      html.state += '<span>'+gameData.relation[v.idx].na +'</span>';
-    });
-    html.state +=   '</dd>';
-    html.state += '</li>';
-    html.state += '<li><dl>';
-    html.state +=   '<dt>Skill (스킬)</dt>';
-    html.state +=   '<dd><span>스킬1</span></dd>';
-    html.state += '</li>';
-    html.state += '</ul>';
-    this.el.gacha_infoState.innerHTML = html.state;
-  }
-  getGrade(n,type){
-    let arr;
-    if(type === 'dia'){
-      arr = [3,10,21,38,63,88];//2,4,9,15,29,25,25
-    }else if(type === 'gold'){
-      arr = [2,6,15,30,50,75];//3,7,11,17,25,25
-    }
-    let ch_arr = [];
-    for(let i = 0 ; i < n ; ++i){
-      const ran_count = Math.random()*100;
-      let result_grade = 0;
-      if(ran_count < arr[0]){//7등급
-        result_grade = 6;
-      }else if(ran_count < arr[1]){//6등급
-        result_grade = 5;
-      }else if(ran_count < arr[2]){//5등급
-        result_grade = 4;
-      }else if(ran_count < arr[3]){//4등급
-        result_grade = 3;
-      }else if(ran_count < arr[4]){//3등급
-        result_grade = 2;
-      }else if(ran_count < arr[5]){//2등급
-        result_grade = 1;
-      }else{//1등급
-        result_grade = 0;
-      }
-      ch_arr.push(result_grade);
-    }
-    const clone_arr = ch_arr.slice();
-    const maxGrade = ch_arr.sort((a,b)=>b-a)[0];
-    return {arr:clone_arr,maxGrade:maxGrade < 3 ? 3 : maxGrade};
-  }
-  makeCard(n,arr){
-    let html = '';
-    const ww = 30,
-        hh = 30*1.481;
-    for(let i = 0 ; i < n ; i++){
-      const idx = this.getCardIdx(arr[i]);
-      this.arr_ch.push(idx);
-      html += '<div class="card" data-grade="'+gameData.ch[idx].grade+'" style="left:'+Math.random()*100+'%;top:'+(Math.random()*40+60)+'%;width:'+ww+'%;padding-top:'+hh+'%;transform:translate(-50%,-50%) rotateX(45deg) rotateZ('+Math.random()*360+'deg);"><div class="front" style="box-shadow:0 0 40px '+gameData.chGradeColor[gameData.ch[idx].grade*1]+',0 0 10px '+gameData.chGradeColor[gameData.ch[idx].grade*1]+',0 0 3px '+gameData.chGradeColor[gameData.ch[idx].grade*1]+'">';
-      html += '<ul>';
-      html += '<li class="name_lv">';
-      html +=   '<img class="img" src="./images/card/card_name.png"/>';
-      html +=   '<span class="lv">1</span><span class="name">'+gameData.ch[idx].na1+'</span>';
-      html += '</li>';
-      html += '<li class="ch" style="background-image:url(./images/ch/ch'+gameData.ch[idx].display+'.png);"></li>';
-      html += '<li class="ch_style" style="background-image:url(./images/ch_style/ch_style'+gameData.ch[idx].style+'.png);"></li>';
-      html += '<li class="ring"></li>';
-      html += '<li class="element" style="background-image:url(./images/ring/ring'+gameData.ch[idx].element+'.png);"></li>';
-      html += '<li class="star">'+awb.ch.makeStar(gameData.ch[idx].grade*1)+'</li>';
-      html += '<li class="frame"></li>';
-      html += '</li></ul>';
-      html += '</div><div class="back"></div></div>';
-    }
-    this.ch_saveIdx = awb.data.add_ch(this.arr_ch);//캐릭 데이터 저장
-    return html;
-  }
-  getCardIdx(n){
-    const length = gameData.chOfGrade[n].length,
-          ran = Math.floor(Math.random()*length);
-    return gameData.chOfGrade[n][ran].idx;
-  }
-}
+  
 
 class Lineup{
   constructor(){

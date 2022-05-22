@@ -92,27 +92,25 @@ const ModalButton = styled.div`
   //   });
   // },
 
-const buttonEvent = (dataObj, fn, saveData, gameData, changeSaveData) => {
-	console.log(dataObj)
-	const type = dataObj.split('_');
-	if (type[0] === 'gacha') {
-		fn('start');
-		if (type[1] === 'diamond') {
-			return 'dia';
-		} else if (type[1] === 'gold') {
-			return 'gold';
-		}
+const buttonEvent = (dataInfo, btInfo, fn) => {
+	switch(btInfo.action) {
+		case 'gacha':
+			fn('start', dataInfo);
+			break;
+		case 'popClose':
+			break;
+		default:
+			break;
 	}
 }
-const typeAsContent = (type, dataObj, fn, saveData, gameData, changeSaveData) => {
-	console.log(type, dataObj);
+const typeAsContent = (type, dataObj, fn) => {
 	if (type === 'confirm') {
 		return (
 			<ModalBox>
 				<p>{dataObj.msg}</p>
 				<ModalButton className="bt_box" flex="true">
 					{dataObj?.bt && dataObj.bt.map((btData, idx) => {
-						return <button key={idx} onClick={() => {buttonEvent(btData.action, fn, saveData, gameData, changeSaveData);}} msg="true">{btData.txt}</button>
+						return <button key={idx} onClick={() => {buttonEvent(dataObj.info, dataObj.bt[idx], fn);}} msg="true">{btData.txt}</button>
 					})}
 				</ModalButton>
 			</ModalBox>
@@ -124,7 +122,7 @@ const typeAsContent = (type, dataObj, fn, saveData, gameData, changeSaveData) =>
 				<input type="text" placeholder={dataObj.hint} />
 				<ModalButton className="bt_box" flex="true">
 					{dataObj?.bt && dataObj.bt.map((btData, idx) => {
-						return <button key={idx} onClick={() => {buttonEvent(btData.action);}} msg="true">{btData.txt}</button>
+						return <button key={idx} onClick={() => {buttonEvent(dataObj.info, dataObj.bt[idx], fn);}} msg="true">{btData.txt}</button>
 					})}
 				</ModalButton>
 			</ModalBox>

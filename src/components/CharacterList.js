@@ -1,7 +1,6 @@
-import React, { useLayoutEffect, useRef, useState, useContext } from 'react';
+import React, { useLayoutEffect, useRef, useContext } from 'react';
 import { AppContext } from 'App';
 import styled from 'styled-components';
-import { util } from 'components/Libs';
 import imgRingBack from 'images/ring/back.png';
 
 const ChList = styled.div`
@@ -62,7 +61,7 @@ const ChracterHeader = ({
       const cardHalfNum = Math.floor(listHalfSize / cardWidth);
       scrolluseRef.current.scrollTo(cardWidth * (slotIdx - cardHalfNum), 0);
     }
-  }, [slotIdx]);
+  }, [slotIdx, cardWidth]);
   return (
     <>
       <ChList ref={scrolluseRef} className="ch_list scroll-x">

@@ -1,7 +1,7 @@
 import React from 'react';
 import PopupContinaer from 'components/PopupContainer';
 import styled from 'styled-components';
-import { util, fn } from 'components/Libs';
+import { util } from 'components/Libs';
 
 import { chImg, chStyleImg, ringImg, itemHole } from 'components/ImgSet';
 import imgRing from 'images/ring/ring_.png';

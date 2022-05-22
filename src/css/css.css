@@ -11,25 +11,6 @@
 
 
 /*gacha*/
-.root.gacha .gacha_wrap.start .gacha_menu{height:0 !important;}
-.gacha_area{flex-grow:1;perspective:300px;perspective-origin:50% 100%;transform-style:flat;}
-.gacha_wrap.start .gacha_area .bg{position:absolute;transform:rotateX(45deg);content:'';left:-50%;top:15%;width:200%;height:100%;background:
-	radial-gradient(hsl(0, 100%, 27%) 4%, hsl(0, 100%, 18%) 9%, hsla(0, 100%, 20%, 0) 9%) 0 0,
-	radial-gradient(hsl(0, 100%, 27%) 4%, hsl(0, 100%, 18%) 8%, hsla(0, 100%, 20%, 0) 10%) 50px 50px,
-	radial-gradient(hsla(0, 100%, 30%, 0.8) 20%, hsla(0, 100%, 20%, 0)) 50px 0,
-	radial-gradient(hsla(0, 100%, 30%, 0.8) 20%, hsla(0, 100%, 20%, 0)) 0 50px,
-	radial-gradient(hsla(0, 100%, 20%, 1) 35%, hsla(0, 100%, 20%, 0) 60%) 50px 0,
-	radial-gradient(hsla(0, 100%, 20%, 1) 35%, hsla(0, 100%, 20%, 0) 60%) 100px 50px,
-	radial-gradient(hsla(0, 100%, 15%, 0.7), hsla(0, 100%, 20%, 0)) 0 0,
-	radial-gradient(hsla(0, 100%, 15%, 0.7), hsla(0, 100%, 20%, 0)) 50px 50px,
-	linear-gradient(45deg, hsla(0, 100%, 20%, 0) 49%, hsla(0, 100%, 0%, 1) 50%, hsla(0, 100%, 20%, 0) 70%) 0 0,
-	linear-gradient(-45deg, hsla(0, 100%, 20%, 0) 49%, hsla(0, 100%, 0%, 1) 50%, hsla(0, 100%, 20%, 0) 70%) 0 0;
-	background-color: #300;
-	background-size: 100px 100px;}
-.gacha_area .card{position:absolute;left:20%;top:30%;transition:all linear 2s;opacity:0;z-index:1;}
-.gacha_area .card div{position:absolute;left:0;right:0;top:0;bottom:0;border-radius:5%;overflow:hidden;backface-visibility:hidden;transition:all .7s;}
-.gacha_area .card .front{z-index:1;background:#000;transform:rotateY(180deg);}
-.gacha_area .card .back{transform:rotateY(0deg);background:url(../images/card/card_back.png) no-repeat center center;background-size:100%;z-index:2;}
 .gacha_area .card.ready{opacity:1;transition:all .5s;}
 .gacha_area .card.on{left:50% !important;top:20% !important;transform:translate(-50%,-50%) rotateX(0deg) rotateZ(0deg) !important;}
 .gacha_area .card.on .front{box-shadow:none !important;}

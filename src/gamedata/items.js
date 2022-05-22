@@ -27,9 +27,9 @@ export const items = {
         {idx:7,part:5,grade:1,display:7,na:'철제벳지',price:400,txt:'철로 만든 벳지',eff:[{type:8,num:['3%','4%','7%']}],set:2},
         {idx:8,part:3,grade:2,display:8,na:'철제손톱',price:500,txt:'철로 만든 <i el el0>치기</i>무기',eff:[{type:3,num:['70','75','80']}],set:2},
         {idx:9,part:3,grade:1,display:9,na:'철제판',price:300,txt:'철로 만든 방어구',eff:[{type:4,num:['150','175','200']}],set:2},
-        {idx:9,part:3,grade:5,display:10,na:'김세존발톱',price:300,txt:'전설의 김세존의 새끼발톱',eff:[{type:4,num:['150','175','200']}],set:2},
-        {idx:9,part:3,grade:5,display:11,na:'김세존이빨',price:300,txt:'전설의 김세존의 어금니',eff:[{type:4,num:['150','175','200']}],set:2},
-        {idx:9,part:3,grade:5,display:12,na:'김세존부리',price:300,txt:'전설의 김세존의 부리',eff:[{type:4,num:['150','175','200']}],set:2},
+        {idx:9,part:3,grade:5,display:10,na:'김세존발톱',price:300,txt:'전설의 김세존의 새끼발톱',eff:[{type:4,num:['150','175','200']}],set:0},
+        {idx:9,part:3,grade:5,display:11,na:'김세존이빨',price:300,txt:'전설의 김세존의 어금니',eff:[{type:4,num:['150','175','200']}],set:0},
+        {idx:9,part:3,grade:5,display:12,na:'김세존부리',price:300,txt:'전설의 김세존의 부리',eff:[{type:4,num:['150','175','200']}],set:0},
     ],
     hole:[//홀 장착 아이템
         //type 장착 타입

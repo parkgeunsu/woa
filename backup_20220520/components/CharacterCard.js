@@ -79,19 +79,11 @@ const ListChElement = styled.li`
 `;
 const ListChElement1 = styled.li`
   top:0;width:100%;height:100%;background-repeat:no-repeat;background-position:center center;background-size:cover;z-index:2;pointer-events:none;
-  background-image:url(${({chLv, ringDisplay}) => {
-    if ( chLv > 29) {
-      return ringDisplay;
-    }
-  }});
+  background-image:url(${({chLv, ringDisplay}) => chLv > 29 ? ringDisplay : '' });
 `;
 const ListChElement2 = styled.li`
   top:13%;width:100%;padding-top:100%;background-repeat:no-repeat;background-position:center center;background-size:100%;z-index:2;pointer-events:none;transform:scale(1.35,1.35);animation:rotate_ring 50s linear infinite;
-  background-image:url(${({chLv, ringDisplay}) => {
-    if ( chLv > 49) {
-      return ringDisplay;
-    }
-  }});
+  background-image:url(${({chLv, ringDisplay}) => chLv > 49 ? ringDisplay : '' });
   @keyframes rotate_ring{
     0%{transform:scale(1.35,1.35) rotate(0deg);}
     100%{transform:scale(1.35,1.35) rotate(360deg);}

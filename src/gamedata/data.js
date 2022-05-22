@@ -11,7 +11,6 @@ export const gameData = {
     stateName: ["통솔", "체력", "완력", "민첩", "지력", "정신", "매력"],
     animal_type:animals,//'독0','빛1','암2','물3','불4','바람5','땅6'
     ch:ch,//face_d 얼굴방향, stateType 성장타입, awaken 각성속성
-    chOfGrade:[[],[],[],[],[],[],[]],//캐릭 등급분리
     items:items,
     //grade (0하급poor, 1일반normal, 2매직magic, 3레어rare, 4에픽epic, 5유니크unique, 6레전드legend)
     itemGrade:{//'#999'
