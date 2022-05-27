@@ -1,9 +1,9 @@
-import React, { useState, useLayoutEffect, useContext } from 'react';
 import { AppContext } from 'App';
-import styled from 'styled-components';
 import { util } from 'components/Libs';
-
 import stateBack from 'images/pattern/white_brick_wall_@2X_.png';
+import React, { useContext, useLayoutEffect, useState } from 'react';
+import styled from 'styled-components';
+
 
 const State = styled.div`
   display:none;position:relative;width:100%;
@@ -30,6 +30,7 @@ const Bar = styled.span`
   }}%;
   .ico{
     position:absolute;right:2px;top:1px;;width:22px;height:22px;
+    background:url(${({stateType}) => stateType}) no-repeat center center;
   }
 `;
 const BackBar = styled.span`
@@ -49,6 +50,7 @@ const CharacterState = ({
   saveData,
   slotIdx,
 }) => {
+  const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
   const stateArr = gameData.stateName;
   const [slotCh, setSlotCh] = useState(saveData.ch[slotIdx]);
@@ -69,7 +71,7 @@ const CharacterState = ({
                   <span className="name">{data}</span>
                   <span className="total_bar">
                     <FrameBar chMaxSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="frame_bar transition gradient_light">
-                      <Bar rSt={slotCh['rSt'+idx]} chMaxSt={slotCh['maxSt'+idx]} className="bar transition gradient_dark_y">
+                      <Bar rSt={slotCh['rSt'+idx]} chMaxSt={slotCh['maxSt'+idx]} stateType={imgSet.iconState[idx]} className="bar transition gradient_dark_y">
                         <span className="ico"></span>
                         {/* <span className="txt_current">0</span> */}
                       </Bar>

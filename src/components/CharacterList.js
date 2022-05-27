@@ -72,8 +72,8 @@ const ChracterHeader = ({
             return (
               <li className={`g${chData.grade} ${slotIdx === idx ? 'on' : ''}`} key={idx} onClick={() => {changeChSlot(idx)}}>
                 <ListRing className="list_ring" imgRingBack={imgRingBack} />
-                <ListCh className="list_ch" chDisplay={imgSet.chImg[chData.display]} />
-                <ListChStyle className="list_chstyle" styleDisplay={imgSet.chStyleImg[chData.style]} />
+                <ListCh className="list_ch" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
+                <ListChStyle className="list_chstyle" styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]} />
               </li>
             )
           })}

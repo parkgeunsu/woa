@@ -1,10 +1,10 @@
-import React from 'react';
-import PopupContinaer from 'components/PopupContainer';
-import styled from 'styled-components';
+import { chImg, chStyleImg, itemHole, ringImg } from 'components/ImgSet';
 import { util } from 'components/Libs';
-
-import { chImg, chStyleImg, ringImg, itemHole } from 'components/ImgSet';
+import PopupContinaer from 'components/PopupContainer';
 import imgRing from 'images/ring/ring_.png';
+import React from 'react';
+import styled from 'styled-components';
+
 
 const PopupArea = styled.div`
 	position:fixed;left:0;right:0;top:0;bottom:0;z-index:10;
@@ -163,7 +163,11 @@ const buttonEvent = (dataObj) => {
         saveCh.items[itemSlot] = {...dataObj.saveData.items['equip'][dataObj.data.itemSaveSlot]};//캐릭에 아이템 넣기
         sData.items['equip'].splice(dataObj.data.itemSaveSlot, 1);//인벤에서 아이템 제거
         overlapCheck = false;
-        dataObj.changeSaveData(sData);
+        dataObj.changeSaveData(util.saveCharacter({
+          saveData: sData,
+          slotIdx: dataObj.data.slotIdx,
+          gameData: gameData,
+        }));
         return;
       }
     });
@@ -171,7 +175,11 @@ const buttonEvent = (dataObj) => {
     let sData = {...dataObj.saveData};
     sData.items['equip'].push(dataObj.data.saveItemData);//인벤에 아이템 넣기
     sData.ch[dataObj.data.slotIdx].items[dataObj.data.itemSaveSlot] = {}; //아이템 삭제
-    dataObj.changeSaveData(sData);
+    dataObj.changeSaveData(util.saveCharacter({
+      saveData: sData,
+      slotIdx: dataObj.data.slotIdx,
+      gameData: gameData,
+    }));
   } else if (dataObj.type === 'itemUse') { //아이템 사용
     
   } else if (dataObj.type === 'itemSell') { //아이템 판매

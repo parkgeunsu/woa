@@ -1,20 +1,16 @@
-import React, { useState, useContext, useLayoutEffect, useRef, useCallback } from 'react';
 import { AppContext } from 'App';
-import styled from 'styled-components';
-
 import { util } from 'components/Libs';
-import ModalContainer from 'components/ModalContainer';
 import Modal from 'components/Modal';
-
+import ModalContainer from 'components/ModalContainer';
 import imgBack from 'images/back/back5.jpg';
-import iconDiamod from 'images/ico/ico_dia.png';
-import iconGold from 'images/ico/ico_gold.png';
 import imgCardBack from 'images/card/card_back.png';
 import imgCardFrame from 'images/card/card_frame.png';
 import imgCardLv from 'images/card/card_lv.png';
 import iconCardName from 'images/card/card_name.png';
-import imgRing from 'images/ring/ring_.png';
+import iconDiamod from 'images/ico/ico_dia.png';
+import iconGold from 'images/ico/ico_gold.png';
 import imgRingBack from 'images/ring/back.png';
+import imgRing from 'images/ring/ring_.png';
 import iconStar1 from 'images/star/star1.png';
 import iconStar2 from 'images/star/star2.png';
 import iconStar3 from 'images/star/star3.png';
@@ -22,6 +18,10 @@ import iconStar4 from 'images/star/star4.png';
 import iconStar5 from 'images/star/star5.png';
 import iconStar6 from 'images/star/star6.png';
 import iconStar7 from 'images/star/star7.png';
+import React, { useCallback, useContext, useLayoutEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+
+
 
 const Img = styled.img.attrs(
   ({imgurl}) => ({
@@ -304,14 +304,14 @@ const GachaInfo = styled.div`
 	.ch_state ul li dd .st6{color:#ce20c2;}
 `;
 const GachaInfoCard = styled.div`
-	position:absolute;left:5%;top:15%;transform:scale(.3);transform-origin:0 0;width:85%;font-size:0;z-index:1;
+	position:absolute;left:7.5%;top:2.5%;transform:scale(.3);transform-origin:0 0;width:85%;font-size:0;z-index:1;
 	img {width:100%;}
 	.ch_detail {position:absolute;top:0;left:0;width:100%;height:100%;backface-visibility:hidden;z-index:2;box-shadow:0 0 1px #ff0, 0 0 2px #fff, 0 0 10px #000;border-radius:20px;overflow:hidden;
 	}
 	.ch_detail li {position:absolute;color:#fff;}
 `;
 const GachaInGraph = styled.div`
-	position:absolute;left:35%;top:10%;width:60%;padding-top:60%;font-size:0;z-index:1;
+	position:absolute;left:35%;top:2.5%;width:60%;padding-top:60%;font-size:0;z-index:1;
 	canvas{position:absolute;left:0;top:0;width:100%;}
 `;
 const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가챠횟수
@@ -375,66 +375,61 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 		};
   }
 	let chArr = [];
-	let saveArr = [];
+	let chDataArr = [];
 	const cardGrade = getGrade(num, gachaType);
 	for (let i = 0; i < num; ++i) {
 		const newIdx = getCardIdx(cardGrade.arr[i]);		
-		console.log(cardGrade[i], typeof cardGrade[i]);
 		const addGrade = Math.random();
 		let luckyGradePoint = 0;
-		// if (cardGrade === 1) {
-		// 	if (addGrade < .005) {
-		// 		luckyGradePoint = 5;
-		// 	} else if (addGrade < .01) {
-		// 		luckyGradePoint = 4;
-		// 	} else if (addGrade < .05) {
-		// 		luckyGradePoint = 3;
-		// 	} else if (addGrade < .1) {
-		// 		luckyGradePoint = 2;
-		// 	} else if (addGrade < .3) {
-		// 		luckyGradePoint = 1;
-		// 	}
-		// } else if (cardGrade === 2) {
-		// 	if (addGrade < .005) {
-		// 		luckyGradePoint = 4;
-		// 	} else if (addGrade < .01) {
-		// 		luckyGradePoint = 3;
-		// 	} else if (addGrade < .05) {
-		// 		luckyGradePoint = 2;
-		// 	} else if (addGrade < .1) {
-		// 		luckyGradePoint = 1;
-		// 	}
-		// } else if (cardGrade === 3) {
-		// 	if (addGrade < .005) {
-		// 		luckyGradePoint = 3;
-		// 	} else if (addGrade < .01) {
-		// 		luckyGradePoint = 2;
-		// 	} else if (addGrade < .05) {
-		// 		luckyGradePoint = 1;
-		// 	}
-		// } else if (cardGrade === 4) {
-		// 	if (addGrade < .005) {
-		// 		luckyGradePoint = 2;
-		// 	} else if (addGrade < .01) {
-		// 		luckyGradePoint = 1;
-		// 	}
-		// }
-		if (cardGrade[i] === 2){
-			luckyGradePoint = 3;
-			console.log('a');
+		if (cardGrade.arr[i] === 1) {
+			if (addGrade < .005) {
+				luckyGradePoint = 5;
+			} else if (addGrade < .01) {
+				luckyGradePoint = 4;
+			} else if (addGrade < .05) {
+				luckyGradePoint = 3;
+			} else if (addGrade < .1) {
+				luckyGradePoint = 2;
+			} else if (addGrade < .3) {
+				luckyGradePoint = 1;
+			}
+		} else if (cardGrade.arr[i] === 2) {
+			if (addGrade < .005) {
+				luckyGradePoint = 4;
+			} else if (addGrade < .01) {
+				luckyGradePoint = 3;
+			} else if (addGrade < .05) {
+				luckyGradePoint = 2;
+			} else if (addGrade < .1) {
+				luckyGradePoint = 1;
+			}
+		} else if (cardGrade.arr[i] === 3) {
+			if (addGrade < .005) {
+				luckyGradePoint = 3;
+			} else if (addGrade < .01) {
+				luckyGradePoint = 2;
+			} else if (addGrade < .05) {
+				luckyGradePoint = 1;
+			}
+		} else if (cardGrade.arr[i] === 4) {
+			if (addGrade < .005) {
+				luckyGradePoint = 2;
+			} else if (addGrade < .01) {
+				luckyGradePoint = 1;
+			}
 		}
-		const cardG = cardGrade + luckyGradePoint;
+		const cardG = cardGrade.arr[i] + luckyGradePoint;
 		chArr.push({
 			idx: newIdx,
 			grade: cardG,
+			slotIdx: saveData.ch.length + i,
 			posX: Math.random() * 100,
 			posY: Math.random() * 40 + 60,
 			rotate: Math.random() * 360,
 		});
-		const itemEff = util.getItemEff();
-		saveData.ch.push(util.saveLvState('', {
-			itemEff: itemEff,
-			grade: '',
+		chDataArr.push(util.saveLvState('', {
+			itemEff: util.getItemEff(),
+			grade: cardG,
 			newState: {
 				actionPoint: 20,
 				exp: 0,
@@ -447,16 +442,10 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 				stateType: Math.floor(Math.random()*4),
 			},
 		}, saveData, gameData));
-		changeSaveData(saveData); //캐릭터 세이브
-		// saveArr.push(util.saveCharacter({ 
-		// 	saveData: saveData, 
-		// 	slotIdx: '',
-		// 	gameData: gameData,
-		// 	newCh: newIdx,
-		// }));
-	}
+	};
 	return {
 		chArr: chArr,
+		chDataArr: chDataArr,
 		maxCard: cardGrade.maxGrade,
 	};
 }
@@ -484,16 +473,18 @@ const Gacha = ({
 	const iconStar = [iconStar1, iconStar2, iconStar3, iconStar4, iconStar5, iconStar6, iconStar7]
   const gameData = useContext(AppContext).gameData;
 	const [gachaMode, setGachaMode] = useState('init');
+	const [cardStateType, setCardStateType] = useState(''); //카드 성장타입
+	const [cardStar, setCardStar] = useState(0); //카드 성장타입
 	const setTime = useRef(null); //타임아웃 ref
 	const maxCardGrade = useRef(null); //뽑은 카드 최대등급
-	const cardRef = useRef([]); //단일 카드
 	const effectRef = useRef(null); // 이펙트 효과
 	const cardGroupRef = useRef(null); //카드 그룹
 	const eventRef = useRef(null); //터치 이벤트 영역
-	const openCardIdx = useRef(0); //카드 뒤짚기 순번
 	const infoRef = useRef(null); //카드 정보창
-	const [infoIdx, setInfoIdx] = useState(0); //카드정보 카드번호
 	const graphRef = useRef(null); //카드정보 그래프
+	const cardRef = useRef([]); //단일 카드
+	const openCardIdx = useRef(0); //카드 뒤짚기 순번
+	const [infoIdx, setInfoIdx] = useState(0); //카드정보 카드번호
 	const changeGachaMode = (mode, data) => {
 		if (mode === 'start') { // 뽑기모드
 			let sData = {...saveData};
@@ -502,8 +493,14 @@ const Gacha = ({
 			} else {
 				sData.info.money -= data.price; //돈 계산
 			}
-			changeSaveData(sData);
-			const cardList = makeCard(data.num, data.type, gameData, saveData, changeSaveData);
+			const cardList = makeCard(data.num, data.type, gameData, sData, changeSaveData);
+
+			cardList.chDataArr.forEach((data, idx) => {
+
+				sData.ch.push(data);
+			});
+			changeSaveData(sData); //세이브
+
 			maxCardGrade.current = cardList.maxCard;
 			setGachaCard(cardList.chArr);
 		}
@@ -604,75 +601,55 @@ const Gacha = ({
 			container.arc(x + width - rounded, y + rounded, rounded, 0, -quarterRadians, true); // top right arc
 			container.lineTo(x + rounded, y); // line from top right to top left
 		}
-		const statePercent = [125,200,200,100,200,100,100],
-			st_t = ['통솔','체력','무력','민첩','지력','정치','매력'],
-			st_c = ['#037ace','#f3004e','#ff5326','#77b516','#f9c215','#5f3dc4','#ce20c2'],
-			ctx_w = can.getBoundingClientRect().width,
-			arc_r = Math.PI*2/7,
-			ctx_c = ctx_w*.5,
-			circle_r = ctx_c*.75,
+		const stData = [
+			{title: '통솔', color: '#037ace', percent: 125,},
+			{title: '체력', color: '#f3004e', percent: 200,},
+			{title: '무력', color: '#ff5326', percent: 200,},
+			{title: '민첩', color: '#77b516', percent: 100,},
+			{title: '지력', color: '#f9c215', percent: 200,},
+			{title: '정치', color: '#5f3dc4', percent: 100,},
+			{title: '매력', color: '#ce20c2', percent: 100,},
+		];
+		const ctxWidth = can.getBoundingClientRect().width,
+			ctxCenter = ctxWidth*.5,
+			barMaxSize = ctxWidth*.75,
 			ctx = can.getContext('2d');
 		let arc_c = 0,
 			arr = [{},{},{},{},{},{},{}],
 			st = [];
-		can.setAttribute('width',ctx_w+'px');
-		can.setAttribute('height',ctx_w+'px');
-		let grd = ctx.createLinearGradient(15, ctx_w-30, ctx_w-30, 15);
-		grd.addColorStop(0, "rgb(0,147,255)");
-		grd.addColorStop(1, "rgb(0,255,199)");
+		can.setAttribute('width', ctxWidth+'px');
+		can.setAttribute('height', ctxWidth+'px');
 		for(let i = 0; i < 7; ++i){
-			st[i] = chData['st'+i];
-			arc_c = st[i]/statePercent[i]*circle_r;
-			arr[i].x = Math.cos(arc_r*i)*arc_c+ctx_c;
-			arr[i].y = Math.sin(arc_r*i)*arc_c+ctx_c;
-			arr[i].x_ = Math.cos(arc_r*i)*ctx_c;
-			arr[i].y_ = Math.sin(arc_r*i)*ctx_c;
+			// arc_c = st[i]/statePercent[i]*circle_r;
+			// arr[i].x = Math.cos(arc_r*i)*arc_c+ctx_c;
+			// arr[i].y = Math.sin(arc_r*i)*arc_c+ctx_c;
+			// arr[i].x_ = Math.cos(arc_r*i)*ctx_c;
+			// arr[i].y_ = Math.sin(arc_r*i)*ctx_c;
 		}
-	
-		//배경1
-		ctx.beginPath();
-		ctx.fillStyle = 'rgb(50,50,50)';
-		for(let i = 0; i < 7; ++i){
-			const tx = arr[i].x_+ctx_c,
-						ty = arr[i].y_+ctx_c;
-			ctx.lineTo(tx,ty);
-		}
-		ctx.lineTo(arr[0].x_+ctx_c,arr[0].y_+ctx_c);
-		ctx.closePath();
-		ctx.fill();
-	
-		//배경2
-		ctx.beginPath();
-		ctx.fillStyle = 'rgb(25,25,25)';
-		for(let i = 0; i < 7; ++i){
-			const tx = arr[i].x_*.9+ctx_c,
-						ty = arr[i].y_*.9+ctx_c;
-			ctx.lineTo(tx,ty);
-		}
-		ctx.lineTo(arr[0].x_*.9+ctx_c,arr[0].y_*.9+ctx_c);
-		ctx.closePath();
-		ctx.fill();
-	
-		//배경3
-		ctx.beginPath();
-		ctx.fillStyle = 'rgb(0,0,0)';
-		for(let i = 0; i < 7; ++i){
-			const tx = arr[i].x_*.8+ctx_c,
-						ty = arr[i].y_*.8+ctx_c;
-			ctx.lineTo(tx,ty);
-		}
-		ctx.lineTo(arr[0].x_*.8+ctx_c,arr[0].y_*.8+ctx_c);
-		ctx.closePath();
-		ctx.fill();
-	
+		
+
 		//능력치 면
-		ctx.beginPath();
-		ctx.fillStyle = grd;
-		for(let i = 0; i < 7; ++i){
-			ctx.lineTo(arr[i].x,arr[i].y);
-		}
-		ctx.lineTo(arr[0].x,arr[0].y);
-		ctx.fill();
+		stData.forEach((data, idx) => {
+			const state = chData['st'+idx];
+			const canX = 25*idx;
+			ctx.beginPath();
+			ctx.fillStyle = data.color;
+			roundedRectangle(ctx, canX + 25, 0, 20, state + 20, 10); //container, x, y, width, height, rounded
+			//text
+			ctx.fill();
+			ctx.beginPath();
+			ctx.fillStyle = '#fff';
+			ctx.font = 'normal bold 16px Arial';
+			ctx.textAlign = 'center';
+			ctx.textBaseline = 'top';
+			ctx.fillText(data.title.substr(0, 1), canX + 35, 5, 20);
+			ctx.fill();
+		});
+		// for(let i = 0; i < 7; ++i){
+		// 	ctx.lineTo(arr[i].x,arr[i].y);
+		// }
+		// ctx.lineTo(arr[0].x,arr[0].y);
+		// ctx.fill();
 	
 		//색상 라인
 		// ctx.lineWidth = 1;
@@ -685,40 +662,40 @@ const Gacha = ({
 		// }
 	
 		//글씨 배경
-		ctx.shadowColor = '#000';
-		ctx.shadowOffsetX = 2;
-		ctx.shadowOffsetY = 2;
-		ctx.shadowBlur = 4;
-		for(let i = 0; i < 7; ++i){
-			ctx.beginPath();
-			ctx.fillStyle = st_c[i];
-			const tx = arr[i].x_*.85+ctx_c,
-						ty = arr[i].y_*.85+ctx_c;
-			roundedRectangle(ctx, tx-13,ty-9,26,16,8);
-			ctx.fill();
-		}
+		// ctx.shadowColor = '#000';
+		// ctx.shadowOffsetX = 2;
+		// ctx.shadowOffsetY = 2;
+		// ctx.shadowBlur = 4;
+		// for(let i = 0; i < 7; ++i){
+		// 	ctx.beginPath();
+		// 	ctx.fillStyle = st_c[i];
+		// 	const tx = arr[i].x_*.85+ctx_c,
+		// 				ty = arr[i].y_*.85+ctx_c;
+		// 	roundedRectangle(ctx, tx-13,ty-9,26,16,8);
+		// 	ctx.fill();
+		// }
 	
 		//원형
-		ctx.fillStyle = '#fff';
-		for(let i = 0; i < 7; ++i){
-			ctx.beginPath();
-			ctx.fillStyle = st_c[i];
-			ctx.arc(arr[i].x,arr[i].y,2.5,0,Math.PI*2);
-			ctx.fill();
-		}
-		ctx.restore();
+		// ctx.fillStyle = '#fff';
+		// for(let i = 0; i < 7; ++i){
+		// 	ctx.beginPath();
+		// 	ctx.fillStyle = st_c[i];
+		// 	ctx.arc(arr[i].x,arr[i].y,2.5,0,Math.PI*2);
+		// 	ctx.fill();
+		// }
+		// ctx.restore();
 	
 		//글씨
-		ctx.beginPath();
-		ctx.font = '11px Arial';
-		ctx.textAlign = 'center';
-		ctx.textBaseline = 'middle';
-		ctx.fillStyle = '#fff';
-		for(let i = 0; i < 7; ++i){
-			const tx = arr[i].x_*.85+ctx_c,
-						ty = arr[i].y_*.85+ctx_c;
-			ctx.fillText(st_t[i],tx,ty);
-		}
+		// ctx.beginPath();
+		// ctx.font = '11px Arial';
+		// ctx.textAlign = 'center';
+		// ctx.textBaseline = 'middle';
+		// ctx.fillStyle = '#fff';
+		// for(let i = 0; i < 7; ++i){
+		// 	const tx = arr[i].x_*.85+ctx_c,
+		// 				ty = arr[i].y_*.85+ctx_c;
+		// 	ctx.fillText(st_t[i],tx,ty);
+		// }
 	
 		// ctx.beginPath();
 		// ctx.font = '13px Arial';
@@ -745,25 +722,28 @@ const Gacha = ({
 				<GachaArea className="gacha_area">
 					<GachaCards ref={cardGroupRef} className="cards">
 						{gachaMode === 'start' && gachaCard && gachaCard.map((data, idx) => {
-							const ch = gameData.ch[data.idx];
+							const chData = gameData.ch[data.idx];
+							const star = data.grade;
 							return (
 								<GachaCard onClick={() => {
 									setInfoIdx(data.idx);
 									infoRef.current.classList.add('on');
 									popCard(gameData.ch[infoIdx]);
-								}} ref={(element) => {cardRef.current[idx] = element}} key={`gachaCard${idx}`} posX={data.posX} posY={data.posY} rotate={data.rotate} className="card ready" data-grade={ch.grade}>
+									setCardStateType(gameData.stateType[saveData.ch[data.slotIdx].stateType].na);
+									setCardStar(data.grade);
+								}} ref={(element) => {cardRef.current[idx] = element}} key={`gachaCard${idx}`} posX={data.posX} posY={data.posY} rotate={data.rotate} className="card ready" data-grade={chData.grade}>
 									<GachaFront className="front" idx={data.idx} gameData={gameData}>
 										<ul>
 											<CardLvName className="name_lv" cardLv={imgCardLv}>
 												<Img className="img" imgurl={iconCardName} />
-								 				<span className="lv">1</span><span className="name">{ch.na1}</span>
+								 				<span className="lv">1</span><span className="name">{chData.na1}</span>
 								 			</CardLvName>
-											<CardDisplay className="ch" chDisplay={imgSet.chImg[ch.display]} />
-								 			<CardStyle className="ch_style" styleDisplay={imgSet.chStyleImg[ch.style]} />
+											<CardDisplay className="ch" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
+								 			<CardStyle className="ch_style" styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]} />
 								 			<CardRing className="ring" ringBack={imgRingBack}></CardRing>
-								 			<CardElement className="element" ringDisplay={imgSet.ringImg[ch.element]} />
+								 			<CardElement className="element" ringDisplay={imgSet.ringImg[chData.element]} />
 								 			<CardStar className="star" starIcon={iconStar}>
-											 	{ch.grade && makeStar(ch.grade)}
+											 	{star && makeStar(star)}
 											</CardStar>
 								 			<CardFrame className="frame" cardFrame={imgCardFrame} />
 										</ul>
@@ -795,12 +775,12 @@ const Gacha = ({
 								<Img className="img" imgurl={iconCardName} />
 								<span className="lv">1</span><span className="name_">{gameData.ch[infoIdx].na}</span><span className="name">{gameData.ch[infoIdx].na1}</span>
 							</CardLvName>
-							<CardDisplay className="ch" chDisplay={imgSet.chImg[gameData.ch[infoIdx].display]} />
-							<CardStyle className="ch_style" styleDisplay={imgSet.chStyleImg[gameData.ch[infoIdx].style]} />
+							<CardDisplay className="ch" chDisplay={imgSet.chImg[`ch${gameData.ch[infoIdx].display}`]} />
+							<CardStyle className="ch_style" styleDisplay={imgSet.chStyleImg[`ch_style${gameData.ch[infoIdx].style}`]} />
 							<CardRing className="ring" ringBack={imgRingBack}></CardRing>
 							<CardElement className="element" ringDisplay={imgSet.ringImg[gameData.ch[infoIdx].element]} />
 							<CardStar  type={'open'} className="star" starIcon={iconStar}>
-								{gameData.ch[infoIdx].grade && makeStar(gameData.ch[infoIdx].grade)}
+								{cardStar && makeStar(cardStar)}
 							</CardStar>
 							<CardFrame className="frame" cardFrame={imgCardFrame} />
 						</ul>
@@ -827,7 +807,7 @@ const Gacha = ({
 							<li>
 								<dl>
 									<dt>Growth (성장)</dt>
-									{/* <dd><span>{gameData.stateType[gameData.ch[infoIdx].stateType].na}</span></dd> */}
+									<dd><span>{cardStateType}</span></dd>
 								</dl>
 							</li>
 							<li>

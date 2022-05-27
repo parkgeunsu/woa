@@ -77,10 +77,11 @@ export const util = { //this.loadImage();
         ['bSt' + index]: bState,
       }
     });
+    // console.log(obj.grade);
     saveChSlot = {
       ...saveChSlot,
-      itemEff: obj?.itemEff,
-      grade: obj?.grade || gameData.ch[saveChSlot.idx].grade, //캐릭터 등급
+      itemEff: obj.itemEff,
+      grade: obj.grade || gameData.ch[saveChSlot.idx].grade, //캐릭터 등급
     }
     return saveChSlot;
   },

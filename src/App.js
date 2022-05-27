@@ -1,18 +1,18 @@
-import React, { useLayoutEffect, useState, createContext } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import styled from 'styled-components';
-import { version, gameData } from 'gamedata/data';
-import { util } from 'components/Libs';
-import { save } from 'gamedata/savedata';
-import Menu from 'components/Menu';
-import Main from 'components/Main';
+import Battle from 'components/Battle';
 import Character from 'components/Character';
 import Gacha from 'components/Gacha';
+import { animalType, chImg, chStyleImg, iconElement, iconState, itemEquip, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg } from 'components/ImgSet';
+import { util } from 'components/Libs';
 import Lineup from 'components/Lineup';
-import Battle from 'components/Battle';
+import Main from 'components/Main';
+import Menu from 'components/Menu';
 import 'css/root.css';
+import { gameData, version } from 'gamedata/data';
+import { save } from 'gamedata/savedata';
+import React, { createContext, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import styled from 'styled-components';
 
-import { chImg, chStyleImg, ringImg, sringImg, ssringImg, animalType, itemEquip, itemEtc, itemHole, itemUpgrade, itemMaterial } from 'components/ImgSet';
 
 export const AppContext = createContext();
 
@@ -43,6 +43,8 @@ const App = () => {
       sringImg: sringImg,
       ssringImg: ssringImg,
       animalType: animalType,
+      iconState: iconState,
+      iconElement: iconElement,
       itemEquip: itemEquip,
       itemEtc: itemEtc,
       itemHole: itemHole,
@@ -68,19 +70,25 @@ const App = () => {
     util.saveData('saveData', save);
     util.saveData('version', version);
   }
-
-  const [saveData, setSaveData] = useState(util.saveCharacter({
-    saveData: useSaveData, 
-    slotIdx: slotIdx,
-    gameData: gameData,
-  }));
+  const [saveData, setSaveData] = useState(
+    () => {
+      if (useSaveData.ch[0].bSt0) { //캐릭 추가 능력치가 없을 경우
+        util.saveData('saveData', useSaveData);
+        return useSaveData;
+      } else {
+        const sData = util.saveCharacter({
+          saveData: useSaveData, 
+          slotIdx: slotIdx,
+          gameData: gameData,
+        });
+        util.saveData('saveData', sData);
+        return sData;
+      }
+    }
+  );
+    
   const changeSaveData = (objData) => {
     setSaveData(objData);
-    // setSaveData(util.saveCharacter({
-    //   saveData: objData,
-    //   slotIdx: slotIdx,
-    //   gameData: gameData,
-    // }));
     util.saveData('saveData', objData);
   }
   return (

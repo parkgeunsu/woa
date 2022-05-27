@@ -224,46 +224,10 @@ class Ch{//4
   }
 }
 
-class Gacha{
-  constructor(){
-    this.el = {}
-    this.setT = null;
-    this.separation_grade();
-    this.set_element();
-    this.display();
-    this.selectCard = 0;
-    this.arr_ch = [];
-    this.ch_saveIdx = [];
-    this.el.gacha_info.addEventListener('click',(e)=>{
-      this.el.gacha_info.classList.remove('on');
-    });
-    window.addEventListener('resize', this.reset.bind(this), false);
-  }
-  set_element(){
-    this.el.container = document.querySelector('.gacha_wrap');
-    this.el.gacha_menu = this.el.container.querySelector('.gacha_menu');
-    this.el.gacha_area = this.el.container.querySelector('.gacha_area');
-    this.el.gacha_cards = this.el.gacha_area.querySelector('.cards');
-    this.el.gacha_eff = this.el.gacha_area.querySelector('.effect');
-    this.el.touch = this.el.gacha_area.querySelector('.touch');
-    this.el.gacha_box = this.el.gacha_area.querySelector('.card_box');
-    this.el.gacha_info = this.el.container.querySelector('.gacha_info');
-    this.el.gacha_infoCard = this.el.gacha_info.querySelector('.ch_detail');
-    this.el.gacha_infoGraph = this.el.gacha_info.querySelector('.ch_graph');
-    this.el.gacha_can = this.el.gacha_infoGraph.querySelector('canvas');
-    this.el.gacha_infoState = this.el.gacha_info.querySelector('.ch_state');
-  }
-  reset(){
-    clearTimeout(this.setT);
-    this.el.container.classList.value = 'gacha_wrap';
-    this.el.gacha_cards.classList.value = 'cards';
-    this.el.gacha_cards.innerHTML = '';
-    this.el.gacha_eff.classList.value = 'effect';
-    this.el.touch.classList.remove('on');
-    this.arr_ch = [];
-    this.selectCard = 0;
-  }
-  
+
+
+
+
 
 class Lineup{
   constructor(){
@@ -278,11 +242,6 @@ class Lineup{
     }).then(()=>{
       this.el.lineup_save.forEach((el,idx)=>{//슬롯 버튼 이벤트
         el.addEventListener('click',(e)=>{
-          this.el.lineup_save.forEach((_el)=>{
-            _el.classList.remove('on');
-          });
-          e.currentTarget.classList.add('on');
-          awb.data.userData.lineup.select = idx;
           this.set_area();
         });
       });
@@ -324,23 +283,6 @@ class Lineup{
   reset(){
     this.display();
     this.set_area();
-  }
-  set_element(){
-    this.el.container = document.querySelector('.lineup_wrap');
-    this.el.lineup_save = this.el.container.querySelectorAll('.lineup_save li');
-    this.el.lineup_saveBt = this.el.container.querySelector('.save_submit');
-    this.el.lineup_cate = this.el.container.querySelectorAll('.lineup_cate');
-    this.el.lineup_map = this.el.container.querySelector('.lineup_map');
-    this.el.lineup_mapCh = this.el.lineup_map.querySelectorAll('.mapCh');
-    this.el.lineup_ch = this.el.container.querySelector('.lineup_ch');
-    this.el.lineup_chList = null;
-    this.el.lineup_info = this.el.container.querySelector('.lineup_info .lineup_na');
-    this.el.lineup_cost = this.el.container.querySelector('.lineup_info .lineup_cost');
-    this.el.lineup_cost_current = this.el.lineup_cost.querySelector('.cost_current');
-    this.el.lineup_cost_total = this.el.lineup_cost.querySelector('.cost_total');
-    this.el.lineup_chInfo = this.el.container.querySelectorAll('.lineup_chInfo li');
-    this.el.lineup_chInfo_txt = this.el.container.querySelectorAll('.lineup_chInfo li .txt');
-    this.el.lineup_chInfo_add = this.el.container.querySelectorAll('.lineup_chInfo li .add_txt');
   }
   set_lineupInfo(ta){
     if(!ta){
@@ -515,26 +457,6 @@ class Lineup{
     data.ch = awb.data.userData.ch;
     data.lineup = awb.data.userData.lineup;
     awb.data.save_data(data);
-  }
-  createMapCh(v){
-    const ch = gameData.ch[v.idx];
-    let html = '';
-    html +=   '<span class="lv" style="background-color:'+gameData.chGradeColor[ch.grade]+'">'+v.lv+'</span>';
-    html +=   '<span class="ch" style="background-image:url(./images/ch/ch'+ch.display+'.png"></span>';
-    html +=   '<span class="ch_style" style="background-image:url(./images/ch_style/ch_style'+ch.style+'.png"></span>';
-    html +=   '<span class="ring"></span>';
-    if(v.lv === 50){
-      html +=   '<span class="element" style="background-image:url(./images/ring/ring'+ch.element+'.png"></span>';
-      html +=   '<span class="element_1" style="background-image:url(./images/sring/sring'+ch.element+'.png"></span>';
-      html +=   '<span class="element_2" style="background-image:url(./images/ssring/ssring'+ch.element+'.png"></span>';
-    }else if(v.lv > 30){
-      html +=   '<span class="element" style="background-image:url(./images/ring/ring'+ch.element+'.png"></span>';
-      html +=   '<span class="element_1" style="background-image:url(./images/sring/sring'+ch.element+'.png"></span>';
-    }else{
-      html +=   '<span class="element" style="background-image:url(./images/ring/ring'+ch.element+'.png"></span>';
-    }
-    html +=   '<span class="frame"></span>';
-    return html;
   }
   display(){
     let html = '';

@@ -1,11 +1,8 @@
-import React, { useState, useContext } from 'react';
 import { AppContext } from 'App';
-import styled from 'styled-components';
-import { util } from 'components/Libs';
-import iconCardName from 'images/card/card_name.png';
-import imgRingBack from 'images/ring/back.png';
 import imgCardFrame from 'images/card/card_frame.png';
 import imgCardLv from 'images/card/card_lv.png';
+import iconCardName from 'images/card/card_name.png';
+import imgRingBack from 'images/ring/back.png';
 import iconStar1 from 'images/star/star1.png';
 import iconStar2 from 'images/star/star2.png';
 import iconStar3 from 'images/star/star3.png';
@@ -13,6 +10,8 @@ import iconStar4 from 'images/star/star4.png';
 import iconStar5 from 'images/star/star5.png';
 import iconStar6 from 'images/star/star6.png';
 import iconStar7 from 'images/star/star7.png';
+import React, { useContext } from 'react';
+import styled from 'styled-components';
 
 const Img = styled.img.attrs(
   ({imgurl}) => ({
@@ -141,8 +140,8 @@ const ChracterDetail = ({
           <span className="name_">{chData.na3}</span>
           <span className="name">{`${chData.na1} ${chData.na2}`}</span>
         </ListNameLv>
-        <ListCh chDisplay={imgSet.chImg[chData.display]} className="ch transition" />
-        <ListChStyle styleDisplay={imgSet.chStyleImg[chData.style]} className="ch_style transition" />
+        <ListCh chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
+        <ListChStyle styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]} className="ch_style transition" />
         <ListChRing ringBack={imgRingBack} className="ring" />
         <ListChElement ringDisplay={imgSet.ringImg[chData.element]} className="element" />
         <ListChElement1 chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
