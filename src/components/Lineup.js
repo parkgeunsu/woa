@@ -10,12 +10,6 @@ import imgCardFrame from 'images/card/card_frame.png';
 import imgCardLv from 'images/card/card_lv.png';
 import imgRingBack from 'images/ring/back.png';
 
-const Img = styled.img.attrs(
-  ({imgurl}) => ({
-    src: imgurl 
-  })
-)``;
-
 const LineupWrap = styled.div`
 	display:flex;flex-direction:column;padding:44px 0 10px 0;width:100%;height:100%;box-sizing:border-box;overflow:hidden;position:absolute;left:0;right:0;top:0;bottom:0;background:url(${({backImg}) => backImg});background-size:cover;
 	& > div{
@@ -328,6 +322,7 @@ const checkUseList = (useList, chIdx) => {
 	});
 	return used;
 }
+
 const Lineup = ({
   saveData,
   changeSaveData,
@@ -342,16 +337,7 @@ const Lineup = ({
 	
 	const mapRef = useRef([]);
 	const lineupInfo = ["HP","SP","RSP","ATK","DEF","MAK","MDF","RCV","SPD"];
-	const lineupSlot = [
-		{txt: "1",},
-		{txt: "2",},
-		{txt: "3",},
-		{txt: "4",},
-		{txt: "5",},
-		{txt: "6",},
-		{txt: "7",},
-		{txt: "8",},
-	];
+	const lineupSlot = [1,2,3,4,5,6,7,8];
 	const clickSaveSlot = (idx) => {//세이브 슬롯 선택
 		console.log('saveslot' + idx);
 		setSelectSave(idx);
@@ -414,9 +400,9 @@ const Lineup = ({
 						<dt>저장슬롯</dt>
 						<dd>
 							<ul>
-								{lineupSlot && lineupSlot.map((data, idx) => {
+								{lineupSlot && lineupSlot.map((txt, idx) => {
 									return (
-										<li className={idx === selectSave ? 'on' : ''} key={idx}><button onClick={() => {clickSaveSlot(idx);}} className={`save_slot`}>{data.txt}</button></li>
+										<li className={idx === selectSave ? 'on' : ''} key={idx}><button onClick={() => {clickSaveSlot(idx);}} className={`save_slot`}>{txt}</button></li>
 									);
 								})}
 							</ul>
