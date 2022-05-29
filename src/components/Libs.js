@@ -191,6 +191,106 @@ export const util = { //this.loadImage();
     }
     return stateArr;
   },
+  getLineupSt: (lineupType, lineupNum, ch, peopleLength, gameData) => {
+    let effArr = [];
+    if (!ch) {
+      effArr.push([[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]);
+    } else {
+      let arr = [0,0,0,0,0,0,0,0,0];
+      const eff = gameData.lineup[lineupType].eff[lineupNum];
+      const peopleNum = peopleLength - 1 < 0 ? 0 : peopleLength - 1;
+      for(let v in eff){
+        switch(v){
+          case 'HP':
+            arr[0] += eff[v][peopleNum];
+            break;
+          case 'SP':
+            arr[1] += eff[v][peopleNum];
+            break;
+          case 'RSP':
+            arr[3] += eff[v][peopleNum];
+            break;
+          case 'ATK':
+            arr[3] += eff[v][peopleNum];
+            break;
+          case 'DEF':
+            arr[4] += eff[v][peopleNum];
+            break;
+          case 'MAK':
+            arr[5] += eff[v][peopleNum];
+            break;
+          case 'MDF':
+            arr[6] += eff[v][peopleNum];
+            break;
+          case 'RCV':
+            arr[7] += eff[v][peopleNum];
+            break;
+          case 'SPD':
+            arr[8] += eff[v][peopleNum];
+            break;
+        }
+      }
+      let effNum = [];
+      arr.forEach((effData, idx) => {
+        effNum[idx] = [[], []];
+        effNum[idx][0] = effData;
+        effNum[idx][1] = effData * ((ch['bSt' + idx] + ch['iSt' + idx]) / 100);
+        if(effData === NaN) console.log('pgs');
+      })
+      effArr.push(effNum);
+    }
+    return effArr;
+  },
+  setLineupSt: (dataObj, gameData, saveData, changeSaveData) => {
+    let save = {...saveData};
+    save.lineup.save_slot[dataObj.saveSlot].no = dataObj.lineupType;
+    save.lineup.save_slot[dataObj.saveSlot].entry = dataObj.useList;
+    let peopleLength = [0,0,0,0,0,0,0,0];
+    const ConvertlineupStIdx = save.lineup.save_slot.map((data, idx) => { // 슬롯당 lineup eff번호
+      const lineSlot = data.no;
+      const lineupArea = gameData.lineup[lineSlot];
+      let lineNum = [];
+      data.entry.forEach((entry_data, entry_idx) => {
+        if (entry_data !== '') {
+          let line = '';
+          lineupArea.entry.forEach((line_data, line_idx) => {
+            line_data.forEach((lineData) => {
+              if (lineData === entry_idx) {
+                line = line_idx;
+                return;
+              }
+            });
+          });//엔트리 라인 확인
+          lineNum.push(line);
+          peopleLength[idx] ++;
+        } else {
+          lineNum.push('');
+        }
+      });
+      return lineNum;
+    });
+    //lineupSt 저장
+    let saveLineupSlot = [
+      ...save.lineup.save_slot,
+    ];
+    ConvertlineupStIdx.forEach((data, idx) => {
+      save.lineup.save_slot[idx].num = peopleLength[idx];
+      const lineupType = save.lineup.save_slot[idx].no;
+      saveLineupSlot[idx].eff = [];
+      data.forEach((lineupData, lineupIdx) => {
+        const chIdx = save.lineup.save_slot[idx].entry[lineupIdx];
+        const ch = save.ch[chIdx];
+        saveLineupSlot[idx].eff.push(...util.getLineupSt(lineupType, lineupData, ch, peopleLength[idx], gameData));
+      });
+    });
+    changeSaveData({ //라인업 캐릭 능력치 저장
+    	...save,
+    	lineup: {
+        save_slot: saveLineupSlot,
+        select: dataObj.saveSlot,
+      }
+    })
+  },
   compileState: (currentState, itemState) => {
     if (itemState !== undefined && itemState !== null) {
       if(itemState.percent !== 0){

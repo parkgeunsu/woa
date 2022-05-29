@@ -2,12 +2,14 @@ import { AppContext } from 'App';
 import imgBack from 'images/back/back1.jpg';
 import iconArrowDown from 'images/ico/arrow_down.png';
 import iconArrowUp from 'images/ico/arrow_up.png';
-import React, { useContext, useLayoutEffect, useState } from 'react';
+import React, { useContext, useLayoutEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
+import { util } from 'components/Libs';
 
 import imgCardFrame from 'images/card/card_frame.png';
 import imgCardLv from 'images/card/card_lv.png';
 import imgRingBack from 'images/ring/back.png';
+
 const Img = styled.img.attrs(
   ({imgurl}) => ({
     src: imgurl 
@@ -66,7 +68,6 @@ const LineupSave = styled.div`
 	ul{display:flex;width:100%;height:100%;justify-content:space-between;}
 	ul li{width:10%;height:100%;text-align:center;}
 	.save_slot{padding:0;width:100%;height:100%;background:#000;color:#fff;box-sizing:border-box;}
-	.save_submit{margin:0 0 0 5px;width:45px;background:#00f;color:#fff;font-weight:600;font-size:12px;}
 	ul li.on .save_slot{border:1px solid #f00;background:#fff;color:#f00;}
 `;
 const LineupMiddle = styled.div`
@@ -238,45 +239,35 @@ const LineupChInfo = styled.div`
 	ul li.none .add_txt{display:none;}
 	ul li.up .add_txt{color:var(--color-point4);}
 	ul li.up .add_txt:before{content:'';position:absolute;left:0;top:0;width:12px;height:100%;background:url(${({arrowUpImg}) => arrowUpImg}) no-repeat center center;background-size:10px;}
-	ul li.up .add_txt:after{content:'%';}
 	ul li.down .add_txt{color:var(--color-point2);}
 	ul li.down .add_txt:before{content:'';position:absolute;left:0;top:0;width:12px;height:100%;background:url(${({arrowDownImg}) => arrowDownImg}) no-repeat center center;background-size:10px;}
-	ul li.down .add_txt:after{content:'%';}
 `;
 const LineupCh = styled.div`
 	height:40%;overflow:hidden;
 	ul{display:flex;flex-flow:wrap;width:100%;}
-	ul li{position:relative;margin:0 6.5px 6.5px 0;width:calc(25% - 5px);padding-top:calc(25% - 5px);font-size:0;overflow:hidden;}
+	ul li{position:relative;margin:0 6.5px 6.5px 0;width:calc(25% - 5px);padding-top:calc(25% - 5px);font-size:0;overflow:hidden;border-radius:10px;}
 	ul li:nth-of-type(4n){margin:0 0 6.5px 0;}
 	ul li > span{position:absolute;font-size:10px;}
-	ul li .frame{top:0;width:100%;height:100%;background:url(../images/card/card_frame.png);background-repeat:no-repeat;background-position:center center;background-size:100% 100%;z-index:5;pointer-events:none;}
-	ul li .lv{display:inline-block;left:50%;bottom:5%;padding:3px;width:14px;height:14px;transform:translate(-50%,0) scale(1);border-radius:50%;line-height:1;text-align:center;z-index:6;font-size:12px;color:#fff;font-weight:600;}
-	ul li .ch{top:0;width:100%;height:100%;background-repeat:no-repeat;background-size:85%;background-position:center 10%;z-index:4;pointer-events:none;}
-	ul li .ch_style{top:0;width:100%;height:100%;background-repeat:no-repeat;background-size:100%;background-position:center 25%;z-index:5;pointer-events:none;}
-	ul li .ring{top:0;width:100%;height:100%;background:url(../images/ring/back.png);background-repeat:no-repeat;background-position:center 10%;background-size:85%;pointer-events:none;z-index:3;}
-	ul li .element{top:0;width:100%;height:100%;background:url(../images/ring/ring0.png);background-repeat:no-repeat;background-position:center 10%;background-size:100%;z-index:1;pointer-events:none;}
-	ul li .element_1{top:0;width:100%;height:100%;background-repeat:no-repeat;background-position:center 10%;background-size:100%;z-index:2;pointer-events:none;}
-	ul li .element_2{top:0;width:100%;padding-top:100%;background-repeat:no-repeat;background-position:center 40%;background-size:135%;z-index:2;pointer-events:none;}
 	ul li.selected{opacity:.3;}
 `;
-const ListNameLv = styled.li`
+const ListNameLv = styled.span`
   left:50%;bottom:5%;width:14px;height:14px;transform:translate(-50%,0) scale(1);text-align:center;z-index:6;font-size:10px;line-height:1;font-weight:600;border-radius:50%;background-color:${({backColor}) => backColor};
 `;
-const ListCh = styled.li`
+const ListCh = styled.span`
   top:0;width:100%;height:100%;background-repeat:no-repeat;background-size:85%;background-image:url(${({chDisplay}) => chDisplay});background-position:center 10%;z-index:4;pointer-events:none;
 `;
-const ListChStyle = styled.li`
+const ListChStyle = styled.span`
   top:0;width:100%;height:100%;background-repeat:no-repeat;background-size:100%;background-position:center 25%;z-index:5;pointer-events:none;
   background-image:url(${({styleDisplay}) => styleDisplay});
 `;
-const ListChRing = styled.li`
+const ListChRing = styled.span`
   top:0;width:100%;height:100%;background:url(${({ringBack}) => ringBack});background-repeat:no-repeat;background-position:center 10%;background-size:85%;pointer-events:none;z-index:3;
 `;
-const ListChElement = styled.li`
+const ListChElement = styled.span`
   top:0;width:100%;height:100%;background-repeat:no-repeat;background-position:center 10%;background-size:100%;z-index:1;pointer-events:none;
   background-image:url(${({ringDisplay}) => ringDisplay});
 `;
-const ListChElement1 = styled.li`
+const ListChElement1 = styled.span`
   top:0;width:100%;height:100%;background-repeat:no-repeat;background-position:center 10%;background-size:cover;z-index:2;pointer-events:none;
   background-image:url(${({chLv, ringDisplay}) => {
     if ( chLv > 29) {
@@ -284,8 +275,8 @@ const ListChElement1 = styled.li`
     }
   }});
 `;
-const ListChElement2 = styled.li`
-  top:13%;width:100%;padding-top:100%;background-repeat:no-repeat;background-position:center 35%;background-size:100%;z-index:2;pointer-events:none;transform:scale(1.35,1.35);animation:rotate_ring 50s linear infinite;
+const ListChElement2 = styled.span`
+  top:0;width:100%;padding-top:100%;background-repeat:no-repeat;background-position:center 35%;background-size:100%;z-index:2;pointer-events:none;transform:scale(1.35,1.35);animation:rotate_ring 50s linear infinite;
   background-image:url(${({chLv, ringDisplay}) => {
     if ( chLv > 49) {
       return ringDisplay;
@@ -296,7 +287,7 @@ const ListChElement2 = styled.li`
     100%{transform:scale(1.35,1.35) rotate(360deg);}
   }
 `;
-const ListChFrame = styled.li`
+const ListChFrame = styled.span`
   top:0;width:100%;height:100%;background:url(${({cardFrame}) => cardFrame});background-repeat:no-repeat;background-position:center center;background-size:100% 100%;z-index:5;pointer-events:none;
 `;
 const LineupInfo = styled.div`
@@ -308,27 +299,49 @@ const LineupInfo = styled.div`
 	.lineup_cost .bar{color:#000;font-size:12px;}
 	.lineup_cost .bar:before{content:' / ';}
 `;
+const CharacterList = ({
+	imgSet,
+	gameData,
+	saveCh,
+	chData,
+}) => {
+	return (
+		<>
+			<ListNameLv cardLv={imgCardLv} backColor={gameData.chGradeColor[chData.grade]}>{saveCh.lv}</ListNameLv>
+			<ListCh chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
+			<ListChStyle styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]} className="ch_style transition" />
+			<ListChRing ringBack={imgRingBack} className="ring" />
+			<ListChElement ringDisplay={imgSet.ringImg[chData.element]} className="element" />
+			<ListChElement1 chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
+			<ListChElement2 chLv={saveCh.lv} ringDisplay={imgSet.ssringImg[chData.element]} className="element_2" />
+			<ListChFrame cardFrame={imgCardFrame} className="frame" />
+		</>
+	)
+}
+const checkUseList = (useList, chIdx) => {
+	let used = false;
+	useList.forEach((dataIdx, idx) => {
+		if (dataIdx === chIdx) {
+			used = true;
+			return;
+		}
+	});
+	return used;
+}
 const Lineup = ({
   saveData,
   changeSaveData,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const [selectSave, setSelectSave] = useState(0); // 선택된 진형슬롯
-	const [selectLineup, setSelectLineup] = useState(0); // 선택된 진형
+	const [selectSave, setSelectSave] = useState(saveData.lineup.select); // 선택된 진형슬롯
+	const [selectLineup, setSelectLineup] = useState(saveData.lineup.save_slot[selectSave].no); // 저장된 슬롯에 선택된 진형
 	const [selectLineupList, setSelectLineupList] = useState(0); //선택된 라인업 리스트 순번
-	const [lineupList, setLineupList] = useState(saveData.lineup.save_slot[selectSave].entry); // 라인업 맵 캐릭
-	const [lineupInfo, setLineupInfo] = useState([
-		{txt: "HP", num: 0,},
-		{txt: "SP", num: 0,},
-		{txt: "RSP", num: 0,},
-		{txt: "ATK", num: 0,},
-		{txt: "DEF", num: 0,},
-		{txt: "MAK", num: 0,},
-		{txt: "MDF", num: 0,},
-		{txt: "RCV", num: 0,},
-		{txt: "SPD", num: 0,},
-	]);
+	const [useList, setUseList] = useState(saveData.lineup.save_slot[selectSave].entry); // 라인업 맵 캐릭
+	const [noneUseList, setNoneUseList] = useState(saveData.ch);
+	
+	const mapRef = useRef([]);
+	const lineupInfo = ["HP","SP","RSP","ATK","DEF","MAK","MDF","RCV","SPD"];
 	const lineupSlot = [
 		{txt: "1",},
 		{txt: "2",},
@@ -339,20 +352,60 @@ const Lineup = ({
 		{txt: "7",},
 		{txt: "8",},
 	];
-	const clickSaveSlot = (idx) => {
+	const clickSaveSlot = (idx) => {//세이브 슬롯 선택
 		console.log('saveslot' + idx);
 		setSelectSave(idx);
+		setSelectLineup(saveData.lineup.save_slot[idx].no);
+		setUseList(saveData.lineup.save_slot[idx].entry);
+		util.setLineupSt({
+			saveSlot: selectSave, 
+			lineupType: selectLineup,
+			useList: useList,
+		}, gameData, saveData, changeSaveData);
 	}
-	const clickLineupSlot = (idx) => {
+	const clickLineupSlot = (idx) => {//진형 타입 선택
 		console.log('lineupslot' + idx);
 		setSelectLineup(idx);
+		setUseList(saveData.lineup.save_slot[selectSave].entry);
+		util.setLineupSt({
+			saveSlot: selectSave, 
+			lineupType: idx,
+			useList: useList,
+		}, gameData, saveData, changeSaveData);
 	}
-	const clickListupList = (idx) => {
+	const clickListupMap = (idx) => {//맵 캐릭터 클릭
+		console.log('mapidx', idx);
 		setSelectLineupList(idx);
+		let saveUseList = useList;
+		if (mapRef.current[idx].classList.contains('on')) {
+			saveUseList[idx] = '';
+		}
+		setUseList(saveUseList);
+		util.setLineupSt({
+			saveSlot: selectSave, 
+			lineupType: selectLineup,
+			useList: useList,
+		}, gameData, saveData, changeSaveData);
+	}
+	const clickLineupCh = (chIdx, idx) => {//캐릭 리스트 클릭
+		console.log('선택된 map순번', selectLineupList);//선택되어 있는 map칸
+		let saveUseList = [...useList];
+		saveUseList[selectLineupList] = idx;
+		setUseList(saveUseList);
+		util.setLineupSt({
+			saveSlot: selectSave, 
+			lineupType: selectLineup,
+			useList: saveUseList,
+		}, gameData, saveData, changeSaveData);
 	}
 	useLayoutEffect(() => {
-		setLineupList(saveData.lineup.save_slot[selectSave].entry);
-	}, [lineupList]);
+		setUseList(saveData.lineup.save_slot[selectSave].entry);
+		util.setLineupSt({
+			saveSlot: selectSave, 
+			lineupType: selectLineup,
+			useList: useList,
+		}, gameData, saveData, changeSaveData);
+	}, []);
   return (
     <>
       <LineupWrap className="lineup_wrap" backImg={imgBack}>
@@ -367,7 +420,6 @@ const Lineup = ({
 									);
 								})}
 							</ul>
-							<button className="save_submit">저장</button>
 						</dd>
 					</dl>
 				</LineupSave>
@@ -466,11 +518,11 @@ const Lineup = ({
 							</div>
 						</LineupInfo>
 						<LineupMap className={`lineup_map lineup_pos lineup${selectLineup}`}>
-							{lineupList && lineupList.map((slotIdx, idx) => {
+							{useList && useList.map((slotIdx, idx) => {
 								if (slotIdx === "") {
 									return (
-										<span key={idx} className={`mapCh l${idx + 1} ${selectLineupList === idx ? 'on' : ''}`} data-mapnum={idx} onClick={() => {
-											clickListupList(idx);
+										<span ref={(element) => {mapRef.current[idx] = element}} key={idx} className={`mapCh l${idx + 1} ${selectLineupList === idx ? 'on' : ''}`} data-mapnum={idx} onClick={() => {
+											clickListupMap(idx);
 										}}>
 											<span className="mapEff"></span>
 											<span className="mapCh_"></span>
@@ -480,19 +532,12 @@ const Lineup = ({
 									const saveCh = saveData.ch[slotIdx];
 									const chData = gameData.ch[saveCh.idx];
 									return (
-										<span key={idx} className={`mapCh has l${idx + 1} ${selectLineupList === idx ? 'on' : ''}`} data-mapnum={idx} onClick={() => {
-											clickListupList(idx);
+										<span ref={(element) => {mapRef.current[idx] = element}} key={idx} className={`mapCh has l${idx + 1} ${selectLineupList === idx ? 'on' : ''}`} data-mapnum={idx} onClick={() => {
+											clickListupMap(idx);
 										}}>
 											<span className="mapEff"></span>
 											<span className="mapCh_">
-												<ListNameLv cardLv={imgCardLv} backColor={gameData.chGradeColor[chData.grade]}>{saveCh.lv}</ListNameLv>
-												<ListCh chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
-												<ListChStyle styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]} className="ch_style transition" />
-												<ListChRing ringBack={imgRingBack} className="ring" />
-												<ListChElement ringDisplay={imgSet.ringImg[chData.element]} className="element" />
-												<ListChElement1 chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
-												<ListChElement2 chLv={saveCh.lv} ringDisplay={imgSet.ssringImg[chData.element]} className="element_2" />
-												<ListChFrame cardFrame={imgCardFrame} className="frame" />
+												<CharacterList imgSet={imgSet} gameData={gameData} saveCh={saveCh} chData={chData}/>
 											</span>
 										</span>
 									);
@@ -501,13 +546,14 @@ const Lineup = ({
 						</LineupMap>
 						<LineupChInfo className="lineup_chInfo scroll-y" arrowUpImg={iconArrowUp} arrowDownImg={iconArrowDown}>
 							<ul>
-								{lineupInfo && saveData.ch[lineupList[selectLineupList]] && lineupInfo.map((data, idx) => {
-									const saveCh = saveData.ch[lineupList[selectLineupList]];
+								{lineupInfo && saveData.ch[useList[selectLineupList]] && lineupInfo.map((stateName, idx) => {
+									const saveCh = saveData.ch[useList[selectLineupList]];
+									const lineupEff = saveData.lineup.save_slot[selectSave].eff[selectLineupList];
 									return (
-										<li key={idx}>
-											<span className="na">{data.txt}</span>
-											<span className="txt">{saveCh[`bSt${idx}`] + saveCh[`iSt${idx}`]}</span>
-											<span className="add_txt"></span>
+										<li key={idx} className={lineupEff[idx][0] > 0 ? 'up' : ( lineupEff[idx][0] < 0 ?'down' : 'none')}>
+											<span className="na">{stateName}</span>
+											<span className="txt">{saveCh[`bSt${idx}`] + saveCh[`iSt${idx}`] + Math.round(lineupEff[idx][1])}</span>
+											<span className="add_txt">{`${lineupEff[idx][0]}% (${Math.round(lineupEff[idx][1])})`}</span>
 										</li>
 									);
 								})}
@@ -515,7 +561,21 @@ const Lineup = ({
 						</LineupChInfo>
 					</LineupArea>
 				</LineupMiddle>
-				<LineupCh className="lineup_ch scroll-y"></LineupCh>
+				<LineupCh className="lineup_ch scroll-y">
+					<ul>
+						{noneUseList && noneUseList.map((saveCh, idx) => {
+							const chData = gameData.ch[saveCh.idx];
+							const used = checkUseList(useList, idx);
+							return (
+								<li className={used ? 'selected': ''} onClick={() => {
+									clickLineupCh(saveCh.idx, idx);
+								}} key={idx} data-idx={idx}>
+									<CharacterList imgSet={imgSet} gameData={gameData} saveCh={saveCh} chData={chData}/>
+								</li>
+							);
+						})}
+					</ul>
+				</LineupCh>
 			</LineupWrap>
     </>
   );

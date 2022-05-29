@@ -274,46 +274,9 @@ class Lineup{
           this.set_lineupInfo(ta);
         });
       });
-    }).then(()=>{
-      this.display();
-      this.set_area();
-    });
-    window.addEventListener('resize', this.reset.bind(this), false);
-  }
-  reset(){
-    this.display();
-    this.set_area();
+    })
   }
   set_lineupInfo(ta){
-    if(!ta){
-      return;
-    }
-    const idx = ta.dataset.idx;
-    if(idx !== ''){
-      const ch = awb.data.userData.ch[idx];
-      this.set_lst(idx);
-      let lst = '';
-      this.el.lineup_chInfo_txt.forEach((el,_idx)=>{//인포창에 능력치 입력
-        el.innerHTML = ch['tst_'+_idx];
-      });
-      this.el.lineup_chInfo_add.forEach((el,_idx)=>{
-        lst = ch['lst'+_idx];
-        if(ch['lst'+_idx] > 0){
-          this.el.lineup_chInfo[_idx].classList.value = 'up';
-        }else if(ch['lst'+_idx] < 0){
-          this.el.lineup_chInfo[_idx].classList.value = 'down';
-        }else{
-          this.el.lineup_chInfo[_idx].classList.value = 'none';
-        }
-        el.innerHTML = lst;
-      });
-    }else{
-      for(let i = 0;i < 9;++i){
-        this.el.lineup_chInfo_txt[i].innerHTML = '';
-        this.el.lineup_chInfo_add[i].innerHTML = '';
-        this.el.lineup_chInfo[i].classList.value = '';
-      }
-    }
     this.set_cost();
   }
   set_cost(){
@@ -368,43 +331,6 @@ class Lineup{
     for(let i = 0; i < 9; ++i){//last state(라인업 + 아이템 최종 능력치)
       awb.data.userData.ch[idx]['tst_'+i] = Math.round(awb.data.userData.ch[idx]['tst'+i] + (awb.data.userData.ch[idx]['tst'+i] * 0.01 * awb.data.userData.ch[idx]['lst'+i]));
     }
-    function st(obj,lineupnum){
-      let arr = [0,0,0,0,0,0,0,0,0];
-      const num = lineupnum - 1;
-      for(let v in obj){
-        switch(v){
-          case 'HP':
-            arr[0] += obj[v][num];
-            break;
-          case 'SP':
-            arr[1] += obj[v][num];
-            break;
-          case 'RSP':
-            arr[3] += obj[v][num];
-            break;
-          case 'ATK':
-            arr[3] += obj[v][num];
-            break;
-          case 'DEF':
-            arr[4] += obj[v][num];
-            break;
-          case 'MAK':
-            arr[5] += obj[v][num];
-            break;
-          case 'MDF':
-            arr[6] += obj[v][num];
-            break;
-          case 'RCV':
-            arr[7] += obj[v][num];
-            break;
-          case 'SPD':
-            arr[8] += obj[v][num];
-            break;
-        }
-      }
-      return arr;
-    }
-  }
   set_area(idx){
     this.slot_idx = awb.data.userData.lineup.select;
     this.slot = awb.data.userData.lineup.save_slot[this.slot_idx];
@@ -459,16 +385,6 @@ class Lineup{
     awb.data.save_data(data);
   }
   display(){
-    let html = '';
-    html += '<ul>';
-    awb.data.userData.ch.forEach((v,idx)=>{
-      html += '<li data-idx="'+idx+'">';
-      html += this.createMapCh(v);
-      html += '</li>';
-    });
-    html += '</ul>';
-    this.el.lineup_ch.innerHTML = html;
-    this.el.lineup_chList = this.el.lineup_ch.querySelectorAll('li');
     this.el.lineup_chList.forEach((el)=>{
       el.addEventListener('click',(e)=>{//캐릭 카드 클릭시 동작
         const ta = e.currentTarget,
