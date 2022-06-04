@@ -554,7 +554,9 @@ const Lineup = ({
 							const used = checkUseList(useList, idx);
 							return (
 								<li className={used ? 'selected': ''} onClick={() => {
-									clickLineupCh(saveCh.idx, idx);
+									if (!used) {
+										clickLineupCh(saveCh.idx, idx);
+									}
 								}} key={idx} data-idx={idx}>
 									<CharacterList imgSet={imgSet} gameData={gameData} saveCh={saveCh} chData={chData}/>
 								</li>

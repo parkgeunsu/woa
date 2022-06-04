@@ -6,6 +6,7 @@ import { job } from 'gamedata/job';
 import { lineup } from 'gamedata/lineup';
 import { relation } from 'gamedata/relation';
 import { skill } from 'gamedata/skill';
+import { scenario } from 'gamedata/scenario';
 
 export const version = "0.1";
 export const gameData = {
@@ -34,5 +35,6 @@ export const gameData = {
     element_dmg:['일반',"쪼기","할퀴기","물기","때리기","누르기",'독','빛','암','물','불','바람','땅'],
     lineup:lineup,
     skill:skill,
-    relation:relation
+    relation:relation,
+    scenario:scenario,
   }

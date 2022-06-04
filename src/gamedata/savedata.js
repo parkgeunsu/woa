@@ -201,6 +201,12 @@ export const save = {
       "material":[
       ],
       "etc":[
+        {"idx":3},
+        {"idx":3},
+        {"idx":4},
+        {"idx":5},
+        {"idx":6},
+        {"idx":7},
         {"idx":0},
         {"idx":1},
         {"idx":21},

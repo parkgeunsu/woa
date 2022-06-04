@@ -184,6 +184,10 @@ const ChCard = styled.div`
   &.rotate .ch_back{
     transform:rotateY(180deg);
   }
+  &.lvUp .lvEffect span{
+    opacity:1;
+    bottom:100%;
+  }
 `;
 
 const ChBack = styled.div`
@@ -212,7 +216,31 @@ const ChInfo = styled.div`
     .name{margin:auto 0;text-align:left;font-size:13px;color:#999;}
   }
 `;
-
+const LvUpEffect = styled.div`
+  span{
+    position:absolute;left:0;right:0;bottom:0%;height:1%;z-index:10;opacity:0;background:rgba(255,255,255,.7);
+  }
+  span:first-of-type{
+    transition: all 1s 0s ease-in;
+    box-shadow:0 0 20px 10px #fff;
+  }
+  span:nth-of-type(2){
+    transition: all 1s 0.2s ease-in;
+    box-shadow:0 0 20px 10px #fd0;
+  }
+  span:nth-of-type(3){
+    transition: all 1s 0.4s ease-in;
+    box-shadow:0 0 20px 10px #fa0;
+  }
+  span:nth-of-type(4){
+    transition: all 1s 0.6s ease-in;
+    box-shadow:0 0 20px 10px #f80;
+  }
+  span:last-of-type{
+    transition: all 1s 0.8s ease-in;
+    box-shadow:0 0 20px 10px #f50;
+  }
+`;
 const Character = ({
   saveData,
   changeSaveData,
@@ -318,12 +346,19 @@ const Character = ({
   return (
     <ChWrap className={`ch_wrap page${chPage}`} {...gestureBind()} style={{x, y}} backImg={imgBack} stateIcon={iconState}>
       <ChCard ref={chRef} className="ch_card transition">
+        <LvUpEffect className="lvEffect">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </LvUpEffect>
         <Img imgurl={imgRing} />
         <CharacterCard saveData={saveData} slotIdx={slotIdx} />
         <ChBack cardBack={imgCardBack} className="ch_back transition" />
       </ChCard>
       <CharacterList saveData={saveData} changeChSlot={changeChSlot} slotIdx={slotIdx} />
-      <CharacterHeader saveData={saveData} chPage={chPage} changeChPage={changeChPage} slotIdx={slotIdx} />
+      <CharacterHeader saveData={saveData} chPage={chPage} changeChPage={changeChPage} slotIdx={slotIdx} changeSaveData={changeSaveData} />
       <ChInfo stateBack={stateBack} frameBack={frameChBack} className="ch_info transition">
         <CharacterState saveData={saveData} slotIdx={slotIdx} />
         <CharacterSkill saveData={saveData} slotIdx={slotIdx} />

@@ -338,39 +338,19 @@ export const util = { //this.loadImage();
     arr[100] = '진형';
     return arr[num];
   },
-  // loadImage: () => {
-  //   let img_tag = '',
-  //       preload = document.querySelector('.preload');
-  //   let arr = {
-  //     ch:21,
-  //     ch_style:21,
-  //     ring:[0,1,2,3,4,5,6],
-  //     sring:[1,2,3,4,5,6],
-  //     ssring:[1,2,3,4,5,6,7,8,10],
-  //     card:['_back','_frame','_lv','_name'],
-  //     frame:['_chback'],
-  //     back:5,
-  //   }
-  //   for(let i in arr){
-  //     let arr_length,
-  //         extension = 'png';
-  //     if(i.indexOf('back') > -1){
-  //       extension = 'jpg'
-  //     }
-  //     if(typeof arr[i] === 'number'){
-  //       arr_length = arr[i];
-  //       for(let j = 0; j <= arr_length; ++j){
-  //         img_tag += '<img src="./images/'+i+'/'+i+j+'.'+extension+'"/>';
-  //       }
-  //     }else{
-  //       arr_length = arr[i].length;
-  //       for(let j = 0; j < arr_length; ++j){
-  //         img_tag += '<img src="./images/'+i+'/'+i+arr[i][j]+'.'+extension+'"/>';
-  //       }
-  //     }
-  //   }
-  //   preload.innerHTML = img_tag;
-  // },
+  getSkill: (gameData, ch, slotIdx, saveData, changeSaveData) => {
+    const chData = gameData.ch[ch.idx],
+      animalSkill = gameData.animal_type[chData.animal_type].skill,
+      jobSkill = gameData.job[chData.job].skill,
+      skillArr = [...animalSkill, ...jobSkill];
+    const skillNum = Math.floor(Math.random() * skillArr.length);
+    saveData.ch[slotIdx].sk.push({
+      idx: skillArr[skillNum],
+      lv: 1,
+      exp: 0,
+    });
+    changeSaveData(saveData);
+  },
   // setNumber: (n) => {
   //   const sn = n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
   //   return sn;
@@ -575,6 +555,8 @@ export const util = { //this.loadImage();
   //         num = [18,19,23,24];
   //       }
   //       break;
+  //     case 23: //자신
+          // num = [n];
   //     default:
   //       break;
   //   }

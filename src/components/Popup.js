@@ -150,10 +150,10 @@ const getSetChk = (has_item,n) => {//셋트 아이템 체크
 const buttonEvent = (dataObj) => {
   const gameData = dataObj.gameData;
   console.log(dataObj);
+  let sData = {...dataObj.saveData};
   if (dataObj.type === 'item_enhancement') {
 
   } else if (dataObj.type === 'itemEquip') { //아이템 착용
-    let sData = {...dataObj.saveData};
     const invenPart = dataObj.data.gameItem.part;
     let overlapCheck = true;
     const saveCh = sData.ch[dataObj.data.slotIdx];
@@ -163,7 +163,7 @@ const buttonEvent = (dataObj) => {
         saveCh.items[itemSlot] = {...dataObj.saveData.items['equip'][dataObj.data.itemSaveSlot]};//캐릭에 아이템 넣기
         sData.items['equip'].splice(dataObj.data.itemSaveSlot, 1);//인벤에서 아이템 제거
         overlapCheck = false;
-        dataObj.changeSaveData(util.saveCharacter({
+        dataObj.changeSaveData(util.saveCharacter({//데이터 저장
           saveData: sData,
           slotIdx: dataObj.data.slotIdx,
           gameData: gameData,
@@ -172,21 +172,63 @@ const buttonEvent = (dataObj) => {
       }
     });
   } else if (dataObj.type === 'itemRelease') { //아이템 해제
-    let sData = {...dataObj.saveData};
     sData.items['equip'].push(dataObj.data.saveItemData);//인벤에 아이템 넣기
     sData.ch[dataObj.data.slotIdx].items[dataObj.data.itemSaveSlot] = {}; //아이템 삭제
-    dataObj.changeSaveData(util.saveCharacter({
+    dataObj.changeSaveData(util.saveCharacter({//데이터 저장
       saveData: sData,
       slotIdx: dataObj.data.slotIdx,
       gameData: gameData,
     }));
   } else if (dataObj.type === 'itemUse') { //아이템 사용
-    
+    const saveCh = sData.ch[dataObj.data.slotIdx];
+    switch (dataObj.data.gameItem.action) {
+      case 99: //골드 획득
+        sData.info.money += dataObj.data.gameItem.price;//돈 계산
+        break;
+      case 98: //경험치 획득
+        if(saveCh.lv >= 50) {
+          const hasMaxExp = gameData.hasMaxExp[saveCh.grade];
+          saveCh.hasExp += dataObj.data.gameItem.eff;
+          saveCh.hasExp += saveCh.exp;
+          saveCh.lv = 50;
+          saveCh.exp = 0;
+          if (saveCh.hasExp > hasMaxExp) {
+            saveCh.hasExp = hasMaxExp;
+          }
+        } else {
+          saveCh.exp += dataObj.data.gameItem.eff;
+        }
+        const lvUp = (ch, dataObj) => {
+          const maxExp = gameData.exp['grade'+ch.grade][ch.lv-1];
+          dataObj.changeSaveData(util.saveCharacter({//데이터 저장
+            saveData: sData,
+            slotIdx: dataObj.data.slotIdx,
+            gameData: gameData,
+          }));
+          if (ch.exp >= maxExp) {
+            if (ch.lv <= 50) {
+              ch.lv += 1;
+              ch.exp -= maxExp;
+              setTimeout(() => {
+                lvUp(ch, dataObj);
+              }, 300);
+              if(ch.lv % 10 === 0) {
+                util.getSkill(gameData, ch, dataObj.data.slotIdx, dataObj.saveData, dataObj.changeSaveData);
+              }
+            }
+          }
+        }
+        lvUp(saveCh, dataObj);
+        break;
+      default:
+        break;
+    } //사용 타입
+    // sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
+    // dataObj.changeSaveData(sData);//데이터 저장
   } else if (dataObj.type === 'itemSell') { //아이템 판매
-    let sData = {...dataObj.saveData};
     sData.info.money += dataObj.data.gameItem.price;//돈 계산
     sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
-    dataObj.changeSaveData(sData);
+    dataObj.changeSaveData(sData);//데이터 저장
   } else if (dataObj.type === 'holeEquip') {
     
   }
