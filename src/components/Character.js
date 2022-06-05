@@ -92,7 +92,7 @@ const ChWrap = styled.div`
   .rt{position:relative;margin:0 0 5px;padding:5px 10px;font-size:12px;border:3px double rgba(255,255,255,.5);border-radius:5px;}
 
   .sk{position:relative;margin:0 0 5px;font-size:12px;border:3px double rgba(255,255,255,.5);border-radius:5px;}
-  .sk_info{padding:5px 10px;}
+  .sk_info{padding:0 10px;}
   .sk .sk_element{width:25px;height:25px;background-position:center center;background-repeat:no-repeat;font-size:0;}
   .sk .sk_element[el0]{background-image:url();background-size:100%;}
   .sk .sk_element[el1]{background-image:url(../images/ico/el1.png);background-size:100%;}
@@ -117,7 +117,7 @@ const ChWrap = styled.div`
   .sk[cate8]:after{content:'';position:absolute;left:0;top:0;border-left:10px solid var(--color-point2);border-top:10px solid var(--color-point2);border-right:10px solid transparent;border-bottom:10px solid transparent;}/*active, buff*/
   .sk[cate9]:after{content:'';position:absolute;left:0;top:0;border-left:10px solid var(--color-w);border-top:10px solid var(--color-w);border-right:10px solid transparent;border-bottom:10px solid transparent;}/*active, passive, buff*/
   .sk .lv_exp{align-items:flex-end;}
-  .sk .lv{width:50px;text-align:center;}
+  .sk .lv{width:50px;text-align:center;font-size:20px;}
   .sk .exp{position:relative;margin:auto 5px;width:100%;height:12px;background:#fff;border-radius:10px;overflow:hidden;}
   .sk .exp span{display:block;position:absolute;left:0;bottom:0;top:0;background-color:var(--color-blue);border-radius:0 10px 10px 0;}
 
@@ -184,9 +184,42 @@ const ChCard = styled.div`
   &.rotate .ch_back{
     transform:rotateY(180deg);
   }
-  &.lvUp .lvEffect span{
-    opacity:1;
-    bottom:100%;
+  .lvEffect {
+    span{
+      position:absolute;left:0;right:0;bottom:0%;height:1%;z-index:10;opacity:0;background:rgba(255,255,255,.7);
+    }
+    span:first-of-type{
+      transition: all 0.5s 0s ease-in;
+      box-shadow:0 0 20px 10px #fff;
+    }
+    span:nth-of-type(2){
+      transition: all 0.5s 0.15s ease-in;
+      box-shadow:0 0 20px 10px #fd0;
+    }
+    span:nth-of-type(3){
+      transition: all 0.5s 0.3s ease-in;
+      box-shadow:0 0 20px 10px #fa0;
+    }
+    span:nth-of-type(4){
+      transition: all 0.5s 0.45s ease-in;
+      box-shadow:0 0 20px 10px #f80;
+    }
+    span:nth-of-type(5){
+      transition: all 0.5s 0.6s ease-in;
+      box-shadow:0 0 20px 10px #f60;
+    }
+    span:nth-of-type(6){
+      transition: all 0.5s 0.75s ease-in;
+      box-shadow:0 0 20px 10px #f40;
+    }
+    span:last-of-type{
+      transition: all 0.5s 0.9s ease-in;
+      box-shadow:0 0 20px 10px #f20;
+    }
+    &.on span{
+      opacity:.5;
+      bottom:100%;
+    }
   }
 `;
 
@@ -214,31 +247,6 @@ const ChInfo = styled.div`
   &{
     span{display:block;margin:auto 0;color:#fff;}
     .name{margin:auto 0;text-align:left;font-size:13px;color:#999;}
-  }
-`;
-const LvUpEffect = styled.div`
-  span{
-    position:absolute;left:0;right:0;bottom:0%;height:1%;z-index:10;opacity:0;background:rgba(255,255,255,.7);
-  }
-  span:first-of-type{
-    transition: all 1s 0s ease-in;
-    box-shadow:0 0 20px 10px #fff;
-  }
-  span:nth-of-type(2){
-    transition: all 1s 0.2s ease-in;
-    box-shadow:0 0 20px 10px #fd0;
-  }
-  span:nth-of-type(3){
-    transition: all 1s 0.4s ease-in;
-    box-shadow:0 0 20px 10px #fa0;
-  }
-  span:nth-of-type(4){
-    transition: all 1s 0.6s ease-in;
-    box-shadow:0 0 20px 10px #f80;
-  }
-  span:last-of-type{
-    transition: all 1s 0.8s ease-in;
-    box-shadow:0 0 20px 10px #f50;
   }
 `;
 const Character = ({
@@ -346,13 +354,6 @@ const Character = ({
   return (
     <ChWrap className={`ch_wrap page${chPage}`} {...gestureBind()} style={{x, y}} backImg={imgBack} stateIcon={iconState}>
       <ChCard ref={chRef} className="ch_card transition">
-        <LvUpEffect className="lvEffect">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </LvUpEffect>
         <Img imgurl={imgRing} />
         <CharacterCard saveData={saveData} slotIdx={slotIdx} />
         <ChBack cardBack={imgCardBack} className="ch_back transition" />

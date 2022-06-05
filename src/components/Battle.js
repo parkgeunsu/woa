@@ -20,17 +20,7 @@ const BattleArea = styled.div`
 `;
 const BattleUnit = styled.div`
 	display:flex;flex-direction:column;position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;
-	& > div {position:relative;margin:0 auto;width:${({containerW}) => containerW}px;height:50%;box-sizing:border-box;border:1px solid #f00;}
-	${'' /* .units_ally .battle_ch:nth-of-type(5n-4) .ch_box{transform:scale(.7) rotateX(-45deg);}
-	.units_ally .battle_ch:nth-of-type(5n-3) .ch_box{transform:scale(.7) rotateX(-45deg);}
-	.units_ally .battle_ch:nth-of-type(5n-2) .ch_box{transform:scale(.7) rotateX(-45deg);}
-	.units_ally .battle_ch:nth-of-type(5n-1) .ch_box{transform:scale(.7) rotateX(-45deg);}
-	.units_ally .battle_ch:nth-of-type(5n) .ch_box{transform:scale(.7) rotateX(-45deg);}
-	.units_enemy .battle_ch:nth-of-type(5n-4) .ch_box{transform:scale(.7) rotateX(-45deg);}
-	.units_enemy .battle_ch:nth-of-type(5n-3) .ch_box{transform:scale(.7) rotateX(-45deg);}
-	.units_enemy .battle_ch:nth-of-type(5n-2) .ch_box{transform:scale(.7) rotateX(-45deg);}
-	.units_enemy .battle_ch:nth-of-type(5n-1) .ch_box{transform:scale(.7) rotateX(-45deg);}
-	.units_enemy .battle_ch:nth-of-type(5n) .ch_box{transform:scale(.7) rotateX(-45deg);} */}
+	& > div {position:relative;margin:0 auto;width:${({containerW}) => containerW}px;height:50%;box-sizing:border-box;}
 `;
 const BattleCh = styled.div`
 	position:absolute;width:${({size}) => size}%;padding-top:${({size}) => size}%;box-sizing:border-box;perspective:100px;transform-style:flat;
@@ -59,9 +49,10 @@ const BattleCh = styled.div`
 `;
 const BattleLand = styled.div`
 	display:flex;flex-direction:column;position:absolute;left:0;right:0;bottom:0;top:0;
+	& > div {position:relative;margin:0 auto;width:${({containerW}) => containerW}px;height:50%;box-sizing:border-box;}
 	.land_ally{position:relative;margin:0 auto;}
 	.land_enemy{position:relative;margin:0 auto;}
-	.land{position:absolute;width:20%;padding-top:12%;box-sizing:border-box;border:1px solid #fff;border-radius:10px;}
+	.land{position:absolute;width:20%;padding-top:20%;box-sizing:border-box;border-radius:5px;}
 	.land.l0{background:rgba(255,255,255,.5);}
 	.land.l1{background:rgba(0,0,255,.5);}
 	.land.l2{background:rgba(0,190,0,.5);}
@@ -94,14 +85,15 @@ const CardRingStyle = styled.span`
 	background-position:center 100%,center center;background-size:100%;transform:translateZ(4px);
 	span{
 		position:absolute;left:-25%;width:150%;padding-top:150%;top:-30%;height:100%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;background-position:center center;background-size:100%;border:none;animation:ring_ro linear 15s infinite;
-		background-image:url(${({ringDisplay, lv}) => {
-			if (lv > 49) {
-				return ringDisplay
-			} else {
-				return '';
-			}
-		}});
-		
+		background-image:url(
+			${({ringDisplay, lv}) => {
+				if (lv > 49) {
+					return ringDisplay
+				} else {
+					return '';
+				}
+			}}
+		);
 	}
 `;
 const CardCh = styled.span`
@@ -123,6 +115,7 @@ const Battle = ({
 	const enemyDeck = scenarioDetail;
 	const containerRef = useRef(null);
 	const [containerW, setContainerW] = useState();
+	const mapSize = 20;
 	useLayoutEffect(() => {
 		setContainerW(containerRef.current.getBoundingClientRect().height * 0.5);
 	}, [containerRef.current]);
@@ -152,30 +145,6 @@ const Battle = ({
 		{idx:22,},
 		{idx:23,},
 		{idx:24,},
-		{idx:25,},
-		{idx:26,},
-		{idx:27,},
-		{idx:28,},
-		{idx:29,},
-		{idx:30,},
-		{idx:31,},
-		{idx:32,},
-		{idx:33,},
-		{idx:34,},
-		{idx:35,},
-		{idx:36,},
-		{idx:37,},
-		{idx:38,},
-		{idx:39,},
-		{idx:40,},
-		{idx:41,},
-		{idx:42,},
-		{idx:43,},
-		{idx:44,},
-		{idx:45,},
-		{idx:46,},
-		{idx:47,},
-		{idx:48,},
 	];
   return (
     <>
@@ -184,14 +153,13 @@ const Battle = ({
 					<BattleUnit containerW={containerW} className="battle_units">
 						<div className="units_ally">
 							{allyDeck && allyDeck.map((allyData, idx)=> {
-								const size = 20;
-								const left = idx % 5 * size,
-									top = Math.floor(idx / 5) * size;
+								const left = idx % 5 * mapSize,
+									top = Math.floor(idx / 5) * mapSize;
 								if (typeof allyData === "number") {
 									const saveCh = saveData.ch[allyData];
 									const chData = gameData.ch[saveCh.idx];
 									return (
-										<BattleCh key={idx} className="battle_ch" data-ch={chData.display} data-idx={idx} left={left} top={top} size={size}>
+										<BattleCh key={idx} className="battle_ch" data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize}>
 											<div className="ch_box">
 												<CardChRing className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} lv={saveCh.lv} />
 												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>
@@ -203,7 +171,7 @@ const Battle = ({
 									);
 								} else {
 									return (
-										<BattleCh key={idx} className="battle_ch" data-idx={idx} left={left} top={top} size={size}>
+										<BattleCh key={idx} className="battle_ch" data-idx={idx} left={left} top={top} size={mapSize}>
 											<div className="ch_box"></div>
 										</BattleCh>
 									);
@@ -212,13 +180,12 @@ const Battle = ({
 						</div>
 						<div className="units_enemy">
 							{enemyDeck && enemyDeck.map((enemyData, idx)=> {
-								const size = 20;
-								const left = idx % 5 * size,
-									top = Math.floor(idx / 5) * size;
+								const left = idx % 5 * mapSize,
+									top = Math.floor(idx / 5) * mapSize;
 								if (enemyData.idx) {
 									const chData = gameData.ch[enemyData.idx];
 									return (
-										<BattleCh key={idx} className="battle_ch" data-ch={chData.display} data-idx={idx} left={left} top={top} size={size}>
+										<BattleCh key={idx} className="battle_ch" data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize}>
 											<div className="ch_box">
 												<CardChRing className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} lv={enemyData.lv} />
 												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>
@@ -230,21 +197,35 @@ const Battle = ({
 									);
 								} else {
 									return (
-										<BattleCh key={idx} className="battle_ch" data-idx={idx} left={left} top={top} size={size}>
+										<BattleCh key={idx} className="battle_ch" data-idx={idx} left={left} top={top} size={mapSize}>
 											<div className="ch_box"></div>
 										</BattleCh>
 									);
 								}
-							})};
+							})}
 						</div>
 					</BattleUnit>
-					<BattleLand className="battle_land">
-						{/* <div className="land_ally">
-							<div className="land l'+ll+'" style="left:'+(left+left_)+'%;top:'+(top+ally_top+12)+'%;"></div>
+					<BattleLand containerW={containerW} className="battle_land">
+						<div className="land_ally">
+						{map.map((data, idx) => {
+							const left = idx % 5 * mapSize,
+								top = Math.floor(idx / 5) * mapSize;
+							const landStyle = Math.floor(Math.random()*4);
+							return (
+								<div key={idx} className={`land l${landStyle}`} style={{left: left+'%', top: top+'%'}}></div>
+							);
+						})}
 						</div>
 						<div className="land_enemy">
-							<div className="land" style="left:'+(80-left-left_)+'%;top:'+(60-top+battle_top+20)+'%;"></div>
-						</div> */}
+						{map.map((data, idx) => {
+							const left = idx % 5 * mapSize,
+								top = Math.floor(idx / 5) * mapSize;
+							const landStyle = Math.floor(Math.random()*4);
+							return (
+								<div key={idx} className={`land l${landStyle}`} style={{left: left+'%', top: top+'%'}}></div>
+							);
+						})}
+						</div>
 					</BattleLand>
 					<BattleOrder className="battle_order">
 						<div className="battle_msg">스킬시전!!</div>

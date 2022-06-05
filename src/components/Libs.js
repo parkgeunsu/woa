@@ -343,13 +343,87 @@ export const util = { //this.loadImage();
       animalSkill = gameData.animal_type[chData.animal_type].skill,
       jobSkill = gameData.job[chData.job].skill,
       skillArr = [...animalSkill, ...jobSkill];
-    const skillNum = Math.floor(Math.random() * skillArr.length);
-    saveData.ch[slotIdx].sk.push({
-      idx: skillArr[skillNum],
-      lv: 1,
-      exp: 0,
+    const skillNum = Math.floor(Math.random() * skillArr.length),
+      skillIdx = skillArr[skillNum];
+    const lvExp = [100,50,25,25];
+    let hasSkill = '';
+    saveData.ch[slotIdx].sk.forEach((data, idx) => {
+      if (data.idx === skillIdx) {
+        data.exp += lvExp[data.lv - 1];
+        if (data.exp >= 100) {
+          data.exp -= 100;
+          data.lv += 1;
+        }
+        hasSkill = data;
+        return;
+      }
     });
+    util.effect.skill(gameData.skill[skillIdx], hasSkill);
+    if (!hasSkill) {
+      saveData.ch[slotIdx].sk.push({
+        idx: skillIdx,
+        lv: 1,
+        exp: 0,
+      });
+    }
     changeSaveData(saveData);
+  },
+  effect: {
+    lvUp: () => {
+      const lvUpContainer = document.getElementsByClassName('ch_card')[0];
+      const lvElement = document.createElement('div');
+      lvElement.setAttribute('class', 'lvEffect');
+      if (lvUpContainer) {
+        lvUpContainer.appendChild(lvElement);
+        lvElement.innerHTML = '<span></span><span></span><span></span><span></span><span></span><span></span><span></span>';
+      };
+      setTimeout(() => {
+        lvElement.classList.add("on");
+        setTimeout(() => {
+          const element = document.getElementsByClassName('lvEffect')[0];
+          if(element) {
+            element.remove();
+          }
+        }, 1600);
+      }, 200);
+    },
+    skill: (skill, hasSkill) => {
+      const skillContainer = document.getElementsByClassName('content')[0];
+      const skillElement = document.createElement('div');
+      skillElement.setAttribute('class', `skillEffect effect${skill.element_type}`);
+      if (skillContainer) {
+        skillContainer.appendChild(skillElement);
+        if(!hasSkill){
+          skillElement.innerHTML = `<div class="skillName newName1">${skill.na || '나몰라'} 획득</div><div class="skillName newName2">${skill.na || '나몰라'} 획득</div>`;
+          setTimeout(() => {
+            skillElement.classList.add("on");
+            setTimeout(() => {
+              skillElement.classList.add("fadeOut");
+              setTimeout(() => {
+                const element = document.getElementsByClassName('skillEffect')[0];
+                if(element) {
+                  element.remove();
+                }
+              }, 1000);
+            }, 1200);
+          }, 200);
+        } else {
+          skillElement.innerHTML = `<div class="skillName oldName">LV.${hasSkill.lv} ${skill.na || '나몰라'}<div class="skillExp"><em class="gradient_dark" style="width:${hasSkill.exp}%"></em></div></div>`;
+          setTimeout(() => {
+            skillElement.classList.add("fadeIn");
+            setTimeout(() => {
+              skillElement.classList.add("fadeOut");
+              setTimeout(() => {
+                const element = document.getElementsByClassName('skillEffect')[0];
+                if(element) {
+                  element.remove();
+                }
+              }, 1000);
+            }, 1200);
+          }, 200);
+        }
+      }
+    }
   },
   // setNumber: (n) => {
   //   const sn = n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');
@@ -358,208 +432,208 @@ export const util = { //this.loadImage();
   // getBattleLineup: (n) => {
   //   return n;
   // },
-  // getEffectArea: (type, n) => {//type: 효과타입, n: 사용위치(0~24)
-  //   let num = [];
-  //   switch(type){
-  //     case 1: //단일
-  //       num = [n];
-  //       break;
-  //     case 2: //가로2
-  //       if(n%5 === 4){
-  //         num = [n,n-1];
-  //       }else{
-  //         num = [n,n+1];
-  //       }
-  //       break;
-  //     case 3://가로3
-  //       if(n%5 === 3){
-  //         num = [n,n+1,n-1];
-  //       }else if(n%5 === 4){
-  //         num = [n,n-1,n-2];
-  //       }else{
-  //         num = [n,n+1,n+2];
-  //       }
-  //       break;
-  //     case 4: //세로2
-  //       if(n > 19){
-  //         num = [n,n-5];
-  //       }else{
-  //         num = [n,n+5];
-  //       }
-  //       break;
-  //     case 5://세로3
-  //       if(n > 19){
-  //         num = [n,n-5,n-10];
-  //       }else if(n > 14){
-  //         num = [n,n+5,n-5];
-  //       }else{
-  //         num = [n,n+5,n+10];
-  //       }
-  //       break;
-  //     case 6: //가로행
-  //       if(n < 5){
-  //         num = [0,1,2,3,4];
-  //       }else if(n < 10){
-  //         num = [5,6,7,8,9];
-  //       }else if(n < 15){
-  //         num = [10,11,12,13,14];
-  //       }else if(n < 20){
-  //         num = [15,16,17,18,19];
-  //       }else{
-  //         num = [20,21,22,23,24];
-  //       }
-  //       break;
-  //     case 7: //세로열
-  //       if(n%5 === 0){
-  //         num = [0,5,10,15,20];
-  //       }else if(n%5 === 1){
-  //         num = [1,6,11,16,21];
-  //       }else if(n%5 === 2){
-  //         num = [2,7,12,17,22];
-  //       }else if(n%5 === 3){
-  //         num = [3,8,13,18,23];
-  //       }else{
-  //         num = [4,9,14,19,24];
-  //       }
-  //       break;
-  //     case 8: //십자5
-  //       if(n<5){
-  //         if(n === 0){
-  //           num = [n,n+1,n+5];
-  //         }else if(n === 4){
-  //           num = [n,n-1,n+5];
-  //         }else{
-  //           num = [n,n-1,n+1,n+5];
-  //         }
-  //       }else if(n>19){
-  //         if(n === 20){
-  //           num = [n,n+1,n-5];
-  //         }else if(n === 24){
-  //           num = [n,n-1,n-5];
-  //         }else{
-  //           num = [n,n-1,n+1,n-5];
-  //         }
-  //       }else{
-  //         if(n%5 === 0){
-  //           num = [n,n-5,n+5,n+1];
-  //         }else if(n%5 === 4){
-  //           num = [n,n-5,n+5,n-1];
-  //         }else{
-  //           num = [n,n-5,n+5,n+1,n-1];
-  //         }
-  //       }
-  //       num = []
-  //       break;
-  //     case 9: //십자9
-  //       num = [12,2,7,10,11,13,14,17,22];
-  //       break;
-  //     case 10: //대각선
-  //       if(n === 0 || n === 6 || n === 12 || n === 18 || n === 24){
-  //         num = [0,6,12,18,24];
-  //       }else if(n === 1 || n === 7 || n === 13 || n === 19){
-  //         num = [1,7,13,19];
-  //       }else if(n === 5 || n === 11 || n === 17 || n === 23){
-  //         num = [5,11,17,23];
-  //       }else if(n === 2 || n === 8 || n === 14){
-  //         num = [2,8,14];
-  //       }else if(n === 10 || n === 16 || n === 22){
-  //         num = [10,16,22];
-  //       }else if(n === 3 || n === 9){
-  //         num = [3,9];
-  //       }else if(n === 15 || n === 21){
-  //         num = [15,21];
-  //       }else if(n === 4){
-  //         num = [4];
-  //       }else{
-  //         num = [20];
-  //       }
-  //       break;
-  //     case 11: //반대 대각선
-  //       if(n === 4 || n === 8 || n === 12 || n === 16 || n === 20){
-  //         num = [4,8,12,16,20];
-  //       }else if(n === 3 || n === 7 || n === 11 || n === 15){
-  //         num = [3,7,11,15];
-  //       }else if(n === 9 || n === 13 || n === 17 || n === 21){
-  //         num = [9,13,17,21];
-  //       }else if(n === 2 || n === 6 || n === 10){
-  //         num = [2,6,10];
-  //       }else if(n === 14 || n === 18 || n === 22){
-  //         num = [14,18,22];
-  //       }else if(n === 1 || n === 5){
-  //         num = [1,5];
-  //       }else if(n === 19 || n === 23){
-  //         num = [19,23];
-  //       }else if(n === 0){
-  //         num = [0];
-  //       }else{
-  //         num = [24];
-  //       }
-  //       break;
-  //     case 15: //└┐
-  //       num = [0,5,10,11,12,13,14,19,24];
-  //       break;
-  //     case 16: //┌┘
-  //       num = [4,9,14,13,12,11,10,15,20];
-  //       break;
-  //     case 17: //卍
-  //       num = [0,1,2,4,7,9,11,12,13,14,15,17,20,22,23,24];
-  //       break;
-  //     case 20: //전체
-  //       num = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
-  //       break;
-  //     case 21: //정사각형9
-  //       if(n === 0 || n === 1 || n === 2 || n === 5 || n === 10){
-  //         num = [0,1,2,5,6,7,10,11,12];
-  //       }else if(n === 3 || n === 4 || n === 9 || n === 14){
-  //         num = [2,3,4,7,8,9,12,13,14];
-  //       }else if(n === 6 || n === 7 || n === 8 || n === 11 || n === 12 || n === 13 || n === 16 || n === 17 || n === 18){
-  //         num = [6,7,8,11,12,13,16,17,18];
-  //       }else if(n === 15 || n === 20 || n === 21 || n === 22){
-  //         num = [10,11,12,15,16,17,20,21,22];
-  //       }else{
-  //         num = [12,13,14,17,18,19,22,23,24];
-  //       }
-  //       break;
-  //     case 22: //정사각형4
-  //       if(n === 0 || n === 1 || n === 5 || n === 6){
-  //         num = [0,1,5,6];
-  //       }else if(n === 2 || n === 7){
-  //         num = [1,2,6,7];
-  //       }else if(n === 3 || n === 8){
-  //         num = [2,3,7,8];
-  //       }else if(n === 4 || n === 9){
-  //         num = [3,4,8,9];
-  //       }else if(n === 10 || n === 11){
-  //         num = [5,6,10,11];
-  //       }else if(n === 12){
-  //         num = [6,7,11,12];
-  //       }else if(n === 13){
-  //         num = [7,8,12,13];
-  //       }else if(n === 14){
-  //         num = [8,9,13,14];
-  //       }else if(n === 15 || n === 16){
-  //         num = [10,11,15,16];
-  //       }else if(n === 17){
-  //         num = [11,12,16,17];
-  //       }else if(n === 18){
-  //         num = [12,13,17,18];
-  //       }else if(n === 19){
-  //         num = [13,14,18,19];
-  //       }else if(n === 20 || n === 21){
-  //         num = [15,16,20,21];
-  //       }else if(n === 22){
-  //         num = [16,17,21,22];
-  //       }else if(n === 23){
-  //         num = [17,18,22,23];
-  //       }else{
-  //         num = [18,19,23,24];
-  //       }
-  //       break;
-  //     case 23: //자신
-          // num = [n];
-  //     default:
-  //       break;
-  //   }
-  //   return num;
-  // },
+  getEffectArea: (type, n) => {//type: 효과타입, n: 사용위치(0~24)
+    let num = [];
+    switch(type){
+      case 1: //단일
+        num = [n];
+        break;
+      case 2: //가로2
+        if(n%5 === 4){
+          num = [n,n-1];
+        }else{
+          num = [n,n+1];
+        }
+        break;
+      case 3://가로3
+        if(n%5 === 3){
+          num = [n,n+1,n-1];
+        }else if(n%5 === 4){
+          num = [n,n-1,n-2];
+        }else{
+          num = [n,n+1,n+2];
+        }
+        break;
+      case 4: //세로2
+        if(n > 19){
+          num = [n,n-5];
+        }else{
+          num = [n,n+5];
+        }
+        break;
+      case 5://세로3
+        if(n > 19){
+          num = [n,n-5,n-10];
+        }else if(n > 14){
+          num = [n,n+5,n-5];
+        }else{
+          num = [n,n+5,n+10];
+        }
+        break;
+      case 6: //가로행
+        if(n < 5){
+          num = [0,1,2,3,4];
+        }else if(n < 10){
+          num = [5,6,7,8,9];
+        }else if(n < 15){
+          num = [10,11,12,13,14];
+        }else if(n < 20){
+          num = [15,16,17,18,19];
+        }else{
+          num = [20,21,22,23,24];
+        }
+        break;
+      case 7: //세로열
+        if(n%5 === 0){
+          num = [0,5,10,15,20];
+        }else if(n%5 === 1){
+          num = [1,6,11,16,21];
+        }else if(n%5 === 2){
+          num = [2,7,12,17,22];
+        }else if(n%5 === 3){
+          num = [3,8,13,18,23];
+        }else{
+          num = [4,9,14,19,24];
+        }
+        break;
+      case 8: //십자5
+        if(n<5){
+          if(n === 0){
+            num = [n,n+1,n+5];
+          }else if(n === 4){
+            num = [n,n-1,n+5];
+          }else{
+            num = [n,n-1,n+1,n+5];
+          }
+        }else if(n>19){
+          if(n === 20){
+            num = [n,n+1,n-5];
+          }else if(n === 24){
+            num = [n,n-1,n-5];
+          }else{
+            num = [n,n-1,n+1,n-5];
+          }
+        }else{
+          if(n%5 === 0){
+            num = [n,n-5,n+5,n+1];
+          }else if(n%5 === 4){
+            num = [n,n-5,n+5,n-1];
+          }else{
+            num = [n,n-5,n+5,n+1,n-1];
+          }
+        }
+        num = []
+        break;
+      case 9: //십자9
+        num = [12,2,7,10,11,13,14,17,22];
+        break;
+      case 10: //대각선
+        if(n === 0 || n === 6 || n === 12 || n === 18 || n === 24){
+          num = [0,6,12,18,24];
+        }else if(n === 1 || n === 7 || n === 13 || n === 19){
+          num = [1,7,13,19];
+        }else if(n === 5 || n === 11 || n === 17 || n === 23){
+          num = [5,11,17,23];
+        }else if(n === 2 || n === 8 || n === 14){
+          num = [2,8,14];
+        }else if(n === 10 || n === 16 || n === 22){
+          num = [10,16,22];
+        }else if(n === 3 || n === 9){
+          num = [3,9];
+        }else if(n === 15 || n === 21){
+          num = [15,21];
+        }else if(n === 4){
+          num = [4];
+        }else{
+          num = [20];
+        }
+        break;
+      case 11: //반대 대각선
+        if(n === 4 || n === 8 || n === 12 || n === 16 || n === 20){
+          num = [4,8,12,16,20];
+        }else if(n === 3 || n === 7 || n === 11 || n === 15){
+          num = [3,7,11,15];
+        }else if(n === 9 || n === 13 || n === 17 || n === 21){
+          num = [9,13,17,21];
+        }else if(n === 2 || n === 6 || n === 10){
+          num = [2,6,10];
+        }else if(n === 14 || n === 18 || n === 22){
+          num = [14,18,22];
+        }else if(n === 1 || n === 5){
+          num = [1,5];
+        }else if(n === 19 || n === 23){
+          num = [19,23];
+        }else if(n === 0){
+          num = [0];
+        }else{
+          num = [24];
+        }
+        break;
+      case 15: //└┐
+        num = [0,5,10,11,12,13,14,19,24];
+        break;
+      case 16: //┌┘
+        num = [4,9,14,13,12,11,10,15,20];
+        break;
+      case 17: //卍
+        num = [0,1,2,4,7,9,11,12,13,14,15,17,20,22,23,24];
+        break;
+      case 20: //전체
+        num = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
+        break;
+      case 21: //정사각형9
+        if(n === 0 || n === 1 || n === 2 || n === 5 || n === 10){
+          num = [0,1,2,5,6,7,10,11,12];
+        }else if(n === 3 || n === 4 || n === 9 || n === 14){
+          num = [2,3,4,7,8,9,12,13,14];
+        }else if(n === 6 || n === 7 || n === 8 || n === 11 || n === 12 || n === 13 || n === 16 || n === 17 || n === 18){
+          num = [6,7,8,11,12,13,16,17,18];
+        }else if(n === 15 || n === 20 || n === 21 || n === 22){
+          num = [10,11,12,15,16,17,20,21,22];
+        }else{
+          num = [12,13,14,17,18,19,22,23,24];
+        }
+        break;
+      case 22: //정사각형4
+        if(n === 0 || n === 1 || n === 5 || n === 6){
+          num = [0,1,5,6];
+        }else if(n === 2 || n === 7){
+          num = [1,2,6,7];
+        }else if(n === 3 || n === 8){
+          num = [2,3,7,8];
+        }else if(n === 4 || n === 9){
+          num = [3,4,8,9];
+        }else if(n === 10 || n === 11){
+          num = [5,6,10,11];
+        }else if(n === 12){
+          num = [6,7,11,12];
+        }else if(n === 13){
+          num = [7,8,12,13];
+        }else if(n === 14){
+          num = [8,9,13,14];
+        }else if(n === 15 || n === 16){
+          num = [10,11,15,16];
+        }else if(n === 17){
+          num = [11,12,16,17];
+        }else if(n === 18){
+          num = [12,13,17,18];
+        }else if(n === 19){
+          num = [13,14,18,19];
+        }else if(n === 20 || n === 21){
+          num = [15,16,20,21];
+        }else if(n === 22){
+          num = [16,17,21,22];
+        }else if(n === 23){
+          num = [17,18,22,23];
+        }else{
+          num = [18,19,23,24];
+        }
+        break;
+      case 23: //자신
+          num = [n];
+      default:
+        break;
+    }
+    return num;
+  },
 }

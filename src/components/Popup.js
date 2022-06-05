@@ -99,7 +99,7 @@ const PopupRelationList = styled.li`
   background-size:cover;
   box-shadow:${({gameData, chData}) => (
       `0 0 13px ${gameData.chGradeColor[chData.grade]}, 0 0 8px ${gameData.chGradeColor[chData.grade]}, 0 0 5px ${gameData.chGradeColor[chData.grade]}, 0 0 2px ${gameData.chGradeColor[chData.grade]}`
-  )}
+  )};
 `;
 const PopupRelationListCh = styled.span`
   position:absolute;left:0;right:0;bottom:0;top:0;
@@ -136,9 +136,9 @@ const PopupItemList = styled.li`
   }
 `;
 const ItemGrade = styled.span`
-  color: ${({ color }) => color}
+  color: ${({ color }) => color};
 `;
-const getSetChk = (has_item,n) => {//셋트 아이템 체크
+const getSetChk = (has_item, n) => {//셋트 아이템 체크
   let chk = false;
   has_item.forEach((v)=>{
     if(v.idx === n){
@@ -205,7 +205,8 @@ const buttonEvent = (dataObj) => {
             slotIdx: dataObj.data.slotIdx,
             gameData: gameData,
           }));
-          if (ch.exp >= maxExp) {
+          if (ch.exp >= maxExp) { //레벨업
+            util.effect.lvUp();
             if (ch.lv <= 50) {
               ch.lv += 1;
               ch.exp -= maxExp;

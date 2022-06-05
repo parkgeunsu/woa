@@ -29,6 +29,75 @@ const ContentContainer = styled.div`
   height: 100%;
   background: #fec;
   overflow: hidden;
+  .skillEffect {
+    position:absolute;left:0;top:0;right:0;bottom:0;z-index:10;pointer-events:none;
+    .skillName{
+      position:absolute;font-size:30px;transform:translate(-50%,-50%);white-space:nowrap;transition:all 1s ease-in-out;
+    }
+    .oldName{
+      left:50%;top:50%;opacity:0;text-align:center;
+    }
+    .skillLv{
+      color:var(--color-w);
+    }
+    .skillExp{
+      position:relative;
+      margin:10px 0 0 0;
+      width:150px;
+      height:15px;
+      border-radius:10px;
+      overflow:hidden;
+      background-color:var(--color-w);
+      em{
+        position:absolute;left:0;top:0;bottom:0;
+        border-radius:10px;
+        background-color:var(--color-blue);
+      }
+    }
+    .newName1{
+      left:0;top:100%;
+    }
+    .newName2{
+      left:100%;top:0;
+    }
+    &.on .skillName{
+      left:50%;top:50%;
+    }
+    &.fadeIn .skillName{
+      opacity:1;
+    }
+    &.fadeOut .skillName{
+      opacity:0;
+    }
+    &.effect0{
+      color:var(--color-w);
+      text-shadow:0 0 5px var(--color-w),0 0 8px var(--color-w),0 0 20px var(--color-w);
+    }
+    &.effect1{
+      color:var(--color-purple);
+      text-shadow:0 0 5px var(--color-w),0 0 8px var(--color-purple),0 0 20px var(--color-purple);
+    }
+    &.effect2{
+      color:var(--color-yellow);
+      text-shadow:0 0 5px var(--color-w),0 0 8px var(--color-yellow),0 0 20px var(--color-yellow);
+    }
+    &.effect3{
+      color:var(--color-blue);
+      text-shadow:0 0 5px var(--color-w),0 0 8px var(--color-blue),0 0 20px var(--color-blue);
+    }
+    &.effect4{
+      color:var(--color-red);
+      text-shadow:0 0 5px var(--color-w),0 0 8px var(--color-red),0 0 20px var(--color-red);
+    }
+    &.effect5{
+      color:var(--color-lightblue);
+      text-shadow:0 0 5px var(--color-w),0 0 8px var(--color-lightblue),0 0 20px var(--color-lightblue);
+    }
+    &.effect6{
+      color:var(--color-green);
+      text-shadow:0 0 5px var(--color-w),0 0 8px var(--color-green),0 0 20px var(--color-green);
+    }
+  }
 `;
 const FooterContainer = styled.div`
   ${'' /* min-height: 35px; */}

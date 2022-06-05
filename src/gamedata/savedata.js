@@ -6,7 +6,7 @@ export const save = {
       money:352000
     },
     "ch":[
-      {"idx":0,"stateType":0,"lv":15,"exp":10,"hasExp":50000,"actionPoint":20,"sk":[{"idx":0,"lv":3,"exp":90},{"idx":1,"lv":5,"exp":70},{"idx":2,"lv":1,"exp":0}],"items":[
+      {"idx":0,"stateType":0,"lv":15,"exp":10,"hasExp":50000,"actionPoint":20,"sk":[{"idx":0,"lv":3,"exp":90},{"idx":12,"lv":1,"exp":0},{"idx":2,"lv":1,"exp":0}],"items":[
         {"idx":5,"slot":0,"hole":[4,0,12,23],"lv":1,"upgrade":1},
         {},
         {"idx":11,"slot":3,"hole":[],"lv":1,"upgrade":2},

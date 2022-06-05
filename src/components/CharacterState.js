@@ -58,7 +58,7 @@ const CharacterState = ({
   // util.saveLvState(0);
   useLayoutEffect(() => {
     setSlotCh(saveData.ch[slotIdx]);
-  }, [slotIdx]);
+  }, [slotIdx, saveData]);
   return (
     <>
       <State className="state">
