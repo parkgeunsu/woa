@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext, useLayoutEffect } from 'react';
+import React, { useRef, useState, useContext, useLayoutEffect, useCallback } from 'react';
 import { AppContext } from 'App';
 import styled from 'styled-components';
 import { util } from 'components/Libs';
@@ -64,13 +64,18 @@ const BattleOrder = styled.div`
 `;
 const BattleMenu = styled.div`
 	display:flex;position:relative;height:50px;background:var(--color-b);
-	.chInfo{flex-basis:60px;}
+	.chInfo{display:flex;flex-basis:60px;align-items:center;justify-content:center;}
+	.chInfo span{display:inline-block;}
+	.chInfo .sp{font-size:20px;}
+	.chInfo .spR{margin:0 0 0 5px;}
+	.chInfo .spR:before{content:'('}
+	.chInfo .spR:after{content:')'}
 	ul{display:flex;flex:1;height:100%;align-items:center;justify-content:flex-start;}
 	ul li{height:100%;}
 	ul li button{display:flex;margin:5px;height:40px;border-radius:10px;background:#fff;box-sizing:border-box;align-items:center;}
 	ul li button span{flex:1;}
 	.skSp{font-size:15px;}
-	.skName{font-size:13px;}
+	.skName{font-size:13px;white-space:nowrap;}
 `;
 const CardChRing = styled.span`
 	position:absolute;width:100%;height:100%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;backface-visibility:hidden;background-color:transparent;
@@ -122,7 +127,6 @@ const Battle = ({
 	const mapSize = 20;
 
 	const [orderIdx, setOrderIdx] = useState(0);
-	const [selectCh, setSelectCh] = useState([]);
 	const mapPos = useRef(null);
 	const [orders, setOrders] = useState([]);
 	const [mode, setMode] = useState('order');
@@ -134,11 +138,12 @@ const Battle = ({
 		return typeof data === 'number';
 	});
 	const battleCh = orderAlly.map((data, idx) => {
+		const saveCh = saveData.ch[data];
 		return {
-			idx: data,
-			sp: 10,
+			...saveCh,
+			sp: Math.floor(saveCh.bSt1/2),
 		}
-	})
+	});
 	const battleCommand = (skill) => {
 		if (mode === 'order') {
 			if (skill === 'cancel') { //취소 실행
@@ -149,7 +154,15 @@ const Battle = ({
 					setOrders(order);
 				}
 			} else if (skill === 'wait'){ //대기 실행 sp 증가
-
+				if (orderIdx < orderAlly.length - 1) {
+					setOrderIdx((prev) => ++prev);
+				} else {
+					setMode('action');
+				}
+				setOrders([
+					...orders,
+					{idx: 99},
+				]);
 			} else { //스킬 실행
 				if (orderIdx < orderAlly.length - 1) {
 					setOrderIdx((prev) => ++prev);
@@ -172,9 +185,6 @@ const Battle = ({
 	useLayoutEffect(() => {
 		setContainerW(containerRef.current.getBoundingClientRect().height * 0.5);
 	}, [containerRef.current]);
-	useLayoutEffect(() => {
-		setSelectCh(saveData.ch[orderAlly[orderIdx]]);
-	}, [orderIdx]);
 	const map = [
 		{idx:0,},
 		{idx:1,},
@@ -289,10 +299,10 @@ const Battle = ({
 				</BattleArea>
 				<BattleMenu className="battle_menu">
 					<div className="chInfo">
-						{`${selectCh.bSt1} + ${selectCh.bSt2}`}
+						<span className="sp">{battleCh[orderIdx].sp}</span><span className="spR">{battleCh[orderIdx].bSt2}</span>
 					</div>
 					<ul>
-						{selectCh.sk && selectCh.sk.map((data, idx) => {
+						{battleCh[orderIdx].sk && battleCh[orderIdx].sk.map((data, idx) => {
 							const sk = gameData.skill;
 							if (sk[data.idx].cate[0] !== 1) {
 								return (
