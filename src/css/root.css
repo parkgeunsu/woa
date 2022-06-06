@@ -21,7 +21,7 @@
 
 body,div,ul,ol,li,dl,dt,dd,p{margin:0;padding:0;line-height:1;font-size:12px;color:#fff;}
 li{list-style:none}
-li, span, label{line-height:1.4;font-size:12px;}
+li, span, label{line-height:1;font-size:12px;}
 a{text-decoration:none;color:#000;}
 canvas{display:block;}
 input,span,label{vertical-align:middle;}

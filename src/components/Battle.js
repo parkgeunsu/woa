@@ -15,7 +15,7 @@ const BattleWarp = styled.div`
 	display:flex;position:absolute;left:0;right:0;top:0;bottom:0;background:url(${({backImg}) => backImg});background-size:cover;flex-direction:column;padding:44px 0 0 0;width:100%;height:100%;box-sizing:border-box;overflow:hidden;
 `;
 const BattleArea = styled.div`
-	position:relative;height:90%;background:#000;
+	position:relative;height:calc(100% - 50px);background:#000;
 	/*perspective:1000px;perspective-origin:50% 50%;*/
 `;
 const BattleUnit = styled.div`
@@ -63,10 +63,14 @@ const BattleOrder = styled.div`
 	.battle_msg{margin:0 auto;padding:10px;width:70%;height:100%;border:2px solid #fff;border-radius:30px;background:rgba(255,255,255,.5);box-sizing:border-box;text-align:center;line-height:1.2;font-size:15px;font-weight:600;color:#000;}
 `;
 const BattleMenu = styled.div`
-	position:relative;height:10%;background:#000;
-	ul{display:flex;height:100%;}
-	ul li{flex:1;height:100%;}
-	ul li button{width:100%;height:100%;border-radius:10px;background:#fff;box-sizing:border-box;text-align:center;}
+	display:flex;position:relative;height:50px;background:var(--color-b);
+	.chInfo{flex-basis:60px;}
+	ul{display:flex;flex:1;height:100%;align-items:center;justify-content:flex-start;}
+	ul li{height:100%;}
+	ul li button{display:flex;margin:5px;height:40px;border-radius:10px;background:#fff;box-sizing:border-box;align-items:center;}
+	ul li button span{flex:1;}
+	.skSp{font-size:15px;}
+	.skName{font-size:13px;}
 `;
 const CardChRing = styled.span`
 	position:absolute;width:100%;height:100%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;backface-visibility:hidden;background-color:transparent;
@@ -84,7 +88,7 @@ const CardRingStyle = styled.span`
 	position:absolute;width:100%;height:100%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;backface-visibility:hidden;background-color:transparent;
 	background-position:center 100%,center center;background-size:100%;transform:translateZ(4px);
 	span{
-		position:absolute;left:-25%;width:150%;padding-top:150%;top:-30%;height:100%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;background-position:center center;background-size:100%;border:none;animation:ring_ro linear 15s infinite;
+		position:absolute;left:-25%;width:150%;padding-top:150%;top:-30%;height:100%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;background-position:center center;background-size:100%;border:none;animation:ring_ro linear 15s infinite;pointer-events:none;
 		background-image:url(
 			${({ringDisplay, lv}) => {
 				if (lv > 49) {
@@ -116,9 +120,61 @@ const Battle = ({
 	const containerRef = useRef(null);
 	const [containerW, setContainerW] = useState();
 	const mapSize = 20;
+
+	const [orderIdx, setOrderIdx] = useState(0);
+	const [selectCh, setSelectCh] = useState([]);
+	const mapPos = useRef(null);
+	const [orders, setOrders] = useState([]);
+	const [mode, setMode] = useState('order');
+	mapPos.current = [];
+	const orderAlly = allyDeck.filter((data, idx) => {
+		if (typeof data === 'number') {
+			mapPos.current.push(idx);
+		}
+		return typeof data === 'number';
+	});
+	const battleCh = orderAlly.map((data, idx) => {
+		return {
+			idx: data,
+			sp: 10,
+		}
+	})
+	const battleCommand = (skill) => {
+		if (mode === 'order') {
+			if (skill === 'cancel') { //취소 실행
+				if (orderIdx > 0) {
+					setOrderIdx((prev) => --prev);
+					let order = [...orders];
+					order.pop();
+					setOrders(order);
+				}
+			} else if (skill === 'wait'){ //대기 실행 sp 증가
+
+			} else { //스킬 실행
+				if (orderIdx < orderAlly.length - 1) {
+					setOrderIdx((prev) => ++prev);
+				} else {
+					setMode('action');
+				}
+				setOrders([
+					...orders,
+					{idx: skill.idx},
+				]);
+			}
+		}
+	}
+	useLayoutEffect(() => {
+		if (mode === 'action') {
+			console.log(orderIdx, orders);
+			console.log("시뮬레이션 실행");
+		}
+	}, [mode]);
 	useLayoutEffect(() => {
 		setContainerW(containerRef.current.getBoundingClientRect().height * 0.5);
 	}, [containerRef.current]);
+	useLayoutEffect(() => {
+		setSelectCh(saveData.ch[orderAlly[orderIdx]]);
+	}, [orderIdx]);
 	const map = [
 		{idx:0,},
 		{idx:1,},
@@ -151,19 +207,18 @@ const Battle = ({
       <BattleWarp className="battle_wrap" backImg={imgBack}>
 				<BattleArea ref={containerRef} className="battle_area">
 					<BattleUnit containerW={containerW} className="battle_units">
-						<div className="units_ally">
-							{allyDeck && allyDeck.map((allyData, idx)=> {
+						<div className="units_enemy">
+							{enemyDeck && enemyDeck.map((enemyData, idx)=> {
 								const left = idx % 5 * mapSize,
 									top = Math.floor(idx / 5) * mapSize;
-								if (typeof allyData === "number") {
-									const saveCh = saveData.ch[allyData];
-									const chData = gameData.ch[saveCh.idx];
+								if (enemyData.idx) {
+									const chData = gameData.ch[enemyData.idx];
 									return (
 										<BattleCh key={idx} className="battle_ch" data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize}>
 											<div className="ch_box">
-												<CardChRing className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} lv={saveCh.lv} />
+												<CardChRing className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} lv={enemyData.lv} />
 												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>
-												<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData.element]} lv={saveCh.lv}>
+												<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData.element]} lv={enemyData.lv}>
 													<span className="ch_ring transition" />
 												</CardRingStyle>
 											</div>
@@ -178,18 +233,19 @@ const Battle = ({
 								}
 							})}
 						</div>
-						<div className="units_enemy">
-							{enemyDeck && enemyDeck.map((enemyData, idx)=> {
-								const left = idx % 5 * mapSize,
-									top = Math.floor(idx / 5) * mapSize;
-								if (enemyData.idx) {
-									const chData = gameData.ch[enemyData.idx];
+						<div className="units_ally">
+							{allyDeck && allyDeck.map((allyData, idx)=> {
+								const left = (24 - idx) % 5 * mapSize,
+									top = Math.floor((24 - idx) / 5) * mapSize;
+								if (typeof allyData === "number") {
+									const saveCh = saveData.ch[allyData];
+									const chData = gameData.ch[saveCh.idx];
 									return (
-										<BattleCh key={idx} className="battle_ch" data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize}>
+										<BattleCh key={idx} className={`battle_ch ${mapPos.current[orderIdx] === idx ? 'on' : ''}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize}>
 											<div className="ch_box">
-												<CardChRing className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} lv={enemyData.lv} />
+												<CardChRing className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} lv={saveCh.lv} />
 												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>
-												<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData.element]} lv={enemyData.lv}>
+												<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData.element]} lv={saveCh.lv}>
 													<span className="ch_ring transition" />
 												</CardRingStyle>
 											</div>
@@ -232,10 +288,26 @@ const Battle = ({
 					</BattleOrder>
 				</BattleArea>
 				<BattleMenu className="battle_menu">
+					<div className="chInfo">
+						{`${selectCh.bSt1} + ${selectCh.bSt2}`}
+					</div>
 					<ul>
-						<li><button>Attack</button></li>
-						<li><button>Skill</button></li>
-						<li><button>defense</button></li>
+						{selectCh.sk && selectCh.sk.map((data, idx) => {
+							const sk = gameData.skill;
+							if (sk[data.idx].cate[0] !== 1) {
+								return (
+									<li key={idx}><button onClick={() => {
+										battleCommand(sk[data.idx]);
+									}}><span className="skSp">{sk[data.idx].sp}</span><span className="skName">{sk[data.idx].na}</span></button></li>
+								);
+							}
+						})}
+						<li><button onClick={() => {
+							battleCommand('wait');
+						}}><span>대기</span></button></li>
+						<li><button onClick={() => {
+							battleCommand('cancel');
+						}}><span>취소</span></button></li>
 					</ul>
 				</BattleMenu>
 			</BattleWarp>

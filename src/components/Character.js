@@ -108,7 +108,7 @@ const ChWrap = styled.div`
   .sk .sk_element[el11]{background-image:url(../images/ico/el11.png);background-size:100%;}
   .sk .sk_element[el12]{background-image:url(../images/ico/el12.png);background-size:100%;}
   .sk .name{margin:auto 5px;width:80px;text-align:center;font-size:12px;color:#fff;font-weight:600;}
-  .sk .txt{margin:auto 0;flex:1;font-size:11px;}
+  .sk .txt{margin:auto 0;flex:1;line-height:1.4;font-size:11px;}
   .sk[cate1]:after{content:'';position:absolute;left:0;top:0;border-left:10px solid var(--color-blue);border-top:10px solid var(--color-blue);border-right:10px solid transparent;border-bottom:10px solid transparent;}/*passive*/
   .sk[cate3]:after{content:'';position:absolute;left:0;top:0;border-left:10px solid var(--color-red);border-top:10px solid var(--color-red);border-right:10px solid transparent;border-bottom:10px solid transparent;}/*active*/
   .sk[cate4]:after{content:'';position:absolute;left:0;top:0;border-left:10px solid var(--color-point6);border-top:10px solid var(--color-point6);border-right:10px solid transparent;border-bottom:10px solid transparent;}/*active, passive*/

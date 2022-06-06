@@ -11,10 +11,10 @@
 export const skill = [
 	{idx:0,
 		na:'공격',element_type:0,cate:[3],txt:`<u>단일</u>, <b dmg>$(0)</b>의 공격을 한다.`
-		,eff:[{ta_:1,ta:1,type:9,num:['100%','110%','125%','135%','150%']}],atkCount:1,turn:1,sp:4},
+		,eff:[{ta_:1,ta:1,type:9,num:['100%','110%','125%','135%','150%']}],atkCount:1,turn:1,sp:5},
 	{idx:1,
 		na:'침뱉기',element_type:0,cate:[3],txt:'<u>가로한줄</u>, <b dmg>$(0)</b>의 <i el el4>수</i>속성 공격을 한다.'
-		,eff:[{ta_:1,ta:6,type:22,num:['70%','80%','90%','100%','110%']}],atkCount:1,turn:1,sp:6},
+		,eff:[{ta_:1,ta:6,type:22,num:['70%','80%','90%','100%','110%']}],atkCount:1,turn:1,sp:7},
 	{idx:2,
 		na:'학익진 강화',element_type:0,cate:[1],txt:'<u>전체</u> 학익진효과가 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
 		,eff:[{ta_:0,ta:20,type:100,num:['20%','25%','30%','35%','40%']}],atkCount:0,turn:0,sp:0}, //이순신
@@ -32,22 +32,22 @@ export const skill = [
 		,eff:[{ta_:0,ta:20,type:0,num:['20%','25%','30%','35%','40%']}],atkCount:0,turn:0,sp:0},
 	{idx:7,
 		na:'세게 공격',element_type:0,cate:[3],txt:'<u>단일</u>, <b dmg>$(0)</b>의 강한 공격을 한다.'
-		,eff:[{ta_:1,ta:1,type:9,num:['150%','175%','200%','225%','250%']}],atkCount:1,turn:1,sp:4},
+		,eff:[{ta_:1,ta:1,type:9,num:['150%','175%','200%','225%','250%']}],atkCount:1,turn:1,sp:10},
 	{idx:8,
 		na:'두번 공격',element_type:0,cate:[3],txt:'<u>단일</u> <b dmg>$(0)</b>의 두번 공격을 한다.'
-		,eff:[{ta_:1,ta:1,type:9,num:['80%','90%','100%','110%','120%']}],atkCount:2,turn:1,sp:0},
+		,eff:[{ta_:1,ta:1,type:9,num:['80%','90%','100%','110%','120%']}],atkCount:2,turn:1,sp:10},
 	{idx:9,
 		na:'연속 공격',element_type:0,cate:[3],txt:'<u>단일</u> <b dmg>$(0)</b>의 2~4회 공격을 한다.'
-		,eff:[{ta_:1,ta:1,type:9,num:['60%','65%','75%','80%','85%']}],atkCount:Math.random()*4,turn:1,sp:0},
+		,eff:[{ta_:1,ta:1,type:9,num:['60%','65%','75%','80%','85%']}],atkCount:Math.random()*4,turn:1,sp:12},
 	{idx:10,
 		na:'무차별 공격',element_type:0,cate:[3],txt:'<u>단일 랜덤</u> <b dmg>$(0)</b>의 두번 공격을 한다.'
-		,eff:[{ta_:1,ta:1,type:9,num:['100%','110%','120%','130%','140%']}],atkCount:1,turn:1,sp:0},
+		,eff:[{ta_:1,ta:1,type:9,num:['100%','110%','120%','130%','140%']}],atkCount:1,turn:1,sp:9},
 	{idx:11,
 		na:'방어',element_type:0,cate:[5],txt:'<u>자신</u> <b buff>$(0)</b>의 방어(DEF)가 <i icon up>증가</i>한다.'
-		,eff:[{ta_:0,ta:1,type:4,num:['100%','120%','140%','170%','200%']}],atkCount:1,turn:1,sp:0},
+		,eff:[{ta_:0,ta:1,type:4,num:['100%','120%','140%','170%','200%']}],atkCount:1,turn:1,sp:2},
 	{idx:12,
 		na:'철벽방어',element_type:0,cate:[5],txt:'<u>자신</u> <b buff>$(0)</b>의 방어(DEF)와 <b buff>$(1)</b>의 술법방어(MDEF)가 <i icon up>증가</i>한다.'
-		,eff:[{ta_:0,ta:1,type:4,num:['100%','120%','140%','170%','200%']},{ta_:0,ta:1,type:6,num:['100%','120%','140%','170%','200%']}],atkCount:1,turn:1,sp:0},
+		,eff:[{ta_:0,ta:1,type:4,num:['100%','120%','140%','170%','200%']},{ta_:0,ta:1,type:6,num:['100%','120%','140%','170%','200%']}],atkCount:1,turn:1,sp:4},
 ]
 
 
