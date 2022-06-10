@@ -224,8 +224,8 @@ const buttonEvent = (dataObj) => {
       default:
         break;
     } //사용 타입
-    // sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
-    // dataObj.changeSaveData(sData);//데이터 저장
+    sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
+    dataObj.changeSaveData(sData);//데이터 저장
   } else if (dataObj.type === 'itemSell') { //아이템 판매
     sData.info.money += dataObj.data.gameItem.price;//돈 계산
     sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거

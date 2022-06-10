@@ -438,7 +438,7 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 				idx: newIdx,
 				items: [{}, {}, {}, {}, {}, {}, {}, {}],
 				lv: 1,
-				sk: [{idx: 0, lv: 1}],
+				sk: [{idx: 0, lv: 1, exp: 0,}],
 				stateType: Math.floor(Math.random()*4),
 			},
 		}, saveData, gameData));

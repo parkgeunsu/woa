@@ -51,15 +51,38 @@ export const util = { //this.loadImage();
   loadData: (key) => {
     return JSON.parse(localStorage.getItem(key));
   },
+  getEnemyState: (enemyData, gameData) => {
+    const stateArr = gameData.stateName;
+    let battleState_ = [];
+    let enemy = {};
+    const itemEff = util.getItemEff('', enemyData, gameData.items, true);
+    stateArr.forEach((el,index)=>{
+      const st = gameData.ch[enemyData.idx]['st'+index],
+        per_current = gameData.stateType[2].arr[enemyData.lv-1]*0.01,
+        stateCurrent = Math.round(st*per_current);
+      battleState_[index] = stateCurrent;
+    });
+    battleState_[7] = gameData.ch[enemyData.idx].st3 + gameData.ch[enemyData.idx].st5 + gameData.ch[enemyData.idx].st6;
+    const battleState = util.getTotalState(battleState_);
+    battleState.forEach((bState, index) => {
+      const iSt = util.compileState(bState, itemEff[index]);
+      enemy = {
+        ...enemy,
+        ['iSt' + index]: iSt,
+        ['bSt' + index]: bState,
+      }
+    });
+    return enemy;
+  },
   saveLvState: (saveSlot, obj, saveData, gameData) => {//카드 획득시 레벨당 능력치 저장(캐릭터 저장된 슬롯번호, {카드등급, 아이템 이펙트등...})
     const stateArr = gameData.stateName;
     let battleState_ = [];
     let saveChSlot = saveData.ch[saveSlot] || obj.newState;
     stateArr.forEach((el,index)=>{
       const st = gameData.ch[saveChSlot.idx]['st'+index],//실제 능력치
-      per_current = gameData.stateType[saveChSlot.stateType].arr[saveChSlot.lv-1]*0.01,//성장타입에 따른 LV당 %
-      stateCurrent = Math.round(st*per_current),//성장타입에 따른 LV당 능력치
-      stateMax = Math.round(gameData.stateType[saveChSlot.stateType].arr[49]*0.01*st);//성장타입에 따른 최대 능력치
+        per_current = gameData.stateType[saveChSlot.stateType].arr[saveChSlot.lv-1]*0.01,//성장타입에 따른 LV당 %
+        stateCurrent = Math.round(st*per_current),//성장타입에 따른 LV당 능력치
+        stateMax = Math.round(gameData.stateType[saveChSlot.stateType].arr[49]*0.01*st);//성장타입에 따른 최대 능력치
       saveChSlot = {
         ...saveChSlot,
         ['rSt' + index]: stateCurrent, //레벨당 현재능력치
@@ -115,8 +138,13 @@ export const util = { //this.loadImage();
       ch: saveCh,
     }
   },
-  getItemEff: (idx, saveCh, gameItem) => {
-    const saveItems = typeof idx === 'number' ? saveCh[idx].items : [{}, {}, {}, {}, {}, {}, {}, {}];
+  getItemEff: (idx, saveCh, gameItem, enemy) => {
+    let saveItems = {};
+    if (enemy) {
+      saveItems = saveCh.items;
+    } else {
+      saveItems = typeof idx === 'number' ? saveCh[idx].items : [{}, {}, {}, {}, {}, {}, {}, {}];
+    }
     //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MATK(5), 술방MDEF(6), 회복RCV(7), 속도SPD(8), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(20),암(21),수(22),화(23),풍(24),지(25), 진형(100)
     let effData = [];
     saveItems.forEach((item) => {
@@ -337,6 +365,35 @@ export const util = { //this.loadImage();
   
     arr[100] = '진형';
     return arr[num];
+  },
+  getEnemySkill: (data, gameData) => {
+    const chData = gameData.ch[data.idx],
+      animalSkill = gameData.animal_type[chData.animal_type].skill,
+      jobSkill = gameData.job[chData.job].skill,
+      skillArr = [...animalSkill, ...jobSkill];
+    const skillNums = [3,6,9,12,15],
+      skillLength = skillNums[Math.floor(data.lv / 10) - 1];
+    let skill = [];
+    for(let i = 0; i < skillLength; ++i) {
+      const Num = Math.floor(Math.random() * skillArr.length),
+      skillIdx = skillArr[Num];
+      let hasSkill = '';
+      skill.forEach((data, idx) => {
+        if (data.idx === skillIdx) {
+          data.lv += 1;
+          data.lv = data.lv > 5 ? 5 : data.lv;
+          hasSkill = data;
+          return;
+        }
+      });
+      if (!hasSkill) {
+        skill.push({
+          idx: skillIdx,
+          lv: 1,
+        });
+      }
+    }
+    return skill;
   },
   getSkill: (gameData, ch, slotIdx, saveData, changeSaveData) => {
     const chData = gameData.ch[ch.idx],
