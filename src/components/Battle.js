@@ -106,8 +106,27 @@ const BattleLand = styled.div`
 	.land.l3{background:rgba(255,0,0,.5);}
 `;
 const BattleOrder = styled.div`
-	display:none;position:absolute;left:0;right:0;top:50%;height:10%;transform:translate(0,-50%);z-index:50;
-	.battle_msg{margin:0 auto;padding:10px;width:70%;height:100%;border:2px solid #fff;border-radius:30px;background:rgba(255,255,255,.5);box-sizing:border-box;text-align:center;line-height:1.2;font-size:15px;font-weight:600;color:#000;}
+	position:absolute;left:0;right:0;transform:translate(0,-50%);z-index:50;transition:all 1s;opacity:0;pointer-events:none;
+	&.ally{bottom:35%;}
+	&.enemy{top:35%;}
+	&.on{opacity:1;}
+	.battle_msg{margin:0 auto;padding:10px;width:50%;height:100%;border-radius:10px;background:#333;box-sizing:border-box;text-align:center;line-height:1.2;font-size:15px;font-weight:600;color:#fff;}
+	&.ally:after{content:'';position:absolute;
+		bottom:-10px;
+    border-top:10px solid #333;
+    border-left:10px solid transparent;
+    border-right:10px solid transparent;
+    border-bottom:0 solid transparent;
+  }
+	&.enemy:after{content:'';position:absolute;
+		top:-10px;
+    border-bottom:10px solid #333;
+    border-left:10px solid transparent;
+    border-right:10px solid transparent;
+    border-top:0 solid transparent;
+  }
+	&.left:after{left:30%;}
+	&.right:after{right:30%;}
 `;
 const BattleMenu = styled.div`
 	display:flex;position:relative;height:50px;background:var(--color-b);
@@ -243,6 +262,22 @@ const activeSk = (skIdx) => {
 			break;
 	}
 }
+
+const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx) => {
+	setTimeout(() => {
+		setTimeout(() => {
+			setSkillMsg(true);
+			setTimeout(() => {
+				setSkillMsg(false);
+				setTimeout(() => {
+					const turnIdx_ = turnIdx + 1;
+					setTurnIdx(turnIdx_);
+					actionAnimation(setTurnIdx, setSkillMsg, turnIdx_);
+				}, 500);
+			}, 500);
+		}, 500);
+	}, 2000);
+}
 const Battle = ({
 	saveData,
   changeSaveData,
@@ -268,7 +303,9 @@ const Battle = ({
 	const [battleAlly, setBattleAlly] = useState(); //아군 능력치
 	const	[battleEnemy, setBattleEnemy] = useState(); //적군 능력치
 	const [timeLine, setTimeLine] = useState(); //공격 순번배열
-	const [turnIdx, setTurnIdx] = useState(0); //공격 순번
+	const [timeLineIdx, setTimeLineIdx] = useState(0); //공격 순번라인 처리
+	const [turnIdx, setTurnIdx] = useState(); //공격캐릭터 활성화 순번
+	const [skillMsg, setSkillMsg] = useState(false); //메시지창 on/off
 	useLayoutEffect(() => {
 		let ally = [];
 		let pos = [];
@@ -481,6 +518,8 @@ const Battle = ({
 				}
 			});
 			setTimeLine(timeLineEntry);
+			setTurnIdx(0);
+			actionAnimation(setTurnIdx, setSkillMsg, 0);
 			console.log("시뮬레이션 실행", timeLineEntry);
 		}
 	}, [mode]);
@@ -568,7 +607,7 @@ const Battle = ({
 								// data.skIdx 스킬번호
 								// target 범위
 								return (
-									<TimeLineCh key={idx} className={`battle_ch ${turnIdx === idx ? 'on' : ''} ${activeSkill}`} team={data.team} size={30} left={left}>
+									<TimeLineCh key={idx} className={`battle_ch ${timeLineIdx === idx ? 'on' : ''} ${activeSkill}`} team={data.team} size={30} left={left}>
 										<CardChRing style={{top:0,borderRadius:'50%',}} className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} />
 										<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>
 									</TimeLineCh>
@@ -635,8 +674,8 @@ const Battle = ({
 						})}
 						</div>
 					</BattleLand>
-					<BattleOrder className="battle_order">
-						<div className="battle_msg">스킬시전!!</div>
+					<BattleOrder className={`battle_order ${skillMsg ? 'on' : ''} ${typeof turnIdx === 'number' && timeLine[turnIdx].team === 'ally' ? 'ally' : 'enemy'} ${typeof turnIdx === 'number' && gameData.ch[timeLine[turnIdx].idx].face_d === 1 ? 'left' : 'right'}`}>
+						<div className="battle_msg">{typeof turnIdx === 'number' && gameData.skill[timeLine[turnIdx].skIdx].na}</div>
 					</BattleOrder>
 				</BattleArea>
 				{mode !== 'action' && battleAlly ? 
