@@ -21,7 +21,10 @@ const BattleArea = styled.div`
 `;
 const BattleUnit = styled.div`
 	display:flex;flex-direction:column;position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;
-	.turnLine{height:50px;}
+	.turnLine{
+		position:relative;height:0;overflow:hidden;
+		&.on{height:50px;overflow:unset;}
+	}
 	& > div {position:relative;margin:0 auto;width:${({containerW}) => containerW}px;height:50%;box-sizing:border-box;transition:all 1s;}
 	& > div .effect0:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:var(--color-b);box-shadow:0 0 10px 10px var(--color-b);z-index:10;opacity:.7;}
 	& > div .effect1:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:var(--color-purple);box-shadow:0 0 10px 10px var(--color-purple);z-index:10;opacity:.7;}
@@ -31,11 +34,28 @@ const BattleUnit = styled.div`
 	& > div .effect5:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:var(--color-lightblue);box-shadow:0 0 10px 10px var(--color-lightblue);z-index:10;opacity:.7;}
 	& > div .effect6:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:var(--color-green);box-shadow:0 0 10px 10px var(--color-green);z-index:10;opacity:.7;}
 `;
+const TimeLineCh = styled.div`
+	position:absolute;left:${({left}) => left}%;width:${({size}) => size}px;padding-top:${({size}) => size}px;box-sizing:border-box;z-index:1;
+	${({team}) => team === 'ally' ? 'bottom:5%;' : 'top:5%;'}
+	&.on{z-index:20;animation:turnEffect 2s linear infinite;}
+	&.none span{filter:grayscale(100%);}
+	&.none:after{content:'';position:absolute;right:0;bottom:0;width:50%;height:50%;}
+	&.none1:after{content:'방';background:#000;}
+	&.none2:after{content:'철';background:#fff;}
+	&.none3:after{content:'대';background:#f00;}
+	@keyframes turnEffect{
+		0%{transform:scale(1);}
+		50%{transform:scale(1.5);}
+		100%{transform:scale(1);}
+	}
+`;
 const BattleCh = styled.div`
 	position:absolute;width:${({size}) => size}%;padding-top:${({size}) => size}%;box-sizing:border-box;perspective:100px;transform-style:flat;
 	left:${({left}) => left}%;
 	top:${({top}) => top}%;
+	transition:all 1s;
 	z-index:1;
+	&.action{left:50%;top:50%;transform:translate(-50%,-50%) scale(2);z-index:30;}
 	.ch_box{position:absolute;left:5%;top:5%;width:90%;height:90%;transition:all .3s;transform-origin:50% 100%;transform-style:preserve-3d;}
 	.ch_box .hpsp{position:absolute;height:12%;width:100%;top:-17%;}
 	.ch_box .hpsp{
@@ -75,7 +95,10 @@ const BattleLand = styled.div`
 	& > div {position:relative;margin:0 auto;width:${({containerW}) => containerW}px;height:50%;box-sizing:border-box;transition:all 1s;}
 	.land_ally{position:relative;margin:0 auto;}
 	.land_enemy{position:relative;margin:0 auto;}
-	.turnLine{height:50px;}
+	.turnLine{
+		position:relative;height:0;
+		&.on{height:50px;}
+	}
 	.land{position:absolute;width:20%;padding-top:20%;box-sizing:border-box;border-radius:5px;}
 	.land.l0{background:rgba(255,255,255,.5);}
 	.land.l1{background:rgba(0,0,255,.5);}
@@ -147,7 +170,7 @@ const chkString = (arr, index) => {
 	});
 	return chk;
 }
-const enemyPattern = (ai, battleCh, allyPos, enemy, gameData) => {
+const enemyPattern = (ai, battleAlly, allyPos, enemy, gameData) => {
 	let enemySkill = [];
 	const activeSkillSorting = (skill) => {
 		let active = [],
@@ -170,13 +193,17 @@ const enemyPattern = (ai, battleCh, allyPos, enemy, gameData) => {
 	}
 	let hpArray = [];
 	allyPos.forEach((data, idx) => {
-		hpArray.push(battleCh[idx].hp_ / battleCh[idx].hp);
+		hpArray.push({
+			idx: idx,
+			hp: battleAlly[idx].hp_ / battleAlly[idx].hp,
+		});
 	});
-	hpArray.sort(); //allyPos[hpArray[0]] 약한캐릭
+	hpArray.sort((a, b) => {
+		return a.hp - b.hp;
+	}); //allyPos[hpArray[0].idx] 약한캐릭
 	enemy.forEach((data, idx) => {
 		const enemyAi = ai[idx];
 		const skillList = activeSkillSorting(data.sk);
-		console.log(skillList);
 		const activeChance = [0.75, 0.8, 0.85, 0.9, 0.9]; //active스킬 확률
 		const normalAttackChance = [0.3, 0.2, 0.15, 0.15, 0.1]; //일반공격 확률
 		const weakAttackChance = [0, 0.2, 0.4, 0.6, 0.8]; //약한적 공격 확률
@@ -184,19 +211,38 @@ const enemyPattern = (ai, battleCh, allyPos, enemy, gameData) => {
 		const ranCount = Math.random();
 		if (ranCount > activeChance[enemyAi]) { //buff
 			enemySkill.push({
-				idx: Math.random() > normalAttackChance[enemyAi] ? skillList.buff[Math.floor(Math.random() * skillList.buff.length)]?.idx || 0 : 0,
-				target: Math.random() <= weakAttackChance[enemyAi] ? allyPos[hpArray[0]] : attackTarget,
+				team: 'enemy',
+				idx: idx,
+				skIdx: Math.random() > normalAttackChance[enemyAi] ? skillList.buff[Math.floor(Math.random() * skillList.buff.length)]?.idx || 0 : 0,
+				target: Math.random() <= weakAttackChance[enemyAi] ? allyPos[hpArray[0].idx] : attackTarget,
 			});
 		} else { //active
 			enemySkill.push({
-				idx: Math.random() > normalAttackChance[enemyAi] ? skillList.active[Math.floor(Math.random() * skillList.active.length)]?.idx || 0 : 0,
-				target: Math.random() <= weakAttackChance[enemyAi] ? allyPos[hpArray[0]] : attackTarget,
+				team: 'enemy',
+				idx: idx,
+				skIdx: Math.random() > normalAttackChance[enemyAi] ? skillList.active[Math.floor(Math.random() * skillList.active.length)]?.idx || 0 : 0,
+				target: Math.random() <= weakAttackChance[enemyAi] ? allyPos[hpArray[0].idx] : attackTarget,
 			});
 		}
 	});
 	return enemySkill;
 }
-
+const activeSk = (skIdx) => {
+	switch(skIdx) {
+		case 11: //방어
+			return 'none none1';
+			break;
+		case 12: //철벽방어
+			return 'none none2';
+			break;
+		case 99: //대기
+			return 'none none3';
+			break;
+		default:
+			return '';
+			break;
+	}
+}
 const Battle = ({
 	saveData,
   changeSaveData,
@@ -212,31 +258,33 @@ const Battle = ({
 	const mapSize = 20;
 
 	const [orderIdx, setOrderIdx] = useState(0);
-	const [orders, setOrders] = useState([]);
+	const [allyOrders, setAllyOrders] = useState([]);
 	const [enemyAi, setEnemyAi] = useState([]);
 	const [enemyOrders, setEnemyOrders] = useState([]);
 	const [mode, setMode] = useState('order');
-	const [effectArea, setEffectArea] = useState([]);
-	const [currentSkill, setCurrentSkill] = useState();
-	const [mapPos, setMapPos] = useState([]);
-	const [battleCh, setBattleCh] = useState();
-	const	[battleEnemy, setBattleEnemy] = useState();
+	const [effectArea, setEffectArea] = useState([]); //스킬 영역
+	const [currentSkill, setCurrentSkill] = useState(); //현재 선택된 스킬
+	const [mapPos, setMapPos] = useState([]); //아군 위치값
+	const [battleAlly, setBattleAlly] = useState(); //아군 능력치
+	const	[battleEnemy, setBattleEnemy] = useState(); //적군 능력치
+	const [timeLine, setTimeLine] = useState(); //공격 순번배열
+	const [turnIdx, setTurnIdx] = useState(0); //공격 순번
 	useLayoutEffect(() => {
-		let ch = [];
+		let ally = [];
 		let pos = [];
 		allyDeck.filter((data, idx) => {
 			if (typeof data === 'number') {
 				const saveCh = saveData.ch[data];
 				pos.push(idx);
 				const hp = saveCh.bSt0 + saveCh.iSt0,
-					rsp = saveCh.bSt2,
-					atk = saveCh.bSt3,
-					def = saveCh.bSt4,
-					mak = saveCh.bSt5,
-					mdf = saveCh.bSt6,
-					rcv = saveCh.bSt7,
-					spd = saveCh.bSt8;
-				ch.push({
+					rsp = saveCh.bSt2 + saveCh.iSt2,
+					atk = saveCh.bSt3 + saveCh.iSt3,
+					def = saveCh.bSt4 + saveCh.iSt4,
+					mak = saveCh.bSt5 + saveCh.iSt5,
+					mdf = saveCh.bSt6 + saveCh.iSt6,
+					rcv = saveCh.bSt7 + saveCh.iSt7,
+					spd = saveCh.bSt8 + saveCh.iSt8;
+				ally.push({
 					...saveCh,
 					hp: hp,
 					hp_: hp,
@@ -252,7 +300,7 @@ const Battle = ({
 				})
 			}
 		});
-		setBattleCh(ch);
+		setBattleAlly(ally);
 		setMapPos(pos);
 		let enemy = [];
 		enemyDeck.filter((data, idx) => {
@@ -261,13 +309,13 @@ const Battle = ({
 				const enemyData = util.getEnemyState(data, gameData);
 				const enemySkill = util.getEnemySkill(data, gameData);
 				const hp = enemyData.bSt0 + enemyData.iSt0,
-					rsp = enemyData.bSt2,
-					atk = enemyData.bSt3,
-					def = enemyData.bSt4,
-					mak = enemyData.bSt5,
-					mdf = enemyData.bSt6,
-					rcv = enemyData.bSt7,
-					spd = enemyData.bSt8;
+					rsp = enemyData.bSt2 + enemyData.iSt2,
+					atk = enemyData.bSt3 + enemyData.iSt3,
+					def = enemyData.bSt4 + enemyData.iSt4,
+					mak = enemyData.bSt5 + enemyData.iSt5,
+					mdf = enemyData.bSt6 + enemyData.iSt6,
+					rcv = enemyData.bSt7 + enemyData.iSt7,
+					spd = enemyData.bSt8 + enemyData.iSt8;
 				enemy.push({
 					...gameCh,
 					...enemyData,
@@ -294,21 +342,23 @@ const Battle = ({
 			const areaArr = util.getEffectArea(currentSkill.ta, pos);
 			setEffectArea(areaArr);
 			if (e.target.classList.contains('effect')) {
-				if (orderIdx < battleCh.length - 1) {
+				if (orderIdx < battleAlly.length - 1) {
 					setOrderIdx((prev) => ++prev);
 				} else {
 					setMode('action');
 				}
-				setOrders([
-					...orders,
+				setAllyOrders([
+					...allyOrders,
 					{
-						idx: currentSkill.idx,
+						team: 'ally',
+						idx: orderIdx,
+						skIdx: currentSkill.idx,
 						enemyTarget: true,
 						target: pos,
 					},
 				]);
 				setEffectArea([]);
-				if (orderIdx < battleCh.length - 1) {
+				if (orderIdx < battleAlly.length - 1) {
 					setMode('order');
 				} else {
 					setMode('action');
@@ -322,20 +372,24 @@ const Battle = ({
 			if (skill === 'cancel') { //취소 실행
 				if (orderIdx > 0) {
 					setOrderIdx((prev) => --prev);
-					let order = [...orders];
+					let order = [...allyOrders];
 					order.pop();
-					setOrders(order);
+					setAllyOrders(order);
 				}
 			} else if (skill === 'wait'){ //대기 실행 sp 증가
-				if (orderIdx < battleCh.length - 1) {
+				if (orderIdx < battleAlly.length - 1) {
 					setOrderIdx((prev) => ++prev);
 				} else {
 					setMode('action');
 					setOrderIdx('');
 				}
-				setOrders([
-					...orders,
-					{idx: 99},
+				setAllyOrders([
+					...allyOrders,
+					{
+						team: 'ally',
+						idx: orderIdx,
+						skIdx: 99,
+					},
 				]);
 			} else { //스킬 실행
 				const sk = gameData.skill[skill.idx];
@@ -347,15 +401,17 @@ const Battle = ({
 						setMode('area');
 						break;
 					case 4: //active(방어)
-						if (orderIdx < battleCh.length - 1) {
+						if (orderIdx < battleAlly.length - 1) {
 							setOrderIdx((prev) => ++prev);
 						} else {
 							setMode('action');
 						}
-						setOrders([
-							...orders,
+						setAllyOrders([
+							...allyOrders,
 							{
-								idx: sk.idx,
+								team: 'ally',
+								idx: orderIdx,
+								skIdx: sk.idx,
 								enemyTarget: false,
 								target: mapPos[orderIdx],
 							},
@@ -395,10 +451,37 @@ const Battle = ({
 	}, [battleEnemy]);
 	useLayoutEffect(() => {
 		if (mode === 'action') {
-			console.log(enemyPattern(enemyAi, battleCh, mapPos, battleEnemy, gameData));
-			//setEnemyOrders();
-			console.log(orderIdx, orders);
-			console.log("시뮬레이션 실행");
+			const enemyOrder = enemyPattern(enemyAi, battleAlly, mapPos, battleEnemy, gameData);
+			// setEnemyOrders(enemyOrder);
+			// console.log(enemyOrder, allyOrders);
+			let allyEnemy = [];
+			battleAlly.forEach((data, idx) => {
+				allyEnemy.push({
+					idx: idx,
+					team: 'ally',
+					spd: data.spd,
+				});
+			});
+			battleEnemy.forEach((data, idx) => {
+				allyEnemy.push({
+					idx: idx,
+					team: 'enemy',
+					spd: data.spd,
+				});
+			});
+			allyEnemy.sort((a, b) => {
+				return b.spd - a.spd;
+			});
+			let timeLineEntry = [];
+			allyEnemy.forEach((data, idx) => {
+				if (data.team === 'ally'){
+					timeLineEntry.push(allyOrders[data.idx]);
+				} else {
+					timeLineEntry.push(enemyOrder[data.idx]);
+				}
+			});
+			setTimeLine(timeLineEntry);
+			console.log("시뮬레이션 실행", timeLineEntry);
 		}
 	}, [mode]);
 	useLayoutEffect(() => {
@@ -445,9 +528,12 @@ const Battle = ({
 								if (enemyData.idx) {
 									const chData = gameData.ch[enemyData.idx];
 									const enemyCh = battleEnemy[enemyData.pos];
-									const hasHp = (enemyCh.hp / enemyCh.hp_) * 100
+									const battleIdx = enemyDeck[idx].pos;
+									const hasHp = (enemyCh.hp / enemyCh.hp_) * 100;
+									const elementCh = area ? "effect" + element_type : "";
+									const actionCh = typeof turnIdx === 'number' && timeLine && timeLine[battleIdx].team === 'enemy' && turnIdx === timeLine[battleIdx].idx ? 'action' : '';
 									return (
-										<BattleCh key={idx} className={`battle_ch effect ${area ? "effect" + element_type : ""}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize} onClick={(e) => {
+										<BattleCh key={idx} className={`battle_ch effect ${elementCh} ${actionCh}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize} onClick={(e) => {
 											areaSelect(e, idx);
 										}}>
 											<div className="ch_box">
@@ -473,22 +559,36 @@ const Battle = ({
 								}
 							})}
 						</div>
-						{mode === 'action' ? 
-							<div className="turnLine">
-
-							</div> : ''
-						}
+						<div className={`turnLine ${mode === 'action' ? 'on' : ''}`}>
+							{timeLine && timeLine.map((data, idx) => {
+								const chData = data.team === 'ally' ? gameData.ch[battleAlly[data.idx].idx] : gameData.ch[battleEnemy[data.idx].idx];
+								const left = 100 / timeLine.length * idx;
+								const activeSkill = activeSk(data.skIdx);// active스킬 판단 99대기,11방어,12철벽방어
+								// data.team 아군적군
+								// data.skIdx 스킬번호
+								// target 범위
+								return (
+									<TimeLineCh key={idx} className={`battle_ch ${turnIdx === idx ? 'on' : ''} ${activeSkill}`} team={data.team} size={30} left={left}>
+										<CardChRing style={{top:0,borderRadius:'50%',}} className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} />
+										<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>
+									</TimeLineCh>
+								)
+							})}
+						</div>
 						<div className="units_ally">
-							{battleCh && allyDeck.map((allyData, idx)=> {
+							{battleAlly && allyDeck.map((allyData, idx)=> {
 								const left = (24 - idx) % 5 * mapSize,
 									top = Math.floor((24 - idx) / 5) * mapSize;
 								if (typeof allyData === "number") {
-									const saveCh = battleCh[saveData.ch[allyData].idx];
+									const battleIdx = saveData.ch[allyData].idx;
+									const saveCh = battleAlly[battleIdx];
 									const chData = gameData.ch[saveCh.idx];
 									const hasHp = (saveCh.hp / saveCh.hp_) * 100,
 										hasSp = (saveCh.sp / saveCh.sp_) * 100;
+										const posCh = mapPos[orderIdx] === idx ? 'on' : '';
+										const actionCh = typeof turnIdx === 'number' && timeLine && timeLine[battleIdx].team === 'ally' && turnIdx === timeLine[battleIdx].idx ? 'action' : '';
 									return (
-										<BattleCh key={idx} className={`battle_ch ${mapPos[orderIdx] === idx ? 'on' : ''}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize}>
+										<BattleCh key={idx} className={`battle_ch ${posCh} ${actionCh}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize}>
 											<div className="ch_box">
 												<CardChRing className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} lv={saveCh.lv} />
 												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>
@@ -523,7 +623,7 @@ const Battle = ({
 							);
 						})}
 						</div>
-						{mode === 'action' ? <div className="turnLine"></div> : ''}
+						<div className={`turnLine ${mode === 'action' ? 'on' : ''}`}></div>
 						<div className="land_enemy">
 						{map.map((data, idx) => {
 							const left = idx % 5 * mapSize,
@@ -539,15 +639,15 @@ const Battle = ({
 						<div className="battle_msg">스킬시전!!</div>
 					</BattleOrder>
 				</BattleArea>
-				{mode !== 'action' && battleCh ? 
+				{mode !== 'action' && battleAlly ? 
 					<>
 						<BattleMenu className="battle_menu">
 							<div className="chInfo">
-								<span className="sp">{battleCh[orderIdx].sp}</span>
-								<span className="spR">{battleCh[orderIdx].bSt2}</span>
+								<span className="sp">{battleAlly[orderIdx].sp}</span>
+								<span className="spR">{battleAlly[orderIdx].bSt2}</span>
 							</div>
 							<ul className="scroll-x">
-								{battleCh[orderIdx].sk && battleCh[orderIdx].sk.map((data, idx) => {
+								{battleAlly[orderIdx].sk && battleAlly[orderIdx].sk.map((data, idx) => {
 									const sk = gameData.skill;
 									if (sk[data.idx].cate[0] !== 1) {
 										return (
