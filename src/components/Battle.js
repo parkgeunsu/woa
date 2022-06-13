@@ -106,7 +106,7 @@ const BattleLand = styled.div`
 	.land.l3{background:rgba(255,0,0,.5);}
 `;
 const BattleOrder = styled.div`
-	position:absolute;left:0;right:0;transform:translate(0,-50%);z-index:50;transition:all 1s;opacity:0;pointer-events:none;
+	position:absolute;left:0;right:0;transform:translate(0,-50%);z-index:50;transition:all 0.5s;opacity:0;pointer-events:none;
 	&.ally{bottom:35%;}
 	&.enemy{top:35%;}
 	&.on{opacity:1;}
@@ -126,6 +126,7 @@ const BattleOrder = styled.div`
     border-top:0 solid transparent;
   }
 	&.left:after{left:30%;}
+	&.center:after{left:50%;}
 	&.right:after{right:30%;}
 `;
 const BattleMenu = styled.div`
@@ -263,7 +264,7 @@ const activeSk = (skIdx) => {
 	}
 }
 
-const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx) => {
+const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, maxTurn) => {
 	setTimeout(() => {
 		setTimeout(() => {
 			setSkillMsg(true);
@@ -271,12 +272,16 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx) => {
 				setSkillMsg(false);
 				setTimeout(() => {
 					const turnIdx_ = turnIdx + 1;
-					setTurnIdx(turnIdx_);
-					actionAnimation(setTurnIdx, setSkillMsg, turnIdx_);
+					if (turnIdx < maxTurn) {
+						setTurnIdx(turnIdx_);
+						actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, maxTurn);
+					} else {
+						setTurnIdx('');
+					}
 				}, 500);
-			}, 500);
+			}, 1000);
 		}, 500);
-	}, 2000);
+	}, 1500);
 }
 const Battle = ({
 	saveData,
@@ -306,6 +311,8 @@ const Battle = ({
 	const [timeLineIdx, setTimeLineIdx] = useState(0); //공격 순번라인 처리
 	const [turnIdx, setTurnIdx] = useState(); //공격캐릭터 활성화 순번
 	const [skillMsg, setSkillMsg] = useState(false); //메시지창 on/off
+
+	const timeout = useRef();
 	useLayoutEffect(() => {
 		let ally = [];
 		let pos = [];
@@ -519,7 +526,7 @@ const Battle = ({
 			});
 			setTimeLine(timeLineEntry);
 			setTurnIdx(0);
-			actionAnimation(setTurnIdx, setSkillMsg, 0);
+			actionAnimation(setTurnIdx, setSkillMsg, 0, timeLineEntry.length - 1);
 			console.log("시뮬레이션 실행", timeLineEntry);
 		}
 	}, [mode]);
@@ -570,7 +577,11 @@ const Battle = ({
 									const battleIdx = enemyDeck[idx].pos;
 									const hasHp = (enemyCh.hp / enemyCh.hp_) * 100;
 									const elementCh = area ? "effect" + element_type : "";
-									const actionCh = typeof turnIdx === 'number' && timeLine && timeLine[battleIdx].team === 'enemy' && turnIdx === timeLine[battleIdx].idx ? 'action' : '';
+									let actionCh = '';
+									if (typeof turnIdx === 'number' && timeLine && timeLine[turnIdx].team === 'enemy' && enemyData.pos === timeLine[turnIdx].idx) {
+										//console.log('pgs', 'enemy', timeLine[battleIdx].idx);
+										actionCh = 'action';
+									}
 									return (
 										<BattleCh key={idx} className={`battle_ch effect ${elementCh} ${actionCh}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize} onClick={(e) => {
 											areaSelect(e, idx);
@@ -607,7 +618,7 @@ const Battle = ({
 								// data.skIdx 스킬번호
 								// target 범위
 								return (
-									<TimeLineCh key={idx} className={`battle_ch ${timeLineIdx === idx ? 'on' : ''} ${activeSkill}`} team={data.team} size={30} left={left}>
+									<TimeLineCh key={idx} className={`battle_ch ${turnIdx === idx ? 'on' : ''} ${activeSkill}`} team={data.team} size={30} left={left}>
 										<CardChRing style={{top:0,borderRadius:'50%',}} className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} />
 										<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>
 									</TimeLineCh>
@@ -625,7 +636,10 @@ const Battle = ({
 									const hasHp = (saveCh.hp / saveCh.hp_) * 100,
 										hasSp = (saveCh.sp / saveCh.sp_) * 100;
 										const posCh = mapPos[orderIdx] === idx ? 'on' : '';
-										const actionCh = typeof turnIdx === 'number' && timeLine && timeLine[battleIdx].team === 'ally' && turnIdx === timeLine[battleIdx].idx ? 'action' : '';
+										let actionCh = '';
+										if (typeof turnIdx === 'number' && timeLine && timeLine[turnIdx].team === 'ally' && battleIdx === timeLine[turnIdx].idx) {
+											actionCh = 'action';
+										}
 									return (
 										<BattleCh key={idx} className={`battle_ch ${posCh} ${actionCh}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize}>
 											<div className="ch_box">
@@ -674,8 +688,10 @@ const Battle = ({
 						})}
 						</div>
 					</BattleLand>
-					<BattleOrder className={`battle_order ${skillMsg ? 'on' : ''} ${typeof turnIdx === 'number' && timeLine[turnIdx].team === 'ally' ? 'ally' : 'enemy'} ${typeof turnIdx === 'number' && gameData.ch[timeLine[turnIdx].idx].face_d === 1 ? 'left' : 'right'}`}>
-						<div className="battle_msg">{typeof turnIdx === 'number' && gameData.skill[timeLine[turnIdx].skIdx].na}</div>
+					<BattleOrder className={`battle_order ${skillMsg ? 'on' : ''} ${typeof turnIdx === 'number' && timeLine[turnIdx].team === 'ally' ? 'ally' : 'enemy'} ${typeof turnIdx === 'number' && gameData.ch[timeLine[turnIdx].idx].face_d}`}>
+						<div className="battle_msg">
+							{typeof turnIdx === 'number' && gameData.skill[timeLine[turnIdx].skIdx]?.na}
+						</div>
 					</BattleOrder>
 				</BattleArea>
 				{mode !== 'action' && battleAlly ? 
