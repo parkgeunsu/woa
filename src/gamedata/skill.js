@@ -18,7 +18,7 @@ export const skill = [
 		,ta_:1,ta:1
 		,eff:[{type:9,num:['100%','110%','125%','135%','150%']}],atkCount:1,turn:1,sp:0},
 	{idx:1,
-		na:'침뱉기',element_type:0,cate:[3],txt:'<u>가로한줄</u>, <b dmg>$(0)</b>의 <i el el4>수</i>속성 공격을 한다.'
+		na:'침뱉기',element_type:3,cate:[3],txt:'<u>가로한줄</u>, <b dmg>$(0)</b>의 <i el el4>수</i>속성 공격을 한다.'
 		,ta_:1,ta:6
 		,eff:[{type:22,num:['70%','80%','90%','100%','110%']}],atkCount:1,turn:1,sp:7},
 	{idx:2,

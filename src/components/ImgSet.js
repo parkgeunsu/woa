@@ -16,6 +16,7 @@ import ch16 from 'images/ch/ch16.png';
 import ch17 from 'images/ch/ch17.png';
 import ch18 from 'images/ch/ch18.png';
 import ch19 from 'images/ch/ch19.png';
+import ch20 from 'images/ch/ch20.png';
 import ch2 from 'images/ch/ch2.png';
 import ch3 from 'images/ch/ch3.png';
 import ch4 from 'images/ch/ch4.png';
@@ -43,6 +44,7 @@ import ch_style16 from 'images/ch_style/ch_style16.png';
 import ch_style17 from 'images/ch_style/ch_style17.png';
 import ch_style18 from 'images/ch_style/ch_style18.png';
 import ch_style19 from 'images/ch_style/ch_style19.png';
+import ch_style20 from 'images/ch_style/ch_style20.png';
 import ch_style2 from 'images/ch_style/ch_style2.png';
 import ch_style3 from 'images/ch_style/ch_style3.png';
 import ch_style4 from 'images/ch_style/ch_style4.png';
@@ -179,11 +181,11 @@ import ssring9 from 'images/ssring/ssring9.png';
 
 export const chImg = {
   ch0:ch0, ch1:ch1, ch2:ch2, ch3:ch3, ch4:ch4, ch5:ch5, ch6:ch6, ch7:ch7, ch8:ch8, ch9:ch9, ch10:ch10,
-  ch11:ch11, ch12:ch12, ch13:ch13, ch14:ch14, ch15:ch15, ch16:ch16, ch17:ch17, ch18:ch18, ch19:ch19,
+  ch11:ch11, ch12:ch12, ch13:ch13, ch14:ch14, ch15:ch15, ch16:ch16, ch17:ch17, ch18:ch18, ch19:ch19, ch20:ch20,
   ch99:ch99, ch100:ch100, ch101:ch101, ch102:ch102, ch103:ch103, ch104:ch104, ch105:ch105
 };
 export const chStyleImg = {
-  ch_style0:ch_style0, ch_style1:ch_style1, ch_style2:ch_style2, ch_style3:ch_style3, ch_style4:ch_style4, ch_style5:ch_style5, ch_style6:ch_style6, ch_style7:ch_style7, ch_style8:ch_style8, ch_style9:ch_style9, ch_style10:ch_style10, ch_style11:ch_style11, ch_style12:ch_style12, ch_style13:ch_style13, ch_style14:ch_style14, ch_style15:ch_style15, ch_style16:ch_style16, ch_style17:ch_style17, ch_style18:ch_style18, ch_style19:ch_style19, 
+  ch_style0:ch_style0, ch_style1:ch_style1, ch_style2:ch_style2, ch_style3:ch_style3, ch_style4:ch_style4, ch_style5:ch_style5, ch_style6:ch_style6, ch_style7:ch_style7, ch_style8:ch_style8, ch_style9:ch_style9, ch_style10:ch_style10, ch_style11:ch_style11, ch_style12:ch_style12, ch_style13:ch_style13, ch_style14:ch_style14, ch_style15:ch_style15, ch_style16:ch_style16, ch_style17:ch_style17, ch_style18:ch_style18, ch_style19:ch_style19, ch_style20:ch_style20, 
   ch_style99:ch_style99, ch_style100:ch_style100, ch_style101:ch_style101, ch_style102:ch_style102, ch_style103:ch_style103, ch_style104:ch_style104, ch_style105:ch_style105
 };
 export const ringImg = [

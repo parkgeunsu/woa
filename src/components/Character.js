@@ -89,7 +89,7 @@ const ChWrap = styled.div`
   .st5 .ico{background:url(${({stateIcon}) => stateIcon[5]}) no-repeat center center;background-size:100%;}
   .st6 .ico{background:url(${({stateIcon}) => stateIcon[6]}) no-repeat center center;background-size:100%;}
 
-  .rt{position:relative;margin:0 0 5px;padding:5px 10px;font-size:12px;border:3px double rgba(255,255,255,.5);border-radius:5px;}
+  .rt{position:relative;margin:0 0 5px;padding:5px 10px;font-size:12px;border:3px double rgba(255,255,255,.5);border-radius:5px;background:rgba(0,0,0,.5);}
 
   .sk{position:relative;margin:0 0 5px;font-size:12px;border:3px double rgba(255,255,255,.5);border-radius:5px;}
   .sk_info{padding:0 10px;}
@@ -338,14 +338,14 @@ const Character = ({
         if (!active && xDir > 0 && Math.abs(mx) > gestureDistance) { //오른쪽
           setSlotIdx((prevSlot) => {
             chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
-            prevSlot++;
-            return prevSlot > chLength - 1 ? 0 : prevSlot;
+            prevSlot--;
+            return prevSlot < 0 ? chLength - 1 : prevSlot;
           });
         } else if(!active && xDir < 0 && Math.abs(mx) > gestureDistance){ //왼쪽
           setSlotIdx((prevSlot) => {
             chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
-            prevSlot--;
-            return prevSlot < 0 ? chLength - 1 : prevSlot;
+            prevSlot++;
+            return prevSlot > chLength - 1 ? 0 : prevSlot;
           });
         }
       }

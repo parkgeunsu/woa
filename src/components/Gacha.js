@@ -816,7 +816,7 @@ const Gacha = ({
 									<dd>
 										{gameData.ch[infoIdx].relation && gameData.ch[infoIdx].relation.map((data, idx) => {
 											return (
-												<span key={idx}>{gameData.relation[data.idx].na}</span>
+												<span key={idx}>{gameData.relation[data].na}</span>
 											);
 										})}
 									</dd>

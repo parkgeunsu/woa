@@ -283,6 +283,25 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, maxTurn) => {
 		}, 500);
 	}, 1500);
 }
+
+const relationCheck = (relation, ally) => {
+	let relationArr = [];
+	ally.forEach((chData) => {
+		relation.forEach((rtData, idx) => {
+			let hasRelation = false;
+			rtData.member.filter((data, idx_) => {
+				if (data === chData.idx) {
+					hasRelation = true;
+					return;
+				}
+			});
+			if (hasRelation) {
+				relationArr.push(idx);
+			}
+		});
+	});
+	console.log(relationArr);
+}
 const Battle = ({
 	saveData,
   changeSaveData,
@@ -378,6 +397,7 @@ const Battle = ({
 				})
 			}
 		});
+		relationCheck(gameData.relation, ally);
 		setBattleEnemy(enemy);
 	}, []);
 	
