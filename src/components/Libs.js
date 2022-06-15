@@ -311,13 +311,8 @@ export const util = { //this.loadImage();
         saveLineupSlot[idx].eff.push(...util.getLineupSt(lineupType, lineupData, ch, peopleLength[idx], gameData));
       });
     });
-    changeSaveData({ //라인업 캐릭 능력치 저장
-    	...save,
-    	lineup: {
-        save_slot: saveLineupSlot,
-        select: dataObj.saveSlot,
-      }
-    })
+    save.lineup.save_slot = saveLineupSlot;
+    changeSaveData(save);//라인업 캐릭 능력치 저장
   },
   compileState: (currentState, itemState) => {
     if (itemState !== undefined && itemState !== null) {

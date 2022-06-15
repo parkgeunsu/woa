@@ -650,14 +650,13 @@ const Battle = ({
 								const left = (24 - idx) % 5 * mapSize,
 									top = Math.floor((24 - idx) / 5) * mapSize;
 								if (typeof allyData === "number") {
-									const battleIdx = saveData.ch[allyData].idx;
-									const saveCh = battleAlly[battleIdx];
+									const saveCh = battleAlly[allyData];
 									const chData = gameData.ch[saveCh.idx];
 									const hasHp = (saveCh.hp / saveCh.hp_) * 100,
 										hasSp = (saveCh.sp / saveCh.sp_) * 100;
 										const posCh = mapPos[orderIdx] === idx ? 'on' : '';
 										let actionCh = '';
-										if (typeof turnIdx === 'number' && timeLine && timeLine[turnIdx].team === 'ally' && battleIdx === timeLine[turnIdx].idx) {
+										if (typeof turnIdx === 'number' && timeLine && timeLine[turnIdx].team === 'ally' && allyData === timeLine[turnIdx].idx) {
 											actionCh = 'action';
 										}
 									return (

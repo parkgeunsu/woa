@@ -63,6 +63,8 @@ const LineupSave = styled.div`
 	ul li{width:10%;height:100%;text-align:center;}
 	.save_slot{padding:0;width:100%;height:100%;background:#000;color:#fff;box-sizing:border-box;}
 	ul li.on .save_slot{border:1px solid #f00;background:#fff;color:#f00;}
+	ul li.save .save_slot{outline:1px solid #00f;background:#00f;color:#fff;}
+	.save_submit{margin:0 0 0 5px;width:45px;background:#00f;color:#fff;font-weight:600;font-size:12px;}
 `;
 const LineupMiddle = styled.div`
 	display:flex;margin:10px 0;height:60%;overflow:hidden;
@@ -329,6 +331,7 @@ const Lineup = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
+	const [saveSlot, setSaveSlot] = useState(saveData.lineup.select); // 저장된 슬롯
 	const [selectSave, setSelectSave] = useState(saveData.lineup.select); // 선택된 진형슬롯
 	const [selectLineup, setSelectLineup] = useState(saveData.lineup.save_slot[selectSave].no); // 저장된 슬롯에 선택된 진형
 	const [selectLineupList, setSelectLineupList] = useState(0); //선택된 라인업 리스트 순번
@@ -338,19 +341,25 @@ const Lineup = ({
 	const mapRef = useRef([]);
 	const lineupInfo = ["HP","SP","RSP","ATK","DEF","MAK","MDF","RCV","SPD"];
 	const lineupSlot = [1,2,3,4,5,6,7,8];
-	const clickSaveSlot = (idx) => {//세이브 슬롯 선택
-		console.log('saveslot' + idx);
+	const clickSelectSlot = (idx) => {//세이브 슬롯 선택
+		//console.log('saveslot' + idx);
 		setSelectSave(idx);
 		setSelectLineup(saveData.lineup.save_slot[idx].no);
 		setUseList(saveData.lineup.save_slot[idx].entry);
 		util.setLineupSt({
-			saveSlot: selectSave, 
+			saveSlot: selectSave,
 			lineupType: selectLineup,
 			useList: useList,
 		}, gameData, saveData, changeSaveData);
 	}
+	const clickSaveSlot = () => {
+		let save = saveData;
+		save.lineup.select = selectSave;
+		setSaveSlot(selectSave);
+		changeSaveData(save);
+	}
 	const clickLineupSlot = (idx) => {//진형 타입 선택
-		console.log('lineupslot' + idx);
+		//console.log('lineupslot' + idx);
 		setSelectLineup(idx);
 		setUseList(saveData.lineup.save_slot[selectSave].entry);
 		util.setLineupSt({
@@ -360,7 +369,7 @@ const Lineup = ({
 		}, gameData, saveData, changeSaveData);
 	}
 	const clickListupMap = (idx) => {//맵 캐릭터 클릭
-		console.log('mapidx', idx);
+		//console.log('mapidx', idx);
 		setSelectLineupList(idx);
 		let saveUseList = useList;
 		if (mapRef.current[idx].classList.contains('on')) {
@@ -402,10 +411,13 @@ const Lineup = ({
 							<ul>
 								{lineupSlot && lineupSlot.map((txt, idx) => {
 									return (
-										<li className={idx === selectSave ? 'on' : ''} key={idx}><button onClick={() => {clickSaveSlot(idx);}} className={`save_slot`}>{txt}</button></li>
+										<li className={`${idx === selectSave ? 'on' : ''} ${idx === saveSlot ? 'save' : ''}`} key={idx}><button onClick={() => {clickSelectSlot(idx);}} className="save_slot">{txt}</button></li>
 									);
 								})}
 							</ul>
+							<button className="save_submit" onClick={() => {
+								clickSaveSlot();
+							}}>선택</button>
 						</dd>
 					</dl>
 				</LineupSave>
