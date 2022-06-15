@@ -264,7 +264,7 @@ const activeSk = (skIdx) => {
 	}
 }
 
-const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, maxTurn) => {
+const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, maxTurn, resetOrder) => {
 	setTimeout(() => {
 		setTimeout(() => {
 			setSkillMsg(true);
@@ -274,9 +274,9 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, maxTurn) => {
 					const turnIdx_ = turnIdx + 1;
 					if (turnIdx < maxTurn) {
 						setTurnIdx(turnIdx_);
-						actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, maxTurn);
+						actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, maxTurn, resetOrder);
 					} else {
-						setTurnIdx('');
+						resetOrder();
 					}
 				}, 500);
 			}, 1000);
@@ -316,9 +316,9 @@ const Battle = ({
 	const [containerW, setContainerW] = useState();
 	const mapSize = 20;
 
-	const [orderIdx, setOrderIdx] = useState(0);
-	const [allyOrders, setAllyOrders] = useState([]);
-	const [enemyAi, setEnemyAi] = useState([]);
+	const [orderIdx, setOrderIdx] = useState(0); //명령 지시 순서
+	const [allyOrders, setAllyOrders] = useState([]); //아군 행동저장배열
+	const [enemyAi, setEnemyAi] = useState([]); //적군 행동저장배열
 	const [enemyOrders, setEnemyOrders] = useState([]);
 	const [mode, setMode] = useState('order');
 	const [effectArea, setEffectArea] = useState([]); //스킬 영역
@@ -327,11 +327,9 @@ const Battle = ({
 	const [battleAlly, setBattleAlly] = useState(); //아군 능력치
 	const	[battleEnemy, setBattleEnemy] = useState(); //적군 능력치
 	const [timeLine, setTimeLine] = useState(); //공격 순번배열
-	const [timeLineIdx, setTimeLineIdx] = useState(0); //공격 순번라인 처리
 	const [turnIdx, setTurnIdx] = useState(); //공격캐릭터 활성화 순번
 	const [skillMsg, setSkillMsg] = useState(false); //메시지창 on/off
 
-	const timeout = useRef();
 	useLayoutEffect(() => {
 		let ally = [];
 		let pos = [];
@@ -400,7 +398,12 @@ const Battle = ({
 		relationCheck(gameData.relation, ally);
 		setBattleEnemy(enemy);
 	}, []);
-	
+	const resetOrder = () => {
+		setOrderIdx(0);
+		setTurnIdx('');
+		setAllyOrders([]);
+		setMode('order');
+	}
 	const areaSelect = (e, pos) => {
 		if (mode === 'area') {
 			const areaArr = util.getEffectArea(currentSkill.ta, pos);
@@ -546,7 +549,7 @@ const Battle = ({
 			});
 			setTimeLine(timeLineEntry);
 			setTurnIdx(0);
-			actionAnimation(setTurnIdx, setSkillMsg, 0, timeLineEntry.length - 1);
+			actionAnimation(setTurnIdx, setSkillMsg, 0, timeLineEntry.length - 1, resetOrder);
 			console.log("시뮬레이션 실행", timeLineEntry);
 		}
 	}, [mode]);
