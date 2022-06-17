@@ -178,6 +178,20 @@ import ssring6 from 'images/ssring/ssring6.png';
 import ssring7 from 'images/ssring/ssring7.png';
 import ssring8 from 'images/ssring/ssring8.png';
 import ssring9 from 'images/ssring/ssring9.png';
+import grass1 from 'images/land/grass1.png';
+import grass2 from 'images/land/grass2.png';
+import grass3 from 'images/land/grass3.png';
+import land1 from 'images/land/land1.png';
+import land2 from 'images/land/land2.png';
+import land3 from 'images/land/land3.png';
+import stone1 from 'images/land/stone1.png';
+import stone2 from 'images/land/stone2.png';
+import stone3 from 'images/land/stone3.png';
+import water1 from 'images/land/water1.png';
+import water2 from 'images/land/water2.png';
+import water3 from 'images/land/water3.png';
+import cloud1 from 'images/bg/cloud1.png';
+import cloud2 from 'images/bg/cloud2.png';
 
 export const chImg = {
   ch0:ch0, ch1:ch1, ch2:ch2, ch3:ch3, ch4:ch4, ch5:ch5, ch6:ch6, ch7:ch7, ch8:ch8, ch9:ch9, ch10:ch10,
@@ -220,4 +234,10 @@ export const itemUpgrade = [
 ];
 export const itemMaterial = [
 
+];
+export const land = [
+  grass1,grass2,grass3,land1,land2,land3,stone1,stone2,stone3,water1,water2,water3
+];
+export const bgEffect = [
+  cloud1,cloud2
 ];

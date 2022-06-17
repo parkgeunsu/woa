@@ -5,6 +5,9 @@ import { util } from 'components/Libs';
 
 import imgBack from 'images/back/back1.jpg';
 import imgRingBack from 'images/ring/back.png';
+import frameRope from 'images/frame/frame_rope.png';
+import frameLeft from 'images/frame/frame_battle1.png';
+import frameRight from 'images/frame/frame_battle2.png';
 
 const Img = styled.img.attrs(
   ({imgurl}) => ({
@@ -16,14 +19,21 @@ const BattleWarp = styled.div`
 `;
 const BattleArea = styled.div`
 	position:relative;height:calc(100% - 50px);background:#000;
-	&.actionMode{height:100%;}
-	/*perspective:1000px;perspective-origin:50% 50%;*/
+	&.action{height:100%;}
+	&:before{content:'';position:absolute;left:${({mode}) => {
+		return !mode ? "-50px" : 0;
+	}};top:0;bottom:0;width:50px;background:url(${({frameLeft}) => frameLeft}) no-repeat -15px center;z-index:1;pointer-events:none;transition:left 1s;}
+	&:after{content:'';position:absolute;right:${({mode}) => {
+		return !mode ? "-50px" : 0;
+	}};top:0;bottom:0;width:50px;background:url(${({frameRight}) => frameRight}) no-repeat 13px center;z-index:1;pointer-events:none;transition:right 1s;}
 `;
 const BattleUnit = styled.div`
 	display:flex;flex-direction:column;position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;
 	.turnLine{
 		position:relative;height:0;overflow:hidden;
-		&.on{height:50px;overflow:unset;}
+		&.on{height:50px;overflow:unset;background-color:#c49d41ad;outline:2px solid #c49d41ad;}
+		&:before{content:'';position:absolute;width:100%;height:10px;left:0;top:-5px;background:url(${({frameImg}) => frameImg});background-size:100%;}
+		&:after{content:'';position:absolute;width:100%;height:10px;left:0;bottom:-5px;background:url(${({frameImg}) => frameImg});background-size:100%;}
 	}
 	& > div {position:relative;margin:0 auto;width:${({containerW}) => containerW}px;height:50%;box-sizing:border-box;transition:all 1s;}
 	& > div .effect0:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:var(--color-b);box-shadow:0 0 10px 10px var(--color-b);z-index:10;opacity:.7;}
@@ -56,6 +66,7 @@ const BattleCh = styled.div`
 	transition:all 1s;
 	z-index:1;
 	&.action{left:50%;top:50%;transform:translate(-50%,-50%) scale(2);z-index:30;}
+	&.action .ch_box .ring_back{box-shadow:0 0 30px 10px #000;}
 	.ch_box{position:absolute;left:5%;top:5%;width:90%;height:90%;transition:all .3s;transform-origin:50% 100%;transform-style:preserve-3d;}
 	.ch_box .hpsp{position:absolute;height:12%;width:100%;top:-17%;}
 	.ch_box .hpsp{
@@ -99,11 +110,14 @@ const BattleLand = styled.div`
 		position:relative;height:0;
 		&.on{height:50px;}
 	}
-	.land{position:absolute;width:20%;padding-top:20%;box-sizing:border-box;border-radius:5px;}
-	.land.l0{background:rgba(255,255,255,.5);}
-	.land.l1{background:rgba(0,0,255,.5);}
-	.land.l2{background:rgba(0,190,0,.5);}
-	.land.l3{background:rgba(255,0,0,.5);}
+`;
+const Land = styled.div`
+	position:absolute;width:20%;padding-top:20%;box-sizing:border-box;border-radius:0;background-image:url(${({landImg}) => landImg});
+	background-size: 100%;
+	outline:2px solid #fff;
+	&:before{
+		content:'';position:absolute;left:0;right:0;top:0;bottom:0;background:#000;opacity:.1;
+	}
 `;
 const BattleOrder = styled.div`
 	position:absolute;left:0;right:0;transform:translate(0,-50%);z-index:50;transition:all 0.5s;opacity:0;pointer-events:none;
@@ -302,6 +316,23 @@ const relationCheck = (relation, ally) => {
 	});
 	console.log(relationArr);
 }
+
+const BgEffect = styled.div`
+	position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;
+	div{position:absolute;width:1000px;height:400px;z-index:40;animation-play-state:running;transition:all 2s;}
+	.cloud1{top:0;animation:cloudAnimation 210s linear infinite;background-image:url(${({img1}) => img1});background-size:100%;}
+	.cloud2{top:30%;animation:cloudAnimationReverse 130s linear infinite;background-image:url(${({img2}) => img2});background-size:100%;}
+	&.action div{animation-play-state:paused;}
+	&.action .cloud2{left:-1000px;animation-play-state:paused;}
+	@keyframes cloudAnimation{
+		0%{left:100%;}
+		100%{left:-1000px;}
+	}
+	@keyframes cloudAnimationReverse{
+		0%{left:-1000px;}
+		100%{left:100%;}
+	}
+`;
 const Battle = ({
 	saveData,
   changeSaveData,
@@ -309,9 +340,10 @@ const Battle = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const scenarioDetail = scenario || gameData.scenario.korea.threeAfter[0].stage[0].entry;
+	const scenarioDetail = scenario || gameData.scenario.korea.threeAfter[0].stage[0];
+	const [mapLand] = useState(scenarioDetail.map);
 	const allyDeck = saveData.lineup.save_slot[saveData.lineup.select].entry;
-	const enemyDeck = scenarioDetail;
+	const enemyDeck = scenarioDetail.entry;
 	const containerRef = useRef(null);
 	const [containerW, setContainerW] = useState();
 	const mapSize = 20;
@@ -320,7 +352,7 @@ const Battle = ({
 	const [allyOrders, setAllyOrders] = useState([]); //아군 행동저장배열
 	const [enemyAi, setEnemyAi] = useState([]); //적군 행동저장배열
 	const [enemyOrders, setEnemyOrders] = useState([]);
-	const [mode, setMode] = useState('order');
+	const [mode, setMode] = useState();
 	const [effectArea, setEffectArea] = useState([]); //스킬 영역
 	const [currentSkill, setCurrentSkill] = useState(); //현재 선택된 스킬
 	const [mapPos, setMapPos] = useState([]); //아군 위치값
@@ -331,6 +363,9 @@ const Battle = ({
 	const [skillMsg, setSkillMsg] = useState(false); //메시지창 on/off
 
 	useLayoutEffect(() => {
+		setTimeout(() => {
+			setMode('order');
+		}, 500);
 		let ally = [];
 		let pos = [];
 		allyDeck.filter((data, idx) => {
@@ -586,8 +621,12 @@ const Battle = ({
   return (
     <>
       <BattleWarp className="battle_wrap" backImg={imgBack}>
-				<BattleArea ref={containerRef} className={`battle_area ${mode === "action"? "actionMode" : ""}`}>
-					<BattleUnit containerW={containerW} className="battle_units">
+				<BgEffect className={`bgEffect ${mode === "action" ? "action" : ""}`} img1={imgSet.bgEffect[0]} img2={imgSet.bgEffect[1]}>
+					<div className="cloud1"></div>
+					<div className="cloud2"></div>
+				</BgEffect>
+				<BattleArea ref={containerRef} className={`battle_area ${mode === "action" ? "action" : ""}`} mode={mode} frameLeft={frameLeft} frameRight={frameRight}>
+					<BattleUnit containerW={containerW} className="battle_units" frameImg={frameRope}>
 						<div className="units_enemy">
 							{battleEnemy && enemyDeck.map((enemyData, idx)=> {
 								const left = idx % 5 * mapSize,
@@ -597,7 +636,6 @@ const Battle = ({
 								if (enemyData.idx) {
 									const chData = gameData.ch[enemyData.idx];
 									const enemyCh = battleEnemy[enemyData.pos];
-									const battleIdx = enemyDeck[idx].pos;
 									const hasHp = (enemyCh.hp / enemyCh.hp_) * 100;
 									const elementCh = area ? "effect" + element_type : "";
 									let actionCh = '';
@@ -692,9 +730,8 @@ const Battle = ({
 						{map.map((data, idx) => {
 							const left = idx % 5 * mapSize,
 								top = Math.floor(idx / 5) * mapSize;
-							const landStyle = Math.floor(Math.random()*4);
 							return (
-								<div key={idx} className={`land l${landStyle}`} style={{left: left+'%', top: top+'%'}}></div>
+								<Land key={idx} className="land" landImg={imgSet.land[mapLand[idx]]} style={{left: left+'%', top: top+'%'}}></Land>
 							);
 						})}
 						</div>
@@ -703,9 +740,8 @@ const Battle = ({
 						{map.map((data, idx) => {
 							const left = idx % 5 * mapSize,
 								top = Math.floor(idx / 5) * mapSize;
-							const landStyle = Math.floor(Math.random()*4);
 							return (
-								<div key={idx} className={`land l${landStyle}`} style={{left: left+'%', top: top+'%'}}></div>
+								<Land key={idx} className="land" landImg={imgSet.land[mapLand[idx + 25]]} style={{left: left+'%', top: top+'%'}}></Land>
 							);
 						})}
 						</div>

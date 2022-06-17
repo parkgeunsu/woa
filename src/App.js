@@ -1,7 +1,7 @@
 import Battle from 'components/Battle';
 import Character from 'components/Character';
 import Gacha from 'components/Gacha';
-import { animalType, chImg, chStyleImg, iconElement, iconState, itemEquip, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg } from 'components/ImgSet';
+import { animalType, chImg, chStyleImg, iconElement, iconState, itemEquip, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect } from 'components/ImgSet';
 import { util } from 'components/Libs';
 import Lineup from 'components/Lineup';
 import Main from 'components/Main';
@@ -119,6 +119,8 @@ const App = () => {
       itemHole: itemHole,
       itemUpgrade: itemUpgrade,
       itemMaterial: itemMaterial,
+      land: land,
+      bgEffect: bgEffect,
     },
     gameData: {
       ...gameData,
