@@ -12,4 +12,5 @@ export const relation = [
     {idx:1,na:'삼국지 라이벌I',tag:'<em link="relation_0"></em>',txt:'<b buff>10%</b>의 물리 공격(ATK) <i icon up>증가</i>, <b buff>10%</b>의 술법 공격(MATK) <i icon up>증가</i> 한다.',eff:[{ta:0,type:3,num:'10%'},{ta:0,type:5,num:'10%'}],member:[0,1],limit:[0]},
     {idx:2,na:'수어지교',tag:'<em link="relation_0"></em>',txt:'HP <b buff>30%</b> <i icon up>증가</i>, SP <b buff>1</b> <i icon up>증가</i> 한다.',eff:[{ta:0,type:0,num:'30%'},{ta:0,type:26,num:'1'}],member:[0,"제갈량"],limit:[0]},
     {idx:3,na:'보디가드(촉)',tag:'<em link="relation_0"></em>',txt:'HP <b buff>30%</b> <i icon up>증가</i>, SP <b buff>1</b> <i icon up>증가</i> 한다.',eff:[{ta:0,type:0,num:'30%'},{ta:0,type:26,num:'1'}],member:[0,"조운"],limit:[0]},
+    {idx:4,na:'Test',tag:'<em link="relation_0"></em>',txt:'HP <b buff>30%</b> <i icon up>증가</i>, SP <b buff>1</b> <i icon up>증가</i> 한다.',eff:[{ta:0,type:0,num:'30%'},{ta:0,type:26,num:'1'}],member:[23,24,27],limit:[0]},
 ];

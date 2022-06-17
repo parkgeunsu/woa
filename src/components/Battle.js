@@ -18,7 +18,7 @@ const BattleWarp = styled.div`
 	display:flex;position:absolute;left:0;right:0;top:0;bottom:0;background:url(${({backImg}) => backImg});background-size:cover;flex-direction:column;padding:44px 0 0 0;width:100%;height:100%;box-sizing:border-box;overflow:hidden;
 `;
 const BattleArea = styled.div`
-	position:relative;height:calc(100% - 50px);background:#000;
+	position:relative;height:calc(100% - 50px);background:#3e2c00;
 	&.action{height:100%;}
 	&:before{content:'';position:absolute;left:${({mode}) => {
 		return !mode ? "-50px" : 0;
@@ -298,23 +298,71 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, maxTurn, resetOrder) 
 	}, 1500);
 }
 
-const relationCheck = (relation, ally) => {
-	let relationArr = [];
-	ally.forEach((chData) => {
-		relation.forEach((rtData, idx) => {
-			let hasRelation = false;
-			rtData.member.filter((data, idx_) => {
-				if (data === chData.idx) {
-					hasRelation = true;
-					return;
-				}
-			});
-			if (hasRelation) {
-				relationArr.push(idx);
-			}
-		});
+const relationEff = (ch, effObj) => {
+	let effData = [];
+	effObj.forEach((eff)=>{ //인연
+		if(effData[eff.type] === undefined) {
+			effData[eff.type] = {percent:0, number:0};
+		}
+		if(eff.num.indexOf('%') > 0){
+			effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num);
+		}else{
+			effData[eff.type].number = effData[eff.type].number + parseInt(eff.num);
+		}
 	});
-	console.log(relationArr);
+	let effObj_ = {}
+	effData.forEach((eff, idx) => {
+		const state = ch['bSt'+idx];
+		let effNum;
+		if (eff.percent !== 0){
+			effNum = Math.round(state * (eff.percent / 100));
+		}else{
+			effNum = eff.number;
+		}
+		effObj_['rtSt'+idx] = effNum;
+	});
+	return effObj_;
+}
+const relationCheck = (gameData, team, teamChk) => {
+	const relation = gameData.relation;
+	let rtMemberArr = [];
+	team.forEach((chData) => {
+		const team_ = teamChk === 'ally' ? chData : chData.idx;
+			gameData.ch[team_].relation.forEach((rtIdx) => {
+				const relationData = relation[rtIdx].member;
+				if (rtMemberArr[rtIdx]) {
+					return;
+				} else {
+					rtMemberArr[rtIdx] = {
+						idx: rtIdx,
+						member: [],
+					}
+				}
+				rtMemberArr[rtIdx].member = Array.from({length: relationData.length}, () => false);
+				relationData.forEach((memberIdx, mIdx) => {
+					team.forEach((teamIdx, tIdx) => {
+						const ii = teamChk === 'ally' ? teamIdx : teamIdx.idx;
+						if (memberIdx === ii) {
+							rtMemberArr[rtIdx].member[mIdx] = true;
+							return;
+						}
+					});
+				});
+			});
+	});
+	let relationArr = [];
+	rtMemberArr.forEach((rtData) => {
+		let chkCount = 0;
+		rtData.member.forEach((data) => {
+			if (data === true) {
+				chkCount += 1;
+			};
+		});
+		if (chkCount === rtData.member.length) {
+			relationArr.push(rtData.idx);
+		}
+	});
+	return relationArr;
 }
 
 const BgEffect = styled.div`
@@ -333,6 +381,7 @@ const BgEffect = styled.div`
 		100%{left:100%;}
 	}
 `;
+
 const Battle = ({
 	saveData,
   changeSaveData,
@@ -348,7 +397,7 @@ const Battle = ({
 	const [containerW, setContainerW] = useState();
 	const mapSize = 20;
 
-	const [orderIdx, setOrderIdx] = useState(0); //명령 지시 순서
+	const [orderIdx, setOrderIdx] = useState(); //명령 지시 순서
 	const [allyOrders, setAllyOrders] = useState([]); //아군 행동저장배열
 	const [enemyAi, setEnemyAi] = useState([]); //적군 행동저장배열
 	const [enemyOrders, setEnemyOrders] = useState([]);
@@ -364,73 +413,104 @@ const Battle = ({
 
 	useLayoutEffect(() => {
 		setTimeout(() => {
+			//최초 실행
+			setOrderIdx(0);
 			setMode('order');
 		}, 500);
-		let ally = [];
+		let ally = [],
+			ally_ = [];
 		let pos = [];
 		allyDeck.filter((data, idx) => {
 			if (typeof data === 'number') {
-				const saveCh = saveData.ch[data];
-				pos.push(idx);
-				const hp = saveCh.bSt0 + saveCh.iSt0,
-					rsp = saveCh.bSt2 + saveCh.iSt2,
-					atk = saveCh.bSt3 + saveCh.iSt3,
-					def = saveCh.bSt4 + saveCh.iSt4,
-					mak = saveCh.bSt5 + saveCh.iSt5,
-					mdf = saveCh.bSt6 + saveCh.iSt6,
-					rcv = saveCh.bSt7 + saveCh.iSt7,
-					spd = saveCh.bSt8 + saveCh.iSt8;
-				ally.push({
-					...saveCh,
-					hp: hp,
-					hp_: hp,
-					sp: Math.floor(saveCh.bSt1/2),
-					sp_: saveCh.bSt1,
-					rsp: rsp,
-					atk: atk,
-					def: def,
-					mak: mak,
-					mdf: mdf,
-					rcv: rcv,
-					spd: spd,
-				})
+				ally_.push(data);
 			}
+		});
+		const allyRelation = relationCheck(gameData, ally_, 'ally');
+		ally_.forEach((data, idx) => {
+			const saveCh = saveData.ch[data];
+			pos.push(idx);
+			let effData;
+			//인연 체크
+			allyRelation.forEach((rtIdx, idx) => {
+				gameData.relation[rtIdx].member.forEach((memberIdx) => {
+					if (memberIdx === data) {
+						effData = relationEff(saveCh, gameData.relation[rtIdx].eff);
+						console.log("아군증가량", effData);
+					}
+				});
+			});
+			const hp = saveCh.bSt0 + saveCh.iSt0 + (effData?.rtSt0 || 0),
+				rsp = saveCh.bSt2 + saveCh.iSt2 + (effData?.rtSt2 || 0),
+				atk = saveCh.bSt3 + saveCh.iSt3 + (effData?.rtSt3 || 0),
+				def = saveCh.bSt4 + saveCh.iSt4 + (effData?.rtSt4 || 0),
+				mak = saveCh.bSt5 + saveCh.iSt5 + (effData?.rtSt5 || 0),
+				mdf = saveCh.bSt6 + saveCh.iSt6 + (effData?.rtSt6 || 0),
+				rcv = saveCh.bSt7 + saveCh.iSt7 + (effData?.rtSt7 || 0),
+				spd = saveCh.bSt8 + saveCh.iSt8 + (effData?.rtSt8 || 0);
+			ally.push({
+				...saveCh,
+				hp: hp,
+				hp_: hp,
+				sp: Math.floor(saveCh.bSt1/2),
+				sp_: saveCh.bSt1,
+				rsp: rsp,
+				atk: atk,
+				def: def,
+				mak: mak,
+				mdf: mdf,
+				rcv: rcv,
+				spd: spd,
+			});
 		});
 		setBattleAlly(ally);
 		setMapPos(pos);
-		let enemy = [];
+		let enemy = [],
+			enemy_ = [];
 		enemyDeck.filter((data, idx) => {
 			if (typeof data.idx === 'number') {
-				const gameCh = gameData.ch[data.idx];
-				const enemyData = util.getEnemyState(data, gameData);
-				const enemySkill = util.getEnemySkill(data, gameData);
-				const hp = enemyData.bSt0 + enemyData.iSt0,
-					rsp = enemyData.bSt2 + enemyData.iSt2,
-					atk = enemyData.bSt3 + enemyData.iSt3,
-					def = enemyData.bSt4 + enemyData.iSt4,
-					mak = enemyData.bSt5 + enemyData.iSt5,
-					mdf = enemyData.bSt6 + enemyData.iSt6,
-					rcv = enemyData.bSt7 + enemyData.iSt7,
-					spd = enemyData.bSt8 + enemyData.iSt8;
-				enemy.push({
-					...gameCh,
-					...enemyData,
-					sk: enemySkill,
-					hp: hp,
-					hp_: hp,
-					sp: Math.floor(enemyData.bSt1/2),
-					sp_: enemyData.bSt1,
-					rsp: rsp,
-					atk: atk,
-					def: def,
-					mak: mak,
-					mdf: mdf,
-					rcv: rcv,
-					spd: spd,
-				})
+				enemy_.push(data);
 			}
 		});
-		relationCheck(gameData.relation, ally);
+		const enemyRelation = relationCheck(gameData, enemy_, 'enemy');
+		enemy_.forEach((data, idx) => {
+			const gameCh = gameData.ch[data.idx];
+			const enemyData = util.getEnemyState(data, gameData);
+			const enemySkill = util.getEnemySkill(data, gameData);
+			let effData;
+			//인연 체크
+			enemyRelation.forEach((rtIdx, idx) => {
+				gameData.relation[rtIdx].member.forEach((memberIdx) => {
+					if (memberIdx === data.idx) {
+						effData = relationEff(enemyData, gameData.relation[rtIdx].eff);
+						console.log("적군증가량", effData);
+					}
+				});
+			});
+			const hp = enemyData.bSt0 + enemyData.iSt0 + (effData?.rtSt0 || 0),
+				rsp = enemyData.bSt2 + enemyData.iSt2 + (effData?.rtSt2 || 0),
+				atk = enemyData.bSt3 + enemyData.iSt3 + (effData?.rtSt3 || 0),
+				def = enemyData.bSt4 + enemyData.iSt4 + (effData?.rtSt4 || 0),
+				mak = enemyData.bSt5 + enemyData.iSt5 + (effData?.rtSt5 || 0),
+				mdf = enemyData.bSt6 + enemyData.iSt6 + (effData?.rtSt6 || 0),
+				rcv = enemyData.bSt7 + enemyData.iSt7 + (effData?.rtSt7 || 0),
+				spd = enemyData.bSt8 + enemyData.iSt8 + (effData?.rtSt8 || 0);
+			enemy.push({
+				...gameCh,
+				...enemyData,
+				sk: enemySkill,
+				hp: hp,
+				hp_: hp,
+				sp: Math.floor(enemyData.bSt1/2),
+				sp_: enemyData.bSt1,
+				rsp: rsp,
+				atk: atk,
+				def: def,
+				mak: mak,
+				mdf: mdf,
+				rcv: rcv,
+				spd: spd,
+			});
+		});
 		setBattleEnemy(enemy);
 	}, []);
 	const resetOrder = () => {
@@ -695,7 +775,7 @@ const Battle = ({
 									const chData = gameData.ch[saveCh.idx];
 									const hasHp = (saveCh.hp / saveCh.hp_) * 100,
 										hasSp = (saveCh.sp / saveCh.sp_) * 100;
-										const posCh = mapPos[orderIdx] === idx ? 'on' : '';
+										const posCh = (typeof orderIdx === 'number' && mapPos[orderIdx] === idx) ? 'on' : '';
 										let actionCh = '';
 										if (typeof turnIdx === 'number' && timeLine && timeLine[turnIdx].team === 'ally' && allyData === timeLine[turnIdx].idx) {
 											actionCh = 'action';
@@ -755,28 +835,32 @@ const Battle = ({
 				{mode !== 'action' && battleAlly ? 
 					<>
 						<BattleMenu className="battle_menu">
-							<div className="chInfo">
-								<span className="sp">{battleAlly[orderIdx].sp}</span>
-								<span className="spR">{battleAlly[orderIdx].bSt2}</span>
-							</div>
-							<ul className="scroll-x">
-								{battleAlly[orderIdx].sk && battleAlly[orderIdx].sk.map((data, idx) => {
-									const sk = gameData.skill;
-									if (sk[data.idx].cate[0] !== 1) {
-										return (
-											<li key={idx}><button onClick={() => {
-												battleCommand(sk[data.idx]);
-											}}><span className="skSp">{sk[data.idx].sp}</span><span className="skName">{sk[data.idx].na}</span></button></li>
-										);
-									}
-								})}
-								<li><button onClick={() => {
-									battleCommand('wait');
-								}}><span>대기</span></button></li>
-								<li><button onClick={() => {
-									battleCommand('cancel');
-								}}><span>취소</span></button></li>
-							</ul>
+							{typeof orderIdx === 'number' && (
+								<>
+									<div className="chInfo">
+										<span className="sp">{battleAlly[orderIdx].sp}</span>
+										<span className="spR">{battleAlly[orderIdx].bSt2}</span>
+									</div>
+									<ul className="scroll-x">
+										{battleAlly[orderIdx].sk && battleAlly[orderIdx].sk.map((data, idx) => {
+											const sk = gameData.skill;
+											if (sk[data.idx].cate[0] !== 1) {
+												return (
+													<li key={idx}><button onClick={() => {
+														battleCommand(sk[data.idx]);
+													}}><span className="skSp">{sk[data.idx].sp}</span><span className="skName">{sk[data.idx].na}</span></button></li>
+												);
+											}
+										})}
+										<li><button onClick={() => {
+											battleCommand('wait');
+										}}><span>대기</span></button></li>
+										<li><button onClick={() => {
+											battleCommand('cancel');
+										}}><span>취소</span></button></li>
+									</ul>
+								</>
+							)}
 					</BattleMenu>
 				</> : ""
 			}
