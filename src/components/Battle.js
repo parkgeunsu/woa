@@ -73,6 +73,8 @@ const BattleCh = styled.div`
 	z-index:1;
 	&.action{left:50%;top:50%;transform:translate(-50%,-50%) scale(2);z-index:30;}
 	&.action .ch_box .ring_back{box-shadow:0 0 30px 10px #000;}
+	&.relation{box-shadow:0 0 10px #f00;}
+	&.relation:before{content:'업';position:absolute;left:0;top:0;color:#f00;}
 	.ch_box{position:absolute;left:5%;top:5%;width:90%;height:90%;transition:all .3s;transform-origin:50% 100%;transform-style:preserve-3d;}
 	.ch_box .hpsp{position:absolute;height:12%;width:100%;top:-17%;}
 	.ch_box .hpsp{
@@ -437,8 +439,9 @@ const Battle = ({
 	const [timeLine, setTimeLine] = useState(); //공격 순번배열
 	const [turnIdx, setTurnIdx] = useState(); //공격캐릭터 활성화 순번
 	const [skillMsg, setSkillMsg] = useState(false); //메시지창 on/off
-	const [relationText, setRelationText] = useState(); //인연
+	const [relationArr, setRelationArr] = useState(); //인연
 	const [relationHeight, setRelationHeight] = useState(0); //인연 박스 크기
+	const [relationCh, setRelationCh] = useState(); //인연 적용캐릭
 	const currentIdx = useRef();
 	currentIdx.current = 0;
 	useLayoutEffect(() => {
@@ -453,7 +456,7 @@ const Battle = ({
 		const allyRelation = relationCheck(saveData, gameData, ally_, 'ally');
 		//최초 실행
 		if (allyRelation.length > 0) { //인연이 있을때
-			setRelationText(allyRelation);
+			setRelationArr(allyRelation);
 			setRelationHeight(35 + 20 + (20 * allyRelation.length)); //인연글씨 + 여백 + 인연갯수
 			setTimeout(() => {
 				setMode('relation');
@@ -461,7 +464,7 @@ const Battle = ({
 					setOrderIdx(0);
 					setMode('order');
 					setTimeout(() => {
-						setRelationText('');
+						setRelationArr('');
 					}, 1300);
 				}, 2000 + allyRelation.length * 300);
 			}, 100);
@@ -555,6 +558,25 @@ const Battle = ({
 			});
 		});
 		setBattleEnemy(enemy);
+		//인연 적용캐릭 셋팅
+		let allyRt = [];
+		allyRelation.forEach((data) => {
+			gameData.relation[data].member.forEach((dataIdx) => {
+				allyRt[dataIdx] = dataIdx;
+			})
+		});
+		let enemyRt = [];
+		enemyRelation.forEach((data) => {
+			gameData.relation[data].member.forEach((dataIdx) => {
+				enemyRt[dataIdx] = dataIdx;
+			});
+		});
+		allyRt = allyRt.filter((element) => element != undefined);
+		enemyRt = enemyRt.filter((element) => element != undefined);
+		setRelationCh({
+			ally:[...allyRt],
+			enemy:[...enemyRt],
+		});
 	}, []);
 	const resetOrder = () => {
 		setOrderIdx(0);
@@ -749,10 +771,10 @@ const Battle = ({
 					<div className="cloud1"></div>
 					<div className="cloud2"></div>
 				</BgEffect>
-				{relationText && (
+				{relationArr && (
 					<RelationArea className={`relation_area ${mode === "relation" ? "on" : ""}`} rtHeight={relationHeight}>
 						<div className="relationTitle"><span>인!</span><span>연!</span><span>발!</span><span>동!</span></div>
-						{relationText.map((rtData, idx) => {
+						{relationArr.map((rtData, idx) => {
 							const rtName = gameData.relation[rtData].na;
 							return (
 								<RelationName key={idx} className="relationName" idx={idx}>{rtName}</RelationName>
@@ -767,6 +789,12 @@ const Battle = ({
 								const left = idx % 5 * mapSize,
 									top = Math.floor(idx / 5) * mapSize,
 									area = chkString(effectArea, idx);
+								let rtCh = '';
+								relationCh?.enemy.forEach((rtchIdx) => {
+									if (rtchIdx === enemyData.idx) {
+										rtCh = 'relation';
+									}
+								});
 								const element_type = currentSkill ? currentSkill.element_type : '';
 								if (enemyData.idx) {
 									const chData = gameData.ch[enemyData.idx];
@@ -779,7 +807,7 @@ const Battle = ({
 										actionCh = 'action';
 									}
 									return (
-										<BattleCh key={idx} className={`battle_ch effect ${elementCh} ${actionCh}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize} onClick={(e) => {
+										<BattleCh key={idx} className={`battle_ch effect ${elementCh} ${actionCh} ${rtCh}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize} onClick={(e) => {
 											areaSelect(e, idx);
 										}}>
 											<div className="ch_box">
@@ -828,6 +856,12 @@ const Battle = ({
 								if (typeof allyData === "number") {
 									const saveCh = battleAlly[currentIdx.current];
 									const chData = gameData.ch[saveCh.idx];
+									let rtCh = '';
+									relationCh?.ally.forEach((rtchIdx) => {
+										if (rtchIdx === saveCh.idx) {
+											rtCh = 'relation';
+										}
+									});
 									const hasHp = (saveCh.hp / saveCh.hp_) * 100,
 										hasSp = (saveCh.sp / saveCh.sp_) * 100;
 										const posCh = (typeof orderIdx === 'number' && mapPos[orderIdx] === currentIdx.current) ? 'on' : '';
@@ -837,7 +871,7 @@ const Battle = ({
 										}
 										currentIdx.current ++;
 									return (
-										<BattleCh key={idx} className={`battle_ch ${posCh} ${actionCh}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize}>
+										<BattleCh key={idx} className={`battle_ch ${posCh} ${actionCh} ${rtCh}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize}>
 											<div className="ch_box">
 												<CardChRing className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} lv={saveCh.lv} />
 												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>
