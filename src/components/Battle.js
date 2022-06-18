@@ -73,8 +73,12 @@ const BattleCh = styled.div`
 	z-index:1;
 	&.action{left:50%;top:50%;transform:translate(-50%,-50%) scale(2);z-index:30;}
 	&.action .ch_box .ring_back{box-shadow:0 0 30px 10px #000;}
-	&.relation{box-shadow:0 0 10px #f00;}
-	&.relation:before{content:'업';position:absolute;left:0;top:0;color:#f00;}
+	&.relation:before{content:'';position:absolute;left:50%;top:50%;width:100%;height:100%;box-shadow:0 0 15px 5px ${({rtColor}) => rtColor};transform:translate(-50%,-50%);z-index:1;filter:blur(5px);background:${({rtColor}) => rtColor};animation:rtAnimation 4s linear;opacity:0;pointer-events:none;}
+	@keyframes rtAnimation{
+		0%{opacity:0;}
+		50%{opacity:1;}
+		100%{opacity:0;}
+	}
 	.ch_box{position:absolute;left:5%;top:5%;width:90%;height:90%;transition:all .3s;transform-origin:50% 100%;transform-style:preserve-3d;}
 	.ch_box .hpsp{position:absolute;height:12%;width:100%;top:-17%;}
 	.ch_box .hpsp{
@@ -373,7 +377,10 @@ const relationCheck = (saveData, gameData, team, teamChk) => {
 			};
 		});
 		if (chkCount === rtData.member.length) {
-			relationArr.push(rtData.idx);
+			relationArr.push({
+				idx: rtData.idx,
+				color: 'rgb(' + Math.round(Math.random()*255) + ',' + Math.round(Math.random()*255) + ',' + Math.round(Math.random()*255) + ')',
+			});
 		}
 	});
 	return relationArr;
@@ -392,7 +399,8 @@ const RelationArea = styled.div`
 	&.on .relationName{filter:blur(0);}
 `;
 const RelationName = styled.div`
-	margin:5px 0;color:#fff;z-index:1;filter:blur(5px);transition:all 0.5s ${({idx}) => 0.5 + idx * 0.3}s;
+	position:relative;margin:5px 0;padding:0 0 0 13px;color:#fff;z-index:1;filter:blur(5px);transition:all 0.5s ${({idx}) => 0.5 + idx * 0.3}s;
+	&:after{content:'';position:absolute;left:0;top:50%;transform:translate(0, -50%);width:5px;height:5px;background:${({color}) => color};box-shadow:0 0 8px 5px ${({color}) => color};}
 `;
 const BgEffect = styled.div`
 	position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;
@@ -477,10 +485,10 @@ const Battle = ({
 			pos.push(idx);
 			let effData;
 			//인연 체크
-			allyRelation.forEach((rtIdx, idx) => {
-				gameData.relation[rtIdx].member.forEach((memberIdx) => {
+			allyRelation.forEach((rtData, idx) => {
+				gameData.relation[rtData.idx].member.forEach((memberIdx) => {
 					if (memberIdx === data) {
-						effData = relationEff(saveCh, gameData.relation[rtIdx].eff);
+						effData = relationEff(saveCh, gameData.relation[rtData.idx].eff);
 						console.log("아군증가량", effData);
 					}
 				});
@@ -524,10 +532,10 @@ const Battle = ({
 			const enemySkill = util.getEnemySkill(data, gameData);
 			let effData;
 			//인연 체크
-			enemyRelation.forEach((rtIdx, idx) => {
-				gameData.relation[rtIdx].member.forEach((memberIdx) => {
+			enemyRelation.forEach((rtData, idx) => {
+				gameData.relation[rtData.idx].member.forEach((memberIdx) => {
 					if (memberIdx === data.idx) {
-						effData = relationEff(enemyData, gameData.relation[rtIdx].eff);
+						effData = relationEff(enemyData, gameData.relation[rtData.idx].eff);
 						console.log("적군증가량", effData);
 					}
 				});
@@ -561,14 +569,20 @@ const Battle = ({
 		//인연 적용캐릭 셋팅
 		let allyRt = [];
 		allyRelation.forEach((data) => {
-			gameData.relation[data].member.forEach((dataIdx) => {
-				allyRt[dataIdx] = dataIdx;
+			gameData.relation[data.idx].member.forEach((dataIdx) => {
+				allyRt[dataIdx] = {
+					idx: dataIdx,
+					color: data.color,
+				}
 			})
 		});
 		let enemyRt = [];
 		enemyRelation.forEach((data) => {
-			gameData.relation[data].member.forEach((dataIdx) => {
-				enemyRt[dataIdx] = dataIdx;
+			gameData.relation[data.idx].member.forEach((dataIdx) => {
+				enemyRt[dataIdx] = {
+					idx: dataIdx,
+					color: data.color,
+				}
 			});
 		});
 		allyRt = allyRt.filter((element) => element != undefined);
@@ -775,9 +789,9 @@ const Battle = ({
 					<RelationArea className={`relation_area ${mode === "relation" ? "on" : ""}`} rtHeight={relationHeight}>
 						<div className="relationTitle"><span>인!</span><span>연!</span><span>발!</span><span>동!</span></div>
 						{relationArr.map((rtData, idx) => {
-							const rtName = gameData.relation[rtData].na;
+							const rtName = gameData.relation[rtData.idx].na;
 							return (
-								<RelationName key={idx} className="relationName" idx={idx}>{rtName}</RelationName>
+								<RelationName key={idx} className="relationName" idx={idx} color={rtData.color}>{rtName}</RelationName>
 							)
 						})}
 					</RelationArea>
@@ -790,8 +804,8 @@ const Battle = ({
 									top = Math.floor(idx / 5) * mapSize,
 									area = chkString(effectArea, idx);
 								let rtCh = '';
-								relationCh?.enemy.forEach((rtchIdx) => {
-									if (rtchIdx === enemyData.idx) {
+								relationCh?.enemy.forEach((rtch) => {
+									if (rtch.idx === enemyData.idx) {
 										rtCh = 'relation';
 									}
 								});
@@ -857,9 +871,11 @@ const Battle = ({
 									const saveCh = battleAlly[currentIdx.current];
 									const chData = gameData.ch[saveCh.idx];
 									let rtCh = '';
-									relationCh?.ally.forEach((rtchIdx) => {
-										if (rtchIdx === saveCh.idx) {
+									let rtColor;
+									relationCh?.ally.forEach((rtch) => {
+										if (rtch.idx === saveCh.idx) {
 											rtCh = 'relation';
+											rtColor = rtch.color;
 										}
 									});
 									const hasHp = (saveCh.hp / saveCh.hp_) * 100,
@@ -871,7 +887,7 @@ const Battle = ({
 										}
 										currentIdx.current ++;
 									return (
-										<BattleCh key={idx} className={`battle_ch ${posCh} ${actionCh} ${rtCh}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize}>
+										<BattleCh key={idx} className={`battle_ch ${posCh} ${actionCh} ${rtCh}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize} rtColor={rtColor}>
 											<div className="ch_box">
 												<CardChRing className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} lv={saveCh.lv} />
 												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>

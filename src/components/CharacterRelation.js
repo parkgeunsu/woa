@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { AppContext } from 'App';
 import styled from 'styled-components';
 import { util } from 'components/Libs';
@@ -6,16 +6,18 @@ import { util } from 'components/Libs';
 import imgRingBack from 'images/ring/back.png';
 const Relation = styled.div`
   display:none;
-  & {
-    .relationMember{margin:10px 0 0 0;justify-content:center;}
-    .name{width:80px;line-height:1.3;font-size:12px;color:#fff !important;font-weight:600;color:#fff;word-break:keep-all !important;text-align:center !important;}
-    .txt{margin:auto 0;padding:0 10px;flex:1;line-height:1.3;font-size:12px;word-break:keep-all;}
-  }
+  .relationMember{margin:10px 0 0 0;justify-content:center;}
+  .name{width:80px;line-height:1.3;font-size:12px;color:#fff !important;font-weight:600;color:#fff;word-break:keep-all !important;text-align:center !important;}
+  .txt{margin:auto 0;padding:0 10px;flex:1;line-height:1.3;font-size:12px;word-break:keep-all;}
+  .rt{overflow:hidden;}
 `;
 const MemberCh = styled.div`
-	position:relative;margin:0 10px 0 0;width:30px;padding-top:30px;box-sizing:border-box;z-index:1;filter:grayscale(100%) brightness(.4);
+	position:relative;width:30px;padding-top:30px;box-sizing:border-box;z-index:1;filter:grayscale(100%) brightness(.4);
   &.on{filter:grayscale(0);box-shadow:0 0 10px #fff;border-radius:20px;}
   &:last-of-type{margin:0;}
+`;
+const RtAll = styled.div`
+  position:absolute;left:-17px;bottom:-10px;width:60px;height:60px;color: #f00;border:4px solid #f00;border-radius:50px;text-align:center;line-height:52px;font-size:22px;font-weight: 600;overflow:hidden;box-sizing:border-box;transform:rotate(-35deg);
 `;
 const CardChRing = styled.span`
 	position:absolute;width:100%;height:100%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;backface-visibility:hidden;background-color:transparent;
@@ -43,9 +45,11 @@ const CharacterRelation = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-
   const chRelation = gameData.ch[saveData.ch[slotIdx].idx].relation;
-  
+  let relationAll = [];
+  chRelation.forEach((rtIdx, idx) => {
+    relationAll[idx] = Array.from({length: gameData.relation[rtIdx].member.length}, () => false);
+  });
 //})}
 // { gameRelation && gameRelation.map((rtData, idx) => {
 //   let hasRelation = false;
@@ -69,22 +73,35 @@ const CharacterRelation = ({
                     <span className="name">{relationData.na}</span>
                     <span className="txt" dangerouslySetInnerHTML={{__html: relationData.txt}} />
                   </div>
-                  <div className="relationMember" flex="true">
+                  <div className={`relationMember`} flex="true">
                     {relationData.member && relationData.member.map((data, idx_) => {
                       const chData = gameData.ch[data];
                       let hasRelation = false;
                       saveData.ch.filter((saveCh) => {
                         if (saveCh.idx === data) {
                           hasRelation = true;
+                          relationAll[idx][idx_] = true;
                           return;
                         }
                       });
+                      let rtAll = true;
+                      relationAll[idx].forEach((rtData) => {
+                        if (rtData === false) {
+                          rtAll = false;
+                        }
+                      });
                       return (
-                        chData && 
-                        <MemberCh key={idx_} className={`battle_ch ${hasRelation ? 'on' : ''}`}>
-                          <CardChRing style={{top:0,borderRadius:'50%',}} className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} />
-                          <CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>
-                        </MemberCh>
+                        chData && (
+                          <div key={idx_} style={{
+                            margin: "0 10px 0 0",
+                          }}>
+                            <MemberCh className={`battle_ch ${hasRelation ? 'on' : ''} ${rtAll}`}>
+                              <CardChRing style={{top:0,borderRadius:'50%',}} className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} />
+                              <CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>
+                            </MemberCh>
+                            {rtAll && <RtAll>ALL</RtAll>}
+                          </div>
+                        )
                       )
                     })}
                   </div>
