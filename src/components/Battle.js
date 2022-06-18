@@ -18,7 +18,13 @@ const BattleWarp = styled.div`
 	display:flex;position:absolute;left:0;right:0;top:0;bottom:0;background:url(${({backImg}) => backImg});background-size:cover;flex-direction:column;padding:44px 0 0 0;width:100%;height:100%;box-sizing:border-box;overflow:hidden;
 `;
 const BattleArea = styled.div`
-	position:relative;height:calc(100% - 50px);background:#3e2c00;
+	position:relative;height:${({mode}) => {
+		if (mode === "order") {
+			return "calc(100% - 50px)";
+		} else {
+			return "100%";
+		}
+	}};background:#3e2c00;transition:height 1s;
 	&.action{height:100%;}
 	&:before{content:'';position:absolute;left:${({mode}) => {
 		return !mode ? "-50px" : 0;
@@ -144,7 +150,13 @@ const BattleOrder = styled.div`
 	&.right:after{right:30%;}
 `;
 const BattleMenu = styled.div`
-	display:flex;position:relative;height:50px;background:var(--color-b);
+	display:flex;position:relative;height:${({mode}) => {
+		if (mode === "relation") {
+			return "0px";
+		} else {
+			return "50px";
+		}
+	}};background:var(--color-b);transition:height 1s;overflow:hidden;
 	.chInfo{display:flex;flex-basis:60px;align-items:center;justify-content:center;}
 	.chInfo span{display:inline-block;}
 	.chInfo .sp{font-size:20px;}
@@ -323,32 +335,32 @@ const relationEff = (ch, effObj) => {
 	});
 	return effObj_;
 }
-const relationCheck = (gameData, team, teamChk) => {
+const relationCheck = (saveData, gameData, team, teamChk) => {
 	const relation = gameData.relation;
 	let rtMemberArr = [];
 	team.forEach((chData) => {
-		const team_ = teamChk === 'ally' ? chData : chData.idx;
-			gameData.ch[team_].relation.forEach((rtIdx) => {
-				const relationData = relation[rtIdx].member;
-				if (rtMemberArr[rtIdx]) {
-					return;
-				} else {
-					rtMemberArr[rtIdx] = {
-						idx: rtIdx,
-						member: [],
-					}
+		const team_ = teamChk === 'ally' ? saveData.ch[chData].idx : chData.idx;
+		gameData.ch[team_].relation.forEach((rtIdx) => {
+			const relationData = relation[rtIdx].member;
+			if (rtMemberArr[rtIdx]) {
+				return;
+			} else {
+				rtMemberArr[rtIdx] = {
+					idx: rtIdx,
+					member: [],
 				}
-				rtMemberArr[rtIdx].member = Array.from({length: relationData.length}, () => false);
-				relationData.forEach((memberIdx, mIdx) => {
-					team.forEach((teamIdx, tIdx) => {
-						const ii = teamChk === 'ally' ? teamIdx : teamIdx.idx;
-						if (memberIdx === ii) {
-							rtMemberArr[rtIdx].member[mIdx] = true;
-							return;
-						}
-					});
+			}
+			rtMemberArr[rtIdx].member = Array.from({length: relationData.length}, () => false);
+			relationData.forEach((memberIdx, mIdx) => {
+				team.forEach((teamIdx, tIdx) => {
+					const ii = teamChk === 'ally' ? saveData.ch[teamIdx].idx : teamIdx.idx;
+					if (memberIdx === ii) {
+						rtMemberArr[rtIdx].member[mIdx] = true;
+						return;
+					}
 				});
 			});
+		});
 	});
 	let relationArr = [];
 	rtMemberArr.forEach((rtData) => {
@@ -364,7 +376,22 @@ const relationCheck = (gameData, team, teamChk) => {
 	});
 	return relationArr;
 }
-
+const RelationArea = styled.div`
+	display:flex;position:absolute;left:0;right:0;top:0;bottom:0;flex-direction:column;z-index:2;align-items:center;justify-content:center;pointer-events:none;
+	&:after{content:'';position:absolute;width:100%;height:0;box-shadow:0 0 20px 10px rgba(0,0,0,.7);background:rgba(0,0,0,.7);transition:height .5s .5s ease-in-out;}
+	&.on:after{height:${({rtHeight}) => rtHeight}px;}
+	.relationTitle{margin:0 0 10px 0;z-index:1;}
+	.relationTitle span{display:inline-block;margin:0 2px;font-size:25px;font-weight:600;opacity:0;color:#fff;}
+	.relationTitle span:first-of-type{transition:opacity .5s 0s;text-shadow:0 0 10px #ff0,0 0 10px #ff0;}
+	.relationTitle span:nth-of-type(2){transition:opacity .5s .2s;text-shadow:0 0 10px #fb0,0 0 10px #fb0;}
+	.relationTitle span:nth-of-type(3){transition:opacity .5s .4s;text-shadow:0 0 10px #f60,0 0 10px #f60;}
+	.relationTitle span:last-of-type{transition:opacity .5s .6s;text-shadow:0 0 10px #f00,0 0 10px #f00;}
+	&.on .relationTitle span{opacity:1;}
+	&.on .relationName{filter:blur(0);}
+`;
+const RelationName = styled.div`
+	margin:5px 0;color:#fff;z-index:1;filter:blur(5px);transition:all 0.5s ${({idx}) => 0.5 + idx * 0.3}s;
+`;
 const BgEffect = styled.div`
 	position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;
 	div{position:absolute;width:1000px;height:400px;z-index:40;animation-play-state:running;transition:all 2s;}
@@ -391,7 +418,7 @@ const Battle = ({
   const gameData = useContext(AppContext).gameData;
 	const scenarioDetail = scenario || gameData.scenario.korea.threeAfter[0].stage[0];
 	const [mapLand] = useState(scenarioDetail.map);
-	const allyDeck = saveData.lineup.save_slot[saveData.lineup.select].entry;
+	const allyDeck = saveData.lineup.save_slot[saveData.lineup.select].entry;//캐릭터 저장된 카드index
 	const enemyDeck = scenarioDetail.entry;
 	const containerRef = useRef(null);
 	const [containerW, setContainerW] = useState();
@@ -410,13 +437,11 @@ const Battle = ({
 	const [timeLine, setTimeLine] = useState(); //공격 순번배열
 	const [turnIdx, setTurnIdx] = useState(); //공격캐릭터 활성화 순번
 	const [skillMsg, setSkillMsg] = useState(false); //메시지창 on/off
-
+	const [relationText, setRelationText] = useState(); //인연
+	const [relationHeight, setRelationHeight] = useState(0); //인연 박스 크기
+	const currentIdx = useRef();
+	currentIdx.current = 0;
 	useLayoutEffect(() => {
-		setTimeout(() => {
-			//최초 실행
-			setOrderIdx(0);
-			setMode('order');
-		}, 500);
 		let ally = [],
 			ally_ = [];
 		let pos = [];
@@ -425,7 +450,25 @@ const Battle = ({
 				ally_.push(data);
 			}
 		});
-		const allyRelation = relationCheck(gameData, ally_, 'ally');
+		const allyRelation = relationCheck(saveData, gameData, ally_, 'ally');
+		//최초 실행
+		if (allyRelation.length > 0) { //인연이 있을때
+			setRelationText(allyRelation);
+			setRelationHeight(35 + 20 + (20 * allyRelation.length)); //인연글씨 + 여백 + 인연갯수
+			setTimeout(() => {
+				setMode('relation');
+				setTimeout(() => {
+					setOrderIdx(0);
+					setMode('order');
+					setTimeout(() => {
+						setRelationText('');
+					}, 1300);
+				}, 2000 + allyRelation.length * 300);
+			}, 100);
+		} else { //인연이 없을때
+			setOrderIdx(0);
+			setMode('order');
+		}
 		ally_.forEach((data, idx) => {
 			const saveCh = saveData.ch[data];
 			pos.push(idx);
@@ -471,7 +514,7 @@ const Battle = ({
 				enemy_.push(data);
 			}
 		});
-		const enemyRelation = relationCheck(gameData, enemy_, 'enemy');
+		const enemyRelation = relationCheck(saveData, gameData, enemy_, 'enemy');
 		enemy_.forEach((data, idx) => {
 			const gameCh = gameData.ch[data.idx];
 			const enemyData = util.getEnemyState(data, gameData);
@@ -550,6 +593,7 @@ const Battle = ({
 		}
 	};
 	const battleCommand = (skill) => {
+		console.log(orderIdx);
 		if (mode === 'order') {
 			if (skill === 'cancel') { //취소 실행
 				if (orderIdx > 0) {
@@ -705,6 +749,17 @@ const Battle = ({
 					<div className="cloud1"></div>
 					<div className="cloud2"></div>
 				</BgEffect>
+				{relationText && (
+					<RelationArea className={`relation_area ${mode === "relation" ? "on" : ""}`} rtHeight={relationHeight}>
+						<div className="relationTitle"><span>인!</span><span>연!</span><span>발!</span><span>동!</span></div>
+						{relationText.map((rtData, idx) => {
+							const rtName = gameData.relation[rtData].na;
+							return (
+								<RelationName key={idx} className="relationName" idx={idx}>{rtName}</RelationName>
+							)
+						})}
+					</RelationArea>
+				)}
 				<BattleArea ref={containerRef} className={`battle_area ${mode === "action" ? "action" : ""}`} mode={mode} frameLeft={frameLeft} frameRight={frameRight}>
 					<BattleUnit containerW={containerW} className="battle_units" frameImg={frameRope}>
 						<div className="units_enemy">
@@ -771,15 +826,16 @@ const Battle = ({
 								const left = (24 - idx) % 5 * mapSize,
 									top = Math.floor((24 - idx) / 5) * mapSize;
 								if (typeof allyData === "number") {
-									const saveCh = battleAlly[allyData];
+									const saveCh = battleAlly[currentIdx.current];
 									const chData = gameData.ch[saveCh.idx];
 									const hasHp = (saveCh.hp / saveCh.hp_) * 100,
 										hasSp = (saveCh.sp / saveCh.sp_) * 100;
-										const posCh = (typeof orderIdx === 'number' && mapPos[orderIdx] === idx) ? 'on' : '';
+										const posCh = (typeof orderIdx === 'number' && mapPos[orderIdx] === currentIdx.current) ? 'on' : '';
 										let actionCh = '';
-										if (typeof turnIdx === 'number' && timeLine && timeLine[turnIdx].team === 'ally' && allyData === timeLine[turnIdx].idx) {
+										if (typeof turnIdx === 'number' && timeLine && timeLine[turnIdx].team === 'ally' && currentIdx.current === timeLine[turnIdx].idx) {
 											actionCh = 'action';
 										}
+										currentIdx.current ++;
 									return (
 										<BattleCh key={idx} className={`battle_ch ${posCh} ${actionCh}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize}>
 											<div className="ch_box">
@@ -832,9 +888,9 @@ const Battle = ({
 						</div>
 					</BattleOrder>
 				</BattleArea>
-				{mode !== 'action' && battleAlly ? 
+				{battleAlly ? 
 					<>
-						<BattleMenu className="battle_menu">
+						<BattleMenu className="battle_menu" mode={mode}>
 							{typeof orderIdx === 'number' && (
 								<>
 									<div className="chInfo">
