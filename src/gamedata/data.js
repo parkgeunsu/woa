@@ -7,6 +7,7 @@ import { lineup } from 'gamedata/lineup';
 import { relation } from 'gamedata/relation';
 import { skill } from 'gamedata/skill';
 import { scenario } from 'gamedata/scenario';
+import { effect, effFrame } from 'gamedata/effect';
 
 export const version = "0.1";
 export const gameData = {
@@ -37,4 +38,5 @@ export const gameData = {
     skill:skill,
     relation:relation,
     scenario:scenario,
+    effect:effect,
   }

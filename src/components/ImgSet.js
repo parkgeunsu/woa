@@ -193,6 +193,12 @@ import water3 from 'images/land/water3.png';
 import cloud1 from 'images/bg/cloud1.png';
 import cloud2 from 'images/bg/cloud2.png';
 
+import eff0 from 'images/effect/2cna25f.png';
+import eff1 from 'images/effect/Sword1.png';
+import eff2 from 'images/effect/Sword2.png';
+import eff3 from 'images/effect/Sword4.png';
+import eff4 from 'images/effect/Death1.png';
+
 export const chImg = {
   ch0:ch0, ch1:ch1, ch2:ch2, ch3:ch3, ch4:ch4, ch5:ch5, ch6:ch6, ch7:ch7, ch8:ch8, ch9:ch9, ch10:ch10,
   ch11:ch11, ch12:ch12, ch13:ch13, ch14:ch14, ch15:ch15, ch16:ch16, ch17:ch17, ch18:ch18, ch19:ch19, ch20:ch20,
@@ -241,3 +247,6 @@ export const land = [
 export const bgEffect = [
   cloud1,cloud2
 ];
+export const eff = [
+  eff0,eff1,eff2,eff3,eff4
+]

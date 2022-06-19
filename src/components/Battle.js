@@ -8,6 +8,7 @@ import imgRingBack from 'images/ring/back.png';
 import frameRope from 'images/frame/frame_rope.png';
 import frameLeft from 'images/frame/frame_battle1.png';
 import frameRight from 'images/frame/frame_battle2.png';
+import 'css/battle.css';
 
 const Img = styled.img.attrs(
   ({imgurl}) => ({
@@ -73,7 +74,7 @@ const BattleCh = styled.div`
 	z-index:1;
 	&.action{left:50%;top:50%;transform:translate(-50%,-50%) scale(2);z-index:30;}
 	&.action .ch_box .ring_back{box-shadow:0 0 30px 10px #000;}
-	&.relation:before{content:'';position:absolute;left:50%;top:50%;width:100%;height:100%;box-shadow:0 0 15px 5px ${({rtColor}) => rtColor};transform:translate(-50%,-50%);z-index:1;filter:blur(5px);background:${({rtColor}) => rtColor};animation:rtAnimation 4s linear;opacity:0;pointer-events:none;}
+	&.relation:after{content:'';position:absolute;left:50%;top:50%;width:100%;height:100%;box-shadow:0 0 15px 5px ${({rtColor}) => rtColor};transform:translate(-50%,-50%);z-index:1;filter:blur(5px);background:${({rtColor}) => rtColor};animation:rtAnimation 4s linear;opacity:0;pointer-events:none;}
 	@keyframes rtAnimation{
 		0%{opacity:0;}
 		50%{opacity:1;}
@@ -123,8 +124,38 @@ const BattleLand = styled.div`
 		&.on{height:50px;}
 	}
 `;
+const BattleEffect = styled(BattleLand)`
+	
+`;
+const EffLand = styled.div`
+	position:absolute;width:20%;padding-top:20%;box-sizing:border-box;border-radius:0;
+	left:${({left}) => left}%;
+	top:${({top}) => top}%;
+	overflow:hidden;
+	.dmgEffect{
+		position:absolute;left:0;right:0;top:0;bottom:0;z-index:10;
+		animation:dmgAnimation 0.5s steps(2) infinite;
+		@keyframes dmgAnimation{
+			0%{background:transparent;}
+			100%{background:rgba(255,0,0,.7);}
+		}
+	}
+`;
+const Eff = styled.img`
+	position:absolute;left:0;top:0;
+	width:500%;z-index:11;
+	height:${({frame}) => {
+		return (Math.floor(frame / 5) + 1) * 100;
+	}}%;
+	transition:unset;
+	animation:frame${({frame}) => frame} 0.5s steps(1);
+	animation-iteration-count: infinite;
+`;
 const Land = styled.div`
-	position:absolute;width:20%;padding-top:20%;box-sizing:border-box;border-radius:0;background-image:url(${({landImg}) => landImg});
+	position:absolute;width:20%;padding-top:20%;box-sizing:border-box;border-radius:0;
+	left:${({left}) => left}%;
+	top:${({top}) => top}%;
+	background-image:url(${({landImg}) => landImg});
 	background-size: 100%;
 	outline:2px solid #fff;
 	&:before{
@@ -450,8 +481,19 @@ const Battle = ({
 	const [relationArr, setRelationArr] = useState(); //인연
 	const [relationHeight, setRelationHeight] = useState(0); //인연 박스 크기
 	const [relationCh, setRelationCh] = useState(); //인연 적용캐릭
-	const currentIdx = useRef();
+	const currentIdx = useRef(); //아군 순번 증가 index
 	currentIdx.current = 0;
+	const [allyEffect, setAllyEffect] = useState([
+		{idx:2, type:0},
+		{idx:3, type:4},
+	]);
+	const [enemyEffect, setEnemyEffect] = useState([
+		{idx:20, type:1},
+		{idx:21, type:1},
+		{idx:22, type:1},
+		{idx:23, type:1},
+		{idx:24, type:1},
+	]);
 	useLayoutEffect(() => {
 		let ally = [],
 			ally_ = [];
@@ -797,6 +839,57 @@ const Battle = ({
 					</RelationArea>
 				)}
 				<BattleArea ref={containerRef} className={`battle_area ${mode === "action" ? "action" : ""}`} mode={mode} frameLeft={frameLeft} frameRight={frameRight}>
+					<BattleEffect containerW={containerW} className="battle_effect">
+						<div className="land_ally">
+						{map.map((data, idx) => {
+							const left = idx % 5 * mapSize,
+								top = Math.floor(idx / 5) * mapSize;
+							let effectChk = false,
+								effType = '';
+							allyEffect.forEach((effData) => {
+								if (effData.idx === idx) {
+									effectChk = true;
+									effType = effData.type;
+								}
+							});
+							return (
+								<EffLand key={idx} className="effectLand" left={left} top={top}>
+									{effectChk && (
+										<>
+											<Eff src={imgSet.eff[effType]} frame={gameData.effect[effType].frame} />
+											<span className="dmgEffect"></span>
+										</>
+									)}
+								</EffLand>
+							);
+						})}
+						</div>
+						<div className={`turnLine ${mode === 'action' ? 'on' : ''}`}></div>
+						<div className="land_enemy">
+						{map.map((data, idx) => {
+							const left = idx % 5 * mapSize,
+								top = Math.floor(idx / 5) * mapSize;
+							let effectChk = false,
+								effType = '';
+							enemyEffect.forEach((effData) => {
+								if (effData.idx === idx) {
+									effectChk = true;
+									effType = effData.type;
+								}
+							});
+							return (
+								<EffLand className="effectLand" key={idx} left={left} top={top}>
+									{effectChk && (
+										<>
+											<Eff src={imgSet.eff[effType]} frame={gameData.effect[effType].frame} />
+											<span className="dmgEffect"></span>
+										</>
+									)}
+								</EffLand>
+							)
+						})}
+						</div>
+					</BattleEffect>
 					<BattleUnit containerW={containerW} className="battle_units" frameImg={frameRope}>
 						<div className="units_enemy">
 							{battleEnemy && enemyDeck.map((enemyData, idx)=> {
@@ -917,7 +1010,7 @@ const Battle = ({
 							const left = idx % 5 * mapSize,
 								top = Math.floor(idx / 5) * mapSize;
 							return (
-								<Land key={idx} className="land" landImg={imgSet.land[mapLand[idx]]} style={{left: left+'%', top: top+'%'}}></Land>
+								<Land key={idx} className="land" landImg={imgSet.land[mapLand[idx]]} left={left} top={top}></Land>
 							);
 						})}
 						</div>
@@ -927,7 +1020,7 @@ const Battle = ({
 							const left = idx % 5 * mapSize,
 								top = Math.floor(idx / 5) * mapSize;
 							return (
-								<Land key={idx} className="land" landImg={imgSet.land[mapLand[idx + 25]]} style={{left: left+'%', top: top+'%'}}></Land>
+								<Land key={idx} className="land" landImg={imgSet.land[mapLand[idx + 25]]} left={left} top={top}></Land>
 							);
 						})}
 						</div>
