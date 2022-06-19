@@ -93,6 +93,37 @@ export const scenario = {
 							]},{idx:'', lv:1, },{idx:'', lv:1, },
 						]
 					},
+					{
+						lineup:0,
+						map:[
+							0,1,1,2,2,
+							5,0,1,1,2,
+							5,5,0,0,1,
+							4,4,5,5,4,
+							3,3,3,3,3,
+							3,9,9,3,10,
+							10,10,10,10,10,
+							11,11,10,10,11,
+							10,9,9,3,3,
+							3,9,3,4,4
+						],
+						entry:[
+							{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							{idx:'', lv:1, },{idx:'', lv:1, },{pos:2,idx:25, lv:20, items: [
+								{idx:0, slot:0, hole:[], lv:2, upgrade:1},
+								{idx:1, slot:0, hole:[], lv:2, upgrade:1},
+								{idx:2, slot:0, hole:[], lv:2, upgrade:1},
+								{idx:4, slot:0, hole:[], lv:2, upgrade:1},
+								{},
+								{},
+								{},
+								{},
+							]},{idx:'', lv:1, },{idx:'', lv:1, },
+							{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+						]
+					},
 				]
 			},
 

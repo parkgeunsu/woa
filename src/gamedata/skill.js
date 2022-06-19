@@ -12,57 +12,63 @@
 //atkCount 공격횟수
 //turn 유지되는 턴수
 //<u>단일</u> <b dmg>90%</b>의 <i el el0>치기</i>로 두번 공격을 한다.
+//effType effect종류
 export const skill = [
 	{idx:0,
-		na:'공격',element_type:0,cate:[3],txt:`<u>단일</u>, <b dmg>$(0)</b>의 공격을 한다.`
-		,ta_:1,ta:1
+		na:'대기',element_type:0,cate:[1],txt:`<u>단일</u>, <b dmg>$(0)</b>의 대기한다.`
+		,ta_:0,ta:1,effType:2
 		,eff:[{type:9,num:['100%','110%','125%','135%','150%']}],atkCount:1,turn:1,sp:0},
 	{idx:1,
-		na:'침뱉기',element_type:3,cate:[3],txt:'<u>가로한줄</u>, <b dmg>$(0)</b>의 <i el el4>수</i>속성 공격을 한다.'
-		,ta_:1,ta:6
-		,eff:[{type:22,num:['70%','80%','90%','100%','110%']}],atkCount:1,turn:1,sp:7},
+		na:'공격',element_type:0,cate:[3],txt:`<u>단일</u>, <b dmg>$(0)</b>의 공격을 한다.`
+		,ta_:1,ta:1,effType:2
+		,eff:[{type:9,num:['100%','110%','125%','135%','150%']}],atkCount:1,turn:1,sp:0},
 	{idx:2,
-		na:'학익진 강화',element_type:0,cate:[1],txt:'<u>전체</u> 학익진효과가 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
-		,ta_:0,ta:20
-		,eff:[{type:100,num:['20%','25%','30%','35%','40%']}],atkCount:0,turn:0,sp:0}, //이순신
+		na:'침뱉기',element_type:3,cate:[3],txt:'<u>가로한줄</u>, <b dmg>$(0)</b>의 <i el el4>수</i>속성 공격을 한다.'
+		,ta_:1,ta:6,effType:6
+		,eff:[{type:22,num:['70%','80%','90%','100%','110%']}],atkCount:1,turn:1,sp:7},
 	{idx:3,
-		na:'격려',element_type:0,cate:[1],txt:'<u>전체</u> 진형효과가 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
-		,ta_:0,ta:20
-		,eff:[{type:100,num:['10%','15%','20%','25%','30%']}],atkCount:0,turn:0,sp:0},
+		na:'학익진 강화',element_type:0,cate:[1],txt:'<u>전체</u> 학익진효과가 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
+		,ta_:0,ta:20,effType:2
+		,eff:[{type:100,num:['20%','25%','30%','35%','40%']}],atkCount:0,turn:0,sp:0}, //이순신
 	{idx:4,
-		na:'불정령',element_type:4,cate:[1],txt:'<u>전체</u> 물리 공격력(ATK)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
-		,ta_:0,ta:3
+		na:'격려',element_type:0,cate:[1],txt:'<u>전체</u> 진형효과가 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
+		,ta_:0,ta:20,effType:2
 		,eff:[{type:100,num:['10%','15%','20%','25%','30%']}],atkCount:0,turn:0,sp:0},
 	{idx:5,
-		na:'빛정령',element_type:2,cate:[1],txt:'<u>전체</u> 술법 공격력(MATK)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
-		,ta_:0,ta:5
-		,eff:[{type:5,num:['10%','15%','20%','25%','30%']}],atkCount:0,turn:0,sp:0},
+		na:'불정령',element_type:4,cate:[1],txt:'<u>전체</u> 물리 공격력(ATK)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
+		,ta_:0,ta:3,effType:2
+		,eff:[{type:100,num:['10%','15%','20%','25%','30%']}],atkCount:0,turn:0,sp:0},
 	{idx:6,
-		na:'물정령',element_type:3,cate:[1],txt:'<u>전체</u> 체력(HP)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
-		,ta_:0,ta:20
-		,eff:[{type:0,num:['20%','25%','30%','35%','40%']}],atkCount:0,turn:0,sp:0},
+		na:'빛정령',element_type:2,cate:[1],txt:'<u>전체</u> 술법 공격력(MATK)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
+		,ta_:0,ta:5,effType:2
+		,eff:[{type:5,num:['10%','15%','20%','25%','30%']}],atkCount:0,turn:0,sp:0},
 	{idx:7,
-		na:'세게 공격',element_type:0,cate:[3],txt:'<u>단일</u>, <b dmg>$(0)</b>의 강한 공격을 한다.'
-		,eff:[{type:9,num:['150%','175%','200%','225%','250%']}],atkCount:1,turn:1,sp:10},
+		na:'물정령',element_type:3,cate:[1],txt:'<u>전체</u> 체력(HP)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
+		,ta_:0,ta:20,effType:2
+		,eff:[{type:0,num:['20%','25%','30%','35%','40%']}],atkCount:0,turn:0,sp:0},
 	{idx:8,
-		na:'두번 공격',element_type:0,cate:[3],txt:'<u>단일</u> <b dmg>$(0)</b>의 두번 공격을 한다.'
-		,ta_:1,ta:1
-		,eff:[{type:9,num:['80%','90%','100%','110%','120%']}],atkCount:2,turn:1,sp:10},
+		na:'세게 공격',element_type:0,cate:[3],txt:'<u>단일</u>, <b dmg>$(0)</b>의 강한 공격을 한다.'
+		,ta_:1,ta:1,effType:5
+		,eff:[{type:9,num:['150%','175%','200%','225%','250%']}],atkCount:1,turn:1,sp:10},
 	{idx:9,
-		na:'연속 공격',element_type:0,cate:[3],txt:'<u>단일</u> <b dmg>$(0)</b>의 2~4회 공격을 한다.'
-		,ta_:1,ta:1
-		,eff:[{type:9,num:['60%','65%','75%','80%','85%']}],atkCount:Math.random()*4,turn:1,sp:12},
+		na:'두번 공격',element_type:0,cate:[3],txt:'<u>단일</u> <b dmg>$(0)</b>의 두번 공격을 한다.'
+		,ta_:1,ta:1,effType:4
+		,eff:[{type:9,num:['80%','90%','100%','110%','120%']}],atkCount:2,turn:1,sp:10},
 	{idx:10,
-		na:'무차별 공격',element_type:0,cate:[3],txt:'<u>단일 랜덤</u> <b dmg>$(0)</b>의 두번 공격을 한다.'
-		,ta_:1,ta:1
-		,eff:[{type:9,num:['100%','110%','120%','130%','140%']}],atkCount:1,turn:1,sp:9},
+		na:'연속 공격',element_type:0,cate:[3],txt:'<u>단일</u> <b dmg>$(0)</b>의 2~4회 공격을 한다.'
+		,ta_:1,ta:1,effType:2
+		,eff:[{type:9,num:['60%','65%','75%','80%','85%']}],atkCount:Math.random()*4,turn:1,sp:12},
 	{idx:11,
-		na:'방어',element_type:0,cate:[4],txt:'<u>자신</u> <b buff>$(0)</b>의 방어(DEF)가 <i icon up>증가</i>한다.'
-		,ta_:0,ta:1
-		,eff:[{type:4,num:['100%','120%','140%','170%','200%']}],atkCount:1,turn:1,sp:0},
+		na:'무차별 공격',element_type:0,cate:[3],txt:'<u>단일 랜덤</u> <b dmg>$(0)</b>의 두번 공격을 한다.'
+		,ta_:1,ta:1,effType:2
+		,eff:[{type:9,num:['100%','110%','120%','130%','140%']}],atkCount:1,turn:1,sp:9},
 	{idx:12,
+		na:'방어',element_type:0,cate:[4],txt:'<u>자신</u> <b buff>$(0)</b>의 방어(DEF)가 <i icon up>증가</i>한다.'
+		,ta_:0,ta:1,effType:2
+		,eff:[{type:4,num:['100%','120%','140%','170%','200%']}],atkCount:1,turn:1,sp:0},
+	{idx:13,
 		na:'철벽방어',element_type:0,cate:[4],txt:'<u>자신</u> <b buff>$(0)</b>의 방어(DEF)와 <b buff>$(1)</b>의 술법방어(MDEF)가 <i icon up>증가</i>한다.'
-		,ta_:0,ta:1
+		,ta_:0,ta:1,effType:2
 		,eff:[{type:4,num:['100%','120%','140%','170%','200%']},{type:6,num:['100%','120%','140%','170%','200%']}],atkCount:1,turn:1,sp:0},
 ]
 

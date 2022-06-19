@@ -198,6 +198,8 @@ import eff1 from 'images/effect/Sword1.png';
 import eff2 from 'images/effect/Sword2.png';
 import eff3 from 'images/effect/Sword4.png';
 import eff4 from 'images/effect/Death1.png';
+import eff5 from 'images/effect/light_004.png';
+import eff6 from 'images/effect/ice.png';
 
 export const chImg = {
   ch0:ch0, ch1:ch1, ch2:ch2, ch3:ch3, ch4:ch4, ch5:ch5, ch6:ch6, ch7:ch7, ch8:ch8, ch9:ch9, ch10:ch10,
@@ -248,5 +250,5 @@ export const bgEffect = [
   cloud1,cloud2
 ];
 export const eff = [
-  eff0,eff1,eff2,eff3,eff4
+  eff0,eff1,eff2,eff3,eff4,eff5,eff6
 ]

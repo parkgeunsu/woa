@@ -26,6 +26,15 @@ const BattleArea = styled.div`
 			return "100%";
 		}
 	}};background:#3e2c00;transition:height 1s;
+	.units_enemy, .units_ally, .land_ally, .land_enemy{
+		height:${({mode}) => {
+			if (mode === "action") {
+				return "calc(50% - 25px)";
+			} else {
+				return "50%";
+			}
+		}};
+	}
 	&.action{height:100%;}
 	&:before{content:'';position:absolute;left:${({mode}) => {
 		return !mode ? "-50px" : 0;
@@ -37,12 +46,12 @@ const BattleArea = styled.div`
 const BattleUnit = styled.div`
 	display:flex;flex-direction:column;position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;
 	.turnLine{
-		position:relative;height:0;overflow:hidden;background:#3e2c00;
+		display:flex;flex-direction:row;position:relative;height:0;overflow:hidden;background:#3e2c00;align-items:center;justify-content:center;
 		&.on{height:50px;overflow:unset;}
-		&:before{content:'';position:absolute;width:100%;height:10px;left:0;top:0;background:url(${({frameImg}) => frameImg});background-size:100%;}
-		&:after{content:'';position:absolute;width:100%;height:10px;left:0;bottom:0;background:url(${({frameImg}) => frameImg});background-size:100%;}
+		&:before{content:'';position:absolute;width:100%;height:10px;left:0;top:-4px;background:url(${({frameImg}) => frameImg});background-size:contain;}
+		&:after{content:'';position:absolute;width:100%;height:10px;left:0;bottom:-4px;background:url(${({frameImg}) => frameImg});background-size:contain;}
 	}
-	& > div {position:relative;margin:0 auto;width:${({containerW}) => containerW}px;height:50%;box-sizing:border-box;transition:all 1s;}
+	& > div {position:relative;margin:0 auto;width:${({containerW}) => containerW}px;box-sizing:border-box;transition:all 1s;}
 	& .turnLine {width:100%;}
 	& > div .effect0:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:var(--color-b);box-shadow:0 0 10px 10px var(--color-b);z-index:10;opacity:.7;}
 	& > div .effect1:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:var(--color-purple);box-shadow:0 0 10px 10px var(--color-purple);z-index:10;opacity:.7;}
@@ -53,8 +62,8 @@ const BattleUnit = styled.div`
 	& > div .effect6:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:var(--color-green);box-shadow:0 0 10px 10px var(--color-green);z-index:10;opacity:.7;}
 `;
 const TimeLineCh = styled.div`
-	position:absolute;left:${({left}) => left}%;width:${({size}) => size}px;padding-top:${({size}) => size}px;box-sizing:border-box;z-index:1;
-	${({team}) => team === 'ally' ? 'bottom:5%;' : 'top:5%;'}
+	position:relative;width:${({size}) => size}px;padding-top:${({size}) => size}px;box-sizing:border-box;z-index:1;
+	${({team}) => team === 'ally' ? 'margin:15px 0 0 0;' : 'margin:-15px 0 0 0;'}
 	&.on{z-index:20;animation:turnEffect 2s linear infinite;}
 	&.none span{filter:grayscale(100%);}
 	&.none:after{content:'';position:absolute;right:0;bottom:0;width:50%;height:50%;}
@@ -117,7 +126,7 @@ const BattleCh = styled.div`
 `;
 const BattleLand = styled.div`
 	display:flex;flex-direction:column;position:absolute;left:0;right:0;bottom:0;top:0;
-	& > div {position:relative;margin:0 auto;width:${({containerW}) => containerW}px;height:50%;box-sizing:border-box;transition:all 1s;}
+	& > div {position:relative;margin:0 auto;width:${({containerW}) => containerW}px;box-sizing:border-box;transition:all 1s;}
 	.land_ally{position:relative;margin:0 auto;}
 	.land_enemy{position:relative;margin:0 auto;}
 	.turnLine{
@@ -151,7 +160,7 @@ const Eff = styled.img`
 	}}%;
 	transition:unset;
 	animation:frame${({frame}) => frame} 0.5s steps(1);
-	animation-iteration-count: infinite;
+	animation-iteration-count: ${({repeat}) => repeat};
 `;
 const Land = styled.div`
 	position:absolute;width:20%;padding-top:20%;box-sizing:border-box;border-radius:0;
@@ -299,14 +308,14 @@ const enemyPattern = (ai, battleAlly, allyPos, enemy, gameData) => {
 			enemySkill.push({
 				team: 'enemy',
 				idx: idx,
-				skIdx: Math.random() > normalAttackChance[enemyAi] ? skillList.buff[Math.floor(Math.random() * skillList.buff.length)]?.idx || 0 : 0,
+				skIdx: Math.random() > normalAttackChance[enemyAi] ? skillList.buff[Math.floor(Math.random() * skillList.buff.length)]?.idx || 1 : 1,
 				target: Math.random() <= weakAttackChance[enemyAi] ? allyPos[hpArray[0].idx].pos : allyPos[attackTarget].pos,
 			});
 		} else { //active
 			enemySkill.push({
 				team: 'enemy',
 				idx: idx,
-				skIdx: Math.random() > normalAttackChance[enemyAi] ? skillList.active[Math.floor(Math.random() * skillList.active.length)]?.idx || 0 : 0,
+				skIdx: Math.random() > normalAttackChance[enemyAi] ? skillList.active[Math.floor(Math.random() * skillList.active.length)]?.idx || 1 : 1,
 				target: Math.random() <= weakAttackChance[enemyAi] ? allyPos[hpArray[0].idx].pos : allyPos[attackTarget].pos,
 			});
 		}
@@ -315,7 +324,7 @@ const enemyPattern = (ai, battleAlly, allyPos, enemy, gameData) => {
 }
 const activeSk = (skIdx) => {
 	switch(skIdx) {
-		case 11: //방어
+		case 0: //방어
 			return 'none none1';
 			break;
 		case 12: //철벽방어
@@ -330,23 +339,31 @@ const activeSk = (skIdx) => {
 	}
 }
 
-const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect) => {
-	setTimeout(() => {
+const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData) => {
+	if (turnIdx <= timeLineEntry.length - 1) {
 		setTimeout(() => {
-			setSkillMsg(true);
 			setTimeout(() => {
-				setSkillMsg(false);
+				setSkillMsg(true);
 				setTimeout(() => {
-					const turnIdx_ = turnIdx + 1;
-					if (turnIdx < timeLineEntry.length - 1) {
-						// {team: 'enemy', idx: 0, skIdx: 0, target: 3}
-						//enemy target 자릿수로 수정
-						if (timeLineEntry[turnIdx].team === 'ally') {
+					setSkillMsg(false);
+					setTimeout(() => {
+						const turnIdx_ = turnIdx + 1;
+						const skillIdx = timeLineEntry[turnIdx].skIdx;// {team: 'enemy', idx: 0, skIdx: 0, target: 3}
+						let targets = util.getEffectArea(gameData.skill[skillIdx].ta, timeLineEntry[turnIdx].target);
+						targets = targets.map((data) => {
+							return {
+								idx:data,
+								type:gameData.skill[skillIdx].effType
+							}
+						});
+						if (timeLineEntry[turnIdx].team === 'ally') { //적군 영역 effect효과
 							setAllyEffect([
-								{idx:timeLineEntry[turnIdx].target, type:2},
+								...targets,
 							]);
-						} else {
-							setEnemyEffect([{idx:timeLineEntry[turnIdx].target, type:3}]);
+						} else { //아군 영역 effect효과
+							setEnemyEffect([
+								...targets
+							]);
 						}
 						setTimeout(() => {
 							if (timeLineEntry[turnIdx].team === 'ally') {
@@ -355,15 +372,15 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLineEntry, resetO
 								setEnemyEffect([]);
 							}
 							setTurnIdx(turnIdx_);
-							actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect);
-						}, 1000);
-					} else {
-						resetOrder();
-					}
-				}, 500);
-			}, 1000);
-		}, 500);
-	}, 1500);
+							actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData);
+						}, 1000);//공격 이펙트 효과시간
+					}, 200);
+				}, 800);//메시지창 사라짐
+			}, 200);//메시지 오픈
+		}, 800); 
+	} else {
+		resetOrder();
+	}
 }
 
 const relationEff = (ch, effObj) => {
@@ -500,8 +517,10 @@ const Battle = ({
 	const [relationArr, setRelationArr] = useState(); //인연
 	const [relationHeight, setRelationHeight] = useState(0); //인연 박스 크기
 	const [relationCh, setRelationCh] = useState(); //인연 적용캐릭
-	const currentIdx = useRef(); //아군 순번 증가 index
-	currentIdx.current = 0;
+	const currentAllyIdx = useRef(); //아군 순번 증가 index
+	const currentEnemyIdx = useRef(); //적군 순번 증가 index
+	currentAllyIdx.current = 0;
+	currentEnemyIdx.current = 0;
 	const [allyEffect, setAllyEffect] = useState([
 		//{idx:2, type:0},
 		//{idx:3, type:4},
@@ -661,6 +680,7 @@ const Battle = ({
 		setTurnIdx('');
 		setAllyOrders([]);
 		setMode('order');
+		setTimeLine('');
 	}
 	const areaSelect = (e, pos) => {
 		if (mode === 'area') {
@@ -713,7 +733,7 @@ const Battle = ({
 					{
 						team: 'ally',
 						idx: orderIdx,
-						skIdx: 99,
+						skIdx: 0,
 					},
 				]);
 			} else { //스킬 실행
@@ -807,7 +827,7 @@ const Battle = ({
 			});
 			setTimeLine(timeLineEntry);
 			setTurnIdx(0);
-			actionAnimation(setTurnIdx, setSkillMsg, 0, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect);
+			actionAnimation(setTurnIdx, setSkillMsg, 0, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData);
 			console.log("시뮬레이션 실행", timeLineEntry);
 		}
 	}, [mode]);
@@ -877,7 +897,7 @@ const Battle = ({
 								<EffLand key={idx} className="effectLand" left={left} top={top}>
 									{effectChk && (
 										<>
-											<Eff src={imgSet.eff[effType]} frame={gameData.effect[effType].frame} />
+											<Eff src={imgSet.eff[effType]} frame={gameData.effect[effType].frame} repeat={gameData.effect[effType].repeat}/>
 											<span className="dmgEffect"></span>
 										</>
 									)}
@@ -902,7 +922,7 @@ const Battle = ({
 								<EffLand className="effectLand" key={idx} left={left} top={top}>
 									{effectChk && (
 										<>
-											<Eff src={imgSet.eff[effType]} frame={gameData.effect[effType].frame} />
+											<Eff src={imgSet.eff[effType]} frame={gameData.effect[effType].frame} repeat={gameData.effect[effType].repeat}/>
 											<span className="dmgEffect"></span>
 										</>
 									)}
@@ -926,14 +946,15 @@ const Battle = ({
 								const element_type = currentSkill ? currentSkill.element_type : '';
 								if (enemyData.idx) {
 									const chData = gameData.ch[enemyData.idx];
-									const enemyCh = battleEnemy[enemyData.pos];
+									const enemyCh = battleEnemy[currentEnemyIdx.current];
 									const hasHp = (enemyCh.hp / enemyCh.hp_) * 100;
 									const elementCh = area ? "effect" + element_type : "";
 									let actionCh = '';
-									if (typeof turnIdx === 'number' && timeLine && timeLine[turnIdx].team === 'enemy' && enemyData.pos === timeLine[turnIdx].idx) {
+									if (typeof turnIdx === 'number' && timeLine && timeLine[turnIdx].team === 'enemy' && currentEnemyIdx.current === timeLine[turnIdx].idx) {
 										//console.log('pgs', 'enemy', timeLine[battleIdx].idx);
 										actionCh = 'action';
 									}
+									currentEnemyIdx.current ++;
 									return (
 										<BattleCh key={idx} className={`battle_ch effect ${elementCh} ${actionCh} ${rtCh}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize} onClick={(e) => {
 											areaSelect(e, idx);
@@ -964,13 +985,12 @@ const Battle = ({
 						<div className={`turnLine ${mode === 'action' ? 'on' : ''}`}>
 							{timeLine && timeLine.map((data, idx) => {
 								const chData = data.team === 'ally' ? gameData.ch[battleAlly[data.idx].idx] : gameData.ch[battleEnemy[data.idx].idx];
-								const left = 100 / timeLine.length * idx;
-								const activeSkill = activeSk(data.skIdx);// active스킬 판단 99대기,11방어,12철벽방어
+								const activeSkill = activeSk(data.skIdx);// active스킬 판단 0대기,11방어,12철벽방어
 								// data.team 아군적군
 								// data.skIdx 스킬번호
 								// target 범위
 								return (
-									<TimeLineCh key={idx} className={`battle_ch ${turnIdx === idx ? 'on' : ''} ${activeSkill}`} team={data.team} size={30} left={left}>
+									<TimeLineCh key={idx} className={`battle_ch ${turnIdx === idx ? 'on' : ''} ${activeSkill}`} team={data.team} size={30}>
 										<CardChRing style={{top:0,borderRadius:'50%',}} className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} />
 										<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>
 									</TimeLineCh>
@@ -982,7 +1002,7 @@ const Battle = ({
 								const left = idx % 5 * mapSize,
 									top = Math.floor(idx / 5) * mapSize;
 								if (typeof allyData === "number") {
-									const saveCh = battleAlly[currentIdx.current];
+									const saveCh = battleAlly[currentAllyIdx.current];
 									const chData = gameData.ch[saveCh.idx];
 									let rtCh = '';
 									let rtColor;
@@ -994,12 +1014,12 @@ const Battle = ({
 									});
 									const hasHp = (saveCh.hp / saveCh.hp_) * 100,
 										hasSp = (saveCh.sp / saveCh.sp_) * 100;
-										const posCh = (typeof orderIdx === 'number' && mapPos[orderIdx].idx === currentIdx.current) ? 'on' : '';
-										let actionCh = '';
-										if (typeof turnIdx === 'number' && timeLine && timeLine[turnIdx].team === 'ally' && currentIdx.current === timeLine[turnIdx].idx) {
-											actionCh = 'action';
-										}
-										currentIdx.current ++;
+									const posCh = (typeof orderIdx === 'number' && mapPos[orderIdx].idx === currentAllyIdx.current) ? 'on' : '';
+									let actionCh = '';
+									if (typeof turnIdx === 'number' && timeLine && timeLine[turnIdx].team === 'ally' && currentAllyIdx.current === timeLine[turnIdx].idx) {
+										actionCh = 'action';
+									}
+									currentAllyIdx.current ++;
 									return (
 										<BattleCh key={idx} className={`battle_ch ${posCh} ${actionCh} ${rtCh}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize} rtColor={rtColor}>
 											<div className="ch_box">
@@ -1062,6 +1082,9 @@ const Battle = ({
 										<span className="spR">{battleAlly[orderIdx].bSt2}</span>
 									</div>
 									<ul className="scroll-x">
+										<li><button onClick={() => {
+											battleCommand('wait');
+										}}><span>대기</span></button></li>
 										{battleAlly[orderIdx].sk && battleAlly[orderIdx].sk.map((data, idx) => {
 											const sk = gameData.skill;
 											if (sk[data.idx].cate[0] !== 1) {
@@ -1072,9 +1095,6 @@ const Battle = ({
 												);
 											}
 										})}
-										<li><button onClick={() => {
-											battleCommand('wait');
-										}}><span>대기</span></button></li>
 										<li><button onClick={() => {
 											battleCommand('cancel');
 										}}><span>취소</span></button></li>

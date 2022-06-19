@@ -6,7 +6,7 @@ export const save = {
       money:352000
     },
     "ch":[
-      {"idx":0,"stateType":0,"lv":15,"exp":10,"hasExp":50000,"actionPoint":20,"sk":[{"idx":0,"lv":2,"exp":40},{"idx":1,"lv":3,"exp":90},{"idx":12,"lv":1,"exp":0},{"idx":2,"lv":1,"exp":0}],"items":[
+      {"idx":0,"stateType":0,"lv":15,"exp":10,"hasExp":50000,"actionPoint":20,"sk":[{"idx":1,"lv":2,"exp":40},{"idx":2,"lv":3,"exp":90},{"idx":13,"lv":1,"exp":0},{"idx":3,"lv":1,"exp":0}],"items":[
         {"idx":5,"slot":0,"hole":[4,0,12,23],"lv":1,"upgrade":1},
         {},
         {"idx":11,"slot":3,"hole":[],"lv":1,"upgrade":2},
@@ -16,7 +16,7 @@ export const save = {
         {},
         {},
       ]},
-      {"idx":1,"stateType":0,"lv":10,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[
+      {"idx":1,"stateType":0,"lv":10,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1},{"idx":8,"lv":1}],"items":[
         {},
         {},
         {},
@@ -25,7 +25,7 @@ export const save = {
         {},
         {},
         {},]},
-      {"idx":2,"stateType":0,"lv":50,"exp":0,"hasExp":9000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[
+      {"idx":2,"stateType":0,"lv":50,"exp":0,"hasExp":9000,"actionPoint":20,"sk":[{"idx":1,"lv":1},{"idx":9,"lv":1}],"items":[
         {},
         {},
         {},
@@ -34,7 +34,7 @@ export const save = {
         {},
         {},
         {},]},
-      {"idx":3,"stateType":0,"lv":50,"exp":10,"hasExp":5000,"actionPoint":20,"sk":[{"idx":0,"lv":3,"exp":90},{"idx":1,"lv":5,"exp":70},{"idx":2,"lv":30,"exp":0}],"items":[
+      {"idx":3,"stateType":0,"lv":50,"exp":10,"hasExp":5000,"actionPoint":20,"sk":[{"idx":1,"lv":3,"exp":90},{"idx":2,"lv":5,"exp":70},{"idx":3,"lv":30,"exp":0}],"items":[
         {"idx":5,"slot":0,"hole":[4,0,12,23],"lv":1,"upgrade":1},
         {},
         {"idx":3,"slot":3,"hole":[],"lv":1,"upgrade":2},
@@ -44,7 +44,7 @@ export const save = {
         {},
         {},
       ]},
-      // {"idx":4,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[
+      // {"idx":4,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1}],"items":[
       //   {},
       //   {},
       //   {},
@@ -53,7 +53,7 @@ export const save = {
       //   {},
       //   {},
       //   {},]},
-      // {"idx":5,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[
+      // {"idx":5,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1}],"items":[
       //   {},
       //   {},
       //   {},
@@ -62,7 +62,7 @@ export const save = {
       //   {},
       //   {},
       //   {},]},
-      // {"idx":6,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[
+      // {"idx":6,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1}],"items":[
       //   {},
       //   {},
       //   {},
@@ -71,7 +71,7 @@ export const save = {
       //   {},
       //   {},
       //   {},]},
-      // {"idx":7,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[
+      // {"idx":7,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1}],"items":[
       //   {},
       //   {},
       //   {},
@@ -80,7 +80,7 @@ export const save = {
       //   {},
       //   {},
       //   {},]},
-      // {"idx":8,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[
+      // {"idx":8,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1}],"items":[
       //   {},
       //   {},
       //   {},
@@ -89,7 +89,7 @@ export const save = {
       //   {},
       //   {},
       //   {},]},
-      // {"idx":9,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[
+      // {"idx":9,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1}],"items":[
       //   {},
       //   {},
       //   {},
@@ -98,7 +98,7 @@ export const save = {
       //   {},
       //   {},
       //   {},]},
-      // {"idx":10,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[
+      // {"idx":10,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1}],"items":[
       //   {},
       //   {},
       //   {},
@@ -107,7 +107,7 @@ export const save = {
       //   {},
       //   {},
       //   {},]},
-      // {"idx":11,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[
+      // {"idx":11,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1}],"items":[
       //   {},
       //   {},
       //   {},
@@ -116,7 +116,7 @@ export const save = {
       //   {},
       //   {},
       //   {},]},
-      // {"idx":12,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[
+      // {"idx":12,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1}],"items":[
       //   {},
       //   {},
       //   {},
@@ -125,7 +125,7 @@ export const save = {
       //   {},
       //   {},
       //   {},]},
-      // {"idx":13,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[
+      // {"idx":13,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1}],"items":[
       //   {},
       //   {},
       //   {},
@@ -134,7 +134,7 @@ export const save = {
       //   {},
       //   {},
       //   {},]},
-      // {"idx":14,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[
+      // {"idx":14,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1}],"items":[
       //   {},
       //   {},
       //   {},
@@ -143,7 +143,7 @@ export const save = {
       //   {},
       //   {},
       //   {},]},
-      // {"idx":15,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[
+      // {"idx":15,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1}],"items":[
       //   {},
       //   {},
       //   {},
@@ -152,7 +152,7 @@ export const save = {
       //   {},
       //   {},
       //   {},]},
-      // {"idx":16,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[
+      // {"idx":16,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1}],"items":[
       //   {},
       //   {},
       //   {},
@@ -161,7 +161,7 @@ export const save = {
       //   {},
       //   {},
       //   {},]},
-      // {"idx":17,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[
+      // {"idx":17,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1}],"items":[
       //   {},
       //   {},
       //   {},
@@ -170,9 +170,9 @@ export const save = {
       //   {},
       //   {},
       //   {},]},
-      // {"idx":18,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[]},
-      // {"idx":19,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[]},
-      // {"idx":20,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":0,"lv":1}],"items":[]},
+      // {"idx":18,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1}],"items":[]},
+      // {"idx":19,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1}],"items":[]},
+      // {"idx":20,"stateType":0,"lv":50,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1}],"items":[]},
     ],
     "items":{
       "equip":[
