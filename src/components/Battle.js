@@ -38,13 +38,13 @@ const BattleArea = styled.div`
 	&.action{height:100%;}
 	&:before{content:'';position:absolute;left:${({mode}) => {
 		return !mode ? "-50px" : 0;
-	}};top:0;bottom:0;width:50px;background:url(${({frameLeft}) => frameLeft}) no-repeat -15px center;z-index:0;pointer-events:none;transition:left 1s;}
+	}};top:0;bottom:0;width:50px;background:url(${({frameLeft}) => frameLeft}) no-repeat -15px center;z-index:1;pointer-events:none;transition:left 1s;}
 	&:after{content:'';position:absolute;right:${({mode}) => {
 		return !mode ? "-50px" : 0;
-	}};top:0;bottom:0;width:50px;background:url(${({frameRight}) => frameRight}) no-repeat 13px center;z-index:0;pointer-events:none;transition:right 1s;}
+	}};top:0;bottom:0;width:50px;background:url(${({frameRight}) => frameRight}) no-repeat 13px center;z-index:1;pointer-events:none;transition:right 1s;}
 `;
 const BattleUnit = styled.div`
-	display:flex;flex-direction:column;position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;
+	display:flex;flex-direction:column;position:absolute;left:0;right:0;top:0;bottom:0;z-index:2;
 	.turnLine{
 		display:flex;flex-direction:row;position:relative;height:0;overflow:hidden;background:#3e2c00;align-items:center;justify-content:center;
 		&.on{height:50px;overflow:unset;}
