@@ -20,7 +20,7 @@ const BattleWarp = styled.div`
 `;
 const BattleArea = styled.div`
 	position:relative;height:${({mode}) => {
-		if (mode === "order") {
+		if (mode === "order" || mode === "area") {
 			return "calc(100% - 50px)";
 		} else {
 			return "100%";
@@ -29,20 +29,21 @@ const BattleArea = styled.div`
 	&.action{height:100%;}
 	&:before{content:'';position:absolute;left:${({mode}) => {
 		return !mode ? "-50px" : 0;
-	}};top:0;bottom:0;width:50px;background:url(${({frameLeft}) => frameLeft}) no-repeat -15px center;z-index:1;pointer-events:none;transition:left 1s;}
+	}};top:0;bottom:0;width:50px;background:url(${({frameLeft}) => frameLeft}) no-repeat -15px center;z-index:0;pointer-events:none;transition:left 1s;}
 	&:after{content:'';position:absolute;right:${({mode}) => {
 		return !mode ? "-50px" : 0;
-	}};top:0;bottom:0;width:50px;background:url(${({frameRight}) => frameRight}) no-repeat 13px center;z-index:1;pointer-events:none;transition:right 1s;}
+	}};top:0;bottom:0;width:50px;background:url(${({frameRight}) => frameRight}) no-repeat 13px center;z-index:0;pointer-events:none;transition:right 1s;}
 `;
 const BattleUnit = styled.div`
 	display:flex;flex-direction:column;position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;
 	.turnLine{
-		position:relative;height:0;overflow:hidden;
-		&.on{height:50px;overflow:unset;background-color:#c49d41ad;outline:2px solid #c49d41ad;}
-		&:before{content:'';position:absolute;width:100%;height:10px;left:0;top:-5px;background:url(${({frameImg}) => frameImg});background-size:100%;}
-		&:after{content:'';position:absolute;width:100%;height:10px;left:0;bottom:-5px;background:url(${({frameImg}) => frameImg});background-size:100%;}
+		position:relative;height:0;overflow:hidden;background:#3e2c00;
+		&.on{height:50px;overflow:unset;}
+		&:before{content:'';position:absolute;width:100%;height:10px;left:0;top:0;background:url(${({frameImg}) => frameImg});background-size:100%;}
+		&:after{content:'';position:absolute;width:100%;height:10px;left:0;bottom:0;background:url(${({frameImg}) => frameImg});background-size:100%;}
 	}
 	& > div {position:relative;margin:0 auto;width:${({containerW}) => containerW}px;height:50%;box-sizing:border-box;transition:all 1s;}
+	& .turnLine {width:100%;}
 	& > div .effect0:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:var(--color-b);box-shadow:0 0 10px 10px var(--color-b);z-index:10;opacity:.7;}
 	& > div .effect1:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:var(--color-purple);box-shadow:0 0 10px 10px var(--color-purple);z-index:10;opacity:.7;}
 	& > div .effect2:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:var(--color-yellow);box-shadow:0 0 10px 10px var(--color-yellow);z-index:10;opacity:.7;}
@@ -120,9 +121,10 @@ const BattleLand = styled.div`
 	.land_ally{position:relative;margin:0 auto;}
 	.land_enemy{position:relative;margin:0 auto;}
 	.turnLine{
-		position:relative;height:0;
+		position:relative;width:100%;height:0;
 		&.on{height:50px;}
 	}
+	&.ready .land{outline-width:2px;}
 `;
 const BattleEffect = styled(BattleLand)`
 	
@@ -157,7 +159,8 @@ const Land = styled.div`
 	top:${({top}) => top}%;
 	background-image:url(${({landImg}) => landImg});
 	background-size: 100%;
-	outline:2px solid #fff;
+	outline:0px solid #fff;
+	transition:outline 1s;
 	&:before{
 		content:'';position:absolute;left:0;right:0;top:0;bottom:0;background:#000;opacity:.1;
 	}
@@ -188,10 +191,10 @@ const BattleOrder = styled.div`
 `;
 const BattleMenu = styled.div`
 	display:flex;position:relative;height:${({mode}) => {
-		if (mode === "relation") {
-			return "0px";
-		} else {
+		if (mode === "order" || mode === "area") {
 			return "50px";
+		} else {
+			return "0px";
 		}
 	}};background:var(--color-b);transition:height 1s;overflow:hidden;
 	.chInfo{display:flex;flex-basis:60px;align-items:center;justify-content:center;}
@@ -290,21 +293,21 @@ const enemyPattern = (ai, battleAlly, allyPos, enemy, gameData) => {
 		const activeChance = [0.75, 0.8, 0.85, 0.9, 0.9]; //active스킬 확률
 		const normalAttackChance = [0.3, 0.2, 0.15, 0.15, 0.1]; //일반공격 확률
 		const weakAttackChance = [0, 0.2, 0.4, 0.6, 0.8]; //약한적 공격 확률
-		const attackTarget = allyPos[Math.floor(Math.random() * allyPos.length)];
+		const attackTarget = Math.floor(Math.random() * allyPos.length);
 		const ranCount = Math.random();
 		if (ranCount > activeChance[enemyAi]) { //buff
 			enemySkill.push({
 				team: 'enemy',
 				idx: idx,
 				skIdx: Math.random() > normalAttackChance[enemyAi] ? skillList.buff[Math.floor(Math.random() * skillList.buff.length)]?.idx || 0 : 0,
-				target: Math.random() <= weakAttackChance[enemyAi] ? allyPos[hpArray[0].idx] : attackTarget,
+				target: Math.random() <= weakAttackChance[enemyAi] ? allyPos[hpArray[0].idx].pos : allyPos[attackTarget].pos,
 			});
 		} else { //active
 			enemySkill.push({
 				team: 'enemy',
 				idx: idx,
 				skIdx: Math.random() > normalAttackChance[enemyAi] ? skillList.active[Math.floor(Math.random() * skillList.active.length)]?.idx || 0 : 0,
-				target: Math.random() <= weakAttackChance[enemyAi] ? allyPos[hpArray[0].idx] : attackTarget,
+				target: Math.random() <= weakAttackChance[enemyAi] ? allyPos[hpArray[0].idx].pos : allyPos[attackTarget].pos,
 			});
 		}
 	});
@@ -327,7 +330,7 @@ const activeSk = (skIdx) => {
 	}
 }
 
-const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, maxTurn, resetOrder) => {
+const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect) => {
 	setTimeout(() => {
 		setTimeout(() => {
 			setSkillMsg(true);
@@ -335,9 +338,25 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, maxTurn, resetOrder) 
 				setSkillMsg(false);
 				setTimeout(() => {
 					const turnIdx_ = turnIdx + 1;
-					if (turnIdx < maxTurn) {
-						setTurnIdx(turnIdx_);
-						actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, maxTurn, resetOrder);
+					if (turnIdx < timeLineEntry.length - 1) {
+						// {team: 'enemy', idx: 0, skIdx: 0, target: 3}
+						//enemy target 자릿수로 수정
+						if (timeLineEntry[turnIdx].team === 'ally') {
+							setAllyEffect([
+								{idx:timeLineEntry[turnIdx].target, type:2},
+							]);
+						} else {
+							setEnemyEffect([{idx:timeLineEntry[turnIdx].target, type:3}]);
+						}
+						setTimeout(() => {
+							if (timeLineEntry[turnIdx].team === 'ally') {
+								setAllyEffect([]);
+							} else {
+								setEnemyEffect([]);
+							}
+							setTurnIdx(turnIdx_);
+							actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect);
+						}, 1000);
 					} else {
 						resetOrder();
 					}
@@ -484,15 +503,15 @@ const Battle = ({
 	const currentIdx = useRef(); //아군 순번 증가 index
 	currentIdx.current = 0;
 	const [allyEffect, setAllyEffect] = useState([
-		{idx:2, type:0},
-		{idx:3, type:4},
+		//{idx:2, type:0},
+		//{idx:3, type:4},
 	]);
 	const [enemyEffect, setEnemyEffect] = useState([
-		{idx:20, type:1},
-		{idx:21, type:1},
-		{idx:22, type:1},
-		{idx:23, type:1},
-		{idx:24, type:1},
+		//{idx:20, type:1},
+		//{idx:21, type:1},
+		//{idx:22, type:1},
+		//{idx:23, type:1},
+		//{idx:24, type:1},
 	]);
 	useLayoutEffect(() => {
 		let ally = [],
@@ -501,6 +520,10 @@ const Battle = ({
 		allyDeck.filter((data, idx) => {
 			if (typeof data === 'number') {
 				ally_.push(data);
+				pos.push({
+					idx: data,
+					pos: idx
+				});
 			}
 		});
 		const allyRelation = relationCheck(saveData, gameData, ally_, 'ally');
@@ -524,14 +547,13 @@ const Battle = ({
 		}
 		ally_.forEach((data, idx) => {
 			const saveCh = saveData.ch[data];
-			pos.push(idx);
 			let effData;
 			//인연 체크
-			allyRelation.forEach((rtData, idx) => {
+			allyRelation.forEach((rtData) => {
 				gameData.relation[rtData.idx].member.forEach((memberIdx) => {
 					if (memberIdx === data) {
 						effData = relationEff(saveCh, gameData.relation[rtData.idx].eff);
-						console.log("아군증가량", effData);
+						//console.log("아군증가량", effData);
 					}
 				});
 			});
@@ -578,7 +600,7 @@ const Battle = ({
 				gameData.relation[rtData.idx].member.forEach((memberIdx) => {
 					if (memberIdx === data.idx) {
 						effData = relationEff(enemyData, gameData.relation[rtData.idx].eff);
-						console.log("적군증가량", effData);
+						//console.log("적군증가량", effData);
 					}
 				});
 			});
@@ -671,7 +693,6 @@ const Battle = ({
 		}
 	};
 	const battleCommand = (skill) => {
-		console.log(orderIdx);
 		if (mode === 'order') {
 			if (skill === 'cancel') { //취소 실행
 				if (orderIdx > 0) {
@@ -717,7 +738,7 @@ const Battle = ({
 								idx: orderIdx,
 								skIdx: sk.idx,
 								enemyTarget: false,
-								target: mapPos[orderIdx],
+								target: mapPos[orderIdx].idx,
 							},
 						]);
 						break;
@@ -786,12 +807,12 @@ const Battle = ({
 			});
 			setTimeLine(timeLineEntry);
 			setTurnIdx(0);
-			actionAnimation(setTurnIdx, setSkillMsg, 0, timeLineEntry.length - 1, resetOrder);
+			actionAnimation(setTurnIdx, setSkillMsg, 0, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect);
 			console.log("시뮬레이션 실행", timeLineEntry);
 		}
 	}, [mode]);
 	useLayoutEffect(() => {
-		setContainerW(containerRef.current.getBoundingClientRect().height * 0.5);
+		setContainerW(containerRef.current.getBoundingClientRect().height * 0.5 - 25);
 	}, [containerRef.current]);
 	const map = [
 		{idx:0,},
@@ -958,8 +979,8 @@ const Battle = ({
 						</div>
 						<div className="units_ally">
 							{battleAlly && allyDeck.map((allyData, idx)=> {
-								const left = (24 - idx) % 5 * mapSize,
-									top = Math.floor((24 - idx) / 5) * mapSize;
+								const left = idx % 5 * mapSize,
+									top = Math.floor(idx / 5) * mapSize;
 								if (typeof allyData === "number") {
 									const saveCh = battleAlly[currentIdx.current];
 									const chData = gameData.ch[saveCh.idx];
@@ -973,7 +994,7 @@ const Battle = ({
 									});
 									const hasHp = (saveCh.hp / saveCh.hp_) * 100,
 										hasSp = (saveCh.sp / saveCh.sp_) * 100;
-										const posCh = (typeof orderIdx === 'number' && mapPos[orderIdx] === currentIdx.current) ? 'on' : '';
+										const posCh = (typeof orderIdx === 'number' && mapPos[orderIdx].idx === currentIdx.current) ? 'on' : '';
 										let actionCh = '';
 										if (typeof turnIdx === 'number' && timeLine && timeLine[turnIdx].team === 'ally' && currentIdx.current === timeLine[turnIdx].idx) {
 											actionCh = 'action';
@@ -1004,7 +1025,7 @@ const Battle = ({
 							})}
 						</div>
 					</BattleUnit>
-					<BattleLand containerW={containerW} className="battle_land">
+					<BattleLand containerW={containerW} className={`battle_land ${mode === "relation" ? "" : "ready"}`}>
 						<div className="land_ally">
 						{map.map((data, idx) => {
 							const left = idx % 5 * mapSize,
