@@ -107,49 +107,49 @@ const LineupMap = styled.div`
 	&.lineup0 > span.l24{background: #bbb;border-color:#ddd;}
 	&.lineup0 > span.l25{background: #bbb;border-color:#ddd;}
 	/*학익진*/
-	&.lineup1 > span.l3{background: #f60;border-color:#fff;}
-	&.lineup1 > span.l7{background: #000;border-color:#666;}
-	&.lineup1 > span.l8{background: #bbb;border-color:#ddd;}
-	&.lineup1 > span.l9{background: #000;border-color:#666;}
+	&.lineup1 > span.l1{background: #bbb;border-color:#ddd;}
+	&.lineup1 > span.l5{background: #bbb;border-color:#ddd;}
+	&.lineup1 > span.l6{background: #666;border-color:#999;}
+	&.lineup1 > span.l10{background: #666;border-color:#999;}
 	&.lineup1 > span.l11{background: #666;border-color:#999;}
 	&.lineup1 > span.l15{background: #666;border-color:#999;}
-	&.lineup1 > span.l16{background: #666;border-color:#999;}
-	&.lineup1 > span.l20{background: #666;border-color:#999;}
-	&.lineup1 > span.l21{background: #bbb;border-color:#ddd;}
-	&.lineup1 > span.l25{background: #bbb;border-color:#ddd;}
+	&.lineup1 > span.l17{background: #000;border-color:#666;}
+	&.lineup1 > span.l18{background: #bbb;border-color:#ddd;}
+	&.lineup1 > span.l19{background: #000;border-color:#666;}
+	&.lineup1 > span.l23{background: #f60;border-color:#fff;}
 	/*어린진*/
-	&.lineup2 > span.l1{background: #bbb;border-color:#ddd;}
-	&.lineup2 > span.l5{background: #bbb;border-color:#ddd;}
-	&.lineup2 > span.l6{background: #666;border-color:#999;}
-	&.lineup2 > span.l10{background: #666;border-color:#999;}
+	&.lineup2 > span.l3{background: #f60;border-color:#fff;}
+	&.lineup2 > span.l7{background:#000;border-color:#666;}
+	&.lineup2 > span.l8{background:#000;border-color:#666;}
+	&.lineup2 > span.l9{background:#000;border-color:#666;}
 	&.lineup2 > span.l12{background: #666;border-color:#999;}
 	&.lineup2 > span.l14{background: #666;border-color:#999;}
-	&.lineup2 > span.l17{background:#000;border-color:#666;}
-	&.lineup2 > span.l18{background:#000;border-color:#666;}
-	&.lineup2 > span.l19{background:#000;border-color:#666;}
-	&.lineup2 > span.l23{background: #f60;border-color:#fff;}
+	&.lineup2 > span.l16{background: #666;border-color:#999;}
+	&.lineup2 > span.l20{background: #666;border-color:#999;}
+	&.lineup2 > span.l21{background: #bbb;border-color:#ddd;}
+	&.lineup2 > span.l25{background: #bbb;border-color:#ddd;}
 	/*언월진*/
 	&.lineup3 > span.l2{background: #666;border-color:#999;}
 	&.lineup3 > span.l3{background:#000;border-color:#666;}
-	&.lineup3 > span.l4{background: #bbb;border-color:#ddd;}
-	&.lineup3 > span.l6{background: #666;border-color:#999;}
-	&.lineup3 > span.l9{background: #f60;border-color:#fff;}
-	&.lineup3 > span.l10{background: #bbb;border-color:#ddd;}
+	&.lineup3 > span.l9{background:#000;border-color:#666;}
 	&.lineup3 > span.l14{background:#000;border-color:#666;}
-	&.lineup3 > span.l19{background:#000;border-color:#666;}
+	&.lineup3 > span.l16{background: #666;border-color:#999;}
+	&.lineup3 > span.l19{background: #f60;border-color:#fff;}
+	&.lineup3 > span.l20{background: #bbb;border-color:#ddd;}
 	&.lineup3 > span.l22{background: #666;border-color:#999;}
 	&.lineup3 > span.l23{background:#000;border-color:#666;}
+	&.lineup3 > span.l24{background: #bbb;border-color:#ddd;}
 	/*봉시진*/
-	&.lineup4 > span.l3{background: #666;border-color:#999;}
-	&.lineup4 > span.l6{background: #bbb;border-color:#ddd;}
-	&.lineup4 > span.l8{background: #666;border-color:#999;}
-	&.lineup4 > span.l10{background: #bbb;border-color:#ddd;}
+	&.lineup4 > span.l3{background: #f60;border-color:#fff;}
+	&.lineup4 > span.l7{background:#000;border-color:#666;}
+	&.lineup4 > span.l9{background:#000;border-color:#666;}
 	&.lineup4 > span.l11{background:#000;border-color:#666;}
 	&.lineup4 > span.l13{background: #666;border-color:#999;}
 	&.lineup4 > span.l15{background:#000;border-color:#666;}
-	&.lineup4 > span.l17{background:#000;border-color:#666;}
-	&.lineup4 > span.l19{background:#000;border-color:#666;}
-	&.lineup4 > span.l23{background: #f60;border-color:#fff;}
+	&.lineup4 > span.l16{background: #bbb;border-color:#ddd;}
+	&.lineup4 > span.l18{background: #666;border-color:#999;}
+	&.lineup4 > span.l20{background: #bbb;border-color:#ddd;}
+	&.lineup4 > span.l23{background: #666;border-color:#999;}
 	/*방원진*/
 	&.lineup5 > span.l3{background: #bbb;border-color:#ddd;}
 	&.lineup5 > span.l7{background: #666;border-color:#999;}
@@ -165,49 +165,49 @@ const LineupMap = styled.div`
 	&.lineup5 > span.l19{background: #666;border-color:#999;}
 	&.lineup5 > span.l23{background: #bbb;border-color:#ddd;}
 	/*안행진*/
-	&.lineup6 > span.l3{background:#000;border-color:#666;}
-	&.lineup6 > span.l8{background: #f60;border-color:#fff;}
+	&.lineup6 > span.l1{background: #666;border-color:#999;}
+	&.lineup6 > span.l5{background: #666;border-color:#999;}
+	&.lineup6 > span.l6{background: #bbb;border-color:#ddd;}
+	&.lineup6 > span.l7{background: #666;border-color:#999;}
+	&.lineup6 > span.l9{background: #666;border-color:#999;}
+	&.lineup6 > span.l10{background: #bbb;border-color:#ddd;}
 	&.lineup6 > span.l12{background:#000;border-color:#666;}
 	&.lineup6 > span.l14{background:#000;border-color:#666;}
-	&.lineup6 > span.l16{background: #bbb;border-color:#ddd;}
-	&.lineup6 > span.l17{background: #666;border-color:#999;}
-	&.lineup6 > span.l19{background: #666;border-color:#999;}
-	&.lineup6 > span.l20{background: #bbb;border-color:#ddd;}
-	&.lineup6 > span.l21{background: #666;border-color:#999;}
-	&.lineup6 > span.l25{background: #666;border-color:#999;}
+	&.lineup6 > span.l18{background: #f60;border-color:#fff;}
+	&.lineup6 > span.l23{background:#000;border-color:#666;}
 	/*장사진*/
-	&.lineup7 > span.l4{background: #666;border-color:#999;}
-	&.lineup7 > span.l5{background: #bbb;border-color:#ddd;}
+	&.lineup7 > span.l1{background: #bbb;border-color:#ddd;}
+	&.lineup7 > span.l2{background: #666;border-color:#999;}
+	&.lineup7 > span.l7{background:#000;border-color:#666;}
 	&.lineup7 > span.l8{background: #bbb;border-color:#ddd;}
-	&.lineup7 > span.l9{background:#000;border-color:#666;}
 	&.lineup7 > span.l13{background: #f60;border-color:#fff;}
 	&.lineup7 > span.l14{background: #bbb;border-color:#ddd;}
-	&.lineup7 > span.l17{background:#000;border-color:#666;}
 	&.lineup7 > span.l18{background: #bbb;border-color:#ddd;}
-	&.lineup7 > span.l21{background: #bbb;border-color:#ddd;}
-	&.lineup7 > span.l22{background: #666;border-color:#999;}
+	&.lineup7 > span.l19{background:#000;border-color:#666;}
+	&.lineup7 > span.l24{background: #666;border-color:#999;}
+	&.lineup7 > span.l25{background: #bbb;border-color:#ddd;}
 	/*형액진*/
-	&.lineup8 > span.l3{background: #666;border-color:#999;}
-	&.lineup8 > span.l6{background: #bbb;border-color:#ddd;}
-	&.lineup8 > span.l7{background: #666;border-color:#999;}
-	&.lineup8 > span.l9{background: #666;border-color:#999;}
-	&.lineup8 > span.l10{background: #bbb;border-color:#ddd;}
+	&.lineup8 > span.l2{background:#000;border-color:#666;}
+	&.lineup8 > span.l4{background:#000;border-color:#666;}
+	&.lineup8 > span.l7{background:#000;border-color:#666;}
+	&.lineup8 > span.l9{background:#000;border-color:#666;}
 	&.lineup8 > span.l13{background: #f60;border-color:#fff;}
-	&.lineup8 > span.l17{background:#000;border-color:#666;}
-	&.lineup8 > span.l19{background:#000;border-color:#666;}
-	&.lineup8 > span.l22{background:#000;border-color:#666;}
-	&.lineup8 > span.l24{background:#000;border-color:#666;}
+	&.lineup8 > span.l16{background: #bbb;border-color:#ddd;}
+	&.lineup8 > span.l17{background: #666;border-color:#999;}
+	&.lineup8 > span.l19{background: #666;border-color:#999;}
+	&.lineup8 > span.l20{background: #bbb;border-color:#ddd;}
+	&.lineup8 > span.l23{background: #666;border-color:#999;}
 	/*추행진*/
-	&.lineup9 > span.l8{background: #bbb;border-color:#ddd;}
+	&.lineup9 > span.l3{background:#000;border-color:#666;}
+	&.lineup9 > span.l7{background:#000;border-color:#666;}
+	&.lineup9 > span.l8{background: #f60;border-color:#fff;}
+	&.lineup9 > span.l9{background:#000;border-color:#666;}
 	&.lineup9 > span.l11{background: #666;border-color:#999;}
 	&.lineup9 > span.l12{background: #666;border-color:#999;}
 	&.lineup9 > span.l13{background: #666;border-color:#999;}
 	&.lineup9 > span.l14{background: #666;border-color:#999;}
 	&.lineup9 > span.l15{background: #666;border-color:#999;}
-	&.lineup9 > span.l17{background:#000;border-color:#666;}
-	&.lineup9 > span.l18{background: #f60;border-color:#fff;}
-	&.lineup9 > span.l19{background:#000;border-color:#666;}
-	&.lineup9 > span.l23{background:#000;border-color:#666;}
+	&.lineup9 > span.l18{background: #bbb;border-color:#ddd;}
 	&.lineup_pos > .mapCh .mapCh_{display:block;width:100%;height:100%;background:transparent;box-sizing:border-box;border:1px solid transparent;box-sizing:border-box;overflow:hidden;}
 	&.lineup_pos > .mapCh .mapCh_ li{
 		position:absolute;
@@ -434,35 +434,35 @@ const Lineup = ({
 							</LineupCate>
 							<LineupCate className={`lineup_cate lineup_pos ${1 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(1);}}>
               {/* <!--학익진--> */}
-								<span className="l1"></span><span className="l2"></span><span e1="true" className="l3"></span><span className="l4"></span><span className="l5"></span>
-								<span className="l6"></span><span e2="true" className="l7"></span><span e4="true" className="l8"></span><span e2="true" className="l9"></span><span className="l10"></span>
-								<span e3="true" className="l11"></span><span className="l12"></span><span className="l13"></span><span className="l14"></span><span e3="true" className="l15"></span>
-								<span e3="true" className="l16"></span><span className="l17"></span><span className="l18"></span><span className="l19"></span><span e3="true" className="l20"></span>
-								<span e4="true" className="l21"></span><span className="l22"></span><span className="l23"></span><span className="l24"></span><span e4="true" className="l25"></span>
+								<span className="l1" e4="true"></span><span className="l2"></span><span className="l3"></span><span className="l4"></span><span className="l5" e4="true"></span>
+								<span className="l6" e3="true"></span><span className="l7"></span><span className="l8"></span><span className="l9"></span><span className="l10" e3="true"></span>
+								<span className="l11" e3="true"></span><span className="l12"></span><span className="l13"></span><span className="l14"></span><span e3="true" className="l15"></span>
+								<span className="l16"></span><span className="l17" e2="true"></span><span className="l18" e4="true"></span><span className="l19" e2="true"></span><span className="l20"></span>
+								<span className="l21"></span><span className="l22"></span><span className="l23" e1="true"></span><span className="l24"></span><span className="l25"></span>
 							</LineupCate>
 							<LineupCate className={`lineup_cate lineup_pos ${2 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(2);}}>
               {/* <!--어린진--> */}
-								<span e4="true" className="l1"></span><span className="l2"></span><span className="l3"></span><span className="l4"></span><span e4="true" className="l5"></span>
-								<span e3="true" className="l6"></span><span className="l7"></span><span className="l8"></span><span className="l9"></span><span e3="true" className="l10"></span>
+								<span className="l1"></span><span className="l2"></span><span className="l3" e1="true"></span><span className="l4"></span><span className="l5"></span>
+								<span className="l6"></span><span className="l7" e2="true"></span><span className="l8" e2="true"></span><span className="l9" e2="true"></span><span className="l10"></span>
 								<span className="l11"></span><span e3="true" className="l12"></span><span className="l13"></span><span e3="true" className="l14"></span><span className="l15"></span>
-								<span className="l16"></span><span e2="true" className="l17"></span><span e2="true" className="l18"></span><span e2="true" className="l19"></span><span className="l20"></span>
-								<span className="l21"></span><span className="l22"></span><span e1="true" className="l23"></span><span className="l24"></span><span className="l25"></span>
+								<span className="l16" e3="true"></span><span className="l17"></span><span className="l18"></span><span className="l19"></span><span className="l20" e3="true"></span>
+								<span className="l21" e4="true"></span><span className="l22"></span><span className="l23"></span><span className="l24"></span><span className="l25" e4="true"></span>
 							</LineupCate>
 							<LineupCate className={`lineup_cate lineup_pos ${3 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(3);}}>
               {/* <!--언월진--> */}
-								<span className="l1"></span><span e3="true" className="l2"></span><span e2="true" className="l3"></span><span e4="true" className="l4"></span><span className="l5"></span>
-								<span e3="true" className="l6"></span><span className="l7"></span><span className="l8"></span><span e1="true" className="l9"></span><span e4="true" className="l10"></span>
-								<span className="l11"></span><span className="l12"></span><span className="l13"></span><span e2="true" className="l14"></span><span className="l15"></span>
-								<span className="l16"></span><span className="l17"></span><span className="l18"></span><span e2="true" className="l19"></span><span className="l20"></span>
-								<span className="l21"></span><span e3="true" className="l22"></span><span e2="true" className="l23"></span><span className="l24"></span><span className="l25"></span>
+								<span className="l1"></span><span className="l2" e3="true"></span><span className="l3" e2="true"></span><span className="l4"></span><span className="l5"></span>
+								<span className="l6"></span><span className="l7"></span><span className="l8"></span><span className="l9" e2="true"></span><span className="l10"></span>
+								<span className="l11"></span><span className="l12"></span><span className="l13"></span><span className="l14" e2="true"></span><span className="l15"></span>
+								<span className="l16" e3="true"></span><span className="l17"></span><span className="l18"></span><span className="l19" e1="true"></span><span className="l20" e4="true"></span>
+								<span className="l21"></span><span className="l22" e3="true"></span><span className="l23" e2="true"></span><span className="l24" e4="true"></span><span className="l25"></span>
 							</LineupCate>
 							<LineupCate className={`lineup_cate lineup_pos ${4 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(4);}}>
               {/* <!--봉시진--> */}
-								<span className="l1"></span><span className="l2"></span><span e3="true" className="l3"></span><span className="l4"></span><span className="l5"></span>
-								<span e4="true" className="l6"></span><span className="l7"></span><span e3="true" className="l8"></span><span className="l9"></span><span e4="true" className="l10"></span>
-								<span e2="true" className="l11"></span><span className="l12"></span><span e3="true" className="l13"></span><span className="l14"></span><span e2="true" className="l15"></span>
-								<span className="l16"></span><span e2="true" className="l17"></span><span className="l18"></span><span e2="true" className="l19"></span><span className="l20"></span>
-								<span className="l21"></span><span className="l22"></span><span e1="true" className="l23"></span><span className="l24"></span><span className="l25"></span>
+								<span className="l1"></span><span className="l2"></span><span className="l3" e1="true"></span><span className="l4"></span><span className="l5"></span>
+								<span className="l6"></span><span className="l7" e2="true"></span><span className="l8"></span><span className="l9" e2="true"></span><span className="l10"></span>
+								<span className="l11" e2="true"></span><span className="l12"></span><span className="l13" e3="true"></span><span className="l14"></span><span className="l15" e2="true"></span>
+								<span className="l16" e4="true"></span><span className="l17"></span><span className="l18" e3="true"></span><span className="l19"></span><span className="l20" e4="true"></span>
+								<span className="l21"></span><span className="l22"></span><span className="l23" e3="true"></span><span className="l24"></span><span className="l25"></span>
 							</LineupCate>
 							<LineupCate className={`lineup_cate lineup_pos ${5 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(5);}}>
               {/* <!--방원진--> */}
@@ -474,35 +474,35 @@ const Lineup = ({
 							</LineupCate>
 							<LineupCate className={`lineup_cate lineup_pos ${6 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(6);}}>
               {/* <!--안행진--> */}
-								<span className="l1"></span><span className="l2"></span><span e2="true" className="l3"></span><span className="l4"></span><span className="l5"></span>
-								<span className="l6"></span><span className="l7"></span><span e1="true" className="l8"></span><span className="l9"></span><span className="l10"></span>
-								<span className="l11"></span><span e2="true" className="l12"></span><span className="l13"></span><span e2="true" className="l14"></span><span className="l15"></span>
-								<span e4="true" className="l16"></span><span e3="true" className="l17"></span><span className="l18"></span><span e3="true" className="l19"></span><span e4="true" className="l20"></span>
-								<span e3="true" className="l21"></span><span className="l22"></span><span className="l23"></span><span className="l24"></span><span e3="true" className="l25"></span>
+								<span className="l1" e3="true"></span><span className="l2"></span><span className="l3"></span><span className="l4"></span><span className="l5" e3="true"></span>
+								<span className="l6" e4="true"></span><span className="l7" e3="true"></span><span className="l8"></span><span className="l9" e3="true"></span><span className="l10" e4="true"></span>
+								<span className="l11"></span><span className="l12" e2="true"></span><span className="l13"></span><span className="l14" e2="true"></span><span className="l15"></span>
+								<span className="l16"></span><span className="l17"></span><span className="l18" e1="true"></span><span className="l19"></span><span className="l20"></span>
+								<span className="l21"></span><span className="l22"></span><span className="l23" e2="true"></span><span className="l24"></span><span className="l25"></span>
 							</LineupCate>
 							<LineupCate className={`lineup_cate lineup_pos ${7 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(7);}}>
               {/* <!--장사진--> */}
-								<span className="l1"></span><span className="l2"></span><span className="l3"></span><span e3="true" className="l4"></span><span e4="true" className="l5"></span>
-								<span className="l6"></span><span className="l7"></span><span e4="true" className="l8"></span><span e2="true" className="l9"></span><span className="l10"></span>
-								<span className="l11"></span><span className="l12"></span><span e1="true" className="l13"></span><span e4="true" className="l14"></span><span className="l15"></span>
-								<span className="l16"></span><span e2="true" className="l17"></span><span e4="true" className="l18"></span><span className="l19"></span><span className="l20"></span>
-								<span e4="true" className="l21"></span><span e3="true" className="l22"></span><span className="l23"></span><span className="l24"></span><span className="l25"></span>
+								<span className="l1" e4="true"></span><span className="l2" e3="true"></span><span className="l3"></span><span className="l4"></span><span className="l5"></span>
+								<span className="l6"></span><span className="l7" e2="true"></span><span className="l8" e4="true"></span><span className="l9"></span><span className="l10"></span>
+								<span className="l11"></span><span className="l12"></span><span e1="true" className="l13"></span><span className="l14" e4="true"></span><span className="l15"></span>
+								<span className="l16"></span><span className="l17"></span><span className="l18" e4="true"></span><span className="l19" e2="true"></span><span className="l20"></span>
+								<span className="l21"></span><span className="l22"></span><span className="l23"></span><span className="l24" e3="true"></span><span className="l25" e4="true"></span>
 							</LineupCate>
 							<LineupCate className={`lineup_cate lineup_pos ${8 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(8);}}>
               {/* <!--형액진--> */}
-								<span className="l1"></span><span className="l2"></span><span e3="true" className="l3"></span><span className="l4"></span><span className="l5"></span>
-								<span e4="true" className="l6"></span><span e3="true" className="l7"></span><span className="l8"></span><span e3="true" className="l9"></span><span e4="true" className="l10"></span>
-								<span className="l11"></span><span className="l12"></span><span e1="true" className="l13"></span><span className="l14"></span><span className="l15"></span>
-								<span className="l16"></span><span e2="true" className="l17"></span><span className="l18"></span><span e2="true" className="l19"></span><span className="l20"></span>
-								<span className="l21"></span><span e2="true" className="l22"></span><span className="l23"></span><span e2="true" className="l24"></span><span className="l25"></span>
+								<span className="l1"></span><span className="l2" e2="true"></span><span className="l3"></span><span className="l4" e2="true"></span><span className="l5"></span>
+								<span className="l6"></span><span className="l7" e2="true"></span><span className="l8"></span><span className="l9" e2="true"></span><span className="l10"></span>
+								<span className="l11"></span><span className="l12"></span><span className="l13" e1="true"></span><span className="l14"></span><span className="l15"></span>
+								<span className="l16" e4="true"></span><span className="l17" e3="true"></span><span className="l18"></span><span className="l19" e3="true"></span><span className="l20" e4="true"></span>
+								<span className="l21"></span><span className="l22"></span><span className="l23" e3="true"></span><span className="l24"></span><span className="l25"></span>
 							</LineupCate>
 							<LineupCate className={`lineup_cate lineup_pos ${9 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(9);}}>
               {/* <!--추행진--> */}
-								<span className="l1"></span><span className="l2"></span><span className="l3"></span><span className="l4"></span><span className="l5"></span>
-								<span className="l6"></span><span className="l7"></span><span e4="true" className="l8"></span><span className="l9"></span><span className="l10"></span>
-								<span e3="true" className="l11"></span><span e3="true" className="l12"></span><span e3="true" className="l13"></span><span e3="true" className="l14"></span><span e3="true" className="l15"></span>
-								<span className="l16"></span><span e2="true" className="l17"></span><span e1="true" className="l18"></span><span e2="true" className="l19"></span><span className="l20"></span>
-								<span className="l21"></span><span className="l22"></span><span e2="true" className="l23"></span><span className="l24"></span><span className="l25"></span>
+								<span className="l1"></span><span className="l2"></span><span className="l3" e2="true"></span><span className="l4"></span><span className="l5"></span>
+								<span className="l6"></span><span className="l7" e2="true"></span><span className="l8" e1="true"></span><span className="l9" e2="true"></span><span className="l10"></span>
+								<span className="l11" e3="true"></span><span className="l12" e3="true"></span><span className="l13" e3="true"></span><span className="l14" e3="true"></span><span className="l15" e3="true"></span>
+								<span className="l16"></span><span className="l17"></span><span className="l18" e4="true"></span><span className="l19"></span><span className="l20"></span>
+								<span className="l21"></span><span className="l22"></span><span className="l23"></span><span className="l24"></span><span className="l25"></span>
 							</LineupCate>
 						</ul>
 					</LineupList>
