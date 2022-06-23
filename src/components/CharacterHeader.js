@@ -29,8 +29,8 @@ const ChMenu = styled.div`/* 인물카드 */
   flex-wrap:wrap;
 `;
 const ChMenuButton = styled.button`
-  width:33.3%;
-  padding-top:33.3%;
+  width:25%;
+  padding-top:25%;
   background:url(${({backImg}) => backImg}) no-repeat center center;
   background-size:100%;
   font-size:0;
@@ -56,6 +56,7 @@ const ChracterHeader = ({
   }
   const chMenu = [
     {backImg: imgMenu0, title: "카드기본"},
+    {backImg: imgMenu1, title: "속성치"},
     {backImg: imgMenu1, title: "능력치"},
     {backImg: imgMenu2, title: "스킬"},
     {backImg: imgMenu3, title: "인연"},

@@ -1,3 +1,5 @@
+import { forwardRef } from "react"
+
 export const fn = { //this.el = {};this.set_element();this.prototype();
   canvas: () => {
     CanvasRenderingContext2D.prototype.roundedRectangle = function(x, y, width, height, rounded) {
@@ -72,6 +74,20 @@ export const util = { //this.loadImage();
         ['bSt' + index]: bState,
       }
     });
+    gameData.element.forEach((elData, index) => {
+      enemy = {
+        ...enemy,
+        ['el' + index]: gameData.animal_type[gameData.ch[enemyData.idx].animal_type].element[index],
+      }
+    });
+    console.log(enemyData);
+    const element = enemyData.element || gameData.ch[enemyData.idx].element;
+    element.forEach((elData, index) => {
+      enemy = {
+        ...enemy,
+        ['el' + elData]: Math.round(enemy['el' + elData] + 50 * (enemyData.grade / 6)),
+      }
+    });
     return enemy;
   },
   saveLvState: (saveSlot, obj, saveData, gameData) => {//카드 획득시 레벨당 능력치 저장(캐릭터 저장된 슬롯번호, {카드등급, 아이템 이펙트등...})
@@ -100,7 +116,21 @@ export const util = { //this.loadImage();
         ['bSt' + index]: bState,
       }
     });
+    // console.log(saveChSlot);//animal_type
     // console.log(obj.grade);
+    gameData.element.forEach((elData, index) => {
+      saveChSlot = {
+        ...saveChSlot,
+        ['el' + index]: gameData.animal_type[gameData.ch[saveChSlot.idx].animal_type].element[index],
+      }
+    });
+    const element = saveChSlot.element || gameData.ch[saveChSlot.idx].element;
+    element.forEach((elData, index) => {
+      saveChSlot = {
+        ...saveChSlot,
+        ['el' + elData]: Math.round(saveChSlot['el' + elData] + 50 * (obj.grade / 6)),
+      }
+    });
     saveChSlot = {
       ...saveChSlot,
       itemEff: obj.itemEff,

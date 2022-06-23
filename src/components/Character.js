@@ -4,6 +4,7 @@ import { useGesture, useDrag } from '@use-gesture/react';
 import { useSpring, animated } from '@react-spring/web';
 
 import CharacterState from 'components/CharacterState';
+import CharacterElement from 'components/CharacterElement';
 import CharacterSkill from 'components/CharacterSkill';
 import CharacterRelation from 'components/CharacterRelation';
 import CharacterItems from 'components/CharacterItems';
@@ -62,22 +63,25 @@ const ChWrap = styled.div`
     .ch_info .state{display:flex;} 
   }
   &.page2{
-    .ch_info .skill{display:block;}
+    .ch_info .element{display:flex;} 
   }
   &.page3{
-    .ch_info .relation{display:block;} 
+    .ch_info .skill{display:block;}
   }
   &.page4{
-    .ch_info .items{display:block;}
+    .ch_info .relation{display:block;} 
   }
   &.page5{
-    .ch_info .apply_state{display:block;}
+    .ch_info .items{display:block;}
   }
   &.page6{
+    .ch_info .apply_state{display:block;}
+  }
+  &.page7{
     .ch_info{top:100%;}
     .item_enhance{top:42%;}
   }
-  &.page7{
+  &.page8{
     .ch_info{top:100%;}
     .ch_info .ch_enhance{top:42%;}
   }
@@ -322,7 +326,7 @@ const Character = ({
   //    from: () => [x.get(), 0],
   // });
   }
-  const gestureDistance = 30;
+  const gestureDistance = 20;
   const gestureBind = useGesture({
     onDrag: ({ active, movement: [mx, my], direction: [xDir, yDir], cancel}) => {
       if (Math.abs(mx) <= gestureDistance){
@@ -362,6 +366,7 @@ const Character = ({
       <CharacterHeader saveData={saveData} chPage={chPage} changeChPage={changeChPage} slotIdx={slotIdx} changeSaveData={changeSaveData} />
       <ChInfo stateBack={stateBack} frameBack={frameChBack} className="ch_info transition">
         <CharacterState saveData={saveData} slotIdx={slotIdx} />
+        <CharacterElement saveData={saveData} slotIdx={slotIdx} />
         <CharacterSkill saveData={saveData} slotIdx={slotIdx} />
         <CharacterRelation saveData={saveData} slotIdx={slotIdx} />
         <CharacterItems saveData={saveData} slotIdx={slotIdx} changeSaveData={changeSaveData} />

@@ -181,6 +181,19 @@ import ssring9 from 'images/ssring/ssring9.png';
 import grass1 from 'images/land/grass1.png';
 import grass2 from 'images/land/grass2.png';
 import grass3 from 'images/land/grass3.png';
+import el0 from 'images/ico/el0.png';
+import el1 from 'images/ico/el1.png';
+import el2 from 'images/ico/el2.png';
+import el3 from 'images/ico/el3.png';
+import el4 from 'images/ico/el4.png';
+import el5 from 'images/ico/el5.png';
+import el6 from 'images/ico/el6.png';
+import el7 from 'images/ico/el7.png';
+import el8 from 'images/ico/el8.png';
+import el9 from 'images/ico/el9.png';
+import el10 from 'images/ico/el10.png';
+import el11 from 'images/ico/el12.png';
+import el12 from 'images/ico/el12.png';
 import land1 from 'images/land/land1.png';
 import land2 from 'images/land/land2.png';
 import land3 from 'images/land/land3.png';
@@ -248,6 +261,9 @@ export const itemMaterial = [
 ];
 export const land = [
   grass1,grass2,grass3,land1,land2,land3,stone1,stone2,stone3,water1,water2,water3
+];
+export const element = [
+  el1,el2,el3,el4,el5,el6,el7,el8,el9,el10,el11,el12
 ];
 export const bgEffect = [
   cloud1,cloud2

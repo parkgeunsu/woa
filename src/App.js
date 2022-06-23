@@ -1,7 +1,7 @@
 import Battle from 'components/Battle';
 import Character from 'components/Character';
 import Gacha from 'components/Gacha';
-import { animalType, chImg, chStyleImg, iconElement, iconState, itemEquip, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, eff } from 'components/ImgSet';
+import { animalType, element, chImg, chStyleImg, iconElement, iconState, itemEquip, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, defenceIcon, eff } from 'components/ImgSet';
 import { util } from 'components/Libs';
 import Lineup from 'components/Lineup';
 import Main from 'components/Main';
@@ -112,6 +112,7 @@ const App = () => {
       sringImg: sringImg,
       ssringImg: ssringImg,
       animalType: animalType,
+      element: element,
       iconState: iconState,
       iconElement: iconElement,
       itemEquip: itemEquip,
@@ -122,9 +123,13 @@ const App = () => {
       land: land,
       bgEffect: bgEffect,
       eff:eff,
+      defenceIcon:defenceIcon,
     },
     gameData: {
       ...gameData,
+    },
+    setting: {
+      speed: 1,
     }
   }
   const [page, setPage] = useState("main");

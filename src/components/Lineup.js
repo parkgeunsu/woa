@@ -301,6 +301,7 @@ const CharacterList = ({
 	saveCh,
 	chData,
 }) => {
+	console.log(chData);
 	return (
 		<>
 			<ListNameLv cardLv={imgCardLv} backColor={gameData.chGradeColor[chData.grade]}>{saveCh.lv}</ListNameLv>
