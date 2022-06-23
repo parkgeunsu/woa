@@ -70,11 +70,6 @@ const TimeLineCh = styled.div`
 	&.none1:after{content:'방';background:#000;}
 	&.none2:after{content:'철';background:#fff;}
 	&.none3:after{content:'대';background:#f00;}
-	@keyframes turnEffect{
-		0%{transform:scale(1);}
-		50%{transform:scale(1.5);}
-		100%{transform:scale(1);}
-	}
 `;
 const BattleCh = styled.div`
 	position:absolute;width:${({size}) => size}%;padding-top:${({size}) => size}%;box-sizing:border-box;perspective:100px;transform-style:flat;
@@ -85,13 +80,9 @@ const BattleCh = styled.div`
 	&.action{left:50%;top:50%;transform:translate(-50%,-50%) scale(2);z-index:30;}
 	&.action .ch_box .ring_back{box-shadow:0 0 30px 10px #000;}
 	&.relation:after{content:'';position:absolute;left:50%;top:50%;width:100%;height:100%;box-shadow:0 0 15px 5px ${({rtColor}) => rtColor};transform:translate(-50%,-50%);z-index:1;filter:blur(5px);background:${({rtColor}) => rtColor};animation:rtAnimation 4s linear;opacity:0;pointer-events:none;}
-	@keyframes rtAnimation{
-		0%{opacity:0;}
-		50%{opacity:1;}
-		100%{opacity:0;}
-	}
 	.ch_box{position:absolute;left:5%;top:5%;width:90%;height:90%;transition:all .3s;transform-origin:50% 100%;transform-style:preserve-3d;}
-	.ch_box .hpsp{position:absolute;height:12%;width:100%;top:-17%;}
+	.ch_box .hpsp{position:absolute;height:25%;width:100%;top:-30%;}
+	&.on .hpsp{height:12%;top:-17%;}
 	.ch_box .hpsp{
 		display:flex;flex-direction:column;justify-content:space-between;
 		span {
@@ -108,21 +99,34 @@ const BattleCh = styled.div`
 	&.on{z-index:2;pointer-events:none;}
 	&.on .ch_box{transform:scale(1.5) rotateX(-50deg);}
 	&.on .ring_back{box-shadow:0 0 30px #fff,0 0 10px #ff0,0 0 5px #f40;}
-
-	/*image-rendering:pixelated;*/
-	@keyframes ring_ro{
-		0%{transform:rotateZ(0deg);}
-		100%{transform:rotateZ(360deg);}
+	&:after{
+		content:'';position:absolute;left:0;right:0;top:0;bottom:0;
+		pointer-events:none;
 	}
-	.style_box{position:absolute;width:100%;height:100%;}
-	.style_box>span{position:absolute;width:100%;height:100%;transform-origin:50% 50%;box-sizing:border-box;}
-
-	.style_box>span:first-of-type{background-color:#f00;}
-	.style_box>span:nth-of-type(2){background-color:#0f0;}
-	.style_box>span:nth-of-type(3){background-color:#ddd;}
-	.style_box>span:nth-of-type(4){background-color:#ff0;}
-	.style_box>span:nth-of-type(5){background-color:#0ff;}
-	.style_box>span:nth-of-type(6){background-color:#f0f;}
+	&.defence0:after{
+		background:url(${({defenceIcon0}) => defenceIcon0}) no-repeat center center;background-size:60%;
+		animation:defence ${({ gameSpd }) => 1/ gameSpd}s;opacity:0;
+	}
+	&.defence1:after{
+		background:url(${({defenceIcon1}) => defenceIcon1}) no-repeat center center;background-size:60%;
+		animation:defence ${({ gameSpd }) => 1/ gameSpd}s;opacity:0;
+	}
+	&.defence2:after{
+		background:url(${({defenceIcon2}) => defenceIcon2}) no-repeat center center;background-size:60%;
+		animation:defence ${({ gameSpd }) => 1/ gameSpd}s;opacity:0;
+	}
+	&.avoid0{
+		animation:avoid0 ${({ gameSpd }) => 1/ gameSpd}s ease-out;
+	}
+	&.avoid1{
+		animation:avoid1 ${({ gameSpd }) => 1/ gameSpd}s ease-out;
+	}
+	&.avoid2{
+		animation:avoid2 ${({ gameSpd }) => 1/ gameSpd}s ease-out;
+	}
+	&.avoid3{
+		animation:avoid3 ${({ gameSpd }) => 1/ gameSpd}s ease-out;
+	}
 `;
 const BattleLand = styled.div`
 	display:flex;flex-direction:column;position:absolute;left:0;right:0;bottom:0;top:0;
@@ -145,11 +149,7 @@ const EffLand = styled.div`
 	overflow:hidden;
 	.dmgEffect{
 		position:absolute;left:0;right:0;top:0;bottom:0;z-index:10;
-		animation:dmgAnimation 0.5s steps(2) infinite;
-		@keyframes dmgAnimation{
-			0%{background:transparent;}
-			100%{background:rgba(255,0,0,.7);}
-		}
+		animation:dmgAnimation ${({gameSpd}) => 0.5 / gameSpd}s steps(2) infinite;
 	}
 `;
 const Eff = styled.img`
@@ -159,7 +159,7 @@ const Eff = styled.img`
 		return (Math.floor(frame / 5) + 1) * 100;
 	}}%;
 	transition:unset;
-	animation:frame${({frame}) => frame} 0.5s steps(1);
+	animation:frame${({frame}) => frame} ${({gameSpd}) => 0.5 / gameSpd}s steps(1);
 	animation-iteration-count: ${({repeat}) => repeat};
 `;
 const Land = styled.div`
@@ -306,19 +306,21 @@ const enemyPattern = (ai, battleAlly, allyPos, enemy, gameData) => {
 		const ranCount = Math.random();
 		const target = Math.random() <= weakAttackChance[enemyAi] ? hpArray[0].idx : attackTarget;
 		if (ranCount > activeChance[enemyAi]) { //buff
+			const skIdx = 2;//Math.random() > normalAttackChance[enemyAi] ? skillList.buff[Math.floor(Math.random() * skillList.buff.length)]?.idx || 1 : 1;
 			enemySkill.push({
 				team: 'enemy',
 				idx: idx,
-				skIdx: Math.random() > normalAttackChance[enemyAi] ? skillList.buff[Math.floor(Math.random() * skillList.buff.length)]?.idx || 1 : 1,
-				targetIdx: target,
+				skIdx: skIdx,
+				targetIdx: util.getEffectArea(gameData.skill[skIdx].ta, target),
 				target: allyPos[target].pos,
 			});
 		} else { //active
+			const skIdx = 2;//Math.random() > normalAttackChance[enemyAi] ? skillList.buff[Math.floor(Math.random() * skillList.buff.length)]?.idx || 1 : 1;
 			enemySkill.push({
 				team: 'enemy',
 				idx: idx,
-				skIdx: Math.random() > normalAttackChance[enemyAi] ? skillList.active[Math.floor(Math.random() * skillList.active.length)]?.idx || 1 : 1,
-				targetIdx: target,
+				skIdx: skIdx,
+				targetIdx: util.getEffectArea(gameData.skill[skIdx].ta, target),
 				target: allyPos[target].pos,
 			});
 		}
@@ -330,7 +332,7 @@ const activeSk = (skIdx) => {
 		case 0: //대기
 			return 'none none1';
 			break;
-		case 12: //방어
+		case 2: //방어
 			return 'none none2';
 			break;
 		case 13: //철벽방어
@@ -342,51 +344,98 @@ const activeSk = (skIdx) => {
 	}
 }
 
-const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy) => {
+const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction) => {
+	const gameSpd = setting.speed,
+		gameEffSound = setting.effSound;
 	if (turnIdx <= timeLineEntry.length - 1) {
 		const turnIdx_ = turnIdx + 1;
 		const skillIdx = timeLineEntry[turnIdx].skIdx;// {team: 'enemy', idx: 0, skIdx: 0, target: 3}
 		if (skillIdx === 0){ //대기
 			setTurnIdx(turnIdx_);
-			actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy);
-		} else if (skillIdx === 12 || skillIdx === 13) { //방어, 철벽방어
+			actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction);
+		} else if (skillIdx === 2 || skillIdx === 13) { //방어, 철벽방어
 			setTurnIdx(turnIdx_);
-			actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy);
+			actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction);
 		} else {
 			let attacker = {},
 				defencer = {},
+				defendEnemy = [],
 				count = 0;
+				let action = [];
 			if (timeLineEntry[turnIdx].team === 'ally') { //아군 공격
 				attacker = battleAlly[timeLineEntry[turnIdx].idx];
-				defencer = battleEnemy[timeLineEntry[turnIdx].targetIdx];
+				// defencer = battleEnemy[timeLineEntry[turnIdx].targetIdx];
+				defencer = timeLineEntry[turnIdx].targetIdx.map((data) => {
+					return battleAlly[data];
+				});
 				const defencerIdx = timeLineEntry[turnIdx].targetIdx;
-				console.log(defencerIdx);
+				//console.log(defencerIdx);
 				timeLineEntry.forEach((data) => {
 					if (data.team === 'enemy'){
-						if (count === defencerIdx) {
-							console.log('방어체크' + data.skIdx);
-						}
+						defencerIdx.forEach((dIdx) => {
+							if (count === dIdx) {
+								defendEnemy.push(dIdx);
+								//console.log(dIdx + '적군 방어중');
+								if (data.skIdx === 2) { //방어
+									action[dIdx] = 'defence0';
+								} else if (data.skIdx === 13) { //철벽방어
+									action[dIdx] = 'defence2'; 
+								}
+							}
+						});
 						count ++;
 					}
 				});
 			} else { //적군 공격
 				attacker = battleEnemy[timeLineEntry[turnIdx].idx];
-				defencer = battleAlly[timeLineEntry[turnIdx].targetIdx];
+				// defencer = battleAlly[timeLineEntry[turnIdx].targetIdx];
+				defencer = timeLineEntry[turnIdx].targetIdx.map((data) => {
+					return battleAlly[data];
+				});
 				const defencerIdx = timeLineEntry[turnIdx].targetIdx;
-				console.log(defencerIdx);
+				//console.log(defencerIdx);
 				timeLineEntry.forEach((data) => {
 					if (data.team === 'ally'){
-						if (count === defencerIdx) {
-							console.log('방어체크' + data.skIdx);
-						}
+						defencerIdx.forEach((dIdx) => {
+							if (count === dIdx) {
+								defendEnemy.push(dIdx);
+								//console.log(dIdx + '아군 방어중');
+								if (data.skIdx === 2) { //방어
+									action[dIdx] = 'defence0';
+								} else if (data.skIdx === 13) { //철벽방어
+									action[dIdx] = 'defence2'; 
+								}
+							}
+						});
 						count ++;
 					}
 				});
 			}
-			console.log(timeLineEntry)
-			//ally.spd enemy.spd 비교
-			console.log(attacker.atk, defencer.def); //atk, def, mak, mdf, spd
-			console.log(attacker.spd, defencer.spd); //atk, def, mak, mdf, spd
+			//데미지 공식
+			let dmg = [];
+			defencer.forEach((defEnemy, dIdx) => {
+				const chance = Math.random();
+				const hitChance =  (60 + 17.5 * (attacker.spd / defEnemy.spd)) / 100; //물리 적중 확률 ally.spd enemy.spd 비교
+				const magicChance = (40 + 20 * (attacker.spd / defEnemy.spd)) / 100; //마법 적중 확률
+				const critical = 0;//치명타 확률 계산
+				//console.log(attacker, defEnemy)
+				if (typeof defendEnemy[dIdx] === 'number') {
+					const sk = defEnemy.sk.filter((skData) => {
+						if (skData.idx === 2) {
+							return skData;
+						};
+					})
+					const stateName = util.getStateName(gameData.skill[sk[0].idx].eff[0].type).toLowerCase();
+					const defNum = util.getPercentNumber(gameData.skill[sk[0].idx].eff[0].num[sk[0].lv], defEnemy[stateName]);
+					const dmg_ = attacker.atk - defNum;
+					dmg.push(dmg_ < 1 ? 1 : dmg_);
+				} else {
+					const dmg_ = attacker.atk - defEnemy.def;
+					dmg.push(dmg_ < 1 ? 1 : dmg_);
+				}
+			});
+			console.log(dmg);
+			//atk, def, mak, mdf, spd
 			//timeLineEntry[turnIdx] 공격자
 			setTimeout(() => {
 				setTimeout(() => {
@@ -394,6 +443,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLineEntry, resetO
 					setTimeout(() => {
 						setSkillMsg(false);
 						setTimeout(() => {
+							setEnemyAction(action);
 							let targets = util.getEffectArea(gameData.skill[skillIdx].ta, timeLineEntry[turnIdx].target);
 							targets = targets.map((data) => {
 								return {
@@ -413,16 +463,18 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLineEntry, resetO
 							setTimeout(() => {
 								if (timeLineEntry[turnIdx].team === 'ally') {
 									setAllyEffect([]);
+									setEnemyAction([]);
 								} else {
 									setEnemyEffect([]);
+									setAllyAction([]);
 								}
 								setTurnIdx(turnIdx_);
-								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy);
-							}, 1000);//공격 이펙트 효과시간
-						}, 200);
-					}, 800);//메시지창 사라짐
-				}, 200);//메시지 오픈
-			}, 800);
+								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction);
+							}, 1000 / gameSpd);//공격 이펙트 효과시간
+						}, 200 / gameSpd);
+					}, 800 / gameSpd);//메시지창 사라짐
+				}, 200 / gameSpd);//메시지 오픈
+			}, 800 / gameSpd);
 		}
 	} else {
 		resetOrder();
@@ -522,14 +574,6 @@ const BgEffect = styled.div`
 	.cloud2{top:30%;animation:cloudAnimationReverse 130s linear infinite;background-image:url(${({img2}) => img2});background-size:100%;}
 	&.action div{animation-play-state:paused;}
 	&.action .cloud2{left:-1000px;animation-play-state:paused;}
-	@keyframes cloudAnimation{
-		0%{left:100%;}
-		100%{left:-1000px;}
-	}
-	@keyframes cloudAnimationReverse{
-		0%{left:-1000px;}
-		100%{left:100%;}
-	}
 `;
 
 const Battle = ({
@@ -539,7 +583,9 @@ const Battle = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const scenarioDetail = scenario || gameData.scenario.korea.threeAfter[0].stage[0];
+	const setting = useContext(AppContext).setting,
+		gameSpd = setting.speed;
+	const scenarioDetail = scenario || gameData.scenario.korea.threeAfter[0].stage[2];
 	const [mapLand] = useState(scenarioDetail.map);
 	const allyDeck = saveData.lineup.save_slot[saveData.lineup.select].entry;//캐릭터 저장된 카드index
 	const enemyDeck = scenarioDetail.entry;
@@ -567,17 +613,10 @@ const Battle = ({
 	const currentEnemyIdx = useRef(); //적군 순번 증가 index
 	currentAllyIdx.current = 0;
 	currentEnemyIdx.current = 0;
-	const [allyEffect, setAllyEffect] = useState([
-		//{idx:2, type:0},
-		//{idx:3, type:4},
-	]);
-	const [enemyEffect, setEnemyEffect] = useState([
-		//{idx:20, type:1},
-		//{idx:21, type:1},
-		//{idx:22, type:1},
-		//{idx:23, type:1},
-		//{idx:24, type:1},
-	]);
+	const [allyEffect, setAllyEffect] = useState([]);//아군 공격효과
+	const [enemyEffect, setEnemyEffect] = useState([]);//적군 공격효과
+	const [allyAction, setAllyAction] = useState([]);
+	const [enemyAction, setEnemyAction] = useState([]);
 	useLayoutEffect(() => {
 		let ally = [],
 			ally_ = [];
@@ -606,9 +645,9 @@ const Battle = ({
 					setMode('order');
 					setTimeout(() => {
 						setRelationArr('');
-					}, 1300);
-				}, 2000 + allyRelation.length * 300);
-			}, 100);
+					}, 1300 / gameSpd);
+				}, (2000 + allyRelation.length * 300) / gameSpd);
+			}, 100 / gameSpd);
 		} else { //인연이 없을때
 			setOrderIdx(0);
 			setMode('order');
@@ -886,7 +925,7 @@ const Battle = ({
 			});
 			setTimeLine(timeLineEntry);
 			setTurnIdx(0);
-			actionAnimation(setTurnIdx, setSkillMsg, 0, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy);
+			actionAnimation(setTurnIdx, setSkillMsg, 0, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction);
 			console.log("시뮬레이션 실행", timeLineEntry);
 		}
 	}, [mode]);
@@ -953,10 +992,10 @@ const Battle = ({
 								}
 							});
 							return (
-								<EffLand key={idx} className="effectLand" left={left} top={top}>
+								<EffLand key={idx} className="effectLand" left={left} top={top} gameSpd={gameSpd}>
 									{effectChk && (
 										<>
-											<Eff src={imgSet.eff[effType]} frame={gameData.effect[effType].frame} repeat={gameData.effect[effType].repeat}/>
+											<Eff src={imgSet.eff[effType]} frame={gameData.effect[effType].frame} repeat={gameData.effect[effType].repeat} gameSpd={gameSpd}/>
 											<span className="dmgEffect"></span>
 										</>
 									)}
@@ -978,10 +1017,10 @@ const Battle = ({
 								}
 							});
 							return (
-								<EffLand className="effectLand" key={idx} left={left} top={top}>
+								<EffLand className="effectLand" key={idx} left={left} top={top} gameSpd={gameSpd}>
 									{effectChk && (
 										<>
-											<Eff src={imgSet.eff[effType]} frame={gameData.effect[effType].frame} repeat={gameData.effect[effType].repeat}/>
+											<Eff src={imgSet.eff[effType]} frame={gameData.effect[effType].frame} repeat={gameData.effect[effType].repeat} gameSpd={gameSpd}/>
 											<span className="dmgEffect"></span>
 										</>
 									)}
@@ -1013,11 +1052,12 @@ const Battle = ({
 										//console.log('pgs', 'enemy', timeLine[battleIdx].idx);
 										actionCh = 'action';
 									}
+									const actionPos = enemyAction[currentEnemyIdx.current] || '';
 									currentEnemyIdx.current ++;
 									return (
-										<BattleCh key={idx} className={`battle_ch effect ${elementCh} ${actionCh} ${rtCh}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize} onClick={(e) => {
+										<BattleCh key={idx} className={`battle_ch effect ${elementCh} ${actionCh} ${rtCh} ${actionPos}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize} onClick={(e) => {
 											areaSelect(e, idx);
-										}}>
+										}} gameSpd={gameSpd} defenceIcon0={imgSet.defenceIcon[0]} defenceIcon1={imgSet.defenceIcon[1]} defenceIcon2={imgSet.defenceIcon[2]}>
 											<div className="ch_box">
 												<CardChRing className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} lv={enemyData.lv} />
 												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>
@@ -1044,7 +1084,7 @@ const Battle = ({
 						<div className={`turnLine ${mode === 'action' ? 'on' : ''}`}>
 							{timeLine && timeLine.map((data, idx) => {
 								const chData = data.team === 'ally' ? gameData.ch[battleAlly[data.idx].idx] : gameData.ch[battleEnemy[data.idx].idx];
-								const activeSkill = activeSk(data.skIdx);// active스킬 판단 0대기,11방어,12철벽방어
+								const activeSkill = activeSk(data.skIdx);// active스킬 판단 0대기,2방어,12철벽방어
 								// data.team 아군적군
 								// data.skIdx 스킬번호
 								// target 범위
@@ -1078,9 +1118,10 @@ const Battle = ({
 									if (typeof turnIdx === 'number' && timeLine && timeLine[turnIdx].team === 'ally' && currentAllyIdx.current === timeLine[turnIdx].idx) {
 										actionCh = 'action';
 									}
+									const actionPos = allyAction[currentAllyIdx.current] || '';
 									currentAllyIdx.current ++;
 									return (
-										<BattleCh key={idx} className={`battle_ch ${posCh} ${actionCh} ${rtCh}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize} rtColor={rtColor}>
+										<BattleCh key={idx} className={`battle_ch ${posCh} ${actionCh} ${rtCh} ${actionPos}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize} rtColor={rtColor}  gameSpd={gameSpd} defenceIcon0={imgSet.defenceIcon[0]} defenceIcon1={imgSet.defenceIcon[1]} defenceIcon2={imgSet.defenceIcon[2]}>
 											<div className="ch_box">
 												<CardChRing className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} lv={saveCh.lv} />
 												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>

@@ -25,8 +25,12 @@ const FrameBar = styled.span`
 `;
 const Bar = styled.span`
   position:relative;height:100%;border-radius:4px;
-  width:${({rSt, chMaxSt}) => {
-    return (rSt/chMaxSt)*100
+  width:${({rSt, chMaxSt, idx}) => {
+    if (idx === 6) {
+      return 100;
+    } else {
+      return (rSt/chMaxSt)*100;
+    }
   }}%;
   .ico{
     position:absolute;right:2px;top:1px;;width:22px;height:22px;
@@ -39,11 +43,19 @@ const BackBar = styled.span`
     return 100 - (chMaxSt/maxSt)*100;
   }}% !important;
 `;
+const stateColor = () => {
+  // const color = util.getPercentColor(maxSt ,rSt);
+  // return (
+  //   `color:${color} !important;
+  //   text-shadow: 0 0 ${color}px #fff;`
+  // );
+}
 const TextTotal = styled.span`
   margin:auto 0;width:30px;text-align:center;font-size:16px;font-weight:600;
-  color:${({chMaxSt, rSt}) => {
-    return util.getPercentColor(chMaxSt ,rSt);
+  color:${({maxSt, rSt}) => {
+    return util.getPercentColor(maxSt ,rSt);
   }} !important;
+  text-shadow: 0 0 ${({maxSt, rSt}) => (rSt / maxSt) * 10}px #fff;
 `;
 
 const CharacterState = ({
@@ -71,15 +83,15 @@ const CharacterState = ({
                   <span className="name">{data}</span>
                   <span className="total_bar">
                     <FrameBar chMaxSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="frame_bar transition gradient_light">
-                      <Bar rSt={slotCh['rSt'+idx]} chMaxSt={slotCh['maxSt'+idx]} stateType={imgSet.iconState[idx]} className="bar transition gradient_dark_y">
+                      <Bar idx={idx} rSt={slotCh['rSt'+idx]} chMaxSt={slotCh['maxSt'+idx]} stateType={imgSet.iconState[idx]} className="bar transition gradient_dark_y">
                         <span className="ico"></span>
                         {/* <span className="txt_current">0</span> */}
                       </Bar>
                     </FrameBar>
                     <BackBar stateBack={stateBack} chMaxSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="back_bar transition" />
                   </span>
-                  <TextTotal rSt={slotCh['rSt'+idx]} chMaxSt={slotCh['maxSt'+idx]} className="txt_total" title={data.title}>
-                    {slotCh['rSt'+idx]}
+                  <TextTotal rSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="txt_total" title={data.title}>
+                    {idx === 6 ? slotCh['maxSt'+idx] : slotCh['rSt'+idx]}
                   </TextTotal>
                 </div>
               )

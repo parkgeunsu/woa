@@ -85,10 +85,10 @@ export const util = { //this.loadImage();
         stateMax = Math.round(gameData.stateType[saveChSlot.stateType].arr[49]*0.01*st);//성장타입에 따른 최대 능력치
       saveChSlot = {
         ...saveChSlot,
-        ['rSt' + index]: stateCurrent, //레벨당 현재능력치
+        ['rSt' + index]: index === 6 ? stateMax : stateCurrent, //레벨당 현재능력치
         ['maxSt' + index]: stateMax, //레벨당 최대능력치
       }
-      battleState_[index] = stateCurrent;
+      battleState_[index] = index === 6 ? stateMax : stateCurrent;
     });
     battleState_[7] = gameData.ch[saveChSlot.idx].st3 + gameData.ch[saveChSlot.idx].st5 + gameData.ch[saveChSlot.idx].st6;
     const battleState = util.getTotalState(battleState_);
@@ -182,7 +182,7 @@ export const util = { //this.loadImage();
   },
   getTotalState: (state) => {
     let stateArr = [];
-    for ( let i = 0; i < 9; ++i ) {
+    for ( let i = 0; i < 10; ++i ) {
       let num = 0;
       switch(i){
         case 0://HP
@@ -211,6 +211,9 @@ export const util = { //this.loadImage();
           break;
         case 8://SPD
           num = state[3]+state[0]*.3;
+          break;
+        case 9://LUK
+          num = state[6]+state[3]+state[0];
           break;
         default:
           break;  
@@ -326,15 +329,14 @@ export const util = { //this.loadImage();
     }
   },
   getPercentColor: (max, num) => { //능력치 높고낮음 처리컬러
-    let co = num/max*510,
-        co_ = 0;
-    if(co/255 > 1){
-      co_ = 255 - co%255;
-      co = 255;
+    const co = num/max*765;
+    if(co < 255){
+      return 'rgb('+co+',0,0)';
+    } else if (co < 510) {
+      return 'rgb(255,'+co%255+',0)';
     }else{
-      co_ = 255;
+      return 'rgb(255,255,'+co%510+')';
     }
-    return 'rgb('+co_+','+co+',0)';
   },
   getPercent: (total, current) => { //퍼센트 계산
     if(current === 0){
@@ -484,6 +486,39 @@ export const util = { //this.loadImage();
   // getBattleLineup: (n) => {
   //   return n;
   // },
+  getStateName: (type) => {
+    switch (type) {
+      case 0:
+        return 'HP';
+      case 1:
+        return 'SP';
+      case 2:
+        return 'RSP';
+      case 3:
+        return 'ATK';
+      case 4:
+        return 'DEF';
+      case 5:
+        return 'MATK';
+      case 6:
+        return 'MDEF';
+      case 7:
+        return 'RCV';
+      case 8:
+        return 'SPD';
+      case 9:
+        return 'HP';
+      default:
+        break;
+    }
+  },
+  getPercentNumber: (plusNum, nowNum) => {
+    if (plusNum.indexOf('%') > 0) {
+      return nowNum * (parseInt(plusNum) / 100);
+    } else {
+      return nowNum + plusNum;
+    }
+  },
   getEffectArea: (type, n) => {//type: 효과타입, n: 사용위치(0~24)
     let num = [];
     switch(type){

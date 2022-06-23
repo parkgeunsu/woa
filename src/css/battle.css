@@ -356,3 +356,56 @@
   95.7%{left:-300%;top:-400%;}
   100%{left:-400%;top:-400%;}
 }
+@keyframes turnEffect{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.5);}
+  100%{transform:scale(1);}
+}
+@keyframes rtAnimation{
+  0%{opacity:0;}
+  50%{opacity:1;}
+  100%{opacity:0;}
+}
+/*image-rendering:pixelated;*/
+@keyframes ring_ro{
+  0%{transform:rotateZ(0deg);}
+  100%{transform:rotateZ(360deg);}
+}
+@keyframes dmgAnimation{
+  0%{background:transparent;}
+  100%{background:rgba(255,0,0,.7);}
+}
+@keyframes cloudAnimation{
+  0%{left:100%;}
+  100%{left:-1000px;}
+}
+@keyframes cloudAnimationReverse{
+  0%{left:-1000px;}
+  100%{left:100%;}
+}
+@keyframes defence{
+  0%{transform:translate(0, 40%);opacity:0;}
+  20%{transform:translate(0, 0%);opacity:0;opacity:1;}
+  85%{transform:translate(0, 0%);opacity:0;opacity:1;}
+  100%{transform:translate(0, 40%);opacity:0;opacity:0;}
+}
+@keyframes avoid0{
+  0%{transform:translate(0%, 0);}
+  50%{transform:translate(-50%, 0);}
+  100%{transform:translate(0%, 0);}
+}
+@keyframes avoid1{
+  0%{transform:translate(0%, 0);}
+  50%{transform:translate(50%, 0);}
+  100%{transform:translate(0%, 0);}
+}
+@keyframes avoid2{
+  0%{transform:translate(0%, 0);}
+  50%{transform:translate(0,-50%);}
+  100%{transform:translate(0%, 0);}
+}
+@keyframes avoid3{
+  0%{transform:translate(0%, 0);}
+  50%{transform:translate(0,50%);}
+  100%{transform:translate(0%, 0);}
+}

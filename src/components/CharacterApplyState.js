@@ -21,7 +21,7 @@ const CharacterApplyState = ({
   saveData,
   slotIdx,
 }) => {
-  const BattleStateName = [{ko:'체력',en:'HP'},{ko:'행동',en:'SP'},{ko:'행동회복',en:'RSP'},{ko:'공격',en:'ATK'},{ko:'방어',en:'DEF'},{ko:'술법공격',en:'MAK'},{ko:'술법방어',en:'MDF'},{ko:'체력회복',en:'RCV'},{ko:'속도',en:'SPD'}];
+  const BattleStateName = [{ko:'체력',en:'HP'},{ko:'행동',en:'SP'},{ko:'행동회복',en:'RSP'},{ko:'공격',en:'ATK'},{ko:'방어',en:'DEF'},{ko:'술법공격',en:'MAK'},{ko:'술법방어',en:'MDF'},{ko:'체력회복',en:'RCV'},{ko:'속도',en:'SPD'},{ko:'행운',en:'LUK'}];
   return (
     <>
       <ApplyState className="apply_state">

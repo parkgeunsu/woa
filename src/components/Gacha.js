@@ -21,8 +21,6 @@ import iconStar7 from 'images/star/star7.png';
 import React, { useCallback, useContext, useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-
-
 const Img = styled.img.attrs(
   ({imgurl}) => ({
     src: imgurl 
@@ -438,7 +436,7 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 				idx: newIdx,
 				items: [{}, {}, {}, {}, {}, {}, {}, {}],
 				lv: 1,
-				sk: [{idx: 0, lv: 1, exp: 0,}],
+				sk: [{idx: 1, lv: 1, exp: 0,},{idx: 2, lv: 1, exp: 0,},],
 				stateType: Math.floor(Math.random()*4),
 			},
 		}, saveData, gameData));
