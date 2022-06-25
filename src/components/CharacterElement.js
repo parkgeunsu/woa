@@ -73,7 +73,7 @@ const CharacterElement = ({
   }, [slotIdx, saveData]);
 
   // const state_per = [125,200,200,100,200,100,100],
-  //   st_t = ['통솔','체력','무력','민첩','지력','정치','매력'],
+  //   st_t = ['통솔','체력','무력','민첩','지력','정치','매력','운'],
   //   st_c = ['#037ace','#f3004e','#ff5326','#77b516','#f9c215','#5f3dc4','#ce20c2'],
   //   ctx_w = this.el.gacha_infoGraph.getBoundingClientRect().width,
   //   arc_r = Math.PI*2/7,

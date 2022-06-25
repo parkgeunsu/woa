@@ -53,13 +53,19 @@ const BattleUnit = styled.div`
 	}
 	& > div {position:relative;margin:0 auto;width:${({containerW}) => containerW}px;box-sizing:border-box;transition:all 1s;}
 	& .turnLine {width:100%;}
-	& > div .effect0:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:var(--color-b);box-shadow:0 0 10px 10px var(--color-b);z-index:10;opacity:.7;}
-	& > div .effect1:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:var(--color-purple);box-shadow:0 0 10px 10px var(--color-purple);z-index:10;opacity:.7;}
-	& > div .effect2:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:var(--color-yellow);box-shadow:0 0 10px 10px var(--color-yellow);z-index:10;opacity:.7;}
-	& > div .effect3:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:var(--color-blue);box-shadow:0 0 10px 10px var(--color-blue);z-index:10;opacity:.7;}
-	& > div .effect4:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:var(--color-red);box-shadow:0 0 10px 10px var(--color-red);z-index:10;opacity:.7;}
-	& > div .effect5:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:var(--color-lightblue);box-shadow:0 0 10px 10px var(--color-lightblue);z-index:10;opacity:.7;}
-	& > div .effect6:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:var(--color-green);box-shadow:0 0 10px 10px var(--color-green);z-index:10;opacity:.7;}
+	& > div .effect0:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-w),inset 0 0 5px 5px var(--color-w);z-index:10;opacity:1;}
+	& > div .effect1:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-w),inset 0 0 5px 5px var(--color-w);z-index:10;opacity:1;}
+	& > div .effect2:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-w),inset 0 0 5px 5px var(--color-w);z-index:10;opacity:1;}
+	& > div .effect3:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-w),inset 0 0 5px 5px var(--color-w);z-index:10;opacity:1;}
+	& > div .effect4:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-w),inset 0 0 5px 5px var(--color-w);z-index:10;opacity:1;}
+	& > div .effect5:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-w),inset 0 0 5px 5px var(--color-w);z-index:10;opacity:1;}
+	& > div .effect6:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-w),inset 0 0 5px 5px var(--color-w);z-index:10;opacity:1;}
+	& > div .effect7:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-yellow),inset 0 0 5px 5px var(--color-yellow);z-index:10;opacity:1;}
+	& > div .effect8:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-b),inset 0 0 5px 5px var(--color-b);z-index:10;opacity:1;}
+	& > div .effect9:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-blue),inset 0 0 5px 5px var(--color-blue);z-index:10;opacity:1;}
+	& > div .effect10:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-red),inset 0 0 5px 5px var(--color-red);z-index:10;opacity:1;}
+	& > div .effect11:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-lightblue),inset 0 0 5px 5px var(--color-lightblue);z-index:10;opacity:1;}
+	& > div .effect12:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-green),inset 0 0 5px 5px var(--color-green);z-index:10;opacity:1;}
 `;
 const TimeLineCh = styled.div`
 	position:relative;width:${({size}) => size}px;padding-top:${({size}) => size}px;box-sizing:border-box;z-index:1;
@@ -280,6 +286,7 @@ const enemyPattern = (ai, battleAlly, allyPos, enemy, gameData) => {
 				debuff.push(data);
 			};
 		});
+		buff.push(2);
 		return {
 			active: active,
 			buff: buff,
@@ -306,7 +313,7 @@ const enemyPattern = (ai, battleAlly, allyPos, enemy, gameData) => {
 		const ranCount = Math.random();
 		const target = Math.random() <= weakAttackChance[enemyAi] ? hpArray[0].idx : attackTarget;
 		if (ranCount > activeChance[enemyAi]) { //buff
-			const skIdx = 2;//Math.random() > normalAttackChance[enemyAi] ? skillList.buff[Math.floor(Math.random() * skillList.buff.length)]?.idx || 1 : 1;
+			const skIdx = Math.random() > normalAttackChance[enemyAi] ? skillList.buff[Math.floor(Math.random() * skillList.buff.length)]?.idx || 1 : 1;
 			enemySkill.push({
 				team: 'enemy',
 				idx: idx,
@@ -315,7 +322,7 @@ const enemyPattern = (ai, battleAlly, allyPos, enemy, gameData) => {
 				target: allyPos[target].pos,
 			});
 		} else { //active
-			const skIdx = 2;//Math.random() > normalAttackChance[enemyAi] ? skillList.buff[Math.floor(Math.random() * skillList.buff.length)]?.idx || 1 : 1;
+			const skIdx = Math.random() > normalAttackChance[enemyAi] ? skillList.active[Math.floor(Math.random() * skillList.active.length)]?.idx || 1 : 1;
 			enemySkill.push({
 				team: 'enemy',
 				idx: idx,
@@ -358,83 +365,119 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLineEntry, resetO
 			actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction);
 		} else {
 			let attacker = {},
-				defencer = {},
-				defendEnemy = [],
+				defencer = [],
+				defendSkillEnemy = [], //방어 시전 캐릭
 				count = 0;
-				let action = [];
+				let allyAction = [],
+					enemyAction = [];
 			if (timeLineEntry[turnIdx].team === 'ally') { //아군 공격
 				attacker = battleAlly[timeLineEntry[turnIdx].idx];
 				// defencer = battleEnemy[timeLineEntry[turnIdx].targetIdx];
 				defencer = timeLineEntry[turnIdx].targetIdx.map((data) => {
-					return battleAlly[data];
+					return {
+						ch: battleEnemy[data],
+						idx: data,
+					}
 				});
+				console.log('aaa', defencer);
 				const defencerIdx = timeLineEntry[turnIdx].targetIdx;
 				//console.log(defencerIdx);
 				timeLineEntry.forEach((data) => {
 					if (data.team === 'enemy'){
-						defencerIdx.forEach((dIdx) => {
-							if (count === dIdx) {
-								defendEnemy.push(dIdx);
-								//console.log(dIdx + '적군 방어중');
-								if (data.skIdx === 2) { //방어
-									action[dIdx] = 'defence0';
-								} else if (data.skIdx === 13) { //철벽방어
-									action[dIdx] = 'defence2'; 
-								}
+						defencer.forEach((chData, dIdx) => {
+							defendSkillEnemy.push(chData.idx);
+							//console.log(dIdx + '적군 방어중');
+							if (data.skIdx === 2) { //방어
+								enemyAction[chData.idx] = 'defence0';
+							} else if (data.skIdx === 13) { //철벽방어
+								enemyAction[chData.idx] = 'defence2'; 
 							}
 						});
-						count ++;
 					}
 				});
 			} else { //적군 공격
 				attacker = battleEnemy[timeLineEntry[turnIdx].idx];
 				// defencer = battleAlly[timeLineEntry[turnIdx].targetIdx];
 				defencer = timeLineEntry[turnIdx].targetIdx.map((data) => {
-					return battleAlly[data];
+					return {
+						ch: battleEnemy[data],
+						idx: data,
+					}
 				});
 				const defencerIdx = timeLineEntry[turnIdx].targetIdx;
 				//console.log(defencerIdx);
 				timeLineEntry.forEach((data) => {
 					if (data.team === 'ally'){
-						defencerIdx.forEach((dIdx) => {
-							if (count === dIdx) {
-								defendEnemy.push(dIdx);
-								//console.log(dIdx + '아군 방어중');
-								if (data.skIdx === 2) { //방어
-									action[dIdx] = 'defence0';
-								} else if (data.skIdx === 13) { //철벽방어
-									action[dIdx] = 'defence2'; 
-								}
+						defencer.forEach((chData, dIdx) => {
+							defendSkillEnemy.push(chData.idx);
+							//console.log(dIdx + '적군 방어중');
+							if (data.skIdx === 2) { //방어
+								allyAction[chData.idx] = 'defence0';
+							} else if (data.skIdx === 13) { //철벽방어
+								allyAction[chData.idx] = 'defence2'; 
 							}
 						});
-						count ++;
 					}
 				});
 			}
 			//데미지 공식
 			let dmg = [];
-			defencer.forEach((defEnemy, dIdx) => {
-				const chance = Math.random();
-				const hitChance =  (60 + 17.5 * (attacker.spd / defEnemy.spd)) / 100; //물리 적중 확률 ally.spd enemy.spd 비교
-				const magicChance = (40 + 20 * (attacker.spd / defEnemy.spd)) / 100; //마법 적중 확률
-				const critical = 0;//치명타 확률 계산
-				//console.log(attacker, defEnemy)
-				if (typeof defendEnemy[dIdx] === 'number') {
-					const sk = defEnemy.sk.filter((skData) => {
-						if (skData.idx === 2) {
-							return skData;
-						};
-					})
-					const stateName = util.getStateName(gameData.skill[sk[0].idx].eff[0].type).toLowerCase();
-					const defNum = util.getPercentNumber(gameData.skill[sk[0].idx].eff[0].num[sk[0].lv], defEnemy[stateName]);
-					const dmg_ = attacker.atk - defNum;
-					dmg.push(dmg_ < 1 ? 1 : dmg_);
+			const skType = gameData.skill[timeLineEntry[turnIdx].skIdx].element_type;//스킬종류
+			const chance = Math.random();
+			const team = timeLineEntry[turnIdx].team === 'ally' ? enemyAction : allyAction;
+			defencer.forEach((defData, dIdx) => {
+				const defEnemy = defData.ch;
+				if (skType < 7) {//물리공격인지
+					const hitChance =  Math.min((60 + 30 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100) / 100, 0.95); //물리 적중 확률
+					if (team[defData.idx] === undefined || team[defData.idx].indexOf('defence') < 0) { //defence를 안했으면
+						if (chance < hitChance) {
+							// console.log("pgs", chance, hitChance);
+							const criticalChance = Math.random();
+							const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100, 0.1);//치명타 확률 계산
+							if (criticalChance < critical) {
+								console.log("pgs 크리티컬", defEnemy);
+							}
+						} else {
+							const avoidNum = Math.floor(Math.random()*4);//회피 종류
+							team[defData.idx] = 'avoid' + avoidNum;
+							console.log("pgs 회피", defEnemy)
+						}
+					} else { //defence를 했으면
+						const criticalChance = Math.random();
+						const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100, 0.1);//치명타 확률 계산
+						if (criticalChance < critical) {
+							console.log("pgs 크리티컬", defEnemy);
+						}
+					}
 				} else {
-					const dmg_ = attacker.atk - defEnemy.def;
-					dmg.push(dmg_ < 1 ? 1 : dmg_);
+					const magicChance = Math.min((40 + 20 * (attacker.spd - defEnemy.spd) / 100) /100, 0.9); //마법 적중 확률
+					if (chance < magicChance) {
+						console.log("pgs", chance, magicChance);
+
+					} else {
+
+					}
 				}
+				
+				
+				// console.log(attacker, defEnemy)
+				// if (typeof defendSkillEnemy[dIdx] === 'number') {
+				// 	const sk = defEnemy.sk.filter((skData) => {
+				// 		if (skData.idx === 2) {
+				// 			return skData;
+				// 		};
+				// 	});
+				// 	const stateName = util.getStateName(gameData.skill[sk[0].idx].eff[0].type).toLowerCase();
+				// 	const defNum = util.getPercentNumber(gameData.skill[sk[0].idx].eff[0].num[sk[0].lv - 1], defEnemy[stateName]);
+				// 	const dmg_ = attacker.atk - defNum;
+				// 	dmg.push(dmg_ < 1 ? 1 : dmg_);
+				// } else {
+				// 	const dmg_ = attacker.atk - defEnemy.def;
+				// 	dmg.push(dmg_ < 1 ? 1 : dmg_);
+				// }
 			});
-			console.log(dmg);
+			
+			console.log("aaa", dmg,allyAction,enemyAction);
 			//atk, def, mak, mdf, spd
 			//timeLineEntry[turnIdx] 공격자
 			setTimeout(() => {
@@ -443,7 +486,8 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLineEntry, resetO
 					setTimeout(() => {
 						setSkillMsg(false);
 						setTimeout(() => {
-							setEnemyAction(action);
+							setAllyAction(allyAction);
+							setEnemyAction(enemyAction);
 							let targets = util.getEffectArea(gameData.skill[skillIdx].ta, timeLineEntry[turnIdx].target);
 							targets = targets.map((data) => {
 								return {
@@ -671,7 +715,8 @@ const Battle = ({
 				mak = saveCh.bSt5 + saveCh.iSt5 + (effData?.rtSt5 || 0),
 				mdf = saveCh.bSt6 + saveCh.iSt6 + (effData?.rtSt6 || 0),
 				rcv = saveCh.bSt7 + saveCh.iSt7 + (effData?.rtSt7 || 0),
-				spd = saveCh.bSt8 + saveCh.iSt8 + (effData?.rtSt8 || 0);
+				spd = saveCh.bSt8 + saveCh.iSt8 + (effData?.rtSt8 || 0),
+				luk = saveCh.bSt9 + saveCh.iSt9 + (effData?.rtSt9 || 0);
 			ally.push({
 				...saveCh,
 				hp: hp,
@@ -685,6 +730,7 @@ const Battle = ({
 				mdf: mdf,
 				rcv: rcv,
 				spd: spd,
+				luk: luk,
 			});
 		});
 		setBattleAlly(ally);
@@ -813,7 +859,12 @@ const Battle = ({
 		}
 	};
 	const battleCommand = (skill) => {
-		if (mode === 'order') {
+		if (mode !== 'order') {
+			if (skill === 'cancel') { //취소 실행
+				setMode('order');
+				setEffectArea([]);
+			}
+		} else {
 			if (skill === 'cancel') { //취소 실행
 				if (orderIdx > 0) {
 					setOrderIdx((prev) => --prev);
@@ -1183,6 +1234,9 @@ const Battle = ({
 									</div>
 									<ul className="scroll-x">
 										<li><button onClick={() => {
+											battleCommand('cancel');
+										}}><span>취소</span></button></li>
+										<li><button onClick={() => {
 											battleCommand('wait');
 										}}><span>대기</span></button></li>
 										{battleAlly[orderIdx].sk && battleAlly[orderIdx].sk.map((data, idx) => {
@@ -1195,9 +1249,6 @@ const Battle = ({
 												);
 											}
 										})}
-										<li><button onClick={() => {
-											battleCommand('cancel');
-										}}><span>취소</span></button></li>
 									</ul>
 								</>
 							)}

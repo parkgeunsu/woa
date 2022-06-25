@@ -6,7 +6,7 @@ export const save = {
       money:352000
     },
     "ch":[
-      {"idx":0,"stateType":0,"element":[6],"lv":15,"exp":10,"hasExp":50000,"actionPoint":20,"sk":[{"idx":1,"lv":2,"exp":40},{"idx":2,"lv":3,"exp":90},{"idx":3,"lv":1,"exp":0},{"idx":13,"lv":1,"exp":0}],"items":[
+      {"idx":0,"stateType":0,"element":[11],"stateLuk":146,"lv":15,"exp":10,"hasExp":50000,"actionPoint":20,"sk":[{"idx":1,"lv":2,"exp":40},{"idx":2,"lv":3,"exp":90},{"idx":3,"lv":1,"exp":0},{"idx":13,"lv":1,"exp":0}],"items":[
         {"idx":5,"slot":0,"hole":[4,0,12,23],"lv":1,"upgrade":1},
         {},
         {"idx":11,"slot":3,"hole":[],"lv":1,"upgrade":2},
@@ -16,7 +16,7 @@ export const save = {
         {},
         {},
       ]},
-      {"idx":1,"stateType":0,"element":[3],"lv":10,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1},{"idx":2,"lv":1},{"idx":8,"lv":1}],"items":[
+      {"idx":1,"stateType":0,"element":[8],"stateLuk":20,"lv":10,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1},{"idx":2,"lv":1},{"idx":8,"lv":1}],"items":[
         {},
         {},
         {},
@@ -25,7 +25,7 @@ export const save = {
         {},
         {},
         {},]},
-      {"idx":4,"stateType":0,"element":[5],"lv":50,"exp":0,"hasExp":9000,"actionPoint":20,"sk":[{"idx":1,"lv":1},{"idx":2,"lv":1},{"idx":9,"lv":1}],"items":[
+      {"idx":4,"stateType":0,"element":[10],"stateLuk":95,"lv":50,"exp":0,"hasExp":9000,"actionPoint":20,"sk":[{"idx":1,"lv":1},{"idx":2,"lv":1},{"idx":9,"lv":1}],"items":[
         {},
         {},
         {},
@@ -34,7 +34,7 @@ export const save = {
         {},
         {},
         {},]},
-      {"idx":7,"stateType":0,"element":[1],"lv":50,"exp":10,"hasExp":5000,"actionPoint":20,"sk":[{"idx":1,"lv":3,"exp":90},{"idx":2,"lv":5,"exp":70},{"idx":3,"lv":30,"exp":0},{"idx":4,"lv":30,"exp":0}],"items":[
+      {"idx":7,"stateType":0,"element":[6],"stateLuk":35,"lv":50,"exp":10,"hasExp":5000,"actionPoint":20,"sk":[{"idx":1,"lv":3,"exp":90},{"idx":2,"lv":5,"exp":70},{"idx":3,"lv":30,"exp":0},{"idx":4,"lv":30,"exp":0}],"items":[
         {"idx":5,"slot":0,"hole":[4,0,12,23],"lv":1,"upgrade":1},
         {},
         {"idx":3,"slot":3,"hole":[],"lv":1,"upgrade":2},

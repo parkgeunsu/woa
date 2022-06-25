@@ -25,13 +25,7 @@ const FrameBar = styled.span`
 `;
 const Bar = styled.span`
   position:relative;height:100%;border-radius:4px;
-  width:${({rSt, chMaxSt, idx}) => {
-    if (idx === 6) {
-      return 100;
-    } else {
-      return (rSt/chMaxSt)*100;
-    }
-  }}%;
+  width:${({rSt, chMaxSt, idx}) => (rSt/chMaxSt) * 100}%;
   .ico{
     position:absolute;right:2px;top:1px;;width:22px;height:22px;
     background:url(${({stateType}) => stateType}) no-repeat center center;
@@ -80,19 +74,39 @@ const CharacterState = ({
             {stateArr && stateArr.map((data, idx) => {
               return (
                 <div key={`chst${idx}`} className={`st st${idx}`} flex="true">
-                  <span className="name">{data}</span>
-                  <span className="total_bar">
-                    <FrameBar chMaxSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="frame_bar transition gradient_light">
-                      <Bar idx={idx} rSt={slotCh['rSt'+idx]} chMaxSt={slotCh['maxSt'+idx]} stateType={imgSet.iconState[idx]} className="bar transition gradient_dark_y">
-                        <span className="ico"></span>
-                        {/* <span className="txt_current">0</span> */}
-                      </Bar>
-                    </FrameBar>
-                    <BackBar stateBack={stateBack} chMaxSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="back_bar transition" />
-                  </span>
-                  <TextTotal rSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="txt_total" title={data.title}>
-                    {idx === 6 ? slotCh['maxSt'+idx] : slotCh['rSt'+idx]}
-                  </TextTotal>
+                  {idx === stateArr.length - 1 ? (
+                    <>
+                      <span className="name">{data}</span>
+                      <span className="total_bar">
+                        <FrameBar chMaxSt={100} maxSt={100} className="frame_bar transition gradient_light">
+                          <Bar idx={idx} rSt={slotCh.stateLuk} chMaxSt={gameData.stateMax[idx]} stateType={imgSet.iconState[idx]} className="bar transition gradient_dark_y">
+                            <span className="ico"></span>
+                            {/* <span className="txt_current">0</span> */}
+                          </Bar>
+                        </FrameBar>
+                        <BackBar stateBack={stateBack} chMaxSt={slotCh.stateLuk} maxSt={gameData.stateMax[idx]} className="back_bar transition" />
+                      </span>
+                      <TextTotal rSt={slotCh.stateLuk} maxSt={gameData.stateMax[idx]} className="txt_total" title={data.title}>
+                        {slotCh.stateLuk}
+                      </TextTotal>
+                    </>
+                  ) : (
+                    <>
+                      <span className="name">{data}</span>
+                      <span className="total_bar">
+                        <FrameBar chMaxSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="frame_bar transition gradient_light">
+                          <Bar idx={idx} rSt={slotCh['rSt'+idx]} chMaxSt={slotCh['maxSt'+idx]} stateType={imgSet.iconState[idx]} className="bar transition gradient_dark_y">
+                            <span className="ico"></span>
+                            {/* <span className="txt_current">0</span> */}
+                          </Bar>
+                        </FrameBar>
+                        <BackBar stateBack={stateBack} chMaxSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="back_bar transition" />
+                      </span>
+                      <TextTotal rSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="txt_total" title={data.title}>
+                        {slotCh['rSt'+idx]}
+                      </TextTotal>
+                    </>
+                  )}
                 </div>
               )
             })}

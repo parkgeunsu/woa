@@ -65,6 +65,7 @@ export const util = { //this.loadImage();
       battleState_[index] = stateCurrent;
     });
     battleState_[7] = gameData.ch[enemyData.idx].st3 + gameData.ch[enemyData.idx].st5 + gameData.ch[enemyData.idx].st6;
+    battleState_[8] = Math.round(Math.random()*200);
     const battleState = util.getTotalState(battleState_);
     battleState.forEach((bState, index) => {
       const iSt = util.compileState(bState, itemEff[index]);
@@ -80,7 +81,6 @@ export const util = { //this.loadImage();
         ['el' + index]: gameData.animal_type[gameData.ch[enemyData.idx].animal_type].element[index],
       }
     });
-    console.log(enemyData);
     const element = enemyData.element || gameData.ch[enemyData.idx].element;
     element.forEach((elData, index) => {
       enemy = {
@@ -101,12 +101,13 @@ export const util = { //this.loadImage();
         stateMax = Math.round(gameData.stateType[saveChSlot.stateType].arr[49]*0.01*st);//성장타입에 따른 최대 능력치
       saveChSlot = {
         ...saveChSlot,
-        ['rSt' + index]: index === 6 ? stateMax : stateCurrent, //레벨당 현재능력치
+        ['rSt' + index]: stateCurrent, //레벨당 현재능력치
         ['maxSt' + index]: stateMax, //레벨당 최대능력치
       }
-      battleState_[index] = index === 6 ? stateMax : stateCurrent;
+      battleState_[index] = stateCurrent;
     });
     battleState_[7] = gameData.ch[saveChSlot.idx].st3 + gameData.ch[saveChSlot.idx].st5 + gameData.ch[saveChSlot.idx].st6;
+    battleState_[8] = saveChSlot.stateLuk;
     const battleState = util.getTotalState(battleState_);
     battleState.forEach((bState, index) => {
       const iSt = util.compileState(bState, obj.itemEff[index]);
@@ -243,7 +244,7 @@ export const util = { //this.loadImage();
           num = state[3]+state[0]*.3;
           break;
         case 9://LUK
-          num = state[6]+state[3]+state[0];
+          num = state[8];
           break;
         default:
           break;  
@@ -255,9 +256,9 @@ export const util = { //this.loadImage();
   getLineupSt: (lineupType, lineupNum, ch, peopleLength, gameData) => {
     let effArr = [];
     if (!ch) {
-      effArr.push([[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]);
+      effArr.push([[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]);
     } else {
-      let arr = [0,0,0,0,0,0,0,0,0];
+      let arr = [0,0,0,0,0,0,0,0,0,0];
       const eff = gameData.lineup[lineupType].eff[lineupNum];
       const peopleNum = peopleLength - 1 < 0 ? 0 : peopleLength - 1;
       for(let v in eff){
@@ -288,6 +289,9 @@ export const util = { //this.loadImage();
             break;
           case 'SPD':
             arr[8] += eff[v][peopleNum];
+            break;
+          case 'LUK':
+            arr[9] += eff[v][peopleNum];
             break;
         }
       }
@@ -397,10 +401,10 @@ export const util = { //this.loadImage();
     const chData = gameData.ch[data.idx],
       animalSkill = gameData.animal_type[chData.animal_type].skill,
       jobSkill = gameData.job[chData.job].skill,
-      skillArr = [...animalSkill, ...jobSkill];
+      skillArr = [2, ...animalSkill, ...jobSkill];
     const skillNums = [3,6,9,12,15],
       skillLength = skillNums[Math.floor(data.lv / 10) - 1];
-    let skill = [];
+    let skill = [{idx:2,lv:1,}]; //방어 기본 장착
     for(let i = 0; i < skillLength; ++i) {
       const Num = Math.floor(Math.random() * skillArr.length),
       skillIdx = skillArr[Num];

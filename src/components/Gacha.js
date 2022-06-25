@@ -430,6 +430,7 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 			grade: cardG,
 			newState: {
 				actionPoint: 20,
+				stateLuk: Math.round(Math.random() * 200),
 				exp: 0,
 				hasExp: 0,
 				grade: cardG,

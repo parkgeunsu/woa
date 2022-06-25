@@ -301,7 +301,6 @@ const CharacterList = ({
 	saveCh,
 	chData,
 }) => {
-	console.log(chData);
 	return (
 		<>
 			<ListNameLv cardLv={imgCardLv} backColor={gameData.chGradeColor[chData.grade]}>{saveCh.lv}</ListNameLv>
@@ -340,7 +339,7 @@ const Lineup = ({
 	const [noneUseList, setNoneUseList] = useState(saveData.ch);
 	
 	const mapRef = useRef([]);
-	const lineupInfo = ["HP","SP","RSP","ATK","DEF","MAK","MDF","RCV","SPD"];
+	const lineupInfo = ["HP","SP","RSP","ATK","DEF","MAK","MDF","RCV","SPD","LUK"];
 	const lineupSlot = [1,2,3,4,5,6,7,8];
 	const clickSelectSlot = (idx) => {//세이브 슬롯 선택
 		//console.log('saveslot' + idx);

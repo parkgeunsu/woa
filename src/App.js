@@ -105,6 +105,11 @@ const FooterContainer = styled.div`
 
 const App = () => {
   const data = {
+    setting: {
+      speed: 1,
+      bgSound: false,
+      effSound: false,
+    },
     images: {
       chImg: chImg,
       chStyleImg: chStyleImg,
@@ -122,6 +127,7 @@ const App = () => {
       itemMaterial: itemMaterial,
       land: land,
       bgEffect: bgEffect,
+      defenceIcon: defenceIcon,
       eff:eff,
       defenceIcon:defenceIcon,
     },
