@@ -25,7 +25,7 @@ export const skill = [
 	{idx:2,
 		na:'방어',element_type:0,cate:[4],txt:'<u>자신</u> <b buff>$(0)</b>의 방어(DEF)가 <i icon up>증가</i>한다.'
 		,ta_:0,ta:1,effType:2
-		,eff:[{type:4,num:['100%','120%','140%','170%','200%']}],atkCount:1,turn:1,sp:0},
+		,eff:[{type:4,num:['120%','140%','160%','180%','200%']}],atkCount:1,turn:1,sp:0},
 	{idx:3,
 		na:'침뱉기',element_type:9,cate:[3],txt:'<u>가로한줄</u>, <b dmg>$(0)</b>의 <i el el4>수</i>속성 공격을 한다.'
 		,ta_:1,ta:6,effType:6

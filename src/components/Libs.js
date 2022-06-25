@@ -88,6 +88,10 @@ export const util = { //this.loadImage();
         ['el' + elData]: Math.round(enemy['el' + elData] + 50 * (enemyData.grade / 6)),
       }
     });
+    enemy = {
+      ...enemy,
+      stateLuk: battleState_[8],
+    }
     return enemy;
   },
   saveLvState: (saveSlot, obj, saveData, gameData) => {//카드 획득시 레벨당 능력치 저장(캐릭터 저장된 슬롯번호, {카드등급, 아이템 이펙트등...})

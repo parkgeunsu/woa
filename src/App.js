@@ -135,7 +135,7 @@ const App = () => {
       ...gameData,
     },
     setting: {
-      speed: 1,
+      speed: 2,
     }
   }
   const [page, setPage] = useState("main");
