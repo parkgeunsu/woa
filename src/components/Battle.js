@@ -162,10 +162,10 @@ const EffLand = styled.div`
 	top:${({top}) => top}%;
 	overflow:hidden;
 	.dmgNum{
-		position:absolute;left:50%;top:50%;color:var(--color-red);font-size:15px;font-weight:600;transition:all ${({gameSpd}) => 1 / gameSpd}s ease-in;opacity:1;transform:translate(-50%,-50%) scale(1);text-shadow:0 0 1px #fff,0 0 1px #fff,0 0 2px #fff,0 0 2px #fff,0 0 3px #fff;z-index:10;
+		position:absolute;left:50%;top:50%;color:var(--color-red);font-size:15px;font-weight:600;transition:all ${({gameSpd}) => 1.5 / gameSpd}s ease-in;opacity:1;transform:translate(-50%,-50%) scale(1);text-shadow:0 0 1px #fff,0 0 1px #fff,0 0 2px #fff,0 0 2px #fff,0 0 3px #fff;z-index:10;
 	}
 	&.dmg .dmgNum{
-		opacity:0;transform:translate(-50%,-150%) scale(1.5);
+		opacity:0;transform:translate(-50%,-180%) scale(2);
 	}
 `;
 const Eff = styled.img`
@@ -249,7 +249,8 @@ const CardChRing = styled.span`
 `;
 const CardRingStyle = styled.span`
 	position:absolute;width:100%;height:100%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;backface-visibility:hidden;background-color:transparent;
-	background-position:center 100%,center center;background-size:100%;transform:translateZ(4px);
+	background-position:center 100%,center center;background-size:100%;
+	/* transform:translateZ(4px); */
 	span{
 		position:absolute;left:-25%;width:150%;padding-top:150%;top:-30%;height:100%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;background-position:center center;background-size:100%;border:none;animation:ring_ro linear ${({gameSpd}) => 15 / gameSpd}s infinite;pointer-events:none;
 		background-image:url(
@@ -264,7 +265,7 @@ const CardRingStyle = styled.span`
 	}
 `;
 const CardCh = styled.span`
-	position:absolute;top:-27%;left:-15%;width:130%;height:130%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;backface-visibility:hidden;background-color:transparent;
+	position:absolute;top:-27%;left:-15%;width:130%;height:130%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;backface-visibility:hidden;background-color:transparent;z-index:1;
 	background-image:${({chDisplay, styleDisplay}) => {
 		return `url(${styleDisplay}), url(${chDisplay})`;
 	}};background-position:center 5%, center -70%;
@@ -360,37 +361,37 @@ const activeSk = (skIdx) => {
 	}
 }
 
-const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setBattleAlly, setBattleEnemy, allyPos, enemyPos, timeLineSet) => {
+const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, timeLineSet) => {
 	const gameSpd = setting.speed,
 		gameEffSound = setting.effSound;
-	if (turnIdx <= timeLineEntry.length - 1) {
+	if (turnIdx <= timeLine.length - 1) {
 		const turnIdx_ = turnIdx + 1;
-		const skillIdx = timeLineEntry[turnIdx].skIdx;// {team: 'enemy', idx: 0, skIdx: 0, target: 3}
+		const skillIdx = timeLine[turnIdx].skIdx;// {team: 'enemy', idx: 0, skIdx: 0, target: 3}
 		if (skillIdx === 0){ //대기
 			setTurnIdx(turnIdx_);
-			actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setBattleAlly, setBattleEnemy, allyPos, enemyPos, timeLineSet);
+			actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, timeLineSet);
 		} else if (skillIdx === 2 || skillIdx === 13) { //방어, 철벽방어
 			setTurnIdx(turnIdx_);
-			actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setBattleAlly, setBattleEnemy, allyPos, enemyPos, timeLineSet);
+			actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, timeLineSet);
 		} else {
 			let attacker = {},
 				defencer = [],
 				defendSkillEnemy = []; //방어종류 시전 캐릭
 			let allyAction = [],
 				enemyAction = [];
-			if (timeLineEntry[turnIdx].team === 'ally') { //아군 공격
-				attacker = battleAlly[timeLineEntry[turnIdx].idx];
-				// defencer = battleEnemy[timeLineEntry[turnIdx].targetIdx];
-				defencer = timeLineEntry[turnIdx].targetIdx.map((data) => {
+			if (timeLine[turnIdx].team === 'ally') { //아군 공격
+				attacker = battleAlly[timeLine[turnIdx].idx];
+				// defencer = battleEnemy[timeLine[turnIdx].targetIdx];
+				defencer = timeLine[turnIdx].targetIdx.map((data) => {
 					return {
 						ch: battleEnemy[data],
 						idx: data,
 					}
 				});
-				timeLineEntry.forEach((data) => {
+				timeLine.forEach((data) => {
 					if (data.team === 'enemy'){
 						//console.log(dIdx + '적군 방어중');
-						timeLineEntry[turnIdx].targetIdx.forEach((tarIdx) => {
+						timeLine[turnIdx].targetIdx.forEach((tarIdx) => {
 							if (tarIdx === data.idx) {
 								defendSkillEnemy[data.idx] = {
 									idx: data.idx,
@@ -410,18 +411,18 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLineEntry, resetO
 					}
 				});
 			} else { //적군 공격
-				attacker = battleEnemy[timeLineEntry[turnIdx].idx];
-				// defencer = battleAlly[timeLineEntry[turnIdx].targetIdx];
-				defencer = timeLineEntry[turnIdx].targetIdx.map((data) => {
+				attacker = battleEnemy[timeLine[turnIdx].idx];
+				// defencer = battleAlly[timeLine[turnIdx].targetIdx];
+				defencer = timeLine[turnIdx].targetIdx.map((data) => {
 					return {
 						ch: battleAlly[data],
 						idx: data,
 					}
 				});
-				timeLineEntry.forEach((data) => {
+				timeLine.forEach((data) => {
 					if (data.team === 'ally'){
 						//console.log(dIdx + '적군 방어중');
-						timeLineEntry[turnIdx].targetIdx.forEach((tarIdx) => {
+						timeLine[turnIdx].targetIdx.forEach((tarIdx) => {
 							if (tarIdx === data.idx) {
 								defendSkillEnemy[data.idx] = {
 									idx: data.idx,
@@ -441,17 +442,21 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLineEntry, resetO
 					}
 				});
 			}
+			console.log('pgs', defencer);
 			//데미지 공식
 			let dmg = [];
-			const skType = gameData.skill[timeLineEntry[turnIdx].skIdx].element_type;//스킬종류
+			const skType = gameData.skill[timeLine[turnIdx].skIdx].element_type;//스킬종류
 			const chance = Math.random();
-			const team = timeLineEntry[turnIdx].team === 'ally' ? enemyAction : allyAction;
+			const team = timeLine[turnIdx].team === 'ally' ? enemyAction : allyAction;
 			let criticalAtk = false;
 			let avoid = false;
 			defencer.forEach((defData, dIdx) => {
 				const defEnemy = defData.ch;
+				if (!defEnemy) {
+					timeLine[turnIdx].targetIdx = [];
+				}
 				if (skType < 7) {//물리공격인지
-					const hitChance =  Math.min((70 + 30 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100) / 100, 0.95); //물리 적중 확률
+					const hitChance =  Math.min((80 + 30 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100) / 100, 0.95); //물리 적중 확률
 					if (team[defData.idx] === undefined || team[defData.idx].indexOf('defence0') < 0) { //방어를 안했으면
 						// console.log("pgs", chance, hitChance);
 						if (chance < hitChance) {
@@ -459,45 +464,45 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLineEntry, resetO
 							const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100, 0.1);//치명타 확률 계산
 							if (criticalChance < critical) {
 								criticalAtk = true;
-								console.log("pgs 물리 크리티컬", defEnemy);
+								console.log("battle 물리 크리티컬", defEnemy);
 							}
 							team[defData.idx] = team[defData.idx] + ' dmg'
 						} else {
 							const avoidNum = Math.floor(Math.random()*4);//회피 종류
 							team[defData.idx] = 'avoid' + avoidNum;
 							avoid = true;
-							console.log("pgs 물리 회피", defEnemy)
+							console.log("battle 물리 회피", defEnemy)
 						}
 					} else { //defence를 했으면
 						const criticalChance = Math.random();
 						const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100, 0.1);//치명타 확률 계산
 						if (criticalChance < critical) {
 							criticalAtk = true;
-							console.log("pgs 물리 크리티컬", defEnemy);
+							console.log("battle 물리 크리티컬", defEnemy);
 						}
 						team[defData.idx] = team[defData.idx] + ' dmg'
 					}
 				} else {
-					const magicChance = Math.min((50 + 20 * (attacker.spd - defEnemy.spd) / 100) /100, 0.9); //마법 적중 확률
+					const magicChance = Math.min((60 + 20 * (attacker.spd - defEnemy.spd) / 100) /100, 0.9); //마법 적중 확률
 					if (team[defData.idx] === undefined || team[defData.idx].indexOf('defence2') < 0) { //마법방어를 안했으면
 						if (chance < magicChance) {
 							const criticalChance = Math.random();
 							const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100, 0.1);//치명타 확률 계산
 							if (criticalChance < critical) {
-								console.log("pgs 마법 크리티컬", defEnemy);
+								console.log("battle 마법 크리티컬", defEnemy);
 							}
 							team[defData.idx] = team[defData.idx] + ' dmg';
 						} else {
 							const avoidNum = Math.floor(Math.random()*4);//회피 종류
 							team[defData.idx] = 'avoid' + avoidNum;
 							avoid = true;
-							console.log("pgs 마법 회피", defEnemy);
+							console.log("battle 마법 회피", defEnemy);
 						}
 					} else { //마법방어를 했으면
 						const criticalChance = Math.random();
 						const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100, 0.1);//치명타 확률 계산
 						if (criticalChance < critical) {
-							console.log("pgs 마법 크리티컬", defEnemy);
+							console.log("battle 마법 크리티컬", defEnemy);
 						}
 						team[defData.idx] = team[defData.idx] + ' dmg';
 					}
@@ -562,18 +567,18 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLineEntry, resetO
 			});
 			console.log("dmg", dmg, attacker);
 			//atk, def, mak, mdf, spd
-			//timeLineEntry[turnIdx] 공격자
+			//timeLine[turnIdx] 공격자
 			setTimeout(() => {
 				setTimeout(() => {
 					setSkillMsg(true);
 					setTimeout(() => {
 						setSkillMsg(false);
 						setTimeout(() => {
-							const targets = util.getEffectArea(gameData.skill[skillIdx].ta, timeLineEntry[turnIdx].target);
+							const targets = util.getEffectArea(gameData.skill[skillIdx].ta, timeLine[turnIdx].target);
 							let targetIdx = [],
 								targetArr = [],
 								targetCount = 0;
-							if (timeLineEntry[turnIdx].team === 'ally') { 
+							if (timeLine[turnIdx].team === 'ally') { 
 								defencer.forEach((data) => {
 									targetIdx.push(enemyPos[data.idx]);
 								});
@@ -603,49 +608,52 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLineEntry, resetO
 									};
 								}
 							});
-							if (timeLineEntry[turnIdx].team === 'ally') { //적군 영역 effect효과
+							if (timeLine[turnIdx].team === 'ally') { //적군 영역 effect효과
 								setAllyEffect([
 									...targetArr,
 								]);
-								let enemyData = [...battleEnemy];
 								defencer.forEach((defData, idx) => {
-									enemyData[defData.idx].hp -= dmg[idx];
-									if (enemyData[defData.idx].hp < 0) {
-										//다이
+									battleEnemy[defData.idx].hp -= dmg[idx];
+									if (battleEnemy[defData.idx].hp < 0) {//다이
 										enemyAction[defData.idx] = 'die';
-										enemyData[defData.idx].hp = 0;
-										//enemyData.splice(defData.idx,1);
-										console.log('pgsa die', defData.idx);
-										// setTimeout(() => {
-										// 	setBattleEnemy(enemyData);
-										// }, 1000);
+										battleEnemy[defData.idx].hp = 0;
+										//battleEnemy.splice(defData.idx,1);
+										//enemyPos.splice(defData.idx,1);
+										// timeLine.forEach((tData, tIdx) => {
+										// 	if (tData.team === 'enemy' && tData.idx === defData.idx) {
+										// 		timeLine.splice(tIdx, 1);
+										// 	}
+										// });
+										//timeLineSet();
+										console.log('pgsa die', defData, timeLine);
 									}
 								});
-								setBattleEnemy(enemyData);
 							} else { //아군 영역 effect효과
 								setEnemyEffect([
 									...targetArr
 								]);
-								let allyData = [...battleAlly];
 								defencer.forEach((defData, idx) => {
-									allyData[defData.idx].hp -= dmg[idx];
-									if (allyData[defData.idx].hp < 0) {
-										//다이
+									battleAlly[defData.idx].hp -= dmg[idx];
+									if (battleAlly[defData.idx].hp < 0) {//다이
 										allyAction[defData.idx] = 'die';
-										allyData[defData.idx].hp = 0;
-										console.log('pgsa die', defData.idx);
-										//allyData.splice(defData.idx,1);
-										// setTimeout(() => {
-										// 	setBattleAlly(allyData);
-										// }, 1000);
+										battleAlly[defData.idx].hp = 0;
+										// timeLine[turnIdx].targetIdx
+										//battleAlly.splice(defData.idx,1);
+										//allyPos.splice(defData.idx,1);
+										// timeLine.forEach((tData, tIdx) => {
+										// 	if (tData.team === 'ally' && tData.idx === defData.idx) {
+										// 		timeLine.splice(tIdx, 1);
+										// 	}
+										// });
+										//timeLineSet();
+										console.log('pgsa die', defData, timeLine);
 									}
 								});
-								setBattleAlly(allyData);
 							}
 							setAllyAction(allyAction);
 							setEnemyAction(enemyAction);
 							setTimeout(() => {
-								if (timeLineEntry[turnIdx].team === 'ally') {
+								if (timeLine[turnIdx].team === 'ally') {
 									setAllyEffect([]);
 									setEnemyAction([]);
 								} else {
@@ -656,8 +664,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLineEntry, resetO
 								//setAllyEffect, setEnemyEffect 데미지 효과 관리
 								//battleAlly, battleEnemy 아군 적군 기본 데이터
 								//setAllyAction, setEnemyAction
-								//setBattleAlly, setBattleEnemy
-								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setBattleAlly, setBattleEnemy, allyPos, enemyPos, timeLineSet);
+								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, timeLineSet);
 							}, 1000 / gameSpd);//공격 이펙트 효과시간
 						}, 200 / gameSpd);
 					}, 800 / gameSpd);//메시지창 사라짐
@@ -668,7 +675,6 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLineEntry, resetO
 		resetOrder();
 	}
 }
-
 const relationEff = (ch, effObj) => {
 	let effData = [];
 	effObj.forEach((eff)=>{ //인연
@@ -781,31 +787,34 @@ const Battle = ({
 	const [containerW, setContainerW] = useState();
 	const mapSize = 20;
 
-	const [orderIdx, setOrderIdx] = useState(); //명령 지시 순서
-	const [allyOrders, setAllyOrders] = useState([]); //아군 행동저장배열
-	const [EnemyOrders, setEnemyOrders] = useState([]); //적군 행동저장배열
-	const [enemyAi, setEnemyAi] = useState([]); //적군 행동저장배열
-	const [mode, setMode] = useState();
-	const [effectArea, setEffectArea] = useState([]); //스킬 영역
-	const [currentSkill, setCurrentSkill] = useState(); //현재 선택된 스킬
-	const [enemyPos, setEnemyPos] = useState(); //적군 위치값
-	const [allyPos, setAllyPos] = useState([]); //아군 위치값
-	const [battleAlly, setBattleAlly] = useState(); //아군 능력치
-	const	[battleEnemy, setBattleEnemy] = useState(); //적군 능력치
-	const [timeLine, setTimeLine] = useState(); //공격 순번배열
-	const [turnIdx, setTurnIdx] = useState(); //공격캐릭터 활성화 순번
-	const [skillMsg, setSkillMsg] = useState(false); //메시지창 on/off
-	const [relationArr, setRelationArr] = useState(); //인연
-	const [relationHeight, setRelationHeight] = useState(0); //인연 박스 크기
-	const [relationCh, setRelationCh] = useState(); //인연 적용캐릭
+	const allyOrders = useRef([]);//아군 행동저장배열
+	const enemyOrders = useRef([]);//적군 행동저장배열
+	const timeLine = useRef([]);//공격 순번배열
+	const enemyAi = useRef([]);//적군 지능저장배열
+	const currentSkill = useRef();//현재 선택된 스킬
 	const currentAllyIdx = useRef(); //아군 순번 증가 index
 	const currentEnemyIdx = useRef(); //적군 순번 증가 index
 	currentAllyIdx.current = 0;
 	currentEnemyIdx.current = 0;
+	const enemyPos = useRef();//적군 위치값
+	const allyPos = useRef([]);//아군 위치값
+	const battleAlly = useRef([]);//아군 능력치
+	const	battleEnemy = useRef([]);//적군 능력치
+	const relationArr = useRef();//인연
+	const relationHeight = useRef(0);//인연 박스 크기
+	const relationCh = useRef();//인연 적용캐릭
+	const [allyAction, setAllyAction] = useState([]);//아군 움직임(defence, avoid)
+	const [enemyAction, setEnemyAction] = useState([]);//적군 움직임(defence, avoid)
+
+	const [effectArea, setEffectArea] = useState([]); //스킬 영역
+	const [skillMsg, setSkillMsg] = useState(false); //메시지창 on/off
 	const [allyEffect, setAllyEffect] = useState([]);//아군 공격효과
 	const [enemyEffect, setEnemyEffect] = useState([]);//적군 공격효과
-	const [allyAction, setAllyAction] = useState([]);
-	const [enemyAction, setEnemyAction] = useState([]);
+
+	const [orderIdx, setOrderIdx] = useState(); //명령 지시 순서
+	const [mode, setMode] = useState();
+	const [turnIdx, setTurnIdx] = useState(); //공격캐릭터 활성화 순번
+
 	useLayoutEffect(() => {
 		let ally = [],
 			ally_ = [];
@@ -825,15 +834,15 @@ const Battle = ({
 		const allyRelation = relationCheck(saveData, gameData, ally_, 'ally');
 		//최초 실행
 		if (allyRelation.length > 0) { //인연이 있을때
-			setRelationArr(allyRelation);
-			setRelationHeight(35 + 20 + (20 * allyRelation.length)); //인연글씨 + 여백 + 인연갯수
+			relationArr.current = allyRelation;
+			relationHeight.current = 35 + 20 + (20 * allyRelation.length); //인연글씨 + 여백 + 인연갯수
 			setTimeout(() => {
 				setMode('relation');
 				setTimeout(() => {
 					setOrderIdx(0);
 					setMode('order');
 					setTimeout(() => {
-						setRelationArr('');
+						relationArr.current = '';
 					}, 1300 / gameSpd);
 				}, (2000 + allyRelation.length * 300) / gameSpd);
 			}, 100 / gameSpd);
@@ -862,8 +871,9 @@ const Battle = ({
 				rcv = saveCh.bSt7 + saveCh.iSt7 + (effData?.rtSt7 || 0),
 				spd = saveCh.bSt8 + saveCh.iSt8 + (effData?.rtSt8 || 0),
 				luk = saveCh.bSt9 + saveCh.iSt9 + (effData?.rtSt9 || 0);
-			ally.push({
+			battleAlly.current.push({
 				...saveCh,
+				na: gameData.ch[saveCh.idx].na1,
 				hp: hp,
 				hp_: hp,
 				sp: Math.floor(saveCh.bSt1/2),
@@ -878,8 +888,7 @@ const Battle = ({
 				luk: luk,
 			});
 		});
-		setBattleAlly(ally);
-		setAllyPos(pos);
+		allyPos.current = pos;
 		let enemy = [],
 			enemy_ = [],
 			enemyP = [];
@@ -889,7 +898,7 @@ const Battle = ({
 				enemyP.push(idx);
 			}
 		});
-		setEnemyPos(enemyP);
+		enemyPos.current = enemyP;
 		const enemyRelation = relationCheck(saveData, gameData, enemy_, 'enemy');
 		enemy_.forEach((data, idx) => {
 			const gameCh = gameData.ch[data.idx];
@@ -930,24 +939,22 @@ const Battle = ({
 				spd: spd,
 			});
 		});
-		setBattleEnemy(enemy);
-		let ai = [];
-			const makeAi = () => {
-				const ai = Math.random();
-				if (ai < .1) {
-					return 3;
-				} else if (ai < .35) {
-					return 2;
-				} else if (ai < .6) {
-					return 1;
-				} else {
-					return 0;
-				}
-			};
-			enemy.forEach((data, idx) => {
-				ai.push(makeAi());
-			})
-		setEnemyAi(ai);
+		battleEnemy.current = enemy;
+		const makeAi = () => {
+			const ai = Math.random();
+			if (ai < .1) {
+				return 3;
+			} else if (ai < .35) {
+				return 2;
+			} else if (ai < .6) {
+				return 1;
+			} else {
+				return 0;
+			}
+		};
+		enemy.forEach(() => {
+			enemyAi.current.push(makeAi());
+		})
 		//인연 적용캐릭 셋팅
 		let allyRt = [];
 		allyRelation.forEach((data) => {
@@ -969,26 +976,26 @@ const Battle = ({
 		});
 		allyRt = allyRt.filter((element) => element != undefined);
 		enemyRt = enemyRt.filter((element) => element != undefined);
-		setRelationCh({
+		relationCh.current = {
 			ally:[...allyRt],
 			enemy:[...enemyRt],
-		});
+		};
 		setTimeout(() => {
-			setRelationCh({});
+			relationCh.current = {};
 		}, 6000 / gameSpd);
 	}, []);
-	const resetOrder = () => {
+	const resetOrder = useCallback(() => {
 		setOrderIdx(0);
 		setTurnIdx('');
-		setAllyOrders([]);
+		allyOrders.current = [];
 		setMode('order');
-		setTimeLine('');
-	}
+		timeLine.current = [];
+	});
 	const areaSelect = (e, pos) => {
 		if (mode === 'area') {
-			const areaArr = util.getEffectArea(currentSkill.ta, pos);
+			const areaArr = util.getEffectArea(currentSkill.current.ta, pos);
 			let targetIdx = [];
-			enemyPos.forEach((posIdx, idx) => {
+			enemyPos.current.forEach((posIdx, idx) => {
 				areaArr.forEach((actionIdx) => {
 					if (posIdx === actionIdx) {
 						targetIdx.push(idx);
@@ -997,24 +1004,21 @@ const Battle = ({
 			})
 			setEffectArea(areaArr);
 			if (e.target.classList.contains('effect')) {
-				if (orderIdx < battleAlly.length - 1) {
+				if (orderIdx < battleAlly.current.length - 1) {
 					setOrderIdx((prev) => ++prev);
 				} else {
 					setMode('action');
 				}
-				setAllyOrders([
-					...allyOrders,
-					{
-						team: 'ally',
-						idx: orderIdx,
-						skIdx: currentSkill.idx,
-						enemyTarget: true,
-						targetIdx: targetIdx,
-						target: pos,
-					},
-				]);
+				allyOrders.current.push({
+					team: 'ally',
+					idx: orderIdx,
+					skIdx: currentSkill.current.idx,
+					enemyTarget: true,
+					targetIdx: targetIdx,
+					target: pos,
+				});
 				setEffectArea([]);
-				if (orderIdx < battleAlly.length - 1) {
+				if (orderIdx < battleAlly.current.length - 1) {
 					setMode('order');
 				} else {
 					setMode('action');
@@ -1033,25 +1037,20 @@ const Battle = ({
 			if (skill === 'cancel') { //취소 실행
 				if (orderIdx > 0) {
 					setOrderIdx((prev) => --prev);
-					let order = [...allyOrders];
-					order.pop();
-					setAllyOrders(order);
+					allyOrders.current.pop();
 				}
 			} else if (skill === 'wait'){ //대기 실행 sp 증가
-				if (orderIdx < battleAlly.length - 1) {
+				if (orderIdx < battleAlly.current.length - 1) {
 					setOrderIdx((prev) => ++prev);
 				} else {
 					setMode('action');
 					setOrderIdx('');
 				}
-				setAllyOrders([
-					...allyOrders,
-					{
-						team: 'ally',
-						idx: orderIdx,
-						skIdx: 0,
-					},
-				]);
+				allyOrders.current.push({
+					team: 'ally',
+					idx: orderIdx,
+					skIdx: 0,
+				});
 			} else { //스킬 실행
 				const sk = gameData.skill[skill.idx];
 				const skType = sk.cate[0];
@@ -1062,22 +1061,19 @@ const Battle = ({
 						setMode('area');
 						break;
 					case 4: //active(방어)
-						if (orderIdx < battleAlly.length - 1) {
+						if (orderIdx < battleAlly.current.length - 1) {
 							setOrderIdx((prev) => ++prev);
 						} else {
 							setMode('action');
 							setOrderIdx('');
 						}
-						setAllyOrders([
-							...allyOrders,
-							{
-								team: 'ally',
-								idx: orderIdx,
-								skIdx: sk.idx,
-								enemyTarget: false,
-								target: allyPos[orderIdx].pos,
-							},
-						]);
+						allyOrders.current.push({
+							team: 'ally',
+							idx: orderIdx,
+							skIdx: sk.idx,
+							enemyTarget: false,
+							target: allyPos.current[orderIdx].pos,
+						});
 						break;
 					case 5: //buff
 						break;
@@ -1086,80 +1082,88 @@ const Battle = ({
 					default:
 						break;
 				}
-				setCurrentSkill(sk);
+				currentSkill.current = sk;
 			}
 		}
 	};
 	// useLayoutEffect(() => {
-	// 	if (battleEnemy) {
-	// 		let ai = [];
-	// 		const makeAi = () => {
-	// 			const ai = Math.random();
-	// 			if (ai < .1) {
-	// 				return 3;
-	// 			} else if (ai < .35) {
-	// 				return 2;
-	// 			} else if (ai < .6) {
-	// 				return 1;
-	// 			} else {
-	// 				return 0;
-	// 			}
-	// 		};
+	// 	if (enemyOrders.length > 0) {
+	// 		let allyEnemy = [];
+	// 		battleAlly.forEach((data, idx) => {
+	// 			allyEnemy.push({
+	// 				idx: idx,
+	// 				team: 'ally',
+	// 				spd: data.spd,
+	// 			});
+	// 		});
 	// 		battleEnemy.forEach((data, idx) => {
-	// 			ai.push(makeAi());
-	// 		})
-	// 		setEnemyAi(ai);
+	// 			allyEnemy.push({
+	// 				idx: idx,
+	// 				team: 'enemy',
+	// 				spd: data.spd,
+	// 			});
+	// 		});
+	// 		allyEnemy.sort((a, b) => {
+	// 			return b.spd - a.spd;
+	// 		});
+	// 		let timeLineEntry = [];
+	// 		allyEnemy.forEach((data, idx) => {
+	// 			if (data.team === 'ally'){
+	// 				timeLineEntry.push(allyOrders[data.idx]);
+	// 			} else {
+	// 				timeLineEntry.push(enemyOrders[data.idx]);
+	// 			}
+	// 		});
+	// 		setTimeLine(timeLineEntry);
+	// 		console.log('pgs' , 'battleAlly, battleEnemy', timeLineEntry)
 	// 	}
-	// }, [battleEnemy]);
-	useLayoutEffect(() => {
-
-	}, [battleAlly, battleEnemy]);
+	// }, [battleAlly, battleEnemy]);
 	useLayoutEffect(() => {
 		if (mode === 'action') {
-			const enemyOrder = enemyPattern(enemyAi, battleAlly, allyPos, battleEnemy, gameData);
-			let allyEnemy = [];
-			battleAlly.forEach((data, idx) => {
-				allyEnemy.push({
-					idx: idx,
-					team: 'ally',
-					spd: data.spd,
-				});
-			});
-			battleEnemy.forEach((data, idx) => {
-				allyEnemy.push({
-					idx: idx,
-					team: 'enemy',
-					spd: data.spd,
-				});
-			});
-			allyEnemy.sort((a, b) => {
-				return b.spd - a.spd;
-			});
-			let timeLineEntry = [];
-			allyEnemy.forEach((data, idx) => {
-				if (data.team === 'ally'){
-					timeLineEntry.push(allyOrders[data.idx]);
-				} else {
-					timeLineEntry.push(enemyOrder[data.idx]);
-				}
-			});
-			setTimeLine(timeLineEntry);
+			// let allyEnemy = [];
+			// battleAlly.forEach((data, idx) => {
+			// 	allyEnemy.push({
+			// 		idx: idx,
+			// 		team: 'ally',
+			// 		spd: data.spd,
+			// 	});
+			// });
+			// battleEnemy.forEach((data, idx) => {
+			// 	allyEnemy.push({
+			// 		idx: idx,
+			// 		team: 'enemy',
+			// 		spd: data.spd,
+			// 	});
+			// });
+			// allyEnemy.sort((a, b) => {
+			// 	return b.spd - a.spd;
+			// });
+			// let timeLineEntry = [];
+			// allyEnemy.forEach((data, idx) => {
+			// 	if (data.team === 'ally'){
+			// 		timeLineEntry.push(allyOrders[data.idx]);
+			// 	} else {
+			// 		timeLineEntry.push(enemyOrder[data.idx]);
+			// 	}
+			// });
+			// setTimeLine(timeLineEntry);
+			timeLineSet();
 			setTurnIdx(0);
-			actionAnimation(setTurnIdx, setSkillMsg, 0, timeLineEntry, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setBattleAlly, setBattleEnemy, allyPos, enemyPos, timeLineSet);
-			console.log("시뮬레이션 실행", timeLineEntry);
+			actionAnimation(setTurnIdx, setSkillMsg, 0, timeLine.current, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly.current, battleEnemy.current, setting, setAllyAction, setEnemyAction, allyPos.current, enemyPos.current, timeLineSet);
 		}
 	}, [mode]);
-	const timeLineSet = () => {
-		const enemyOrder = enemyPattern(enemyAi, battleAlly, allyPos, battleEnemy, gameData);
+	const timeLineSet = useCallback(() => {
+		//timeLine.current = [];
+		enemyOrders.current = enemyPattern(enemyAi.current, battleAlly.current, allyPos.current, battleEnemy.current, gameData);
 		let allyEnemy = [];
-		battleAlly.forEach((data, idx) => {
+		battleAlly.current.forEach((data, idx) => {
 			allyEnemy.push({
 				idx: idx,
 				team: 'ally',
 				spd: data.spd,
 			});
 		});
-		battleEnemy.forEach((data, idx) => {
+		battleEnemy.current.forEach((data, idx) => {
 			allyEnemy.push({
 				idx: idx,
 				team: 'enemy',
@@ -1169,16 +1173,14 @@ const Battle = ({
 		allyEnemy.sort((a, b) => {
 			return b.spd - a.spd;
 		});
-		let timeLineEntry = [];
 		allyEnemy.forEach((data, idx) => {
 			if (data.team === 'ally'){
-				timeLineEntry.push(allyOrders[data.idx]);
+				timeLine.current.push(allyOrders.current[data.idx]);
 			} else {
-				timeLineEntry.push(enemyOrder[data.idx]);
+				timeLine.current.push(enemyOrders.current[data.idx]);
 			}
 		});
-		setTimeLine(timeLineEntry);
-	};
+	}, [battleAlly.current, battleEnemy.current]);
 	useLayoutEffect(() => {
 		setContainerW(containerRef.current.getBoundingClientRect().height * 0.5 - 25);
 	}, [containerRef.current]);
@@ -1216,10 +1218,10 @@ const Battle = ({
 					<div className="cloud1"></div>
 					<div className="cloud2"></div>
 				</BgEffect>
-				{relationArr && (
-					<RelationArea className={`relation_area ${mode === "relation" ? "on" : ""}`} rtHeight={relationHeight} gameSpd={gameSpd}>
+				{relationArr.current && (
+					<RelationArea className={`relation_area ${mode === "relation" ? "on" : ""}`} rtHeight={relationHeight.current} gameSpd={gameSpd}>
 						<div className="relationTitle"><span>인!</span><span>연!</span><span>발!</span><span>동!</span></div>
-						{relationArr.map((rtData, idx) => {
+						{relationArr.current.map((rtData, idx) => {
 							const rtName = gameData.relation[rtData.idx].na;
 							return (
 								<RelationName key={idx} className="relationName" idx={idx} color={rtData.color} gameSpd={gameSpd}>{rtName}</RelationName>
@@ -1287,37 +1289,37 @@ const Battle = ({
 					</BattleEffect>
 					<BattleUnit containerW={containerW} className="battle_units" frameImg={frameRope}>
 						<div className="units_enemy">
-							{battleEnemy && enemyDeck.map((enemyData, idx)=> {
+							{battleEnemy.current && enemyDeck.map((enemyData, idx)=> {
 								const left = idx % 5 * mapSize,
 									top = Math.floor(idx / 5) * mapSize,
 									area = chkString(effectArea, idx);
 								let rtCh = '';
-								relationCh?.enemy?.forEach((rtch) => {
+								relationCh.current?.enemy?.forEach((rtch) => {
 									if (rtch.idx === enemyData.idx) {
 										rtCh = 'relation';
 									}
 								});
-								const element_type = currentSkill ? currentSkill.element_type : '';
+								const element_type = currentSkill.current ? currentSkill.current.element_type : '';
 								if (enemyData.idx) {
 									const chData = gameData.ch[enemyData.idx];
-									const enemyCh = battleEnemy[currentEnemyIdx.current];
-									const hasHp = (enemyCh.hp / enemyCh.hp_) * 100;
+									const enemyCh = battleEnemy.current[currentEnemyIdx.current];
+									const hasHp = (enemyCh?.hp / enemyCh?.hp_) * 100;
 									const elementCh = area ? "effect" + element_type : "";
 									let actionCh = '';
-									if (typeof turnIdx === 'number' && timeLine && timeLine[turnIdx].team === 'enemy' && currentEnemyIdx.current === timeLine[turnIdx].idx) {
-										//console.log('pgs', 'enemy', timeLine[battleIdx].idx);
+									if (typeof turnIdx === 'number' && timeLine.current && timeLine.current[turnIdx].team === 'enemy' && currentEnemyIdx.current === timeLine.current[turnIdx].idx) {
+										//console.log('pgs', 'enemy', timeLine.current[battleIdx].idx);
 										actionCh = 'action';
 									}
 									const actionPos = enemyAction[currentEnemyIdx.current] || '';
 									currentEnemyIdx.current ++;
 									return (
-										<BattleCh key={idx} className={`battle_ch effect ${elementCh} ${actionCh} ${rtCh} ${actionPos}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize} onClick={(e) => {
+										<BattleCh key={idx} className={`battle_ch effect ${elementCh} ${actionCh} ${rtCh} ${actionPos}`} data-ch={chData?.display} data-idx={idx} left={left} top={top} size={mapSize} onClick={(e) => {
 											areaSelect(e, idx);
 										}} gameSpd={gameSpd} defenceIcon0={imgSet.defenceIcon[0]} defenceIcon1={imgSet.defenceIcon[1]} defenceIcon2={imgSet.defenceIcon[2]}>
 											<div className="ch_box">
-												<CardChRing className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} lv={enemyData.lv} gameSpd={gameSpd} />
-												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>
-												<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData.element]} lv={enemyData.lv}>
+												<CardChRing className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={enemyData.lv} gameSpd={gameSpd} />
+												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData?.style}`]}/>
+												<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData?.element]} lv={enemyData.lv} gameSpd={gameSpd}>
 													<span className="ch_ring transition" />
 												</CardRingStyle>
 												<div className="hpsp">
@@ -1339,50 +1341,50 @@ const Battle = ({
 							})}
 						</div>
 						<div className={`turnLine ${mode === 'action' ? 'on' : ''}`}>
-							{timeLine && timeLine.map((data, idx) => {
-								const chData = data.team === 'ally' ? gameData.ch[battleAlly[data.idx].idx] : gameData.ch[battleEnemy[data.idx].idx];
-								const activeSkill = activeSk(data.skIdx);// active스킬 판단 0대기,2방어,12철벽방어
+							{timeLine.current && timeLine.current.map((data, idx) => {
+								const chData = data.team === 'ally' ? gameData.ch[battleAlly.current[data.idx]?.idx] : gameData.ch[battleEnemy.current[data.idx]?.idx];
+								const activeSkill = activeSk(data.skIdx);// active스킬 판단 0대기,2방어,13철벽방어
 								// data.team 아군적군
 								// data.skIdx 스킬번호
 								// target 범위
 								return (
 									<TimeLineCh key={idx} className={`battle_ch ${turnIdx === idx ? 'on' : ''} ${activeSkill}`} team={data.team} size={30} gameSpd={gameSpd}>
-										<CardChRing style={{top:0,borderRadius:'50%',}} className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} />
-										<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>
+										<CardChRing style={{top:0,borderRadius:'50%',}} className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} />
+										<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData?.style}`]}/>
 									</TimeLineCh>
 								)
 							})}
 						</div>
 						<div className="units_ally">
-							{battleAlly && allyDeck.map((allyData, idx)=> {
+							{battleAlly.current && allyDeck.map((allyData, idx)=> {
 								const left = idx % 5 * mapSize,
 									top = Math.floor(idx / 5) * mapSize;
 								if (typeof allyData === "number") {
-									const saveCh = battleAlly[currentAllyIdx.current];
-									const chData = gameData.ch[saveCh.idx];
+									const saveCh = battleAlly.current[currentAllyIdx.current];
+									const chData = gameData.ch[saveCh?.idx];
 									let rtCh = '';
 									let rtColor;
-									relationCh?.ally?.forEach((rtch) => {
+									relationCh.current?.ally?.forEach((rtch) => {
 										if (rtch.idx === saveCh.idx) {
 											rtCh = 'relation';
 											rtColor = rtch.color;
 										}
 									});
-									const hasHp = (saveCh.hp / saveCh.hp_) * 100,
-										hasSp = (saveCh.sp / saveCh.sp_) * 100;
-									const posCh = (typeof orderIdx === 'number' && allyPos[orderIdx].idx === currentAllyIdx.current) ? 'on' : '';
+									const hasHp = (saveCh?.hp / saveCh?.hp_) * 100,
+										hasSp = (saveCh?.sp / saveCh?.sp_) * 100;
+									const posCh = (typeof orderIdx === 'number' && allyPos.current[orderIdx].idx === currentAllyIdx.current) ? 'on' : '';
 									let actionCh = '';
-									if (typeof turnIdx === 'number' && timeLine && timeLine[turnIdx].team === 'ally' && currentAllyIdx.current === timeLine[turnIdx].idx) {
+									if (typeof turnIdx === 'number' && timeLine.current && timeLine.current[turnIdx].team === 'ally' && currentAllyIdx.current === timeLine.current[turnIdx].idx) {
 										actionCh = 'action';
 									}
 									const actionPos = allyAction[currentAllyIdx.current] || '';
 									currentAllyIdx.current ++;
 									return (
-										<BattleCh key={idx} className={`battle_ch ${posCh} ${actionCh} ${rtCh} ${actionPos}`} data-ch={chData.display} data-idx={idx} left={left} top={top} size={mapSize} rtColor={rtColor}  gameSpd={gameSpd} defenceIcon0={imgSet.defenceIcon[0]} defenceIcon1={imgSet.defenceIcon[1]} defenceIcon2={imgSet.defenceIcon[2]}>
+										<BattleCh key={idx} className={`battle_ch ${posCh} ${actionCh} ${rtCh} ${actionPos}`} data-ch={chData?.display} data-idx={idx} left={left} top={top} size={mapSize} rtColor={rtColor}  gameSpd={gameSpd} defenceIcon0={imgSet.defenceIcon[0]} defenceIcon1={imgSet.defenceIcon[1]} defenceIcon2={imgSet.defenceIcon[2]}>
 											<div className="ch_box">
-												<CardChRing className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} lv={saveCh.lv} />
-												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>
-												<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData.element]} lv={saveCh.lv}>
+												<CardChRing className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={saveCh?.lv} />
+												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData?.style}`]}/>
+												<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData?.element]} lv={saveCh?.lv} gameSpd={gameSpd}>
 													<span className="ch_ring transition" />
 												</CardRingStyle>
 												<div className="hpsp">
@@ -1424,20 +1426,20 @@ const Battle = ({
 						})}
 						</div>
 					</BattleLand>
-					<BattleOrder className={`battle_order ${skillMsg ? 'on' : ''} ${typeof turnIdx === 'number' && timeLine[turnIdx].team === 'ally' ? 'ally' : 'enemy'} ${typeof turnIdx === 'number' && gameData.ch[timeLine[turnIdx].idx].face_d}`} gameSpd={gameSpd}>
+					<BattleOrder className={`battle_order ${skillMsg ? 'on' : ''} ${typeof turnIdx === 'number' && timeLine.current[turnIdx].team === 'ally' ? 'ally' : 'enemy'} ${typeof turnIdx === 'number' && gameData.ch[timeLine.current[turnIdx].idx].face_d}`} gameSpd={gameSpd}>
 						<div className="battle_msg">
-							{typeof turnIdx === 'number' && gameData.skill[timeLine[turnIdx].skIdx]?.na}
+							{typeof turnIdx === 'number' && gameData.skill[timeLine.current[turnIdx].skIdx]?.na}
 						</div>
 					</BattleOrder>
 				</BattleArea>
-				{battleAlly ? 
+				{battleAlly.current ? 
 					<>
 						<BattleMenu className="battle_menu" mode={mode} gameSpd={gameSpd}>
 							{typeof orderIdx === 'number' && (
 								<>
 									<div className="chInfo">
-										<span className="sp">{battleAlly[orderIdx].sp}</span>
-										<span className="spR">{battleAlly[orderIdx].bSt2}</span>
+										<span className="sp">{battleAlly.current[orderIdx].sp}</span>
+										<span className="spR">{battleAlly.current[orderIdx].bSt2}</span>
 									</div>
 									<ul className="scroll-x">
 										<li><button onClick={() => {
@@ -1446,7 +1448,7 @@ const Battle = ({
 										<li><button onClick={() => {
 											battleCommand('wait');
 										}}><span>대기</span></button></li>
-										{battleAlly[orderIdx].sk && battleAlly[orderIdx].sk.map((data, idx) => {
+										{battleAlly.current[orderIdx].sk && battleAlly.current[orderIdx].sk.map((data, idx) => {
 											const sk = gameData.skill;
 											if (sk[data.idx].cate[0] !== 1) {
 												return (
