@@ -4,7 +4,7 @@
 // active4(본인), 바로실행 
 // buff5(아군전체), debuff6(적군전체) 턴제로 실행
 //element_type 무(각자타입으로)(0),찌르기(1),할퀴기(2),물기(3),치기(4),누르기(5),던지기(6),빛(7),어둠(8),물(9),불(10),바람(11),땅(12)
-//eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MATK(5), 술방MDEF(6), 회복RCV(7), 속도SPD(8), 동물에 맞는공격(9), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 빛(20),어둠(21),물(22),불(23),바람(24),땅(25), 진형(100)
+//eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 동물에 맞는공격(9), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 빛(20),어둠(21),물(22),불(23),바람(24),땅(25), 진형(100)
 //ta_ 아군0, 적군1
 //ta getEffectArea 효과범위
 //num 효과
@@ -25,7 +25,7 @@ export const skill = [
 	{idx:2,
 		na:'방어',element_type:0,cate:[4],txt:'<u>자신</u> <b buff>$(0)</b>의 방어(DEF)가 <i icon up>증가</i>한다.'
 		,ta_:0,ta:1,effType:2
-		,eff:[{type:4,num:['120%','140%','160%','180%','200%']}],atkCount:1,turn:1,sp:0},
+		,eff:[{type:4,num:['150%','170%','200%','220%','250%']}],atkCount:1,turn:1,sp:0},
 	{idx:3,
 		na:'침뱉기',element_type:9,cate:[3],txt:'<u>가로한줄</u>, <b dmg>$(0)</b>의 <i el el4>수</i>속성 공격을 한다.'
 		,ta_:1,ta:6,effType:6
@@ -43,7 +43,7 @@ export const skill = [
 		,ta_:0,ta:3,effType:2
 		,eff:[{type:100,num:['10%','15%','20%','25%','30%']}],atkCount:0,turn:0,sp:0},
 	{idx:7,
-		na:'빛정령',element_type:7,cate:[1],txt:'<u>전체</u> 술법 공격력(MATK)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
+		na:'빛정령',element_type:7,cate:[1],txt:'<u>전체</u> 술법 공격력(MAK)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
 		,ta_:0,ta:5,effType:2
 		,eff:[{type:5,num:['10%','15%','20%','25%','30%']}],atkCount:0,turn:0,sp:0},
 	{idx:8,
@@ -67,9 +67,17 @@ export const skill = [
 		,ta_:1,ta:1,effType:2
 		,eff:[{type:9,num:['100%','110%','120%','130%','140%']}],atkCount:1,turn:1,sp:9},
 	{idx:13,
-		na:'철벽방어',element_type:0,cate:[4],txt:'<u>자신</u> <b buff>$(0)</b>의 방어(DEF)와 <b buff>$(1)</b>의 술법방어(MDEF)가 <i icon up>증가</i>한다.'
+		na:'철벽방어',element_type:0,cate:[4],txt:'<u>자신</u> <b buff>$(0)</b>의 방어(DEF)와 <b buff>$(1)</b>의 술법방어(MDF)가 <i icon up>증가</i>한다.'
 		,ta_:0,ta:1,effType:2
-		,eff:[{type:4,num:['100%','120%','140%','170%','200%']},{type:6,num:['100%','120%','140%','170%','200%']}],atkCount:1,turn:1,sp:0},
+		,eff:[{type:4,num:['140%','160%','180%','200%','230%']},{type:6,num:['140%','160%','180%','200%','230%']}],atkCount:1,turn:1,sp:0},
+	{idx:14,
+		na:'마법방어',element_type:0,cate:[4],txt:'<u>자신</u> <b buff>$(0)</b>의 술법방어(MDF)가 <i icon up>증가</i>한다.'
+		,ta_:0,ta:1,effType:2
+		,eff:[{type:6,num:['150%','170%','200%','220%','250%']}],atkCount:1,turn:1,sp:0},
+	{idx:15,
+		na:'나무뒤에 숨기',element_type:0,cate:[4],txt:'<u>자신</u> <b buff>$(0)</b>의 방어(DEF)가 <i icon up>증가</i>한다.'
+		,ta_:0,ta:1,effType:2
+		,eff:[{type:4,num:['300','400','650','800','1000']}],atkCount:1,turn:1,sp:0},
 ]
 
 

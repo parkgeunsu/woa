@@ -180,7 +180,7 @@ export const util = { //this.loadImage();
     } else {
       saveItems = typeof idx === 'number' ? saveCh[idx].items : [{}, {}, {}, {}, {}, {}, {}, {}];
     }
-    //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MATK(5), 술방MDEF(6), 회복RCV(7), 속도SPD(8), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(20),암(21),수(22),화(23),풍(24),지(25), 진형(100)
+    //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(20),암(21),수(22),화(23),풍(24),지(25), 진형(100)
     let effData = [];
     saveItems.forEach((item) => {
       if(item.idx !== undefined){
@@ -385,7 +385,7 @@ export const util = { //this.loadImage();
   },
   getEffectType: (num) => {
     //eff type(효과 dmg_type&buff_type) 찌르기(0),할퀴기(1),물기(2),치기(3),누르기(4),독(11),명(12),암(13),수(14),화(15),풍(16),지(17), 공(21),방(22),술공(23),술방(24),HP(25),SP(26),RSP(27),속도(28),명중(29),진형(100)
-    let arr = ['체력HP','행동SP','행동회복RSP','공ATK','방DEF','술공MATK','술방MDEF','회복RCV','속도SPD','',
+    let arr = ['체력HP','행동SP','행동회복RSP','공ATK','방DEF','술공MAK','술방MDF','회복RCV','속도SPD','',
                 '찌르기','할퀴기','물기','치기','누르기','','','','','','',
                 '명','암','수','화','풍','지','','','','',
                 '','','','','','','','','','',
@@ -396,7 +396,7 @@ export const util = { //this.loadImage();
                 '','','','','','','','','','',
                 '','','','','','','','','','진형'];
 
-    //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MATK(5), 술방MDEF(6), 회복RCV(7), 속도SPD(8), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(20),암(21),수(22),화(23),풍(24),지(25), 진형(100)
+    //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(20),암(21),수(22),화(23),풍(24),지(25), 진형(100)
   
     arr[100] = '진형';
     return arr[num];
@@ -537,9 +537,9 @@ export const util = { //this.loadImage();
       case 4:
         return 'DEF';
       case 5:
-        return 'MATK';
+        return 'MAK';
       case 6:
-        return 'MDEF';
+        return 'MDF';
       case 7:
         return 'RCV';
       case 8:
