@@ -208,6 +208,7 @@ import cloud2 from 'images/bg/cloud2.png';
 import defenceIcon0 from 'images/ico/shield0.png';
 import defenceIcon1 from 'images/ico/shield1.png';
 import defenceIcon2 from 'images/ico/shield2.png';
+import tombstone from 'images/ico/tombstone.png';
 
 import eff0 from 'images/effect/2cna25f.png';
 import eff1 from 'images/effect/Sword1.png';
@@ -268,8 +269,8 @@ export const element = [
 export const bgEffect = [
   cloud1,cloud2
 ];
-export const defenceIcon = [
-  defenceIcon0,defenceIcon1,defenceIcon2
+export const actionIcon = [
+  defenceIcon0,defenceIcon1,defenceIcon2,tombstone,
 ];
 export const eff = [
   eff0,eff1,eff2,eff3,eff4,eff5,eff6
