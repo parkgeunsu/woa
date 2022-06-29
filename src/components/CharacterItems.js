@@ -1,35 +1,10 @@
 import React, { useState, useLayoutEffect, useContext } from 'react';
 import { AppContext } from 'App';
 import styled from 'styled-components';
-import { util } from 'components/Libs';
 import PopupContainer from 'components/PopupContainer';
 import Popup from 'components/Popup';
 import 'css/ch.css';
 
-const Items = styled.div`
-  display:none;
-  &{
-    .animal_item_pic{position:relative;margin:0 auto;width:60%;padding-top:60%;}
-    .animal_item_pic .line{}
-    .animal_item_pic .line span{position:absolute;width:0;height:2px;background:transparent;border-top:1px solid #fff;border-bottom:1px solid #fff;}
-    .equip_items{position:relative;width:100%;}
-    .has_items{padding:5px 0;}
-    .h_items{display:flex;flex-flow:wrap;width:100%;}
-  }
-`;
-const ItemContainer = styled.dl`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-`;
-const ItemArea = styled.dd`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-`;
 const AnimalItemPic = styled.div`
   background: url(${({animalType}) => animalType}) no-repeat center center;
   background-size: 100%;
@@ -81,10 +56,10 @@ const CharacterItems = ({
 
   return (
     <>
-      <Items className="items">
-        <ItemContainer className="info_group it_group">
+      <div className="items">
+        <dl className="info_group it_group">
           <dt>ITEM<span>(아이템 착용)</span></dt>
-          <ItemArea>
+          <dd className="item_area">
             <div className="equip_items">
               <AnimalItemPic animalType={imgSet.animalType[animalIdx]} className={`animal_item_pic animal_type${animalIdx}`}>
                 <span className="line line1"><span className="l1"></span><span className="l2"></span><span className="dot"></span></span>
@@ -184,9 +159,9 @@ const CharacterItems = ({
                 })}
               </ul>
             </div>
-          </ItemArea>
-        </ItemContainer>
-      </Items>
+          </dd>
+        </dl>
+      </div>
       <PopupContainer>
         {popupOn && <Popup type={itemType} dataObj={itemInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {handlePopup()}} gameData={gameData}/>}
       </PopupContainer>

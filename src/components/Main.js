@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { AppContext } from 'App';
 import { Link } from 'react-router-dom';
-
-import backImg from 'images/back/back2.jpg';
 
 const ContentMainWarp = styled.div`
   display: flex;
@@ -11,7 +10,7 @@ const ContentMainWarp = styled.div`
   right: 0;
   top: 0;
   bottom: 0;
-  background:url(${backImg});
+  background:url(${({ backImg }) => backImg});
   background-size: cover;
   padding: 44px 0 0 0;
   flex-direction: column;
@@ -35,9 +34,10 @@ const MenuButton = styled(Link)`
 const Main = ({
   changePage,
 }) => {
+  const imgSet = useContext(AppContext).images;
   return (
     <>
-      <ContentMainWarp className="main_wrap">
+      <ContentMainWarp className="main_wrap" backImg={imgSet.back[2]}>
         <ContentMenu className="main_menu transition">
           <ul className="menu">
             <li><MenuButton to="/character" onClick={() => {changePage("character");}}>Character</MenuButton></li>

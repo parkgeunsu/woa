@@ -1,47 +1,12 @@
+import React, { useContext, useLayoutEffect, useState, useRef } from 'react';
 import { AppContext } from 'App';
 import { util } from 'components/Libs';
-import stateBack from 'images/pattern/white_brick_wall_@2X_.png';
-import React, { useContext, useLayoutEffect, useState } from 'react';
 import styled from 'styled-components';
 
-
 const Element = styled.div`
-  display:none;position:relative;width:100%;
-  &{
-    .st{display:flex;margin:0 0 10px 0;}
-    .name{width:35px;}
-    .info_group{display:flex;flex-direction:column;width:100%;height:100%;box-sizing:border-box;}
-    .info_group dt{padding:0 0 10px;font-size:16px;color:#fff;text-align:center;}
-    .info_group dt span{display:inline-block;margin:0 0 0 5px;color:#999;}
-    .info_group dd{display:flex;flex-direction:column;overflow:hidden;}
-    .total_bar{position:relative;margin:0 5px;height:24px;flex:1;border-radius:6px;border:3px double #913300;background-color:transparent;overflow:hidden;}
-  }
-`;
-const FrameBar = styled.span`
-  position:absolute;left:0;height:100%;background-color:#333;border-radius:4px;
-  width: ${({chMaxSt, maxSt}) => {
-    return (chMaxSt/maxSt)*100;
-  }}%;
-`;
-const Bar = styled.span`
-  position:relative;height:100%;border-radius:4px;
-  width:${({rSt, chMaxSt, idx}) => {
-    if (idx === 6) {
-      return 100;
-    } else {
-      return (rSt/chMaxSt)*100;
-    }
-  }}%;
-  .ico{
-    position:absolute;right:2px;top:1px;;width:22px;height:22px;
-    background:url(${({stateType}) => stateType}) no-repeat center center;
-  }
-`;
-const BackBar = styled.span`
-  position:absolute;right:0;height:100%;background:url(${({stateBack}) => stateBack}) repeat-x left center;border-radius:4px;
-  width: ${({chMaxSt, maxSt}) => {
-    return 100 - (chMaxSt/maxSt)*100;
-  }}% !important;
+  .element_icon{background-image:url(${({ icon }) => icon});background-size:100%;}
+  .element_currentBar{width:${({ percent }) => percent}%;}
+  .element_iconMini{background-image:url(${({ icon }) => icon});background-size:100%;}
 `;
 const stateColor = () => {
   // const color = util.getPercentColor(maxSt ,rSt);
@@ -50,28 +15,27 @@ const stateColor = () => {
   //   text-shadow: 0 0 ${color}px #fff;`
   // );
 }
-const TextTotal = styled.span`
-  margin:auto 0;width:30px;text-align:center;font-size:16px;font-weight:600;
-  color:${({maxSt, rSt}) => {
-    return util.getPercentColor(maxSt ,rSt);
-  }} !important;
-  text-shadow: 0 0 ${({maxSt, rSt}) => (rSt / maxSt) * 10}px #fff;
-`;
-
 const CharacterElement = ({
   saveData,
   slotIdx,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-  const elArr = gameData.element;
   const [slotCh, setSlotCh] = useState(saveData.ch[slotIdx]);
+  const elArr = [];
+  const elRadial = Math.PI*2 / gameData.element.length;
+  gameData.element.forEach((elName, idx) => {
+    elArr[idx] = {
+      na: elName,
+      x: Math.cos(elRadial * idx),
+      y: Math.sin(elRadial * idx),
+    };
+  })
   // const chIdx = saveCh.idx;
   // util.saveLvState(0);
   useLayoutEffect(() => {
     setSlotCh(saveData.ch[slotIdx]);
   }, [slotIdx, saveData]);
-
   // const state_per = [125,200,200,100,200,100,100],
   //   st_t = ['통솔','체력','무력','민첩','지력','정치','매력','운'],
   //   st_c = ['#037ace','#f3004e','#ff5326','#77b516','#f9c215','#5f3dc4','#ce20c2'],
@@ -85,16 +49,18 @@ const CharacterElement = ({
   //   st = [];
   return (
     <>
-      <Element className="element">
+      <div className="element">
         <dl className="info_group ch_group">
           <dt>ELEMENT<span>(속성)</span></dt>
-          <dd className="scroll-y">
+          <dd className="scroll-y" flex-h="true">
             {elArr && elArr.map((data, idx) => {
               const num = slotCh['el' + idx];
+              const elementPercent = num * .5;
               return (
-                <div key={`chst${idx}`} className={`st st${idx}`} flex="true">
-                  {`${data}: ${num}`}
-                </div>
+                <Element key={`chst${idx}`} percent={elementPercent} icon={imgSet.element[idx + 1]} className={`el el${idx}`}>
+                  <div className="element_icon"></div>
+                  <div className="element_bar"><span className={`element_currentBar transition gradient_dark_element${idx%2 === 0 ? "" : "R"}`}><span className="element_iconMini"></span></span></div>
+                </Element>
               )
               // return (
               //   <div key={`chst${idx}`} className={`st st${idx}`} flex="true">
@@ -116,7 +82,7 @@ const CharacterElement = ({
             })}
           </dd>
         </dl>
-      </Element>
+      </div>
     </>
   );
 }

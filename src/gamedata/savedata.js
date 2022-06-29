@@ -34,7 +34,7 @@ export const save = {
         {},
         {},
         {},]},
-      {"idx":7,"stateType":0,"element":[6],"stateLuk":35,"lv":50,"exp":10,"hasExp":5000,"actionPoint":20,"sk":[{"idx":1,"lv":3,"exp":90},{"idx":2,"lv":5,"exp":70},{"idx":3,"lv":30,"exp":0},{"idx":4,"lv":30,"exp":0}],"items":[
+      {"idx":7,"stateType":0,"element":[6],"stateLuk":35,"lv":50,"exp":10,"hasExp":5000,"actionPoint":20,"sk":[{"idx":1,"lv":3,"exp":90},{"idx":2,"lv":5,"exp":70},{"idx":3,"lv":3,"exp":0},{"idx":4,"lv":3,"exp":0}],"items":[
         {"idx":5,"slot":0,"hole":[4,0,12,23],"lv":1,"upgrade":1},
         {},
         {"idx":3,"slot":3,"hole":[],"lv":1,"upgrade":2},

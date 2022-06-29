@@ -408,7 +408,7 @@ export const util = { //this.loadImage();
       skillArr = [2, ...animalSkill, ...jobSkill];
     const skillNums = [3,6,9,12,15],
       skillLength = skillNums[Math.floor(data.lv / 10) - 1];
-    let skill = [{idx:2,lv:1,}]; //방어 기본 장착
+    let skill = [{idx:1,lv:1,},{idx:2,lv:1,}]; //공격, 방어 기본 장착
     for(let i = 0; i < skillLength; ++i) {
       const Num = Math.floor(Math.random() * skillArr.length),
       skillIdx = skillArr[Num];
@@ -545,7 +545,51 @@ export const util = { //this.loadImage();
       case 8:
         return 'SPD';
       case 9:
+        return 'LUK';
+      default:
+        break;
+    }
+  },
+  getMagicState: (type) => {
+    switch (type) {
+      case 0:
         return 'HP';
+      case 1:
+        return 'SP';
+      case 2:
+        return 'RSP';
+      case 3:
+        return 'ATK';
+      case 4:
+        return 'DEF';
+      case 5:
+        return 'MAK';
+      case 6:
+        return 'MDF';
+      case 7:
+        return 'RCV';
+      case 8:
+        return 'SPD';
+      case 9:
+        return 'ATK';
+      case 10:
+        return 'ATK';
+      case 11:
+        return 'ATK';
+      case 12:
+        return 'ATK';
+      case 13:
+        return 'ATK';
+      case 14:
+        return 'ATK';
+      case 20:
+        return 'ATK';
+      case 16:
+        return 'ATK';
+      case 17:
+        return 'ATK';
+      case 18:
+        return 'ATK';
       default:
         break;
     }

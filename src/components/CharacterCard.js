@@ -26,6 +26,7 @@ const ChCard = styled.ul`
   height:100%;
   backface-visibility:hidden;
   z-index:2;
+  pointer-events:none;
   box-shadow:0 0 1px #ff0,0 0 2px #fff,0 0 10px #000;box-shadow:0 0 1px #ff0,0 0 2px #fff,0 0 10px #000;
   border-radius:20px;
   overflow:hidden;
@@ -54,47 +55,32 @@ const ListNameLv = styled.li`
   }
 `;
 const ListCh = styled.li`
-  top:0;
-  width:100%;
-  height:100%;
-  background-repeat:no-repeat;
-  background-size:85%;
-  background-image:url(${({chDisplay}) => chDisplay});
-  background-position:center center;
-  z-index:4;
-  pointer-events:none;
+  top:0;width:100%;height:100%;background-repeat:no-repeat;background-image:url(${({chDisplay}) => chDisplay});background-size:85%;background-position:center center;z-index:4;
 `;
 
 const ListChStyle = styled.li`
-  top:0;width:100%;height:100%;background-repeat:no-repeat;background-size:100%;background-position:center center;z-index:5;pointer-events:none;
-  background-image:url(${({styleDisplay}) => styleDisplay});
+  top:0;width:100%;height:100%;background-repeat:no-repeat;background-image:url(${({styleDisplay}) => styleDisplay});background-size:100%;background-position:center center;z-index:5;
+  
 `;
 const ListChRing = styled.li`
-  top:0;width:100%;height:100%;background:url(${({ringBack}) => ringBack});background-repeat:no-repeat;background-position:center center;background-size:85%;pointer-events:none;z-index:3;
+  top:0;width:100%;height:100%;background-repeat:no-repeat;background:url(${({ringBack}) => ringBack});background-position:center center;background-size:85%;z-index:3;
 `;
 const ListChElement = styled.li`
-  top:0;width:100%;height:100%;background-repeat:no-repeat;background-position:center center;background-size:100%;z-index:1;pointer-events:none;
-  background-image:url(${({ringDisplay}) => ringDisplay});
+  top:0;width:100%;height:100%;background-repeat:no-repeat;background-image:url(${({ringDisplay}) => ringDisplay});background-position:center center;background-size:100%;z-index:1;
 `;
 const ListChElement1 = styled.li`
-  top:0;width:100%;height:100%;background-repeat:no-repeat;background-position:center center;background-size:cover;z-index:2;pointer-events:none;
-  background-image:url(${({chLv, ringDisplay}) => {
+  top:0;width:100%;height:100%;background-repeat:no-repeat;background-image:url(${({chLv, ringDisplay}) => {
     if ( chLv > 29) {
       return ringDisplay;
     }
-  }});
+  }});background-position:center center;background-size:cover;z-index:2;
 `;
 const ListChElement2 = styled.li`
-  top:13%;width:100%;padding-top:100%;background-repeat:no-repeat;background-position:center center;background-size:100%;z-index:2;pointer-events:none;transform:scale(1.35,1.35);animation:rotate_ring 50s linear infinite;
-  background-image:url(${({chLv, ringDisplay}) => {
+  top:13%;width:100%;padding-top:100%;background-repeat:no-repeat;background-image:url(${({chLv, ringDisplay}) => {
     if ( chLv > 49) {
       return ringDisplay;
     }
-  }});
-  @keyframes rotate_ring{
-    0%{transform:scale(1.35,1.35) rotate(0deg);}
-    100%{transform:scale(1.35,1.35) rotate(360deg);}
-  }
+  }});background-position:center center;background-size:100%;z-index:2;transform:scale(1.35,1.35);animation:rotate_ring 50s linear infinite;
 `;
 const ListChStar = styled.li`
   left:0;bottom:22%;width:100%;height:25px;z-index:5;text-align:center;
@@ -119,7 +105,7 @@ const makeStar = (n) => {//별 처리
   return tag
 }
 const ListChFrame = styled.li`
-  top:0;width:100%;height:100%;background:url(${({cardFrame}) => cardFrame});background-repeat:no-repeat;background-position:center center;background-size:100% 100%;z-index:5;pointer-events:none;
+  top:0;width:100%;height:100%;background:url(${({cardFrame}) => cardFrame});background-repeat:no-repeat;background-position:center center;background-size:100% 100%;z-index:5;
 `;
 
 const ChracterDetail = ({

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+	<head>
+	<meta charset="UTF-8">
+	<meta name="Generator" content="EditPlus®">
+	<meta name="Author" content="">
+	<meta name="Keywords" content="">
+	<meta name="Description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>webview</title>
+</head>
+<body>
+	<div class="root">
+	</div>
+	<script>
+		let frame = 60;
+		let tag = '';
+		let percent = 100/(frame - 1);
+		tag += `@keyframes frame${frame}{<br/>`;
+		for(var i = 0; i <= frame - 1; i++){
+			tag += `${Math.round(percent*i*10)/10}%{left:${i%5*-100}%;top:${Math.floor(i/5)*-100}%;}<br/>`;
+		}
+		tag += '}';
+		document.body.innerHTML = tag;
+	</script>
+</body>
+</html>

@@ -1,51 +1,26 @@
 import { AppContext } from 'App';
 import { util } from 'components/Libs';
-import stateBack from 'images/pattern/white_brick_wall_@2X_.png';
 import React, { useContext, useLayoutEffect, useState } from 'react';
 import styled from 'styled-components';
 
-
-const State = styled.div`
-  display:none;position:relative;width:100%;
-  &{
-    .st{display:flex;margin:0 0 10px 0;}
-    .name{width:35px;}
-    .info_group{display:flex;flex-direction:column;width:100%;height:100%;box-sizing:border-box;}
-    .info_group dt{padding:0 0 10px;font-size:16px;color:#fff;text-align:center;}
-    .info_group dt span{display:inline-block;margin:0 0 0 5px;color:#999;}
-    .info_group dd{display:flex;flex-direction:column;overflow:hidden;}
-    .total_bar{position:relative;margin:0 5px;height:24px;flex:1;border-radius:6px;border:3px double #913300;background-color:transparent;overflow:hidden;}
-  }
-`;
 const FrameBar = styled.span`
-  position:absolute;left:0;height:100%;background-color:#333;border-radius:4px;
   width: ${({chMaxSt, maxSt}) => {
     return (chMaxSt/maxSt)*100;
   }}%;
 `;
 const Bar = styled.span`
-  position:relative;height:100%;border-radius:4px;
   width:${({rSt, chMaxSt, idx}) => (rSt/chMaxSt) * 100}%;
   .ico{
-    position:absolute;right:2px;top:1px;;width:22px;height:22px;
     background:url(${({stateType}) => stateType}) no-repeat center center;
   }
 `;
 const BackBar = styled.span`
-  position:absolute;right:0;height:100%;background:url(${({stateBack}) => stateBack}) repeat-x left center;border-radius:4px;
+  background:url(${({stateBack}) => stateBack}) repeat-x left center;
   width: ${({chMaxSt, maxSt}) => {
     return 100 - (chMaxSt/maxSt)*100;
   }}% !important;
 `;
-const stateColor = () => {
-  // const color = util.getPercentColor(maxSt ,rSt);
-  // return (
-  //   `color:${color} !important;
-  //   text-shadow: 0 0 ${color}px #fff;`
-  // );
-}
 const TextTotal = styled.span`
-  margin:auto 0;width:30px;text-align:center;font-size:16px;font-weight:600;
   color:${({maxSt, rSt}) => {
     return util.getPercentColor(maxSt ,rSt);
   }} !important;
@@ -67,7 +42,7 @@ const CharacterState = ({
   }, [slotIdx, saveData]);
   return (
     <>
-      <State className="state">
+      <div className="state">
         <dl className="info_group ch_group">
           <dt>STATE<span>(스탯)</span></dt>
           <dd className="scroll-y">
@@ -84,7 +59,7 @@ const CharacterState = ({
                             {/* <span className="txt_current">0</span> */}
                           </Bar>
                         </FrameBar>
-                        <BackBar stateBack={stateBack} chMaxSt={slotCh.stateLuk} maxSt={gameData.stateMax[idx]} className="back_bar transition" />
+                        <BackBar stateBack={imgSet.etc.stateBack} chMaxSt={slotCh.stateLuk} maxSt={gameData.stateMax[idx]} className="back_bar transition" />
                       </span>
                       <TextTotal rSt={slotCh.stateLuk} maxSt={gameData.stateMax[idx]} className="txt_total" title={data.title}>
                         {slotCh.stateLuk}
@@ -100,7 +75,7 @@ const CharacterState = ({
                             {/* <span className="txt_current">0</span> */}
                           </Bar>
                         </FrameBar>
-                        <BackBar stateBack={stateBack} chMaxSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="back_bar transition" />
+                        <BackBar stateBack={imgSet.etc.stateBack} chMaxSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="back_bar transition" />
                       </span>
                       <TextTotal rSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="txt_total" title={data.title}>
                         {slotCh['rSt'+idx]}
@@ -112,7 +87,7 @@ const CharacterState = ({
             })}
           </dd>
         </dl>
-      </State>
+      </div>
     </>
   );
 }

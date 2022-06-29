@@ -1,3 +1,46 @@
+import back0 from 'images/back/back0.jpg';
+import back1 from 'images/back/back1.jpg';
+import back2 from 'images/back/back2.jpg';
+import back3 from 'images/back/back5.jpg';
+
+import imgCardBack from 'images/card/card_back.png';
+import imgRing from 'images/ring/ring_.png';
+import frameChBack from 'images/frame/frame_chback.png';
+import stateBack from 'images/pattern/white_brick_wall_@2X_.png';
+import imgCardFrame from 'images/card/card_frame.png';
+import imgCardLv from 'images/card/card_lv.png';
+import iconCardName from 'images/card/card_name.png';
+import imgRingBack from 'images/ring/back.png';
+import frameRope from 'images/frame/frame_rope.png';
+import frameLeft from 'images/frame/frame_battle1.png';
+import frameRight from 'images/frame/frame_battle2.png';
+import bar0 from 'images/frame/bar0.png';
+import bar1 from 'images/frame/bar1.png';
+import frameMain from 'images/frame/frame_main.png';
+
+import menu0 from 'images/ico/ch_menu0.png';
+import menu1 from 'images/ico/ch_menu1.png';
+import menu2 from 'images/ico/ch_menu2.png';
+import menu3 from 'images/ico/ch_menu3.png';
+import menu4 from 'images/ico/ch_menu4.png';
+
+import iconBack from 'images/ico/ico_back.png';
+import iconChat from 'images/ico/ico_chat.png';
+import iconSetup from 'images/ico/ico_setup.png';
+import iconLv from 'images/ico/ico_lv.png';
+import iconDia from 'images/ico/ico_dia.png';
+import iconGold from 'images/ico/ico_gold.png';
+import iconAllview from 'images/ico/ico_allview.png';
+import iconLargeview from 'images/ico/ico_largeview.png';
+
+import iconStar1 from 'images/star/star1.png';
+import iconStar2 from 'images/star/star2.png';
+import iconStar3 from 'images/star/star3.png';
+import iconStar4 from 'images/star/star4.png';
+import iconStar5 from 'images/star/star5.png';
+import iconStar6 from 'images/star/star6.png';
+import iconStar7 from 'images/star/star7.png';
+
 import ch0 from 'images/ch/ch0.png';
 import ch1 from 'images/ch/ch1.png';
 import ch10 from 'images/ch/ch10.png';
@@ -192,7 +235,7 @@ import el7 from 'images/ico/el7.png';
 import el8 from 'images/ico/el8.png';
 import el9 from 'images/ico/el9.png';
 import el10 from 'images/ico/el10.png';
-import el11 from 'images/ico/el12.png';
+import el11 from 'images/ico/el11.png';
 import el12 from 'images/ico/el12.png';
 import land1 from 'images/land/land1.png';
 import land2 from 'images/land/land2.png';
@@ -210,14 +253,32 @@ import defenceIcon1 from 'images/ico/shield1.png';
 import defenceIcon2 from 'images/ico/shield2.png';
 import tombstone from 'images/ico/tombstone.png';
 
-import eff0 from 'images/effect/2cna25f.png';
-import eff1 from 'images/effect/Sword1.png';
-import eff2 from 'images/effect/Sword2.png';
-import eff3 from 'images/effect/Sword4.png';
-import eff4 from 'images/effect/Death1.png';
-import eff5 from 'images/effect/light_004.png';
-import eff6 from 'images/effect/ice.png';
-
+//이펙트 애니메이션
+import attack from 'images/effect/attack.png';
+import bite from 'images/effect/bite.png';
+import claw from 'images/effect/claw.png';
+import saliva from 'images/effect/saliva.png';
+// import eff1 from 'images/effect/Sword1.png';
+// import eff2 from 'images/effect/Sword2.png';
+// import eff3 from 'images/effect/Sword4.png';
+// import eff4 from 'images/effect/Death1.png';
+// import eff5 from 'images/effect/light_004.png';
+// import eff6 from 'images/effect/ice.png';
+export const back = [
+  back0,back1,back2,back3
+];
+export const menu = [
+  menu0,menu1,menu2,menu3,menu4
+]
+export const etc = {
+  imgRing:imgRing,imgCardBack:imgCardBack,frameChBack:frameChBack,stateBack:stateBack,imgCardFrame:imgCardFrame,imgCardLv:imgCardLv,iconCardName:iconCardName,imgRingBack:imgRingBack,frameRope:frameRope,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,
+};
+export const icon = {
+  iconBack:iconBack,iconChat:iconChat,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,
+};
+export const iconStar = [
+  iconStar1,iconStar2,iconStar3,iconStar4,iconStar5,iconStar6,iconStar7
+];
 export const chImg = {
   ch0:ch0, ch1:ch1, ch2:ch2, ch3:ch3, ch4:ch4, ch5:ch5, ch6:ch6, ch7:ch7, ch8:ch8, ch9:ch9, ch10:ch10,
   ch11:ch11, ch12:ch12, ch13:ch13, ch14:ch14, ch15:ch15, ch16:ch16, ch17:ch17, ch18:ch18, ch19:ch19, ch20:ch20,
@@ -264,7 +325,7 @@ export const land = [
   grass1,grass2,grass3,land1,land2,land3,stone1,stone2,stone3,water1,water2,water3
 ];
 export const element = [
-  el1,el2,el3,el4,el5,el6,el7,el8,el9,el10,el11,el12
+  el0,el1,el2,el3,el4,el5,el6,el7,el8,el9,el10,el11,el12
 ];
 export const bgEffect = [
   cloud1,cloud2
@@ -273,5 +334,5 @@ export const actionIcon = [
   defenceIcon0,defenceIcon1,defenceIcon2,tombstone,
 ];
 export const eff = [
-  eff0,eff1,eff2,eff3,eff4,eff5,eff6
+  attack,bite,claw,saliva
 ];

@@ -2,30 +2,20 @@ import React, { useRef, useState, useContext, useLayoutEffect, useCallback } fro
 import { AppContext } from 'App';
 import styled from 'styled-components';
 import { util } from 'components/Libs';
-
-import imgBack from 'images/back/back1.jpg';
-import imgRingBack from 'images/ring/back.png';
-import frameRope from 'images/frame/frame_rope.png';
-import frameLeft from 'images/frame/frame_battle1.png';
-import frameRight from 'images/frame/frame_battle2.png';
 import 'css/battle.css';
+import 'css/battleAnimation.css';
 
-const Img = styled.img.attrs(
-  ({imgurl}) => ({
-    src: imgurl 
-  })
-)``;
 const BattleWarp = styled.div`
-	display:flex;position:absolute;left:0;right:0;top:0;bottom:0;background:url(${({backImg}) => backImg});background-size:cover;flex-direction:column;padding:44px 0 0 0;width:100%;height:100%;box-sizing:border-box;overflow:hidden;
+	background:url(${({backImg}) => backImg});background-size:cover;
 `;
 const BattleArea = styled.div`
-	position:relative;height:${({mode}) => {
+	height:${({mode}) => {
 		if (mode === "order" || mode === "area") {
 			return "calc(100% - 50px)";
 		} else {
 			return "100%";
 		}
-	}};background:#3e2c00;transition:height 1s;
+	}};
 	.units_enemy, .units_ally, .land_ally, .land_enemy{
 		height:${({mode}) => {
 			if (mode === "action") {
@@ -35,81 +25,46 @@ const BattleArea = styled.div`
 			}
 		}};
 	}
-	&.action{height:100%;}
-	&:before{content:'';position:absolute;left:${({mode}) => {
+	&:before{left:${({mode}) => {
 		return !mode ? "-50px" : 0;
-	}};top:0;bottom:0;width:50px;background:url(${({frameLeft}) => frameLeft}) no-repeat -15px center;z-index:1;pointer-events:none;transition:left 1s;}
-	&:after{content:'';position:absolute;right:${({mode}) => {
+	}};background:url(${({frameLeft}) => frameLeft}) no-repeat -15px center;}
+	&:after{right:${({mode}) => {
 		return !mode ? "-50px" : 0;
-	}};top:0;bottom:0;width:50px;background:url(${({frameRight}) => frameRight}) no-repeat 13px center;z-index:1;pointer-events:none;transition:right 1s;}
+	}};background:url(${({frameRight}) => frameRight}) no-repeat 13px center;}
 `;
 const BattleUnit = styled.div`
-	display:flex;flex-direction:column;position:absolute;left:0;right:0;top:0;bottom:0;z-index:2;
 	.turnLine{
-		display:flex;flex-direction:row;position:relative;height:0;overflow:hidden;background:#3e2c00;align-items:center;justify-content:center;
-		&.on{height:50px;overflow:unset;}
-		&:before{content:'';position:absolute;width:100%;height:10px;left:0;top:-4px;background:url(${({frameImg}) => frameImg});background-size:contain;}
-		&:after{content:'';position:absolute;width:100%;height:10px;left:0;bottom:-4px;background:url(${({frameImg}) => frameImg});background-size:contain;}
+		&:before{background:url(${({frameImg}) => frameImg});background-size:contain;}
+		&:after{background:url(${({frameImg}) => frameImg});background-size:contain;}
 	}
-	& > div {position:relative;margin:0 auto;width:${({containerW}) => containerW}px;box-sizing:border-box;transition:all 1s;}
-	& .turnLine {width:100%;}
-	& > div .effect0:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-w),inset 0 0 5px 5px var(--color-w);z-index:10;opacity:1;}
-	& > div .effect1:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-w),inset 0 0 5px 5px var(--color-w);z-index:10;opacity:1;}
-	& > div .effect2:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-w),inset 0 0 5px 5px var(--color-w);z-index:10;opacity:1;}
-	& > div .effect3:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-w),inset 0 0 5px 5px var(--color-w);z-index:10;opacity:1;}
-	& > div .effect4:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-w),inset 0 0 5px 5px var(--color-w);z-index:10;opacity:1;}
-	& > div .effect5:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-w),inset 0 0 5px 5px var(--color-w);z-index:10;opacity:1;}
-	& > div .effect6:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-w),inset 0 0 5px 5px var(--color-w);z-index:10;opacity:1;}
-	& > div .effect7:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-yellow),inset 0 0 5px 5px var(--color-yellow);z-index:10;opacity:1;}
-	& > div .effect8:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-b),inset 0 0 5px 5px var(--color-b);z-index:10;opacity:1;}
-	& > div .effect9:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-blue),inset 0 0 5px 5px var(--color-blue);z-index:10;opacity:1;}
-	& > div .effect10:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-red),inset 0 0 5px 5px var(--color-red);z-index:10;opacity:1;}
-	& > div .effect11:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-lightblue),inset 0 0 5px 5px var(--color-lightblue);z-index:10;opacity:1;}
-	& > div .effect12:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-green),inset 0 0 5px 5px var(--color-green);z-index:10;opacity:1;}
+	& > div {width:${({containerW}) => containerW}px;}
 `;
 const TimeLineCh = styled.div`
-	position:relative;width:${({size}) => size}px;padding-top:${({size}) => size}px;box-sizing:border-box;z-index:1;
+	width:${({size}) => size}px;padding-top:${({size}) => size}px;
 	${({team}) => team === 'ally' ? 'margin:15px 0 0 0;' : 'margin:-15px 0 0 0;'}
 	&.on{z-index:20;animation:turnEffect ${({ gameSpd }) => 2 / gameSpd}s linear infinite;}
-	&.none span{filter:grayscale(100%);}
-	&.none:after{content:"";position:absolute;right:0;bottom:0;width:100%;height:100%;z-index:1;}
-	&.wait:after{background:url() no-repeat right center;background-size:50%;}
-	&.defence0:after{background:url(${({defenceIcon0}) => defenceIcon0}) no-repeat right center;background-size:50%;}
-	&.defence1:after{background:url(${({defenceIcon1}) => defenceIcon1}) no-repeat right center;background-size:50%;}
-	&.defence2:after{background:url(${({defenceIcon2}) => defenceIcon2}) no-repeat right center;background-size:50%;}
-	&.defence3:after{background:url(${({defenceIcon3}) => defenceIcon3}) no-repeat right center;background-size:50%;}
-	&.die:after{background:url(${({tombstone}) => tombstone}) no-repeat center center;background-size:50%;}
+	&.defence0:after{background:url(${({defenceIcon0}) => defenceIcon0}) no-repeat right center;background-size:70%;}
+	&.defence1:after{background:url(${({defenceIcon1}) => defenceIcon1}) no-repeat right center;background-size:70%;}
+	&.defence2:after{background:url(${({defenceIcon2}) => defenceIcon2}) no-repeat right center;background-size:70%;}
+	&.defence3:after{background:url(${({defenceIcon3}) => defenceIcon3}) no-repeat right center;background-size:70%;}
+	&.die:after{background:url(${({tombstone}) => tombstone}) no-repeat center center;background-size:70%;}
 `;
 const BattleCh = styled.div`
-	position:absolute;width:${({size}) => size}%;padding-top:${({size}) => size}%;box-sizing:border-box;perspective:100px;transform-style:flat;
+	width:${({size}) => size}%;padding-top:${({size}) => size}%;
 	left:${({left}) => left}%;
 	top:${({top}) => top}%;
 	transition:all ${({ gameSpd }) => 1/ gameSpd}s;
-	z-index:1;
-	&.action{left:50%;top:50%;transform:translate(-50%,-50%) scale(2);z-index:30;}
-	&.action .ch_box .ring_back{box-shadow:0 0 30px 10px #000;}
-	&.relation:after{content:'';position:absolute;left:50%;top:50%;width:100%;height:100%;box-shadow:0 0 15px 5px ${({rtColor}) => rtColor};transform:translate(-50%,-50%);z-index:1;filter:blur(5px);background:${({rtColor}) => rtColor};animation:rtAnimation ${({ gameSpd }) => 4 / gameSpd}s linear;opacity:0;pointer-events:none;}
-	.ch_box{position:absolute;left:5%;top:5%;width:90%;height:90%;transition:all ${({ gameSpd }) => 0.3/ gameSpd}s;transform-origin:50% 100%;transform-style:preserve-3d;}
-	.ch_box .hpsp{position:absolute;height:25%;width:100%;top:-30%;}
-	&.on .hpsp{height:12%;top:-17%;}
+	&.relation:after{box-shadow:0 0 15px 5px ${({rtColor}) => rtColor};background:${({rtColor}) => rtColor};animation:rtAnimation ${({ gameSpd }) => 4 / gameSpd}s linear;}
+	.ch_box{transition:all ${({ gameSpd }) => 0.3/ gameSpd}s;}
 	.ch_box .hpsp{
-		display:flex;flex-direction:column;justify-content:space-between;
 		span {
-			display:flex;height:45%;background-color:#fff;border-radius:10px;overflow:hidden;box-shadow:inset 0 0 2px #000;
-			em{display:inline-block;border-radius:10px;}
 			&.hp{
-				em{height:100%;width:100%;background-color:var(--color-red);transition:all ${({ gameSpd }) => 0.5/ gameSpd}s;}
+				em{transition:all ${({ gameSpd }) => 0.5/ gameSpd}s;}
 			}
 			&.sp{
-				em{height:100%;width:100%;background-color:var(--color-blue);transition:all ${({ gameSpd }) => 0.5/ gameSpd}s;}
+				em{transition:all ${({ gameSpd }) => 0.5/ gameSpd}s;}
 			}
 		}
-	}
-	&.on{z-index:2;pointer-events:none;}
-	&.on .ch_box{transform:scale(1.5) rotateX(-50deg);}
-	&.on .ring_back{box-shadow:0 0 30px #fff,0 0 10px #ff0,0 0 5px #f40;}
-	&:after{
-		content:'';position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;
 	}
 	&.defence0:after{
 		background:url(${({defenceIcon0}) => defenceIcon0}) no-repeat center center;background-size:60%;
@@ -135,14 +90,11 @@ const BattleCh = styled.div`
 	&.avoid3{
 		animation:avoid3 ${({ gameSpd }) => 1/ gameSpd}s ease-out;
 	}
-	.dmg{
-		position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;
-	}
-	&.dmg .dmg{
-		animation:dmgAnimation ${({gameSpd}) => 0.5 / gameSpd}s steps(2) infinite;
-	}
-	&.die .ch_box{
-		opacity:0;transform:scale(.1);
+	${'' /* &.dmg .dmg{
+		animation:dmgAnimation ${({gameSpd}) => 0.5 / gameSpd}s steps(1) infinite;
+	} */}
+	&.dmgCri .dmg{
+		animation:dmgCriticalAnimation ${({gameSpd}) => 0.5 / gameSpd}s steps(4) infinite;
 	}
 	&.die:after{
 		background:url(${({tombstone}) => tombstone}) no-repeat center center;background-size:80%;
@@ -150,101 +102,43 @@ const BattleCh = styled.div`
 	}
 `;
 const BattleLand = styled.div`
-	display:flex;flex-direction:column;position:absolute;left:0;right:0;bottom:0;top:0;
-	& > div {position:relative;margin:0 auto;width:${({containerW}) => containerW}px;box-sizing:border-box;transition:all ${({ gameSpd }) => 1/ gameSpd}s;}
-	.land_ally{position:relative;margin:0 auto;}
-	.land_enemy{position:relative;margin:0 auto;}
-	.turnLine{
-		position:relative;width:100%;height:0;
-		&.on{height:50px;}
-	}
-	&.ready .land{outline-width:2px;}
+	& > div {width:${({containerW}) => containerW}px;transition:all ${({ gameSpd }) => 1/ gameSpd}s;}
 `;
-const BattleEffect = styled(BattleLand)`
-	
+const BattleEffect = styled.div`
+	& > div {width:${({containerW}) => containerW}px;transition:all ${({ gameSpd }) => 1/ gameSpd}s;}
 `;
 const EffLand = styled.div`
-	position:absolute;width:20%;padding-top:20%;box-sizing:border-box;border-radius:0;
 	left:${({left}) => left}%;
 	top:${({top}) => top}%;
-	overflow:hidden;
 	.dmgNum{
-		position:absolute;left:50%;top:50%;color:var(--color-red);font-size:15px;font-weight:600;transition:all ${({gameSpd}) => 1.5 / gameSpd}s ease-in;opacity:1;transform:translate(-50%,-50%) scale(1);text-shadow:0 0 1px #fff,0 0 1px #fff,0 0 2px #fff,0 0 2px #fff,0 0 3px #fff;z-index:10;
-	}
-	&.dmg .dmgNum{
-		opacity:0;transform:translate(-50%,-180%) scale(2);
+		transition:all ${({gameSpd}) => 1.5 / gameSpd}s ease-in;
 	}
 `;
 const Eff = styled.img`
-	position:absolute;left:0;top:0;
-	width:500%;z-index:11;
 	height:${({frame}) => {
-		return (Math.floor(frame / 5) + 1) * 100;
+		return Math.ceil(frame / 5) * 100;
 	}}%;
-	transition:unset;
-	animation:frame${({frame}) => frame} ${({gameSpd}) => 0.5 / gameSpd}s steps(1);
-	animation-iteration-count: ${({repeat}) => repeat};
+	animation:frame${({frame}) => frame} ${({gameSpd}) => 1 / gameSpd}s steps(1);
+	animation-iteration-count: ${({repeat}) => repeat || "infinite"};
 `;
 const Land = styled.div`
-	position:absolute;width:20%;padding-top:20%;box-sizing:border-box;border-radius:0;
 	left:${({left}) => left}%;
 	top:${({top}) => top}%;
 	background-image:url(${({landImg}) => landImg});
-	background-size: 100%;
-	outline:0px solid #fff;
-	transition:outline 1s;
-	&:before{
-		content:'';position:absolute;left:0;right:0;top:0;bottom:0;background:#000;opacity:.1;
-	}
 `;
 const BattleOrder = styled.div`
-	position:absolute;left:0;right:0;transform:translate(0,-50%);z-index:50;transition:all ${({gameSpd}) => 0.5 / gameSpd}s;opacity:0;pointer-events:none;
-	&.ally{bottom:35%;}
-	&.enemy{top:35%;}
-	&.on{opacity:1;}
-	.battle_msg{margin:0 auto;padding:10px;width:50%;height:100%;border-radius:10px;background:#333;box-sizing:border-box;text-align:center;line-height:1.2;font-size:15px;font-weight:600;color:#fff;}
-	&.ally:after{content:'';position:absolute;
-		bottom:-10px;
-    border-top:10px solid #333;
-    border-left:10px solid transparent;
-    border-right:10px solid transparent;
-    border-bottom:0 solid transparent;
-  }
-	&.enemy:after{content:'';position:absolute;
-		top:-10px;
-    border-bottom:10px solid #333;
-    border-left:10px solid transparent;
-    border-right:10px solid transparent;
-    border-top:0 solid transparent;
-  }
-	&.left:after{left:30%;}
-	&.center:after{left:50%;}
-	&.right:after{right:30%;}
+	transition:all ${({gameSpd}) => 0.5 / gameSpd}s;opacity:0;
 `;
 const BattleMenu = styled.div`
-	display:flex;position:relative;height:${({mode}) => {
+	height:${({mode}) => {
 		if (mode === "order" || mode === "area") {
 			return "50px";
 		} else {
 			return "0px";
 		}
-	}};background:var(--color-b);transition:height ${({gameSpd}) => 1 / gameSpd}s;overflow:hidden;
-	.chInfo{display:flex;flex-basis:60px;align-items:center;justify-content:center;}
-	.chInfo span{display:inline-block;}
-	.chInfo .sp{font-size:20px;}
-	.chInfo .spR{margin:0 0 0 5px;}
-	.chInfo .spR:before{content:'('}
-	.chInfo .spR:after{content:')'}
-	ul{display:flex;flex:1;height:100%;align-items:center;justify-content:flex-start;}
-	ul li{height:100%;}
-	ul li button{display:flex;margin:5px;height:40px;border-radius:10px;background:#fff;box-sizing:border-box;align-items:center;}
-	ul li button span{flex:1;white-space:nowrap;}
-	.skSp{font-size:15px;}
-	.skName{font-size:13px;white-space:nowrap;}
+	}};transition:height ${({gameSpd}) => 1 / gameSpd}s;
 `;
 const CardChRing = styled.span`
-	position:absolute;width:100%;height:100%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;backface-visibility:hidden;background-color:transparent;
-	border-radius:30%;overflow:hidden;
 	${({lv, ringBack, ringDisplay, ringDisplay1}) => {
 		if (lv > 29) {
 			return `background-image:url(${ringBack}), url(${ringDisplay}), url(${ringDisplay1});background-position:center 40%,center,center;`
@@ -255,11 +149,8 @@ const CardChRing = styled.span`
 	background-size:100%;
 `;
 const CardRingStyle = styled.span`
-	position:absolute;width:100%;height:100%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;backface-visibility:hidden;background-color:transparent;
-	background-position:center 100%,center center;background-size:100%;
-	/* transform:translateZ(4px); */
 	span{
-		position:absolute;left:-25%;width:150%;padding-top:150%;top:-30%;height:100%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;background-position:center center;background-size:100%;border:none;animation:ring_ro linear ${({gameSpd}) => 15 / gameSpd}s infinite;pointer-events:none;
+		animation:ring_ro linear ${({gameSpd}) => 15 / gameSpd}s infinite;
 		background-image:url(
 			${({ringDisplay, lv}) => {
 				if (lv > 49) {
@@ -269,10 +160,10 @@ const CardRingStyle = styled.span`
 				}
 			}}
 		);
+		background-size:100%;
 	}
 `;
 const CardCh = styled.span`
-	position:absolute;top:-27%;left:-15%;width:130%;height:130%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;backface-visibility:hidden;background-color:transparent;z-index:1;
 	background-image:${({chDisplay, styleDisplay}) => {
 		return `url(${styleDisplay}), url(${chDisplay})`;
 	}};background-position:center 5%, center -70%;
@@ -321,13 +212,20 @@ const enemyPattern = (ai, battleAlly, allyPos, enemy, gameData) => {
 	hpArray.sort((a, b) => {
 		return a.hp - b.hp;
 	}); //allyPos[hpArray[0].idx] 약한캐릭
+	let aliveAlly = [];
+	battleAlly.forEach((allyData, idx) => {
+		if (allyData.state === "alive") {
+			aliveAlly.push(idx);
+		}
+	});
 	enemy.forEach((data, idx) => {
 		const enemyAi = ai[idx];
 		const skillList = activeSkillSorting(data.sk);
 		const activeChance = [0.75, 0.8, 0.85, 0.9, 0.9]; //active스킬 확률
 		const normalAttackChance = [0.3, 0.2, 0.15, 0.15, 0.1]; //일반공격 확률
 		const weakAttackChance = [0, 0.2, 0.4, 0.6, 0.8]; //약한적 공격 확률
-		const attackTarget = Math.floor(Math.random() * allyPos.length);
+		const attackTarget = aliveAlly[Math.floor(Math.random() * aliveAlly.length)];
+		// const attackTarget = Math.floor(Math.random() * allyPos.length);
 		const ranCount = Math.random();
 		const target = Math.random() <= weakAttackChance[enemyAi] ? hpArray[0].idx : attackTarget;
 		const skillType = ranCount > activeChance[enemyAi] ? skillList.buff : skillList.active;
@@ -380,22 +278,53 @@ const activeSk = (timeLineData) => {
 	}
 }
 
-const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, timeLineSet) => {
+const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode) => {
+	if (modeRef.indexOf('battle') >= 0){
+		return;
+	}
+	const endGameCheck = () => {
+		const chLength = [battleAlly.length, battleEnemy.length],
+			allyEnemyDie = [0,0];
+		battleAlly.forEach((ally) => {
+			if (ally.state === 'die') {
+				allyEnemyDie[0] ++;
+			}
+		});
+		battleEnemy.forEach((enemy) => {
+			if (enemy.state === 'die') {
+				allyEnemyDie[1] ++;
+			}
+		})
+		if (allyEnemyDie[0] >= chLength[0]) {
+			modeRef = 'battleLose';
+			resetOrder('battleLose');
+		}
+		if (allyEnemyDie[1] >= chLength[1]) {
+			modeRef = 'battleWin';
+			resetOrder('battleWin');
+		}
+	}
 	const gameSpd = setting.speed,
 		gameEffSound = setting.effSound;
 	if (turnIdx <= timeLine.length - 1) {
 		const turnIdx_ = turnIdx + 1;
 		let skillIdx = timeLine[turnIdx].order.skIdx;// {team: 'enemy', idx: 0, skIdx: 0, target: 3}
-		if (timeLine[turnIdx].state === 'die') { //죽었을시
-			skillIdx = 0;
-			console.log('pass');
+		//console.log('pgs', timeLine, turnIdx);
+		if (timeLine[turnIdx].order.team === 'ally') {//죽은 상태인지
+			if (battleAlly[timeLine[turnIdx].order.idx].state === 'die') {
+				skillIdx = 0;
+			}
+		} else {
+			if (battleEnemy[timeLine[turnIdx].order.idx].state === 'die') {
+				skillIdx = 0;
+			}
 		}
 		if (skillIdx === 0){ //대기
 			setTurnIdx(turnIdx_);
-			actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, timeLineSet);
+			actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode);
 		} else if (skillIdx === 2 || skillIdx === 13) { //방어, 철벽방어
 			setTurnIdx(turnIdx_);
-			actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, timeLineSet);
+			actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode);
 		} else {
 			let attacker = {},
 				defencer = [],
@@ -475,114 +404,132 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 			let avoid = false;
 			defencer.forEach((defData, dIdx) => {
 				const defEnemy = defData.ch;
-				if (skType < 7) {//물리공격인지
-					const hitChance =  Math.min((80 + 30 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100) / 100, 0.95); //물리 적중 확률
-					if (team[defData.idx] === undefined || team[defData.idx].indexOf('defence0') < 0) { //방어를 안했으면
-						// console.log("pgs", chance, hitChance);
-						if (chance < hitChance) {
+				if (defEnemy.state !== 'die') { //적이 살았을 경우
+					if (skType < 7) {//물리공격인지
+						const hitChance =  Math.min((80 + 30 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100) / 100, 0.95); //물리 적중 확률
+						if (team[defData.idx] === undefined || team[defData.idx].indexOf('defence0') < 0) { //방어를 안했으면
+							// console.log("pgs", chance, hitChance);
+							if (chance < hitChance) {
+								const criticalChance = Math.random();
+								const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100, 0.1);//치명타 확률 계산
+								if (criticalChance < critical) {
+									criticalAtk = true;
+									team[defData.idx] = team[defData.idx] + ' dmgCri'
+								} else {
+									team[defData.idx] = team[defData.idx] + ' dmg'
+								}
+							} else {
+								const avoidNum = Math.floor(Math.random()*4);//회피 종류
+								avoid = true;
+								team[defData.idx] = 'avoid' + avoidNum;
+							}
+						} else { //defence를 했으면
 							const criticalChance = Math.random();
 							const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100, 0.1);//치명타 확률 계산
 							if (criticalChance < critical) {
 								criticalAtk = true;
-								console.log("battle 물리 크리티컬", defEnemy);
+								team[defData.idx] = team[defData.idx] + ' dmgCri'
+							} else {
+								team[defData.idx] = team[defData.idx] + ' dmg'
 							}
-							team[defData.idx] = team[defData.idx] + ' dmg'
-						} else {
-							const avoidNum = Math.floor(Math.random()*4);//회피 종류
-							team[defData.idx] = 'avoid' + avoidNum;
-							avoid = true;
-							console.log("battle 물리 회피", defEnemy)
 						}
-					} else { //defence를 했으면
-						const criticalChance = Math.random();
-						const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100, 0.1);//치명타 확률 계산
-						if (criticalChance < critical) {
-							criticalAtk = true;
-							console.log("battle 물리 크리티컬", defEnemy);
-						}
-						team[defData.idx] = team[defData.idx] + ' dmg'
-					}
-				} else {
-					const magicChance = Math.min((60 + 20 * (attacker.spd - defEnemy.spd) / 100) /100, 0.9); //마법 적중 확률
-					if (team[defData.idx] === undefined || team[defData.idx].indexOf('defence2') < 0) { //마법방어를 안했으면
-						if (chance < magicChance) {
+					} else {
+						const magicChance = Math.min((60 + 20 * (attacker.spd - defEnemy.spd) / 100) /100, 0.9); //마법 적중 확률
+						if (team[defData.idx] === undefined || team[defData.idx].indexOf('defence2') < 0) { //마법방어를 안했으면
+							if (chance < magicChance) {
+								const criticalChance = Math.random();
+								const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100, 0.1);//치명타 확률 계산
+								if (criticalChance < critical) {
+									criticalAtk = true;
+									team[defData.idx] = team[defData.idx] + ' dmgCri'
+								} else {
+									team[defData.idx] = team[defData.idx] + ' dmg';
+								}
+							} else {
+								const avoidNum = Math.floor(Math.random()*4);//회피 종류
+								avoid = true;
+								team[defData.idx] = 'avoid' + avoidNum;
+							}
+						} else { //마법방어를 했으면
 							const criticalChance = Math.random();
 							const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100, 0.1);//치명타 확률 계산
 							if (criticalChance < critical) {
-								console.log("battle 마법 크리티컬", defEnemy);
+								criticalAtk = true;
+								team[defData.idx] = team[defData.idx] + ' dmgCri'
+							} else {
+								team[defData.idx] = team[defData.idx] + ' dmg';
 							}
-							team[defData.idx] = team[defData.idx] + ' dmg';
-						} else {
-							const avoidNum = Math.floor(Math.random()*4);//회피 종류
-							team[defData.idx] = 'avoid' + avoidNum;
-							avoid = true;
-							console.log("battle 마법 회피", defEnemy);
 						}
-					} else { //마법방어를 했으면
-						const criticalChance = Math.random();
-						const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100, 0.1);//치명타 확률 계산
-						if (criticalChance < critical) {
-							console.log("battle 마법 크리티컬", defEnemy);
+					}
+					//마법 방어와 방어 분기 처리
+					//스킬 공격치 적용
+					//skill dmg
+					let dmg_ = 0,
+						atkNum = {},
+						defNum = {},
+						sk = {},
+						attackType = 0,
+						defenceType = 0;
+					if (skType < 7) {//물리공격
+						attackType = 'atk';
+						defenceType = 'def';
+					} else {//마법공격
+						attackType = 'mak';
+						defenceType = 'mdf';
+					}
+					defendSkillEnemy.forEach((defEnemy_, idx) => {
+						const chkIdx = defEnemy_.idx;
+						if (chkIdx === 2) {
+							sk = defEnemy.sk.filter((skData) => {
+								if (skData.idx === 2) {
+									return skData;
+								};
+							});
+						} else if (chkIdx === 13) {
+							sk = defEnemy.sk.filter((skData) => {
+								if (skData.idx === 13) {
+									return skData;
+								};
+							});	
+						} else if (chkIdx === 14) {
+							sk = defEnemy.sk.filter((skData) => {
+								if (skData.idx === 14) {
+									return skData;
+								};
+							});	
+						} else if (chkIdx === 15) {
+							sk = defEnemy.sk.filter((skData) => {
+								if (skData.idx === 15) {
+									return skData;
+								};
+							});	
 						}
-						team[defData.idx] = team[defData.idx] + ' dmg';
+					});
+					if (Object.keys(sk).length !== 0) {
+						gameData.skill[sk[0].idx].eff.forEach((skData) => {
+							const stateName = util.getStateName(skData.type).toLocaleLowerCase();
+							const skill = sk[0].lv > 5 ? 5 : sk[0].lv;
+							defNum[stateName] = util.getPercentNumber(skData.num[skill - 1], defEnemy[stateName]);
+						})
+					} else {
+						defNum = defEnemy;
 					}
-				}
-				//마법 방어와 방어 분기 처리
-				//스킬 공격치 적용
-				//skill dmg
-				let dmg_ = 0,
-					defNum = {},
-					sk = {},
-					attackType = 0,
-					defenceType = 0;
-				if (skType < 7) {//물리공격
-					attackType = 'atk';
-					defenceType = 'def';
-				} else {//마법공격
-					attackType = 'mak';
-					defenceType = 'mdf';
-				}
-				defendSkillEnemy.forEach((defEnemy_, idx) => {
-					const chkIdx = defEnemy_.idx;
-					if (chkIdx === 2) {
-						sk = defEnemy.sk.filter((skData) => {
-							if (skData.idx === 2) {
-								return skData;
-							};
-						});
-					} else if (chkIdx === 13) {
-						sk = defEnemy.sk.filter((skData) => {
-							if (skData.idx === 13) {
-								return skData;
-							};
-						});	
-					} else if (chkIdx === 14) {
-						sk = defEnemy.sk.filter((skData) => {
-							if (skData.idx === 14) {
-								return skData;
-							};
-						});	
-					} else if (chkIdx === 15) {
-						sk = defEnemy.sk.filter((skData) => {
-							if (skData.idx === 15) {
-								return skData;
-							};
-						});	
-					}
-				});
-				if (Object.keys(sk).length !== 0) {
-					gameData.skill[sk[0].idx].eff.forEach((skData) => {
+					const attackerSkill = attacker.sk.filter((skData) => {
+						return skData.idx === timeLine[turnIdx].order.skIdx;
+					});
+					gameData.skill[attackerSkill[0].idx].eff.forEach((skData) => {
 						const stateName = util.getStateName(skData.type).toLocaleLowerCase();
-						defNum[stateName] = util.getPercentNumber(skData.num[sk[0].lv - 1], defEnemy[stateName]);
-					})
-				} else {
-					defNum = defEnemy;
-				}
-				dmg_ = (criticalAtk ? attacker[attackType] * 2 : attacker[attackType]) - (defNum[defenceType] || defEnemy[defenceType]);
-				if (avoid) {
+						const skill = attackerSkill[0].lv > 5 ? 5 : attackerSkill[0].lv;
+						atkNum[stateName] = util.getPercentNumber(skData.num[skill - 1], attacker[stateName]);
+					});
+					dmg_ = (criticalAtk ? atkNum[attackType] * 2 : atkNum[attackType]) - (defNum[defenceType] || defEnemy[defenceType]);
+					if (avoid) {
+						dmg.push('');
+					} else {
+						dmg.push(dmg_ < 1 ? 1 : dmg_);
+					}
+				} else { //적이 죽었을 경우
 					dmg.push('');
-				} else {
-					dmg.push(dmg_ < 1 ? 1 : dmg_);
 				}
 			});
 			console.log("dmg", dmg, attacker);
@@ -617,14 +564,14 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 								if (chk) { //스킬 맞는 위치와 범위값중 일치하는지 확인
 									targetArr[idx] = {
 										idx:data,
-										type:gameData.skill[skillIdx].effType,
+										animation:gameData.skill[skillIdx].effAnimation,
 										dmg:Math.floor(dmg[targetCount]),
 									};
 									targetCount ++;
 								} else {
 									targetArr[idx] = {
 										idx:data,
-										type:gameData.skill[skillIdx].effType,
+										animation:gameData.skill[skillIdx].effAnimation,
 									};
 								}
 							});
@@ -638,17 +585,10 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 										enemyAction[defData.idx] = 'die';
 										battleEnemy[defData.idx].hp = 0;
 										battleEnemy[defData.idx].state = 'die';
-										//battleEnemy.splice(defData.idx,1);
-										//enemyPos.splice(defData.idx,1);
-										// timeLine.forEach((tData, tIdx) => {
-										// 	if (tData.team === 'enemy' && tData.idx === defData.idx) {
-										// 		timeLine.splice(tIdx, 1);
-										// 	}
-										// });
-										//timeLineSet();
-										console.log('pgsa die', defData, timeLine);
+										// console.log('die', defData.idx, battleEnemy[defData.idx].state);
 									}
 								});
+								endGameCheck();
 							} else { //아군 영역 effect효과
 								setEnemyEffect([
 									...targetArr
@@ -659,18 +599,10 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 										allyAction[defData.idx] = 'die';
 										battleAlly[defData.idx].hp = 0;
 										battleAlly[defData.idx].state = 'die';
-										// timeLine[turnIdx].targetIdx
-										//battleAlly.splice(defData.idx,1);
-										//allyPos.splice(defData.idx,1);
-										// timeLine.forEach((tData, tIdx) => {
-										// 	if (tData.team === 'ally' && tData.idx === defData.idx) {
-										// 		timeLine.splice(tIdx, 1);
-										// 	}
-										// });
-										//timeLineSet();
-										console.log('pgsa die', defData, timeLine);
+										// console.log('die', defData.idx, battleAlly[defData.idx].state);
 									}
 								});
+								endGameCheck();
 							}
 							setAllyAction(allyAction);
 							setEnemyAction(enemyAction);
@@ -683,7 +615,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 									setAllyAction([]);
 								}
 								setTurnIdx(turnIdx_);
-								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, timeLineSet);
+								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode);
 							}, 1000 / gameSpd);//공격 이펙트 효과시간
 						}, 200 / gameSpd);
 					}, 800 / gameSpd);//메시지창 사라짐
@@ -691,7 +623,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 			}, 800 / gameSpd);
 		}
 	} else {
-		resetOrder();
+		resetOrder('order');
 	}
 }
 const relationEff = (ch, effObj) => {
@@ -765,8 +697,8 @@ const relationCheck = (saveData, gameData, team, teamChk) => {
 }
 const RelationArea = styled.div`
 	display:flex;position:absolute;left:0;right:0;top:0;bottom:0;flex-direction:column;z-index:10;align-items:center;justify-content:center;pointer-events:none;
-	&:after{content:'';position:absolute;width:100%;height:0;box-shadow:0 0 20px 10px rgba(0,0,0,.7);background:rgba(0,0,0,.7);transition:height ${({gameSpd}) => 0.5 / gameSpd}s ${({gameSpd}) => 0.5 / gameSpd}s ease-in-out;}
-	&.on:after{height:${({rtHeight}) => rtHeight}px;}
+	&:after{content:'';position:absolute;width:100%;height:0;box-shadow:0 0 20px 10px rgba(0,0,0,0);background:rgba(0,0,0,.7);transition:all ${({gameSpd}) => 0.5 / gameSpd}s ${({gameSpd}) => 0.5 / gameSpd}s ease-in-out;}
+	&.on:after{height:${({rtHeight}) => rtHeight}px;box-shadow:0 0 20px 10px rgba(0,0,0,.7);}
 	.relationTitle{margin:0 0 10px 0;z-index:1;}
 	.relationTitle span{display:inline-block;margin:0 2px;font-size:25px;font-weight:600;opacity:0;color:#fff;}
 	.relationTitle span:first-of-type{transition:opacity ${({gameSpd}) => 0.5 / gameSpd}s 0s;text-shadow:0 0 10px #ff0,0 0 10px #ff0;}
@@ -832,16 +764,16 @@ const Battle = ({
 
 	const [orderIdx, setOrderIdx] = useState(); //명령 지시 순서
 	const [mode, setMode] = useState();
+	const modeRef = useRef('');
 	const [turnIdx, setTurnIdx] = useState(); //공격캐릭터 활성화 순번
 
 	useLayoutEffect(() => {
-		let ally = [],
-			ally_ = [];
+		let ally = [];
 		let pos = [];
 		let count = 0;
 		allyDeck.filter((data, idx) => {
 			if (typeof data === 'number') {
-				ally_.push(data);
+				ally.push(data);
 				pos.push({
 					idx: count,
 					cardSlot: data,
@@ -850,7 +782,7 @@ const Battle = ({
 				count ++;
 			}
 		});
-		const allyRelation = relationCheck(saveData, gameData, ally_, 'ally');
+		const allyRelation = relationCheck(saveData, gameData, ally, 'ally');
 		//최초 실행
 		if (allyRelation.length > 0) { //인연이 있을때
 			relationArr.current = allyRelation;
@@ -869,7 +801,7 @@ const Battle = ({
 			setOrderIdx(0);
 			setMode('order');
 		}
-		ally_.forEach((data, idx) => {
+		ally.forEach((data, idx) => {
 			const saveCh = saveData.ch[data];
 			let effData;
 			//인연 체크
@@ -1005,13 +937,15 @@ const Battle = ({
 			relationCh.current = {};
 		}, 6000 / gameSpd);
 	}, []);
-	const resetOrder = useCallback(() => {
+	const resetOrder = (mode) => {
 		setOrderIdx(0);
 		setTurnIdx('');
 		allyOrders.current = [];
-		setMode('order');
 		timeLine.current = [];
-	});
+		console.log('pgs', mode);
+		modeRef.current = mode;
+		setMode(mode);
+	};
 	const areaSelect = (e, pos) => {
 		if (mode === 'area') {
 			const areaArr = util.getEffectArea(currentSkill.current.ta, pos);
@@ -1049,6 +983,9 @@ const Battle = ({
 		}
 	};
 	const battleCommand = (skill) => {
+		if (mode === 'end') {//전투 종료시
+			return;
+		}
 		if (mode !== 'order') {
 			if (skill === 'cancel') { //취소 실행
 				setMode('order');
@@ -1112,7 +1049,11 @@ const Battle = ({
 			timeLineSet();
 			console.log(timeLine.current);
 			setTurnIdx(0);
-			actionAnimation(setTurnIdx, setSkillMsg, 0, timeLine.current, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly.current, battleEnemy.current, setting, setAllyAction, setEnemyAction, allyPos.current, enemyPos.current, timeLineSet);
+			actionAnimation(setTurnIdx, setSkillMsg, 0, timeLine.current, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly.current, battleEnemy.current, setting, setAllyAction, setEnemyAction, allyPos.current, enemyPos.current, modeRef.current, setMode);
+		} else if (mode === 'battleWin') {
+			console.log('pgs', '격!퇴!성!공!');
+		} else if (mode === 'battleLose') {
+			console.log('pgs', '격!퇴!실!패!');
 		}
 	}, [mode]);
 	
@@ -1196,7 +1137,7 @@ const Battle = ({
 	];
   return (
     <>
-      <BattleWarp className="battle_wrap" backImg={imgBack}>
+      <BattleWarp className={`battle_wrap ${mode}`} backImg={imgSet.back[1]}>
 				<BgEffect className={`bgEffect ${mode === "action" ? "action" : ""}`} img1={imgSet.bgEffect[0]} img2={imgSet.bgEffect[1]} gameSpd={gameSpd}>
 					<div className="cloud1"></div>
 					<div className="cloud2"></div>
@@ -1212,28 +1153,28 @@ const Battle = ({
 						})}
 					</RelationArea>
 				)}
-				<BattleArea ref={containerRef} className={`battle_area ${mode === "action" ? "action" : ""}`} mode={mode} frameLeft={frameLeft} frameRight={frameRight}>
+				<BattleArea ref={containerRef} className={`battle_area ${mode === "action" ? "action" : ""}`} mode={mode} frameLeft={imgSet.etc.frameLeft} frameRight={imgSet.etc.frameRight}>
 					<BattleEffect containerW={containerW} className="battle_effect">
 						<div className="land_enemy">
 						{map.map((data, idx) => {
 							const left = idx % 5 * mapSize,
 								top = Math.floor(idx / 5) * mapSize;
 							let effectChk = false,
-								effType = '',
+								effAnimation = '',
 								effNum = '';
 							allyEffect.forEach((effData) => {
 								if (effData.idx === idx) {
 									effectChk = true;
-									effType = effData.type;
+									effAnimation = effData.animation;
 									effNum = effData.dmg;
 								}
 							});
 							const effChk = effNum && effNum !== 0;
 							return (
-								<EffLand key={idx} className={`effectLand ${effChk ? 'dmg' : ''}`} left={left} top={top} gameSpd={gameSpd}>
+								<EffLand key={idx} className={`effect_land ${effChk ? 'dmg' : ''}`} left={left} top={top} gameSpd={gameSpd}>
 									{effectChk && (
 										<>
-											<Eff src={imgSet.eff[effType]} frame={gameData.effect[effType].frame} repeat={gameData.effect[effType].repeat} gameSpd={gameSpd}/>
+											<Eff className="effect_eff" src={imgSet.eff[effAnimation]} frame={gameData.effect[effAnimation].frame} repeat={gameData.effect[effAnimation].repeat} gameSpd={gameSpd}/>
 										</>
 									)}
 									<span className="dmgNum">{effChk ? effNum : ''}</span>
@@ -1247,21 +1188,21 @@ const Battle = ({
 							const left = idx % 5 * mapSize,
 								top = Math.floor(idx / 5) * mapSize;
 							let effectChk = false,
-								effType = '',
+								effAnimation = '',
 								effNum = '';
 							enemyEffect.forEach((effData) => {
 								if (effData.idx === idx) {
 									effectChk = true;
-									effType = effData.type;
+									effAnimation = effData.animation;
 									effNum = effData.dmg;
 								}
 							});
 							const effChk = effNum && effNum !== 0;
 							return (
-								<EffLand className={`effectLand ${effChk ? 'dmg' : ''}`} key={idx} left={left} top={top} gameSpd={gameSpd}>
+								<EffLand className={`effect_land ${effChk ? 'dmg' : ''}`} key={idx} left={left} top={top} gameSpd={gameSpd}>
 									{effectChk && (
 										<>
-											<Eff src={imgSet.eff[effType]} frame={gameData.effect[effType].frame} repeat={gameData.effect[effType].repeat} gameSpd={gameSpd}/>
+											<Eff className="effect_eff" src={imgSet.eff[effAnimation]} frame={gameData.effect[effAnimation].frame} repeat={gameData.effect[effAnimation].repeat} gameSpd={gameSpd}/>
 										</>
 									)}
 									<span className="dmgNum">{effChk ? effNum : ''}</span>
@@ -1270,7 +1211,7 @@ const Battle = ({
 						})}
 						</div>
 					</BattleEffect>
-					<BattleUnit containerW={containerW} className="battle_units" frameImg={frameRope}>
+					<BattleUnit containerW={containerW} className="battle_units" frameImg={imgSet.etc.frameRope}>
 						<div className="units_enemy">
 							{battleEnemy.current && enemyDeck.map((enemyData, idx)=> {
 								const left = idx % 5 * mapSize,
@@ -1289,7 +1230,7 @@ const Battle = ({
 									const hasHp = (enemyCh?.hp / enemyCh?.hp_) * 100;
 									const elementCh = area ? "effect" + element_type : "";
 									let actionCh = '';
-									if (typeof turnIdx === "number" && timeLine.current && timeLine.current[turnIdx].order.team === "enemy" && currentEnemyIdx.current === timeLine.current[turnIdx].order.idx) {
+									if (typeof turnIdx === "number" && timeLine.current && timeLine.current[turnIdx]?.order.team === "enemy" && currentEnemyIdx.current === timeLine.current[turnIdx]?.order.idx) {
 										actionCh = "action";
 									}
 									const die = enemyCh?.state || "";
@@ -1300,7 +1241,7 @@ const Battle = ({
 											areaSelect(e, idx);
 										}} gameSpd={gameSpd} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]}>
 											<div className="ch_box">
-												<CardChRing className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={enemyData.lv} gameSpd={gameSpd} />
+												<CardChRing className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={enemyData.lv} gameSpd={gameSpd} />
 												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData?.style}`]}/>
 												<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData?.element]} lv={enemyData.lv} gameSpd={gameSpd}>
 													<span className="ch_ring transition" />
@@ -1328,8 +1269,8 @@ const Battle = ({
 								const chData = data.order.team === 'ally' ? gameData.ch[battleAlly.current[data.order.idx]?.idx] : gameData.ch[battleEnemy.current[data.order.idx]?.idx];
 								const activeSkill = activeSk(data);// die 및 active스킬 판단 0대기,2방어,13철벽방어
 								return (
-									<TimeLineCh key={idx} className={`battle_ch ${turnIdx === idx ? 'on' : ''} ${activeSkill}`} team={data.order.team} size={30} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]} gameSpd={gameSpd}>
-										<CardChRing style={{top:0,borderRadius:'50%',}} className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} />
+									<TimeLineCh key={idx} className={`battle_ch timeLine ${turnIdx === idx ? 'on' : ''} ${activeSkill}`} team={data.order.team} size={30} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]} gameSpd={gameSpd}>
+										<CardChRing style={{top:0,borderRadius:'50%',}} className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} />
 										<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData?.style}`]}/>
 									</TimeLineCh>
 								)
@@ -1352,9 +1293,9 @@ const Battle = ({
 									});
 									const hasHp = (saveCh?.hp / saveCh?.hp_) * 100,
 										hasSp = (saveCh?.sp / saveCh?.sp_) * 100;
-									const posCh = (typeof orderIdx === "number" && allyPos.current[orderIdx].idx === currentAllyIdx.current) ? "on" : "";
+									const posCh = (typeof orderIdx === "number" && allyPos.current[orderIdx]?.idx === currentAllyIdx.current) ? "on" : "";
 									let actionCh = "";
-									if (typeof turnIdx === "number" && timeLine.current && timeLine.current[turnIdx].order.team === "ally" && currentAllyIdx.current === timeLine.current[turnIdx].order.idx) {
+									if (typeof turnIdx === "number" && timeLine.current && timeLine.current[turnIdx]?.order.team === "ally" && currentAllyIdx.current === timeLine.current[turnIdx]?.order.idx) {
 										actionCh = "action";
 									}
 									const die = saveCh?.state || "";
@@ -1363,7 +1304,7 @@ const Battle = ({
 									return (
 										<BattleCh key={idx} className={`battle_ch ${posCh} ${actionCh} ${rtCh} ${actionPos} ${die}`} data-ch={chData?.display} data-idx={idx} left={left} top={top} size={mapSize} rtColor={rtColor}  gameSpd={gameSpd} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]}>
 											<div className="ch_box">
-												<CardChRing className="ring_back" ringBack={imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={saveCh?.lv} />
+												<CardChRing className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={saveCh?.lv} />
 												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData?.style}`]}/>
 												<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData?.element]} lv={saveCh?.lv} gameSpd={gameSpd}>
 													<span className="ch_ring transition" />
@@ -1407,20 +1348,20 @@ const Battle = ({
 						})}
 						</div>
 					</BattleLand>
-					<BattleOrder className={`battle_order ${skillMsg ? 'on' : ''} ${typeof turnIdx === 'number' && timeLine.current[turnIdx].order.team === 'ally' ? 'ally' : 'enemy'} ${typeof turnIdx === 'number' && gameData.ch[timeLine.current[turnIdx].order.idx].face_d}`} gameSpd={gameSpd}>
+					<BattleOrder className={`battle_order ${skillMsg ? 'on' : ''} ${typeof turnIdx === 'number' && timeLine.current[turnIdx]?.order.team === 'ally' ? 'ally' : 'enemy'} ${typeof turnIdx === 'number' && gameData.ch[timeLine.current[turnIdx]?.order.idx]?.face_d}`} gameSpd={gameSpd}>
 						<div className="battle_msg">
-							{typeof turnIdx === 'number' && gameData.skill[timeLine.current[turnIdx].order.skIdx]?.na}
+							{typeof turnIdx === 'number' && gameData.skill[timeLine.current[turnIdx]?.order.skIdx]?.na}
 						</div>
 					</BattleOrder>
 				</BattleArea>
-				{battleAlly.current ? 
+				{battleAlly.current ?
 					<>
 						<BattleMenu className="battle_menu" mode={mode} gameSpd={gameSpd}>
 							{typeof orderIdx === 'number' && (
 								<>
 									<div className="chInfo">
-										<span className="sp">{battleAlly.current[orderIdx].sp}</span>
-										<span className="spR">{battleAlly.current[orderIdx].bSt2}</span>
+										<span className="sp">{battleAlly.current[orderIdx]?.sp}</span>
+										<span className="spR">{battleAlly.current[orderIdx]?.bSt2}</span>
 									</div>
 									<ul className="scroll-x">
 										<li><button onClick={() => {
@@ -1429,7 +1370,7 @@ const Battle = ({
 										<li><button onClick={() => {
 											battleCommand('wait');
 										}}><span>대기</span></button></li>
-										{battleAlly.current[orderIdx].sk && battleAlly.current[orderIdx].sk.map((data, idx) => {
+										{battleAlly.current[orderIdx]?.sk && battleAlly.current[orderIdx]?.sk.map((data, idx) => {
 											const sk = gameData.skill;
 											if (sk[data.idx].cate[0] !== 1) {
 												return (
@@ -1442,9 +1383,9 @@ const Battle = ({
 									</ul>
 								</>
 							)}
-					</BattleMenu>
-				</> : ""
-			}
+						</BattleMenu>
+					</> : ""
+				}
 			</BattleWarp>
     </>
   );

@@ -2,164 +2,55 @@ import { AppContext } from 'App';
 import { util } from 'components/Libs';
 import Modal from 'components/Modal';
 import ModalContainer from 'components/ModalContainer';
-import imgBack from 'images/back/back5.jpg';
-import imgCardBack from 'images/card/card_back.png';
-import imgCardFrame from 'images/card/card_frame.png';
-import imgCardLv from 'images/card/card_lv.png';
-import iconCardName from 'images/card/card_name.png';
-import iconDiamod from 'images/ico/ico_dia.png';
-import iconGold from 'images/ico/ico_gold.png';
-import imgRingBack from 'images/ring/back.png';
-import imgRing from 'images/ring/ring_.png';
-import iconStar1 from 'images/star/star1.png';
-import iconStar2 from 'images/star/star2.png';
-import iconStar3 from 'images/star/star3.png';
-import iconStar4 from 'images/star/star4.png';
-import iconStar5 from 'images/star/star5.png';
-import iconStar6 from 'images/star/star6.png';
-import iconStar7 from 'images/star/star7.png';
 import React, { useCallback, useContext, useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import 'css/gacha.css';
 
 const Img = styled.img.attrs(
   ({imgurl}) => ({
     src: imgurl 
   })
 )``;
-
 const GachaWrap = styled.div`
-	display:flex;position:absolute;left:0;right:0;top:0;bottom:0;background:url(${({backImg}) => backImg});background-size:cover;
-	flex-direction:column;padding:44px 0 0 0;width:100%;height:100%;box-sizing:border-box;overflow:hidden;
+	background:url(${({backImg}) => backImg});background-size:cover;
 `;
 const GachaMenu = styled.ul`
-	padding:0 20px;flex-grow:0;overflow:hidden;
 	height: ${({gachaMode}) => {
 		return gachaMode === ('start' || 'card') ? 0 : 'auto';
 	}};
-	li {margin:0 0 10px 0;}
-	li:last-of-type{margin:0;}
 `;
-const GachaMenuButton = styled.button`
-	display:block;padding:10px 0;width:100%;background:rgba(255,255,255,.5);color:#000;border-radius:20px;text-align:center;
-	.price{margin:0 0 0 10px;padding:0 0 0 20px;}
-	.menu{padding:0 20px;}
-`;
+const GachaMenuButton = styled.button``;
 const GachaIcon = styled.span`
-	background:url(${({icoType}) => icoType}) no-repeat left center;background-size:20px;
-`;
-
-const GachaArea = styled.div`
-	flex-grow:1;perspective:300px;perspective-origin:50% 100%;transform-style:flat;
-`;
-const GachaBg = styled.div`
-	${({gachaMode}) => {
-		if (gachaMode === 'start') {
-			return (
-				`position:absolute;transform:rotateX(45deg);content:'';left:-50%;top:15%;width:200%;height:100%;background: radial-gradient(hsl(0, 100%, 27%) 4%, hsl(0, 100%, 18%) 9%, hsla(0, 100%, 20%, 0) 9%) 0 0, radial-gradient(hsl(0, 100%, 27%) 4%, hsl(0, 100%, 18%) 8%, hsla(0, 100%, 20%, 0) 10%) 50px 50px, radial-gradient(hsla(0, 100%, 30%, 0.8) 20%, hsla(0, 100%, 20%, 0)) 50px 0, radial-gradient(hsla(0, 100%, 30%, 0.8) 20%, hsla(0, 100%, 20%, 0)) 0 50px, radial-gradient(hsla(0, 100%, 20%, 1) 35%, hsla(0, 100%, 20%, 0) 60%) 50px 0, radial-gradient(hsla(0, 100%, 20%, 1) 35%, hsla(0, 100%, 20%, 0) 60%) 100px 50px, radial-gradient(hsla(0, 100%, 15%, 0.7), hsla(0, 100%, 20%, 0)) 0 0, radial-gradient(hsla(0, 100%, 15%, 0.7), hsla(0, 100%, 20%, 0)) 50px 50px, linear-gradient(45deg, hsla(0, 100%, 20%, 0) 49%, hsla(0, 100%, 0%, 1) 50%, hsla(0, 100%, 20%, 0) 70%) 0 0, linear-gradient(-45deg, hsla(0, 100%, 20%, 0) 49%, hsla(0, 100%, 0%, 1) 50%, hsla(0, 100%, 20%, 0) 70%) 0 0;
-				background-color: #300;
-				background-size: 100px 100px`
-			)
-		}
-	}}
-`;
-const GachaCards = styled.div`
-	&.pos {
-		.card{left:0 !important;top:0 !important;}
-		.card:first-of-type{transform:scale(.9) translate(10%,10%) !important;}
-		.card:nth-of-type(2){transform:scale(.9) translate(130%,10%) !important;}
-		.card:nth-of-type(3){transform:scale(.9) translate(250%,10%) !important;}
-		.card:nth-of-type(4){transform:scale(.9) translate(70%,100%) !important;}
-		.card:nth-of-type(5){transform:scale(.9) translate(190%,100%) !important;}
-		.card:nth-of-type(6){transform:scale(.9) translate(10%,190%) !important;}
-		.card:nth-of-type(7){transform:scale(.9) translate(130%,190%) !important;}
-		.card:nth-of-type(8){transform:scale(.9) translate(250%,190%) !important;}
-		.card:nth-of-type(9){transform:scale(.9) translate(70%,280%) !important;}
-		.card:last-of-type{transform:scale(.9) translate(190%,280%) !important;}
-	}
-	&.posOne .card{left:0 !important;top:0 !important;transform:scale(1.5) translate(80%,80%) !important;}
-	&.cardMode {
-		.card {
-			pointer-events: unset;
-		}
-	}
+	background:url(${({ icoType }) => icoType}) no-repeat left center;background-size:20px;
 `;
 const GachaCard = styled.div`
-	position:absolute;transition:all linear 2s;opacity:0;z-index:1;
 	left: ${({posX}) => posX}%;
 	top: ${({posY}) => posY}%;
-	width: 30%;
 	padding-top: ${30*1.481}%;
 	transform: translate(-50%,-50%) rotateX(45deg) rotateZ(${({rotate}) => rotate}deg);
-	pointer-events: none;
-	&.ready {
-		opacity:1;transition:all .5s;
-	}
-	&.on {
-		left:50% !important;top:20% !important;transform:translate(-50%,-50%) rotateX(0deg) rotateZ(0deg) !important;
-		.front{box-shadow:none !important;}
-	}
-	&.open {
-		left:50% !important;top:70% !important;transform:scale(1.3) translate(-35%,-50%) rotateX(0deg) rotateZ(0deg) !important;
-		.front{z-index:2;transform:rotateY(1440deg);}
-		.back{z-index:1;transform:rotateY(1270deg);}
-		li{position:absolute;color:#fff;font-size:10px;}
-		.name_lv .lv {font-size:10px;}
-		.name_lv .name_ {font-size:10px;}
-		.name_lv .name {font-size:10px;}
-	}
-	&.open.special {
-		div{transition:all 3s;}
-		.front{z-index:2;transform:rotateY(14400deg);}
-		.back{z-index:1;transform:rotateY(12700deg);}
-		&:before{content:'';position:absolute;left:50%;top:50%;padding-top:500%;width:500%;transform:translate(-50%,-50%) scale(0);background-image:radial-gradient(rgba(255,100,0,.7) 0%,rgba(255,210,0,.8) 40%,transparent 80%);background-size:100%;animation:sp_eff1 3s;transform-origin:center;}
-		&:after{content:'';position:absolute;left:50%;top:50%;padding-top:500%;width:500%;transform:translate(-50%,-50%) scale(0);background-image:radial-gradient(rgba(255,255,255,1) 0%, rgba(200,25,0,.4) 50%,transparent 80%);background-size:100%;animation:sp_eff2 3s;transform-origin:center;}
-	}
-	@keyframes sp_eff1{
-		0%{transform:translate(-50%,-50%) scale(0);}
-		30%{transform:translate(-50%,-50%) scale(1);}
-		50%{transform:translate(-50%,-50%) scale(.3);}
-		50%{transform:translate(-50%,-50%) scale(.8);}
-		100%{transform:translate(-50%,-50%) scale(0);}
-	}
-	@keyframes sp_eff2{
-		0%{transform:translate(-50%,-50%) scale(0);}
-		10%{transform:translate(-50%,-50%) scale(.3);}
-		30%{transform:translate(-50%,-50%) scale(.9);}
-		70%{transform:translate(-50%,-50%) scale(.2);}
-		85%{transform:translate(-50%,-50%) scale(.6);}
-		100%{transform:translate(-50%,-50%) scale(0);}
-	}
 `;
 const CardLvName = styled.li`
-	left:50%;bottom:7%;width:85%;transform:translate(-50%,0) scale(1);text-shadow:0 0 1px #fff;text-align:center;z-index:3;font-size:0;
-	&:after{content:'';display:block;position:absolute;left:3%;top:-17%;padding-top:30%;width:30%;background:url(${({cardLv}) => cardLv});background-repeat:no-repeat;background-position:center center;background-size:contain;}
-	.lv{position:absolute;display:inline-block;left:3%;top:15%;width:30%;line-height:1;font-size:25px;text-align:center;z-index:1;}
-	img{width:100%;}
-	.name_{position:absolute;display:inline-block;left:33%;top:17%;width:67%;line-height:1;font-size:14px;text-align:left;z-index:1;box-sizing:border-box;}
-	.name{position:absolute;display:inline-block;right:2%;bottom:26%;width:67%;line-height:1;font-size:20px;z-index:1;box-sizing:border-box;letter-spacing:-2px;white-space:nowrap;overflow:hidden;}
+	&:after{background-image:url(${({cardLv}) => cardLv});background-size:contain;}
 `;
 const CardDisplay = styled.li`
-	top:0;width:100%;height:100%;
 	background-image:url(${({chDisplay}) => chDisplay});
-	background-repeat:no-repeat;background-size:85%;background-position:center center;z-index:4;pointer-events:none;
+	background-size:85%;
 `;
 const CardStyle = styled.li`
-	top:0;width:100%;height:100%;
 	background-image:url(${({styleDisplay}) => styleDisplay});
-	background-repeat:no-repeat;background-size:100%;background-position:center center;z-index:5;pointer-events:none;
+	background-size:100%;
 `;
 const CardElement = styled.li`
-	top:0;width:100%;height:100%;
 	background-image:url(${({ringDisplay}) => ringDisplay});
-	background-repeat:no-repeat;background-position:center center;background-size:100%;z-index:1;pointer-events:none;
+	background-size:100%;
 `;
 const CardStar = styled.li`
-	left:0;bottom:22%;width:100%;height:${({type}) => {
+	height:${({type}) => {
 		return (
 			type === 'open' ? 'height:25px' : 'height:12px'
 		);
-	}};z-index:5;text-align:center;
-	span{display:inline-block;
+	}};
+	span{
 		${({type}) => {
 			return (
 				type === 'open' ? 'width:25px;height:25px' : 'width:12px;height:12px'
@@ -175,18 +66,14 @@ const CardStar = styled.li`
 	span:nth-of-type(7){background:url(${({starIcon}) => starIcon[6]}) no-repeat center center;background-size:100%;}
 `;
 const CardRing = styled.li`
-	top:0;width:100%;height:100%;
-	background:url(${({ringBack}) => ringBack});
-	background-repeat:no-repeat;background-position:center center;background-size:85%;pointer-events:none;z-index:3;
+	background-image:url(${({ringBack}) => ringBack});
+	background-size:85%;
 `;
 const CardFrame = styled.li`
-	top:0;width:100%;height:100%;
 	background:url(${({cardFrame}) => cardFrame});
-	background-repeat:no-repeat;background-position:center center;background-size:100% 100%;z-index:5;pointer-events:none;
+	background-size:100% 100%;
 `;
 const GachaFront = styled.div`
-	position:absolute;left:0;right:0;top:0;bottom:0;border-radius:5%;overflow:hidden;backface-visibility:hidden;transition:all .7s;
-	z-index:1;background:#000;transform:rotateY(180deg);
 	box-shadow:${({gameData, idx}) => {
 		const grade = gameData.ch[idx].grade;
 		const gradeColor = gameData.chGradeColor[grade*1];
@@ -205,113 +92,15 @@ const GachaFront = styled.div`
 		} else if (grade === 7) {
 			return `0 0 40px ${gradeColor},0 0 10px ${gradeColor},0 0 3px ${gradeColor}, 0 0 50px #fff`;
 		}
-		
 	}};
 `;
 const GachaBack = styled.div`
-	position:absolute;left:0;right:0;top:0;bottom:0;border-radius:5%;overflow:hidden;backface-visibility:hidden;transition:all .7s;
-	transform:rotateY(0deg);background:url(${({cardBack}) => cardBack}) no-repeat center center;background-size:100%;z-index:2;
-`;
-const GachaEffect = styled.div`
-	position:absolute;left:0;top:-10%;width:100%;padding-top:100%;background-image:radial-gradient(rgba(255,255,255,1) 0%,rgba(255,255,255,0) 70%);background-size:cover;transform:scale(0);z-index:11;
-	&.grade6{animation:grade6 linear 3s;}
-	&.grade5{animation:grade5 linear 2.5s;}
-	&.grade4{animation:grade4 linear 2s;}
-	&.grade3{animation:grade3 linear 1.5s;}
-	@keyframes grade3{
-		0%{transform:scale(0,0);background-image:radial-gradient(#fff 0%,rgba(255,255,255,0) 70%);}
-		12.5%{transform:scale(6,6);}
-		25%{transform:scale(0,0);background-image:radial-gradient(#00a90c 0%,rgba(255,255,255,0) 70%);}
-		37.5%{transform:scale(6,6);}
-		50%{transform:scale(0,0);background-image:radial-gradient(#0090ff 0%,rgba(255,255,255,0) 70%);}
-		62.5%{transform:scale(6,6);}
-		75%{transform:scale(0,0);background-image:radial-gradient(#f4ea19 0%,rgba(255,255,255,0) 70%);}
-		87.5%{transform:scale(6,6);}
-		100%{transform:scale(0,0);background-image:radial-gradient(#f4ea19 0%,rgba(255,255,255,0) 70%);}
-	}
-	@keyframes grade4{
-		0%{transform:scale(0,0);background-image:radial-gradient(#fff 0%,rgba(255,255,255,0) 70%);}
-		10%{transform:scale(6,6);}
-		20%{transform:scale(0,0);background-image:radial-gradient(#00a90c 0%,rgba(255,255,255,0) 70%);}
-		30%{transform:scale(6,6);}
-		40%{transform:scale(0,0);background-image:radial-gradient(#0090ff 0%,rgba(255,255,255,0) 70%);}
-		50%{transform:scale(6,6);}
-		60%{transform:scale(0,0);background-image:radial-gradient(#f4ea19 0%,rgba(255,255,255,0) 70%);}
-		70%{transform:scale(6,6);}
-		80%{transform:scale(0,0);background-image:radial-gradient(#a800ff 0%,rgba(255,255,255,0) 70%);}
-		90%{transform:scale(6,6);}
-		100%{transform:scale(0,0);background-image:radial-gradient(#a800ff 0%,rgba(255,255,255,0) 70%);}
-	}
-	@keyframes grade5{
-		0%{transform:scale(0,0);background-image:radial-gradient(#fff 0%,rgba(255,255,255,0) 70%);}
-		8.3%{transform:scale(6,6);}
-		16.6%{transform:scale(0,0);background-image:radial-gradient(#00a90c 0%,rgba(255,255,255,0) 70%);}
-		25%{transform:scale(6,6);}
-		33.3%{transform:scale(0,0);background-image:radial-gradient(#0090ff 0%,rgba(255,255,255,0) 70%);}
-		41.6%{transform:scale(6,6);}
-		50%{transform:scale(0,0);background-image:radial-gradient(#f4ea19 0%,rgba(255,255,255,0) 70%);}
-		58.3%{transform:scale(6,6);}
-		66.6%{transform:scale(0,0);background-image:radial-gradient(#a800ff 0%,rgba(255,255,255,0) 70%);}
-		75%{transform:scale(6,6);}
-		83.3%{transform:scale(0,0);background-image:radial-gradient(#ff8000 0%,rgba(255,255,255,0) 70%);}
-		91.6%{transform:scale(6,6);}
-		100%{transform:scale(0,0);background-image:radial-gradient(#ff8000 0%,rgba(255,255,255,0) 70%);}
-	}
-	@keyframes grade6{
-		0%{transform:scale(0,0);background-image:radial-gradient(#fff 0%,rgba(255,255,255,0) 70%);}
-		7.2%{transform:scale(6,6);}
-		14.5%{transform:scale(0,0);background-image:radial-gradient(#00a90c 0%,rgba(255,255,255,0) 70%);}
-		21.7%{transform:scale(6,6);}
-		29%{transform:scale(0,0);background-image:radial-gradient(#0090ff 0%,rgba(255,255,255,0) 70%);}
-		36.2%{transform:scale(6,6);}
-		43.5%{transform:scale(0,0);background-image:radial-gradient(#f4ea19 0%,rgba(255,255,255,0) 70%);}
-		50.2%{transform:scale(6,6);}
-		57.5%{transform:scale(0,0);background-image:radial-gradient(#a800ff 0%,rgba(255,255,255,0) 70%);}
-		64.7%{transform:scale(6,6);}
-		72%{transform:scale(0,0);background-image:radial-gradient(#ff8000 0%,rgba(255,255,255,0) 70%);}
-		79.2%{transform:scale(6,6);}
-		86%{transform:scale(0,0);background-image:radial-gradient(#ff2a00 0%,rgba(255,255,255,0) 70%);}
-		93%{transform:scale(6,6);}
-		100%{transform:scale(0,0);background-image:radial-gradient(#ff2a00 0%,rgba(255,255,255,0) 70%);}
-	}
-`;
-const GachaEventArea = styled.div`
-	position: absolute;left: 0;right: 0;top: 0;bottom: 0;z-index: 20;pointer-events:none;
-	&.on {
-		pointer-events: unset;
-	}
+	background:url(${({cardBack}) => cardBack}) no-repeat center center;background-size:100%;
 `;
 const GachaInfo = styled.div`
-	display:none;position:absolute;left:0;right:0;top:0;bottom:0;z-index:3;
-	&.on {display:block;}
-	&:after{content:'';position:absolute;left:0;right:0;top:0;bottom:0;background:rgba(0,0,0,.7);}
-	.ch_state{position:absolute;left:5%;top:45%;right:5%;bottom:3%;padding:10px 20px;background:rgba(0,0,0,.8);box-sizing:border-box;border:5px solid transparent;border-image:url(../images/frame/frame_chback.png) 5 round;z-index:1;}
-	.ch_state ul{}
-	.ch_state ul li{display:flex;margin:0 0 10px 0;padding:0 0 10px 0;justify-content:space-between;border-bottom:1px solid #fff;}
-	.ch_state ul li:last-of-type{border-bottom:0;}
-	.ch_state ul li dl{}
-	.ch_state ul li dt{margin:0 0 5px 0;padding:3px 5px;border-radius:5px;background:rgba(255,255,255,.3);font-size:12px;font-weight:600;color:#fff;}
-	.ch_state ul li dd{font-size:14px;}
-	.ch_state ul li dd .st{display:inline-block;padding:4px;font-weight:600;font-size:14px;}
-	.ch_state ul li dd .st0{color:#037ace;}
-	.ch_state ul li dd .st1{color:#f3004e;}
-	.ch_state ul li dd .st2{color:#ff5326;}
-	.ch_state ul li dd .st3{color:#77b516;}
-	.ch_state ul li dd .st4{color:#f9c215;}
-	.ch_state ul li dd .st5{color:#5f3dc4;}
-	.ch_state ul li dd .st6{color:#ce20c2;}
+	.ch_state{border-image:url(${({ borderImg }) => borderImg}) 5 round;}
 `;
-const GachaInfoCard = styled.div`
-	position:absolute;left:7.5%;top:2.5%;transform:scale(.3);transform-origin:0 0;width:85%;font-size:0;z-index:1;
-	img {width:100%;}
-	.ch_detail {position:absolute;top:0;left:0;width:100%;height:100%;backface-visibility:hidden;z-index:2;box-shadow:0 0 1px #ff0, 0 0 2px #fff, 0 0 10px #000;border-radius:20px;overflow:hidden;
-	}
-	.ch_detail li {position:absolute;color:#fff;}
-`;
-const GachaInGraph = styled.div`
-	position:absolute;left:35%;top:2.5%;width:60%;padding-top:60%;font-size:0;z-index:1;
-	canvas{position:absolute;left:0;top:0;width:100%;}
-`;
+
 const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가챠횟수
   const separationGrade = () => { // 캐릭 등급분리
 		let gradeChArr = [[],[],[],[],[],[],[]];
@@ -469,7 +258,7 @@ const Gacha = ({
 	changeSaveData,
 }) => {
   const imgSet = useContext(AppContext).images;
-	const iconStar = [iconStar1, iconStar2, iconStar3, iconStar4, iconStar5, iconStar6, iconStar7]
+	const iconStar = [imgSet.iconStar[0], imgSet.iconStar[1], imgSet.iconStar[2], imgSet.iconStar[3], imgSet.iconStar[4], imgSet.iconStar[5], imgSet.iconStar[6]]
   const gameData = useContext(AppContext).gameData;
 	const [gachaMode, setGachaMode] = useState('init');
 	const [cardStateType, setCardStateType] = useState(''); //카드 성장타입
@@ -706,20 +495,20 @@ const Gacha = ({
 	}, [graphRef]);
   return (
 		<>
-			<GachaWrap className="gacha_wrap" backImg={imgBack} >
+			<GachaWrap className="gacha_wrap" backImg={imgSet.back[3]} >
 				<GachaMenu gachaMode={gachaMode} className="gacha_menu transition">
 					{gachaList && gachaList.map((data, idx) => {
 						return (
 							<li key={idx} onClick={() => {handleModal('confirm', idx);}}>
-								<GachaMenuButton>{`${data.na} Gacha`}
-									<GachaIcon className={`price ${data.type.indexOf('p') < 0 ? 'gold' : 'dia'}`} icoType={data.type.indexOf('p') < 0 ? iconGold : iconDiamod}>{data.price}</GachaIcon>
+								<GachaMenuButton className="gacha_menu_button">{`${data.na} Gacha`}
+									<GachaIcon className={`price ${data.type.indexOf('p') < 0 ? 'gold' : 'dia'}`} icoType={data.type.indexOf('p') < 0 ? imgSet.icon.iconGold : imgSet.icon.iconDia}>{data.price}</GachaIcon>
 								</GachaMenuButton>
 							</li>
 						);
 					})}
 				</GachaMenu>
-				<GachaArea className="gacha_area">
-					<GachaCards ref={cardGroupRef} className="cards">
+				<div className="gacha_area">
+					<div ref={cardGroupRef} className="gacha_cards">
 						{gachaMode === 'start' && gachaCard && gachaCard.map((data, idx) => {
 							const chData = gameData.ch[data.idx];
 							const star = data.grade;
@@ -730,31 +519,31 @@ const Gacha = ({
 									popCard(gameData.ch[infoIdx]);
 									setCardStateType(gameData.stateType[saveData.ch[data.slotIdx].stateType].na);
 									setCardStar(data.grade);
-								}} ref={(element) => {cardRef.current[idx] = element}} key={`gachaCard${idx}`} posX={data.posX} posY={data.posY} rotate={data.rotate} className="card ready" data-grade={chData.grade}>
-									<GachaFront className="front" idx={data.idx} gameData={gameData}>
+								}} ref={(element) => {cardRef.current[idx] = element}} key={`gachaCard${idx}`} posX={data.posX} posY={data.posY} rotate={data.rotate} className="gacha_card ready" data-grade={chData.grade}>
+									<GachaFront className="gacha_front" idx={data.idx} gameData={gameData}>
 										<ul>
-											<CardLvName className="name_lv" cardLv={imgCardLv}>
-												<Img className="img" imgurl={iconCardName} />
+											<CardLvName className="gacha_name_lv" cardLv={imgSet.etc.imgCardLv}>
+												<Img className="img" imgurl={imgSet.etc.iconCardName} />
 								 				<span className="lv">1</span><span className="name">{chData.na1}</span>
 								 			</CardLvName>
-											<CardDisplay className="ch" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
-								 			<CardStyle className="ch_style" styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]} />
-								 			<CardRing className="ring" ringBack={imgRingBack}></CardRing>
-								 			<CardElement className="element" ringDisplay={imgSet.ringImg[chData.element]} />
-								 			<CardStar className="star" starIcon={iconStar}>
+											<CardDisplay className="gacha_ch" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
+								 			<CardStyle className="gacha_ch_style" styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]} />
+								 			<CardRing className="gacha_ring" ringBack={imgSet.etc.imgRingBack}></CardRing>
+								 			<CardElement className="gacha_element" ringDisplay={imgSet.ringImg[chData.element]} />
+								 			<CardStar className="gacha_star" starIcon={iconStar}>
 											 	{star && makeStar(star)}
 											</CardStar>
-								 			<CardFrame className="frame" cardFrame={imgCardFrame} />
+								 			<CardFrame className="gacha_frame" cardFrame={imgSet.etc.imgCardFrame} />
 										</ul>
 									</GachaFront>
-									<GachaBack cardBack={imgCardBack} className="back" />
+									<GachaBack className="gacha_back" cardBack={imgSet.etc.imgCardBack}/>
 								</GachaCard>
 							);
 						})}
-					</GachaCards>
-					<GachaBg gachaMode={gachaMode} className="bg" />
-					<GachaEffect ref={effectRef} className="effect"/>
-					<GachaEventArea ref={eventRef} onClick={() => {
+					</div>
+					<div className={`gacha_bg ${gachaMode === "start" ? "start" : ""}`}></div>
+					<div ref={effectRef} className="gacha_effect"></div>
+					<div className="gacha_event_area" ref={eventRef} onClick={() => {
 						openCard(cardRef.current, openCardIdx.current);
 						openCardIdx.current ++;
 						if (!cardRef.current[openCardIdx.current]) {
@@ -762,31 +551,31 @@ const Gacha = ({
 							// awb.main.el.root.classList.remove('noback');
 							cardGroupRef.current.classList.add('cardMode');
 						}
-					}}/>
-				</GachaArea>
+					}}></div>
+				</div>
 				<GachaInfo ref={infoRef} onClick={() => {
 					infoRef.current.classList.remove('on');
-				}} className="gacha_info">
-					<GachaInfoCard className="ch_card">
-						<Img imgurl={imgRing} />
+				}} className="gacha_info" borderImg={imgSet.etc.frameChBack}>
+					<div className="gacha_ch_card">
+						<Img imgurl={imgSet.etc.imgRing} />
 						<ul className="ch_detail">
-							<CardLvName className="name_lv" cardLv={imgCardLv}>
-								<Img className="img" imgurl={iconCardName} />
+							<CardLvName className="gacha_name_lv" cardLv={imgSet.etc.imgCardLv}>
+								<Img className="img" imgurl={imgSet.etc.iconCardName} />
 								<span className="lv">1</span><span className="name_">{gameData.ch[infoIdx].na}</span><span className="name">{gameData.ch[infoIdx].na1}</span>
 							</CardLvName>
-							<CardDisplay className="ch" chDisplay={imgSet.chImg[`ch${gameData.ch[infoIdx].display}`]} />
-							<CardStyle className="ch_style" styleDisplay={imgSet.chStyleImg[`ch_style${gameData.ch[infoIdx].style}`]} />
-							<CardRing className="ring" ringBack={imgRingBack}></CardRing>
-							<CardElement className="element" ringDisplay={imgSet.ringImg[gameData.ch[infoIdx].element]} />
-							<CardStar  type={'open'} className="star" starIcon={iconStar}>
+							<CardDisplay className="gacha_ch" chDisplay={imgSet.chImg[`ch${gameData.ch[infoIdx].display}`]} />
+							<CardStyle className="gacha_ch_style" styleDisplay={imgSet.chStyleImg[`ch_style${gameData.ch[infoIdx].style}`]} />
+							<CardRing className="gacha_ring" ringBack={imgSet.etc.imgRingBack}></CardRing>
+							<CardElement className="gacha_element" ringDisplay={imgSet.ringImg[gameData.ch[infoIdx].element]} />
+							<CardStar type={'open'} className="gacha_star" starIcon={iconStar}>
 								{cardStar && makeStar(cardStar)}
 							</CardStar>
-							<CardFrame className="frame" cardFrame={imgCardFrame} />
+							<CardFrame className="gacha_frame" cardFrame={imgSet.etc.imgCardFrame} />
 						</ul>
-					</GachaInfoCard>
-					<GachaInGraph className="ch_graph">
+					</div>
+					<div className="gacha_ch_graph">
 						<canvas ref={graphRef}></canvas>
-					</GachaInGraph>
+					</div>
 					<div className="ch_state scroll-y">
 						<ul>
 							<li>

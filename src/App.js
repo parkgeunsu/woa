@@ -1,7 +1,7 @@
 import Battle from 'components/Battle';
 import Character from 'components/Character';
 import Gacha from 'components/Gacha';
-import { animalType, element, chImg, chStyleImg, iconElement, iconState, itemEquip, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, eff } from 'components/ImgSet';
+import { back, animalType, icon, etc, iconStar, element, chImg, chStyleImg, iconElement, iconState, itemEquip, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, eff, menu } from 'components/ImgSet';
 import { util } from 'components/Libs';
 import Lineup from 'components/Lineup';
 import Main from 'components/Main';
@@ -9,7 +9,7 @@ import Menu from 'components/Menu';
 import 'css/root.css';
 import { gameData, version } from 'gamedata/data';
 import { save } from 'gamedata/savedata';
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -106,11 +106,16 @@ const FooterContainer = styled.div`
 const App = () => {
   const data = {
     setting: {
-      speed: 1,
+      speed: 2,
       bgSound: false,
       effSound: false,
     },
     images: {
+      back: back,
+      menu: menu,
+      etc: etc,
+      icon: icon,
+      iconStar: iconStar,
       chImg: chImg,
       chStyleImg: chStyleImg,
       ringImg: ringImg,
@@ -133,9 +138,6 @@ const App = () => {
     gameData: {
       ...gameData,
     },
-    setting: {
-      speed: 2,
-    }
   }
   const [page, setPage] = useState("main");
   const slotIdx = 'all';
@@ -168,7 +170,92 @@ const App = () => {
       }
     }
   );
-    
+  useEffect(() => { //이미지 프리로드
+    back.map((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    for (let v in icon) {
+      const img = new Image();
+      img.src = icon[v];
+    }
+    for (let v in etc) {
+      const img = new Image();
+      img.src = etc[v];
+    }
+    animalType.map((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    element.map((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    for (let v in chImg) {
+      const img = new Image();
+      img.src = chImg[v];
+    }
+    for (let v in chStyleImg) {
+      const img = new Image();
+      img.src = chStyleImg[v];
+    }
+    iconElement.map((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    iconState.map((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    itemEquip.map((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    itemEtc.map((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    itemHole.map((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    itemMaterial.map((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    itemUpgrade.map((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    ringImg.map((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    sringImg.map((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    ssringImg.map((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    land.map((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    bgEffect.map((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    actionIcon.map((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    eff.map((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+  }, []);
   const changeSaveData = (objData) => {
     setSaveData(objData);
     util.saveData('saveData', objData);
