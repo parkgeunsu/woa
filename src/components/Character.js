@@ -1,13 +1,12 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useRef, useContext, useEffect, useLayoutEffect } from 'react';
 import styled from 'styled-components';
 import { AppContext } from 'App';
-import { useGesture, useDrag } from '@use-gesture/react';
-import { useSpring, animated } from '@react-spring/web';
 import 'css/character.css';
 
 import CharacterState from 'components/CharacterState';
 import CharacterElement from 'components/CharacterElement';
 import CharacterSkill from 'components/CharacterSkill';
+import CharacterAnimalSkill from 'components/CharacterAnimalSkill';
 import CharacterRelation from 'components/CharacterRelation';
 import CharacterItems from 'components/CharacterItems';
 import CharacterApplyState from 'components/CharacterApplyState';
@@ -64,84 +63,57 @@ const Character = ({
   const changeChSlot = (idx) => {
     setSlotIdx(idx);
   }
-
-  const [{x, y}, api] = useSpring(() => {
-    return (
-      {
-        x: 0,
-        y: 0
-      }
-    )
-  });
-  const test = {
-  // const dragBind = useDrag(({ active, down, movement: [mx, my], direction: [xDir, yDir], cancel}) => {
-  //   if (!active && yDir < 0 && Math.abs(my) > swipeDistance) { // 위로
-  //     console.log("a");
-  //     setChPage((prevPage) => {
-  //       return prevPage < 6 ? ++prevPage : 0;
-  //     });
-  //     return;
-  //   } else if (!active && yDir > 0 && Math.abs(my) > swipeDistance){ //아래로
-  //     console.log("b");
-  //     setChPage(0);
-  //     return;
-  //   };
-  //   if (chPage === 0){
-  //     if (!active && xDir > 0 && Math.abs(mx) > swipeDistance) {
-  //       console.log("c");
-  //       setSlotIdx((prevSlot) => {
-  //         chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
-  //         return prevSlot < 0 ? 0 : --prevSlot;
-  //       });
-  //       return;
-  //     } else if(!active && xDir < 0 && Math.abs(mx) > swipeDistance){
-  //       console.log("d");
-  //       setSlotIdx((prevSlot) => {
-  //         chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
-  //         return ++prevSlot;
-  //       });
-  //       return;
-  //     }
-  //     api.start(
-  //       () => {
-  //         return (
-  //           { 
-  //             x: down ? mx: 0, 
-  //             // y: down ? my: 0, 
-  //             immediate: down
-  //           }
-  //         )
-  //       }
-  //     )
-  //   }
-  // },
-  // { 
-  //   //  axis: 'lock',
-  //    bounds: { left: -50, right: 50 },
-  //    delay: 1000,
-  //    from: () => [x.get(), 0],
-  // });
+  const touchPosition = useState(null);
+  const hasScrollElement = useRef(null);
+  const handleTouchStart = (e) => {
+    hasScrollElement.current = e.target.closest(".scroll-y");
+    const touchDown = [e.touches[0].clientX, e.touches[0].clientY];
+    touchPosition.current = touchDown;
   }
-  const gestureDistance = 20;
-  const gestureBind = useGesture({
-    onDrag: ({ active, movement: [mx, my], direction: [xDir, yDir], cancel}) => {
-      if (Math.abs(mx) <= gestureDistance){
-        if (!active && yDir < 0 && Math.abs(my) > gestureDistance) { // 위로
-          setChPage((prevPage) => {
-            return prevPage < 6 ? ++prevPage : 0;
-          });
-        } else if (!active && yDir > 0 && Math.abs(my) > gestureDistance){ //아래로
-          setChPage(0);
-        };
-      }
-      if(Math.abs(my) <= gestureDistance){
-        if (!active && xDir > 0 && Math.abs(mx) > gestureDistance) { //오른쪽
+  const handleTouchMove = (e) => {
+    const touchDown = touchPosition.current;
+    const currentTouch = [e.touches[0].clientX, e.touches[0].clientY];
+    if (!touchDown || !currentTouch) {
+      return;
+    }
+    const diffX = touchDown[0] - currentTouch[0],
+      diffY = touchDown[1] - currentTouch[1];
+    if (hasScrollElement.current === null) {
+      if (Math.abs(diffX) > Math.abs(diffY)){
+        if (diffX > 5) { //오른쪽
           setSlotIdx((prevSlot) => {
             chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
             prevSlot--;
             return prevSlot < 0 ? chLength - 1 : prevSlot;
           });
-        } else if(!active && xDir < 0 && Math.abs(mx) > gestureDistance){ //왼쪽
+        }
+        if (diffX < -5) { //왼쪽
+          setSlotIdx((prevSlot) => {
+            chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
+            prevSlot++;
+            return prevSlot > chLength - 1 ? 0 : prevSlot;
+          });
+        }
+      } else {
+        if (diffY > 5) { //위로
+          setChPage((prevPage) => {
+            return prevPage < 6 ? ++prevPage : 0;
+          });
+        }
+        if (diffY < -5) { //아래로
+          setChPage(0);
+        }
+      }
+    } else {
+      if (Math.abs(diffX) > Math.abs(diffY)){
+        if (diffX > 5) { //오른쪽
+          setSlotIdx((prevSlot) => {
+            chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
+            prevSlot--;
+            return prevSlot < 0 ? chLength - 1 : prevSlot;
+          });
+        }
+        if (diffX < -5) { //왼쪽
           setSlotIdx((prevSlot) => {
             chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
             prevSlot++;
@@ -149,10 +121,12 @@ const Character = ({
           });
         }
       }
-    },
-  });
+    }
+    touchPosition.current = null;
+    hasScrollElement.current = null;
+  }
   return (
-    <ChWrap className={`ch_wrap page${chPage}`} {...gestureBind()} style={{x, y}} backImg={imgSet.back[0]} stateIcon={iconState}>
+    <ChWrap className={`ch_wrap page${chPage}`}  backImg={imgSet.back[0]} stateIcon={iconState} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
       <div ref={chRef} className="ch_card transition">
         <Img imgurl={imgSet.etc.imgRing} />
         <CharacterCard saveData={saveData} slotIdx={slotIdx} />
@@ -163,10 +137,11 @@ const Character = ({
       <ChInfo stateBack={imgSet.etc.stateBack} frameBack={imgSet.etc.frameChBack} className="ch_info transition">
         <CharacterState saveData={saveData} slotIdx={slotIdx} />
         <CharacterElement saveData={saveData} slotIdx={slotIdx} />
+        <CharacterAnimalSkill saveData={saveData} slotIdx={slotIdx} />
         <CharacterSkill saveData={saveData} slotIdx={slotIdx} />
         <CharacterRelation saveData={saveData} slotIdx={slotIdx} />
         <CharacterItems saveData={saveData} slotIdx={slotIdx} changeSaveData={changeSaveData} />
-        <CharacterApplyState saveData={saveData} slotIdx={slotIdx} />
+        <CharacterApplyState saveData={saveData} slotIdx={slotIdx}/>
       </ChInfo>
       <CharacterItemEnhance saveData={saveData} slotIdx={slotIdx} />
       <CharacterChEnhance saveData={saveData} slotIdx={slotIdx} />

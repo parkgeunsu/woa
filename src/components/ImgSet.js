@@ -97,19 +97,6 @@ import ch_style7 from 'images/ch_style/ch_style7.png';
 import ch_style8 from 'images/ch_style/ch_style8.png';
 import ch_style9 from 'images/ch_style/ch_style9.png';
 import ch_style99 from 'images/ch_style/ch_style99.png';
-import iconElement0 from 'images/ico/el0.png';
-import iconElement1 from 'images/ico/el1.png';
-import iconElement10 from 'images/ico/el10.png';
-import iconElement11 from 'images/ico/el11.png';
-import iconElement12 from 'images/ico/el12.png';
-import iconElement2 from 'images/ico/el2.png';
-import iconElement3 from 'images/ico/el3.png';
-import iconElement4 from 'images/ico/el4.png';
-import iconElement5 from 'images/ico/el5.png';
-import iconElement6 from 'images/ico/el6.png';
-import iconElement7 from 'images/ico/el7.png';
-import iconElement8 from 'images/ico/el8.png';
-import iconElement9 from 'images/ico/el9.png';
 import iconState0 from 'images/ico/st0.png';
 import iconState1 from 'images/ico/st1.png';
 import iconState2 from 'images/ico/st2.png';
@@ -299,9 +286,6 @@ export const ssringImg = [
 ];
 export const animalType = [
   animalType0,animalType1,animalType2,animalType3,animalType4,animalType5,animalType6,animalType7,animalType8,animalType9,animalType10,animalType11,animalType12,animalType13,animalType14,animalType15,animalType16,animalType17,animalType18,animalType19,animalType20,animalType21,animalType22,animalType23,animalType24,animalType25
-];
-export const iconElement = [
-  iconElement0,iconElement1,iconElement2,iconElement3,iconElement4,iconElement5,iconElement6,iconElement7,iconElement8,iconElement9,iconElement10,iconElement11,iconElement12
 ];
 export const iconState = [
   iconState0,iconState1,iconState2,iconState3,iconState4,iconState5,iconState6

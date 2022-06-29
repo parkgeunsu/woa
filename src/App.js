@@ -1,7 +1,7 @@
 import Battle from 'components/Battle';
 import Character from 'components/Character';
 import Gacha from 'components/Gacha';
-import { back, animalType, icon, etc, iconStar, element, chImg, chStyleImg, iconElement, iconState, itemEquip, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, eff, menu } from 'components/ImgSet';
+import { back, animalType, icon, etc, iconStar, element, chImg, chStyleImg, iconState, itemEquip, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, eff, menu } from 'components/ImgSet';
 import { util } from 'components/Libs';
 import Lineup from 'components/Lineup';
 import Main from 'components/Main';
@@ -124,7 +124,6 @@ const App = () => {
       animalType: animalType,
       element: element,
       iconState: iconState,
-      iconElement: iconElement,
       itemEquip: itemEquip,
       itemEtc: itemEtc,
       itemHole: itemHole,
@@ -199,10 +198,6 @@ const App = () => {
       const img = new Image();
       img.src = chStyleImg[v];
     }
-    iconElement.map((image) => {
-      const img = new Image();
-      img.src = image;
-    });
     iconState.map((image) => {
       const img = new Image();
       img.src = image;

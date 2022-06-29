@@ -6,12 +6,17 @@ const CharacterApplyState = ({
   slotIdx,
 }) => {
   const BattleStateName = [{ko:'체력',en:'HP'},{ko:'행동',en:'SP'},{ko:'행동회복',en:'RSP'},{ko:'공격',en:'ATK'},{ko:'방어',en:'DEF'},{ko:'술법공격',en:'MAK'},{ko:'술법방어',en:'MDF'},{ko:'체력회복',en:'RCV'},{ko:'속도',en:'SPD'},{ko:'행운',en:'LUK'}];
+  const scrollMove = (e) => {
+    //e.stopPropagation();
+  }
   return (
     <>
       <div className="apply_state scroll-y">
         <dl className="info_group ach_group">
           <dt>TOTAL STATE<span>(총스탯)</span></dt>
-          <dd className="scroll-y">
+          <dd className="scroll-y" onTouchMove={(e) => {
+            scrollMove(e);
+          }}>
             <ul className="total_states">
               { BattleStateName && BattleStateName.map((bData, idx) => {
                 return (

@@ -18,7 +18,7 @@ const SkillElement = styled.span`
   &.el12{background-image:url(${({ elementIcon }) => elementIcon[12]});background-size:100%;}
 `;
 
-const CharacterSkill = ({
+const CharacterAnimalSkill = ({
   saveData,
   slotIdx,
 }) => {
@@ -28,9 +28,9 @@ const CharacterSkill = ({
   const elementIcon = [imgSet.element[0],imgSet.element[1],imgSet.element[2],imgSet.element[3],imgSet.element[4],imgSet.element[5],imgSet.element[6],imgSet.element[7],imgSet.element[8],imgSet.element[9],imgSet.element[10],imgSet.element[11],imgSet.element[12]];
   return (
     <>
-      <div className="skill scroll-y">
+      <div className="skillAnimal">
         <dl className="info_group">
-          <dt>SKILL<span>(스킬)</span></dt>
+          <dt>ANIMAL SKILL<span>(동물 스킬)</span></dt>
           <dd className="scroll-y" >
             { saveSkill && saveSkill.map((skData, idx) => {
               const skData_ = gameData.skill[skData.idx];
@@ -65,4 +65,4 @@ const CharacterSkill = ({
   );
 }
 
-export default CharacterSkill;
+export default CharacterAnimalSkill;
