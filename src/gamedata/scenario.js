@@ -138,7 +138,7 @@ export const scenario = {
 							3,9,3,4,4
 						],
 						entry:[
-							{idx:'', lv:1, },{idx:'', lv:1, },{pos:0,idx:23, lv:50, grade:4, items: [
+							{idx:'', lv:1, },{idx:'', lv:1, },{pos:0,idx:24, lv:50, grade:7, items: [
 								{idx:0, slot:0, hole:[], lv:2, upgrade:1},
 								{idx:1, slot:0, hole:[], lv:2, upgrade:1},
 								{idx:2, slot:0, hole:[], lv:2, upgrade:1},
@@ -148,7 +148,7 @@ export const scenario = {
 								{},
 								{},
 							]},{idx:'', lv:1, },{idx:'', lv:1, },
-							{idx:'', lv:1, },{idx:'', lv:1, },{pos:1,idx:24, lv:30, grade:4, items: [
+							{idx:'', lv:1, },{idx:'', lv:1, },{pos:1,idx:23, lv:30, grade:7, items: [
 								{idx:0, slot:0, hole:[], lv:2, upgrade:1},
 								{idx:1, slot:0, hole:[], lv:2, upgrade:1},
 								{idx:2, slot:0, hole:[], lv:2, upgrade:1},
@@ -157,7 +157,7 @@ export const scenario = {
 								{},
 								{},
 								{},
-							]},{pos:3,idx:26, lv:50, grade:4, items: [
+							]},{pos:3,idx:26, lv:50, grade:6, items: [
 								{idx:0, slot:0, hole:[], lv:2, upgrade:1},
 								{idx:1, slot:0, hole:[], lv:2, upgrade:1},
 								{idx:2, slot:0, hole:[], lv:2, upgrade:1},

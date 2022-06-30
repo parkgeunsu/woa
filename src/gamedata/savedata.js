@@ -6,7 +6,7 @@ export const save = {
       money:352000
     },
     "ch":[
-      {"idx":0,"stateType":0,"element":[11],"stateLuk":146,"lv":15,"exp":10,"hasExp":50000,"actionPoint":20,"sk":[{"idx":1,"lv":2,"exp":40},{"idx":2,"lv":3,"exp":90},{"idx":3,"lv":1,"exp":0},{"idx":13,"lv":1,"exp":0}],"items":[
+      {"idx":0,"stateType":0,"element":[11],"grade":6,"stateLuk":146,"lv":15,"exp":10,"hasExp":50000,"actionPoint":20,"sk":[{"idx":1,"lv":2,"exp":40},{"idx":2,"lv":3,"exp":90},{"idx":3,"lv":1,"exp":0},{"idx":13,"lv":1,"exp":0}],"items":[
         {"idx":5,"slot":0,"hole":[4,0,12,23],"lv":1,"upgrade":1},
         {},
         {"idx":11,"slot":3,"hole":[],"lv":1,"upgrade":2},
@@ -16,7 +16,17 @@ export const save = {
         {},
         {},
       ]},
-      {"idx":1,"stateType":0,"element":[8],"stateLuk":20,"lv":10,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1},{"idx":2,"lv":1},{"idx":8,"lv":1}],"items":[
+      {"idx":0,"stateType":0,"element":[11],"grade":7,"stateLuk":146,"lv":15,"exp":10,"hasExp":50000,"actionPoint":20,"sk":[{"idx":1,"lv":2,"exp":40},{"idx":2,"lv":3,"exp":90},{"idx":3,"lv":1,"exp":0},{"idx":13,"lv":1,"exp":0}],"items":[
+        {"idx":5,"slot":0,"hole":[4,0,12,23],"lv":1,"upgrade":1},
+        {},
+        {"idx":11,"slot":3,"hole":[],"lv":1,"upgrade":2},
+        {},
+        {"idx":2,"slot":2,"hole":[0,0,0],"lv":1,"upgrade":1},
+        {},
+        {},
+        {},
+      ]},
+      {"idx":1,"stateType":0,"element":[8],"stateLuk":20,"lv":40,"exp":0,"hasExp":1000,"actionPoint":20,"sk":[{"idx":1,"lv":1},{"idx":2,"lv":1},{"idx":3,"lv":1}],"items":[
         {},
         {},
         {},

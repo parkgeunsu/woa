@@ -396,7 +396,8 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 			}
 			//console.log('pgs', defencer);
 			//데미지 공식
-			let dmg = [];
+			let dmg = [],
+				elementDmg = 0;
 			const skType = gameData.skill[timeLine[turnIdx].order.skIdx].element_type;//스킬종류
 			const chance = Math.random();
 			const team = timeLine[turnIdx].order.team === 'ally' ? enemyAction : allyAction;
@@ -405,6 +406,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 			defencer.forEach((defData, dIdx) => {
 				const defEnemy = defData.ch;
 				if (defEnemy.state !== 'die') { //적이 살았을 경우
+					//마법 방어와 방어 분기 처리
 					if (skType < 7) {//물리공격인지
 						const hitChance =  Math.min((80 + 30 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100) / 100, 0.95); //물리 적중 확률
 						if (team[defData.idx] === undefined || team[defData.idx].indexOf('defence0') < 0) { //방어를 안했으면
@@ -461,7 +463,39 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 							}
 						}
 					}
-					//마법 방어와 방어 분기 처리
+					//속성공격 추뎀
+					//찌르기(0),할퀴기(1),물기(2),치기(3),누르기(4),던지기(5),빛(6),어둠(7),물(8),불(9),바람(10),땅(11)
+					switch (skType - 1) {
+						case 0:
+						case 1:
+						case 2:
+						case 3:
+						case 4:
+						case 5:
+							elementDmg = (attacker['el'+(skType - 1)] - defEnemy['el'+(skType - 1)]) / 100 + 1;
+							break;
+						case 6:
+							elementDmg = (attacker['el'+(skType - 1)] + defEnemy['el7']) / 100 + 1;
+							break;
+						case 7:
+							elementDmg = (attacker['el'+(skType - 1)] + defEnemy['el6']) / 100 + 1;
+							break;
+						case 8:
+							elementDmg = (attacker['el'+(skType - 1)] + defEnemy['el9']) / 100 + 1;
+							break;
+						case 9:
+							elementDmg = (attacker['el'+(skType - 1)] + defEnemy['el10']) / 100 + 1;
+							break;
+						case 10:
+							elementDmg = (attacker['el'+(skType - 1)] + defEnemy['el11']) / 100 + 1;
+							break;
+						case 11:
+							elementDmg = (attacker['el'+(skType - 1)] + defEnemy['el8']) / 100 + 1;
+							break;
+						default:
+							break;
+					}
+					elementDmg = elementDmg <= 1 ? 1 : elementDmg;
 					//스킬 공격치 적용
 					//skill dmg
 					let dmg_ = 0,
@@ -522,7 +556,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 						const skill = attackerSkill[0].lv > 5 ? 5 : attackerSkill[0].lv;
 						atkNum[stateName] = util.getPercentNumber(skData.num[skill - 1], attacker[stateName]);
 					});
-					dmg_ = (criticalAtk ? atkNum[attackType] * 2 : atkNum[attackType]) - (defNum[defenceType] || defEnemy[defenceType]);
+					dmg_ = (criticalAtk ? atkNum[attackType] * elementDmg * 2 : atkNum[attackType] * elementDmg) - (defNum[defenceType] || defEnemy[defenceType]);
 					if (avoid) {
 						dmg.push('');
 					} else {

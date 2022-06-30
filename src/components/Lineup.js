@@ -57,7 +57,7 @@ const CharacterList = ({
 }) => {
 	return (
 		<>
-			<ListNameLv cardLv={imgSet.etc.imgCardLv} backColor={gameData.chGradeColor[chData.grade]}>{saveCh.lv}</ListNameLv>
+			<ListNameLv cardLv={imgSet.etc.imgCardLv} backColor={gameData.chGradeColor[saveCh.grade]}>{saveCh.lv}</ListNameLv>
 			<ListCh chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
 			<ListChStyle styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]} className="ch_style transition" />
 			<ListChRing ringBack={imgSet.etc.imgRingBack} className="ring" />

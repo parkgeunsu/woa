@@ -133,7 +133,7 @@ const ChracterDetail = ({
         <ListChElement1 chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
         <ListChElement2 chLv={saveCh.lv} ringDisplay={imgSet.ssringImg[chData.element]} className="element_2" />
         <ListChStar starIcon={iconStar} className="star">
-          {chData.grade && makeStar(chData.grade)}
+          {saveCh.grade && makeStar(saveCh.grade)}
         </ListChStar>
         <ListChFrame cardFrame={imgCardFrame} className="frame" />
       </ChCard>

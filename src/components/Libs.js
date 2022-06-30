@@ -67,12 +67,17 @@ export const util = { //this.loadImage();
     battleState_[7] = gameData.ch[enemyData.idx].st3 + gameData.ch[enemyData.idx].st5 + gameData.ch[enemyData.idx].st6;
     battleState_[8] = Math.round(Math.random()*200);
     const battleState = util.getTotalState(battleState_);
+    //등급에 따른 추가 능력치
+    let addGradePercent = 1;
+    for (let i = gameData.ch[enemyData.idx].grade; i < enemyData.grade; ++i) {
+      addGradePercent *= gameData.addGradeArr[i];
+    }
     battleState.forEach((bState, index) => {
       const iSt = util.compileState(bState, itemEff[index]);
       enemy = {
         ...enemy,
         ['iSt' + index]: iSt,
-        ['bSt' + index]: bState,
+        ['bSt' + index]: (index !== 1 && index !== 2 && index !== 8 && index !== 9) ? Math.round(bState * addGradePercent) : bState,
       }
     });
     gameData.element.forEach((elData, index) => {
@@ -112,17 +117,21 @@ export const util = { //this.loadImage();
     });
     battleState_[7] = gameData.ch[saveChSlot.idx].st3 + gameData.ch[saveChSlot.idx].st5 + gameData.ch[saveChSlot.idx].st6;
     battleState_[8] = saveChSlot.stateLuk;
+    //등급에 따른 추가 능력치
+    let addGradePercent = 1;
+    for (let i = gameData.ch[saveChSlot.idx].grade; i < obj.grade; ++i) {
+      addGradePercent *= gameData.addGradeArr[i];
+    }
     const battleState = util.getTotalState(battleState_);
     battleState.forEach((bState, index) => {
       const iSt = util.compileState(bState, obj.itemEff[index]);
       saveChSlot = {
         ...saveChSlot,
         ['iSt' + index]: iSt,
-        ['bSt' + index]: bState,
+        ['bSt' + index]: (index !== 1 && index !== 2 && index !== 8 && index !== 9) ? Math.round(bState * addGradePercent) : bState,
       }
     });
     // console.log(saveChSlot);//animal_type
-    // console.log(obj.grade);
     gameData.element.forEach((elData, index) => {
       saveChSlot = {
         ...saveChSlot,
@@ -163,7 +172,7 @@ export const util = { //this.loadImage();
         const itemEff = util.getItemEff(idx, saveCh, gameItem);
         saveCh[idx] = util.saveLvState(idx, {
           itemEff: itemEff,
-          grade: gameData.ch[saveCh[idx].idx].grade,
+          grade: saveCh[idx].grade || gameData.ch[saveCh[idx].idx].grade,
           newState: {},
         }, saveData, gameData);
       });

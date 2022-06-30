@@ -276,13 +276,13 @@ export const chStyleImg = {
   ch_style99:ch_style99, ch_style100:ch_style100, ch_style101:ch_style101, ch_style102:ch_style102, ch_style103:ch_style103, ch_style104:ch_style104, ch_style105:ch_style105
 };
 export const ringImg = [
-  ring0,ring1,ring2,ring3,ring4,ring5,ring6,ring7,ring_
+  "","","","","",ring0,ring1,ring2,ring3,ring4,ring5,ring6,ring7,ring_
 ];
 export const sringImg = [
-  sring0,sring1,sring2,sring3,sring4,sring5,sring6,sring7,sring10
+  "","","","","",sring0,sring1,sring2,sring3,sring4,sring5,sring6,sring7,sring10
 ];
 export const ssringImg = [
-  ssring0,ssring1,ssring2,ssring3,ssring4,ssring5,ssring6,ssring7,ssring8,ssring9,ssring10
+  "","","","","",ssring0,ssring1,ssring2,ssring3,ssring4,ssring5,ssring6,ssring7,ssring8,ssring9,ssring10
 ];
 export const animalType = [
   animalType0,animalType1,animalType2,animalType3,animalType4,animalType5,animalType6,animalType7,animalType8,animalType9,animalType10,animalType11,animalType12,animalType13,animalType14,animalType15,animalType16,animalType17,animalType18,animalType19,animalType20,animalType21,animalType22,animalType23,animalType24,animalType25

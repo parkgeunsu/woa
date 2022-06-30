@@ -45,7 +45,7 @@ const ChracterHeader = ({
             const saveCh = saveData.ch[idx];
             const chData = gameData.ch[saveCh.idx];
             return (
-              <li className={`g${chData.grade} ${slotIdx === idx ? 'on' : ''}`} key={idx} onClick={() => {changeChSlot(idx)}}>
+              <li className={`g${saveCh.grade} ${slotIdx === idx ? 'on' : ''}`} key={idx} onClick={() => {changeChSlot(idx)}}>
                 <ListRing className="list_ring" ringBack={imgSet.etc.imgRingBack} />
                 <ListCh className="list_ch" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
                 <ListChStyle className="list_chstyle" styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]} />
