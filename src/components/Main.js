@@ -12,7 +12,7 @@ const ContentMainWarp = styled.div`
   bottom: 0;
   background:url(${({ backImg }) => backImg});
   background-size: cover;
-  padding: 44px 0 0 0;
+  padding: 50px 0 0 0;
   flex-direction: column;
   width: 100%;
   height: 100%;

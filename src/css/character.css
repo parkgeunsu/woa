@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-.ch_wrap{position:absolute;left:0;right:0;top:0;bottom:0;padding: 44px 0 0 0;width: 100%;height: 100%;box-sizing: border-box;overflow:hidden;touch-action:none;}
+.ch_wrap{position:absolute;left:0;right:0;top:0;bottom:0;padding: 50px 0 0 0;width: 100%;height: 100%;box-sizing: border-box;overflow:hidden;touch-action:none;}
 .ch_wrap.page0 .ch_card{left:50%;top:50%;transform:translate(-50%,-50%) scale(1);}
 .ch_wrap.page0 .ch_card.rotate .ch_detail{z-index:1;transform:rotateY(360deg);}
 .ch_wrap.page0 .ch_card.rotate .ch_back{z-index:2;transform:rotateY(180deg);}
@@ -140,7 +140,7 @@
 .ch_info .skill .sk.cate6:after{content:'';position:absolute;left:0;top:0;border-left:10px solid var(--color-green);border-top:10px solid var(--color-green);border-right:10px solid transparent;border-bottom:10px solid transparent;}/*passive, buff*/
 .ch_info .skill .sk.cate8:after{content:'';position:absolute;left:0;top:0;border-left:10px solid var(--color-point2);border-top:10px solid var(--color-point2);border-right:10px solid transparent;border-bottom:10px solid transparent;}/*active, buff*/
 .ch_info .skill .sk.cate9:after{content:'';position:absolute;left:0;top:0;border-left:10px solid var(--color-w);border-top:10px solid var(--color-w);border-right:10px solid transparent;border-bottom:10px solid transparent;}/*active, passive, buff*/
-.ch_info .skill .sk .name{margin:2px 5px 5px;width:80px;text-align:center;font-size:12px;color:#fff;font-weight:600;font-size:15px;}
+.ch_info .skill .sk .name{margin:2px 5px 5px;width:100%;text-align:center;font-size:12px;color:#fff;font-weight:600;font-size:15px;}
 .ch_info .skill .sk .txt{flex:1;line-height:14px;font-size:12px;}
 .ch_info .skill .sk .lv_exp{align-items:flex-end;}
 .ch_info .skill .sk .lv{width:50px;text-align:center;}

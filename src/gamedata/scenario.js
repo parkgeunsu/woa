@@ -27,6 +27,7 @@ export const scenario = {
 				name:"후삼국시대",
 				stage:[
 					{
+						title:"후삼국시대 전투1",
 						lineup:0,
 						map:[
 							0,1,1,2,2,
@@ -124,6 +125,7 @@ export const scenario = {
 						]
 					},
 					{
+						title:"후삼국시대 전투2",
 						lineup:0,
 						map:[
 							0,1,1,2,2,
@@ -173,6 +175,7 @@ export const scenario = {
 						]
 					},
 					{
+						title:"후삼국시대 전투3",
 						lineup:0,
 						map:[
 							0,1,1,2,2,

@@ -10,7 +10,7 @@ import 'css/root.css';
 import { gameData, version } from 'gamedata/data';
 import { save } from 'gamedata/savedata';
 import React, { createContext, useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 
@@ -138,7 +138,9 @@ const App = () => {
       ...gameData,
     },
   }
-  const [page, setPage] = useState("main");
+  const navigate = useNavigate();
+  const location = useLocation().pathname.split("/")[1];
+  const [page, setPage] = useState(location);
   const slotIdx = 'all';
   const changePage = (pagename) => {
     setPage(pagename);
@@ -256,18 +258,22 @@ const App = () => {
     util.saveData('saveData', objData);
   }
   return (
-    <RootContainer value={data} className={`root ${page}`}>
-      <Menu saveData={saveData} changePage={changePage} />
-      <ContentContainer className="content">
-        <Routes>
-          <Route path="/" element={<Main changePage={changePage} />} />
-          <Route path="/character" element={<Character saveData={saveData} changeSaveData={changeSaveData} />} />
-          <Route path="/gacha" element={<Gacha saveData={saveData} changeSaveData={changeSaveData} />} />
-          <Route path="/lineup" element={<Lineup saveData={saveData} changeSaveData={changeSaveData} />} />
-          <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} />} />
-        </Routes>
-      </ContentContainer>
-      {/* <FooterContainer/> */}
+    <RootContainer value={data} >
+      <div style={{height: "100%",overflowY:"overlay",overflowX:"hidden"}} className={`root ${page}`}>
+        {location !== "battle" && (
+          <Menu saveData={saveData} changePage={changePage} navigate={navigate} />
+        )}
+        <ContentContainer className="content">
+          <Routes>
+            <Route path="/" element={<Main changePage={changePage} />} />
+            <Route path="/character" element={<Character saveData={saveData} changeSaveData={changeSaveData} />} />
+            <Route path="/gacha" element={<Gacha saveData={saveData} changeSaveData={changeSaveData} />} />
+            <Route path="/lineup" element={<Lineup saveData={saveData} changeSaveData={changeSaveData} />} />
+            <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
+          </Routes>
+        </ContentContainer>
+        {/* <FooterContainer/> */}
+      </div>
     </RootContainer>
   );
 }

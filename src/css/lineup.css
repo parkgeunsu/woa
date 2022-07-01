@@ -1,5 +1,5 @@
 @charset "utf-8";
-.lineup_wrap{display:flex;flex-direction:column;padding:44px 0 10px 0;width:100%;height:100%;box-sizing:border-box;overflow:hidden;position:absolute;left:0;right:0;top:0;bottom:0;}
+.lineup_wrap{display:flex;flex-direction:column;padding:50px 0 10px 0;width:100%;height:100%;box-sizing:border-box;overflow:hidden;position:absolute;left:0;right:0;top:0;bottom:0;}
 .lineup_wrap > div{padding:0 20px;justify-content: center;}
 .lineup_wrap .lineup_pos > span{position:absolute;width:20%;height:20%;font-size:0;background:#eee;box-sizing:border-box;border:1px solid #fff;overflow:hidden;}
 .lineup_wrap .lineup_pos > span[e1]{background: #f60;border-color:#fff;}

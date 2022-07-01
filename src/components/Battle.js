@@ -5,6 +5,12 @@ import { util } from 'components/Libs';
 import 'css/battle.css';
 import 'css/battleAnimation.css';
 
+const TeamIcon = styled.div`
+	background-image:url(${({ iconImg }) => iconImg});background-size:100%;
+`;
+const BattleHeader = styled.div`
+  li.back .ico{background-image:url(${({ iconBack }) => iconBack});}
+`;
 const BattleWarp = styled.div`
 	background:url(${({backImg}) => backImg});background-size:cover;
 `;
@@ -169,6 +175,23 @@ const CardCh = styled.span`
 	}};background-position:center 5%, center -70%;
 	background-size:90%, 75%;
 `;
+const RelationArea = styled.div`
+	&:after{transition:all ${({gameSpd}) => 0.5 / gameSpd}s ${({gameSpd}) => 0.5 / gameSpd}s ease-in-out;}
+	&.on:after{height:${({rtHeight}) => rtHeight}px;box-shadow:0 0 20px 10px rgba(0,0,0,.7);}
+	.relationTitle span:first-of-type{transition:opacity ${({gameSpd}) => 0.5 / gameSpd}s 0s;text-shadow:0 0 10px #ff0,0 0 10px #ff0;}
+	.relationTitle span:nth-of-type(2){transition:opacity ${({gameSpd}) => 0.5 / gameSpd}s .2s;text-shadow:0 0 10px #fb0,0 0 10px #fb0;}
+	.relationTitle span:nth-of-type(3){transition:opacity ${({gameSpd}) => 0.5 / gameSpd}s .4s;text-shadow:0 0 10px #f60,0 0 10px #f60;}
+	.relationTitle span:last-of-type{transition:opacity ${({gameSpd}) => 0.5 / gameSpd}s .6s;text-shadow:0 0 10px #f00,0 0 10px #f00;}
+`;
+const RelationName = styled.div`
+	position:relative;margin:5px 0;padding:0 0 0 13px;color:#fff;z-index:1;filter:blur(5px);transition:all ${({gameSpd}) => 0.5 / gameSpd}s ${({idx}) => 0.5 + idx * 0.3}s;
+	&:after{content:'';position:absolute;left:0;top:50%;transform:translate(0, -50%);width:5px;height:5px;background:${({color}) => color};box-shadow:0 0 8px 5px ${({color}) => color};}
+`;
+const BgEffect = styled.div`
+	div{transition:all ${({gameSpd}) => 2 / gameSpd}s;}
+	.cloud1{top:0;animation:cloudAnimation ${({gameSpd}) => 210 / gameSpd}s linear infinite;background-image:url(${({img1}) => img1});background-size:100%;}
+	.cloud2{top:30%;animation:cloudAnimationReverse ${({gameSpd}) => 130 / gameSpd}s linear infinite;background-image:url(${({img2}) => img2});background-size:100%;opacity:1;}
+`;
 
 const chkString = (arr, index) => {
 	let chk = false;
@@ -278,7 +301,7 @@ const activeSk = (timeLineData) => {
 	}
 }
 
-const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode) => {
+const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, atkCount) => {
 	if (modeRef.indexOf('battle') >= 0){
 		return;
 	}
@@ -307,9 +330,9 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 	const gameSpd = setting.speed,
 		gameEffSound = setting.effSound;
 	if (turnIdx <= timeLine.length - 1) {
-		const turnIdx_ = turnIdx + 1;
 		let skillIdx = timeLine[turnIdx].order.skIdx;// {team: 'enemy', idx: 0, skIdx: 0, target: 3}
 		//console.log('pgs', timeLine, turnIdx);
+		let atkC = [0, false];
 		if (timeLine[turnIdx].order.team === 'ally') {//죽은 상태인지
 			if (battleAlly[timeLine[turnIdx].order.idx].state === 'die') {
 				skillIdx = 0;
@@ -320,11 +343,11 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 			}
 		}
 		if (skillIdx === 0){ //대기
-			setTurnIdx(turnIdx_);
-			actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode);
+			setTurnIdx(turnIdx + 1);
+			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, atkC);
 		} else if (skillIdx === 2 || skillIdx === 13) { //방어, 철벽방어
-			setTurnIdx(turnIdx_);
-			actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode);
+			setTurnIdx(turnIdx + 1);
+			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, atkC);
 		} else {
 			let attacker = {},
 				defencer = [],
@@ -394,6 +417,29 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 					}
 				});
 			}
+			atkC = (atkCount && atkCount[0]) ? atkCount : [...gameData.skill[skillIdx].atkCount];
+			//공격 횟수 지정
+			atkC[0] -= 1;
+			if (atkC[1] === "random") {
+				atkC[0] += Math.round(Math.random() * -1) + 1;
+			} else if (atkC[1] === "another") {
+
+				//!!!!손봐야됨!!!!
+				// if (timeLine[turnIdx].order.team === 'ally') {
+				// 	const defencerIdx = [Math.floor(Math.random()* battleEnemy.length)];
+				// 	defencer = [{
+				// 		ch: battleAlly[defencerIdx],
+				// 		idx: defencerIdx,
+				// 	}];
+				// } else {
+				// 	const defencerIdx = [Math.floor(Math.random()* battleAlly.length)];
+				// 	defencer = [{
+				// 		ch: battleAlly[defencerIdx],
+				// 		idx: defencerIdx,
+				// 	}];
+				// }
+			}
+			const turnIdx_ = atkC[0] <= 0 ? turnIdx + 1 : turnIdx;
 			//console.log('pgs', defencer);
 			//데미지 공식
 			let dmg = [],
@@ -465,6 +511,16 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 					}
 					//속성공격 추뎀
 					//찌르기(0),할퀴기(1),물기(2),치기(3),누르기(4),던지기(5),빛(6),어둠(7),물(8),불(9),바람(10),땅(11)
+					const elementFilter = (elementArr, idx) => {
+						let elementChk = false;
+						elementArr.forEach((element) => {
+							if (element === idx) {
+								elementChk = true;
+								return;
+							}
+						});
+						return elementChk;
+					}
 					switch (skType - 1) {
 						case 0:
 						case 1:
@@ -474,23 +530,55 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 						case 5:
 							elementDmg = (attacker['el'+(skType - 1)] - defEnemy['el'+(skType - 1)]) / 100 + 1;
 							break;
-						case 6:
-							elementDmg = (attacker['el'+(skType - 1)] + defEnemy['el7']) / 100 + 1;
+						case 6: //빛
+							if (elementFilter(defEnemy.element, 7)) { //어둠 속성이면
+								elementDmg = (attacker['el'+(skType - 1)] * 2) / 100 + 1;
+							} else {
+								elementDmg = attacker['el'+(skType - 1)] / 100 + 1;
+							}
 							break;
-						case 7:
-							elementDmg = (attacker['el'+(skType - 1)] + defEnemy['el6']) / 100 + 1;
+						case 7: //어둠
+							if (elementFilter(defEnemy.element, 6)) { //빛 속성이면
+								elementDmg = (attacker['el'+(skType - 1)] * 2) / 100 + 1;
+							} else {
+								elementDmg = attacker['el'+(skType - 1)] / 100 + 1;
+							}
 							break;
-						case 8:
-							elementDmg = (attacker['el'+(skType - 1)] + defEnemy['el9']) / 100 + 1;
+						case 8: //물
+							if (elementFilter(defEnemy.element, 9)) { //불 속성이면
+								elementDmg = (attacker['el'+(skType - 1)] * 2) / 100 + 1;
+							} else if (elementFilter(defEnemy.element, 11)) {//땅 속성이면
+								elementDmg = (attacker['el'+(skType - 1)] * 0.5) / 100 + 1;
+							} else {
+								elementDmg = attacker['el'+(skType - 1)] / 100 + 1;
+							}
 							break;
-						case 9:
-							elementDmg = (attacker['el'+(skType - 1)] + defEnemy['el10']) / 100 + 1;
-							break;
+						case 9: //불
+							if (elementFilter(defEnemy.element, 10)) { //바람 속성이면
+								elementDmg = (attacker['el'+(skType - 1)] * 2) / 100 + 1;
+							} else if (elementFilter(defEnemy.element, 8)) {//물 속성이면
+								elementDmg = (attacker['el'+(skType - 1)] * 0.5) / 100 + 1;
+							} else {
+								elementDmg = attacker['el'+(skType - 1)] / 100 + 1;
+							}
+							break; //바람
 						case 10:
-							elementDmg = (attacker['el'+(skType - 1)] + defEnemy['el11']) / 100 + 1;
+							if (elementFilter(defEnemy.element, 11)) { //땅 속성이면
+								elementDmg = (attacker['el'+(skType - 1)] * 2) / 100 + 1;
+							} else if (elementFilter(defEnemy.element, 9)) {//불 속성이면
+								elementDmg = (attacker['el'+(skType - 1)] * 0.5) / 100 + 1;
+							} else {
+								elementDmg = attacker['el'+(skType - 1)] / 100 + 1;
+							}
 							break;
-						case 11:
-							elementDmg = (attacker['el'+(skType - 1)] + defEnemy['el8']) / 100 + 1;
+						case 11: //땅
+							if (elementFilter(defEnemy.element, 8)) { //물 속성이면
+								elementDmg = (attacker['el'+(skType - 1)] * 2) / 100 + 1;
+							} else if (elementFilter(defEnemy.element, 10)) {//바람 속성이면
+								elementDmg = (attacker['el'+(skType - 1)] * 0.5) / 100 + 1;
+							} else {
+								elementDmg = attacker['el'+(skType - 1)] / 100 + 1;
+							}
 							break;
 						default:
 							break;
@@ -649,7 +737,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 									setAllyAction([]);
 								}
 								setTurnIdx(turnIdx_);
-								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode);
+								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, atkC);
 							}, 1000 / gameSpd);//공격 이펙트 효과시간
 						}, 200 / gameSpd);
 					}, 800 / gameSpd);//메시지창 사라짐
@@ -729,37 +817,30 @@ const relationCheck = (saveData, gameData, team, teamChk) => {
 	});
 	return relationArr;
 }
-const RelationArea = styled.div`
-	display:flex;position:absolute;left:0;right:0;top:0;bottom:0;flex-direction:column;z-index:10;align-items:center;justify-content:center;pointer-events:none;
-	&:after{content:'';position:absolute;width:100%;height:0;box-shadow:0 0 20px 10px rgba(0,0,0,0);background:rgba(0,0,0,.7);transition:all ${({gameSpd}) => 0.5 / gameSpd}s ${({gameSpd}) => 0.5 / gameSpd}s ease-in-out;}
-	&.on:after{height:${({rtHeight}) => rtHeight}px;box-shadow:0 0 20px 10px rgba(0,0,0,.7);}
-	.relationTitle{margin:0 0 10px 0;z-index:1;}
-	.relationTitle span{display:inline-block;margin:0 2px;font-size:25px;font-weight:600;opacity:0;color:#fff;}
-	.relationTitle span:first-of-type{transition:opacity ${({gameSpd}) => 0.5 / gameSpd}s 0s;text-shadow:0 0 10px #ff0,0 0 10px #ff0;}
-	.relationTitle span:nth-of-type(2){transition:opacity ${({gameSpd}) => 0.5 / gameSpd}s .2s;text-shadow:0 0 10px #fb0,0 0 10px #fb0;}
-	.relationTitle span:nth-of-type(3){transition:opacity ${({gameSpd}) => 0.5 / gameSpd}s .4s;text-shadow:0 0 10px #f60,0 0 10px #f60;}
-	.relationTitle span:last-of-type{transition:opacity ${({gameSpd}) => 0.5 / gameSpd}s .6s;text-shadow:0 0 10px #f00,0 0 10px #f00;}
-	&.on .relationTitle span{opacity:1;}
-	&.on .relationName{filter:blur(0);}
-`;
-const RelationName = styled.div`
-	position:relative;margin:5px 0;padding:0 0 0 13px;color:#fff;z-index:1;filter:blur(5px);transition:all ${({gameSpd}) => 0.5 / gameSpd}s ${({idx}) => 0.5 + idx * 0.3}s;
-	&:after{content:'';position:absolute;left:0;top:50%;transform:translate(0, -50%);width:5px;height:5px;background:${({color}) => color};box-shadow:0 0 8px 5px ${({color}) => color};}
-`;
-const BgEffect = styled.div`
-	position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;
-	div{position:absolute;width:1000px;height:400px;z-index:40;animation-play-state:running;transition:all ${({gameSpd}) => 2 / gameSpd}s;}
-	.cloud1{top:0;animation:cloudAnimation ${({gameSpd}) => 210 / gameSpd}s linear infinite;background-image:url(${({img1}) => img1});background-size:100%;}
-	.cloud2{top:30%;animation:cloudAnimationReverse ${({gameSpd}) => 130 / gameSpd}s linear infinite;background-image:url(${({img2}) => img2});background-size:100%;opacity:1;}
-	&.action div{animation-play-state:paused;opacity:0;}
-	&.action .cloud2{left:-1000px;animation-play-state:paused;}
-`;
-
+const powerChk = (ally, enemy) => {
+	let hp = [0,0];
+	ally.forEach((data) => {
+		hp[0] += data.hp;
+	});
+	enemy.forEach((data) => {
+		hp[1] += data.hp;
+	});
+	const allyPercent = Math.floor((hp[0] / (hp[0] + hp[1])) * 1000) / 10;
+	return {
+		allyPercent: allyPercent,
+		enemyPercent: 100 - allyPercent,
+		allyHp: Math.floor(hp[0]),
+		enemyHp: Math.floor(hp[1]),
+	}
+}
 const Battle = ({
+	navigate,
 	saveData,
   changeSaveData,
+	changePage,
 	scenario,
 }) => {
+
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
 	const setting = useContext(AppContext).setting,
@@ -788,6 +869,13 @@ const Battle = ({
 	const relationArr = useRef();//인연
 	const relationHeight = useRef(0);//인연 박스 크기
 	const relationCh = useRef();//인연 적용캐릭
+	const getItem = useRef([]);//획득 아이템
+	const teamPower = useRef({
+		allyPercent: 50,
+		enemyPercent: 50,
+		allyHp: 1000,
+		enemyHp: 1000,
+	});//팀 전력
 	const [allyAction, setAllyAction] = useState([]);//아군 움직임(defence, avoid)
 	const [enemyAction, setEnemyAction] = useState([]);//적군 움직임(defence, avoid)
 
@@ -1090,7 +1178,9 @@ const Battle = ({
 			console.log('pgs', '격!퇴!실!패!');
 		}
 	}, [mode]);
-	
+	useLayoutEffect(() => {
+		teamPower.current = powerChk(battleAlly.current, battleEnemy.current);
+	}, [turnIdx]);
 	useLayoutEffect(() => {
 		if (allyPos.current[orderIdx]) {
 			if (battleAlly.current[allyPos.current[orderIdx].idx].state === "die") {
@@ -1171,6 +1261,68 @@ const Battle = ({
 	];
   return (
     <>
+			<BattleHeader className="header battle_header" iconBack={imgSet.icon.iconBack}>
+				<ul>
+          <li className="back"><span className="ico" onClick={() => {
+            navigate('/');
+            changePage("main");
+          }}></span></li>
+				</ul>
+				<div className="battle_title" flex-h-center="true">
+					<div className="scenario_title">{scenarioDetail.title}</div>
+					<div className="team_summary">
+						<div style={{width: teamPower.current.allyPercent+"%"}}className="ally_team gradient_dark"></div>
+						<div style={{width: teamPower.current.enemyPercent+"%"}} className="enemy_team gradient_dark"></div>
+						<TeamIcon style={{left: teamPower.current.allyPercent+"%"}} className="team_bullet" iconImg={imgSet.element[13]}></TeamIcon>
+						<div className="ally_power">{teamPower.current.allyHp}</div>
+						<div className="enemy_power">{teamPower.current.enemyHp}</div>
+					</div>
+				</div>
+			</BattleHeader>
+			{mode === "battleWin" && (
+				<div className="battle_end" onClick={() => {
+					navigate('/');
+					changePage("main");
+				}} flex-h-center="true">
+					<div className="battle_title">격!퇴!성!공!</div>
+					<div className="battle_result_ch" flex-h-center="true">
+						{battleAlly.current && battleAlly.current.map((allyData, idx) => {
+							if (allyData.state === "alive") {
+								const chData = gameData.ch[allyData.idx];
+								return (
+									<div className="battle_end_ch" key={idx} flex="true">
+										<div className="end_ch">
+											<CardChRing className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={allyData.lv} gameSpd={gameSpd} />
+											<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData?.style}`]}/>
+											<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData?.element]} lv={allyData.lv} gameSpd={gameSpd}>
+												<span className="ch_ring transition" />
+											</CardRingStyle>
+										</div>
+										<div>획득 경험치: 1243430000</div>
+									</div>
+								);
+							}
+						})}
+					</div>
+					<div className="battle_result_item" flex-center="true">
+						획득 아이템
+						{getItem.current && getItem.current.map((item, idx) => {
+							const itData = gameData.item[item.idx];
+							return (
+								<div key={idx}>아이템</div>
+							)
+						})}
+					</div>
+				</div>
+			)}
+			{mode === "battleLose" && (
+				<div className="battle_end" onClick={() => {
+					navigate('/');
+					changePage("main");
+				}} flex-h-center="true">
+					<div className="battle_title">격퇴실패</div>
+				</div>
+			)}
       <BattleWarp className={`battle_wrap ${mode}`} backImg={imgSet.back[1]}>
 				<BgEffect className={`bgEffect ${mode === "action" ? "action" : ""}`} img1={imgSet.bgEffect[0]} img2={imgSet.bgEffect[1]} gameSpd={gameSpd}>
 					<div className="cloud1"></div>

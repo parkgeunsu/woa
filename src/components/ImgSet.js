@@ -224,6 +224,7 @@ import el9 from 'images/ico/el9.png';
 import el10 from 'images/ico/el10.png';
 import el11 from 'images/ico/el11.png';
 import el12 from 'images/ico/el12.png';
+import el13 from 'images/ico/el13.png';
 import land1 from 'images/land/land1.png';
 import land2 from 'images/land/land2.png';
 import land3 from 'images/land/land3.png';
@@ -309,7 +310,7 @@ export const land = [
   grass1,grass2,grass3,land1,land2,land3,stone1,stone2,stone3,water1,water2,water3
 ];
 export const element = [
-  el0,el1,el2,el3,el4,el5,el6,el7,el8,el9,el10,el11,el12
+  el0,el1,el2,el3,el4,el5,el6,el7,el8,el9,el10,el11,el12,el13
 ];
 export const bgEffect = [
   cloud1,cloud2
