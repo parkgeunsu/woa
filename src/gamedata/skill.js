@@ -61,7 +61,7 @@ export const skill = [
 	{idx:11,
 		na:'연속 공격',element_type:0,cate:[3],txt:'<u>단일</u> <b dmg>$(0)</b>의 2~4회 공격을 한다.'
 		,ta_:1,ta:1,effAnimation:1
-		,eff:[{type:3,num:['60%','65%','75%','80%','85%']}],atkCount:[3, "random"],turn:1,sp:12},
+		,eff:[{type:3,num:['60%','65%','75%','80%','85%']}],atkCount:[3, "randomCount"],turn:1,sp:12},
 	{idx:12,
 		na:'무차별 공격',element_type:0,cate:[3],txt:'<u>단일 랜덤</u> <b dmg>$(0)</b>의 두번 공격을 한다.'
 		,ta_:1,ta:1,effAnimation:2

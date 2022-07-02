@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { util } from 'components/Libs';
 import 'css/battle.css';
 import 'css/battleAnimation.css';
+import { matchRoutes } from 'react-router-dom';
 
 const TeamIcon = styled.div`
 	background-image:url(${({ iconImg }) => iconImg});background-size:100%;
@@ -301,7 +302,7 @@ const activeSk = (timeLineData) => {
 	}
 }
 
-const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, atkCount) => {
+const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, atkOpion) => {
 	if (modeRef.indexOf('battle') >= 0){
 		return;
 	}
@@ -332,7 +333,8 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 	if (turnIdx <= timeLine.length - 1) {
 		let skillIdx = timeLine[turnIdx].order.skIdx;// {team: 'enemy', idx: 0, skIdx: 0, target: 3}
 		//console.log('pgs', timeLine, turnIdx);
-		let atkC = [0, false];
+		let atkC = [0, false], //공격 횟수
+			atkS = 0; //한캐릭이 공격한 횟수 체크
 		if (timeLine[turnIdx].order.team === 'ally') {//죽은 상태인지
 			if (battleAlly[timeLine[turnIdx].order.idx].state === 'die') {
 				skillIdx = 0;
@@ -344,25 +346,51 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 		}
 		if (skillIdx === 0){ //대기
 			setTurnIdx(turnIdx + 1);
-			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, atkC);
+			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, {
+				atkCount:atkC,
+				atkStay: atkS,
+			});
 		} else if (skillIdx === 2 || skillIdx === 13) { //방어, 철벽방어
 			setTurnIdx(turnIdx + 1);
-			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, atkC);
+			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, {
+				atkCount:atkC,
+				atkStay: atkS,
+			});
 		} else {
 			let attacker = {},
 				defencer = [],
 				defendSkillEnemy = []; //방어종류 시전 캐릭
 			let allyAction = [],
 				enemyAction = [];
+			//공격 횟수 지정
+			atkC = (atkOpion?.atkCount && atkOpion?.atkCount[0]) ? atkOpion?.atkCount : [...gameData.skill[skillIdx].atkCount];
+			atkC[0] -= 1;
 			if (timeLine[turnIdx].order.team === 'ally') { //아군 공격
 				attacker = battleAlly[timeLine[turnIdx].order.idx];
-				// defencer = battleEnemy[timeLine[turnIdx].targetIdx];
-				defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
-					return {
-						ch: battleEnemy[data],
-						idx: data,
+				if (atkC[1] === "another") {
+					const defencerIdx = [Math.floor(Math.random()* battleEnemy.length)];
+					defencer = [{
+						ch: battleEnemy[defencerIdx],
+						idx: defencerIdx,
+					}];
+					timeLine[turnIdx].order.targetIdx = [defencerIdx];
+					timeLine[turnIdx].order.target = enemyPos[defencerIdx];
+				} else {
+					if (atkC[1] === "randomCount") {
+						atkS ++;
+						if (Math.random() < 0.5 - atkS / 10) {
+							atkC[0] ++;
+						} else {
+							atkC[0] --;
+						}
 					}
-				});
+					defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
+						return {
+							ch: battleEnemy[data],
+							idx: data,
+						}
+					});
+				}
 				timeLine.forEach((data) => {
 					if (data.order.team === 'enemy'){
 						//console.log(dIdx + '적군 방어중');
@@ -387,13 +415,30 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 				});
 			} else { //적군 공격
 				attacker = battleEnemy[timeLine[turnIdx].order.idx];
-				// defencer = battleAlly[timeLine[turnIdx].targetIdx];
-				defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
-					return {
-						ch: battleAlly[data],
-						idx: data,
+				if (atkC[1] === "another") {
+					const defencerIdx = [Math.floor(Math.random()* battleAlly.length)];
+					defencer = [{
+						ch: battleAlly[defencerIdx],
+						idx: defencerIdx,
+					}];
+					timeLine[turnIdx].order.targetIdx = [defencerIdx];
+					timeLine[turnIdx].order.target = allyPos[defencerIdx].pos;
+				} else {
+					if (atkC[1] === "randomCount") {
+						atkS ++;
+						if (Math.random() < 0.5 - atkS / 10) {
+							atkC[0] ++;
+						} else {
+							atkC[0] --;
+						}
 					}
-				});
+					defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
+						return {
+							ch: battleAlly[data],
+							idx: data,
+						}
+					});
+				}
 				timeLine.forEach((data) => {
 					if (data.order.team === 'ally'){
 						//console.log(dIdx + '적군 방어중');
@@ -417,33 +462,16 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 					}
 				});
 			}
-			atkC = (atkCount && atkCount[0]) ? atkCount : [...gameData.skill[skillIdx].atkCount];
-			//공격 횟수 지정
-			atkC[0] -= 1;
-			if (atkC[1] === "random") {
-				atkC[0] += Math.round(Math.random() * -1) + 1;
-			} else if (atkC[1] === "another") {
-
-				//!!!!손봐야됨!!!!
-				// if (timeLine[turnIdx].order.team === 'ally') {
-				// 	const defencerIdx = [Math.floor(Math.random()* battleEnemy.length)];
-				// 	defencer = [{
-				// 		ch: battleAlly[defencerIdx],
-				// 		idx: defencerIdx,
-				// 	}];
-				// } else {
-				// 	const defencerIdx = [Math.floor(Math.random()* battleAlly.length)];
-				// 	defencer = [{
-				// 		ch: battleAlly[defencerIdx],
-				// 		idx: defencerIdx,
-				// 	}];
-				// }
+			let turnIdx_ = turnIdx;
+			if (atkC[0] <= 0) {
+				turnIdx_ = turnIdx + 1;
+				atkS = 0;
 			}
-			const turnIdx_ = atkC[0] <= 0 ? turnIdx + 1 : turnIdx;
 			//console.log('pgs', defencer);
 			//데미지 공식
 			let dmg = [],
 				elementDmg = 0;
+			let totalDmg = 0;
 			const skType = gameData.skill[timeLine[turnIdx].order.skIdx].element_type;//스킬종류
 			const chance = Math.random();
 			const team = timeLine[turnIdx].order.team === 'ally' ? enemyAction : allyAction;
@@ -649,12 +677,17 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 						dmg.push('');
 					} else {
 						dmg.push(dmg_ < 1 ? 1 : dmg_);
+						totalDmg += dmg_ < 1 ? 1 : dmg_
 					}
 				} else { //적이 죽었을 경우
 					dmg.push('');
 				}
 			});
-			console.log("dmg", dmg, attacker);
+			if (typeof attacker.totalDmg === "number") {
+				attacker.totalDmg += totalDmg;
+			} else {
+				attacker.totalDmg = totalDmg;
+			}
 			//atk, def, mak, mdf, spd
 			//timeLine[turnIdx] 공격자
 			setTimeout(() => {
@@ -737,7 +770,10 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 									setAllyAction([]);
 								}
 								setTurnIdx(turnIdx_);
-								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, atkC);
+								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, {
+									atkCount: atkC,
+									atkStay: atkS,
+								});
 							}, 1000 / gameSpd);//공격 이펙트 효과시간
 						}, 200 / gameSpd);
 					}, 800 / gameSpd);//메시지창 사라짐
@@ -833,6 +869,36 @@ const powerChk = (ally, enemy) => {
 		enemyHp: Math.floor(hp[1]),
 	}
 }
+const getExp = (currentAlly, enemyData) => {
+	let exp = 0,
+		enemyHp = 0,
+		hpGrade = '';
+	enemyData.forEach((data) => {
+		enemyHp += data.hp_;
+		exp += data.grade * 4 * data.lv * 1.5;
+	});
+	const dmgHp = (currentAlly.totalDmg || 0) / enemyHp;
+	if (dmgHp < 0.3) {
+		hpGrade = "D";
+		exp = exp * .4;
+	} else if (dmgHp < 0.5) {
+		hpGrade = "C";
+		exp = exp * .6;
+	} else if (dmgHp < 0.7) {
+		hpGrade = "B";
+		exp = exp * .8;
+	} else if (dmgHp < 0.9) {
+		hpGrade = "A";
+		exp = exp * 1.2;
+	} else {
+		hpGrade = "S";
+		exp = exp * 1.5;
+	}
+	return {
+		grade: hpGrade,
+		exp: exp,
+	}
+}
 const Battle = ({
 	navigate,
 	saveData,
@@ -845,14 +911,13 @@ const Battle = ({
   const gameData = useContext(AppContext).gameData;
 	const setting = useContext(AppContext).setting,
 		gameSpd = setting.speed;
-	const scenarioDetail = scenario || gameData.scenario.korea.threeAfter[0].stage[2];
+	const scenarioDetail = scenario || gameData.scenario.korea.threeAfter[0].stage[1];
 	const [mapLand] = useState(scenarioDetail.map);
 	const allyDeck = saveData.lineup.save_slot[saveData.lineup.select].entry;//캐릭터 저장된 카드index
 	const enemyDeck = scenarioDetail.entry;
 	const containerRef = useRef(null);
 	const [containerW, setContainerW] = useState();
 	const mapSize = 20;
-
 	const allyOrders = useRef([]);//아군 행동저장배열
 	const enemyOrders = useRef([]);//적군 행동저장배열
 	const timeLine = useRef([]);//공격 순번배열
@@ -870,6 +935,8 @@ const Battle = ({
 	const relationHeight = useRef(0);//인연 박스 크기
 	const relationCh = useRef();//인연 적용캐릭
 	const getItem = useRef([]);//획득 아이템
+	const allySlot = useRef([]);//아군 저장 슬롯배열
+	const resultExp = useRef([]);//결과 획득 경험치
 	const teamPower = useRef({
 		allyPercent: 50,
 		enemyPercent: 50,
@@ -904,6 +971,7 @@ const Battle = ({
 				count ++;
 			}
 		});
+		allySlot.current = [...ally];
 		const allyRelation = relationCheck(saveData, gameData, ally, 'ally');
 		//최초 실행
 		if (allyRelation.length > 0) { //인연이 있을때
@@ -947,6 +1015,7 @@ const Battle = ({
 			battleAlly.current.push({
 				...saveCh,
 				na: gameData.ch[saveCh.idx].na1,
+				hasExp:saveCh.hasExp,
 				state: 'alive',
 				hp: hp,
 				hp_: hp,
@@ -1000,6 +1069,7 @@ const Battle = ({
 				state: 'alive',
 				...gameCh,
 				...enemyData,
+				lv: data.lv,
 				sk: enemySkill,
 				hp: hp,
 				hp_: hp,
@@ -1174,6 +1244,15 @@ const Battle = ({
 			actionAnimation(setTurnIdx, setSkillMsg, 0, timeLine.current, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly.current, battleEnemy.current, setting, setAllyAction, setEnemyAction, allyPos.current, enemyPos.current, modeRef.current, setMode);
 		} else if (mode === 'battleWin') {
 			console.log('pgs', '격!퇴!성!공!');
+			let saveD = {...saveData};
+			allySlot.current.forEach((slotIdx, idx) => {
+				const hasMaxExp = gameData.hasMaxExp[saveD.ch[slotIdx].grade];
+				saveD.ch[slotIdx].hasExp += resultExp.current[idx];
+				if (saveD.ch[slotIdx].hasExp > hasMaxExp) {
+					saveD.ch[slotIdx].hasExp = hasMaxExp;
+				}
+			});
+			changeSaveData(saveD);
 		} else if (mode === 'battleLose') {
 			console.log('pgs', '격!퇴!실!패!');
 		}
@@ -1287,21 +1366,32 @@ const Battle = ({
 					<div className="battle_title">격!퇴!성!공!</div>
 					<div className="battle_result_ch" flex-h-center="true">
 						{battleAlly.current && battleAlly.current.map((allyData, idx) => {
-							if (allyData.state === "alive") {
-								const chData = gameData.ch[allyData.idx];
-								return (
-									<div className="battle_end_ch" key={idx} flex="true">
-										<div className="end_ch">
-											<CardChRing className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={allyData.lv} gameSpd={gameSpd} />
-											<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData?.style}`]}/>
-											<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData?.element]} lv={allyData.lv} gameSpd={gameSpd}>
-												<span className="ch_ring transition" />
-											</CardRingStyle>
-										</div>
-										<div>획득 경험치: 1243430000</div>
+							const chData = gameData.ch[allyData.idx];
+							const battleGrade = getExp(allyData, battleEnemy.current);
+							resultExp.current[idx] = battleGrade.exp;
+							const exp = [allyData.hasExp, gameData.hasMaxExp[allyData.grade]];
+							return (
+								<div className="battle_end_ch" key={idx} flex-center="true">
+									<div className="end_ch">
+										<CardChRing className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={allyData.lv} gameSpd={gameSpd} />
+										<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData?.style}`]}/>
+										<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData?.element]} lv={allyData.lv} gameSpd={gameSpd}>
+											<span className="ch_ring transition" />
+										</CardRingStyle>
 									</div>
-								);
-							}
+									<div className="battle_end_contribution" flex-h-center="true">
+										<div className="battle_end_hpexp" flex-center="true">
+												<div className="battle_end_hp"><span>기여도:</span><span className="num">{Math.round(allyData.totalDmg) || 0}</span></div>
+												<div className="battle_end_exp"><span>경험치:</span><span className="num">{battleGrade.exp}</span></div>
+												<div className="battle_end_grade">{battleGrade.grade}</div>
+										</div>
+										<div className="battle_end_expBar">
+											<div className="bar"><em className="gradient_dark transition" style={{width:exp[1] / exp[0]}}></em></div>
+											<div className="txt">{exp[0]} / {exp[1]}</div>
+										</div>
+									</div>
+								</div>
+							);
 						})}
 					</div>
 					<div className="battle_result_item" flex-center="true">

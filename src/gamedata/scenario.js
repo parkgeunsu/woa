@@ -94,6 +94,7 @@ export const scenario = {
 						]
 					},
 					{
+						title:"후삼국시대 전투2",
 						lineup:0,
 						map:[
 							0,1,1,2,2,
@@ -125,7 +126,7 @@ export const scenario = {
 						]
 					},
 					{
-						title:"후삼국시대 전투2",
+						title:"후삼국시대 전투3",
 						lineup:0,
 						map:[
 							0,1,1,2,2,
@@ -175,7 +176,7 @@ export const scenario = {
 						]
 					},
 					{
-						title:"후삼국시대 전투3",
+						title:"후삼국시대 전투4",
 						lineup:0,
 						map:[
 							0,1,1,2,2,
