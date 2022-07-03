@@ -911,7 +911,7 @@ const Battle = ({
   const gameData = useContext(AppContext).gameData;
 	const setting = useContext(AppContext).setting,
 		gameSpd = setting.speed;
-	const scenarioDetail = scenario || gameData.scenario.korea.threeAfter[0].stage[1];
+	const scenarioDetail = scenario || gameData.scenario.korea.joseon2.LSS.stage[0];
 	const [mapLand] = useState(scenarioDetail.map);
 	const allyDeck = saveData.lineup.save_slot[saveData.lineup.select].entry;//캐릭터 저장된 카드index
 	const enemyDeck = scenarioDetail.entry;
@@ -937,6 +937,7 @@ const Battle = ({
 	const getItem = useRef([]);//획득 아이템
 	const allySlot = useRef([]);//아군 저장 슬롯배열
 	const resultExp = useRef([]);//결과 획득 경험치
+	const resultBeige = useRef([]);//결과 전투벳지
 	const teamPower = useRef({
 		allyPercent: 50,
 		enemyPercent: 50,
@@ -1248,6 +1249,22 @@ const Battle = ({
 			allySlot.current.forEach((slotIdx, idx) => {
 				const hasMaxExp = gameData.hasMaxExp[saveD.ch[slotIdx].grade];
 				saveD.ch[slotIdx].hasExp += resultExp.current[idx];
+				switch (saveD.ch[slotIdx].battleBeige) {
+					case "S":
+						saveD.ch[slotIdx].battleBeige[0] += 1;
+						break;
+					case "A":
+						saveD.ch[slotIdx].battleBeige[1] += 1;
+						break;	
+					case "B":
+						saveD.ch[slotIdx].battleBeige[2] += 1;
+						break;
+					case "C":
+						saveD.ch[slotIdx].battleBeige[3] += 1;
+						break;
+					default:
+						break;
+				}
 				if (saveD.ch[slotIdx].hasExp > hasMaxExp) {
 					saveD.ch[slotIdx].hasExp = hasMaxExp;
 				}
@@ -1369,6 +1386,7 @@ const Battle = ({
 							const chData = gameData.ch[allyData.idx];
 							const battleGrade = getExp(allyData, battleEnemy.current);
 							resultExp.current[idx] = battleGrade.exp;
+							resultBeige.current[idx] = battleGrade.grade;
 							const exp = [allyData.hasExp, gameData.hasMaxExp[allyData.grade]];
 							return (
 								<div className="battle_end_ch" key={idx} flex-center="true">

@@ -1,16 +1,20 @@
+import React, { createContext, useEffect, useState } from 'react';
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
+import { back, animalType, icon, etc, iconStar, element, chImg, chStyleImg, iconState, itemEquip, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, eff, menu } from 'components/ImgSet';
+import { util } from 'components/Libs';
+import Main from 'components/Main';
+import Menu from 'components/Menu';
 import Battle from 'components/Battle';
 import Character from 'components/Character';
 import Gacha from 'components/Gacha';
-import { back, animalType, icon, etc, iconStar, element, chImg, chStyleImg, iconState, itemEquip, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, eff, menu } from 'components/ImgSet';
-import { util } from 'components/Libs';
 import Lineup from 'components/Lineup';
-import Main from 'components/Main';
-import Menu from 'components/Menu';
+import Shop from 'components/Shop';
+import ItemEnhancement from 'components/ItemEnhancement';
+import CharacterEnhancement from 'components/CharacterEnhancement';
+import Map from 'components/Map';
 import 'css/root.css';
 import { gameData, version } from 'gamedata/data';
 import { save } from 'gamedata/savedata';
-import React, { createContext, useEffect, useState } from 'react';
-import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 
@@ -270,6 +274,10 @@ const App = () => {
             <Route path="/gacha" element={<Gacha saveData={saveData} changeSaveData={changeSaveData} />} />
             <Route path="/lineup" element={<Lineup saveData={saveData} changeSaveData={changeSaveData} />} />
             <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
+            <Route path="/characterEnhancement" element={<CharacterEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
+            <Route path="/itemEnhancement" element={<ItemEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
+            <Route path="/shop" element={<Shop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
+            <Route path="/map" element={<Map saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
           </Routes>
         </ContentContainer>
         {/* <FooterContainer/> */}

@@ -51,19 +51,19 @@ export const skill = [
 		,ta_:0,ta:20,effAnimation:0
 		,eff:[{type:100,num:['20%','25%','30%','35%','40%']}],atkCount:[0],turn:0,sp:0},
 	{idx:9,
-		na:'세게 공격',element_type:0,cate:[3],txt:'<u>단일</u>, <b dmg>$(0)</b>의 강한 공격을 한다.'
+		na:'집중타',element_type:0,cate:[3],txt:'<u>단일</u>, <b dmg>$(0)</b>의 강한 공격을 한다.'
 		,ta_:1,ta:1,effAnimation:1
 		,eff:[{type:3,num:['150%','175%','200%','225%','250%']}],atkCount:[1],turn:1,sp:10},
 	{idx:10,
-		na:'두번 공격',element_type:0,cate:[3],txt:'<u>단일</u> <b dmg>$(0)</b>의 두번 공격을 한다.'
+		na:'때린데 또 까',element_type:0,cate:[3],txt:'<u>단일</u> <b dmg>$(0)</b>의 2회 공격을 한다.'
 		,ta_:1,ta:1,effAnimation:2
 		,eff:[{type:3,num:['80%','90%','100%','110%','120%']}],atkCount:[2],turn:1,sp:10},
 	{idx:11,
 		na:'연속 공격',element_type:0,cate:[3],txt:'<u>단일</u> <b dmg>$(0)</b>의 2~4회 공격을 한다.'
 		,ta_:1,ta:1,effAnimation:1
-		,eff:[{type:3,num:['60%','65%','75%','80%','85%']}],atkCount:[3, "randomCount"],turn:1,sp:12},
+		,eff:[{type:3,num:['60%','65%','75%','80%','85%']}],atkCount:[2, "randomCount"],turn:1,sp:12},
 	{idx:12,
-		na:'무차별 공격',element_type:0,cate:[3],txt:'<u>단일 랜덤</u> <b dmg>$(0)</b>의 두번 공격을 한다.'
+		na:'무차별 공격',element_type:0,cate:[3],txt:'<u>단일 랜덤</u> <b dmg>$(0)</b>의 3회 공격을 한다.'
 		,ta_:1,ta:1,effAnimation:2
 		,eff:[{type:3,num:['100%','110%','120%','130%','140%']}],atkCount:[3, "another"],turn:1,sp:9},
 	{idx:13,
@@ -78,6 +78,10 @@ export const skill = [
 		na:'나무뒤에 숨기',element_type:0,cate:[4],txt:'<u>자신</u> <b buff>$(0)</b>의 방어(DEF)가 <i icon up>증가</i>한다.'
 		,ta_:0,ta:1,effAnimation:0
 		,eff:[{type:4,num:['300','400','650','800','1000']}],atkCount:[1],turn:1,sp:0},
+	{idx:16,
+		na:'그루밍',element_type:2,cate:[3],txt:`<u>단일</u>, <b dmg>$(0)</b>의 속도(SPD)를 3턴 감소시킨다.`
+		,ta_:1,ta:1,effAnimation:0
+		,eff:[{type:3,num:['50','70','90','120','150']}],atkCount:[1],turn:3,sp:0},
 ]
 
 export const skillAnimal = [
