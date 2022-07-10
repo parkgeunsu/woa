@@ -60,6 +60,12 @@ import ch17 from 'images/ch/ch17.png';
 import ch18 from 'images/ch/ch18.png';
 import ch19 from 'images/ch/ch19.png';
 import ch20 from 'images/ch/ch20.png';
+import ch28 from 'images/ch/ch28.png';
+import ch29 from 'images/ch/ch29.png';
+import ch30 from 'images/ch/ch30.png';
+import ch31 from 'images/ch/ch31.png';
+import ch32 from 'images/ch/ch32.png';
+import ch33 from 'images/ch/ch33.png';
 import ch2 from 'images/ch/ch2.png';
 import ch3 from 'images/ch/ch3.png';
 import ch4 from 'images/ch/ch4.png';
@@ -69,34 +75,6 @@ import ch7 from 'images/ch/ch7.png';
 import ch8 from 'images/ch/ch8.png';
 import ch9 from 'images/ch/ch9.png';
 import ch99 from 'images/ch/ch99.png';
-import ch_style0 from 'images/ch_style/ch_style0.png';
-import ch_style1 from 'images/ch_style/ch_style1.png';
-import ch_style10 from 'images/ch_style/ch_style10.png';
-import ch_style100 from 'images/ch_style/ch_style100.png';
-import ch_style101 from 'images/ch_style/ch_style101.png';
-import ch_style102 from 'images/ch_style/ch_style102.png';
-import ch_style103 from 'images/ch_style/ch_style103.png';
-import ch_style104 from 'images/ch_style/ch_style104.png';
-import ch_style105 from 'images/ch_style/ch_style105.png';
-import ch_style11 from 'images/ch_style/ch_style11.png';
-import ch_style12 from 'images/ch_style/ch_style12.png';
-import ch_style13 from 'images/ch_style/ch_style13.png';
-import ch_style14 from 'images/ch_style/ch_style14.png';
-import ch_style15 from 'images/ch_style/ch_style15.png';
-import ch_style16 from 'images/ch_style/ch_style16.png';
-import ch_style17 from 'images/ch_style/ch_style17.png';
-import ch_style18 from 'images/ch_style/ch_style18.png';
-import ch_style19 from 'images/ch_style/ch_style19.png';
-import ch_style20 from 'images/ch_style/ch_style20.png';
-import ch_style2 from 'images/ch_style/ch_style2.png';
-import ch_style3 from 'images/ch_style/ch_style3.png';
-import ch_style4 from 'images/ch_style/ch_style4.png';
-import ch_style5 from 'images/ch_style/ch_style5.png';
-import ch_style6 from 'images/ch_style/ch_style6.png';
-import ch_style7 from 'images/ch_style/ch_style7.png';
-import ch_style8 from 'images/ch_style/ch_style8.png';
-import ch_style9 from 'images/ch_style/ch_style9.png';
-import ch_style99 from 'images/ch_style/ch_style99.png';
 import iconState0 from 'images/ico/st0.png';
 import iconState1 from 'images/ico/st1.png';
 import iconState2 from 'images/ico/st2.png';
@@ -269,12 +247,8 @@ export const iconStar = [
 ];
 export const chImg = {
   ch0:ch0, ch1:ch1, ch2:ch2, ch3:ch3, ch4:ch4, ch5:ch5, ch6:ch6, ch7:ch7, ch8:ch8, ch9:ch9, ch10:ch10,
-  ch11:ch11, ch12:ch12, ch13:ch13, ch14:ch14, ch15:ch15, ch16:ch16, ch17:ch17, ch18:ch18, ch19:ch19, ch20:ch20,
+  ch11:ch11, ch12:ch12, ch13:ch13, ch14:ch14, ch15:ch15, ch16:ch16, ch17:ch17, ch18:ch18, ch19:ch19, ch20:ch20, ch28:ch28, ch29:ch29, ch30:ch30, ch31:ch31, ch32:ch32, ch33:ch33, 
   ch99:ch99, ch100:ch100, ch101:ch101, ch102:ch102, ch103:ch103, ch104:ch104, ch105:ch105
-};
-export const chStyleImg = {
-  ch_style0:ch_style0, ch_style1:ch_style1, ch_style2:ch_style2, ch_style3:ch_style3, ch_style4:ch_style4, ch_style5:ch_style5, ch_style6:ch_style6, ch_style7:ch_style7, ch_style8:ch_style8, ch_style9:ch_style9, ch_style10:ch_style10, ch_style11:ch_style11, ch_style12:ch_style12, ch_style13:ch_style13, ch_style14:ch_style14, ch_style15:ch_style15, ch_style16:ch_style16, ch_style17:ch_style17, ch_style18:ch_style18, ch_style19:ch_style19, ch_style20:ch_style20, 
-  ch_style99:ch_style99, ch_style100:ch_style100, ch_style101:ch_style101, ch_style102:ch_style102, ch_style103:ch_style103, ch_style104:ch_style104, ch_style105:ch_style105
 };
 export const ringImg = [
   "","","","","",ring0,ring1,ring2,ring3,ring4,ring5,ring6,ring7,ring_

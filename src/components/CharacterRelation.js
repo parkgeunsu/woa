@@ -13,10 +13,10 @@ const CardChRing = styled.span`
 	background-size:100%;
 `;
 const CardCh = styled.span`
-	background-image:${({chDisplay, styleDisplay}) => {
-		return `url(${styleDisplay}), url(${chDisplay})`;
-	}};background-position:center 5%, center -70%;
-	background-size:90%, 75%;
+	background-image:${({chDisplay}) => {
+		return `url(${chDisplay})`;
+	}};background-position:center -70%;
+	background-size:75%;
 `;
 
 const CharacterRelation = ({
@@ -68,7 +68,7 @@ const CharacterRelation = ({
                           }}>
                             <div className={`relation_ch ${hasRelation ? 'on' : ''} ${rtAll}`}>
                               <CardChRing style={{top:0,borderRadius:'50%',}} className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData.element]} ringDisplay1={imgSet.sringImg[chData.element]} />
-                              <CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]}/>
+                              <CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
                             </div>
                             {rtAll && <div className="rtAll">ALL</div>}
                           </div>

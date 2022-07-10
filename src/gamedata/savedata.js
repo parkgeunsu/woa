@@ -16,7 +16,7 @@ export const save = {
         {},
         {},
       ]},
-      {"idx":1,"stateType":0,"element":[8],"stateLuk":20,"lv":40,"exp":0,"hasExp":1000,"actionPoint":20,"battleBeige":[0,0,0,0],"animalBeige":0,"sk":[{"idx":1,"lv":1},{"idx":2,"lv":1},{"idx":3,"lv":1}],"items":[
+      {"idx":28,"stateType":0,"element":[8],"stateLuk":20,"lv":40,"exp":0,"hasExp":1000,"actionPoint":20,"battleBeige":[0,0,0,0],"animalBeige":0,"sk":[{"idx":1,"lv":1},{"idx":2,"lv":1},{"idx":3,"lv":1}],"items":[
         {},
         {},
         {},

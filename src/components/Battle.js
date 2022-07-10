@@ -171,10 +171,10 @@ const CardRingStyle = styled.span`
 	}
 `;
 const CardCh = styled.span`
-	background-image:${({chDisplay, styleDisplay}) => {
-		return `url(${styleDisplay}), url(${chDisplay})`;
-	}};background-position:center 5%, center -70%;
-	background-size:90%, 75%;
+	background-image:${({chDisplay}) => {
+		return `url(${chDisplay})`;
+	}};background-position:center -70%;
+	background-size:75%;
 `;
 const RelationArea = styled.div`
 	&:after{transition:all ${({gameSpd}) => 0.5 / gameSpd}s ${({gameSpd}) => 0.5 / gameSpd}s ease-in-out;}
@@ -1392,7 +1392,7 @@ const Battle = ({
 								<div className="battle_end_ch" key={idx} flex-center="true">
 									<div className="end_ch">
 										<CardChRing className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={allyData.lv} gameSpd={gameSpd} />
-										<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData?.style}`]}/>
+										<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} />
 										<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData?.element]} lv={allyData.lv} gameSpd={gameSpd}>
 											<span className="ch_ring transition" />
 										</CardRingStyle>
@@ -1536,7 +1536,7 @@ const Battle = ({
 										}} gameSpd={gameSpd} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]}>
 											<div className="ch_box">
 												<CardChRing className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={enemyData.lv} gameSpd={gameSpd} />
-												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData?.style}`]}/>
+												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} />
 												<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData?.element]} lv={enemyData.lv} gameSpd={gameSpd}>
 													<span className="ch_ring transition" />
 												</CardRingStyle>
@@ -1565,7 +1565,7 @@ const Battle = ({
 								return (
 									<TimeLineCh key={idx} className={`battle_ch timeLine ${turnIdx === idx ? 'on' : ''} ${activeSkill}`} team={data.order.team} size={30} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]} gameSpd={gameSpd}>
 										<CardChRing style={{top:0,borderRadius:'50%',}} className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} />
-										<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData?.style}`]}/>
+										<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} />
 									</TimeLineCh>
 								)
 							})}
@@ -1599,7 +1599,7 @@ const Battle = ({
 										<BattleCh key={idx} className={`battle_ch ${posCh} ${actionCh} ${rtCh} ${actionPos} ${die}`} data-ch={chData?.display} data-idx={idx} left={left} top={top} size={mapSize} rtColor={rtColor}  gameSpd={gameSpd} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]}>
 											<div className="ch_box">
 												<CardChRing className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={saveCh?.lv} />
-												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} styleDisplay={imgSet.chStyleImg[`ch_style${chData?.style}`]}/>
+												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} />
 												<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData?.element]} lv={saveCh?.lv} gameSpd={gameSpd}>
 													<span className="ch_ring transition" />
 												</CardRingStyle>

@@ -34,10 +34,6 @@ const CardLvName = styled.li`
 `;
 const CardDisplay = styled.li`
 	background-image:url(${({chDisplay}) => chDisplay});
-	background-size:85%;
-`;
-const CardStyle = styled.li`
-	background-image:url(${({styleDisplay}) => styleDisplay});
 	background-size:100%;
 `;
 const CardElement = styled.li`
@@ -367,7 +363,6 @@ const ItemEnhancement = ({
 								 				<span className="lv">1</span><span className="name">{chData.na1}</span>
 								 			</CardLvName>
 											<CardDisplay className="gacha_ch" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
-								 			<CardStyle className="gacha_ch_style" styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]} />
 								 			<CardRing className="gacha_ring" ringBack={imgSet.etc.imgRingBack}></CardRing>
 								 			<CardElement className="gacha_element" ringDisplay={imgSet.ringImg[chData.element]} />
 								 			<CardStar className="gacha_star" starIcon={iconStar}>
@@ -402,7 +397,6 @@ const ItemEnhancement = ({
 								<span className="lv">1</span><span className="name_">{gameData.ch[infoIdx].na}</span><span className="name">{gameData.ch[infoIdx].na1}</span>
 							</CardLvName>
 							<CardDisplay className="gacha_ch" chDisplay={imgSet.chImg[`ch${gameData.ch[infoIdx].display}`]} />
-							<CardStyle className="gacha_ch_style" styleDisplay={imgSet.chStyleImg[`ch_style${gameData.ch[infoIdx].style}`]} />
 							<CardRing className="gacha_ring" ringBack={imgSet.etc.imgRingBack}></CardRing>
 							<CardElement className="gacha_element" ringDisplay={imgSet.ringImg[gameData.ch[infoIdx].element]} />
 							<CardStar type={'open'} className="gacha_star" starIcon={iconStar}>

@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
-import { back, animalType, icon, etc, iconStar, element, chImg, chStyleImg, iconState, itemEquip, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, eff, menu } from 'components/ImgSet';
+import { back, animalType, icon, etc, iconStar, element, chImg, iconState, itemEquip, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, eff, menu } from 'components/ImgSet';
 import { util } from 'components/Libs';
 import Main from 'components/Main';
 import Menu from 'components/Menu';
@@ -121,7 +121,6 @@ const App = () => {
       icon: icon,
       iconStar: iconStar,
       chImg: chImg,
-      chStyleImg: chStyleImg,
       ringImg: ringImg,
       sringImg: sringImg,
       ssringImg: ssringImg,
@@ -199,10 +198,6 @@ const App = () => {
     for (let v in chImg) {
       const img = new Image();
       img.src = chImg[v];
-    }
-    for (let v in chStyleImg) {
-      const img = new Image();
-      img.src = chStyleImg[v];
     }
     iconState.map((image) => {
       const img = new Image();

@@ -55,13 +55,9 @@ const ListNameLv = styled.li`
   }
 `;
 const ListCh = styled.li`
-  top:0;width:100%;height:100%;background-repeat:no-repeat;background-image:url(${({chDisplay}) => chDisplay});background-size:85%;background-position:center center;z-index:4;
+  top:0;width:100%;height:100%;background-repeat:no-repeat;background-image:url(${({chDisplay}) => chDisplay});background-size:100%;background-position:center center;z-index:4;
 `;
 
-const ListChStyle = styled.li`
-  top:0;width:100%;height:100%;background-repeat:no-repeat;background-image:url(${({styleDisplay}) => styleDisplay});background-size:100%;background-position:center center;z-index:5;
-  
-`;
 const ListChRing = styled.li`
   top:0;width:100%;height:100%;background-repeat:no-repeat;background:url(${({ringBack}) => ringBack});background-position:center center;background-size:85%;z-index:3;
 `;
@@ -127,7 +123,6 @@ const ChracterDetail = ({
           <span className="name">{`${chData.na1} ${chData.na2}`}</span>
         </ListNameLv>
         <ListCh chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
-        <ListChStyle styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]} className="ch_style transition" />
         <ListChRing ringBack={imgRingBack} className="ring" />
         <ListChElement ringDisplay={imgSet.ringImg[chData.element]} className="element" />
         <ListChElement1 chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />

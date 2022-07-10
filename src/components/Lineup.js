@@ -17,11 +17,7 @@ const ListNameLv = styled.span`
   left:50%;bottom:5%;width:14px;height:14px;transform:translate(-50%,0) scale(1);text-align:center;z-index:6;font-size:10px;line-height:1;font-weight:600;border-radius:50%;background-color:${({backColor}) => backColor};
 `;
 const ListCh = styled.span`
-  top:0;width:100%;height:100%;background-repeat:no-repeat;background-size:85%;background-image:url(${({chDisplay}) => chDisplay});background-position:center 10%;z-index:4;pointer-events:none;
-`;
-const ListChStyle = styled.span`
-  top:0;width:100%;height:100%;background-repeat:no-repeat;background-size:100%;background-position:center 25%;z-index:5;pointer-events:none;
-  background-image:url(${({styleDisplay}) => styleDisplay});
+  top:0;width:100%;height:100%;background-repeat:no-repeat;background-size:100%;background-image:url(${({chDisplay}) => chDisplay});background-position:center 10%;z-index:4;pointer-events:none;
 `;
 const ListChRing = styled.span`
   top:0;width:100%;height:100%;background:url(${({ringBack}) => ringBack});background-repeat:no-repeat;background-position:center 10%;background-size:85%;pointer-events:none;z-index:3;
@@ -59,7 +55,6 @@ const CharacterList = ({
 		<>
 			<ListNameLv cardLv={imgSet.etc.imgCardLv} backColor={gameData.chGradeColor[saveCh.grade]}>{saveCh.lv}</ListNameLv>
 			<ListCh chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
-			<ListChStyle styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]} className="ch_style transition" />
 			<ListChRing ringBack={imgSet.etc.imgRingBack} className="ring" />
 			<ListChElement ringDisplay={imgSet.ringImg[chData.element]} className="element" />
 			<ListChElement1 chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />

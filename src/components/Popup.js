@@ -1,4 +1,4 @@
-import { chImg, chStyleImg, itemHole, ringImg } from 'components/ImgSet';
+import { chImg, itemHole, ringImg } from 'components/ImgSet';
 import { util } from 'components/Libs';
 import PopupContinaer from 'components/PopupContainer';
 import imgRing from 'images/ring/ring_.png';
@@ -104,12 +104,7 @@ const PopupRelationList = styled.li`
 const PopupRelationListCh = styled.span`
   position:absolute;left:0;right:0;bottom:0;top:0;
   background-image:url(${({chDisplay}) => chDisplay});
-  background-size:85%;background-position:center -10%;
-`;
-const PopupRelationListChStyle = styled.span`
-  position:absolute;left:0;right:0;bottom:0;top:0;
-  background-image:url(${({styleDisplay}) => styleDisplay});
-  background-size:100%;background-position:center 20%;
+  background-size:100%;background-position:center -10%;
 `;
 const Img = styled.img.attrs(
   ({imgurl}) => ({
@@ -245,7 +240,6 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData) => {
             <PopupRelationList key={idx} gameData={gameData} chData={chData} ringDisplay={ringImg[chData.element]}>
               <Img imgurl={imgRing} />
               <PopupRelationListCh chDisplay={chImg[chData.display]} className="ch" />
-              <PopupRelationListChStyle classNAme="ch_style" styleDisplay={chStyleImg[chData.style]} />
               <span className="name">{chData.na1}</span>
             </PopupRelationList>
           )

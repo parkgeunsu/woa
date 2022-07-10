@@ -12,9 +12,6 @@ const ChListUl = styled.ul`
 const ListCh = styled.span`
   background-image:url(${({chDisplay}) => chDisplay});background-size:100%;
 `;
-const ListChStyle = styled.span`  
-  background-image:url(${({styleDisplay}) => styleDisplay});background-size:100%;
-`;
 const ListRing = styled.span`
   background-size:100%;
   background-image:url(${({ringBack}) => ringBack});
@@ -48,7 +45,6 @@ const ChracterHeader = ({
               <li className={`g${saveCh.grade} ${slotIdx === idx ? 'on' : ''}`} key={idx} onClick={() => {changeChSlot(idx)}}>
                 <ListRing className="list_ring" ringBack={imgSet.etc.imgRingBack} />
                 <ListCh className="list_ch" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
-                <ListChStyle className="list_chstyle" styleDisplay={imgSet.chStyleImg[`ch_style${chData.style}`]} />
               </li>
             )
           })}

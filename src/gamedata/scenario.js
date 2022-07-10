@@ -7,22 +7,22 @@
 //sp 행동력
 export const scenario = {
 	china:{
-		yin:{}, //(BC1600)
-		ju:{}, //(BC10세기)
-		chunchu:{}, //공자
-		jin:{}, //(BC221)
-		han:{}, //초한지(BC206)
-		three:{}, //삼국지(BC220)
-		dang:{}, //서유기(618)
-		song:{}, //수호지
-		ming:{}, //금병매(1368)
+		yin:{}, //(BC1600) period:0
+		ju:{}, //(BC10세기) period:1
+		chunchu:{}, //공자 period:2
+		jin:{}, //(BC221) period:3
+		han:{}, //초한지(BC206) period:4
+		three:{}, //삼국지(BC220) period:5
+		dang:{}, //서유기(618) period:6
+		song:{}, //수호지 period:7
+		ming:{}, //금병매(1368) period:8
 	},
 	korea:{
-		gojoseon:{}, //단군(BC2333)
-		threeBefore:{}, //부여,옥저&동예,삼한
-		three:{}, //신라(BC57)박혁거세, 고구려(BC37)주몽, 백제(BC18)온조
-		ns:{}, //남북국시대 통일신라,발해 대조영(698)
-		threeAfter:{
+		gojoseon:{}, //단군(BC2333) period:0
+		threeBefore:{}, //부여,옥저&동예,삼한 period:1
+		three:{}, //신라(BC57)박혁거세, 고구려(BC37)주몽, 백제(BC18)온조 period:2
+		ns:{}, //남북국시대 통일신라,발해 대조영(698) period:3
+		threeAfter:{ //신라, 후백제(892)견훤, 후고구려(901)궁예, 왕건 period:4
 			xx: {
 				name:"후삼국시대",
 				stage:[
@@ -226,15 +226,15 @@ export const scenario = {
 					},
 				]
 			},
-		}, //신라, 후백제(892)견훤, 후고구려(901)궁예, 왕건
-		joseon1:{ //조선 초기
+		},
+		joseon1:{ //이성계(1392) 조선 초기 period:5
 			xx:{
 				name:"조선 초기",
 				stage:[
 				]
 			}
-		}, //이성계(1392)
-		joseon2:{ //이순신(1592)
+		},
+		joseon2:{ //이순신(1592) period:6
 			LSS:{
 				name:"이순신",
 				stage:[
@@ -596,20 +596,26 @@ export const scenario = {
 				],
 			}
 		},
-		joseon3:{
+		joseon3:{ // period 7
 
 		}
 	},
+	japan:{
+		junkuk:{} // peroid 0
+	},
 	europe:{
-		ancientEgypt:{}, //(BC3000)
+		ancientEgypt:{}, //(BC3000) period 0
 		//파라오, 예컨대 쿠푸, 핫셉수트, 투탕카문, 람세스
-		greece:{}, //(BC1100)
+		greece:{}, //(BC1100) period 1
 		//아테네: 소크라테스,플라톤,아리스토텔레스
 		//스파르타
 		//페르시아 전쟁, 펠로폰네소스 전쟁
-		Alexander:{}, //그리스, 마케도니아 알렉산드로스 대왕(BC356)
-		roma:{}, // 율리우스 카이사르(BC100)
+		Alexander:{}, //그리스, 마케도니아 알렉산드로스 대왕(BC356) period 2
+		roma:{}, // 율리우스 카이사르(BC100) period 3
 		//포에니 전쟁,
-		middleAge:{}, //(476)
+		middleAge:{}, //(476) period 4
 	},
+	asia:{
+		
+	}
 }
