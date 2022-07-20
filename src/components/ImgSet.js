@@ -43,13 +43,15 @@ import iconStar7 from 'images/star/star7.png';
 
 import ch0 from 'images/ch/ch0.png';
 import ch1 from 'images/ch/ch1.png';
+import ch2 from 'images/ch/ch2.png';
+import ch3 from 'images/ch/ch3.png';
+import ch4 from 'images/ch/ch4.png';
+import ch5 from 'images/ch/ch5.png';
+import ch6 from 'images/ch/ch6.png';
+import ch7 from 'images/ch/ch7.png';
+import ch8 from 'images/ch/ch8.png';
+import ch9 from 'images/ch/ch9.png';
 import ch10 from 'images/ch/ch10.png';
-import ch100 from 'images/ch/ch100.png';
-import ch101 from 'images/ch/ch101.png';
-import ch102 from 'images/ch/ch102.png';
-import ch103 from 'images/ch/ch103.png';
-import ch104 from 'images/ch/ch104.png';
-import ch105 from 'images/ch/ch105.png';
 import ch11 from 'images/ch/ch11.png';
 import ch12 from 'images/ch/ch12.png';
 import ch13 from 'images/ch/ch13.png';
@@ -60,21 +62,40 @@ import ch17 from 'images/ch/ch17.png';
 import ch18 from 'images/ch/ch18.png';
 import ch19 from 'images/ch/ch19.png';
 import ch20 from 'images/ch/ch20.png';
+import ch21 from 'images/ch/ch21.png';
+import ch22 from 'images/ch/ch22.png';
+import ch23 from 'images/ch/ch23.png';
+import ch24 from 'images/ch/ch24.png';
+import ch25 from 'images/ch/ch25.png';
+import ch26 from 'images/ch/ch26.png';
+import ch27 from 'images/ch/ch27.png';
 import ch28 from 'images/ch/ch28.png';
 import ch29 from 'images/ch/ch29.png';
 import ch30 from 'images/ch/ch30.png';
 import ch31 from 'images/ch/ch31.png';
 import ch32 from 'images/ch/ch32.png';
 import ch33 from 'images/ch/ch33.png';
-import ch2 from 'images/ch/ch2.png';
-import ch3 from 'images/ch/ch3.png';
-import ch4 from 'images/ch/ch4.png';
-import ch5 from 'images/ch/ch5.png';
-import ch6 from 'images/ch/ch6.png';
-import ch7 from 'images/ch/ch7.png';
-import ch8 from 'images/ch/ch8.png';
-import ch9 from 'images/ch/ch9.png';
-import ch99 from 'images/ch/ch99.png';
+import ch34 from 'images/ch/ch34.png';
+import ch35 from 'images/ch/ch35.png';
+import ch36 from 'images/ch/ch36.png';
+import ch37 from 'images/ch/ch37.png';
+import ch38 from 'images/ch/ch38.png';
+import ch39 from 'images/ch/ch39.png';
+import ch40 from 'images/ch/ch40.png';
+import ch41 from 'images/ch/ch41.png';
+import ch42 from 'images/ch/ch42.png';
+import ch43 from 'images/ch/ch43.png';
+import ch44 from 'images/ch/ch44.png';
+import ch45 from 'images/ch/ch45.png';
+import ch46 from 'images/ch/ch46.png';
+import ch47 from 'images/ch/ch47.png';
+import ch48 from 'images/ch/ch48.png';
+import ch49 from 'images/ch/ch49.png';
+import ch50 from 'images/ch/ch50.png';
+import ch51 from 'images/ch/ch51.png';
+import ch52 from 'images/ch/ch52.png';
+import ch53 from 'images/ch/ch53.png';
+import ch54 from 'images/ch/ch54.png';
 import iconState0 from 'images/ico/st0.png';
 import iconState1 from 'images/ico/st1.png';
 import iconState2 from 'images/ico/st2.png';
@@ -247,8 +268,8 @@ export const iconStar = [
 ];
 export const chImg = {
   ch0:ch0, ch1:ch1, ch2:ch2, ch3:ch3, ch4:ch4, ch5:ch5, ch6:ch6, ch7:ch7, ch8:ch8, ch9:ch9, ch10:ch10,
-  ch11:ch11, ch12:ch12, ch13:ch13, ch14:ch14, ch15:ch15, ch16:ch16, ch17:ch17, ch18:ch18, ch19:ch19, ch20:ch20, ch28:ch28, ch29:ch29, ch30:ch30, ch31:ch31, ch32:ch32, ch33:ch33, 
-  ch99:ch99, ch100:ch100, ch101:ch101, ch102:ch102, ch103:ch103, ch104:ch104, ch105:ch105
+  ch11:ch11, ch12:ch12, ch13:ch13, ch14:ch14, ch15:ch15, ch16:ch16, ch17:ch17, ch18:ch18, ch19:ch19, ch20:ch20,
+  ch21:ch21, ch22:ch22, ch23:ch23, ch24:ch24, ch25:ch25, ch26:ch26, ch27:ch27, ch28:ch28, ch29:ch29, ch30:ch30, ch31:ch31, ch32:ch32, ch33:ch33, ch34:ch34, ch35:ch35, ch36:ch36, ch37:ch37, ch38:ch38, ch39:ch39, ch40:ch40, ch41:ch41, ch42:ch42, ch43:ch43, ch44:ch44, ch45:ch45, ch46:ch46, ch47:ch47, ch48:ch48, ch49:ch49, ch50:ch50, ch51:ch51, ch52:ch52, ch53:ch53, ch54:ch54, 
 };
 export const ringImg = [
   "","","","","",ring0,ring1,ring2,ring3,ring4,ring5,ring6,ring7,ring_

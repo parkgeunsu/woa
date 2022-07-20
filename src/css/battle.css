@@ -132,6 +132,32 @@
 .battle_wrap .bgEffect.action div{animation-play-state:paused;opacity:0;}
 .battle_wrap .bgEffect.action .cloud2{left:-1000px;animation-play-state:paused;}
 
+.battle_scenario{position:absolute;left:0;right:0;top:0;bottom:0;padding:20px;box-sizing:border-box;z-index:10;background-color:rgba(0,0,0,.85);}
+.scenario_box{margin:15px 0;align-items:center;}
+.scenario_ch{position:relative;width:100px;height:100px;}
+.scenario_ch .ch_name{position:absolute;bottom:0;width:100%;text-align:center;word-break:keep-all;line-height:1.3;font-weight:600;font-size:14px;}
+.scenario_ch .ring_back{display:block;position:absolute;left:10%;top:10%;width:80%;height:80%;border-radius:40px;overflow:hidden;box-shadow:0 0 10px #fff;}
+.scenario_ch .ch_style{display:block;position:absolute;left:-10%;top:-20%;width:120%;height:120%;background-repeat:no-repeat;}
+.scenario_talk{position:relative;padding:10px;border:4px solid #fff;background:rgba(255,255,255,.7);box-sizing:border-box;border-radius:10px;color:#000;flex:1;line-height:1.5;font-size:14px;}
+.scenario_box.left .scenario_talk:after{
+  content:"";position:absolute;top:50%;left:-14px;
+  transform:translate(0,-50%);
+  border-right: 10px solid #fff;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;}
+.scenario_box.right .scenario_talk:after{
+  content:"";position:absolute;top:50%;right:-14px;
+  transform:translate(0,-50%);
+  border-left:10px solid #fff;
+  border-top:10px solid transparent;
+  border-bottom:10px solid transparent;}
+.scenario_box.left .scenario_ch{margin:0 10px 0 0;order:1;}
+.scenario_box.left .scenario_talk{order:2;}
+.scenario_box.right .scenario_ch{margin:0 0 0 10px;order:2;}
+.scenario_box.right .scenario_talk{order:1;}
+.scenario_box.ally .scenario_ch .ch_name{text-shadow:0 0 3px #00f,0 0 3px #00f,0 0 3px #00f;}
+.scenario_box.enemy .scenario_ch .ch_name{text-shadow:0 0 3px #f00,0 0 3px #f00,0 0 3px #f00;}
+
 .battle_end{position:absolute;left:0;right:0;top:0;bottom:0;z-index:10;background-color:rgba(0,0,0,.85);justify-content:center;}
 .battle_end .end_ch{position:relative;margin:0 10px 0 0;width:15%;padding-top:15%;}
 .battle_end .end_ch .ring_back, .battle_end .end_ch .ring_style{top:0;}

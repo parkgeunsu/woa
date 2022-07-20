@@ -911,7 +911,8 @@ const Battle = ({
   const gameData = useContext(AppContext).gameData;
 	const setting = useContext(AppContext).setting,
 		gameSpd = setting.speed;
-	const scenarioDetail = scenario || gameData.scenario.korea.joseon2.LSS.stage[0];
+	const scenarioDetail = gameData.scenario[scenario.country][scenario.period][scenario.title][scenario.stage] || gameData.scenario.korea.joseon2.LSS.stage[0];
+	const viewScenario = saveData.scenario[scenario.country][scenario.period][scenario.title][scenario.stage];
 	const [mapLand] = useState(scenarioDetail.map);
 	const allyDeck = saveData.lineup.save_slot[saveData.lineup.select].entry;//캐릭터 저장된 카드index
 	const enemyDeck = scenarioDetail.entry;
@@ -931,7 +932,8 @@ const Battle = ({
 	const allyPos = useRef([]);//아군 위치값
 	const battleAlly = useRef([]);//아군 능력치
 	const	battleEnemy = useRef([]);//적군 능력치
-	const relationArr = useRef();//인연
+	const allyRelationArr = useRef();//아군인연
+	const enemyRelationArr = useRef();//적군인연
 	const relationHeight = useRef(0);//인연 박스 크기
 	const relationCh = useRef();//인연 적용캐릭
 	const getItem = useRef([]);//획득 아이템
@@ -944,6 +946,11 @@ const Battle = ({
 		allyHp: 1000,
 		enemyHp: 1000,
 	});//팀 전력
+	const conversationData = useRef([]);//대화데이터
+	const conversationList = useRef([]);//적용 대화
+	const conversationCount = useRef(0);//적용 대화 글자수
+	const conversationScrollContainer = useRef(null);//대화 스크롤 영역
+	const conversationStepRef = useRef(1);
 	const [allyAction, setAllyAction] = useState([]);//아군 움직임(defence, avoid)
 	const [enemyAction, setEnemyAction] = useState([]);//적군 움직임(defence, avoid)
 
@@ -956,7 +963,64 @@ const Battle = ({
 	const [mode, setMode] = useState();
 	const modeRef = useRef('');
 	const [turnIdx, setTurnIdx] = useState(); //공격캐릭터 활성화 순번
-
+	const conversationTimeout = useRef();
+	const [conversationMsg, setConversationMsg] = useState();
+	const relationMode = useCallback(() => {
+		if (allyRelationArr.current.length > 0) { //인연이 있을때
+			relationHeight.current = 35 + 20 + (20 * allyRelationArr.current.length); //인연글씨 + 여백 + 인연갯수
+			setTimeout(() => {
+				setMode('relation');
+				setTimeout(() => {
+					setOrderIdx(0);
+					setMode('order');
+					setTimeout(() => {
+						allyRelationArr.current = '';
+					}, 1300 / gameSpd);
+				}, (2000 + allyRelationArr.current.length * 300) / gameSpd);
+			}, 100 / gameSpd);
+		} else { //인연이 없을때
+			setOrderIdx(0);
+			setMode('order');
+		}
+		//인연 적용캐릭 셋팅
+		let allyRt = [];
+		allyRelationArr.current.forEach((data) => {
+			gameData.relation[data.idx].member.forEach((dataIdx) => {
+				allyRt[dataIdx] = {
+					idx: dataIdx,
+					color: data.color,
+				}
+			})
+		});
+		let enemyRt = [];
+		enemyRelationArr.current.forEach((data) => {
+			gameData.relation[data.idx].member.forEach((dataIdx) => {
+				enemyRt[dataIdx] = {
+					idx: dataIdx,
+					color: data.color,
+				}
+			});
+		});
+		allyRt = allyRt.filter((element) => element != undefined);
+		enemyRt = enemyRt.filter((element) => element != undefined);
+		relationCh.current = {
+			ally:[...allyRt],
+			enemy:[...enemyRt],
+		};
+		setTimeout(() => {
+			relationCh.current = {};
+		}, 6000 / gameSpd);
+	});
+	const conversationInterval = useCallback(() => {
+		conversationCount.current ++;
+		if (conversationList.current[conversationStepRef.current - 1].txt.substr(conversationCount.current,1).indexOf("<") !== -1) {
+			conversationCount.current += 5;
+		}
+		setConversationMsg(conversationList.current[conversationStepRef.current - 1].txt.substr(0,conversationCount.current) + "_");
+		if (conversationCount.current >= conversationList.current[conversationStepRef.current - 1].txt.length) {
+			clearInterval(conversationTimeout.current);
+		}
+	});
 	useLayoutEffect(() => {
 		let ally = [];
 		let pos = [];
@@ -973,24 +1037,17 @@ const Battle = ({
 			}
 		});
 		allySlot.current = [...ally];
-		const allyRelation = relationCheck(saveData, gameData, ally, 'ally');
 		//최초 실행
-		if (allyRelation.length > 0) { //인연이 있을때
-			relationArr.current = allyRelation;
-			relationHeight.current = 35 + 20 + (20 * allyRelation.length); //인연글씨 + 여백 + 인연갯수
-			setTimeout(() => {
-				setMode('relation');
-				setTimeout(() => {
-					setOrderIdx(0);
-					setMode('order');
-					setTimeout(() => {
-						relationArr.current = '';
-					}, 1300 / gameSpd);
-				}, (2000 + allyRelation.length * 300) / gameSpd);
-			}, 100 / gameSpd);
-		} else { //인연이 없을때
-			setOrderIdx(0);
-			setMode('order');
+		const allyRelation = relationCheck(saveData, gameData, ally, 'ally');
+		allyRelationArr.current = allyRelation;
+		if (!viewScenario) {
+			conversationData.current = gameData.scenario[scenario.country][scenario.period][scenario.title].stage[scenario.stage].conversation;
+			conversationList.current.push(conversationData.current[0]);
+			setMode("scenario");
+			conversationCount.current = 0;
+			conversationTimeout.current = setInterval(conversationInterval, 100);
+		} else {
+			relationMode();
 		}
 		ally.forEach((data, idx) => {
 			const saveCh = saveData.ch[data];
@@ -1044,6 +1101,7 @@ const Battle = ({
 		});
 		enemyPos.current = enemyP;
 		const enemyRelation = relationCheck(saveData, gameData, enemy_, 'enemy');
+		enemyRelationArr.current = enemyRelation;
 		enemy_.forEach((data, idx) => {
 			const gameCh = gameData.ch[data.idx];
 			const enemyData = util.getEnemyState(data, gameData);
@@ -1100,35 +1158,10 @@ const Battle = ({
 		};
 		enemy.forEach(() => {
 			enemyAi.current.push(makeAi());
-		})
-		//인연 적용캐릭 셋팅
-		let allyRt = [];
-		allyRelation.forEach((data) => {
-			gameData.relation[data.idx].member.forEach((dataIdx) => {
-				allyRt[dataIdx] = {
-					idx: dataIdx,
-					color: data.color,
-				}
-			})
 		});
-		let enemyRt = [];
-		enemyRelation.forEach((data) => {
-			gameData.relation[data.idx].member.forEach((dataIdx) => {
-				enemyRt[dataIdx] = {
-					idx: dataIdx,
-					color: data.color,
-				}
-			});
-		});
-		allyRt = allyRt.filter((element) => element != undefined);
-		enemyRt = enemyRt.filter((element) => element != undefined);
-		relationCh.current = {
-			ally:[...allyRt],
-			enemy:[...enemyRt],
-		};
-		setTimeout(() => {
-			relationCh.current = {};
-		}, 6000 / gameSpd);
+		return () => {
+			clearInterval(conversationTimeout.current);
+		}
 	}, []);
 	const resetOrder = (mode) => {
 		setOrderIdx(0);
@@ -1375,6 +1408,46 @@ const Battle = ({
 					</div>
 				</div>
 			</BattleHeader>
+			{mode === "scenario" && (
+				<div ref={conversationScrollContainer} className="battle_scenario scroll-y" onClick={() => {
+					setTimeout(() => {
+						conversationScrollContainer.current.scrollTo(0,10000);
+					}, 150);
+					if (conversationStepRef.current > conversationData.current.length - 1) {
+						relationMode();
+						return;
+					}
+					let conversationClone = conversationData.current[conversationStepRef.current];
+					if (conversationData.current[conversationStepRef.current].idx === "") {
+						conversationClone.idx = battleAlly.current[Math.floor(Math.random() * battleAlly.current.length)].idx;
+					}
+					conversationStepRef.current ++;
+					conversationList.current.push(conversationClone);
+					
+					clearInterval(conversationTimeout.current);
+					conversationCount.current = 0;
+					conversationTimeout.current = setInterval(conversationInterval, 100);
+				}}>
+					{conversationList.current.map((data, idx) => {
+						const chData = gameData.ch[data.idx];
+						return idx <= conversationStepRef.current && (
+						<div key={idx} className={`scenario_box ${data.pos} ${data.team}`} flex-center="true">
+								<div className="scenario_ch">
+									<CardChRing className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} />
+									<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} />
+									<div className="ch_name">{chData?.na1}</div>
+								</div>
+								{idx === conversationStepRef.current - 1 && (
+									<div className="scenario_talk" dangerouslySetInnerHTML={{__html: conversationMsg}} />
+								)}
+								{idx < conversationStepRef.current - 1 && (
+									<div className="scenario_talk" dangerouslySetInnerHTML={{__html: conversationList.current[idx].txt}} />
+								)}
+						</div>
+						)
+					})}
+				</div>
+			)}
 			{mode === "battleWin" && (
 				<div className="battle_end" onClick={() => {
 					navigate('/');
@@ -1436,10 +1509,10 @@ const Battle = ({
 					<div className="cloud1"></div>
 					<div className="cloud2"></div>
 				</BgEffect>
-				{relationArr.current && (
+				{allyRelationArr.current && (
 					<RelationArea className={`relation_area ${mode === "relation" ? "on" : ""}`} rtHeight={relationHeight.current} gameSpd={gameSpd}>
 						<div className="relationTitle"><span>인!</span><span>연!</span><span>발!</span><span>동!</span></div>
-						{relationArr.current.map((rtData, idx) => {
+						{allyRelationArr.current.map((rtData, idx) => {
 							const rtName = gameData.relation[rtData.idx].na;
 							return (
 								<RelationName key={idx} className="relationName" idx={idx} color={rtData.color} gameSpd={gameSpd}>{rtName}</RelationName>

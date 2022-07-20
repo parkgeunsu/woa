@@ -256,6 +256,12 @@ const App = () => {
     setSaveData(objData);
     util.saveData('saveData', objData);
   }
+  const scenario = {
+    country: "korea",
+    period: "joseon2",
+    title: "LSS",
+    stage: 0
+  }
   return (
     <RootContainer value={data} >
       <div style={{height: "100%",overflowY:"overlay",overflowX:"hidden"}} className={`root ${page}`}>
@@ -268,7 +274,7 @@ const App = () => {
             <Route path="/character" element={<Character saveData={saveData} changeSaveData={changeSaveData} />} />
             <Route path="/gacha" element={<Gacha saveData={saveData} changeSaveData={changeSaveData} />} />
             <Route path="/lineup" element={<Lineup saveData={saveData} changeSaveData={changeSaveData} />} />
-            <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
+            <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} scenario={scenario} />} />
             <Route path="/characterEnhancement" element={<CharacterEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
             <Route path="/itemEnhancement" element={<ItemEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
             <Route path="/shop" element={<Shop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />

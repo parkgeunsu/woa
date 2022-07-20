@@ -241,13 +241,57 @@ export const scenario = {
 					{
 						title:"1592년 옥포해전",
 						conversation:[
-							{idx:0, txt: "쯧쯧.. 멍청한 조선놈들, 어짜피 조선 군부는 이나라를 포기했다. 안봐도 나 도도의 승리다."},// 도도 다카토라
-							{idx:1, txt: "당연한 말씀입니다. 당연히 우리 대일본제국 해군의 위력에 비할수 있겠습니까?"},// 호리노우치 우지요시
-							{idx:2, txt: "대장. 일본의 적함이 상당합니다.<br/> 도도 저자는 많은 정공을 세운 일본 제일의 장수라 하옵니다. 우리 수군에 승산이 있을까요?"},// 조선병사1
-							{idx:3, txt: "그들은 많은 승리로 콧대가 하늘을 찌를 것이다. 오히려 이때가 우리에겐 기회다."},// 이순신
-							{idx:4, txt: "... (그렇다 하기엔 적군이 너무 많다..)"},// 조선병사2
-							{idx:3, txt: "가자! 나를 따르라"},// 이순신
+							{idx:28, team:"enemy", pos:"left", txt: "쯧쯧.. <br/>멍청한 조선놈들, 어짜피 조선 군부는 이나라를 포기했다. 안봐도 나 도도의 승리다."},// 도도 다카토라
+							{idx:54, team:"enemy", pos:"right", txt:"당연한 말씀입니다.<br/> 당연히 우리 대일본제국 해군의 위력에 비할수 있겠습니까?"},// 호리노우치 우지요시
+							{idx:"", team:"ally", pos:"right", txt:"대장.. <br/>일본의 적함이 상당합니다.<br/> 도도 저자는 많은 정공을 세운 일본 제일의 장수라 하옵니다. <br/>우리 수군에 승산이 있을까요?"},// 조선병사1
+							{idx:21, team:"ally", pos:"left", txt:"그들은 많은 승리로 콧대가 하늘을 찌를 것이다. 오히려 이때가 우리에겐 기회다."},// 이순신
+							{idx:"", team:"ally", pos:"right", txt:"... <br/>(그렇다 하기엔 적군이 너무 많다..)"},// 조선병사2
+							{idx:21, team:"ally", pos:"left", txt: "가자! 나를 따르라!!"},// 이순신
 						],
+						lineup:0,
+						map:[
+							10,9,9,11,10,
+							9,11,10,11,10,
+							9,9,9,11,9,
+							11,11,10,10,11,
+							10,10,10,10,10,
+							10,9,9,11,10,
+							10,9,11,10,10,
+							3,3,9,10,9,
+							4,5,3,4,3,
+							1,0,4,5,5,
+						],
+						entry:[
+							{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							{idx:'', lv:1, },{idx:'', lv:1, },{pos:1,idx:28, lv:50, grade:4, items: [
+								{idx:0, slot:0, hole:[], lv:2, upgrade:1},
+								{idx:1, slot:0, hole:[], lv:2, upgrade:1},
+								{idx:2, slot:0, hole:[], lv:2, upgrade:1},
+								{idx:4, slot:0, hole:[], lv:2, upgrade:1},
+								{},
+								{},
+								{},
+								{},
+							]},{pos:2,idx:54, lv:50, grade:4, items: [
+								{idx:0, slot:0, hole:[], lv:2, upgrade:1},
+								{idx:1, slot:0, hole:[], lv:2, upgrade:1},
+								{idx:2, slot:0, hole:[], lv:2, upgrade:1},
+								{idx:4, slot:0, hole:[], lv:2, upgrade:1},
+								{},
+								{},
+								{},
+								{},
+							]},{idx:'', lv:1, },
+							{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+						],
+					},
+					{
+						title:"1592년 사천해전",
+						conversation:{
+							
+						},
 						lineup:0,
 						map:[
 							0,1,1,2,2,
@@ -260,76 +304,6 @@ export const scenario = {
 							11,11,10,10,11,
 							10,9,9,3,3,
 							3,9,3,4,4
-						],
-						entry:[
-							{idx:'', lv:1, },{idx:'', lv:1, },{pos:0,idx:23, lv:50, grade:4, items: [
-								{idx:0, slot:0, hole:[], lv:2, upgrade:1},
-								{idx:1, slot:0, hole:[], lv:2, upgrade:1},
-								{idx:2, slot:0, hole:[], lv:2, upgrade:1},
-								{idx:4, slot:0, hole:[], lv:2, upgrade:1},
-								{},
-								{},
-								{},
-								{},
-							]},{idx:'', lv:1, },{idx:'', lv:1, },
-							{idx:'', lv:1, },{idx:'', lv:1, },{pos:1,idx:24, lv:30, grade:4, items: [
-								{idx:0, slot:0, hole:[], lv:2, upgrade:1},
-								{idx:1, slot:0, hole:[], lv:2, upgrade:1},
-								{idx:2, slot:0, hole:[], lv:2, upgrade:1},
-								{idx:4, slot:0, hole:[], lv:2, upgrade:1},
-								{},
-								{},
-								{},
-								{},
-							]},{pos:3,idx:26, lv:50, grade:4, items: [
-								{idx:0, slot:0, hole:[], lv:2, upgrade:1},
-								{idx:1, slot:0, hole:[], lv:2, upgrade:1},
-								{idx:2, slot:0, hole:[], lv:2, upgrade:1},
-								{idx:4, slot:0, hole:[], lv:2, upgrade:1},
-								{},
-								{},
-								{},
-								{},
-							]},{idx:'', lv:1, },
-							{idx:'', lv:1, },{idx:'', lv:1, },{pos:3,idx:26, lv:50, grade:4, items: [
-								{idx:0, slot:0, hole:[], lv:2, upgrade:1},
-								{idx:1, slot:0, hole:[], lv:2, upgrade:1},
-								{idx:2, slot:0, hole:[], lv:2, upgrade:1},
-								{idx:4, slot:0, hole:[], lv:2, upgrade:1},
-								{},
-								{},
-								{},
-								{},
-							]},{idx:'', lv:1, },{idx:'', lv:1, },
-							{idx:'', lv:1, },{idx:'', lv:1, },{pos:4,idx:27, lv:33, grade:4, items: [
-								{idx:0, slot:0, hole:[], lv:2, upgrade:1},
-								{idx:1, slot:0, hole:[], lv:2, upgrade:1},
-								{idx:2, slot:0, hole:[], lv:2, upgrade:1},
-								{idx:4, slot:0, hole:[], lv:2, upgrade:1},
-								{},
-								{},
-								{},
-								{},
-							]},{idx:'', lv:1, },{idx:'', lv:1, },
-						],
-					},
-					{
-						title:"1592년 사천해전",
-						conversation:{
-							
-						},
-						lineup:0,
-						map:[
-							0,0,0,0,0,
-							0,0,0,0,0,
-							0,0,0,0,0,
-							0,0,0,0,0,
-							0,0,0,0,0,
-							0,0,0,0,0,
-							0,0,0,0,0,
-							0,0,0,0,0,
-							0,0,0,0,0,
-							0,0,0,0,0,
 						],
 						entry:[],
 					},
