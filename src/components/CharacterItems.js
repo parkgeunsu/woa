@@ -163,7 +163,7 @@ const CharacterItems = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={itemType} dataObj={itemInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {handlePopup()}} gameData={gameData}/>}
+        {popupOn && <Popup type={itemType} dataObj={itemInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {handlePopup()}} gameData={gameData} imgSet={imgSet}/>}
       </PopupContainer>
     </>
   );

@@ -11,6 +11,7 @@ import { effect, effFrame } from 'gamedata/effect';
 
 export const version = "0.1";
 export const gameData = {
+    itemType: ["","투구","갑옷","무기","반지","목걸이"],
     stateName: ["통솔", "체력", "완력", "민첩", "지력", "정신", "매력","행운"],
     addGradeArr: [1,1.2,1.3,1.4,1.5,1.6,1.7],//등급에 따른 추가 능력치
     animal_type:animals,//'독0','빛1','암2','물3','불4','바람5','땅6'

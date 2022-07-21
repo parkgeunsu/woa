@@ -1411,7 +1411,9 @@ const Battle = ({
 			{mode === "scenario" && (
 				<div ref={conversationScrollContainer} className="battle_scenario scroll-y" onClick={() => {
 					setTimeout(() => {
-						conversationScrollContainer.current.scrollTo(0,10000);
+						if (conversationScrollContainer.current) {
+							conversationScrollContainer.current.scrollTo(0,10000);
+						}
 					}, 150);
 					if (conversationStepRef.current > conversationData.current.length - 1) {
 						relationMode();

@@ -113,25 +113,52 @@ const Img = styled.img.attrs(
 )``;
 
 const PopupItemContainer = styled.ul`
-  display:flex;flex-direction:column;align-items:center;
+  display:flex;position:relative;flex-direction:column;align-items:center;
   margin:auto auto;width:80%;
+  border:5px solid transparent;
+  border-image:url(${({frameBack}) => frameBack}) 5 round;
+  background:rgba(0,0,0,.7);
+  & > li {
+    padding:10px;width:100%;box-sizing:border-box;
+  }
+  .item_header{padding:5px 10px;border:5px solid transparent;
+  border-image:url(${({frameBack}) => frameBack}) 5 round;
+  background:rgba(0,0,0,.7);text-align:center;background-image:radial-gradient(at 50%, #930 0%, #691500 40%, #000 80%);}
+  .item_upgrade{margin:0 0 0 5px;font-weight:600;color:#fff;font-size:14px;text-shadow:0 0 5px #fff;}
+  .item_name{color:${({ color }) => color};font-size:15px;font-weight:600;}
+  .item_footer{justify-content:space-between;align-items:center;border:5px solid transparent;
+  border-image:url(${({frameBack}) => frameBack}) 5 round;
+  background:rgba(0,0,0,.7);}
+  .item_price span{display:inline-block;margin:0 5px 0 0;font-size:14px;color:#c80;}
+  .item_price em{font-size:14px;color:#fff;vertical-align:middle;}
+  .item_footer button{margin:0;}
+`;
+const PopupItemPic = styled.div`
+  width:80px;height:80px;background-image:url(${({itemPic}) => itemPic});background-size:100%;background-repeat:no-repeat;border:5px double #c80;
+`;
+const PopupItemName = styled.div`
+  margin:0 0 0 10px;flex:1;
+  span{display:inline-block;vertical-align:middle;}
+  .item_top{display:flex;justify-content:space-between;margin:0 0 15px 0;color:#bbb;font-size:12px;}
+  .item_grade{color:${({ color }) => color};}
+  .item_bottom{margin:0 0 10px 0;}
+  .item_description{font-family:serif;line-height:1.2;font-size:13px;color:#d3a859;font-weight:600;}
 `;
 const PopupItemList = styled.li`
-  display:flex;flex-direction:column;align-items:center;
-  &.item_eff{margin:5px 0 0 0;padding:5px 10px;min-width:50%;box-sizing:border-box;border:1px solid #fff;}
-  &.item_hole img{margin-left:5px;height:15px;vertical-align:middle;}
-  &.item_eff span{margin-bottom:5px;}
-  &.item_eff span:last-of-type{margin-bottom:0;}
-  &.item_set{margin:5px 0 0 0;padding:5px 10px;min-width:50%;box-sizing:border-box;border:1px solid #fff;}
-  & {
-    span{color:#fff;}
-    .item_grade{font-weight:600;color:#fff;text-align:center;}
-    .item_lv{margin:2px 0 5px 0;font-weight:600;color:#fff;font-size:16px;text-shadow:0 0 5px #fff;text-align:center;}
-    .item_set_piece.on{color:#f00;}
-  }
-`;
-const ItemGrade = styled.span`
-  color: ${({ color }) => color};
+  display:flex;margin:5px 0 0 0;flex-direction:column;
+  .item_title{margin:0 0 5px 0;font-size:14px;color:#ddd;}
+  .item_effs{margin:0 0 5px 15px;color:#2f73ff;font-weight:600;}
+  &.item_eff{padding:0 10px;}
+  .item_holes{margin:0 0 5px 5px;}
+  .item_holeback{display:inline-block;background-image:radial-gradient(at 50%, #000 30%, #888 100%);border-radius:30px;margin-left:5px;width:24px;height:24px;text-align:center;}
+  &.item_hole{padding:0 10px;}
+  .item_holes img{margin:2px 0 0 0;width:20px;height:20px;vertical-align:middle;}
+  .item_holeName{display:inline-block;margin:0 0 0 5px;color:#e14040;font-weight:600;}
+  &.item_set{margin:0 0 10px 0;padding:0 10px;}
+  .item_setNa{margin:0 0 10px 0;color:#0f0;font-size:14px;}
+  .item_set_piece{margin:0 0 5px 15px;color:#555;}
+  .item_set_piece:last-of-type{margin:0 0 0 15px;}
+  .item_set_piece.on{color:#fff;font-weight:600;}
 `;
 const getSetChk = (has_item, n) => {//셋트 아이템 체크
   let chk = false;
@@ -229,7 +256,7 @@ const buttonEvent = (dataObj) => {
     
   }
 }
-const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData) => {
+const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet) => {
 	if (type === 'relation') {
     const member = dataObj.relation.member;
 		return (
@@ -251,46 +278,58 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData) => {
     const saveItems = dataObj.saveItemData;
     const setsInfo = gameData.items.set_type[items.set];
 		return (
-			<PopupItemContainer className="items">
-        <PopupItemList>
-          <ItemGrade className="item_grade" color={gameData.itemGrade.color[items.grade]}>{`${gameData.itemGrade.txt_e[items.grade]} (${gameData.itemGrade.txt_k[items.grade]})`}</ItemGrade>
-          <span className="item_price">{`₩ ${items.price}`} </span>
-          <span className="item_lv">
-          {`LV.${saveItems.lv} "${items.na}"+${saveItems.upgrade > 0 ? saveItems.upgrade : ''}`}
-          </span>
-          <span className="item_txt" dangerouslySetInnerHTML={{__html: items.txt}}></span>
-        </PopupItemList>
+			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[items.grade]}>
+        <li className="item_header" flex-center="true"><span className="item_name">{items.na}</span><span className="item_upgrade">{`+${saveItems.upgrade > 0 ? saveItems.upgrade : ''}`}</span></li>
+        <li flex="true">
+          <PopupItemPic itemPic={imgSet.itemEquip[items.display]} />
+          <div flex-h="true" style={{flex: 1,}}>
+            <PopupItemName color={gameData.itemGrade.color[items.grade]}>
+              <div className="item_top">
+                <span className="item_grade">{gameData.itemGrade.txt_k[items.grade]}</span> <span className="item_type">{gameData.itemType[items.part]}</span>
+              </div>
+              <div className="item_description" dangerouslySetInnerHTML={{__html: `"${items.txt}"`}}></div>
+            </PopupItemName>
+            {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
+          </div>
+        </li>
         <PopupItemList className="item_eff">
+          <div className="item_title">아이템 효과</div>
           {items.eff && items.eff.map((data, idx) => {
             return (
-              <span key={idx}>{`${util.getEffectType(data.type)} ${data.num[saveItems.upgrade]}`}</span>
+              <div key={idx} className="item_effs">{`${util.getEffectType(data.type)} +${data.num[saveItems.upgrade]}`}</div>
             ) 
           })}
         </PopupItemList>
-        <PopupItemList className="item_hole">
-          {saveItems.hole && saveItems.hole.map((data, idx) => {
-            return (
-              <span key={idx}>{`홀 ${idx+1} : ${gameData.items.hole[data].na}`}<Img imgurl={itemHole[data]} /></span>
-            ) 
-          })}
-        </PopupItemList>
+        {saveItems.hole.length > 0 && (
+          <PopupItemList className="item_hole">
+            <div className="item_title">소켓 효과</div>
+            {saveItems.hole.map((data, idx) => {
+              return (
+                <div key={idx} className="item_holes"><span className="item_holeback"><Img imgurl={itemHole[data]} /></span><span className="item_holeName">{`${gameData.items.hole[data].na}`}</span></div>
+              ) 
+            })}
+          </PopupItemList>
+        )}
         <PopupItemList className="item_set">
-          <span className="item_setNa">{setsInfo.na}</span>
+          <div className="item_setNa">{setsInfo.na}</div>
           {setsInfo.part && setsInfo.part.map((data, idx) => {
             return (
-              <span key={idx} className={`item_set_piece ${getSetChk(saveData.ch[dataObj.slotIdx].items, data)}`}>{gameData.items.equip[data].na}</span>
+              <div key={idx} className={`item_set_piece ${getSetChk(saveData.ch[dataObj.slotIdx].items, data)}`}>{gameData.items.equip[data].na}</div>
             ) 
           })}
         </PopupItemList>
-        <PopupItemList style={{flexDirection: 'row'}}>
-          <button text="true" onClick={() => {buttonEvent({
-            type: 'itemRelease',
-            data: dataObj,
-            saveData: saveData,
-            changeSaveData: changeSaveData,
-            gameData: gameData,
-          })}} data-buttontype="itemRelease">해제</button>
-        </PopupItemList>
+        <li className="item_footer" flex="true">
+          <div className="item_price"><span>판매가:</span><em>{`₩${items.price}`}</em></div>
+          <div className="item_button" flex="true">
+            <button text="true" onClick={() => {buttonEvent({
+              type: 'itemRelease',
+              data: dataObj,
+              saveData: saveData,
+              changeSaveData: changeSaveData,
+              gameData: gameData,
+            })}} data-buttontype="itemRelease">해제</button>
+          </div>
+        </li>
       </PopupItemContainer>
 		);
 	} else if (type === 'hequip') {
@@ -298,168 +337,225 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData) => {
     const saveItems = dataObj.saveItemData;
     const setsInfo = gameData.items.set_type[items.set];
     return (
-			<PopupItemContainer className="items">
-        <PopupItemList>
-          <ItemGrade className="item_grade" color={gameData.itemGrade.color[items.grade]}>{`${gameData.itemGrade.txt_e[items.grade]} (${gameData.itemGrade.txt_k[items.grade]})`}</ItemGrade>
-          <span className="item_price">{`₩ ${items.price}`} </span>
-          <span className="item_lv">
-          {`LV.${saveItems.lv} "${items.na}"+${saveItems.upgrade > 0 ? saveItems.upgrade : ''}`}
-          </span>
-          <span className="item_txt" dangerouslySetInnerHTML={{__html: items.txt}}></span>
-        </PopupItemList>
+      <PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[items.grade]}>
+        <li className="item_header" flex-center="true"><span className="item_name">{items.na}</span><span className="item_upgrade">{`+${saveItems.upgrade > 0 ? saveItems.upgrade : ''}`}</span></li>
+        <li flex="true">
+          <PopupItemPic itemPic={imgSet.itemEquip[items.display]} />
+          <div flex-h="true" style={{flex: 1,}}>
+            <PopupItemName color={gameData.itemGrade.color[items.grade]}>
+              <div className="item_top">
+                <span className="item_grade">{gameData.itemGrade.txt_k[items.grade]}</span> <span className="item_type">{gameData.itemType[items.part]}</span>
+              </div>
+              <div className="item_description" dangerouslySetInnerHTML={{__html: `"${items.txt}"`}}></div>
+            </PopupItemName>
+            {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
+          </div>
+        </li>
         <PopupItemList className="item_eff">
+          <div className="item_title">아이템 효과</div>
           {items.eff && items.eff.map((data, idx) => {
             return (
-              <span key={idx}>{`${util.getEffectType(data.type)} ${data.num[saveItems.upgrade]}`}</span>
+              <div key={idx} className="item_effs">{`${util.getEffectType(data.type)} +${data.num[saveItems.upgrade]}`}</div>
             ) 
           })}
         </PopupItemList>
-        <PopupItemList className="item_hole">
-          {saveItems.hole && saveItems.hole.map((data, idx) => {
-            return (
-              <span key={idx}>{`홀 ${idx+1} : ${gameData.items.hole[data].na}`}<Img imgurl={itemHole[data]} /></span>
-            ) 
-          })}
-        </PopupItemList>
+        {saveItems.hole.length > 0 && (
+          <PopupItemList className="item_hole">
+            <div className="item_title">소켓 효과</div>
+            {saveItems.hole.map((data, idx) => {
+              return (
+                <div key={idx} className="item_holes"><span className="item_holeback"><Img imgurl={itemHole[data]} /></span><span className="item_holeName">{`${gameData.items.hole[data].na}`}</span></div>
+              ) 
+            })}
+          </PopupItemList>
+        )}
         <PopupItemList className="item_set">
-          <span className="item_setNa">{setsInfo.na}</span>
+          <div className="item_setNa">{setsInfo.na}</div>
           {setsInfo.part && setsInfo.part.map((data, idx) => {
             return (
-              <span key={idx} className={`item_set_piece ${getSetChk(saveData.ch[dataObj.slotIdx].items, data)}`}>{gameData.items.equip[data].na}</span>
+              <div key={idx} className={`item_set_piece ${getSetChk(saveData.ch[dataObj.slotIdx].items, data)}`}>{gameData.items.equip[data].na}</div>
             ) 
           })}
         </PopupItemList>
-        <PopupItemList style={{flexDirection: 'row'}}>
-          <button text="true" onClick={() => {buttonEvent({
-            type: 'itemEnhancement',
-            data: dataObj,
-            saveData: saveData,
-            changeSaveData: changeSaveData,
-            gameData: gameData,
-          })}} data-buttontype="itemEnhancement">강화</button>
-          <button text="true" onClick={() => {buttonEvent({
-            type: 'itemEquip',
-            data: dataObj,
-            saveData: saveData,
-            changeSaveData: changeSaveData,
-            gameData: gameData,
-          })}} data-buttontype="itemEquip">장착</button>
-          <button text="true" onClick={() => {buttonEvent({
-            type: 'itemSell',
-            data: dataObj,
-            saveData: saveData,
-            changeSaveData: changeSaveData,
-            gameData: gameData,
-          })}} data-buttontype="itemSell">판매</button>
-        </PopupItemList>
+        <li className="item_footer" flex="true">
+          <div className="item_price"><span>판매가:</span><em>{`₩${items.price}`}</em></div>
+          <div className="item_button" flex="true">
+            <button text="true" onClick={() => {buttonEvent({
+              type: 'itemEnhancement',
+              data: dataObj,
+              saveData: saveData,
+              changeSaveData: changeSaveData,
+              gameData: gameData,
+            })}} data-buttontype="itemEnhancement">강화</button>
+            <button text="true" onClick={() => {buttonEvent({
+              type: 'itemEquip',
+              data: dataObj,
+              saveData: saveData,
+              changeSaveData: changeSaveData,
+              gameData: gameData,
+            })}} data-buttontype="itemEquip">장착</button>
+            <button text="true" onClick={() => {buttonEvent({
+              type: 'itemSell',
+              data: dataObj,
+              saveData: saveData,
+              changeSaveData: changeSaveData,
+              gameData: gameData,
+            })}} data-buttontype="itemSell">판매</button>
+          </div>
+        </li>
       </PopupItemContainer>
     );
   } else if (type === 'hole') {
     const items = gameData.items.hole[dataObj.saveItemData.idx];
     return (
-			<PopupItemContainer className="items">
-        <PopupItemList>
-          <ItemGrade className="item_grade" color={gameData.itemGrade.color[items.grade]}>{`${gameData.itemGrade.txt_e[items.grade]} (${gameData.itemGrade.txt_k[items.grade]})`}</ItemGrade><span className="item_price">{`₩ ${items.price}`} </span>
-          <span className="item_lv">{`"${items.na}"`}</span>
-          <span className="item_txt" dangerouslySetInnerHTML={{__html: items.txt}}></span>
-        </PopupItemList>
+			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[items.grade]}>
+        <li className="item_header" flex-center="true"><span className="item_name">{items.na}</span></li>
+        <li flex="true">
+          <PopupItemPic itemPic={imgSet.itemHole[items.display]} />
+          <div flex-h="true" style={{flex: 1,}}>
+            <PopupItemName color={gameData.itemGrade.color[items.grade]}>
+              <div className="item_top">
+                <span className="item_grade">{gameData.itemGrade.txt_k[items.grade]}</span> <span className="item_type">소켓보석</span>
+              </div>
+              <div className="item_description" dangerouslySetInnerHTML={{__html: `"${items.txt}"`}}></div>
+            </PopupItemName>
+            {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
+          </div>
+        </li>
         <PopupItemList className="item_eff">
+          <div className="item_title">아이템 효과</div>
           {items.eff && items.eff.map((data, idx) => {
             return (
-              <span key={idx}>{`${util.getEffectType(data.type)} ${data.num}`}</span>
+              <div key={idx} className="item_effs">{`${util.getEffectType(data.type)} +${data.num}`}</div>
             ) 
           })}
         </PopupItemList>
-        <PopupItemList style={{flexDirection: 'row'}}>
-          <button text="true" onClick={() => {buttonEvent({
-            type: 'holeEquip',
-            data: dataObj,
-            saveData: saveData,
-            changeSaveData: changeSaveData,
-            gameData: gameData,
-          })}} data-buttontype="holeEquip">장착</button>
-          <button text="true" onClick={() => {buttonEvent({
-            type: 'itemSell',
-            data: dataObj,
-            saveData: saveData,
-            changeSaveData: changeSaveData,
-            gameData: gameData,
-          })}} data-buttontype="itemSell">판매</button>
-        </PopupItemList>
+        <li className="item_footer" flex="true">
+          <div className="item_price"><span>판매가:</span><em>{`₩${items.price}`}</em></div>
+          <div className="item_button" flex="true">
+            <button text="true" onClick={() => {buttonEvent({
+              type: 'holeEquip',
+              data: dataObj,
+              saveData: saveData,
+              changeSaveData: changeSaveData,
+              gameData: gameData,
+            })}} data-buttontype="holeEquip">장착</button>
+            <button text="true" onClick={() => {buttonEvent({
+              type: 'itemSell',
+              data: dataObj,
+              saveData: saveData,
+              changeSaveData: changeSaveData,
+              gameData: gameData,
+            })}} data-buttontype="itemSell">판매</button>
+          </div>
+        </li>
       </PopupItemContainer>
     )
   } else if (type === 'upgrade') {
     const items = gameData.items.upgrade[dataObj.saveItemData.idx];
     return (
-			<PopupItemContainer className="items">
-        <PopupItemList>
-          <ItemGrade className="item_grade" color={gameData.itemGrade.color[items.grade]}>{`${gameData.itemGrade.txt_e[items.grade]} (${gameData.itemGrade.txt_k[items.grade]})`}</ItemGrade><span className="item_price">{`₩ ${items.price}`} </span>
-          <span className="item_lv">{`"${items.na}"`}</span>
-          <span className="item_eff" dangerouslySetInnerHTML={{__html: items.txt}}></span>
-        </PopupItemList>
-        <PopupItemList style={{flexDirection: 'row'}}>
-          <button text="true" onClick={() => {buttonEvent({
-            type: 'itemUse',
-            data: dataObj,
-            saveData: saveData,
-            changeSaveData: changeSaveData,
-            gameData: gameData,
-          })}} data-buttontype="itemUse">사용</button>
-          <button text="true" onClick={() => {buttonEvent({
-            type: 'itemSell',
-            data: dataObj,
-            saveData: saveData,
-            changeSaveData: changeSaveData,
-            gameData: gameData,
-          })}} data-buttontype="itemSell">판매</button>
-        </PopupItemList>
+			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[items.grade]}>
+        <li className="item_header" flex-center="true"><span className="item_name">{items.na}</span></li>
+        <li flex="true">
+          <PopupItemPic itemPic={imgSet.itemUpgrade[items.display]} />
+          <div flex-h="true" style={{flex: 1,}}>
+            <PopupItemName color={gameData.itemGrade.color[items.grade]}>
+              <div className="item_top">
+                <span className="item_grade">{gameData.itemGrade.txt_k[items.grade]}</span> <span className="item_type">강화재료</span>
+              </div>
+              <div className="item_description" dangerouslySetInnerHTML={{__html: `"${items.txt}"`}}></div>
+            </PopupItemName>
+            {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
+          </div>
+        </li>
+        <li className="item_footer" flex="true">
+          <div className="item_price"><span>판매가:</span><em>{`₩${items.price}`}</em></div>
+          <div className="item_button" flex="true">
+            <button text="true" onClick={() => {buttonEvent({
+              type: 'itemUse',
+              data: dataObj,
+              saveData: saveData,
+              changeSaveData: changeSaveData,
+              gameData: gameData,
+            })}} data-buttontype="itemUse">사용</button>
+            <button text="true" onClick={() => {buttonEvent({
+              type: 'itemSell',
+              data: dataObj,
+              saveData: saveData,
+              changeSaveData: changeSaveData,
+              gameData: gameData,
+            })}} data-buttontype="itemSell">판매</button>
+          </div>
+        </li>
       </PopupItemContainer>
     )
   } else if (type === 'material') {
     const items = gameData.items.material[dataObj.saveItemData.idx];
     return (
-			<PopupItemContainer className="items">
-        <PopupItemList>
-          <ItemGrade className="item_grade" color={gameData.itemGrade.color[items.grade]}>{`${gameData.itemGrade.txt_e[items.grade]} (${gameData.itemGrade.txt_k[items.grade]})`}</ItemGrade><span className="item_price">{`₩ ${items.price}`} </span>
-          <span className="item_lv">{`"${items.na}"`}</span>
-          <span className="item_eff" dangerouslySetInnerHTML={{__html: items.txt}}></span>
-        </PopupItemList>
-        <PopupItemList style={{flexDirection: 'row'}}>
-          <button text="true" onClick={() => {buttonEvent({
-            type: 'itemSell',
-            data: dataObj,
-            saveData: saveData,
-            changeSaveData: changeSaveData,
-            gameData: gameData,
-          })}} data-buttontype="itemSell">판매</button>
-        </PopupItemList>
+			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[items.grade]}>
+        <li className="item_header" flex-center="true"><span className="item_name">{items.na}</span></li>
+        <li flex="true">
+          <PopupItemPic itemPic={imgSet.itemMaterial[items.display]} />
+          <div flex-h="true" style={{flex: 1,}}>
+            <PopupItemName color={gameData.itemGrade.color[items.grade]}>
+              <div className="item_top">
+                <span className="item_grade">{gameData.itemGrade.txt_k[items.grade]}</span> <span className="item_type">재료</span>
+              </div>
+              <div className="item_description" dangerouslySetInnerHTML={{__html: `"${items.txt}"`}}></div>
+            </PopupItemName>
+            {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
+          </div>
+        </li>
+        <li className="item_footer" flex="true">
+          <div className="item_price"><span>판매가:</span><em>{`₩${items.price}`}</em></div>
+          <div className="item_button" flex="true">
+            <button text="true" onClick={() => {buttonEvent({
+              type: 'itemSell',
+              data: dataObj,
+              saveData: saveData,
+              changeSaveData: changeSaveData,
+              gameData: gameData,
+            })}} data-buttontype="itemSell">판매</button>
+          </div>
+        </li>
       </PopupItemContainer>
     )
   } else if (type === 'etc') {
     const items = gameData.items.etc[dataObj.saveItemData.idx];
     return (
-			<PopupItemContainer className="items">
-        <PopupItemList>
-          <ItemGrade className="item_grade" color={gameData.itemGrade.color[items.grade]}>{`${gameData.itemGrade.txt_e[items.grade]} (${gameData.itemGrade.txt_k[items.grade]})`}</ItemGrade><span className="item_price">{`₩ ${items.price}`} </span>
-          <span className="item_lv">{`"${items.na}"`}</span>
-          <span className="item_eff" dangerouslySetInnerHTML={{__html: items.txt}}></span>
-        </PopupItemList>
-        <PopupItemList style={{flexDirection: 'row'}}>
-          <button text="true" onClick={() => {buttonEvent({
-            type: 'itemUse',
-            data: dataObj,
-            saveData: saveData,
-            changeSaveData: changeSaveData,
-            gameData: gameData,
-          })}} data-buttontype="itemUse">사용</button>
-          <button text="true" onClick={() => {buttonEvent({
-            type: 'itemSell',
-            data: dataObj,
-            saveData: saveData,
-            changeSaveData: changeSaveData,
-            gameData: gameData,
-          })}} data-buttontype="itemSell">판매</button>
-        </PopupItemList>
+			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[items.grade]}>
+        <li className="item_header" flex-center="true"><span className="item_name">{items.na}</span></li>
+        <li flex="true">
+          <PopupItemPic itemPic={imgSet.itemEtc[items.display]} />
+          <div flex-h="true" style={{flex: 1,}}>
+            <PopupItemName color={gameData.itemGrade.color[items.grade]}>
+              <div className="item_top">
+                <span className="item_grade">{gameData.itemGrade.txt_k[items.grade]}</span> <span className="item_type">기타</span>
+              </div>
+              <div className="item_description" dangerouslySetInnerHTML={{__html: `"${items.txt}"`}}></div>
+            </PopupItemName>
+            {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
+          </div>
+        </li>
+        <li className="item_footer" flex="true">
+          <div className="item_price"><span>판매가:</span><em>{`₩${items.price}`}</em></div>
+          <div className="item_button" flex="true">
+            <button text="true" onClick={() => {buttonEvent({
+              type: 'itemUse',
+              data: dataObj,
+              saveData: saveData,
+              changeSaveData: changeSaveData,
+              gameData: gameData,
+            })}} data-buttontype="itemUse">사용</button>
+            <button text="true" onClick={() => {buttonEvent({
+              type: 'itemSell',
+              data: dataObj,
+              saveData: saveData,
+              changeSaveData: changeSaveData,
+              gameData: gameData,
+            })}} data-buttontype="itemSell">판매</button>
+          </div>
+        </li>
       </PopupItemContainer>
     )
   }
@@ -472,12 +568,13 @@ const Popup = ({
   changeSaveData,
 	dataObj,
   gameData,
+  imgSet,
 }) => {
 	return (
 		<PopupContinaer>
 			<PopupArea className="popup transition">
 				<PopupCont className="popup_cont" onClick={() => {onClose()}}>
-					{typeAsContent(type, dataObj, saveData, changeSaveData, gameData)}
+					{typeAsContent(type, dataObj, saveData, changeSaveData, gameData, imgSet)}
 				</PopupCont>
 				<PopupClose>
 					<span></span><span></span>

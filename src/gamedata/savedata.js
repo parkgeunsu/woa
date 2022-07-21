@@ -7,9 +7,9 @@ export const save = {
     },
     "ch":[
       {"idx":0,"stateType":0,"element":[11],"grade":6,"stateLuk":146,"lv":45,"exp":10,"hasExp":50000,"actionPoint":20,"battleBeige":[0,0,0,0],"animalBeige":0,"sk":[{"idx":1,"lv":2,"exp":40},{"idx":2,"lv":3,"exp":90},{"idx":16,"lv":1,"exp":0},{"idx":11,"lv":1,"exp":0}],"items":[
-        {"idx":5,"slot":0,"hole":[4,0,12,23],"lv":1,"upgrade":1},
+        {"idx":5,"slot":0,"hole":[4,0,12,23],"upgrade":1},
         {},
-        {"idx":11,"slot":3,"hole":[],"lv":1,"upgrade":2},
+        {"idx":11,"slot":3,"hole":[],"upgrade":2},
         {},
         {},
         {},
@@ -35,24 +35,24 @@ export const save = {
         {},
         {},]},
       {"idx":7,"stateType":0,"element":[6],"stateLuk":35,"lv":50,"exp":10,"hasExp":5000,"actionPoint":20,"battleBeige":[0,0,0,0],"animalBeige":0,"sk":[{"idx":1,"lv":3,"exp":90},{"idx":2,"lv":5,"exp":70},{"idx":3,"lv":3,"exp":0},{"idx":4,"lv":3,"exp":0}],"items":[
-        {"idx":5,"slot":0,"hole":[4,0,12,23],"lv":1,"upgrade":1},
+        {"idx":5,"slot":0,"hole":[4,0,12,23],"upgrade":1},
         {},
-        {"idx":3,"slot":3,"hole":[],"lv":1,"upgrade":2},
+        {"idx":3,"slot":3,"hole":[],"upgrade":2},
         {},
         {},
-        {"idx":2,"slot":2,"hole":[0,0,0],"lv":1,"upgrade":1},
+        {"idx":2,"slot":2,"hole":[0,0,0],"upgrade":1},
         {},
         {},
       ]},
     ],
     "items":{
       "equip":[
-        {"idx":10,"slot":0,"hole":[],"lv":1,"upgrade":1},
-        {"idx":11,"slot":0,"hole":[],"lv":1,"upgrade":1},
-        {"idx":12,"slot":0,"hole":[],"lv":1,"upgrade":1},
-        {"idx":5,"slot":0,"hole":[],"lv":1,"upgrade":1},
-        {"idx":3,"slot":3,"hole":[],"lv":1,"upgrade":2},
-        {"idx":1,"slot":1,"hole":[1],"lv":1,"upgrade":0}
+        {"idx":10,"slot":0,"hole":[],"upgrade":1},
+        {"idx":11,"slot":0,"hole":[],"upgrade":1},
+        {"idx":12,"slot":0,"hole":[],"upgrade":1},
+        {"idx":5,"slot":0,"hole":[],"upgrade":1},
+        {"idx":3,"slot":3,"hole":[],"upgrade":2},
+        {"idx":1,"slot":1,"hole":[1],"upgrade":0}
       ],
       "hole":[
         {"idx":1},

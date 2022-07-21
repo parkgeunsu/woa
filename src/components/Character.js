@@ -134,7 +134,7 @@ const Character = ({
       </div>
       <CharacterList saveData={saveData} changeChSlot={changeChSlot} slotIdx={slotIdx} />
       <CharacterHeader saveData={saveData} chPage={chPage} changeChPage={changeChPage} slotIdx={slotIdx} changeSaveData={changeSaveData} />
-      <ChInfo stateBack={imgSet.etc.stateBack} frameBack={imgSet.etc.frameChBack} className="ch_info transition">
+      <ChInfo frameBack={imgSet.etc.frameChBack} className="ch_info transition">
         <CharacterState saveData={saveData} slotIdx={slotIdx} />
         <CharacterElement saveData={saveData} slotIdx={slotIdx} />
         <CharacterAnimalSkill saveData={saveData} slotIdx={slotIdx} />
