@@ -198,16 +198,16 @@
 .ch_info .items .item0{border:none;}
 /* .ch_info .items .item0:after{content:'';display:block;position:absolute;left:50%;top:50%;width:50%;height:2px;background:#fff;transform-origin:50% 50%;transform:translate(-50%,-50%) rotate(-45deg);}
 .ch_info .items .item0:before{content:'';display:block;position:absolute;left:50%;top:50%;width:50%;height:2px;background:#fff;transform-origin:50% 50%;transform:translate(-50%,-50%) rotate(45deg);} */
-.item.item1{background:var(--color-red);}
-.item.item2{background:var(--color-green);}
-.item.item3{background:var(--color-blue);}
-.item.item4{background:var(--color-lightblue);}
-.item.item5{background:var(--color-yellow);}
-.item.item10{background:var(--color-grey);}
-.item.item11{background:var(--color-point1);}
-.item.item12{background:var(--color-b);}
-.item.item13{background:var(--color-point5);}
-.item.item14{background:var(--color-point5);}
+.item.item1{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-red) 100%);}
+.item.item2{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-green) 100%);}
+.item.item3{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-blue) 100%);}
+.item.item4{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-lightblue) 100%);}
+.item.item5{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-yellow) 100%);}
+.item.item10{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-grey) 100%);}
+.item.item11{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-point1) 100%);}
+.item.item12{background-image:radial-gradient(at 30% 30%,rgba(255,255,255,.5) 0%,var(--color-b) 100%);}
+.item.item13{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-point5) 100%);}
+.item.item14{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-point5) 100%);}
 
 /*
 .item .txt{position:absolute;left:2px;right:2px;bottom:2px;font-size:11px;text-align:center;z-index:1;}

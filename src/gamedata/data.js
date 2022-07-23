@@ -2,6 +2,7 @@ import { animals } from 'gamedata/animals';
 import { exp } from 'gamedata/exp';
 import { ch } from 'gamedata/heros';
 import { items } from 'gamedata/items';
+import { itemsSvg } from 'gamedata/itemsSvg';
 import { job } from 'gamedata/job';
 import { lineup } from 'gamedata/lineup';
 import { relation } from 'gamedata/relation';
@@ -42,4 +43,5 @@ export const gameData = {
     relation:relation,
     scenario:scenario,
     effect:effect,
+    itemsSvg:itemsSvg,
   }

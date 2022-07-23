@@ -8,7 +8,7 @@ export const items = {
         {idx:1,na:'나무의 축복',part:[0,1,2,3,4],set_num:[5],eff:[{type:0,num:'500'}]},
         {idx:2,na:'철든 XX',part:[5,6,7,8,9],set_num:[5],eff:[{type:3,num:'100'},{type:0,num:'700'}]},
     ],
-    equip:[//part 부위 1투구, 2갑옷, 3무기, 4반지, 5목걸이, 10짐, 보석11, 업그레이드12, 기타13
+    equip:[//part 부위 head1, armor2, weapon3, ring4, necklace5, baggage짐, 보석11, 업그레이드12, 기타13, 재료14
     //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동력SP(1), 행동회복력RSP(2), 공격력ATK(3), 방어력DEF(4), 술법공격력MAK(5), 술법방어력MDF(6), 회복력RCV(7), 속도SPD(8), 행운LUK(9), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(20),암(21),수(22),화(23),풍(24),지(25), 진형(100)
     //action 아이템 동작 아이디변경(1), 홀장착(9), 장비강화(10), 스킬제거(11), 골드변경(99), 랜덤뽑기(100)
     //display 이미지번호
@@ -17,19 +17,19 @@ export const items = {
     //set 셋트번호 0없음
     //hole 홀장착
     //enhance 강화
-        {idx:0,part:1,grade:1,display:0,na:'나무투구',price:100,txt:'나무로 만든 투구',eff:[{type:0,num:['2%','3%','5%']},{type:4,num:['50','50','50']}],set:1},
-        {idx:1,part:2,grade:2,display:1,na:'나무갑옷',price:200,txt:'나무로 만든 갑옷',eff:[{type:0,num:['5%','6%','10%']},{type:4,num:['100','100','100']}],set:1},
-        {idx:2,part:5,grade:1,display:2,na:'나무벳지',price:200,txt:'나무로 만든 벳지',eff:[{type:8,num:['1%','2%','5%']}],set:1},
-        {idx:3,part:3,grade:2,display:3,na:'나무손톱',price:300,txt:'나무로 만든 <i el el0>치기</i>무기',eff:[{type:3,num:['50','55','60']}],set:1},
-        {idx:4,part:3,grade:1,display:4,na:'나무껍질',price:300,txt:'나무로 만든 껍질방어구',eff:[{type:22,num:['100','125','150']}],set:1},
-        {idx:5,part:1,grade:1,display:5,na:'철투구',price:200,txt:'철로 만든 투구',eff:[{type:0,num:['4%','5%','7%']},{type:4,num:['100','100','100']}],set:2},
-        {idx:6,part:2,grade:2,display:6,na:'철갑옷',price:400,txt:'철로 만든 갑옷',eff:[{type:0,num:['8%','9%','12%']},{type:4,num:['150','150','150']}],set:2},
-        {idx:7,part:5,grade:1,display:7,na:'철벳지',price:400,txt:'철로 만든 벳지',eff:[{type:8,num:['3%','4%','7%']}],set:2},
-        {idx:8,part:3,grade:2,display:8,na:'철손톱',price:500,txt:'철로 만든 <i el el0>치기</i>무기',eff:[{type:3,num:['70','75','80']}],set:2},
-        {idx:9,part:3,grade:1,display:9,na:'철제판',price:300,txt:'철로 만든 방어구',eff:[{type:4,num:['150','175','200']}],set:2},
-        {idx:9,part:3,grade:5,display:10,na:'김세존발톱',price:300,txt:'전설의 김세존의 새끼발톱',eff:[{type:4,num:['150','175','200']}],set:0},
-        {idx:9,part:3,grade:5,display:11,na:'김세존이빨',price:300,txt:'전설의 김세존의 어금니',eff:[{type:4,num:['150','175','200']}],set:0},
-        {idx:9,part:3,grade:5,display:12,na:'김세존부리',price:300,txt:'전설의 김세존의 부리',eff:[{type:4,num:['150','175','200']}],set:0},
+        {idx:0,part:1,grade:1,display:0,na:'나무투구',color:["#fff","#000"],price:100,txt:'나무로 만든 투구',eff:[{type:0,num:['2%','3%','5%']},{type:4,num:['50','50','50']}],set:0},
+        {idx:1,part:1,grade:1,display:1,na:'철투구',color:["#fff","#000","#E2AE36"],price:200,txt:'철로 만든 투구',eff:[{type:0,num:['4%','5%','7%']},{type:4,num:['100','100','100']}],set:0},
+        // {idx:1,part:2,grade:2,display:1,na:'나무갑옷',price:200,txt:'나무로 만든 갑옷',eff:[{type:0,num:['5%','6%','10%']},{type:4,num:['100','100','100']}],set:1},
+        // {idx:2,part:5,grade:1,display:2,na:'나무벳지',price:200,txt:'나무로 만든 벳지',eff:[{type:8,num:['1%','2%','5%']}],set:1},
+        // {idx:3,part:3,grade:2,display:3,na:'나무손톱',price:300,txt:'나무로 만든 <i el el0>치기</i>무기',eff:[{type:3,num:['50','55','60']}],set:1},
+        // {idx:4,part:3,grade:1,display:4,na:'나무껍질',price:300,txt:'나무로 만든 껍질방어구',eff:[{type:22,num:['100','125','150']}],set:1},
+        // {idx:6,part:2,grade:2,display:6,na:'철갑옷',price:400,txt:'철로 만든 갑옷',eff:[{type:0,num:['8%','9%','12%']},{type:4,num:['150','150','150']}],set:2},
+        // {idx:7,part:5,grade:1,display:7,na:'철벳지',price:400,txt:'철로 만든 벳지',eff:[{type:8,num:['3%','4%','7%']}],set:2},
+        // {idx:8,part:3,grade:2,display:8,na:'철손톱',price:500,txt:'철로 만든 <i el el0>치기</i>무기',eff:[{type:3,num:['70','75','80']}],set:2},
+        // {idx:9,part:3,grade:1,display:9,na:'철제판',price:300,txt:'철로 만든 방어구',eff:[{type:4,num:['150','175','200']}],set:2},
+        // {idx:9,part:3,grade:5,display:10,na:'김세존발톱',price:300,txt:'전설의 김세존의 새끼발톱',eff:[{type:4,num:['150','175','200']}],set:0},
+        // {idx:9,part:3,grade:5,display:11,na:'김세존이빨',price:300,txt:'전설의 김세존의 어금니',eff:[{type:4,num:['150','175','200']}],set:0},
+        // {idx:9,part:3,grade:5,display:12,na:'김세존부리',price:300,txt:'전설의 김세존의 부리',eff:[{type:4,num:['150','175','200']}],set:0},
     ],
     hole:[//홀 장착 아이템
         //type 장착 타입

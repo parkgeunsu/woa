@@ -1,6 +1,7 @@
 import React, { useState, useLayoutEffect, useContext } from 'react';
 import { AppContext } from 'App';
 import styled from 'styled-components';
+import { util } from 'components/Libs';
 import PopupContainer from 'components/PopupContainer';
 import Popup from 'components/Popup';
 import 'css/ch.css';
@@ -12,6 +13,7 @@ const AnimalItemPic = styled.div`
 const ItemPic = styled.span`
   background: url(${({itemPic}) => itemPic}) no-repeat center center;
   background-size: 100%;
+  svg{width:100%;height:100%;}
 `;
 const CharacterItems = ({
   saveData,
@@ -80,7 +82,11 @@ const CharacterItems = ({
                     return (
                       <li key={`equip${idx}`} onClick={() => {handlePopup('equip', data.idx, idx)}} className={`item item${gameData.animal_type[animalIdx].equip[idx]}`}>
                         <em link={`equip_${data.idx}_${idx}`}>
-                          <ItemPic className="pic" itemPic={imgSet.itemEquip[items.display]}></ItemPic>
+                          {/* <ItemPic className="pic" itemPic={imgSet.itemEquip[items.display]}></ItemPic> */}
+                          <ItemPic className="pic">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color)}}>
+                            </svg>
+                          </ItemPic>
                           <span className="lv">{data.lv}</span>
                           <span className="hole" flex-center="true">
                             {itemsHole.map((holedata, holeidx) => {
@@ -105,7 +111,10 @@ const CharacterItems = ({
                   return (
                     <li key={`hequip${idx}`} onClick={() => {handlePopup('hequip', data.idx, idx)}} className={`item item${gameData.items.equip[data.idx].part}`} data-itemnum={`equip_${data.idx}`}>
                       <em link={`hequip_${data.idx}_${idx}`}>
-                        <ItemPic className="pic" itemPic={imgSet.itemEquip[items.display]} />
+                        <ItemPic className="pic">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color)}}>
+                          </svg>
+                        </ItemPic>
                         <span className="lv">{data.lv}</span>
                         <span className="hole" flex-center="true">
                           {itemsHole.map((holedata, holeidx) => {

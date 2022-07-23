@@ -813,4 +813,14 @@ export const util = { //this.loadImage();
     }
     return num;
   },
+  setItemColor: (svgData, colorSet) => {
+    let svg = svgData;
+    const idPattern = new RegExp("==id==","g");
+    svg = svg.replace(idPattern, Math.random().toString(36).substring(2, 11));
+    colorSet.forEach((data, idx) => {
+      const pattern = new RegExp("=="+idx+"==","g");
+      svg = svg.replace(pattern, data);
+    })
+    return svg;
+  },
 }
