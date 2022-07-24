@@ -17,8 +17,8 @@ export const items = {
     //set 셋트번호 0없음
     //hole 홀장착
     //enhance 강화
-        {idx:0,part:1,grade:1,display:0,na:'나무투구',color:["#fff","#000"],price:100,txt:'나무로 만든 투구',eff:[{type:0,num:['2%','3%','5%']},{type:4,num:['50','50','50']}],set:0},
-        {idx:1,part:1,grade:1,display:1,na:'철투구',color:["#fff","#000","#E2AE36"],price:200,txt:'철로 만든 투구',eff:[{type:0,num:['4%','5%','7%']},{type:4,num:['100','100','100']}],set:0},
+        {idx:0,part:1,grade:1,display:0,na:'터번',kg:0.1,price:100,color:["#fff","#000"],txt:'나무로 만든 투구',eff:[{type:0,num:['2%','3%','5%']},{type:4,num:['50','50','50']}],set:0},
+        {idx:1,part:1,grade:1,display:1,na:'두정갑 투구',kg:3,price:200,color:["#fff","#000","#E2AE36"],txt:'철로 만든 투구',eff:[{type:0,num:['4%','5%','7%']},{type:4,num:['100','100','100']}],set:0},
         // {idx:1,part:2,grade:2,display:1,na:'나무갑옷',price:200,txt:'나무로 만든 갑옷',eff:[{type:0,num:['5%','6%','10%']},{type:4,num:['100','100','100']}],set:1},
         // {idx:2,part:5,grade:1,display:2,na:'나무벳지',price:200,txt:'나무로 만든 벳지',eff:[{type:8,num:['1%','2%','5%']}],set:1},
         // {idx:3,part:3,grade:2,display:3,na:'나무손톱',price:300,txt:'나무로 만든 <i el el0>치기</i>무기',eff:[{type:3,num:['50','55','60']}],set:1},
@@ -30,6 +30,7 @@ export const items = {
         // {idx:9,part:3,grade:5,display:10,na:'김세존발톱',price:300,txt:'전설의 김세존의 새끼발톱',eff:[{type:4,num:['150','175','200']}],set:0},
         // {idx:9,part:3,grade:5,display:11,na:'김세존이빨',price:300,txt:'전설의 김세존의 어금니',eff:[{type:4,num:['150','175','200']}],set:0},
         // {idx:9,part:3,grade:5,display:12,na:'김세존부리',price:300,txt:'전설의 김세존의 부리',eff:[{type:4,num:['150','175','200']}],set:0},
+        //두정갑
     ],
     hole:[//홀 장착 아이템
         //type 장착 타입
