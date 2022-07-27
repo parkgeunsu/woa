@@ -17,8 +17,22 @@ export const items = {
     //set 셋트번호 0없음
     //hole 홀장착
     //enhance 강화
-        {idx:0,part:1,grade:1,display:0,na:'터번',kg:0.1,price:100,color:["#fff","#000"],txt:'나무로 만든 투구',eff:[{type:0,num:['2%','3%','5%']},{type:4,num:['50','50','50']}],set:0},
-        {idx:1,part:1,grade:1,display:1,na:'두정갑 투구',kg:3,price:200,color:["#fff","#000","#E2AE36"],txt:'철로 만든 투구',eff:[{type:0,num:['4%','5%','7%']},{type:4,num:['100','100','100']}],set:0},
+        {idx:0,part:1,grade:1,display:0,na:'터번',kg:0.1,price:100,color:["#fff","#000"],socket:2,txt:'나무로 만든 투구',eff:[{type:0,num:['2%','3%','5%']},{type:4,num:['50','50','50']}],set:0},
+        {idx:1,part:1,grade:1,display:1,na:'두정투구',kg:3,price:200,color:["#fff","#000","#E2AE36"],socket:3,txt:'철로 만든 투구',eff:[{type:0,num:['4%','5%','7%']},{type:4,num:['100','100','100']}],set:0},
+        {idx:2,part:2,display:1,na:'퀄티드 아머',kg:5,price:300,color:[],txt:'Quiled Armor 천을 기워 붙인 갑옷, 면갑',eff:[{type:4,num:[50,100]}],set:0},
+        {idx:3,part:2,display:1,na:'하이드 아머',kg:7,price:400,color:[],txt:'Hide Armor 조끼형태의 가죽 갑옷',eff:[{type:4,num:[30,120]}],set:0},
+        {idx:4,part:2,display:1,na:'레더 아머',kg:10,price:500,color:[],txt:'Lether Armor 가죽 갑옷',eff:[{type:4,num:[50,150]}],set:0},
+        {idx:5,part:2,display:1,na:'스터디드 레더 아머',kg:5,price:700,color:[],txt:'Studded Lether Armor 징박힌 가죽 갑옷',eff:[{type:4,num:[100,200]}],set:0},
+        {idx:6,part:2,display:1,na:'링 메일',kg:11,price:900,color:[],txt:'Ring Mail 사슬 형태의 철제 갑옷',eff:[{type:4,num:[150,250]}],set:0},
+        {idx:7,part:2,display:1,na:'스케일 메일',kg:13,price:1000,color:[],txt:'Scale Mail 금속조각을 붙힌 갑옷, 어린갑',eff:[{type:4,num:[170,270]}],set:0},
+        {idx:8,part:2,display:1,na:'체인 메일',kg:15,price:1000,color:[],txt:'Chain Mail 메쉬형태로 금속링을 엮은 갑옷, 쇄자갑',eff:[{type:4,num:[200,300]}],set:0},
+        {idx:9,part:2,display:1,na:'스피린트 메일',kg:17,price:1100,color:[],txt:'Splint Mail 천이나 가죽에 금속 스트립을 엮은 갑옷, 경번갑',eff:[{type:4,num:[250,400]}],set:0},
+        {idx:10,part:2,display:1,na:'브리간딘',kg:20,price:1200,color:[],txt:'Brigandine 가죽 겉 감 안에 철판을 덧댄 갑옷,두정갑',eff:[{type:4,num:[300,450]}],set:0},
+        {idx:11,part:2,display:1,na:'플레이트 메일',kg:27,price:1500,color:[],socket:3,txt:'Plate Mail 강철판으로 만든 갑옷, 판금갑',eff:[{type:4,num:[450,600]}],set:0},
+        {idx:12,part:2,display:1,na:'풀 플레이트',kg:35,price:2000,color:[],socket:3,txt:'Full Plate 전신을 강철판으로 만든 갑옷, 판금갑',eff:[{type:4,num:[600,1000]}],set:0},
+        //두석린갑(豆錫鱗甲) : 황동, 붉은 칠한 황동, 검은 칠한 황동을 번갈아 사용한 의장용 갑옷
+        //도금동엽갑(塗金銅葉甲) : 도금한 비늘을 사용한 의장용 황금 갑옷
+        //사무라이갑
         // {idx:1,part:2,grade:2,display:1,na:'나무갑옷',price:200,txt:'나무로 만든 갑옷',eff:[{type:0,num:['5%','6%','10%']},{type:4,num:['100','100','100']}],set:1},
         // {idx:2,part:5,grade:1,display:2,na:'나무벳지',price:200,txt:'나무로 만든 벳지',eff:[{type:8,num:['1%','2%','5%']}],set:1},
         // {idx:3,part:3,grade:2,display:3,na:'나무손톱',price:300,txt:'나무로 만든 <i el el0>치기</i>무기',eff:[{type:3,num:['50','55','60']}],set:1},
@@ -30,7 +44,6 @@ export const items = {
         // {idx:9,part:3,grade:5,display:10,na:'김세존발톱',price:300,txt:'전설의 김세존의 새끼발톱',eff:[{type:4,num:['150','175','200']}],set:0},
         // {idx:9,part:3,grade:5,display:11,na:'김세존이빨',price:300,txt:'전설의 김세존의 어금니',eff:[{type:4,num:['150','175','200']}],set:0},
         // {idx:9,part:3,grade:5,display:12,na:'김세존부리',price:300,txt:'전설의 김세존의 부리',eff:[{type:4,num:['150','175','200']}],set:0},
-        //두정갑
     ],
     hole:[//홀 장착 아이템
         //type 장착 타입

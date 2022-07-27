@@ -27,10 +27,10 @@ const CharacterItems = ({
   const saveItems = saveData.ch[slotIdx].items;
   const gameItem = gameData.items;
   const invenItems = saveData.items;
-
   const [popupOn, setPopupOn] = useState(false);
   const [itemInfo, setItemInfo] = useState({});
   const [itemType, setItemType] = useState('equip');
+  const [kg, setKg] = useState([0,0]);
   const handlePopup = (itemType, itemIdx, itemSaveSlot) => {
     if( itemType ){
       let saveItemData;
@@ -55,12 +55,23 @@ const CharacterItems = ({
   useLayoutEffect(() => { //슬롯이 바뀔때 동물종류 변경
     setAnimalIdx(gameData.ch[saveData.ch[slotIdx].idx].animal_type);
   }, [slotIdx]);
-
+  useLayoutEffect(() => {
+    let kg = 0;
+    saveItems.forEach((itemData) => {
+      if (Object.keys(itemData).length !== 0) {
+        kg += gameItem.equip[itemData.idx].kg;
+      }
+    })
+    setKg([kg, Math.floor(gameData.ch[saveData.ch[slotIdx].idx].st1 / 0.3)/10]);
+  }, [saveItems]);
   return (
     <>
       <div className="items">
         <dl className="info_group it_group">
-          <dt>ITEM<span>(아이템 착용)</span></dt>
+          <dt flex="true">
+            <div><em>ITEM</em><span>(아이템 착용)</span></div>
+            <div className="kg">{`${kg[0]}kg / ${kg[1]}kg`}</div>
+          </dt>
           <dd className="item_area">
             <div className="equip_items">
               <AnimalItemPic animalType={imgSet.animalType[animalIdx]} className={`animal_item_pic animal_type${animalIdx}`}>
