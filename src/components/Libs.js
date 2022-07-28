@@ -197,11 +197,13 @@ export const util = { //this.loadImage();
           if(effData[eff.type] === undefined) {
             effData[eff.type] = {percent:0, number:0};
           }
-          if(eff.num[item.upgrade].indexOf('%') > 0){
-            effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num[item.upgrade]);
-          }else{
-            effData[eff.type].number = effData[eff.type].number + parseInt(eff.num[item.upgrade]);
-          }
+          // if(eff.num[item.upgrade].indexOf('%') > 0){
+            effData[eff.type].percent = effData[eff.type].percent;
+            // effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num[item.upgrade]);
+          // }else{
+            // effData[eff.type].number = effData[eff.type].number;
+            // effData[eff.type].number = effData[eff.type].number + parseInt(eff.num[item.upgrade]);
+          // }
         });
       }
       if(item.hole){

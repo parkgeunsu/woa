@@ -2,7 +2,7 @@ import { chImg, itemHole, ringImg } from 'components/ImgSet';
 import { util } from 'components/Libs';
 import PopupContinaer from 'components/PopupContainer';
 import imgRing from 'images/ring/ring_.png';
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 
 
@@ -139,12 +139,14 @@ const PopupItemPic = styled.div`
   svg{width:100%;height:100%;}
 `;
 const PopupItemName = styled.div`
+  display:flex;flex-direction:column;
   margin:0 0 0 10px;flex:1;
   span{display:inline-block;vertical-align:middle;}
   .item_top{display:flex;justify-content:space-between;margin:0 0 15px 0;color:#bbb;font-size:12px;}
   .item_grade{color:${({ color }) => color};}
   .item_bottom{margin:0 0 10px 0;}
-  .item_description{font-family:serif;line-height:1.2;font-size:13px;color:#d3a859;font-weight:600;}
+  .item_description{flex:1;font-family:serif;line-height:1.2;font-size:13px;color:#d3a859;font-weight:600;}
+  .item_kg{text-align:right;font-weight:600;color:#bbb;}
 `;
 const PopupItemList = styled.li`
   display:flex;margin:5px 0 0 0;flex-direction:column;
@@ -173,7 +175,6 @@ const getSetChk = (has_item, n) => {//셋트 아이템 체크
 }
 const buttonEvent = (dataObj) => {
   const gameData = dataObj.gameData;
-  console.log(dataObj);
   let sData = {...dataObj.saveData};
   if (dataObj.type === 'item_enhancement') {
 
@@ -183,16 +184,23 @@ const buttonEvent = (dataObj) => {
     const saveCh = sData.ch[dataObj.data.slotIdx];
     saveCh.items.forEach((item, itemSlot)=>{
       const chType = gameData.ch[saveCh.idx].animal_type;
-      if (invenPart === gameData.animal_type[chType].equip[itemSlot] && overlapCheck && item.idx === undefined) {//해당파트와 같은파트인지? && 빈칸인지? && 같은파트가 비었을경우 한번만 발생하게
-        saveCh.items[itemSlot] = {...dataObj.saveData.items['equip'][dataObj.data.itemSaveSlot]};//캐릭에 아이템 넣기
-        sData.items['equip'].splice(dataObj.data.itemSaveSlot, 1);//인벤에서 아이템 제거
-        overlapCheck = false;
-        dataObj.changeSaveData(util.saveCharacter({//데이터 저장
-          saveData: sData,
-          slotIdx: dataObj.data.slotIdx,
-          gameData: gameData,
-        }));
-        return;
+      if (invenPart === gameData.animal_type[chType].equip[itemSlot] && overlapCheck) {//해당파트와 같은파트인지? && 빈칸인지? && 같은파트가 비었을경우 한번만 발생하게
+        if (item.idx === undefined) { //해당 슬롯이 비었을 비었을 경우
+          saveCh.items[itemSlot] = {...dataObj.saveData.items['equip'][dataObj.data.itemSaveSlot]};//캐릭에 아이템 넣기
+          sData.items['equip'].splice(dataObj.data.itemSaveSlot, 1);//인벤에서 아이템 제거
+          overlapCheck = false;
+          dataObj.changeSaveData(util.saveCharacter({//데이터 저장
+            saveData: sData,
+            slotIdx: dataObj.data.slotIdx,
+            gameData: gameData,
+          }));
+          return;
+        } else { //해당 슬롯에 아이템이 있을 경우
+          dataObj.msg({
+            "show":true,
+            "text":"같은 부위에 이미 다른 아이템이 착용 중입니다."
+          });
+        }
       }
     });
   } else if (dataObj.type === 'itemRelease') { //아이템 해제
@@ -258,7 +266,7 @@ const buttonEvent = (dataObj) => {
     
   }
 }
-const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet) => {
+const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet, msg) => {
 	if (type === 'relation') {
     const member = dataObj.relation.member;
 		return (
@@ -278,9 +286,10 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
 	} else if (type === 'equip') {
     const items = gameData.items.equip[dataObj.saveItemData.idx];
     const saveItems = dataObj.saveItemData;
+    const grade = saveItems.grade || items.grade;
     const setsInfo = gameData.items.set_type[items.set];
 		return (
-			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[items.grade]}>
+			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[grade]}>
         <li className="item_header" flex-center="true"><span className="item_name">{items.na}</span><span className="item_upgrade">{`+${saveItems.upgrade > 0 ? saveItems.upgrade : ''}`}</span></li>
         <li flex="true">
           <PopupItemPic className={`item item${items.part}`}>
@@ -288,11 +297,12 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             </svg>
           </PopupItemPic>
           <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemName color={gameData.itemGrade.color[items.grade]}>
+            <PopupItemName color={gameData.itemGrade.color[grade]}>
               <div className="item_top">
-                <span className="item_grade">{gameData.itemGrade.txt_k[items.grade]}</span> <span className="item_type">{gameData.itemType[items.part]}</span>
+                <span className="item_grade">{gameData.itemGrade.txt_k[grade]}</span> <span className="item_type">{gameData.itemType[items.part]}</span>
               </div>
               <div className="item_description" dangerouslySetInnerHTML={{__html: `"${items.txt}"`}}></div>
+              <div className="item_kg">{items.kg}kg</div>
             </PopupItemName>
             {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
           </div>
@@ -332,6 +342,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
+              msg: msg,
             })}} data-buttontype="itemRelease">해제</button>
           </div>
         </li>
@@ -340,9 +351,10 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
 	} else if (type === 'hequip') {
     const items = gameData.items.equip[dataObj.saveItemData.idx];
     const saveItems = dataObj.saveItemData;
+    const grade = saveItems.grade || items.grade;
     const setsInfo = gameData.items.set_type[items.set];
     return (
-      <PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[items.grade]}>
+      <PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[grade]}>
         <li className="item_header" flex-center="true"><span className="item_name">{items.na}</span><span className="item_upgrade">{`+${saveItems.upgrade > 0 ? saveItems.upgrade : ''}`}</span></li>
         <li flex="true">
           <PopupItemPic className={`item item${items.part}`}>
@@ -350,11 +362,12 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             </svg>
           </PopupItemPic>
           <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemName color={gameData.itemGrade.color[items.grade]}>
+            <PopupItemName color={gameData.itemGrade.color[grade]}>
               <div className="item_top">
-                <span className="item_grade">{gameData.itemGrade.txt_k[items.grade]}</span> <span className="item_type">{gameData.itemType[items.part]}</span>
+                <span className="item_grade">{gameData.itemGrade.txt_k[grade]}</span> <span className="item_type">{gameData.itemType[items.part]}</span>
               </div>
               <div className="item_description" dangerouslySetInnerHTML={{__html: `"${items.txt}"`}}></div>
+              <div className="item_kg">{items.kg}kg</div>
             </PopupItemName>
             {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
           </div>
@@ -394,6 +407,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
+              msg: msg,
             })}} data-buttontype="itemEnhancement">강화</button>
             <button text="true" onClick={() => {buttonEvent({
               type: 'itemEquip',
@@ -401,6 +415,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
+              msg: msg,
             })}} data-buttontype="itemEquip">장착</button>
             <button text="true" onClick={() => {buttonEvent({
               type: 'itemSell',
@@ -408,6 +423,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
+              msg: msg,
             })}} data-buttontype="itemSell">판매</button>
           </div>
         </li>
@@ -447,6 +463,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
+              msg: msg,
             })}} data-buttontype="holeEquip">장착</button>
             <button text="true" onClick={() => {buttonEvent({
               type: 'itemSell',
@@ -454,6 +471,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
+              msg: msg,
             })}} data-buttontype="itemSell">판매</button>
           </div>
         </li>
@@ -485,6 +503,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
+              msg: msg,
             })}} data-buttontype="itemUse">사용</button>
             <button text="true" onClick={() => {buttonEvent({
               type: 'itemSell',
@@ -492,6 +511,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
+              msg: msg,
             })}} data-buttontype="itemSell">판매</button>
           </div>
         </li>
@@ -523,6 +543,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
+              msg: msg,
             })}} data-buttontype="itemSell">판매</button>
           </div>
         </li>
@@ -554,6 +575,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
+              msg: msg,
             })}} data-buttontype="itemUse">사용</button>
             <button text="true" onClick={() => {buttonEvent({
               type: 'itemSell',
@@ -561,6 +583,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
+              msg: msg,
             })}} data-buttontype="itemSell">판매</button>
           </div>
         </li>
@@ -577,18 +600,21 @@ const Popup = ({
 	dataObj,
   gameData,
   imgSet,
+  msg,
 }) => {
 	return (
-		<PopupContinaer>
-			<PopupArea className="popup transition">
-				<PopupCont className="popup_cont" onClick={() => {onClose()}}>
-					{typeAsContent(type, dataObj, saveData, changeSaveData, gameData, imgSet)}
-				</PopupCont>
-				<PopupClose>
-					<span></span><span></span>
-				</PopupClose>
-			</PopupArea>
-		</PopupContinaer>
+    <>
+      <PopupContinaer>
+        <PopupArea className="popup transition">
+          <PopupCont className="popup_cont" onClick={() => {onClose()}}>
+            {typeAsContent(type, dataObj, saveData, changeSaveData, gameData, imgSet, msg)}
+          </PopupCont>
+          <PopupClose>
+            <span></span><span></span>
+          </PopupClose>
+        </PopupArea>
+      </PopupContinaer>
+    </>
 	)
 }
 

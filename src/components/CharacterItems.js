@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { util } from 'components/Libs';
 import PopupContainer from 'components/PopupContainer';
 import Popup from 'components/Popup';
+import MsgContainer from 'components/MsgContainer';
+import Msg from 'components/Msg';
 import 'css/ch.css';
 
 const AnimalItemPic = styled.div`
@@ -24,13 +26,16 @@ const CharacterItems = ({
   const gameData = useContext(AppContext).gameData;
   const [animalIdx, setAnimalIdx] = useState(gameData.ch[saveData.ch[slotIdx].idx].animal_type);
 
-  const saveItems = saveData.ch[slotIdx].items;
+  const [saveItems, setSaveItems] = useState(saveData.ch[slotIdx].items);
   const gameItem = gameData.items;
   const invenItems = saveData.items;
   const [popupOn, setPopupOn] = useState(false);
   const [itemInfo, setItemInfo] = useState({});
   const [itemType, setItemType] = useState('equip');
   const [kg, setKg] = useState([0,0]);
+  const [msg, setMsg] = useState({
+    "show": false,
+    "text": ""});
   const handlePopup = (itemType, itemIdx, itemSaveSlot) => {
     if( itemType ){
       let saveItemData;
@@ -56,6 +61,7 @@ const CharacterItems = ({
     setAnimalIdx(gameData.ch[saveData.ch[slotIdx].idx].animal_type);
   }, [slotIdx]);
   useLayoutEffect(() => {
+    setSaveItems(saveData.ch[slotIdx].items);
     let kg = 0;
     saveItems.forEach((itemData) => {
       if (Object.keys(itemData).length !== 0) {
@@ -63,7 +69,7 @@ const CharacterItems = ({
       }
     })
     setKg([kg, Math.floor(gameData.ch[saveData.ch[slotIdx].idx].st1 / 0.3)/10]);
-  }, [saveItems]);
+  }, [saveData]);
   return (
     <>
       <div className="items">
@@ -183,8 +189,11 @@ const CharacterItems = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={itemType} dataObj={itemInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {handlePopup()}} gameData={gameData} imgSet={imgSet}/>}
+        {popupOn && <Popup type={itemType} dataObj={itemInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {handlePopup()}} gameData={gameData} imgSet={imgSet} msg={setMsg}/>}
       </PopupContainer>
+      <MsgContainer>
+        {msg.show && <Msg text={msg.text}></Msg>}
+      </MsgContainer>
     </>
   );
 }

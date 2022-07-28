@@ -22,8 +22,8 @@ export const gameData = {
     //grade (0하급poor, 1일반normal, 2매직magic, 3레어rare, 4에픽epic, 5유니크unique, 6레전드legend)
     itemGrade:{//'#999'
       txt_e:['Poor','Normal','Magic','Rare','Epic','Unique','Legend'],
-      txt_k:['하급','일반','매직','레어','에픽','유니크','레전드'],
-      color:['#999','#fff','#0090ff','#f4ea19','#a800ff','#ff8800','#ff2a00']
+      txt_k:['하급','일반','매직','레어','에픽','세트','유니크','레전드'],
+      color:['#999','#fff','#0090ff','#f4ea19','#a800ff','#00a90c','#ff8800','#ff2a00']
     },
     chGradeColor:['#999','#fff','#00a90c','#0090ff','#f4ea19','#a800ff','#ff8000','#ff2a00'],
     stateMax:[150,240,240,120,240,120,120,200],//능력치 최대치(통,체,완,순,지,정,매,운) 150,200,200,100,200,100,100,200
