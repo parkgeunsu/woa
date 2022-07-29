@@ -1,34 +1,10 @@
 import { chImg, itemHole, ringImg } from 'components/ImgSet';
 import { util } from 'components/Libs';
-import PopupContinaer from 'components/PopupContainer';
+import PopupContainer from 'components/PopupContainer';
 import imgRing from 'images/ring/ring_.png';
 import React, {useState} from 'react';
 import styled from 'styled-components';
 
-
-const PopupArea = styled.div`
-	position:fixed;left:0;right:0;top:0;bottom:0;z-index:10;
-	&:after{
-		content:'';position:absolute;left:0;right:0;top:0;bottom:0;background:rgba(0,0,0,.7);
-	}
-`;
-const PopupCont = styled.div`
-	position:absolute;left:0;right:0;top:0;bottom:0;z-index:2;
-  display:flex;flex-direction:column;align-items:center;
-	&{
-		ul{margin:auto auto;width:80%;}
-
-		button{margin:10px 3px;padding:5px 10px;border-radius:10px;background-image:-webkit-linear-gradient(bottom, rgba(0,0,0,0.075), rgba(255,255,255,0.5));background-image: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(255,255,255,0.5));box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.5), 0 0 1px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0,0,0,1);border-radius: 20px;color:rgba(255,255,255,0.9);line-height:1;}
-	}
-`;
-const PopupClose = styled.div`
-	position:absolute;right:5px;top:10px;z-index:1;
-	&{
-		span{display:block;position:absolute;right:10px;top:20px;width:30px;height:5px;background:#fff;box-shadow:0 0 10px #fff;}
-		span:first-of-type{transform-origin:50% 50%;transform:rotate(135deg);}
-		span:last-of-type{transform-origin:50% 50%;transform:rotate(45deg);}
-	}
-`;
   //   //이벤트 바인딩
   //   this.el.popup.querySelectorAll('button').forEach((el)=>{
   //     el.addEventListener('click',(e)=>{
@@ -86,15 +62,7 @@ const PopupClose = styled.div`
   //     });
   //   });
   // },
-const PopupRelationContainer = styled.ul`
-  margin:auto auto;width:80%;flex-flow:wrap;
-  & {
-    li img{width:100%;}
-    li .name{position:absolute;z-index:1;left:0;right:0;top:50%;padding:5px;text-align:center;font-size:12px;line-height:12px;letter-spacing:-1px;color:#000;font-weight:600;background:rgba(255,255,255,.4);}
-  }
-`;
 const PopupRelationList = styled.li`
-  position:relative;margin:5px;padding-top:calc(33.3% - 10px);width:calc(33.3% - 10px);height:0;border-radius:100px;font-size:0;overflow:hidden;
   background-image:url(${({ringDisplay}) => ringDisplay});
   background-size:cover;
   box-shadow:${({gameData, chData}) => (
@@ -111,58 +79,21 @@ const Img = styled.img.attrs(
     src: imgurl 
   })
 )``;
-
 const PopupItemContainer = styled.ul`
-  display:flex;position:relative;flex-direction:column;align-items:center;
-  margin:auto auto;width:80%;
   border:5px solid transparent;
   border-image:url(${({frameBack}) => frameBack}) 5 round;
-  background:rgba(0,0,0,.7);
-  & > li {
-    padding:10px;width:100%;box-sizing:border-box;
+  .item_header{border:5px solid transparent;
+  border-image:url(${({frameBack}) => frameBack}) 5 round;
   }
-  .item_header{padding:5px 10px;border:5px solid transparent;
-  border-image:url(${({frameBack}) => frameBack}) 5 round;
-  background:rgba(0,0,0,.7);text-align:center;background-image:radial-gradient(at 50%, #930 0%, #691500 40%, #000 80%);}
-  .item_upgrade{margin:0 0 0 5px;font-weight:600;color:#fff;font-size:14px;text-shadow:0 0 5px #fff;}
-  .item_name{color:${({ color }) => color};font-size:15px;font-weight:600;}
-  .item_footer{justify-content:space-between;align-items:center;border:5px solid transparent;
-  border-image:url(${({frameBack}) => frameBack}) 5 round;
-  background:rgba(0,0,0,.7);}
-  .item_price span{display:inline-block;margin:0 5px 0 0;font-size:14px;color:#c80;}
-  .item_price em{font-size:14px;color:#fff;vertical-align:middle;}
-  .item_footer button{margin:0;}
+  .item_name{color:${({ color }) => color};}
+  .item_footer{border:5px solid transparent;
+  border-image:url(${({frameBack}) => frameBack}) 5 round;}
 `;
 const PopupItemPic = styled.div`
-  width:80px;height:80px;border:5px double #c80;
-  &:after{display:block;content:"";width:100%;height:100%;background-image:url(${({itemPic}) => itemPic});background-size:100%;background-repeat:no-repeat;}
-  svg{width:100%;height:100%;}
+  &:after{background-image:url(${({itemPic}) => itemPic});background-size:100%;background-repeat:no-repeat;}
 `;
 const PopupItemName = styled.div`
-  display:flex;flex-direction:column;
-  margin:0 0 0 10px;flex:1;
-  span{display:inline-block;vertical-align:middle;}
-  .item_top{display:flex;justify-content:space-between;margin:0 0 15px 0;color:#bbb;font-size:12px;}
   .item_grade{color:${({ color }) => color};}
-  .item_bottom{margin:0 0 10px 0;}
-  .item_description{flex:1;font-family:serif;line-height:1.2;font-size:13px;color:#d3a859;font-weight:600;}
-  .item_kg{text-align:right;font-weight:600;color:#bbb;}
-`;
-const PopupItemList = styled.li`
-  display:flex;margin:5px 0 0 0;flex-direction:column;
-  .item_title{margin:0 0 5px 0;font-size:14px;color:#ddd;}
-  .item_effs{margin:0 0 5px 15px;color:#2f73ff;font-weight:600;}
-  &.item_eff{padding:0 10px;}
-  .item_holes{margin:0 0 5px 5px;}
-  .item_holeback{display:inline-block;background-image:radial-gradient(at 50%, #000 30%, #888 100%);border-radius:30px;margin-left:5px;width:24px;height:24px;text-align:center;}
-  &.item_hole{padding:0 10px;}
-  .item_holes img{margin:2px 0 0 0;width:20px;height:20px;vertical-align:middle;}
-  .item_holeName{display:inline-block;margin:0 0 0 5px;color:#e14040;font-weight:600;}
-  &.item_set{margin:0 0 10px 0;padding:0 10px;}
-  .item_setNa{margin:0 0 10px 0;color:#0f0;font-size:14px;}
-  .item_set_piece{margin:0 0 5px 15px;color:#555;}
-  .item_set_piece:last-of-type{margin:0 0 0 15px;}
-  .item_set_piece.on{color:#fff;font-weight:600;}
 `;
 const getSetChk = (has_item, n) => {//셋트 아이템 체크
   let chk = false;
@@ -174,6 +105,7 @@ const getSetChk = (has_item, n) => {//셋트 아이템 체크
   return chk ? 'on' : '';
 }
 const buttonEvent = (dataObj) => {
+  dataObj.event.stopPropagation();
   const gameData = dataObj.gameData;
   let sData = {...dataObj.saveData};
   if (dataObj.type === 'item_enhancement') {
@@ -182,24 +114,37 @@ const buttonEvent = (dataObj) => {
     const invenPart = dataObj.data.gameItem.part;
     let overlapCheck = true;
     const saveCh = sData.ch[dataObj.data.slotIdx];
+    //아이템 무게 측정
+    let currentKg = 0;
+    const totalKg = Math.floor(gameData.ch[saveCh.idx].st1 / 0.3)/10;
+    saveCh.items.forEach((item) => {
+      if (Object.keys(item).length !== 0) {
+        currentKg += gameData.items.equip[item.idx].kg;
+      }
+    });
     saveCh.items.forEach((item, itemSlot)=>{
       const chType = gameData.ch[saveCh.idx].animal_type;
       if (invenPart === gameData.animal_type[chType].equip[itemSlot] && overlapCheck) {//해당파트와 같은파트인지? && 빈칸인지? && 같은파트가 비었을경우 한번만 발생하게
         if (item.idx === undefined) { //해당 슬롯이 비었을 비었을 경우
-          saveCh.items[itemSlot] = {...dataObj.saveData.items['equip'][dataObj.data.itemSaveSlot]};//캐릭에 아이템 넣기
-          sData.items['equip'].splice(dataObj.data.itemSaveSlot, 1);//인벤에서 아이템 제거
-          overlapCheck = false;
-          dataObj.changeSaveData(util.saveCharacter({//데이터 저장
-            saveData: sData,
-            slotIdx: dataObj.data.slotIdx,
-            gameData: gameData,
-          }));
-          return;
+          currentKg += dataObj.data.gameItem.kg
+          if (currentKg > totalKg) { //가능 무게를 넘어 갈 경우
+            dataObj.showMsg(true);
+            dataObj.msgText("착용할려는 장비가 무겁습니다.");
+          } else { //착용 가능 무게일 경우
+            saveCh.items[itemSlot] = {...dataObj.saveData.items['equip'][dataObj.data.itemSaveSlot]};//캐릭에 아이템 넣기
+            sData.items['equip'].splice(dataObj.data.itemSaveSlot, 1);//인벤에서 아이템 제거
+            overlapCheck = false;
+            dataObj.changeSaveData(util.saveCharacter({//데이터 저장
+              saveData: sData,
+              slotIdx: dataObj.data.slotIdx,
+              gameData: gameData,
+            }));
+            dataObj.showPopup(false);
+            return;
+          }
         } else { //해당 슬롯에 아이템이 있을 경우
-          dataObj.msg({
-            "show":true,
-            "text":"같은 부위에 이미 다른 아이템이 착용 중입니다."
-          });
+          dataObj.showMsg(true);
+          dataObj.msgText("같은 부위에 이미 다른 아이템이 착용 중입니다.");
         }
       }
     });
@@ -211,6 +156,7 @@ const buttonEvent = (dataObj) => {
       slotIdx: dataObj.data.slotIdx,
       gameData: gameData,
     }));
+    dataObj.showPopup(false);
   } else if (dataObj.type === 'itemUse') { //아이템 사용
     const saveCh = sData.ch[dataObj.data.slotIdx];
     switch (dataObj.data.gameItem.action) {
@@ -258,30 +204,32 @@ const buttonEvent = (dataObj) => {
     } //사용 타입
     sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
     dataObj.changeSaveData(sData);//데이터 저장
+    dataObj.showPopup(false);
   } else if (dataObj.type === 'itemSell') { //아이템 판매
     sData.info.money += dataObj.data.gameItem.price;//돈 계산
     sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
     dataObj.changeSaveData(sData);//데이터 저장
+    dataObj.showPopup(false);
   } else if (dataObj.type === 'holeEquip') {
-    
+    dataObj.showPopup(false);
   }
 }
-const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet, msg) => {
+const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, showPopup) => {
 	if (type === 'relation') {
     const member = dataObj.relation.member;
 		return (
-			<PopupRelationContainer flex-center="true" className="people">
+			<ul flex-center="true" className="people">
         {member && member.map((data ,idx) => {
           const chData = gameData.ch[idx];
           return (
-            <PopupRelationList key={idx} gameData={gameData} chData={chData} ringDisplay={ringImg[chData.element]}>
+            <PopupRelationList className="people_list" key={idx} gameData={gameData} chData={chData} ringDisplay={ringImg[chData.element]}>
               <Img imgurl={imgRing} />
               <PopupRelationListCh chDisplay={chImg[chData.display]} className="ch" />
               <span className="name">{chData.na1}</span>
             </PopupRelationList>
           )
         })}
-			</PopupRelationContainer>
+			</ul>
 		);
 	} else if (type === 'equip') {
     const items = gameData.items.equip[dataObj.saveItemData.idx];
@@ -290,14 +238,14 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     const setsInfo = gameData.items.set_type[items.set];
 		return (
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[grade]}>
-        <li className="item_header" flex-center="true"><span className="item_name">{items.na}</span><span className="item_upgrade">{`+${saveItems.upgrade > 0 ? saveItems.upgrade : ''}`}</span></li>
+        <li className="item_header" flex-center="true"><span className="item_name">{items.na}</span></li>
         <li flex="true">
           <PopupItemPic className={`item item${items.part}`}>
             <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color)}}>
             </svg>
           </PopupItemPic>
           <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemName color={gameData.itemGrade.color[grade]}>
+            <PopupItemName className="item_cont" color={gameData.itemGrade.color[grade]}>
               <div className="item_top">
                 <span className="item_grade">{gameData.itemGrade.txt_k[grade]}</span> <span className="item_type">{gameData.itemType[items.part]}</span>
               </div>
@@ -307,42 +255,57 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
           </div>
         </li>
-        <PopupItemList className="item_eff">
-          <div className="item_title">아이템 효과</div>
-          {items.eff && items.eff.map((data, idx) => {
+        <li className="item_list item_eff">
+          <div className="item_title">기본 효과</div>
+          {saveItems.baseEff && saveItems.baseEff.map((data, idx) => {
+            const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
             return (
-              <div key={idx} className="item_effs">{`${util.getEffectType(data.type)} +${data.num[saveItems.upgrade]}`}</div>
+              <div key={idx} className="item_effs">{`${util.getEffectType(data.type)} +${data.num[grade]}`}</div>
             ) 
           })}
-        </PopupItemList>
+        </li>
+        {saveItems.addEff.length > 0 && (
+          <li className="item_list item_eff">
+            <div className="item_title">추가 효과</div>
+            {saveItems.addEff.map((data, idx) => {
+              const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
+              return (
+                <div key={idx} className="item_effs">{`${util.getEffectType(data.type)} +${data.num[grade]}`}</div>
+              ) 
+            })}
+          </li>
+        )}
         {saveItems.hole.length > 0 && (
-          <PopupItemList className="item_hole">
+          <li className="item_list item_hole">
             <div className="item_title">소켓 효과</div>
             {saveItems.hole.map((data, idx) => {
               return (
                 <div key={idx} className="item_holes"><span className="item_holeback"><Img imgurl={itemHole[data]} /></span><span className="item_holeName">{`${gameData.items.hole[data].na}`}</span></div>
               ) 
             })}
-          </PopupItemList>
+          </li>
         )}
-        <PopupItemList className="item_set">
+        <li className="item_list item_set">
           <div className="item_setNa">{setsInfo.na}</div>
           {setsInfo.part && setsInfo.part.map((data, idx) => {
             return (
               <div key={idx} className={`item_set_piece ${getSetChk(saveData.ch[dataObj.slotIdx].items, data)}`}>{gameData.items.equip[data].na}</div>
             ) 
           })}
-        </PopupItemList>
+        </li>
         <li className="item_footer" flex="true">
           <div className="item_price"><span>판매가:</span><em>{`₩${items.price}`}</em></div>
           <div className="item_button" flex="true">
-            <button text="true" onClick={() => {buttonEvent({
+            <button text="true" onClick={(e) => {buttonEvent({
+              event: e,
               type: 'itemRelease',
               data: dataObj,
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
-              msg: msg,
+              msgText: msgText,
+              showMsg: showMsg,
+              showPopup: showPopup,
             })}} data-buttontype="itemRelease">해제</button>
           </div>
         </li>
@@ -355,14 +318,14 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     const setsInfo = gameData.items.set_type[items.set];
     return (
       <PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[grade]}>
-        <li className="item_header" flex-center="true"><span className="item_name">{items.na}</span><span className="item_upgrade">{`+${saveItems.upgrade > 0 ? saveItems.upgrade : ''}`}</span></li>
+        <li className="item_header" flex-center="true"><span className="item_name">{items.na}</span></li>
         <li flex="true">
           <PopupItemPic className={`item item${items.part}`}>
             <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color)}}>
             </svg>
           </PopupItemPic>
           <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemName color={gameData.itemGrade.color[grade]}>
+            <PopupItemName className="item_cont" color={gameData.itemGrade.color[grade]}>
               <div className="item_top">
                 <span className="item_grade">{gameData.itemGrade.txt_k[grade]}</span> <span className="item_type">{gameData.itemType[items.part]}</span>
               </div>
@@ -372,58 +335,79 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
           </div>
         </li>
-        <PopupItemList className="item_eff">
-          <div className="item_title">아이템 효과</div>
-          {items.eff && items.eff.map((data, idx) => {
+        <li className="item_list item_eff">
+          <div className="item_title">기본 효과</div>
+          {saveItems.baseEff && saveItems.baseEff.map((data, idx) => {
+            const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
             return (
-              <div key={idx} className="item_effs">{`${util.getEffectType(data.type)} +${data.num[saveItems.upgrade]}`}</div>
+              <div key={idx} className="item_effs">{`${util.getEffectType(data.type)} +${data.num[grade]}`}</div>
             ) 
           })}
-        </PopupItemList>
+        </li>
+        {saveItems.addEff.length > 0 && (
+          <li className="item_list item_eff">
+            <div className="item_title">추가 효과</div>
+            {saveItems.addEff.map((data, idx) => {
+              const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
+              return (
+                <div key={idx} className="item_effs">{`${util.getEffectType(data.type)} +${data.num[grade]}`}</div>
+              ) 
+            })}
+          </li>
+        )}
         {saveItems.hole.length > 0 && (
-          <PopupItemList className="item_hole">
+          <li className="item_list item_hole">
             <div className="item_title">소켓 효과</div>
             {saveItems.hole.map((data, idx) => {
               return (
                 <div key={idx} className="item_holes"><span className="item_holeback"><Img imgurl={itemHole[data]} /></span><span className="item_holeName">{`${gameData.items.hole[data].na}`}</span></div>
               ) 
             })}
-          </PopupItemList>
+          </li>
         )}
-        <PopupItemList className="item_set">
+        <li className="item_list item_set">
           <div className="item_setNa">{setsInfo.na}</div>
           {setsInfo.part && setsInfo.part.map((data, idx) => {
             return (
               <div key={idx} className={`item_set_piece ${getSetChk(saveData.ch[dataObj.slotIdx].items, data)}`}>{gameData.items.equip[data].na}</div>
             ) 
           })}
-        </PopupItemList>
+        </li>
         <li className="item_footer" flex="true">
           <div className="item_price"><span>판매가:</span><em>{`₩${items.price}`}</em></div>
           <div className="item_button" flex="true">
-            <button text="true" onClick={() => {buttonEvent({
+            <button text="true" onClick={(e) => {buttonEvent({
+              event: e,
               type: 'itemEnhancement',
               data: dataObj,
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
-              msg: msg,
+              msgText: msgText,
+              showMsg: showMsg,
+              showPopup: showPopup,
             })}} data-buttontype="itemEnhancement">강화</button>
-            <button text="true" onClick={() => {buttonEvent({
+            <button text="true" onClick={(e) => {buttonEvent({
+              event: e,
               type: 'itemEquip',
               data: dataObj,
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
-              msg: msg,
+              msgText: msgText,
+              showMsg: showMsg,
+              showPopup: showPopup,
             })}} data-buttontype="itemEquip">장착</button>
-            <button text="true" onClick={() => {buttonEvent({
+            <button text="true" onClick={(e) => {buttonEvent({
+              event: e,
               type: 'itemSell',
               data: dataObj,
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
-              msg: msg,
+              msgText: msgText,
+              showMsg: showMsg,
+              showPopup: showPopup,
             })}} data-buttontype="itemSell">판매</button>
           </div>
         </li>
@@ -431,13 +415,14 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     );
   } else if (type === 'hole') {
     const items = gameData.items.hole[dataObj.saveItemData.idx];
+    const saveItems = dataObj.saveItemData;
     return (
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[items.grade]}>
         <li className="item_header" flex-center="true"><span className="item_name">{items.na}</span></li>
         <li flex="true">
           <PopupItemPic  className="item item11" itemPic={imgSet.itemHole[items.display]} />
           <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemName color={gameData.itemGrade.color[items.grade]}>
+            <PopupItemName className="item_cont" color={gameData.itemGrade.color[items.grade]}>
               <div className="item_top">
                 <span className="item_grade">{gameData.itemGrade.txt_k[items.grade]}</span> <span className="item_type">소켓보석</span>
               </div>
@@ -446,32 +431,48 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
           </div>
         </li>
-        <PopupItemList className="item_eff">
-          <div className="item_title">아이템 효과</div>
-          {items.eff && items.eff.map((data, idx) => {
+        <li className="item_list item_eff">
+          <div className="item_title">기본 효과</div>
+          {saveItems.baseEff && saveItems.baseEff.map((data, idx) => {
             return (
-              <div key={idx} className="item_effs">{`${util.getEffectType(data.type)} +${data.num}`}</div>
+              <div key={idx} className="item_effs">{`${util.getEffectType(data.type)} +${data.num[0]}`}</div>
             ) 
           })}
-        </PopupItemList>
+        </li>
+        {saveItems.addEff.length > 0 && (
+          <li className="item_list item_eff">
+            <div className="item_title">추가 효과</div>
+            {saveItems.addEff.map((data, idx) => {
+              return (
+                <div key={idx} className="item_effs">{`${util.getEffectType(data.type)} +${data.num[0]}`}</div>
+              ) 
+            })}
+          </li>
+        )}
         <li className="item_footer" flex="true">
           <div className="item_price"><span>판매가:</span><em>{`₩${items.price}`}</em></div>
           <div className="item_button" flex="true">
-            <button text="true" onClick={() => {buttonEvent({
+            <button text="true" onClick={(e) => {buttonEvent({
+              event: e,
               type: 'holeEquip',
               data: dataObj,
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
-              msg: msg,
+              msgText: msgText,
+              showMsg: showMsg,
+              showPopup: showPopup,
             })}} data-buttontype="holeEquip">장착</button>
-            <button text="true" onClick={() => {buttonEvent({
+            <button text="true" onClick={(e) => {buttonEvent({
+              event: e,
               type: 'itemSell',
               data: dataObj,
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
-              msg: msg,
+              msgText: msgText,
+              showMsg: showMsg,
+              showPopup: showPopup,
             })}} data-buttontype="itemSell">판매</button>
           </div>
         </li>
@@ -485,7 +486,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         <li flex="true">
           <PopupItemPic className="item item12" itemPic={imgSet.itemUpgrade[items.display]} />
           <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemName color={gameData.itemGrade.color[items.grade]}>
+            <PopupItemName className="item_cont" color={gameData.itemGrade.color[items.grade]}>
               <div className="item_top">
                 <span className="item_grade">{gameData.itemGrade.txt_k[items.grade]}</span> <span className="item_type">강화재료</span>
               </div>
@@ -497,21 +498,27 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         <li className="item_footer" flex="true">
           <div className="item_price"><span>판매가:</span><em>{`₩${items.price}`}</em></div>
           <div className="item_button" flex="true">
-            <button text="true" onClick={() => {buttonEvent({
+            <button text="true" onClick={(e) => {buttonEvent({
+              event: e,
               type: 'itemUse',
               data: dataObj,
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
-              msg: msg,
+              msgText: msgText,
+              showMsg: showMsg,
+              showPopup: showPopup,
             })}} data-buttontype="itemUse">사용</button>
-            <button text="true" onClick={() => {buttonEvent({
+            <button text="true" onClick={(e) => {buttonEvent({
+              event: e,
               type: 'itemSell',
               data: dataObj,
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
-              msg: msg,
+              msgText: msgText,
+              showMsg: showMsg,
+              showPopup: showPopup,
             })}} data-buttontype="itemSell">판매</button>
           </div>
         </li>
@@ -525,7 +532,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         <li flex="true">
           <PopupItemPic className="item item14" itemPic={imgSet.itemMaterial[items.display]} />
           <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemName color={gameData.itemGrade.color[items.grade]}>
+            <PopupItemName className="item_cont" color={gameData.itemGrade.color[items.grade]}>
               <div className="item_top">
                 <span className="item_grade">{gameData.itemGrade.txt_k[items.grade]}</span> <span className="item_type">재료</span>
               </div>
@@ -537,13 +544,16 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         <li className="item_footer" flex="true">
           <div className="item_price"><span>판매가:</span><em>{`₩${items.price}`}</em></div>
           <div className="item_button" flex="true">
-            <button text="true" onClick={() => {buttonEvent({
+            <button text="true" onClick={(e) => {buttonEvent({
+              event: e,
               type: 'itemSell',
               data: dataObj,
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
-              msg: msg,
+              msgText: msgText,
+              showMsg: showMsg,
+              showPopup: showPopup,
             })}} data-buttontype="itemSell">판매</button>
           </div>
         </li>
@@ -557,7 +567,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         <li flex="true">
           <PopupItemPic className="item item13" itemPic={imgSet.itemEtc[items.display]} />
           <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemName color={gameData.itemGrade.color[items.grade]}>
+            <PopupItemName className="item_cont" color={gameData.itemGrade.color[items.grade]}>
               <div className="item_top">
                 <span className="item_grade">{gameData.itemGrade.txt_k[items.grade]}</span> <span className="item_type">기타</span>
               </div>
@@ -569,21 +579,27 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         <li className="item_footer" flex="true">
           <div className="item_price"><span>판매가:</span><em>{`₩${items.price}`}</em></div>
           <div className="item_button" flex="true">
-            <button text="true" onClick={() => {buttonEvent({
+            <button text="true" onClick={(e) => {buttonEvent({
+              event: e,
               type: 'itemUse',
               data: dataObj,
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
-              msg: msg,
+              msgText: msgText,
+              showMsg: showMsg,
+              showPopup: showPopup,
             })}} data-buttontype="itemUse">사용</button>
-            <button text="true" onClick={() => {buttonEvent({
+            <button text="true" onClick={(e) => {buttonEvent({
+              event: e,
               type: 'itemSell',
               data: dataObj,
               saveData: saveData,
               changeSaveData: changeSaveData,
               gameData: gameData,
-              msg: msg,
+              msgText: msgText,
+              showMsg: showMsg,
+              showPopup: showPopup,
             })}} data-buttontype="itemSell">판매</button>
           </div>
         </li>
@@ -593,27 +609,30 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
 }
 
 const Popup = ({ 
-	onClose,
+	showPopup,
 	type,
   saveData,
   changeSaveData,
 	dataObj,
   gameData,
   imgSet,
-  msg,
+  msgText,
+  showMsg,
 }) => {
 	return (
     <>
-      <PopupContinaer>
-        <PopupArea className="popup transition">
-          <PopupCont className="popup_cont" onClick={() => {onClose()}}>
-            {typeAsContent(type, dataObj, saveData, changeSaveData, gameData, imgSet, msg)}
-          </PopupCont>
-          <PopupClose>
+      <PopupContainer>
+        <div className="popup transition">
+          <div className="popup_cont" onClick={(e) => {
+            showPopup(false);
+          }}>
+            {typeAsContent(type, dataObj, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, showPopup)}
+          </div>
+          <div className="popup_close">
             <span></span><span></span>
-          </PopupClose>
-        </PopupArea>
-      </PopupContinaer>
+          </div>
+        </div>
+      </PopupContainer>
     </>
 	)
 }

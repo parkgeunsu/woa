@@ -30,12 +30,11 @@ const CharacterItems = ({
   const gameItem = gameData.items;
   const invenItems = saveData.items;
   const [popupOn, setPopupOn] = useState(false);
+  const [msgOn, setMsgOn] = useState(false);
   const [itemInfo, setItemInfo] = useState({});
   const [itemType, setItemType] = useState('equip');
   const [kg, setKg] = useState([0,0]);
-  const [msg, setMsg] = useState({
-    "show": false,
-    "text": ""});
+  const [msg, setMsg] = useState("");
   const handlePopup = (itemType, itemIdx, itemSaveSlot) => {
     if( itemType ){
       let saveItemData;
@@ -189,10 +188,10 @@ const CharacterItems = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={itemType} dataObj={itemInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {handlePopup()}} gameData={gameData} imgSet={imgSet} msg={setMsg}/>}
+        {popupOn && <Popup type={itemType} dataObj={itemInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} gameData={gameData} imgSet={imgSet} msgText={setMsg} showMsg={setMsgOn}/>}
       </PopupContainer>
       <MsgContainer>
-        {msg.show && <Msg text={msg.text}></Msg>}
+        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
       </MsgContainer>
     </>
   );

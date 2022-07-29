@@ -25,7 +25,7 @@ export const items = {
         {idx:5,part:2,grade:1,display:23,na:'스터디드 레더 아머',kg:5,price:700,color:["#E4AF51"],txt:'Studded Lether Armor 징박힌 가죽 갑옷',eff:[{type:4,num:[100,200]}],set:0},
         {idx:6,part:2,grade:1,display:24,na:'링 메일',kg:11,price:900,color:["#fff"],txt:'Ring Mail 사슬 형태의 철제 갑옷',eff:[{type:4,num:[150,250]}],set:0},
         {idx:7,part:2,grade:1,display:25,na:'스케일 메일',kg:13,price:1000,color:["#E6E7E8"],txt:'Scale Mail 금속조각을 붙힌 갑옷, 어린갑',eff:[{type:4,num:[170,270]}],set:0},
-        {idx:8,part:2,grade:1,display:26,na:'체인 메일',kg:15,price:1000,color:[],txt:'Chain Mail 메쉬형태로 금속링을 엮은 갑옷, 쇄자갑',eff:[{type:4,num:[200,300]}],set:0},
+        {idx:8,part:2,grade:1,display:26,na:'체인 메일',kg:15,price:1000,color:["#fff"],txt:'Chain Mail 메쉬형태로 금속링을 엮은 갑옷, 쇄자갑',eff:[{type:4,num:[200,300]}],set:0},
         {idx:9,part:2,grade:1,display:27,na:'스피린트 메일',kg:17,price:1100,color:["#9B8579"],txt:'Splint Mail 천이나 가죽에 금속 스트립을 엮은 갑옷, 경번갑',eff:[{type:4,num:[250,400]}],set:0},
         {idx:10,part:2,grade:1,display:28,na:'브리간딘',kg:20,price:1200,color:["#D1D3D4"],txt:'Brigandine 가죽 겉 감 안에 철판을 덧댄 갑옷,두정갑',eff:[{type:4,num:[300,450]}],set:0},
         {idx:11,part:2,grade:1,display:29,na:'플레이트 메일',kg:27,price:1500,color:["#000"],socket:3,txt:'Plate Mail 강철판으로 만든 갑옷, 판금갑',eff:[{type:4,num:[450,600]}],set:0},
