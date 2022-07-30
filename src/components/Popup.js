@@ -236,9 +236,32 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     const saveItems = dataObj.saveItemData;
     const grade = saveItems.grade || items.grade;
     const setsInfo = gameData.items.set_type[items.set];
+    //아이템 기본, 추가, 홀 효과
+    let totalEff = [];
+    saveItems.baseEff.forEach((data, idx) => {
+      if (totalEff[data.type] === undefined) {
+        totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
+      }
+      totalEff[data.type].base += parseInt(data.num[grade - 1]);
+    });
+    saveItems.addEff.forEach((data, idx) => {
+      if (totalEff[data.type] === undefined) {
+        totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
+      }
+      totalEff[data.type].add += parseInt(data.num[0]);
+    });
+    saveItems.hole.forEach((data, idx) => {
+      const holeItem = gameData.items.hole[data].eff;
+      holeItem.forEach((holeData, idx) => {
+        if (totalEff[holeData.type] === undefined) {
+          totalEff[holeData.type] = {type: holeData.type, base: 0, add:0, hole:0};
+        }
+        totalEff[holeData.type].hole += parseInt(holeData.num);
+      });
+    });
 		return (
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[grade]}>
-        <li className="item_header" flex-center="true"><span className="item_name">{items.na}</span></li>
+        <li className="item_header" flex-center="true"><span className="item_name">{typeof saveItems.mark === 'number' && gameData.animal_type[saveItems.mark].na + "의"} {items.na}</span></li>
         <li flex="true">
           <PopupItemPic className={`item item${items.part}`}>
             <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color)}}>
@@ -256,43 +279,62 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           </div>
         </li>
         <li className="item_list item_eff">
-          <div className="item_title">기본 효과</div>
-          {saveItems.baseEff && saveItems.baseEff.map((data, idx) => {
-            const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
+          <div className="item_title">아이템 효과</div>
+          {totalEff.map((eff, idx) => {
             return (
-              <div key={idx} className="item_effs">{`${util.getEffectType(data.type)} +${data.num[grade]}`}</div>
-            ) 
+              <div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
+            )
           })}
         </li>
-        {saveItems.addEff.length > 0 && (
-          <li className="item_list item_eff">
-            <div className="item_title">추가 효과</div>
-            {saveItems.addEff.map((data, idx) => {
-              const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
+        <div style={{width:"100%"}} className="scroll-y">
+          {saveItems.baseEff.length > 0 && (
+            <li className="item_list item_eff">
+              <div className="item_title">기본 효과</div>
+              {saveItems.baseEff.map((data, idx) => {
+                const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
+                return (
+                  <div key={idx} className="item_effs">{`${util.getEffectType(data.type, "ko")} ${data.num[grade]}`}</div>
+                ) 
+              })}
+            </li>
+          )}
+          {saveItems.addEff.length > 0 && (
+            <li className="item_list item_eff">
+              <div className="item_title">추가 효과</div>
+              {saveItems.addEff.map((data, idx) => {
+                const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
+                return (
+                  <div key={idx} className="item_effs add">{`${util.getEffectType(data.type, "ko")} ${data.num[0]}`}</div>
+                ) 
+              })}
+            </li>
+          )}
+          {saveItems.hole.length > 0 && (
+            <li className="item_list item_hole">
+              <div className="item_title">소켓 효과</div>
+              {totalEff.map((data, idx) => {
+                if (data.hole > 0) {
+                  return (
+                    <div key={idx} className="item_effs hole">{`${util.getEffectType(data.type, "ko")} ${data.hole}`}</div>
+                  )
+                }
+              })}
+              {saveItems.hole.map((data, idx) => {
+                return (
+                  <div key={idx} className="item_holes"><span className="item_holeback"><Img imgurl={itemHole[data]} /></span><span className="item_holeName">{`${gameData.items.hole[data].na}`}</span></div>
+                ) 
+              })}
+            </li>
+          )}
+          <li className="item_list item_set">
+            <div className="item_setNa">{setsInfo.na}</div>
+            {setsInfo.part && setsInfo.part.map((data, idx) => {
               return (
-                <div key={idx} className="item_effs">{`${util.getEffectType(data.type)} +${data.num[grade]}`}</div>
+                <div key={idx} className={`item_set_piece ${getSetChk(saveData.ch[dataObj.slotIdx].items, data)}`}>{gameData.items.equip[data].na}</div>
               ) 
             })}
           </li>
-        )}
-        {saveItems.hole.length > 0 && (
-          <li className="item_list item_hole">
-            <div className="item_title">소켓 효과</div>
-            {saveItems.hole.map((data, idx) => {
-              return (
-                <div key={idx} className="item_holes"><span className="item_holeback"><Img imgurl={itemHole[data]} /></span><span className="item_holeName">{`${gameData.items.hole[data].na}`}</span></div>
-              ) 
-            })}
-          </li>
-        )}
-        <li className="item_list item_set">
-          <div className="item_setNa">{setsInfo.na}</div>
-          {setsInfo.part && setsInfo.part.map((data, idx) => {
-            return (
-              <div key={idx} className={`item_set_piece ${getSetChk(saveData.ch[dataObj.slotIdx].items, data)}`}>{gameData.items.equip[data].na}</div>
-            ) 
-          })}
-        </li>
+        </div>
         <li className="item_footer" flex="true">
           <div className="item_price"><span>판매가:</span><em>{`₩${items.price}`}</em></div>
           <div className="item_button" flex="true">
@@ -316,9 +358,32 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     const saveItems = dataObj.saveItemData;
     const grade = saveItems.grade || items.grade;
     const setsInfo = gameData.items.set_type[items.set];
+    //아이템 기본, 추가, 홀 효과
+    let totalEff = [];
+    saveItems.baseEff.forEach((data, idx) => {
+      if (totalEff[data.type] === undefined) {
+        totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
+      }
+      totalEff[data.type].base += parseInt(data.num[grade - 1]);
+    });
+    saveItems.addEff.forEach((data, idx) => {
+      if (totalEff[data.type] === undefined) {
+        totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
+      }
+      totalEff[data.type].add += parseInt(data.num[0]);
+    });
+    saveItems.hole.forEach((data, idx) => {
+      const holeItem = gameData.items.hole[data].eff;
+      holeItem.forEach((holeData, idx) => {
+        if (totalEff[holeData.type] === undefined) {
+          totalEff[holeData.type] = {type: holeData.type, base: 0, add:0, hole:0};
+        }
+        totalEff[holeData.type].hole += parseInt(holeData.num);
+      });
+    });
     return (
       <PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[grade]}>
-        <li className="item_header" flex-center="true"><span className="item_name">{items.na}</span></li>
+        <li className="item_header" flex-center="true"><span className="item_name">{typeof saveItems.mark === 'number' && gameData.animal_type[saveItems.mark].na + "의"} {items.na}</span></li>
         <li flex="true">
           <PopupItemPic className={`item item${items.part}`}>
             <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color)}}>
@@ -336,43 +401,60 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           </div>
         </li>
         <li className="item_list item_eff">
-          <div className="item_title">기본 효과</div>
-          {saveItems.baseEff && saveItems.baseEff.map((data, idx) => {
-            const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
+          <div className="item_title">아이템 효과</div>
+          {totalEff.map((eff, idx) => {
             return (
-              <div key={idx} className="item_effs">{`${util.getEffectType(data.type)} +${data.num[grade]}`}</div>
-            ) 
+              <div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
+            )
           })}
         </li>
-        {saveItems.addEff.length > 0 && (
+        <div style={{width:"100%"}} className="scroll-y">
           <li className="item_list item_eff">
-            <div className="item_title">추가 효과</div>
-            {saveItems.addEff.map((data, idx) => {
+            <div className="item_title">기본 효과</div>
+            {saveItems.baseEff && saveItems.baseEff.map((data, idx) => {
               const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
               return (
-                <div key={idx} className="item_effs">{`${util.getEffectType(data.type)} +${data.num[grade]}`}</div>
+                <div key={idx} className="item_effs">{`${util.getEffectType(data.type, "ko")} ${data.num[grade]}`}</div>
               ) 
             })}
           </li>
-        )}
-        {saveItems.hole.length > 0 && (
-          <li className="item_list item_hole">
-            <div className="item_title">소켓 효과</div>
-            {saveItems.hole.map((data, idx) => {
+          {saveItems.addEff.length > 0 && (
+            <li className="item_list item_eff">
+              <div className="item_title">추가 효과</div>
+              {saveItems.addEff.map((data, idx) => {
+                const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
+                return (
+                  <div key={idx} className="item_effs add">{`${util.getEffectType(data.type, "ko")} ${data.num[0]}`}</div>
+                ) 
+              })}
+            </li>
+          )}
+          {saveItems.hole.length > 0 && (
+            <li className="item_list item_hole">
+              <div className="item_title">소켓 효과</div>
+              {totalEff.map((data, idx) => {
+                if (data.hole > 0) {
+                  return (
+                    <div key={idx} className="item_effs hole">{`${util.getEffectType(data.type, "ko")} ${data.hole}`}</div>
+                  )
+                }
+              })}
+              {saveItems.hole.map((data, idx) => {
+                return (
+                  <div key={idx} className="item_holes"><span className="item_holeback"><Img imgurl={itemHole[data]} /></span><span className="item_holeName">{`${gameData.items.hole[data].na}`}</span></div>
+                ) 
+              })}
+            </li>
+          )}
+          <li className="item_list item_set">
+            <div className="item_setNa">{setsInfo.na}</div>
+            {setsInfo.part && setsInfo.part.map((data, idx) => {
               return (
-                <div key={idx} className="item_holes"><span className="item_holeback"><Img imgurl={itemHole[data]} /></span><span className="item_holeName">{`${gameData.items.hole[data].na}`}</span></div>
+                <div key={idx} className={`item_set_piece ${getSetChk(saveData.ch[dataObj.slotIdx].items, data)}`}>{gameData.items.equip[data].na}</div>
               ) 
             })}
           </li>
-        )}
-        <li className="item_list item_set">
-          <div className="item_setNa">{setsInfo.na}</div>
-          {setsInfo.part && setsInfo.part.map((data, idx) => {
-            return (
-              <div key={idx} className={`item_set_piece ${getSetChk(saveData.ch[dataObj.slotIdx].items, data)}`}>{gameData.items.equip[data].na}</div>
-            ) 
-          })}
-        </li>
+        </div>
         <li className="item_footer" flex="true">
           <div className="item_price"><span>판매가:</span><em>{`₩${items.price}`}</em></div>
           <div className="item_button" flex="true">
@@ -435,7 +517,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           <div className="item_title">기본 효과</div>
           {saveItems.baseEff && saveItems.baseEff.map((data, idx) => {
             return (
-              <div key={idx} className="item_effs">{`${util.getEffectType(data.type)} +${data.num[0]}`}</div>
+              <div key={idx} className="item_effs">{`${util.getEffectType(data.type, "ko")} ${data.num[0]}`}</div>
             ) 
           })}
         </li>
@@ -444,7 +526,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             <div className="item_title">추가 효과</div>
             {saveItems.addEff.map((data, idx) => {
               return (
-                <div key={idx} className="item_effs">{`${util.getEffectType(data.type)} +${data.num[0]}`}</div>
+                <div key={idx} className="item_effs add">{`${util.getEffectType(data.type, "ko")} ${data.num[0]}`}</div>
               ) 
             })}
           </li>

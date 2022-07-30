@@ -19,17 +19,17 @@ export const items = {
     //enhance 강화
         {idx:0,part:1,grade:1,display:0,na:'터번',kg:0.1,price:100,color:["#fff","#000"],socket:2,txt:'나무로 만든 투구',eff:[{type:0,num:['2%','3%','5%']},{type:4,num:['50','50','50']}],set:0},
         {idx:1,part:1,grade:1,display:1,na:'두정투구',kg:3,price:200,color:["#fff","#000","#E2AE36"],socket:3,txt:'철로 만든 투구',eff:[{type:0,num:['4%','5%','7%']},{type:4,num:['100','100','100']}],set:0},
-        {idx:2,part:2,grade:1,display:20,na:'퀄티드 아머',kg:5,price:300,color:["#FEC260"],txt:'Quiled Armor 천을 기워 붙인 갑옷, 면갑',eff:[{type:4,num:[50,100]}],set:0},
-        {idx:3,part:2,grade:1,display:21,na:'하이드 아머',kg:7,price:400,color:["#C16F2B"],txt:'Hide Armor 조끼형태의 가죽 갑옷',eff:[{type:4,num:[30,120]}],set:0},
-        {idx:4,part:2,grade:1,display:22,na:'레더 아머',kg:10,price:500,color:["#C16F2B"],txt:'Lether Armor 가죽 갑옷',eff:[{type:4,num:[50,150]}],set:0},
-        {idx:5,part:2,grade:1,display:23,na:'스터디드 레더 아머',kg:5,price:700,color:["#E4AF51"],txt:'Studded Lether Armor 징박힌 가죽 갑옷',eff:[{type:4,num:[100,200]}],set:0},
-        {idx:6,part:2,grade:1,display:24,na:'링 메일',kg:11,price:900,color:["#fff"],txt:'Ring Mail 사슬 형태의 철제 갑옷',eff:[{type:4,num:[150,250]}],set:0},
-        {idx:7,part:2,grade:1,display:25,na:'스케일 메일',kg:13,price:1000,color:["#E6E7E8"],txt:'Scale Mail 금속조각을 붙힌 갑옷, 어린갑',eff:[{type:4,num:[170,270]}],set:0},
-        {idx:8,part:2,grade:1,display:26,na:'체인 메일',kg:15,price:1000,color:["#fff"],txt:'Chain Mail 메쉬형태로 금속링을 엮은 갑옷, 쇄자갑',eff:[{type:4,num:[200,300]}],set:0},
-        {idx:9,part:2,grade:1,display:27,na:'스피린트 메일',kg:17,price:1100,color:["#9B8579"],txt:'Splint Mail 천이나 가죽에 금속 스트립을 엮은 갑옷, 경번갑',eff:[{type:4,num:[250,400]}],set:0},
-        {idx:10,part:2,grade:1,display:28,na:'브리간딘',kg:20,price:1200,color:["#D1D3D4"],txt:'Brigandine 가죽 겉 감 안에 철판을 덧댄 갑옷,두정갑',eff:[{type:4,num:[300,450]}],set:0},
-        {idx:11,part:2,grade:1,display:29,na:'플레이트 메일',kg:27,price:1500,color:["#000"],socket:3,txt:'Plate Mail 강철판으로 만든 갑옷, 판금갑',eff:[{type:4,num:[450,600]}],set:0},
-        {idx:12,part:2,grade:1,display:30,na:'풀 플레이트',kg:35,price:2000,color:["#000"],socket:3,txt:'Full Plate 전신을 강철판으로 만든 갑옷, 판금갑',eff:[{type:4,num:[600,1000]}],set:0},
+        {idx:2,part:2,grade:1,display:20,na:'퀄티드 아머',kg:5,price:300,color:["#FEC260"],txt:'Quiled Armor 천을 기워 붙인 갑옷, 면갑',eff:[{type:4,num:['50','100']}],set:0},
+        {idx:3,part:2,grade:1,display:21,na:'하이드 아머',kg:7,price:400,color:["#C16F2B"],txt:'Hide Armor 조끼형태의 가죽 갑옷',eff:[{type:4,num:['30','120']}],set:0},
+        {idx:4,part:2,grade:1,display:22,na:'레더 아머',kg:10,price:500,color:["#C16F2B"],txt:'Lether Armor 가죽 갑옷',eff:[{type:4,num:['50','150']}],set:0},
+        {idx:5,part:2,grade:1,display:23,na:'스터디드 레더 아머',kg:5,price:700,color:["#E4AF51"],txt:'Studded Lether Armor 징박힌 가죽 갑옷',eff:[{type:4,num:['100','200']}],set:0},
+        {idx:6,part:2,grade:1,display:24,na:'링 메일',kg:11,price:900,color:["#fff"],txt:'Ring Mail 사슬 형태의 철제 갑옷',eff:[{type:4,num:['150','250']}],set:0},
+        {idx:7,part:2,grade:1,display:25,na:'스케일 메일',kg:13,price:1000,color:["#E6E7E8"],txt:'Scale Mail 금속조각을 붙힌 갑옷, 어린갑',eff:[{type:4,num:['170','270']}],set:0},
+        {idx:8,part:2,grade:1,display:26,na:'체인 메일',kg:15,price:1000,color:["#fff"],txt:'Chain Mail 메쉬형태로 금속링을 엮은 갑옷, 쇄자갑',eff:[{type:4,num:['200','300']}],set:0},
+        {idx:9,part:2,grade:1,display:27,na:'스피린트 메일',kg:17,price:1100,color:["#9B8579"],txt:'Splint Mail 천이나 가죽에 금속 스트립을 엮은 갑옷, 경번갑',eff:[{type:4,num:['250','400']}],set:0},
+        {idx:10,part:2,grade:1,display:28,na:'브리간딘',kg:20,price:1200,color:["#D1D3D4"],txt:'Brigandine 가죽 겉 감 안에 철판을 덧댄 갑옷,두정갑',eff:[{type:4,num:['300','450']}],set:0},
+        {idx:11,part:2,grade:1,display:29,na:'플레이트 메일',kg:27,price:1500,color:["#000"],socket:3,txt:'Plate Mail 강철판으로 만든 갑옷, 판금갑',eff:[{type:4,num:['450','600']}],set:0},
+        {idx:12,part:2,grade:1,display:30,na:'풀 플레이트',kg:35,price:2000,color:["#000"],socket:3,txt:'Full Plate 전신을 강철판으로 만든 갑옷, 판금갑',eff:[{type:4,num:['600','1000']}],set:0},
         //두석린갑(豆錫鱗甲) : 황동, 붉은 칠한 황동, 검은 칠한 황동을 번갈아 사용한 의장용 갑옷
         //도금동엽갑(塗金銅葉甲) : 도금한 비늘을 사용한 의장용 황금 갑옷
         //사무라이갑

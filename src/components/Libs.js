@@ -192,18 +192,26 @@ export const util = { //this.loadImage();
     //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(20),암(21),수(22),화(23),풍(24),지(25), 진형(100)
     let effData = [];
     saveItems.forEach((item) => {
-      if(item.idx !== undefined){
-        gameItem.equip[item.idx].eff.forEach((eff)=>{
+      if(Object.keys(item).length !== 0){
+        item.baseEff.forEach((eff) => {
           if(effData[eff.type] === undefined) {
             effData[eff.type] = {percent:0, number:0};
           }
-          // if(eff.num[item.upgrade].indexOf('%') > 0){
-            effData[eff.type].percent = effData[eff.type].percent;
-            // effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num[item.upgrade]);
-          // }else{
-            // effData[eff.type].number = effData[eff.type].number;
-            // effData[eff.type].number = effData[eff.type].number + parseInt(eff.num[item.upgrade]);
-          // }
+          if(eff.num[item.grade - 1].indexOf('%') > 0){
+            effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num[item.grade - 1]);
+          }else{
+            effData[eff.type].number = effData[eff.type].number + parseInt(eff.num[item.grade - 1]);
+          }
+        });
+        item.addEff.forEach((eff) => {
+          if(effData[eff.type] === undefined) {
+            effData[eff.type] = {percent:0, number:0};
+          }
+          if(eff.num.indexOf('%') > 0){
+            effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num);
+          }else{
+            effData[eff.type].number = effData[eff.type].number + parseInt(eff.num);
+          }
         });
       }
       if(item.hole){
@@ -394,9 +402,27 @@ export const util = { //this.loadImage();
         return Math.round(current/total*100);
     }
   },
-  getEffectType: (num) => {
+  getEffectType: (num, type) => {
     //eff type(효과 dmg_type&buff_type) 찌르기(0),할퀴기(1),물기(2),치기(3),누르기(4),독(11),명(12),암(13),수(14),화(15),풍(16),지(17), 공(21),방(22),술공(23),술방(24),HP(25),SP(26),RSP(27),속도(28),명중(29),진형(100)
-    let arr = ['체력(HP)','행동력(SP)','행동회복력(RSP)','공격력ATK','방어력(DEF)','술법공격력(MAK)','술법방어력(MDF)','회복력(RCV)','속도(SPD)','행운(LUK)','찌르기','할퀴기','물기','치기','누르기','','','','','','',
+    let arr = ['체력(HP)','행동력(SP)','행동회복력(RSP)','공격력(ATK)','방어력(DEF)','술법공격력(MAK)','술법방어력(MDF)','회복력(RCV)','속도(SPD)','행운(LUK)','찌르기','할퀴기','물기','치기','누르기','','','','','','',
+    '명','암','수','화','풍','지','','','','',
+    '','','','','','','','','','',
+    '','','','','','','','','','',
+    '','','','','','','','','','',
+    '','','','','','','','','','',
+    '','','','','','','','','','',
+    '','','','','','','','','','',
+    '','','','','','','','','','진형'];
+    let arr_ko = ['체력','행동력','행동회복력','공격력','방어력','술법공격력','술법방어력','회복력','속도','행운','찌르기','할퀴기','물기','치기','누르기','','','','','','',
+    '명','암','수','화','풍','지','','','','',
+    '','','','','','','','','','',
+    '','','','','','','','','','',
+    '','','','','','','','','','',
+    '','','','','','','','','','',
+    '','','','','','','','','','',
+    '','','','','','','','','','',
+    '','','','','','','','','','진형'];
+    let arr_en = ['HP','SP','RSP','ATK','DEF','MAK','MDF','RCV','SPD','LUK','찌르기','할퀴기','물기','치기','누르기','','','','','','',
     '명','암','수','화','풍','지','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',
@@ -409,7 +435,13 @@ export const util = { //this.loadImage();
     //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(20),암(21),수(22),화(23),풍(24),지(25), 진형(100)
   
     arr[100] = '진형';
-    return arr[num];
+    if (type === 'en') {
+      return arr_en[num];
+    } else if (type === 'ko') {
+      return arr_ko[num];
+    } else {
+      return arr[num];
+    }
   },
   getEnemySkill: (data, gameData) => {
     const chData = gameData.ch[data.idx],
