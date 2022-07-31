@@ -672,7 +672,9 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 						const skill = attackerSkill[0].lv > 5 ? 5 : attackerSkill[0].lv;
 						atkNum[stateName] = util.getPercentNumber(skData.num[skill - 1], attacker[stateName]);
 					});
-					dmg_ = (criticalAtk ? atkNum[attackType] * elementDmg * 2 : atkNum[attackType] * elementDmg) - (defNum[defenceType] || defEnemy[defenceType]);
+					// dmg_ = (criticalAtk ? atkNum[attackType] * elementDmg * 2 : atkNum[attackType] * elementDmg) - (defNum[defenceType] || defEnemy[defenceType]);
+					const defCount = defNum[defenceType] || defEnemy[defenceType];
+					dmg_ = atkNum[attackType] * elementDmg - (criticalAtk ? defCount * .33 : defCount);//크리티컬이면 방어 1/3로 줄임
 					if (avoid) {
 						dmg.push('');
 					} else {

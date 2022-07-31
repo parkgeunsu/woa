@@ -238,7 +238,7 @@ export const util = { //this.loadImage();
       let num = 0;
       switch(i){
         case 0://HP
-          num = state[1]*4+state[0]*2;
+          num = state[1]*5+state[0]*3;
           break;
         case 1://SP
           num = state[7]*.2;
@@ -247,19 +247,19 @@ export const util = { //this.loadImage();
           num = (state[7]*.2+2)*.2;
           break;
         case 3://ATK
-          num = state[2]*1.5+state[0]*.5;
+          num = state[2]*3+state[0]*1.5;
           break;
         case 4://DEF
-          num = state[0]+state[3]*.2;
+          num = state[0]*2+state[3]*2;
           break;
         case 5://MAK
-          num = state[4]*1.5+state[5]*.5;
+          num = state[4]*2.5+state[5];
           break;
         case 6://MDF
-          num = state[5]+state[3]*.2;
+          num = state[5]*2+state[3]*2;
           break;
         case 7://RCV
-          num = state[6]+(state[0]+state[5])*.2;
+          num = state[6]+(state[0]*1.5+state[5]*1.5)*.2;
           break;
         case 8://SPD
           num = state[3]+state[0]*.3;
@@ -402,8 +402,8 @@ export const util = { //this.loadImage();
   },
   getEffectType: (num, type) => {
     //eff type(효과 dmg_type&buff_type) 찌르기(0),할퀴기(1),물기(2),치기(3),누르기(4),독(11),명(12),암(13),수(14),화(15),풍(16),지(17), 공(21),방(22),술공(23),술방(24),HP(25),SP(26),RSP(27),속도(28),명중(29),진형(100)
-    let arr = ['체력(HP)','행동력(SP)','행동회복력(RSP)','공격력(ATK)','방어력(DEF)','술법공격력(MAK)','술법방어력(MDF)','회복력(RCV)','속도(SPD)','행운(LUK)','찌르기','할퀴기','물기','치기','누르기','','','','','','',
-    '명','암','수','화','풍','지','','','','',
+    let arr = ['체력(HP)','행동력(SP)','행동회복력(RSP)','공격력(ATK)','방어력(DEF)','술법공격력(MAK)','술법방어력(MDF)','회복력(RCV)','속도(SPD)','행운(LUK)','찌르기','할퀴기','물기','치기','누르기','던지기','','','','','',
+    '빛','어둠','물','불','바람','땅','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',
@@ -411,8 +411,8 @@ export const util = { //this.loadImage();
     '','','','','','','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','진형'];
-    let arr_ko = ['체력','행동력','행동회복력','공격력','방어력','술법공격력','술법방어력','회복력','속도','행운','찌르기','할퀴기','물기','치기','누르기','','','','','','',
-    '명','암','수','화','풍','지','','','','',
+    let arr_ko = ['체력','행동력','행동회복력','공격력','방어력','술법공격력','술법방어력','회복력','속도','행운','찌르기','할퀴기','물기','치기','누르기','던지기','','','','','',
+    '빛','어둠','물','불','바람','땅','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',
@@ -420,19 +420,18 @@ export const util = { //this.loadImage();
     '','','','','','','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','진형'];
-    let arr_en = ['HP','SP','RSP','ATK','DEF','MAK','MDF','RCV','SPD','LUK','찌르기','할퀴기','물기','치기','누르기','','','','','','',
-    '명','암','수','화','풍','지','','','','',
+    let arr_en = ['HP','SP','RSP','ATK','DEF','MAK','MDF','RCV','SPD','LUK','Sting','Scratch','Bite','Hit','Crush','Throw','','','','','',
+    'Light','Dark','Water','Fire','Wind','Land','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',
-    '','','','','','','','','','진형'];
+    '','','','','','','','','','Formation'];
 
     //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(20),암(21),수(22),화(23),풍(24),지(25), 진형(100)
   
-    arr[100] = '진형';
     if (type === 'en') {
       return arr_en[num];
     } else if (type === 'ko') {
@@ -855,7 +854,130 @@ export const util = { //this.loadImage();
     })
     return svg;
   },
-  getItems: (gameData, part ) => {
-    console.log(gameData);
+  getRandomColor: () => {
+    const r = Math.round(Math.random() * 255);
+    const g = Math.round(Math.random() * 255);
+    const b = Math.round(Math.random() * 255);
+    return `rgba(${r},${g},${b},1)`;
+  },
+  getItemGrade: () => {
+    const gradeNum = Math.random();
+    if (gradeNum < 0.05) { //에픽등급
+      return 4;
+    } else if (gradeNum < 0.2) { //레어등급
+      return 3;
+    } else if (gradeNum < 0.7) { //매직등급
+      return 2;
+    } else {
+      return 1;
+    }
+  },
+  getItem: (saveData, gameData, changeSaveData, option ) => {
+    let save = {...saveData};//장비 아이템 복사
+    let itemLv = option.lv;
+    const type = option.type || 'equip',
+      part = option.part || 2,//아이템 부위(장비만 해당)
+      itemGroup = gameData.items[type][part],
+      itemIdx = Math.floor(Math.random() * itemGroup.length),//아이템 번호
+      selectItem = itemGroup[itemIdx];
+    const grade = util.getItemGrade();
+    const slotNum = Math.round(Math.random() * 4);
+    let hole = new Array(slotNum).fill(0);
+    const pointColor = Math.floor(Math.random() * gameData.items.item_point_color.length);
+    const color = selectItem.color.map(() => {
+      return gameData.items.item_point_color[pointColor];
+      //util.getRandomColor();
+    });
+    const baseEff = selectItem.eff.map((data) => {
+      let num = [];
+      num[0] = String(Math.round(Math.random() * (Number(data.num[1]) - Number(data.num[0]))) + Number(data.num[0]));
+      for (let i = 1; i < 4; ++i) {
+        num[i] = String(Number(num[i - 1]) + Math.round(Number(data.num[0]) * 0.25 + Math.random() * (Number(data.num[0]) * .25)));
+      }
+      return {
+        type: data.type,
+        num: num,
+      }
+    });
+    const addEff = [];
+    const getAddEff = (grade, upEff) => {
+      const effList = [
+        [[100,200],[200,400],[100,1000]], //체력
+        [[1,10],[10,20],[1,30]], //행동력
+        [[1,3],[3,6],[1,15]], //행동회복력
+        [[50,100],[100,200],[50,400]], //공격력
+        [[50,100],[100,200],[50,400]], //방어력
+        [[50,100],[100,200],[50,400]], //술공
+        [[50,100],[100,200],[50,400]], //술방
+        [[10,30],[30,60],[10,100]], //회복력
+        [[1,10],[10,25],[1,40]], //속도
+        [[10,20],[20,50],[10,100]], //행운
+        [[1,15],[15,30],[1,50]], //찌르기
+        [[1,15],[15,30],[1,50]], //할퀴기
+        [[1,15],[15,30],[1,50]], //물기
+        [[1,15],[15,30],[1,50]], //치기
+        [[1,15],[15,30],[1,50]], //누르기
+        [[1,15],[15,30],[1,50]], //던지기
+        [[1,15],[15,30],[1,50]], //빛
+        [[1,15],[15,30],[1,50]], //어둠
+        [[1,15],[15,30],[1,50]], //물
+        [[1,15],[15,30],[1,50]], //불
+        [[1,15],[15,30],[1,50]], //바람
+        [[1,15],[15,30],[1,50]], //땅
+      ]
+      const effType = Math.round(Math.random()*21);
+      let effRandomNum = [];
+      if (grade === 2) {
+        effRandomNum = effList[effType][2];
+      } else {
+        effRandomNum = effList[effType][upEff ? 1 : 0];
+      }
+      const effNum = Math.floor(Math.random()*(effRandomNum[1] - effRandomNum[0])) + effRandomNum[0];
+      return {
+        type: effType > 15 ? effType + 4 : effType,
+        num: [String(effNum)],
+      }
+    }
+    if (grade === 2) {
+      const addEffLength = Math.floor(itemLv / 20);
+      for (let i = 0; i < addEffLength; ++i) {
+        if (itemLv > 20) {
+          itemLv -= 20;
+          addEff.push(getAddEff(grade));
+        } else {
+          break;
+        }
+      }
+    } else if ( grade === 3 || grade === 4) {
+      const addEffLength = Math.floor(itemLv / 10);
+      for (let i = 0; i < addEffLength; ++i) {
+        const upEff = Math.random() > 0.5;
+        if (itemLv > 10) {
+          itemLv -= upEff ? 15 : 10;
+          addEff.push(getAddEff(grade, upEff));
+        } else {
+          break;
+        }
+      }
+
+    }
+    const mark = Math.random() < .8 ? Math.round(Math.random() * 24) : '';
+    const markNum = Math.round(Math.random() * 4);
+    const modifier = `${gameData.items.slotModifier[slotNum]} ${mark !== '' ? gameData.animal_type[mark].na : ''}${gameData.items.markModifier[markNum]}`;
+    itemLv -= slotNum * 5;
+    const itemObj = {
+      idx:selectItem.idx,
+      part:selectItem.part,
+      grade:grade,
+      slot:slotNum,//아이템 홀착용 갯수
+      hole:hole,
+      color:color,
+      baseEff:baseEff,
+      addEff:addEff,
+      mark:mark,
+      modifier:modifier,
+    }
+    save.items[type].push(itemObj);
+    changeSaveData(save);
   },
 }

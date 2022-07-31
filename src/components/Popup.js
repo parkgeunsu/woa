@@ -262,7 +262,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     });
 		return (
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[grade]}>
-        <li className="item_header" flex-center="true"><span className="item_name">{typeof saveItems.mark === 'number' && gameData.animal_type[saveItems.mark].na + "의"} {items.na}</span></li>
+        <li className="item_header" flex-center="true"><span className="item_name">{saveItems.modifier} {items.na}</span></li>
         <li flex="true">
           <PopupItemPic className={`item item${items.part}`}>
             <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color)}}>
@@ -337,7 +337,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           </li>
         </div>
         <li className="item_footer" flex="true">
-          <div className="item_price"><span>판매가:</span><em>{`₩${items.price}`}</em></div>
+          <div className="item_price"><span>판매가:</span><em>{`₩${items.price * saveItems.grade}`}</em></div>
           <div className="item_button" flex="true">
             <button text="true" onClick={(e) => {buttonEvent({
               event: e,
@@ -384,7 +384,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     });
     return (
       <PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[grade]}>
-        <li className="item_header" flex-center="true"><span className="item_name">{typeof saveItems.mark === 'number' && gameData.animal_type[saveItems.mark].na + "의"} {items.na}</span></li>
+        <li className="item_header" flex-center="true"><span className="item_name">{saveItems.modifier} {items.na}</span></li>
         <li flex="true">
           <PopupItemPic className={`item item${items.part}`}>
             <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color)}}>
@@ -457,7 +457,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           </li>
         </div>
         <li className="item_footer" flex="true">
-          <div className="item_price"><span>판매가:</span><em>{`₩${items.price}`}</em></div>
+          <div className="item_price"><span>판매가:</span><em>{`₩${items.price * saveItems.grade}`}</em></div>
           <div className="item_button" flex="true">
             <button text="true" onClick={(e) => {buttonEvent({
               event: e,
@@ -533,7 +533,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           </li>
         )}
         <li className="item_footer" flex="true">
-          <div className="item_price"><span>판매가:</span><em>{`₩${items.price}`}</em></div>
+          <div className="item_price"><span>판매가:</span><em>{`₩${items.price * saveItems.grade}`}</em></div>
           <div className="item_button" flex="true">
             <button text="true" onClick={(e) => {buttonEvent({
               event: e,

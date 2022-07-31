@@ -30,7 +30,7 @@ const CharacterItems = ({
   const saveItems = useRef(null);
   saveItems.current = saveData.ch[slotIdx].items;
   const gameItem = gameData.items;
-  const invenItems = saveData.items;
+  const [invenItems, setInvenItems] = useState(saveData.items);
   const [popupOn, setPopupOn] = useState(false);
   const [msgOn, setMsgOn] = useState(false);
   const [itemInfo, setItemInfo] = useState({});
@@ -44,7 +44,6 @@ const CharacterItems = ({
         saveItemData = saveItems.current[itemSaveSlot];
       } else if (itemType === 'hequip') {
         saveItemData = invenItems['equip'][itemSaveSlot];
-        console.log(saveItemData);
       } else {
         saveItemData = invenItems[itemType][itemSaveSlot];
       }
@@ -65,10 +64,8 @@ const CharacterItems = ({
     }
     setPopupOn(!popupOn);
   }
-  useLayoutEffect(() => { //슬롯이 바뀔때 동물종류 변경
-    setAnimalIdx(gameData.ch[saveData.ch[slotIdx].idx].animal_type);
-  }, [slotIdx]);
   useLayoutEffect(() => {
+    setAnimalIdx(gameData.ch[saveData.ch[slotIdx].idx].animal_type);//슬롯이 바뀔때 동물종류 변경
     // setSaveItems();
     saveItems.current = saveData.ch[slotIdx].items;
     let kg = 0;
@@ -78,6 +75,7 @@ const CharacterItems = ({
       }
     })
     setKg([kg, Math.floor(gameData.ch[saveData.ch[slotIdx].idx].st1 / 0.3)/10]);
+    setInvenItems(saveData.items);
   }, [slotIdx, saveData]);
   return (
     <>

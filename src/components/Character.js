@@ -131,7 +131,13 @@ const Character = ({
     <ChWrap className={`ch_wrap page${chPage}`}  backImg={imgSet.back[0]} stateIcon={iconState} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
       <div style={{position:"absolute",right:"10px",top:"50px",zIndex:100}}>
         <button onClick={() => {
-          util.getItems(gameData);
+          const option = {
+            type:'equip',
+            part:2,//장비만 해당
+            grade:1,
+            lv:40,
+          }
+          util.getItem(saveData, gameData, changeSaveData, option);
         }}>아이템 추가</button>
       </div>
       <div ref={chRef} className="ch_card transition">
