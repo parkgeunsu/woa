@@ -1,5 +1,3 @@
-import { forwardRef } from "react"
-
 export const fn = { //this.el = {};this.set_element();this.prototype();
   canvas: () => {
     CanvasRenderingContext2D.prototype.roundedRectangle = function(x, y, width, height, rounded) {
@@ -856,5 +854,8 @@ export const util = { //this.loadImage();
       svg = svg.replace(pattern, data);
     })
     return svg;
+  },
+  getItem: (gameData, part ) => {
+    console.log(gameData);
   },
 }

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { AppContext } from 'App';
 import 'css/character.css';
 
+import { util } from 'components/Libs';
 import CharacterState from 'components/CharacterState';
 import CharacterElement from 'components/CharacterElement';
 import CharacterSkill from 'components/CharacterSkill';
@@ -52,6 +53,7 @@ const Character = ({
   changeSaveData,
 }) => {
   const imgSet = useContext(AppContext).images;
+  const gameData = useContext(AppContext).gameData;
   const chLength = saveData.ch.length;
   const [slotIdx, setSlotIdx] = useState(0);
   const [chPage, setChPage] = useState(0);
@@ -127,6 +129,11 @@ const Character = ({
   }
   return (
     <ChWrap className={`ch_wrap page${chPage}`}  backImg={imgSet.back[0]} stateIcon={iconState} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
+      <div style={{position:"absolute",right:"10px",top:"50px",zIndex:100}}>
+        <button onClick={() => {
+          util.getItem(gameData);
+        }}>아이템 추가</button>
+      </div>
       <div ref={chRef} className="ch_card transition">
         <Img imgurl={imgSet.etc.imgRing} />
         <CharacterCard saveData={saveData} slotIdx={slotIdx} />
