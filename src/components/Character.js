@@ -131,7 +131,7 @@ const Character = ({
     <ChWrap className={`ch_wrap page${chPage}`}  backImg={imgSet.back[0]} stateIcon={iconState} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
       <div style={{position:"absolute",right:"10px",top:"50px",zIndex:100}}>
         <button onClick={() => {
-          util.getItem(gameData);
+          util.getItems(gameData);
         }}>아이템 추가</button>
       </div>
       <div ref={chRef} className="ch_card transition">

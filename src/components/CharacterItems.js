@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useContext } from 'react';
+import React, { useState, useLayoutEffect, useContext, useRef } from 'react';
 import { AppContext } from 'App';
 import styled from 'styled-components';
 import { util } from 'components/Libs';
@@ -26,7 +26,9 @@ const CharacterItems = ({
   const gameData = useContext(AppContext).gameData;
   const [animalIdx, setAnimalIdx] = useState(gameData.ch[saveData.ch[slotIdx].idx].animal_type);
 
-  const [saveItems, setSaveItems] = useState(saveData.ch[slotIdx].items);
+  // const [saveItems, setSaveItems] = useState(saveData.ch[slotIdx].items);
+  const saveItems = useRef(null);
+  saveItems.current = saveData.ch[slotIdx].items;
   const gameItem = gameData.items;
   const invenItems = saveData.items;
   const [popupOn, setPopupOn] = useState(false);
@@ -35,20 +37,27 @@ const CharacterItems = ({
   const [itemType, setItemType] = useState('equip');
   const [kg, setKg] = useState([0,0]);
   const [msg, setMsg] = useState("");
-  const handlePopup = (itemType, itemIdx, itemSaveSlot) => {
+  const handlePopup = (itemType, itemIdx, itemSaveSlot, itemPart) => {
     if( itemType ){
       let saveItemData;
       if (itemType === 'equip') {
-        saveItemData = saveItems[itemSaveSlot];
+        saveItemData = saveItems.current[itemSaveSlot];
       } else if (itemType === 'hequip') {
         saveItemData = invenItems['equip'][itemSaveSlot];
+        console.log(saveItemData);
       } else {
         saveItemData = invenItems[itemType][itemSaveSlot];
       }
       setItemType(itemType);
+      let gameItemData = '';
+      if (itemType === 'hequip' || itemType === 'equip') {
+        gameItemData = gameItem['equip'][itemPart][itemIdx];
+      } else {
+        gameItemData = gameItem[itemType][itemIdx];
+      }
       setItemInfo({
         slotIdx: slotIdx,
-        gameItem: gameItem[itemType === 'hequip' ? 'equip' : itemType][itemIdx],
+        gameItem: gameItemData,
         itemSaveSlot: itemSaveSlot,
         saveItemData: saveItemData,
         type: itemType === 'hequip' ? 'equip' : itemType,
@@ -60,15 +69,16 @@ const CharacterItems = ({
     setAnimalIdx(gameData.ch[saveData.ch[slotIdx].idx].animal_type);
   }, [slotIdx]);
   useLayoutEffect(() => {
-    setSaveItems(saveData.ch[slotIdx].items);
+    // setSaveItems();
+    saveItems.current = saveData.ch[slotIdx].items;
     let kg = 0;
-    saveItems.forEach((itemData) => {
+    saveItems.current.forEach((itemData) => {
       if (Object.keys(itemData).length !== 0) {
-        kg += gameItem.equip[itemData.idx].kg;
+        kg += gameItem.equip[itemData.part][itemData.idx].kg;
       }
     })
     setKg([kg, Math.floor(gameData.ch[saveData.ch[slotIdx].idx].st1 / 0.3)/10]);
-  }, [saveData]);
+  }, [slotIdx, saveData]);
   return (
     <>
       <div className="items">
@@ -90,13 +100,13 @@ const CharacterItems = ({
                 <span className="line line8"><span className="l1"></span><span className="l2"></span><span className="dot"></span></span>
               </AnimalItemPic>
               <ul className="e_items">
-                { saveItems && saveItems.map((data, idx) => {
+                { saveItems.current && saveItems.current.map((data, idx) => {
                   const itemChk = Object.keys(data).length;
                   if (itemChk !== 0) {
-                    const items = gameItem.equip[data.idx];
+                    const items = gameItem.equip[data.part][data.idx];
                     const itemsHole = data.hole;
                     return (
-                      <li key={`equip${idx}`} onClick={() => {handlePopup('equip', data.idx, idx)}} className={`item item${gameData.animal_type[animalIdx].equip[idx]}`}>
+                      <li key={`equip${idx}`} onClick={() => {handlePopup('equip', data.idx, idx, data.part)}} className={`item item${gameData.animal_type[animalIdx].equip[idx]}`}>
                         <em link={`equip_${data.idx}_${idx}`}>
                           {/* <ItemPic className="pic" itemPic={imgSet.itemEquip[items.display]}></ItemPic> */}
                           <ItemPic className="pic">
@@ -122,10 +132,10 @@ const CharacterItems = ({
             <div className="has_items scroll-y">
               <ul className="h_items">
                 { invenItems.equip && invenItems.equip.map((data, idx) => {
-                  const items = gameItem.equip[data.idx];
+                  const items = gameItem.equip[data.part][data.idx];
                   const itemsHole = data.hole;
                   return (
-                    <li key={`hequip${idx}`} onClick={() => {handlePopup('hequip', data.idx, idx)}} className={`item item${gameData.items.equip[data.idx].part}`} data-itemnum={`equip_${data.idx}`}>
+                    <li key={`hequip${idx}`} onClick={() => {handlePopup('hequip', data.idx, idx, data.part)}} className={`item item${data.part}`} data-itemnum={`equip_${data.idx}`}>
                       <em link={`hequip_${data.idx}_${idx}`}>
                         <ItemPic className="pic">
                           <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color)}}>

@@ -855,7 +855,7 @@ export const util = { //this.loadImage();
     })
     return svg;
   },
-  getItem: (gameData, part ) => {
+  getItems: (gameData, part ) => {
     console.log(gameData);
   },
 }

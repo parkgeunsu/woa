@@ -106,12 +106,13 @@ const getSetChk = (has_item, n) => {//셋트 아이템 체크
 }
 const buttonEvent = (dataObj) => {
   dataObj.event.stopPropagation();
+  console.log(dataObj);
   const gameData = dataObj.gameData;
   let sData = {...dataObj.saveData};
   if (dataObj.type === 'item_enhancement') {
 
   } else if (dataObj.type === 'itemEquip') { //아이템 착용
-    const invenPart = dataObj.data.gameItem.part;
+    const invenPart = dataObj.data.saveItemData.part;
     let overlapCheck = true;
     const saveCh = sData.ch[dataObj.data.slotIdx];
     //아이템 무게 측정
@@ -119,7 +120,7 @@ const buttonEvent = (dataObj) => {
     const totalKg = Math.floor(gameData.ch[saveCh.idx].st1 / 0.3)/10;
     saveCh.items.forEach((item) => {
       if (Object.keys(item).length !== 0) {
-        currentKg += gameData.items.equip[item.idx].kg;
+        currentKg += gameData.items.equip[item.part][item.idx].kg;
       }
     });
     saveCh.items.forEach((item, itemSlot)=>{
@@ -232,7 +233,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
 			</ul>
 		);
 	} else if (type === 'equip') {
-    const items = gameData.items.equip[dataObj.saveItemData.idx];
+    const items = gameData.items.equip[dataObj.saveItemData.part][dataObj.saveItemData.idx];
     const saveItems = dataObj.saveItemData;
     const grade = saveItems.grade || items.grade;
     const setsInfo = gameData.items.set_type[items.set];
@@ -354,7 +355,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
       </PopupItemContainer>
 		);
 	} else if (type === 'hequip') {
-    const items = gameData.items.equip[dataObj.saveItemData.idx];
+    const items = gameData.items.equip[dataObj.saveItemData.part][dataObj.saveItemData.idx];
     const saveItems = dataObj.saveItemData;
     const grade = saveItems.grade || items.grade;
     const setsInfo = gameData.items.set_type[items.set];
