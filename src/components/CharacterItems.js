@@ -104,7 +104,7 @@ const CharacterItems = ({
                     const items = gameItem.equip[data.part][data.idx];
                     const itemsHole = data.hole;
                     return (
-                      <li key={`equip${idx}`} onClick={() => {handlePopup('equip', data.idx, idx, data.part)}} className={`item item${gameData.animal_type[animalIdx].equip[idx]}`}>
+                      <li key={`equip${idx}`} onClick={() => {handlePopup('equip', data.idx, idx, data.part)}} className={`item item${gameData.animal_type[animalIdx].equip[idx]} ${gameData.itemGrade.txt_e[data.grade].toLowerCase()}`}>
                         <em link={`equip_${data.idx}_${idx}`}>
                           {/* <ItemPic className="pic" itemPic={imgSet.itemEquip[items.display]}></ItemPic> */}
                           <ItemPic className="pic">
@@ -133,7 +133,7 @@ const CharacterItems = ({
                   const items = gameItem.equip[data.part][data.idx];
                   const itemsHole = data.hole;
                   return (
-                    <li key={`hequip${idx}`} onClick={() => {handlePopup('hequip', data.idx, idx, data.part)}} className={`item item${data.part}`} data-itemnum={`equip_${data.idx}`}>
+                    <li key={`hequip${idx}`} onClick={() => {handlePopup('hequip', data.idx, idx, data.part)}} className={`item item${data.part} ${gameData.itemGrade.txt_e[data.grade].toLowerCase()}`} data-itemnum={`equip_${data.idx}`}>
                       <em link={`hequip_${data.idx}_${idx}`}>
                         <ItemPic className="pic">
                           <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color)}}>

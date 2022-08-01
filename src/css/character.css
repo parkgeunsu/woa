@@ -210,6 +210,13 @@
 .item.item12{background-image:radial-gradient(at 30% 30%,rgba(255,255,255,.5) 0%,var(--color-b) 100%);}
 .item.item13{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-point5) 100%);}
 .item.item14{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-point5) 100%);}
+.item.normal{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-normal) 100%);}
+.item.magic{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-magic) 100%);}
+.item.rare{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-rare) 100%);}
+.item.epic{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-epic) 100%);}
+.item.set{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-set) 100%);}
+.item.unique{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-unique) 100%);}
+.item.legend{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-legend) 100%);}
 
 /*
 .item .txt{position:absolute;left:2px;right:2px;bottom:2px;font-size:11px;text-align:center;z-index:1;}

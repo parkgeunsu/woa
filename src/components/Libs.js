@@ -962,7 +962,7 @@ export const util = { //this.loadImage();
 
     }
     const mark = Math.random() < .8 ? Math.round(Math.random() * 24) : '';
-    const markNum = Math.round(Math.random() * 4);
+    const markNum = mark === '' ? 0 : Math.ceil(Math.random() * 4);
     const modifier = `${gameData.items.slotModifier[slotNum]} ${mark !== '' ? gameData.animal_type[mark].na : ''}${gameData.items.markModifier[markNum]}`;
     itemLv -= slotNum * 5;
     const itemObj = {
@@ -975,6 +975,7 @@ export const util = { //this.loadImage();
       baseEff:baseEff,
       addEff:addEff,
       mark:mark,
+      markNum:markNum,
       modifier:modifier,
     }
     save.items[type].push(itemObj);
