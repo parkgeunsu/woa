@@ -934,7 +934,7 @@ export const util = { //this.loadImage();
       }
       const effNum = Math.floor(Math.random()*(effRandomNum[1] - effRandomNum[0])) + effRandomNum[0];
       return {
-        type: effType > 15 ? effType + 4 : effType,
+        type: effType > 15 ? effType + 5 : effType,
         num: [String(effNum)],
       }
     }
@@ -962,7 +962,18 @@ export const util = { //this.loadImage();
 
     }
     const mark = Math.random() < .8 ? Math.round(Math.random() * 24) : '';
-    const markNum = mark === '' ? 0 : Math.ceil(Math.random() * 4);
+    const markNum = mark === '' ? 0 : (() => {
+      const randomCount = Math.random();
+      if (randomCount < .1) {
+        return 4;
+      } else if (randomCount < .3) {
+        return 3;
+      } else if (randomCount < .6) {
+        return 2;
+      } else {
+        return 1;
+      }
+    })();
     const modifier = `${gameData.items.slotModifier[slotNum]} ${mark !== '' ? gameData.animal_type[mark].na : ''}${gameData.items.markModifier[markNum]}`;
     itemLv -= slotNum * 5;
     const itemObj = {

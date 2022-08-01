@@ -107,7 +107,7 @@ const getSetChk = (has_item, n) => {//셋트 아이템 체크
 const makeMark = (markNum, img) => {
   let markTag = '';
   for (let i = 0; i < markNum; ++i) {
-    markTag += `<span><img src="${img}"/></span>`
+    markTag += `<span><img src="${img}" class="light"/><img src="${img}" class="front"/><img src="${img}" class="shadow"/></span>`
   }
   return markTag; 
   //imgSet.animalType[animalIdx]
