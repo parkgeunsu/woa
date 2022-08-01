@@ -9,10 +9,8 @@ import Msg from 'components/Msg';
 import 'css/ch.css';
 
 const AnimalItemPic = styled.div`
-  background: url(${({animalType}) => animalType}) no-repeat 6px 6px;
-  background-size: calc(100% - 16px);
-  &:before{content:'';position:absolute;left:0;top:0;width:calc(100% - 16px);height:calc(100% - 16px);background:url(${({animalType}) => animalType}) no-repeat center center;background-size:100%;box-shadow:inset 5px 5px 20px 0 #311e00,5px 5px 0px 0px #311e00,10px 10px 13px 0px #000;border:8px solid #895910;border-radius:200px;filter:brightness(0.7);z-index:1;}
-  &:after{content:'';position:absolute;left:0;top:0;width:calc(100% - 16px);height:calc(100% - 16px);background: url(${({animalType}) => animalType}) no-repeat 11px 11px;background-size:100%;filter:invert(1);}
+  &:before{content:'';position:absolute;left:0;top:0;width:100%;height:100%;background: url(${({animalType}) => animalType}) no-repeat center center;background-size:100%;filter:brightness(0.3);z-index:1;}
+  &:after{content:'';position:absolute;left:3px;top:3px;width:100%;height:100%;background: url(${({animalType}) => animalType}) no-repeat center center;background-size:100%;filter:brightness(.1);}
 `;
 const ItemPic = styled.span`
   background: url(${({itemPic}) => itemPic}) no-repeat center center;
