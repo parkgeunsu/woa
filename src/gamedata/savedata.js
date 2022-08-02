@@ -145,7 +145,7 @@ export const save = {
         "joseon1":{},
         "joseon2":{ //이순신(1592) period:6
           "LSS":[
-            false, //옥포해전
+            true, //옥포해전
             false, //사천해전
             false, //당포해전
             false, //당항포해전

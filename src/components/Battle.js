@@ -2,6 +2,8 @@ import React, { useRef, useState, useContext, useLayoutEffect, useCallback } fro
 import { AppContext } from 'App';
 import styled from 'styled-components';
 import { util } from 'components/Libs';
+import MsgContainer from 'components/MsgContainer';
+import Msg from 'components/Msg';
 import 'css/battle.css';
 import 'css/battleAnimation.css';
 import { matchRoutes } from 'react-router-dom';
@@ -302,7 +304,7 @@ const activeSk = (timeLineData) => {
 	}
 }
 
-const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, atkOpion) => {
+const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, atkOpion) => {;
 	if (modeRef.indexOf('battle') >= 0){
 		return;
 	}
@@ -347,13 +349,13 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 		if (skillIdx === 0){ //대기
 			setTurnIdx(turnIdx + 1);
 			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, {
-				atkCount:atkC,
+				atkCount: atkC,
 				atkStay: atkS,
 			});
 		} else if (skillIdx === 2 || skillIdx === 13) { //방어, 철벽방어
 			setTurnIdx(turnIdx + 1);
 			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, {
-				atkCount:atkC,
+				atkCount: atkC,
 				atkStay: atkS,
 			});
 		} else {
@@ -378,7 +380,9 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 				} else {
 					if (atkC[1] === "randomCount") {
 						atkS ++;
-						if (Math.random() < 0.5 - atkS / 10) {
+						const randomCountPercent = 0.5 - atkS / 10;
+						console.log(randomCountPercent);
+						if (Math.random() < randomCountPercent) {
 							atkC[0] ++;
 						} else {
 							atkC[0] --;
@@ -426,7 +430,9 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 				} else {
 					if (atkC[1] === "randomCount") {
 						atkS ++;
-						if (Math.random() < 0.5 - atkS / 10) {
+						const randomCountPercent = 0.5 - atkS / 10;
+						console.log(randomCountPercent);
+						if (Math.random() < randomCountPercent) {
 							atkC[0] ++;
 						} else {
 							atkC[0] --;
@@ -467,7 +473,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 				turnIdx_ = turnIdx + 1;
 				atkS = 0;
 			}
-			//console.log('pgs', defencer);
+			console.log('pgs', defencer);
 			//데미지 공식
 			let dmg = [],
 				elementDmg = 0;
@@ -738,6 +744,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 								]);
 								defencer.forEach((defData, idx) => {
 									battleEnemy[defData.idx].hp -= dmg[idx];
+									console.log(defencer);
 									if (battleEnemy[defData.idx].hp < 0) {//다이
 										enemyAction[defData.idx] = 'die';
 										battleEnemy[defData.idx].hp = 0;
@@ -942,6 +949,7 @@ const Battle = ({
 	const allySlot = useRef([]);//아군 저장 슬롯배열
 	const resultExp = useRef([]);//결과 획득 경험치
 	const resultBeige = useRef([]);//결과 전투벳지
+	const scenarioRepeat = useRef(false);//시나리오 처음 입장인지 확인(대화집 pass 여부)
 	const teamPower = useRef({
 		allyPercent: 50,
 		enemyPercent: 50,
@@ -966,7 +974,9 @@ const Battle = ({
 	const modeRef = useRef('');
 	const [turnIdx, setTurnIdx] = useState(); //공격캐릭터 활성화 순번
 	const conversationTimeout = useRef();
-	const [conversationMsg, setConversationMsg] = useState();
+	const [conversationMsg, setConversationMsg] = useState();//대화 내용
+  const [msgOn, setMsgOn] = useState(false);
+  const [msg, setMsg] = useState("");
 	const relationMode = useCallback(() => {
 		if (allyRelationArr.current.length > 0) { //인연이 있을때
 			relationHeight.current = 35 + 20 + (20 * allyRelationArr.current.length); //인연글씨 + 여백 + 인연갯수
@@ -1003,8 +1013,8 @@ const Battle = ({
 				}
 			});
 		});
-		allyRt = allyRt.filter((element) => element != undefined);
-		enemyRt = enemyRt.filter((element) => element != undefined);
+		allyRt = allyRt.filter((element) => element !== undefined);
+		enemyRt = enemyRt.filter((element) => element !== undefined);
 		relationCh.current = {
 			ally:[...allyRt],
 			enemy:[...enemyRt],
@@ -1042,7 +1052,19 @@ const Battle = ({
 		//최초 실행
 		const allyRelation = relationCheck(saveData, gameData, ally, 'ally');
 		allyRelationArr.current = allyRelation;
+		let enemy = [],
+			enemy_ = [],
+			enemyP = [];
+		enemyDeck.filter((data, idx) => {
+			if (typeof data.idx === 'number') {
+				enemy_.push(data);
+				enemyP.push(idx);
+			}
+		});
+		const enemyRelation = relationCheck(saveData, gameData, enemy_, 'enemy');
+		enemyRelationArr.current = enemyRelation;
 		if (!viewScenario) {
+			scenarioRepeat.current = true;
 			conversationData.current = gameData.scenario[scenario.country][scenario.period][scenario.title].stage[scenario.stage].conversation;
 			conversationList.current.push(conversationData.current[0]);
 			setMode("scenario");
@@ -1092,18 +1114,7 @@ const Battle = ({
 			});
 		});
 		allyPos.current = pos;
-		let enemy = [],
-			enemy_ = [],
-			enemyP = [];
-		enemyDeck.filter((data, idx) => {
-			if (typeof data.idx === 'number') {
-				enemy_.push(data);
-				enemyP.push(idx);
-			}
-		});
 		enemyPos.current = enemyP;
-		const enemyRelation = relationCheck(saveData, gameData, enemy_, 'enemy');
-		enemyRelationArr.current = enemyRelation;
 		enemy_.forEach((data, idx) => {
 			const gameCh = gameData.ch[data.idx];
 			const enemyData = util.getEnemyState(data, gameData);
@@ -1163,6 +1174,9 @@ const Battle = ({
 		});
 		return () => {
 			clearInterval(conversationTimeout.current);
+			let saveD = {...saveData};
+			saveD.scenario[scenario.country][scenario.period][scenario.title][scenario.stage] = scenarioRepeat;
+			changeSaveData(saveD);
 		}
 	}, []);
 	const resetOrder = (mode) => {
@@ -1199,6 +1213,7 @@ const Battle = ({
 					enemyTarget: true,
 					targetIdx: targetIdx,
 					target: pos,
+					sp: -gameData.skill[currentSkill.current.idx].sp,
 				});
 				setEffectArea([]);
 				if (orderIdx < battleAlly.current.length - 1) {
@@ -1236,13 +1251,18 @@ const Battle = ({
 					team: 'ally',
 					idx: orderIdx,
 					skIdx: 0,
+					sp: battleAlly.current[orderIdx].bSt2,
 				});
 			} else { //스킬 실행
-				const sk = gameData.skill[skill.idx];
-				const skType = sk.cate[0];
+				if (battleAlly.current[orderIdx].sp - skill.sp < 0) {
+					setMsgOn(true);
+					setMsg("스킬 포인트가 부족합니다.");
+					return;
+				}
+				const skType = skill.cate[0];
 				switch (skType){
 					case 3: //active
-						const areaArr = util.getEffectArea(sk.ta, 12);
+						const areaArr = util.getEffectArea(skill.ta, 12);
 						setEffectArea(areaArr);
 						setMode('area');
 						break;
@@ -1256,9 +1276,10 @@ const Battle = ({
 						allyOrders.current.push({
 							team: 'ally',
 							idx: orderIdx,
-							skIdx: sk.idx,
+							skIdx: skill.idx,
 							enemyTarget: false,
 							target: allyPos.current[orderIdx].pos,
+							sp: -skill.sp,
 						});
 						break;
 					case 5: //buff
@@ -1268,19 +1289,25 @@ const Battle = ({
 					default:
 						break;
 				}
-				currentSkill.current = sk;
+				currentSkill.current = skill;
 			}
 		}
 	};
 	useLayoutEffect(() => {
 		if (mode === 'action') {
 			timeLineSet();
-			console.log(timeLine.current);
+			battleAlly.current.map((data, idx) => {
+				data.sp += allyOrders.current[idx].sp;
+				if (data.sp > data.sp_) {
+					data.sp = data.sp_;
+				}
+			});
 			setTurnIdx(0);
 			actionAnimation(setTurnIdx, setSkillMsg, 0, timeLine.current, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly.current, battleEnemy.current, setting, setAllyAction, setEnemyAction, allyPos.current, enemyPos.current, modeRef.current, setMode);
 		} else if (mode === 'battleWin') {
 			console.log('pgs', '격!퇴!성!공!');
 			let saveD = {...saveData};
+			saveD.scenario[scenario.country][scenario.period][scenario.title][scenario.stage] = scenarioRepeat;
 			allySlot.current.forEach((slotIdx, idx) => {
 				const hasMaxExp = gameData.hasMaxExp[saveD.ch[slotIdx].grade];
 				saveD.ch[slotIdx].hasExp += resultExp.current[idx];
@@ -1320,7 +1347,13 @@ const Battle = ({
 					idx: orderIdx,
 					skIdx: 0,
 				});
-				setOrderIdx((prev) => ++prev);
+				if (orderIdx < battleAlly.current.length - 1) {
+					setOrderIdx((prev) => ++prev);
+				} else {
+					if (mode !== 'battleLose' && mode !== 'battleWin') {
+						setMode('action');
+					}
+				}
 			}
 		}
 	}, [orderIdx]);
@@ -1732,15 +1765,15 @@ const Battle = ({
 								<>
 									<div className="chInfo">
 										<span className="sp">{battleAlly.current[orderIdx]?.sp}</span>
-										<span className="spR">{battleAlly.current[orderIdx]?.bSt2}</span>
+										{/* <span className="spR">{battleAlly.current[orderIdx]?.bSt2}</span> */}
 									</div>
 									<ul className="scroll-x">
 										<li><button onClick={() => {
 											battleCommand('cancel');
-										}}><span>취소</span></button></li>
+										}}><span className="skName">취소</span></button></li>
 										<li><button onClick={() => {
 											battleCommand('wait');
-										}}><span>대기</span></button></li>
+										}}><span className="skSp">{battleAlly.current[orderIdx]?.bSt2}</span><span className="skName">대기</span></button></li>
 										{battleAlly.current[orderIdx]?.sk && battleAlly.current[orderIdx]?.sk.map((data, idx) => {
 											const sk = gameData.skill;
 											if (sk[data.idx].cate[0] !== 1) {
@@ -1758,6 +1791,9 @@ const Battle = ({
 					</> : ""
 				}
 			</BattleWarp>
+      <MsgContainer>
+        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+      </MsgContainer>
     </>
   );
 }

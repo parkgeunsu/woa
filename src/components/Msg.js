@@ -16,8 +16,8 @@ const Msg = ({
 			msgRef.current.classList.add("fadeOut");
 			timeRef.current = setTimeout(() => {
 				showMsg(prev => !prev);
-			}, 500);
-		}, 1500);
+			}, 300);
+		}, 1000);
 		return () => {
 			clearTimeout(timeRef.current);
 		}

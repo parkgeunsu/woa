@@ -212,7 +212,7 @@ b[buff]{color:#02f;text-shadow:-1px -1px 0px #0df,1px 1px 0px #000;}
 .popup_close span:first-of-type{transform-origin:50% 50%;transform:rotate(135deg);}
 .popup_close span:last-of-type{transform-origin:50% 50%;transform:rotate(45deg);}
 
-.msg{position:fixed;left:0;right:0;top:0;bottom:0;z-index:11;transition:all .5s;}
+.msg{position:fixed;left:0;right:0;top:0;bottom:0;z-index:11;transition:all .3s;}
 .msg.fadeOut{opacity:0;}
 .msg:after{
 	content:'';position:absolute;left:0;right:0;top:0;bottom:0;background:rgba(0,0,0,.7);

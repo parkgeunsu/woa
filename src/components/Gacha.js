@@ -216,6 +216,7 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 			newState: {
 				actionPoint: 20,
 				stateLuk: Math.round(Math.random() * 200),
+				element: gameData.ch[newIdx].element,
 				exp: 0,
 				hasExp: 0,
 				battleBeige:[0,0,0,0],
