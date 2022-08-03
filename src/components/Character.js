@@ -133,9 +133,9 @@ const Character = ({
         <button onClick={() => {
           const option = {
             type:'equip',
-            part:2,//장비만 해당
+            part:1,//Math.ceil(Math.random()*2),//장비만 해당
             grade:1,
-            lv:40,
+            lv:Math.round(Math.random()*40 + 60),
           }
           util.getItem(saveData, gameData, changeSaveData, option);
         }}>아이템 추가</button>

@@ -883,9 +883,26 @@ export const util = { //this.loadImage();
     const grade = util.getItemGrade();
     const slotNum = Math.round(Math.random() * 4);
     let hole = new Array(slotNum).fill(0);
-    const pointColor = Math.floor(Math.random() * gameData.items.item_point_color.length);
-    const color = selectItem.color.map(() => {
-      return gameData.items.item_point_color[pointColor];
+    let colorArr = Math.random() < .5 ? [gameData.items.item_point_light, gameData.items.item_point_dark] : [gameData.items.item_point_dark, gameData.items.item_point_light];
+    const color = selectItem.color.map((data, idx) => {
+      if (idx < 2) {
+        const pointColor = Math.floor(Math.random() * colorArr[idx].length);
+        return colorArr[idx][pointColor];
+      } else {
+        return util.getRandomColor();
+      }
+      // if (idx === 1) {
+      //   light = light > 0 ? 0 : 155;
+      // }
+      // if (idx > 1) {
+      //   ranNum = 155;
+      //   light = 0;
+      // }
+      // for (let i = 0; i < 3; ++i) {
+      //   colorArr[i] = Math.round(Math.random() * (100 + ranNum) + light);
+      // }
+      // console.log(`rgba(${colorArr[0]},${colorArr[1]},${colorArr[2]},1)`);
+      // return gameData.items.item_point_color[pointColor];
       //util.getRandomColor();
     });
     const baseEff = selectItem.eff.map((data) => {
