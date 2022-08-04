@@ -264,7 +264,7 @@ export const scenario = {
 						entry:[
 							{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
 							{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
-							{idx:'', lv:1, },{idx:'', lv:1, },{pos:1,idx:28, lv:50, grade:4, items: [
+							{idx:'', lv:1, },{idx:'', lv:1, },{pos:1,idx:28, lv:10, grade:4, items: [
 								{idx:0, part:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
 								{idx:1, part:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
 								{idx:2, part:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
@@ -273,7 +273,7 @@ export const scenario = {
 								{},
 								{},
 								{},
-							]},{pos:2,idx:54, lv:50, grade:4, items: [
+							]},{pos:2,idx:54, lv:10, grade:4, items: [
 								{idx:0, part:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
 								{idx:1, part:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
 								{idx:2, part:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},

@@ -109,6 +109,16 @@ const BattleCh = styled.div`
 		animation:tombstone ${({ gameSpd }) => 1/ gameSpd}s;opacity:0;animation-fill-mode:forwards;transform-origin:50% 100%;
 	}
 `;
+const Buff = styled.div`
+	.buff_effect{
+		height:${({frame}) => {
+			return Math.ceil(frame / 5) * 100;
+		}}%;
+		background:url(${({effImg}) => effImg}) no-repeat center center;background-size:100%;z-index:1;
+		animation:frame${({frame}) => frame} ${({gameSpd}) => 1 / gameSpd}s steps(1);
+		animation-iteration-count: infinite;
+	}
+`;
 const BattleLand = styled.div`
 	& > div {width:${({containerW}) => containerW}px;transition:all ${({ gameSpd }) => 1/ gameSpd}s;}
 `;
@@ -309,8 +319,8 @@ const activeSk = (timeLineData) => {
 	}
 }
 
-const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, atkOpion) => {;
-	if (modeRef.indexOf('battle') >= 0){
+const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, setAllyEnemyBuff, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, atkOption) => {;
+	if (modeRef.indexOf('battle') >= 0){ //battleLose, battleWin시 
 		return;
 	}
 	const endGameCheck = () => {
@@ -343,7 +353,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 		const skillCate = skill.cate[0];
 		//console.log('pgs', timeLine, turnIdx);
 		let atkC = [0, false], //공격 횟수
-			atkS = 0; //한캐릭이 공격한 횟수 체크
+			atkS = atkOption?.atkStay || 0; //한캐릭이 공격한 횟수 체크
 		if (timeLine[turnIdx].order.team === 'ally') {//죽은 상태인지
 			if (battleAlly[timeLine[turnIdx].order.idx].state === 'die') {
 				skillIdx = 0;
@@ -355,7 +365,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 		}
 		if (skillCate === 1 || skillCate === 4){ //대기, 방어, 철벽방어
 			setTurnIdx(turnIdx + 1);
-			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, {
+			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, setAllyEnemyBuff, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, {
 				atkCount: atkC,
 				atkStay: atkS,
 			});
@@ -365,9 +375,8 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 				defendSkillEnemy = []; //방어종류 시전 캐릭
 			let allyAction = [],
 				enemyAction = [];
-			let buffDebuff = [];
 			//공격 횟수 지정
-			atkC = (atkOpion?.atkCount && atkOpion?.atkCount[0]) ? atkOpion?.atkCount : [...gameData.skill[skillIdx].atkCount];
+			atkC = (atkOption?.atkCount && atkOption?.atkCount[0]) ? atkOption?.atkCount : [...gameData.skill[skillIdx].atkCount];
 			atkC[0] -= 1;
 			if (timeLine[turnIdx].order.team === 'ally') { //아군 공격
 				attacker = battleAlly[timeLine[turnIdx].order.idx];//공격자 셋팅
@@ -383,8 +392,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 					} else {
 						if (atkC[1] === "randomCount") {
 							atkS ++;
-							const randomCountPercent = 0.5 - atkS / 10;
-							console.log(randomCountPercent);
+							const randomCountPercent = 0.6 - atkS / 10;
 							if (Math.random() < randomCountPercent) {
 								atkC[0] ++;
 							} else {
@@ -427,20 +435,22 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 							idx: data,
 						}
 					});
-					defencer.forEach((data) => {
+					defencer.forEach((defData) => {
+						let buffDebuff = battleEnemy[defData.idx].buffDebuff;
 						skill.eff.forEach((data_) => {
+							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
+							const maxCount = data_.count[skLvIdx];
 							if (buffDebuff[data_.type] === undefined) {
-								buffDebuff[data_.type] = {type:'', eff:0};
+								buffDebuff[data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.effAnimation};
 							}
-							buffDebuff[data_.type] = {
-								type:data_.type,
-								num:data_.num[timeLine[turnIdx].order.skLv - 1],
-							}
+							buffDebuff[data_.type].count = maxCount;
+							buffDebuff[data_.type].maxCount = maxCount;
+							buffDebuff[data_.type].type = data_.type;
+							buffDebuff[data_.type].num = Number(data_.num[skLvIdx]);
+							buffDebuff[data_.type].animation = skill.effAnimation;
 						});
 					});
-					console.log(buffDebuff);//buffDebuff외부로 전달해서 캐릭에 적용
 				}
-				
 			} else { //적군 공격
 				attacker = battleEnemy[timeLine[turnIdx].order.idx];//공격자 셋팅
 				if(skillCate !== 5 && skillCate !== 6) {//방어자 셋팅
@@ -455,7 +465,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 					} else {
 						if (atkC[1] === "randomCount") {
 							atkS ++;
-							const randomCountPercent = 0.5 - atkS / 10;
+							const randomCountPercent = 0.6 - atkS / 10;
 							if (Math.random() < randomCountPercent) {
 								atkC[0] ++;
 							} else {
@@ -498,18 +508,21 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 							idx: data,
 						}
 					});
-					defencer.forEach((data) => {
+					defencer.forEach((defData, idx) => {
+						let buffDebuff = battleAlly[defData.idx].buffDebuff;
 						skill.eff.forEach((data_) => {
+							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
+							const maxCount = data_.count[skLvIdx];
 							if (buffDebuff[data_.type] === undefined) {
-								buffDebuff[data_.type] = {type:'', eff:0};
+								buffDebuff[data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.effAnimation};
 							}
-							buffDebuff[data_.type] = {
-								type:data_.type,
-								num:data_.num[timeLine[turnIdx].order.skLv - 1],
-							}
+							buffDebuff[data_.type].count = maxCount;
+							buffDebuff[data_.type].maxCount = maxCount;
+							buffDebuff[data_.type].type = data_.type;
+							buffDebuff[data_.type].num = Number(data_.num[skLvIdx]);
+							buffDebuff[data_.type].animation = skill.effAnimation;
 						});
 					});
-					console.log(buffDebuff);
 				}
 			}
 			let turnIdx_ = turnIdx;
@@ -741,9 +754,11 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 				} else {
 					attacker.totalDmg = totalDmg;
 				}
-			} else {
-				console.log(attacker, defencer);
-				// buffDebuff
+			} else { //버프, 디버프 일 경우 데미지 전달
+				defencer.forEach(() => {
+					dmg.push('');
+				});
+				attacker.totalDmg = 0;
 			}
 			//atk, def, mak, mdf, spd
 			//timeLine[turnIdx] 공격자
@@ -761,7 +776,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 								defencer.forEach((data) => {
 									targetIdx.push(enemyPos[data.idx]);
 								});
-							} else { 
+							} else {
 								defencer.forEach((data) => {
 									targetIdx.push(allyPos[data.idx].pos);
 								});
@@ -827,7 +842,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 									setAllyAction([]);
 								}
 								setTurnIdx(turnIdx_);
-								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, {
+								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, setAllyEnemyBuff, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, allyPos, enemyPos, modeRef, setMode, {
 									atkCount: atkC,
 									atkStay: atkS,
 								});
@@ -1010,7 +1025,7 @@ const Battle = ({
 	const conversationStepRef = useRef(1);
 	const [allyAction, setAllyAction] = useState([]);//아군 움직임(defence, avoid)
 	const [enemyAction, setEnemyAction] = useState([]);//적군 움직임(defence, avoid)
-
+	const [allyEnemyBuff, setAllyEnemyBuff] = useState([[],[]]);//아군,적군 버프
 	const [effectArea, setEffectArea] = useState([]); //스킬 영역
 	const [skillMsg, setSkillMsg] = useState(false); //메시지창 on/off
 	const [allyEffect, setAllyEffect] = useState([]);//아군 공격효과
@@ -1146,6 +1161,7 @@ const Battle = ({
 				na: gameData.ch[saveCh.idx].na1,
 				hasExp:saveCh.hasExp,
 				state: 'alive',
+				buffDebuff:[],
 				hp: hp,
 				hp_: hp,
 				sp: Math.floor(saveCh.bSt1/2),
@@ -1186,6 +1202,7 @@ const Battle = ({
 				spd = enemyData.bSt8 + enemyData.iSt8 + (effData?.rtSt8 || 0);
 			enemy.push({
 				state: 'alive',
+				buffDebuff:[],
 				...gameCh,
 				...enemyData,
 				lv: data.lv,
@@ -1356,8 +1373,102 @@ const Battle = ({
 					data.sp = data.sp_;
 				}
 			});
+			//아군 버프 체크
+			let allyBuff = [...allyEnemyBuff[0]] || [];
+			battleAlly.current.forEach((ally, chIdx) => {
+				ally.buffDebuff.forEach((buff) => {
+					const state = util.getStateName(buff.type).toLowerCase();
+					const buffIdx = buff.type;
+					if (ally['current' + state]) {
+						ally[state] = ally['current' + state];
+					} else {
+						ally['current' + state] = ally[state];
+					}
+					if (buff.count <= 0) {//버프 횟수 종료시
+						delete ally.buffDebuff[buffIdx];
+						ally[state] = ally['current' + state];
+						delete ally['current' + state];
+						allyBuff[chIdx].forEach((data, idx) => {
+							if (data === buff.animation) {
+								delete allyBuff[chIdx][idx];
+								return;
+							}
+						});
+					} else {//버프 효과 진행시
+						ally[state] = ally[state] + buff.num  < 0 ? 0 : ally[state] + buff.num;
+						const buffCount = --buff.count;
+						ally.buffDebuff[buffIdx] = {
+							count: buffCount,
+							maxCount: buff.maxCount,
+							type: buff.type,
+							num: buff.num,
+							animation:buff.animation,
+						}
+						if (allyBuff[chIdx] === undefined) {
+							allyBuff[chIdx] = [];
+						}
+						let animationCheck = false;//애니메이션 중복체크
+						allyBuff[chIdx].forEach((data) => {
+							if (data === buff.animation) {
+								animationCheck = true;
+							}
+						});
+						if (!animationCheck) {
+							allyBuff[chIdx].push(buff.animation);
+						}
+					}
+				});
+			});
+			//적군 버프 체크
+			let enemyBuff = [...allyEnemyBuff[1]] || [];
+			battleEnemy.current.forEach((enemy, chIdx) => {
+				enemy.buffDebuff.forEach((buff) => {
+					const state = util.getStateName(buff.type).toLowerCase();
+					const buffIdx = buff.type;
+					if (enemy['current' + state]) {
+						enemy[state] = enemy['current' + state];
+					} else {
+						enemy['current' + state] = enemy[state];
+					}
+					if (buff.count <= 0) {//버프 횟수 종료시
+						delete enemy.buffDebuff[buffIdx];
+						enemy[state] = enemy['current' + state];
+						delete enemy['current' + state];
+						enemyBuff[chIdx].forEach((data, idx) => {
+							if (data === buff.animation) {
+								delete enemyBuff[chIdx][idx];
+								return;
+							}
+						});
+					} else {//버프 효과 진행시
+						enemy[state] = enemy[state] + buff.num  < 0 ? 0 : enemy[state] + buff.num;
+						const buffCount = --buff.count;
+						enemy.buffDebuff[buffIdx] = {
+							count: buffCount,
+							maxCount: buff.maxCount,
+							type: buff.type,
+							num: buff.num,
+							animation:buff.animation,
+						}
+						if (enemyBuff[chIdx] === undefined) {
+							enemyBuff[chIdx] = [];
+						}
+						let animationCheck = false;//애니메이션 중복체크
+						enemyBuff[chIdx].forEach((data) => {
+							if (data === buff.animation) {
+								animationCheck = true;
+							}
+						})
+						if (!animationCheck) {
+							enemyBuff[chIdx].push(buff.animation);
+						}
+					}
+				});
+			});
+			setAllyEnemyBuff([allyBuff, enemyBuff]);
+
 			setTurnIdx(0);
-			actionAnimation(setTurnIdx, setSkillMsg, 0, timeLine.current, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly.current, battleEnemy.current, setting, setAllyAction, setEnemyAction, allyPos.current, enemyPos.current, modeRef.current, setMode);
+			actionAnimation(setTurnIdx, setSkillMsg, 0, timeLine.current, resetOrder, setAllyEffect, setEnemyEffect, setAllyEnemyBuff, gameData, battleAlly.current, battleEnemy.current, setting, setAllyAction, setEnemyAction, allyPos.current, enemyPos.current, modeRef.current, setMode);
 		} else if (mode === 'battleWin') {
 			console.log('pgs', '격!퇴!성!공!');
 			let saveD = {...saveData};
@@ -1450,33 +1561,9 @@ const Battle = ({
 	useLayoutEffect(() => {
 		setContainerW(containerRef.current.getBoundingClientRect().height * 0.5 - 25);
 	}, [containerRef.current]);
-	const map = [
-		{idx:0,},
-		{idx:1,},
-		{idx:2,},
-		{idx:3,},
-		{idx:4,},
-		{idx:5,},
-		{idx:6,},
-		{idx:7,},
-		{idx:8,},
-		{idx:9,},
-		{idx:10,},
-		{idx:11,},
-		{idx:12,},
-		{idx:13,},
-		{idx:14,},
-		{idx:15,},
-		{idx:16,},
-		{idx:17,},
-		{idx:18,},
-		{idx:19,},
-		{idx:20,},
-		{idx:21,},
-		{idx:22,},
-		{idx:23,},
-		{idx:24,},
-	];
+	const map = Array.from({length: 25}, (undefined, i) => {
+		return {idx: i}
+	});
   return (
     <>
 			<BattleHeader className="header battle_header" iconBack={imgSet.icon.iconBack}>
@@ -1693,11 +1780,19 @@ const Battle = ({
 									}
 									const die = enemyCh?.state || "";
 									const actionPos = enemyAction[currentEnemyIdx.current] || "";
+									const buffEff = allyEnemyBuff[1][currentEnemyIdx.current];
 									currentEnemyIdx.current ++;
 									return (
 										<BattleCh key={idx} className={`battle_ch effect ${elementCh} ${actionCh} ${rtCh} ${actionPos} ${die}`} data-ch={chData?.display} data-idx={idx} left={left} top={top} size={mapSize} onClick={(e) => {
 											areaSelect(e, idx);
 										}} gameSpd={gameSpd} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]}>
+											{buffEff && buffEff.map((buffData, idx) => {
+												return (
+													<Buff key={idx} className="ch_buff" gameSpd={gameSpd} effImg={imgSet.eff[buffData]} frame={gameData.effect[buffData].frame} buffEff={buffData} >
+														<div className="buff_effect"></div>
+													</Buff>
+												);
+											})}
 											<div className="ch_box">
 												<CardChRing className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={enemyData.lv} gameSpd={gameSpd} />
 												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} />
@@ -1758,9 +1853,17 @@ const Battle = ({
 									}
 									const die = saveCh?.state || "";
 									const actionPos = allyAction[currentAllyIdx.current] || "";
+									const buffEff = allyEnemyBuff[0][currentEnemyIdx.current];
 									currentAllyIdx.current ++;
 									return (
 										<BattleCh key={idx} className={`battle_ch ${posCh} ${actionCh} ${rtCh} ${actionPos} ${die}`} data-ch={chData?.display} data-idx={idx} left={left} top={top} size={mapSize} rtColor={rtColor}  gameSpd={gameSpd} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]}>
+											{buffEff && buffEff.map((buffData, idx) => {
+												return (
+													<Buff key={idx} className="ch_buff" gameSpd={gameSpd} effImg={imgSet.eff[buffData]} frame={gameData.effect[buffData].frame} buffEff={buffData}>
+														<div className="buff_effect"></div>
+													</Buff>
+												);
+											})}
 											<div className="ch_box">
 												<CardChRing className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={saveCh?.lv} />
 												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} />

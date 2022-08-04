@@ -6,4 +6,13 @@ export const effect = [
   // {idx:4,frame:24,repeat:2},
   // {idx:5,frame:22,repeat:2},
   // {idx:6,frame:13,repeat:2},
+  {idx:4,frame:0,repeat:1},
+  {idx:5,frame:0,repeat:1},
+  {idx:6,frame:0,repeat:1},
+  {idx:7,frame:0,repeat:1},
+  {idx:8,frame:0,repeat:1},
+  {idx:9,frame:0,repeat:1},
+  {idx:10,frame:0,repeat:1},
+  {idx:11,frame:13,repeat:''},
+  {idx:12,frame:11,repeat:''},
 ];

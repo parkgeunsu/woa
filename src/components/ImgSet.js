@@ -251,6 +251,9 @@ import saliva from 'images/effect/saliva.png';
 // import eff4 from 'images/effect/Death1.png';
 // import eff5 from 'images/effect/light_004.png';
 // import eff6 from 'images/effect/ice.png';
+import buff0 from 'images/effect/buff0.png';
+import buff1 from 'images/effect/buff1.png';
+
 export const back = [
   back0,back1,back2,back3
 ];
@@ -314,5 +317,6 @@ export const actionIcon = [
   defenceIcon0,defenceIcon1,defenceIcon2,tombstone,
 ];
 export const eff = [
-  attack,bite,claw,saliva
+  attack,bite,claw,saliva,'','','','','','',
+  '',buff0,buff1
 ];

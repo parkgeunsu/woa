@@ -61,6 +61,8 @@
 .battle_ch:after{content:'';position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;}
 .battle_ch .dmg{position:absolute;left:0;right:0;top:0;bottom:0;filter:blur(7px);transform:scale(1.3);pointer-events:none;}
 .battle_ch.die .ch_box{opacity:0;transform:scale(.1);}
+.battle_ch .ch_buff{position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;width:100%;height:100%;overflow:hidden;z-index:1;}
+.battle_ch .ch_buff .buff_effect{position:absolute;width:500%;}
 
 .battle_ch.timeLine{position:relative;}
 .battle_ch.timeLine.none span{filter:grayscale(100%);}
