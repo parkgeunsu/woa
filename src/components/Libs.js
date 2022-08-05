@@ -881,7 +881,7 @@ export const util = { //this.loadImage();
       itemIdx = Math.floor(Math.random() * itemGroup.length),//아이템 번호
       selectItem = itemGroup[itemIdx];
     const grade = util.getItemGrade();
-    const slotNum = Math.round(Math.random() * 4);
+    const slotNum = Math.round(Math.random() * selectItem.socket);
     let hole = new Array(slotNum).fill(0);
     let colorArr = Math.random() < .5 ? [gameData.items.item_point_light, gameData.items.item_point_dark] : [gameData.items.item_point_dark, gameData.items.item_point_light];
     const color = selectItem.color.map((data, idx) => {

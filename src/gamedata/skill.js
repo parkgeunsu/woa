@@ -79,11 +79,11 @@ export const skill = [
 		,ta_:0,ta:1,effAnimation:0
 		,eff:[{type:4,num:['300','400','650','800','1000']}],atkCount:[1],turn:1,sp:5},
 	{idx:16,
-		na:'그루밍',element_type:0,cate:[6],txt:`<u>단일</u>, <b dmg>$(0)</b>의 속도(SPD)를 3턴 감소시킨다.`
+		na:'그루밍',element_type:0,cate:[5],txt:`<u>단일 아군</u>, <b dmg>$(0)</b>의 속도(SPD)를 3턴 증가시킨다.`
 		,ta_:1,ta:1,effAnimation:11
-		,eff:[{type:8,num:['150','-70','-90','-120','-150'],count:[3,3,3,3,3]}],turn:1,atkCount:[1],sp:5},
+		,eff:[{type:8,num:['50','70','90','120','150'],count:[3,3,3,3,3]}],turn:1,atkCount:[1],sp:5},
 	{idx:17,
-		na:'테스트',element_type:0,cate:[6],txt:`<u>단일</u>, <b dmg>$(0)</b>의 방어(DEF)를 2턴 감소시킨다.`
+		na:'테스트',element_type:0,cate:[6],txt:`<u>적군</u>, <b dmg>$(0)</b>의 방어(DEF)를 2턴 감소시킨다.`
 		,ta_:1,ta:15,effAnimation:12
 		,eff:[{type:4,num:['-300','-400','-500','-600','-150'],count:[2,2,2,2,2]}],turn:1,atkCount:[1],sp:6},
 ]

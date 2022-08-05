@@ -48,14 +48,14 @@
 .battle_ch.action{left:50%;top:50%;transform:translate(-50%,-50%) scale(2);z-index:30;}
 .battle_ch.action .ch_box .ring_back{box-shadow:0 0 30px 10px #000;}
 .battle_ch.relation:after{content:'';position:absolute;left:50%;top:50%;width:100%;height:100%;transform:translate(-50%,-50%);z-index:1;filter:blur(5px);opacity:0;pointer-events:none;}
-.battle_ch .ch_box{position:absolute;left:5%;top:5%;width:90%;height:90%;transform-origin:50% 100%;transform-style:preserve-3d;}
+.battle_ch .ch_box{position:absolute;left:5%;top:5%;width:90%;height:90%;transform-origin:50% 100%;transform-style:preserve-3d;pointer-events:none;}
 .battle_ch .ch_box .hpsp{display:flex;position:absolute;height:25%;width:100%;top:-30%;flex-direction:column;justify-content:space-between;}
 .battle_ch.on .hpsp{height:12%;top:-17%;}
 .battle_ch .ch_box .hpsp span{display:flex;height:45%;background-color:#fff;border-radius:10px;overflow:hidden;box-shadow:inset 0 0 2px #000;}
 .battle_ch .ch_box .hpsp span em{display:inline-block;border-radius:10px;}
 .battle_ch .ch_box .hpsp span.hp em{height:100%;width:100%;background-color:var(--color-red);}
 .battle_ch .ch_box .hpsp span.sp em{height:100%;width:100%;background-color:var(--color-blue);}
-.battle_ch.on{z-index:2;pointer-events:none;}
+.battle_ch.on{z-index:2;}
 .battle_ch.on .ch_box{transform:scale(1.5) rotateX(-50deg);}
 .battle_ch.on .ring_back{box-shadow:0 0 30px #fff,0 0 10px #ff0,0 0 5px #f40;}
 .battle_ch:after{content:'';position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;}
