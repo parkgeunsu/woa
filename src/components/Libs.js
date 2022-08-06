@@ -585,6 +585,8 @@ export const util = { //this.loadImage();
         return 'SPD';
       case 9:
         return 'LUK';
+      case 100:
+        return 'formation';
       default:
         break;
     }

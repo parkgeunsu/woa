@@ -120,6 +120,9 @@ const Buff = styled.div`
 		animation-iteration-count: infinite;
 	}
 `;
+const Passive = styled.div`
+	top:${({idx}) => idx*15}%;background:url(${({effImg}) => effImg}) no-repeat center center;background-size:100%;
+`;
 const BattleLand = styled.div`
 	& > div {width:${({containerW}) => containerW}px;transition:all ${({ gameSpd }) => 1/ gameSpd}s;}
 `;
@@ -402,7 +405,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 							buffDebuff[data_.type].num = data_.num[skLvIdx];
 							buffDebuff[data_.type].animation = skill.effAnimation;
 						});
-						console.log(buffDebuff, battleAlly[defData.idx]);
+						// console.log(buffDebuff, battleAlly[defData.idx]);
 					});
 				} else if (skillCate === 6) {//적군 디버프 방어자 셋팅
 					defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
@@ -438,7 +441,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 					} else {
 						if (atkC[1] === "randomCount") {
 							atkS ++;
-							const randomCountPercent = 0.6 - atkS / 10;
+							const randomCountPercent = 0.5 - atkS / 10;
 							if (Math.random() < randomCountPercent) {
 								atkC[0] ++;
 							} else {
@@ -533,7 +536,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 					} else {
 						if (atkC[1] === "randomCount") {
 							atkS ++;
-							const randomCountPercent = 0.6 - atkS / 10;
+							const randomCountPercent = 0.5 - atkS / 10;
 							if (Math.random() < randomCountPercent) {
 								atkC[0] ++;
 							} else {
@@ -1108,6 +1111,7 @@ const Battle = ({
 	const conversationStepRef = useRef(1);
 	const [allyAction, setAllyAction] = useState([]);//아군 움직임(defence, avoid)
 	const [enemyAction, setEnemyAction] = useState([]);//적군 움직임(defence, avoid)
+	const allyEnemyPassiveRef = useRef([[],[]]);//아군,적군 패시브
 	const allyEnemyBuffRef = useRef([[],[]]);//아군,적군 버프
 
 	const [effectAllyArea, setEffectAllyArea] = useState([]); //아군스킬 영역
@@ -1498,9 +1502,123 @@ const Battle = ({
 	};
 	useLayoutEffect(() => { //모드가 바꿨을때
 		if (mode === 'action') {
+			let battleAllyCopy = [...battleAlly.current];
+			//아군 패시브 체크
+			let allyPassive = [],
+				passiveAllySkill = [];
+			battleAllyCopy.forEach((ally, allyIdx) => {
+				if (ally.state === 'die') {
+					ally.sk.forEach((allySkill) => {//죽은 캐릭 스킬
+						const gameDataSkill = gameData.skill[allySkill.idx];
+						const state = util.getStateName(gameDataSkill.eff[0].type).toLowerCase();
+						battleAllyCopy.forEach((ally_) => {//죽은 캐릭 패시브 제거
+							ally_[state] = ally_['passive' + state];
+							delete ally_['passive' + state];
+						});
+					});
+					return;
+				}
+				ally.sk.forEach((allySkill) => {//살아있는 캐릭 스킬
+					const gameDataSkill = gameData.skill[allySkill.idx],
+						passiveType = gameDataSkill.eff[0].type,
+						passiveNum = gameDataSkill.eff[0].num[allySkill.lv - 1],
+						passiveEff = gameDataSkill.effAnimation;
+					const state = util.getStateName(passiveType).toLowerCase();
+					if (gameDataSkill.ta === 10) {//전체 캐릭 패시브 적용
+						battleAllyCopy.forEach((ally_, chIdx) => {
+							if (ally_['passive' + state]) {
+								ally_[state] = ally_['passive' + state];
+							} else {
+								ally_['passive' + state] = ally_[state];
+							}
+							if (gameData.skill[allySkill.idx].cate[0] === 2) {//패시브 스킬인지
+								let passiveOverlap = false;
+								if (passiveAllySkill[chIdx] === undefined) {
+									passiveAllySkill[chIdx] = [];
+								}
+								passiveAllySkill[chIdx].forEach((passiveData, idx) => {
+									if (passiveData.type === passiveType) {
+										passiveOverlap = true;
+										if (parseInt(passiveData.num) < parseInt(passiveNum)) {
+												delete passiveAllySkill[chIdx][idx];
+											passiveAllySkill[chIdx].push({
+												type: passiveType,
+												num: passiveNum,
+												eff: passiveEff,
+											});
+										}
+									}
+								});
+								if (!passiveOverlap) {
+									passiveAllySkill[chIdx].push({
+										type: passiveType,
+										num: passiveNum,
+										eff: passiveEff,
+									});
+								}
+								if (passiveNum.indexOf('%') > 0) {
+									const percent = parseInt(passiveNum) / 100;
+									ally_[state] = percent < 0 ? ally_[state] - ally_[state] * Math.abs(percent) : ally_[state] + ally_[state] * percent;
+									ally_[state] = ally_[state] < 0 ? 0 : ally_[state];
+									console.log(passiveNum);
+								} else {
+									ally_[state] = ally_[state] + Number(passiveNum)  < 0 ? 0 : ally_[state] + Number(passiveNum);
+								}
+							}
+							console.log(state, ally_['passive' + state], ally_[state]);
+						});
+					} else {//단일 대상 패시브 적용
+						if (ally['passive' + state]) {
+							ally[state] = ally['passive' + state];
+						} else {
+							ally['passive' + state] = ally[state];
+						}
+						if (gameData.skill[allySkill.idx].cate[0] === 2) {//패시브 스킬인지
+							let passiveOverlap = false;
+							passiveAllySkill[allyIdx].forEach((passiveData, idx) => {
+								if (passiveData.type === passiveType) {
+									passiveOverlap = true;
+									if (parseInt(passiveData.num) < parseInt(passiveNum)) {
+										delete passiveAllySkill[allyIdx][idx];
+										passiveAllySkill[allyIdx].push({
+											type: passiveType,
+											num: passiveNum,
+											eff: passiveEff,
+										});
+									}
+								}
+							});
+							if (!passiveOverlap) {
+								passiveAllySkill[allyIdx].push({
+									type: passiveType,
+									num: passiveNum,
+									eff: passiveEff,
+								});
+							}
+							if (passiveNum.indexOf('%') > 0) {
+								const percent = parseInt(passiveNum) / 100;
+								ally[state] = percent < 0 ? ally[state] - ally[state] * Math.abs(percent) : ally[state] + ally[state] * percent;
+								ally[state] = ally[state] < 0 ? 0 : ally[state];
+								console.log(passiveNum);
+							} else {
+								ally[state] = ally[state] + Number(passiveNum)  < 0 ? 0 : ally[state] + Number(passiveNum);
+							}
+						}
+						console.log(state, ally['passive' + state], ally[state]);
+					}
+				});
+			});
+			passiveAllySkill.forEach((data, idx) => {
+				data.forEach((data_) => {
+					if (allyPassive[idx] === undefined) {
+						allyPassive[idx] = [];
+					}
+					allyPassive[idx].push(data_.eff);
+				})
+			});
+
 			//아군 버프 체크
-			let allyBuff = [...allyEnemyBuffRef.current[0]] || [],
-				battleAllyCopy = [...battleAlly.current];
+			let allyBuff = [...allyEnemyBuffRef.current[0]] || [];
 			battleAllyCopy.forEach((ally, chIdx) => {
 				if (ally.state === 'die') {
 					return;
@@ -1508,15 +1626,15 @@ const Battle = ({
 				ally.buffDebuff.forEach((buff) => {
 					const state = util.getStateName(buff.type).toLowerCase();
 					const buffIdx = buff.type;
-					if (ally['current' + state]) {
-						ally[state] = ally['current' + state];
+					if (ally['buff' + state]) {
+						ally[state] = ally['buff' + state];
 					} else {
-						ally['current' + state] = ally[state];
+						ally['buff' + state] = ally[state];
 					}
 					if (buff.count <= 0) {//버프 횟수 종료시
 						delete ally.buffDebuff[buffIdx];
-						ally[state] = ally['current' + state];
-						delete ally['current' + state];
+						ally[state] = ally['buff' + state];
+						delete ally['buff' + state];
 						allyBuff[chIdx].forEach((data, idx) => {
 							if (data === buff.animation) {
 								delete allyBuff[chIdx][idx];
@@ -1526,10 +1644,12 @@ const Battle = ({
 					} else {//버프 효과 진행시
 						if (buff.num.indexOf('%') > 0) {
 							const percent = parseInt(buff.num) / 100;
-							ally[state] = percent < 0 ? ally[state] - ally[state] * Math.abs(percent) : ally[state] * percent;
+							ally[state] = percent < 0 ? ally[state] - ally[state] * Math.abs(percent) : ally[state] + ally[state] * percent;
+							ally[state] = ally[state] < 0 ? 0 : ally[state];
 						} else {
 							ally[state] = ally[state] + Number(buff.num)  < 0 ? 0 : ally[state] + Number(buff.num);
 						}
+						console.log(ally['buff' + state], ally[state]);
 						const buffCount = --buff.count;
 						ally.buffDebuff[buffIdx] = {
 							count: buffCount,
@@ -1554,9 +1674,122 @@ const Battle = ({
 				});
 			});
 			battleAlly.current = battleAllyCopy;
+
+			let battleEnemyCopy = [...battleEnemy.current];
+			//적군 패시브 체크
+			let enemyPassive = [],
+				passiveEnemySkill = [];
+			battleEnemyCopy.forEach((enemy) => {
+				if (enemy.state === 'die') {
+					enemy.sk.forEach((enemySkill) => {//죽은 캐릭 스킬
+						const gameDataSkill = gameData.skill[enemySkill.idx];
+						const state = util.getStateName(gameDataSkill.eff[0].type).toLowerCase();
+						battleEnemyCopy.forEach((enemy_) => {//죽은 캐릭 패시브 제거
+							enemy_[state] = enemy_['passive' + state];
+							delete enemy_['passive' + state];
+						});
+					});
+					return;
+				}
+				enemy.sk.forEach((enemySkill) => {//살아있는 캐릭 스킬
+					const gameDataSkill = gameData.skill[enemySkill.idx],
+						passiveType = gameDataSkill.eff[0].type,
+						passiveNum = gameDataSkill.eff[0].num[enemySkill.lv - 1],
+						passiveEff = gameDataSkill.effAnimation;
+					const state = util.getStateName(passiveType).toLowerCase();
+					if (gameDataSkill.ta === 10) {//전체 캐릭 패시브 적용
+						battleEnemyCopy.forEach((enemy_, chIdx) => {
+							if (enemy_['passive' + state]) {
+								enemy_[state] = enemy_['passive' + state];
+							} else {
+								enemy_['passive' + state] = enemy_[state];
+							}
+							if (gameData.skill[enemySkill.idx].cate[0] === 2) {//패시브 스킬인지
+								let passiveOverlap = false;
+								if (passiveEnemySkill[chIdx] === undefined) {
+									passiveEnemySkill[chIdx] = [];
+								}
+								passiveEnemySkill[chIdx].forEach((passiveData, idx) => {
+									if (passiveData.type === passiveType) {
+										passiveOverlap = true;
+										if (parseInt(passiveData.num) < parseInt(passiveNum)) {
+											delete passiveEnemySkill[chIdx][idx];
+											passiveEnemySkill[chIdx].push({
+												type: passiveType,
+												num: passiveNum,
+												eff: passiveEff,
+											});
+										}
+									}
+								});
+								if (!passiveOverlap) {
+									passiveEnemySkill[chIdx].push({
+										type: passiveType,
+										num: passiveNum,
+										eff: passiveEff,
+									});
+								}
+								if (passiveNum.indexOf('%') > 0) {
+									const percent = parseInt(passiveNum) / 100;
+									enemy_[state] = percent < 0 ? enemy_[state] - enemy_[state] * Math.abs(percent) : enemy_[state] + enemy_[state] * percent;
+									enemy_[state] = enemy_[state] < 0 ? 0 : enemy_[state];
+								} else {
+									enemy_[state] = enemy_[state] + Number(passiveNum)  < 0 ? 0 : enemy_[state] + Number(passiveNum);
+								}
+							}
+							console.log(state, enemy_['passive' + state], enemy_[state]);
+						});
+					} else {//단일 대상 패시브 적용
+						if (enemy['passive' + state]) {
+							enemy[state] = enemy['passive' + state];
+						} else {
+							enemy['passive' + state] = enemy[state];
+						}
+						if (gameData.skill[enemySkill.idx].cate[0] === 2) {//패시브 스킬인지
+							let passiveOverlap = false;
+							passiveEnemySkill.forEach((passiveData, idx) => {
+								if (passiveData.type === passiveType) {
+									passiveOverlap = true;
+									if (parseInt(passiveData.num) < parseInt(passiveNum)) {
+										delete passiveEnemySkill[idx];
+										passiveEnemySkill.push({
+											type: passiveType,
+											num: passiveNum,
+											eff: passiveEff,
+										});
+									}
+								}
+							});
+							if (!passiveOverlap) {
+								passiveEnemySkill.push({
+									type: passiveType,
+									num: passiveNum,
+									eff: passiveEff,
+								});
+							}
+							if (passiveNum.indexOf('%') > 0) {
+								const percent = parseInt(passiveNum) / 100;
+								enemy[state] = percent < 0 ? enemy[state] - enemy[state] * Math.abs(percent) : enemy[state] + enemy[state] * percent;
+								enemy[state] = enemy[state] < 0 ? 0 : enemy[state];
+							} else {
+								enemy[state] = enemy[state] + Number(passiveNum)  < 0 ? 0 : enemy[state] + Number(passiveNum);
+							}
+						}
+						console.log(state, enemy['passive' + state], enemy[state]);
+					}
+				})
+			});
+			passiveEnemySkill.forEach((data, idx) => {
+				data.forEach((data_) => {
+					if (enemyPassive[idx] === undefined) {
+						enemyPassive[idx] = [];
+					}
+					enemyPassive[idx].push(data_.eff);
+				})
+			});
+
 			//적군 버프 체크
-			let enemyBuff = [...allyEnemyBuffRef.current[1]] || [],
-				battleEnemyCopy = [...battleEnemy.current];
+			let enemyBuff = [...allyEnemyBuffRef.current[1]] || [];
 			battleEnemyCopy.forEach((enemy, chIdx) => {
 				if (enemy.state === 'die') {
 					return;
@@ -1564,15 +1797,15 @@ const Battle = ({
 				enemy.buffDebuff.forEach((buff) => {
 					const state = util.getStateName(buff.type).toLowerCase();
 					const buffIdx = buff.type;
-					if (enemy['current' + state]) {
-						enemy[state] = enemy['current' + state];
+					if (enemy['buff' + state]) {
+						enemy[state] = enemy['buff' + state];
 					} else {
-						enemy['current' + state] = enemy[state];
+						enemy['buff' + state] = enemy[state];
 					}
 					if (buff.count <= 0) {//버프 횟수 종료시
 						delete enemy.buffDebuff[buffIdx];
-						enemy[state] = enemy['current' + state];
-						delete enemy['current' + state];
+						enemy[state] = enemy['buff' + state];
+						delete enemy['buff' + state];
 						enemyBuff[chIdx].forEach((data, idx) => {
 							if (data === buff.animation) {
 								delete enemyBuff[chIdx][idx];
@@ -1582,7 +1815,8 @@ const Battle = ({
 					} else {//버프 효과 진행시
 						if (buff.num.indexOf('%') > 0) {
 							const percent = parseInt(buff.num) / 100;
-							enemy[state] = percent < 0 ? enemy[state] - enemy[state] * Math.abs(percent) : enemy[state] * percent;
+							enemy[state] = percent < 0 ? enemy[state] - enemy[state] * Math.abs(percent) : enemy[state] + enemy[state] * percent;
+							enemy[state] = enemy[state] < 0 ? 0 : enemy[state];
 						} else {
 							enemy[state] = enemy[state] + Number(buff.num)  < 0 ? 0 : enemy[state] + Number(buff.num);
 						}
@@ -1610,7 +1844,9 @@ const Battle = ({
 				});
 			});
 			battleEnemy.current = battleEnemyCopy;
-			allyEnemyBuffRef.current = [allyBuff, enemyBuff];
+
+			allyEnemyPassiveRef.current = [allyPassive, enemyPassive];//패시브효과 전달
+			allyEnemyBuffRef.current = [allyBuff, enemyBuff];//버프효과 전달 
 
 			//행동 포인트 수정
 			battleAlly.current.map((data, idx) => {
@@ -1932,6 +2168,7 @@ const Battle = ({
 									}
 									const die = enemyCh?.state || "";
 									const actionPos = enemyAction[currentEnemyIdx.current] || "";
+									const passive = allyEnemyPassiveRef.current[1][currentEnemyIdx.current];
 									const buffEff = allyEnemyBuffRef.current[1][currentEnemyIdx.current];
 									currentEnemyIdx.current ++;
 									return (
@@ -1946,6 +2183,11 @@ const Battle = ({
 												);
 											})}
 											<div className="ch_box">
+												{passive && passive.map((passiveData, idx) => {
+													return (
+														<Passive key={idx} className="ch_passive" effImg={imgSet.passive[passiveData]} idx={idx} passive={passiveData}/>
+													);
+												})}
 												<CardChRing className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={enemyData.lv} gameSpd={gameSpd} />
 												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} />
 												<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData?.element]} lv={enemyData.lv} gameSpd={gameSpd}>
@@ -2007,7 +2249,8 @@ const Battle = ({
 									}
 									const die = saveCh?.state || "";
 									const actionPos = allyAction[currentAllyIdx.current] || "";
-									const buffEff = allyEnemyBuffRef.current[0][currentEnemyIdx.current];
+									const passive = allyEnemyPassiveRef.current[0][currentAllyIdx.current];
+									const buffEff = allyEnemyBuffRef.current[0][currentAllyIdx.current];
 									currentAllyIdx.current ++;
 									return (
 										<BattleCh key={idx} className={`battle_ch ${posCh} ${area ? "effect effect" + element_type : ""} ${actionCh} ${rtCh} ${actionPos} ${die}`} data-ch={chData?.display} data-idx={idx} left={left} top={top} size={mapSize} rtColor={rtColor} onClick={(e) => {
@@ -2021,6 +2264,11 @@ const Battle = ({
 												);
 											})}
 											<div className="ch_box">
+												{passive && passive.map((passiveData, idx) => {
+													return (
+														<Passive key={idx} className="ch_passive" effImg={imgSet.passive[passiveData]} idx={idx} passive={passiveData}/>
+													);
+												})}
 												<CardChRing className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={saveCh?.lv} />
 												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} />
 												<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData?.element]} lv={saveCh?.lv} gameSpd={gameSpd}>
@@ -2091,7 +2339,7 @@ const Battle = ({
 										}}><span className="skSp">{battleAlly.current[orderIdx]?.bSt2}</span><span className="skName">대기</span></button></li>
 										{battleAlly.current[orderIdx]?.sk && battleAlly.current[orderIdx]?.sk.map((data, idx) => {
 											const sk = gameData.skill;
-											if (sk[data.idx].cate[0] !== 1) {
+											if (sk[data.idx].cate[0] !== 2) {
 												return (
 													<li key={idx}><button onClick={() => {
 														battleCommand(sk[data.idx], data.lv);

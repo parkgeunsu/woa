@@ -6,7 +6,7 @@ export const save = {
       money:352000
     },
     "ch":[
-      {"idx":1,"stateType":0,"element":[11],"grade":6,"stateLuk":146,"lv":45,"exp":10,"hasExp":50000,"actionPoint":20,"battleBeige":[0,0,0,0],"animalBeige":0,"sk":[{"idx":1,"lv":2,"exp":40},{"idx":2,"lv":3,"exp":90},{"idx":16,"lv":1,"exp":0},{"idx":11,"lv":1,"exp":0}],"items":[
+      {"idx":1,"stateType":0,"element":[11],"grade":6,"stateLuk":146,"lv":45,"exp":10,"hasExp":50000,"actionPoint":20,"battleBeige":[0,0,0,0],"animalBeige":0,"sk":[{"idx":1,"lv":1,"exp":0},{"idx":2,"lv":1,"exp":0},{"idx":6,"lv":1,"exp":0},{"idx":7,"lv":1,"exp":0},{"idx":17,"lv":1,"exp":0}],"items":[
         {"idx":0,"part":1,"slot":0,"hole":[4,0,12,23],"grade":1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[],mark:24,modifier:'king의 '},
         {},
         // {"idx":11,"slot":3,"hole":[],"grade":2},
@@ -17,7 +17,7 @@ export const save = {
         {},
         {},
       ]},
-      {"idx":2,"stateType":0,"element":[8],"grade":5,"stateLuk":20,"lv":40,"exp":0,"hasExp":1000,"actionPoint":20,"battleBeige":[0,0,0,0],"animalBeige":0,"sk":[{"idx":1,"lv":1},{"idx":2,"lv":1},{"idx":17,"lv":1}],"items":[
+      {"idx":2,"stateType":0,"element":[8],"grade":5,"stateLuk":20,"lv":40,"exp":0,"hasExp":1000,"actionPoint":20,"battleBeige":[0,0,0,0],"animalBeige":0,"sk":[{"idx":1,"lv":1,"exp":0},{"idx":2,"lv":1,"exp":0},{"idx":8,"lv":1,"exp":0}],"items":[
         {},
         {},
         {},

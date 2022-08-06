@@ -240,6 +240,20 @@ import defenceIcon1 from 'images/ico/shield1.png';
 import defenceIcon2 from 'images/ico/shield2.png';
 import tombstone from 'images/ico/tombstone.png';
 
+//패시브 아이콘
+import passive0 from 'images/ico/passive0.png';
+import passive1 from 'images/ico/passive1.png';
+import passive2 from 'images/ico/passive2.png';
+import passive3 from 'images/ico/passive3.png';
+import passive4 from 'images/ico/passive4.png';
+import passive5 from 'images/ico/passive5.png';
+import passive6 from 'images/ico/passive6.png';
+import passive7 from 'images/ico/passive7.png';
+import passive8 from 'images/ico/passive8.png';
+import passive9 from 'images/ico/passive9.png';
+import passive10 from 'images/ico/passive10.png';
+import passive11 from 'images/ico/passive11.png';
+
 //이펙트 애니메이션
 import attack from 'images/effect/attack.png';
 import bite from 'images/effect/bite.png';
@@ -315,6 +329,9 @@ export const bgEffect = [
 ];
 export const actionIcon = [
   defenceIcon0,defenceIcon1,defenceIcon2,tombstone,
+];
+export const passive = [
+  passive0,passive1,passive2,passive3,passive4,passive5,passive6,passive7,passive8,passive9,passive10,passive11,
 ];
 export const eff = [
   attack,bite,claw,saliva,'','','','','','',

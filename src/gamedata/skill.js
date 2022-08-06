@@ -1,12 +1,13 @@
-//cate(스킬종류, 배열) 중복가능 
-// passive1, 
+//cate(스킬종류, 배열) 중복가능
+// none1
+// passive2,
 // active3(적군), 턴제로 실행
 // active4(본인), 바로실행 
 // buff5(아군전체), debuff6(적군전체) 턴제로 실행
 //element_type 무속성(0),찌르기(1),할퀴기(2),물기(3),치기(4),누르기(5),던지기(6),빛(7),어둠(8),물(9),불(10),바람(11),땅(12)
 //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 행운LUK(9), 패시브(100)
 //ta_ 아군0, 적군1
-//ta getEffectArea 효과범위
+//ta getEffectArea 효과범위, passive일 경우 1:단일, 10:전체
 //num 효과
 //sp 행동력
 //atkCount 공격횟수
@@ -31,25 +32,25 @@ export const skill = [
 		,ta_:1,ta:6,effAnimation:3
 		,eff:[{type:5,num:['70%','80%','90%','100%','110%']}],atkCount:[1],turn:1,sp:12},
 	{idx:4,
-		na:'학익진 강화',element_type:0,cate:[1],txt:'<u>전체</u> 학익진효과가 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
-		,ta_:0,ta:20,effAnimation:0
+		na:'학익진 강화',element_type:0,cate:[2],txt:'<u>전체</u> 학익진효과가 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
+		,ta_:0,ta:10,effAnimation:0
 		,eff:[{type:100,num:['20%','25%','30%','35%','40%']}],atkCount:[0],turn:0,sp:0}, //이순신
 	{idx:5,
-		na:'격려',element_type:0,cate:[1],txt:'<u>전체</u> 진형효과가 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
-		,ta_:0,ta:20,effAnimation:0
+		na:'격려',element_type:0,cate:[2],txt:'<u>전체</u> 진형효과가 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
+		,ta_:0,ta:10,effAnimation:1
 		,eff:[{type:100,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
 	{idx:6,
-		na:'불정령',element_type:10,cate:[1],txt:'<u>전체</u> 물리 공격력(ATK)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
-		,ta_:0,ta:3,effAnimation:0
-		,eff:[{type:100,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
+		na:'불정령',element_type:10,cate:[2],txt:'<u>전체</u> 물리 공격력(ATK)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
+		,ta_:0,ta:10,effAnimation:2
+		,eff:[{type:3,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
 	{idx:7,
-		na:'빛정령',element_type:7,cate:[1],txt:'<u>전체</u> 술법 공격력(MAK)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
-		,ta_:0,ta:5,effAnimation:0
-		,eff:[{type:100,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
+		na:'빛정령',element_type:7,cate:[2],txt:'<u>전체</u> 술법 공격력(MAK)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
+		,ta_:0,ta:10,effAnimation:3
+		,eff:[{type:5,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
 	{idx:8,
-		na:'물정령',element_type:9,cate:[1],txt:'<u>전체</u> 체력(HP)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
-		,ta_:0,ta:20,effAnimation:0
-		,eff:[{type:100,num:['20%','25%','30%','35%','40%']}],atkCount:[0],turn:0,sp:0},
+		na:'물정령',element_type:9,cate:[2],txt:'<u>전체</u> 체력(HP)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
+		,ta_:0,ta:10,effAnimation:4
+		,eff:[{type:0,num:['20%','25%','30%','35%','40%']}],atkCount:[0],turn:0,sp:0},
 	{idx:9,
 		na:'집중타',element_type:0,cate:[3],txt:'<u>단일</u>, <b dmg>$(0)</b>의 강한 공격을 한다.'
 		,ta_:1,ta:1,effAnimation:1
@@ -81,8 +82,12 @@ export const skill = [
 	{idx:16,
 		na:'그루밍',element_type:0,cate:[5],txt:`<u>단일 아군</u>, <b dmg>$(0)</b>의 속도(SPD)를 3턴 증가시킨다.`
 		,ta_:1,ta:1,effAnimation:11
-		,eff:[{type:8,num:['50','70','90','120','150'],count:[3,3,3,3,3]}],turn:1,atkCount:[1],sp:5},
+		,eff:[{type:8,num:['50%','70','90','120','150'],count:[3,3,3,3,3]}],turn:1,atkCount:[1],sp:5},
 	{idx:17,
+		na:'하악질',element_type:2,cate:[5],txt:`<u>단일 아군</u>, <b dmg>$(0)</b>의 공격(ATK)을 3턴 증가시킨다.`
+		,ta_:1,ta:1,effAnimation:0
+		,eff:[{type:3,num:['100%','120%','140%','170%','200%'],count:[3,3,3,3,3]}],atkCount:[0],turn:1,sp:7},
+	{idx:18,
 		na:'테스트',element_type:0,cate:[6],txt:`<u>적군</u>, <b dmg>$(0)</b>의 방어(DEF)를 2턴 감소시킨다.`
 		,ta_:1,ta:15,effAnimation:12
 		,eff:[{type:4,num:['-300','-400','-500','-600','-150'],count:[2,2,2,2,2]}],turn:1,atkCount:[1],sp:6},
