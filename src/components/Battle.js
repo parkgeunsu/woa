@@ -1141,9 +1141,6 @@ const Battle = ({
 					}, 1300 / gameSpd);
 				}, (2000 + allyRelationArr.current.length * 300) / gameSpd);
 			}, 100 / gameSpd);
-		} else { //인연이 없을때
-			setOrderIdx(0);
-			setMode('order');
 		}
 		//인연 적용캐릭 셋팅
 		let allyRt = [];
@@ -1172,6 +1169,87 @@ const Battle = ({
 		};
 		setTimeout(() => {
 			relationCh.current = {};
+			//패시브 체크
+			let allyPassive = [];
+			battleAlly.current.forEach((ally, idx) => {
+				ally.sk.forEach((allySkill) => {
+					if (gameData.skill[allySkill.idx].cate[0] === 2) {
+						const eff = gameData.skill[allySkill.idx].effAnimation;
+						if (gameData.skill[allySkill.idx].ta === 10) {//전체 캐릭 패시브 적용
+							battleAlly.current.forEach((ally_, chIdx) => {
+								let effOverlap = false;
+								if (allyPassive[chIdx] === undefined) {
+									allyPassive[chIdx] = [];
+								}
+								allyPassive[chIdx].forEach((data) => {
+									if (data === eff) {
+										effOverlap = true;
+										return;
+									}
+								});
+								if (!effOverlap) {
+									allyPassive[chIdx].push(eff);
+								}
+							});
+						} else {//단일 대상 패시브 적용
+							let effOverlap = false;
+							if (allyPassive[idx] === undefined) {
+								allyPassive[idx] = [];
+							}
+							allyPassive[idx].forEach((data) => {
+								if (data === eff) {
+									effOverlap = true;
+									return;
+								}
+							});
+							if (!effOverlap) {
+								allyPassive[idx].push(eff);
+							}
+						}
+					}
+				});
+			});
+			let enemyPassive = [];
+			battleEnemy.current.forEach((enemy, idx) => {
+				enemy.sk.forEach((enemySkill) => {
+					if (gameData.skill[enemySkill.idx].cate[0] === 2) {
+						const eff = gameData.skill[enemySkill.idx].effAnimation;
+						if (gameData.skill[enemySkill.idx].ta === 10) {//전체 캐릭 패시브 적용
+							battleEnemy.current.forEach((enemy_, chIdx) => {
+								let effOverlap = false;
+								if (enemyPassive[chIdx] === undefined){
+									enemyPassive[chIdx] = [];
+								}
+								enemyPassive[chIdx].forEach((data) => {
+									if (data === eff) {
+										effOverlap = true;
+										return;
+									}
+								});
+								if (!effOverlap) {
+									enemyPassive[chIdx].push(eff);
+								}
+							});
+						} else {//단일 대상 패시브 적용
+							let effOverlap = false;
+							if (enemyPassive[idx] === undefined){
+								enemyPassive[idx] = [];
+							}
+							enemyPassive[idx].forEach((data) => {
+								if (data === eff) {
+									effOverlap = true;
+									return;
+								}
+							});
+							if (!effOverlap) {
+								enemyPassive[idx].push(eff);
+							}
+						} 
+					}
+				});
+			});
+			allyEnemyPassiveRef.current = [allyPassive, enemyPassive];//패시브효과 전달
+			setMode('passive');
 		}, 6000 / gameSpd);
 	});
 	const conversationInterval = useCallback(() => {
@@ -1501,7 +1579,12 @@ const Battle = ({
 		}
 	};
 	useLayoutEffect(() => { //모드가 바꿨을때
-		if (mode === 'action') {
+		if (mode === 'passive') {
+			setTimeout(() => {
+				setOrderIdx(0);
+				setMode('order');
+			}, 2000);
+		} else if (mode === 'action') {
 			let battleAllyCopy = [...battleAlly.current];
 			//아군 패시브 체크
 			let allyPassive = [],
@@ -1777,7 +1860,7 @@ const Battle = ({
 						}
 						console.log(state, enemy['passive' + state], enemy[state]);
 					}
-				})
+				});
 			});
 			passiveEnemySkill.forEach((data, idx) => {
 				data.forEach((data_) => {
