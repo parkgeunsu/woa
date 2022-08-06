@@ -1064,8 +1064,8 @@ const Battle = ({
 	changePage,
 	scenario,
 }) => {
-  	const imgSet = useContext(AppContext).images;
-  	const gameData = useContext(AppContext).gameData;
+  const imgSet = useContext(AppContext).images;
+  const gameData = useContext(AppContext).gameData;
 	const setting = useContext(AppContext).setting,
 		gameSpd = setting.speed;
 	const scenarioDetail = gameData.scenario[scenario.country][scenario.period][scenario.title][scenario.stage] || gameData.scenario.korea.joseon2.LSS.stage[0];
@@ -1111,6 +1111,8 @@ const Battle = ({
 	const conversationStepRef = useRef(1);
 	const [allyAction, setAllyAction] = useState([]);//아군 움직임(defence, avoid)
 	const [enemyAction, setEnemyAction] = useState([]);//적군 움직임(defence, avoid)
+	const allyPassive = useRef([]);//아군 패시브
+	const enemyPassive =useRef([]);//적군 패시브
 	const allyEnemyPassiveRef = useRef([[],[]]);//아군,적군 패시브
 	const allyEnemyBuffRef = useRef([[],[]]);//아군,적군 버프
 
@@ -1128,20 +1130,46 @@ const Battle = ({
 	const [conversationMsg, setConversationMsg] = useState();//대화 내용
   	const [msgOn, setMsgOn] = useState(false);
   	const [msg, setMsg] = useState("");
-	const relationMode = useCallback(() => {
-		if (allyRelationArr.current.length > 0) { //인연이 있을때
-			relationHeight.current = 35 + 20 + (20 * allyRelationArr.current.length); //인연글씨 + 여백 + 인연갯수
-			setTimeout(() => {
-				setMode('relation');
-				setTimeout(() => {
-					setOrderIdx(0);
-					setMode('order');
-					setTimeout(() => {
-						allyRelationArr.current = '';
-					}, 1300 / gameSpd);
-				}, (2000 + allyRelationArr.current.length * 300) / gameSpd);
-			}, 100 / gameSpd);
+	const conversationInterval = useCallback(() => {
+		conversationCount.current ++;
+		if (conversationList.current[conversationStepRef.current - 1].txt.substr(conversationCount.current,1).indexOf("<") !== -1) {
+			conversationCount.current += 5;
 		}
+		setConversationMsg(conversationList.current[conversationStepRef.current - 1].txt.substr(0,conversationCount.current) + "_");
+		if (conversationCount.current >= conversationList.current[conversationStepRef.current - 1].txt.length) {
+			clearInterval(conversationTimeout.current);
+		}
+	});
+	useLayoutEffect(() => {//최초 실행
+		let ally = [];
+		let pos = [];
+		let count = 0;
+		allyDeck.filter((data, idx) => {
+			if (typeof data === 'number') {
+				ally.push(data);
+				pos.push({
+					idx: count,
+					cardSlot: data,
+					pos: idx
+				});
+				count ++;
+			}
+		});
+		allySlot.current = [...ally];
+		//인연 시작
+		const allyRelation = relationCheck(saveData, gameData, ally, 'ally');
+		allyRelationArr.current = allyRelation;
+		let enemy = [],
+			enemy_ = [],
+			enemyP = [];
+		enemyDeck.filter((data, idx) => {
+			if (typeof data.idx === 'number') {
+				enemy_.push(data);
+				enemyP.push(idx);
+			}
+		});
+		const enemyRelation = relationCheck(saveData, gameData, enemy_, 'enemy');
+		enemyRelationArr.current = enemyRelation;
 		//인연 적용캐릭 셋팅
 		let allyRt = [];
 		allyRelationArr.current.forEach((data) => {
@@ -1167,142 +1195,20 @@ const Battle = ({
 			ally:[...allyRt],
 			enemy:[...enemyRt],
 		};
-		setTimeout(() => {
-			relationCh.current = {};
-			//패시브 체크
-			let allyPassive = [];
-			battleAlly.current.forEach((ally, idx) => {
-				ally.sk.forEach((allySkill) => {
-					if (gameData.skill[allySkill.idx].cate[0] === 2) {
-						const eff = gameData.skill[allySkill.idx].effAnimation;
-						if (gameData.skill[allySkill.idx].ta === 10) {//전체 캐릭 패시브 적용
-							battleAlly.current.forEach((ally_, chIdx) => {
-								let effOverlap = false;
-								if (allyPassive[chIdx] === undefined) {
-									allyPassive[chIdx] = [];
-								}
-								allyPassive[chIdx].forEach((data) => {
-									if (data === eff) {
-										effOverlap = true;
-										return;
-									}
-								});
-								if (!effOverlap) {
-									allyPassive[chIdx].push(eff);
-								}
-							});
-						} else {//단일 대상 패시브 적용
-							let effOverlap = false;
-							if (allyPassive[idx] === undefined) {
-								allyPassive[idx] = [];
-							}
-							allyPassive[idx].forEach((data) => {
-								if (data === eff) {
-									effOverlap = true;
-									return;
-								}
-							});
-							if (!effOverlap) {
-								allyPassive[idx].push(eff);
-							}
-						}
-					}
-				});
-			});
-			let enemyPassive = [];
-			battleEnemy.current.forEach((enemy, idx) => {
-				enemy.sk.forEach((enemySkill) => {
-					if (gameData.skill[enemySkill.idx].cate[0] === 2) {
-						const eff = gameData.skill[enemySkill.idx].effAnimation;
-						if (gameData.skill[enemySkill.idx].ta === 10) {//전체 캐릭 패시브 적용
-							battleEnemy.current.forEach((enemy_, chIdx) => {
-								let effOverlap = false;
-								if (enemyPassive[chIdx] === undefined){
-									enemyPassive[chIdx] = [];
-								}
-								enemyPassive[chIdx].forEach((data) => {
-									if (data === eff) {
-										effOverlap = true;
-										return;
-									}
-								});
-								if (!effOverlap) {
-									enemyPassive[chIdx].push(eff);
-								}
-							});
-						} else {//단일 대상 패시브 적용
-							let effOverlap = false;
-							if (enemyPassive[idx] === undefined){
-								enemyPassive[idx] = [];
-							}
-							enemyPassive[idx].forEach((data) => {
-								if (data === eff) {
-									effOverlap = true;
-									return;
-								}
-							});
-							if (!effOverlap) {
-								enemyPassive[idx].push(eff);
-							}
-						} 
-					}
-				});
-			});
-			allyEnemyPassiveRef.current = [allyPassive, enemyPassive];//패시브효과 전달
-			setMode('passive');
-		}, 6000 / gameSpd);
-	});
-	const conversationInterval = useCallback(() => {
-		conversationCount.current ++;
-		if (conversationList.current[conversationStepRef.current - 1].txt.substr(conversationCount.current,1).indexOf("<") !== -1) {
-			conversationCount.current += 5;
-		}
-		setConversationMsg(conversationList.current[conversationStepRef.current - 1].txt.substr(0,conversationCount.current) + "_");
-		if (conversationCount.current >= conversationList.current[conversationStepRef.current - 1].txt.length) {
-			clearInterval(conversationTimeout.current);
-		}
-	});
-	useLayoutEffect(() => {
-		let ally = [];
-		let pos = [];
-		let count = 0;
-		allyDeck.filter((data, idx) => {
-			if (typeof data === 'number') {
-				ally.push(data);
-				pos.push({
-					idx: count,
-					cardSlot: data,
-					pos: idx
-				});
-				count ++;
-			}
-		});
-		allySlot.current = [...ally];
-		//최초 실행
-		const allyRelation = relationCheck(saveData, gameData, ally, 'ally');
-		allyRelationArr.current = allyRelation;
-		let enemy = [],
-			enemy_ = [],
-			enemyP = [];
-		enemyDeck.filter((data, idx) => {
-			if (typeof data.idx === 'number') {
-				enemy_.push(data);
-				enemyP.push(idx);
-			}
-		});
-		const enemyRelation = relationCheck(saveData, gameData, enemy_, 'enemy');
-		enemyRelationArr.current = enemyRelation;
-		if (!viewScenario) {
+		//시나리오 시청 판단
+		if (!viewScenario) {//시나리오 시청
 			scenarioRepeat.current = true;
 			conversationData.current = gameData.scenario[scenario.country][scenario.period][scenario.title].stage[scenario.stage].conversation;
 			conversationList.current.push(conversationData.current[0]);
-			setMode("scenario");
+			setMode('scenario');
 			conversationCount.current = 0;
 			conversationTimeout.current = setInterval(conversationInterval, 100);
-		} else {
-			relationMode();
+		} else {//시나리오 패스
+			setTimeout(() => {
+				setMode('relation');
+			}, 100 / gameSpd);
 		}
-		ally.forEach((data, idx) => {
+		ally.forEach((data, idx) => {//능력치 셋팅
 			const saveCh = saveData.ch[data];
 			let effData;
 			//인연 체크
@@ -1388,6 +1294,7 @@ const Battle = ({
 			});
 		});
 		battleEnemy.current = enemy;
+		//적군 행동 지능
 		const makeAi = () => {
 			const ai = Math.random();
 			if (ai < .1) {
@@ -1403,7 +1310,84 @@ const Battle = ({
 		enemy.forEach(() => {
 			enemyAi.current.push(makeAi());
 		});
-		return () => {
+		//패시브 시작
+		battleAlly.current.forEach((ally, idx) => {
+			ally.sk.forEach((allySkill) => {
+				if (gameData.skill[allySkill.idx].cate[0] === 2) {
+					const eff = gameData.skill[allySkill.idx].effAnimation;
+					if (gameData.skill[allySkill.idx].ta === 10) {//전체 캐릭 패시브 적용
+						battleAlly.current.forEach((ally_, chIdx) => {
+							let effOverlap = false;
+							if (allyPassive.current[chIdx] === undefined) {
+								allyPassive.current[chIdx] = [];
+							}
+							allyPassive.current[chIdx].forEach((data) => {
+								if (data === eff) {
+									effOverlap = true;
+									return;
+								}
+							});
+							if (!effOverlap) {
+								allyPassive.current[chIdx].push(eff);
+							}
+						});
+					} else {//단일 대상 패시브 적용
+						let effOverlap = false;
+						if (allyPassive.current[idx] === undefined) {
+							allyPassive.current[idx] = [];
+						}
+						allyPassive.current[idx].forEach((data) => {
+							if (data === eff) {
+								effOverlap = true;
+								return;
+							}
+						});
+						if (!effOverlap) {
+							allyPassive.current[idx].push(eff);
+						}
+					}
+				}
+			});
+		});
+		battleEnemy.current.forEach((enemy, idx) => {
+			enemy.sk.forEach((enemySkill) => {
+				if (gameData.skill[enemySkill.idx].cate[0] === 2) {
+					const eff = gameData.skill[enemySkill.idx].effAnimation;
+					if (gameData.skill[enemySkill.idx].ta === 10) {//전체 캐릭 패시브 적용
+						battleEnemy.current.forEach((enemy_, chIdx) => {
+							let effOverlap = false;
+							if (enemyPassive.current[chIdx] === undefined){
+								enemyPassive.current[chIdx] = [];
+							}
+							enemyPassive.current[chIdx].forEach((data) => {
+								if (data === eff) {
+									effOverlap = true;
+									return;
+								}
+							});
+							if (!effOverlap) {
+								enemyPassive.current[chIdx].push(eff);
+							}
+						});
+					} else {//단일 대상 패시브 적용
+						let effOverlap = false;
+						if (enemyPassive.current[idx] === undefined){
+							enemyPassive.current[idx] = [];
+						}
+						enemyPassive.current[idx].forEach((data) => {
+							if (data === eff) {
+								effOverlap = true;
+								return;
+							}
+						});
+						if (!effOverlap) {
+							enemyPassive.current[idx].push(eff);
+						}
+					} 
+				}
+			});
+		});
+		return () => {//언마운트 리셋
 			clearInterval(conversationTimeout.current);
 			let saveD = {...saveData};
 			saveD.scenario[scenario.country][scenario.period][scenario.title][scenario.stage] = scenarioRepeat;
@@ -1579,11 +1563,27 @@ const Battle = ({
 		}
 	};
 	useLayoutEffect(() => { //모드가 바꿨을때
-		if (mode === 'passive') {
+		if (mode === 'relation') {
+			if (allyRelationArr.current.length > 0) { //인연이 있을때
+				relationHeight.current = 35 + 20 + (20 * allyRelationArr.current.length); //인연글씨 + 여백 + 인연갯수
+				setTimeout(() => {
+					setTimeout(() => {
+						setMode('passive');
+						setTimeout(() => {
+							allyRelationArr.current = '';
+							relationCh.current = {};
+						}, 2000 / gameSpd);
+					}, 1300 / gameSpd);
+				}, (2000 + allyRelationArr.current.length * 300) / gameSpd);
+			}
+		} else if (mode === 'passive') {
 			setTimeout(() => {
-				setOrderIdx(0);
+				allyEnemyPassiveRef.current = [allyPassive.current, enemyPassive.current];//패시브효과 전달
 				setMode('order');
-			}, 2000);
+				setTimeout(() => {
+					setOrderIdx(0);
+				}, 2000 / gameSpd);
+			}, 2000 / gameSpd);
 		} else if (mode === 'action') {
 			let battleAllyCopy = [...battleAlly.current];
 			//아군 패시브 체크
@@ -2064,7 +2064,7 @@ const Battle = ({
 						}
 					}, 150);
 					if (conversationStepRef.current > conversationData.current.length - 1) {
-						relationMode();
+						setMode('relation');
 						return;
 					}
 					let conversationClone = conversationData.current[conversationStepRef.current];
