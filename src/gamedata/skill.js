@@ -32,23 +32,23 @@ export const skill = [
 		,ta_:1,ta:6,effAnimation:3
 		,eff:[{type:5,num:['70%','80%','90%','100%','110%']}],atkCount:[1],turn:1,sp:12},
 	{idx:4,
-		na:'학익진 강화',element_type:0,cate:[2],txt:'<u>전체</u> 학익진효과가 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
+		na:'학익진 강화',element_type:0,cate:[2],txt:'전쟁 참여시 <u>전체</u> 학익진효과가 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
 		,ta_:0,ta:10,effAnimation:0
 		,eff:[{type:100,num:['20%','25%','30%','35%','40%']}],atkCount:[0],turn:0,sp:0}, //이순신
 	{idx:5,
-		na:'격려',element_type:0,cate:[2],txt:'<u>전체</u> 진형효과가 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
+		na:'격려',element_type:0,cate:[2],txt:'전쟁 참여시 <u>전체</u> 진형효과가 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
 		,ta_:0,ta:10,effAnimation:1
 		,eff:[{type:100,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
 	{idx:6,
-		na:'불정령',element_type:10,cate:[2],txt:'<u>전체</u> 물리 공격력(ATK)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
+		na:'불정령',element_type:10,cate:[2],txt:'전쟁 참여시 <u>전체</u> 물리 공격력(ATK)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
 		,ta_:0,ta:10,effAnimation:2
 		,eff:[{type:3,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
 	{idx:7,
-		na:'빛정령',element_type:7,cate:[2],txt:'<u>전체</u> 술법 공격력(MAK)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
+		na:'빛정령',element_type:7,cate:[2],txt:'전쟁 참여시 <u>전체</u> 술법 공격력(MAK)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
 		,ta_:0,ta:10,effAnimation:3
 		,eff:[{type:5,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
 	{idx:8,
-		na:'물정령',element_type:9,cate:[2],txt:'<u>전체</u> 체력(HP)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
+		na:'물정령',element_type:9,cate:[2],txt:'전쟁 참여시 <u>전체</u> 체력(HP)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
 		,ta_:0,ta:10,effAnimation:4
 		,eff:[{type:0,num:['20%','25%','30%','35%','40%']}],atkCount:[0],turn:0,sp:0},
 	{idx:9,

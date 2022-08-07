@@ -7,8 +7,8 @@ export const save = {
     },
     "ch":[
       {"idx":1,"stateType":0,"element":[11],"grade":6,"stateLuk":146,"lv":45,"exp":10,"hasExp":50000,"actionPoint":20,"battleBeige":[0,0,0,0],"animalBeige":0,"sk":[{"idx":1,"lv":1,"exp":0},{"idx":2,"lv":1,"exp":0},{"idx":6,"lv":1,"exp":0},{"idx":7,"lv":1,"exp":0},{"idx":17,"lv":1,"exp":0}],"items":[
-        {"idx":0,"part":1,"slot":0,"hole":[4,0,12,23],"grade":1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[],mark:24,modifier:'king의 '},
-        {},
+        {"idx": 2,"part": 1,"grade": 2,"slot": 1,"hole": [0],"color": ["#d9e506","#52057f"],"baseEff": [{"type": 4,"num": ["82","98","121","140"]}],"addEff": [{"type": 13,"num": ["46"]},{"type": 4,"num": ["178"]},{"type": 8,"num": ["4"]},{"type": 11,"num": ["25"]}],"mark": 0,"markNum": 2,"modifier": "사파이어의 고양이두마리"},
+        {"idx": 8,"part": 2,"grade": 2,"slot": 4,"hole": [0,0,0,0],"color": ["#706357"],"baseEff": [{"type": 4,"num": ["305","386","480","583"]}],"addEff": [{"type": 13,"num": ["2"]},{"type": 13,"num": ["18"]},{"type": 4,"num": ["359"]}],"mark": 0,"markNum": 4,"modifier": "다이아몬드의 고양이네마리"},
         // {"idx":11,"slot":3,"hole":[],"grade":2},
         {},
         {},
@@ -18,7 +18,7 @@ export const save = {
         {},
       ]},
       {"idx":0,"stateType":0,"element":[8],"grade":5,"stateLuk":20,"lv":40,"exp":0,"hasExp":1000,"actionPoint":20,"battleBeige":[0,0,0,0],"animalBeige":0,"sk":[{"idx":1,"lv":1,"exp":0},{"idx":2,"lv":1,"exp":0},{"idx":8,"lv":1,"exp":0}],"items":[
-        {},
+        {"idx":0,"part":1,"slot":0,"hole":[4,0,12,23],"grade":1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[],mark:24,modifier:'king의 '},
         {},
         {},
         {},

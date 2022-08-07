@@ -1612,21 +1612,26 @@ const Battle = ({
 				}, 1000 + allyPassive.current.length * 500 / gameSpd);
 			}, 2000 / gameSpd);
 		} else if (mode === 'action') {
-			let battleAllyCopy = [...battleAlly.current];
+			let battleAllyCopy = battleAlly.current;
 			//아군 패시브 체크
 			let allyPassive = [],
 				passiveAllySkill = [];
+			battleAllyCopy.forEach((ally) => {
+				ally.nowhp = ally.hp;
+			});
 			battleAllyCopy.forEach((ally, allyIdx) => {
 				if (ally.state === 'die') {
 					ally.sk.forEach((allySkill) => {//죽은 캐릭 스킬
 						const gameDataSkill = gameData.skill[allySkill.idx];
 						const state = util.getStateName(gameDataSkill.eff[0].type).toLowerCase();
 						battleAllyCopy.forEach((ally_) => {//죽은 캐릭 패시브 제거
-							if (state === 'hp') {
+							if (state === 'hp' && ally_['passive'+state]) {
 								const remainPercent = ally_['current'+state + '_'] / ally_['passive'+state];
-								ally_[state] = remainPercent * ally_['current'+state];
+								ally_[state] = remainPercent * ally_['now'+state];
 								ally_[state + '_'] = ally_['current'+state + '_'];
-							} else {
+								delete ally_['passive'+state];
+								console.log(ally_[state])
+							} else if (state !== 'hp') {
 								ally_[state] = ally_['current' + state];
 							}
 						});
@@ -1645,7 +1650,11 @@ const Battle = ({
 								passiveAllySkill[chIdx] = [];
 								return;
 							}
-							ally_[state] = ally_['current' + state];//수정
+							if (state === 'hp') {
+								ally_[state] = ally_['now' + state];
+							} else {
+								ally_[state] = ally_['current' + state];
+							}
 							if (gameData.skill[allySkill.idx].cate[0] === 2) {//패시브 스킬인지
 								let passiveOverlap = false;
 								if (passiveAllySkill[chIdx] === undefined) {
@@ -1671,21 +1680,27 @@ const Battle = ({
 										eff: passiveEff,
 									});
 								}
-								if (passiveNum.indexOf('%') > 0) {
-									const percent = parseInt(passiveNum) / 100;
-									ally_[state] = percent < 0 ? ally_[state] - ally_[state] * Math.abs(percent) : ally_[state] + ally_[state] * percent;
-									ally_[state] = ally_[state] < 0 ? 0 : ally_[state];
-								} else {
-									ally_[state] = ally_[state] + Number(passiveNum)  < 0 ? 0 : ally_[state] + Number(passiveNum);
+								if (state !== 'hp' || (state === 'hp' && !ally_['passive' + state])) {
+									if (passiveNum.indexOf('%') > 0) {
+										const percent = parseInt(passiveNum) / 100;
+										ally_[state] = percent < 0 ? ally_[state] - ally_[state] * Math.abs(percent) : ally_[state] + ally_[state] * percent;
+										ally_[state] = ally_[state] < 0 ? 0 : ally_[state];
+									} else {
+										ally_[state] = ally_[state] + Number(passiveNum)  < 0 ? 0 : ally_[state] + Number(passiveNum);
+									}
+									if (state === 'hp' && !ally_['passive' + state]) {
+										ally_['passive' + state] = ally_[state];
+									}
 								}
-							}
-							if (state === 'hp' && !ally_['passive' + state]) {
-								ally_['passive' + state] = ally_[state];
 							}
 							//console.log(state, ally_['passive' + state], ally_[state]);
 						});
 					} else {//단일 대상 패시브 적용
-						ally[state] = ally['current' + state];
+						if (state === 'hp') {
+							ally[state] = ally['now' + state];
+						} else {
+							ally[state] = ally['current' + state];
+						}
 						if (gameData.skill[allySkill.idx].cate[0] === 2) {//패시브 스킬인지
 							let passiveOverlap = false;
 							passiveAllySkill[allyIdx].forEach((passiveData, idx) => {
@@ -1708,17 +1723,19 @@ const Battle = ({
 									eff: passiveEff,
 								});
 							}
-							if (passiveNum.indexOf('%') > 0) {
-								const percent = parseInt(passiveNum) / 100;
-								ally[state] = percent < 0 ? ally[state] - ally[state] * Math.abs(percent) : ally[state] + ally[state] * percent;
-								ally[state] = ally[state] < 0 ? 0 : ally[state];
-								console.log(passiveNum);
-							} else {
-								ally[state] = ally[state] + Number(passiveNum)  < 0 ? 0 : ally[state] + Number(passiveNum);
+							if (state !== 'hp' || (state === 'hp' && !ally['passive' + state])) {
+								if (passiveNum.indexOf('%') > 0) {
+									const percent = parseInt(passiveNum) / 100;
+									ally[state] = percent < 0 ? ally[state] - ally[state] * Math.abs(percent) : ally[state] + ally[state] * percent;
+									ally[state] = ally[state] < 0 ? 0 : ally[state];
+									console.log(passiveNum);
+								} else {
+									ally[state] = ally[state] + Number(passiveNum)  < 0 ? 0 : ally[state] + Number(passiveNum);
+								}
+								if (state === 'hp' && !ally['passive' + state]) {
+									ally['passive' + state] = ally[state];
+								}
 							}
-						}
-						if (state === 'hp' && !ally['passive' + state]) {
-							ally['passive' + state] = ally[state];
 						}
 						//console.log(state, ally['passive' + state], ally[state]);
 					}
@@ -1795,17 +1812,21 @@ const Battle = ({
 			//적군 패시브 체크
 			let enemyPassive = [],
 				passiveEnemySkill = [];
+			battleEnemyCopy.forEach((enemy) => {
+				enemy.nowhp = enemy.hp;
+			});
 			battleEnemyCopy.forEach((enemy, enemyIdx) => {
 				if (enemy.state === 'die') {
 					enemy.sk.forEach((enemySkill) => {//죽은 캐릭 스킬
 						const gameDataSkill = gameData.skill[enemySkill.idx];
 						const state = util.getStateName(gameDataSkill.eff[0].type).toLowerCase();
 						battleEnemyCopy.forEach((enemy_) => {//죽은 캐릭 패시브 제거
-							if (state === 'hp') {
+							if (state === 'hp' && enemy_['passive'+state]) {
 								const remainPercent = enemy_['current'+state + '_'] / enemy_['passive'+state];
-								enemy_[state] = remainPercent * enemy_['current'+state];
+								enemy_[state] = remainPercent * enemy_['now'+state];
 								enemy_[state + '_'] = enemy_['current'+state + '_'];
-							} else {
+								delete enemy_['passive'+state]
+							} else if (state !== 'hp') {
 								enemy_[state] = enemy_['current' + state];
 							}
 						});
@@ -1824,7 +1845,12 @@ const Battle = ({
 								passiveEnemySkill[chIdx] = [];
 								return;
 							}
-							enemy_[state] = enemy_['current' + state];
+							if (state === 'hp') {
+								enemy_[state] = enemy_['now' + state];
+								return;
+							} else {
+								enemy_[state] = enemy_['current' + state];
+							}
 							if (gameData.skill[enemySkill.idx].cate[0] === 2) {//패시브 스킬인지
 								let passiveOverlap = false;
 								if (passiveEnemySkill[chIdx] === undefined) {
@@ -1850,21 +1876,27 @@ const Battle = ({
 										eff: passiveEff,
 									});
 								}
-								if (passiveNum.indexOf('%') > 0) {
-									const percent = parseInt(passiveNum) / 100;
-									enemy_[state] = percent < 0 ? enemy_[state] - enemy_[state] * Math.abs(percent) : enemy_[state] + enemy_[state] * percent;
-									enemy_[state] = enemy_[state] < 0 ? 0 : enemy_[state];
-								} else {
-									enemy_[state] = enemy_[state] + Number(passiveNum)  < 0 ? 0 : enemy_[state] + Number(passiveNum);
+								if (state !== 'hp' || (state === 'hp' && !enemy_['passive' + state])) {
+									if (passiveNum.indexOf('%') > 0) {
+										const percent = parseInt(passiveNum) / 100;
+										enemy_[state] = percent < 0 ? enemy_[state] - enemy_[state] * Math.abs(percent) : enemy_[state] + enemy_[state] * percent;
+										enemy_[state] = enemy_[state] < 0 ? 0 : enemy_[state];
+									} else {
+										enemy_[state] = enemy_[state] + Number(passiveNum)  < 0 ? 0 : enemy_[state] + Number(passiveNum);
+									}
+									if (state === 'hp' && !enemy_['passive' + state]) {
+										enemy_['passive' + state] = enemy_[state];
+									}
 								}
-							}
-							if (state === 'hp' && !enemy_['passive' + state]) {
-								enemy_['passive' + state] = enemy_[state];
 							}
 							//console.log(state, enemy_['passive' + state], enemy_[state]);
 						});
 					} else {//단일 대상 패시브 적용
-						enemy[state] = enemy['current' + state];
+						if (state === 'hp') {
+							enemy[state] = enemy['now' + state];
+						} else {
+							enemy[state] = enemy['current' + state];
+						}
 						if (gameData.skill[enemySkill.idx].cate[0] === 2) {//패시브 스킬인지
 							let passiveOverlap = false;
 							passiveEnemySkill[enemyIdx].forEach((passiveData, idx) => {
@@ -1887,16 +1919,18 @@ const Battle = ({
 									eff: passiveEff,
 								});
 							}
-							if (passiveNum.indexOf('%') > 0) {
-								const percent = parseInt(passiveNum) / 100;
-								enemy[state] = percent < 0 ? enemy[state] - enemy[state] * Math.abs(percent) : enemy[state] + enemy[state] * percent;
-								enemy[state] = enemy[state] < 0 ? 0 : enemy[state];
-							} else {
-								enemy[state] = enemy[state] + Number(passiveNum)  < 0 ? 0 : enemy[state] + Number(passiveNum);
+							if (state !== 'hp' || (state === 'hp' && !enemy['passive' + state])) {
+								if (passiveNum.indexOf('%') > 0) {
+									const percent = parseInt(passiveNum) / 100;
+									enemy[state] = percent < 0 ? enemy[state] - enemy[state] * Math.abs(percent) : enemy[state] + enemy[state] * percent;
+									enemy[state] = enemy[state] < 0 ? 0 : enemy[state];
+								} else {
+									enemy[state] = enemy[state] + Number(passiveNum)  < 0 ? 0 : enemy[state] + Number(passiveNum);
+								}
+								if (state === 'hp' && !enemy['passive' + state]) {
+									enemy['passive' + state] = enemy[state];
+								}
 							}
-						}
-						if (state === 'hp' && !enemy['passive' + state]) {
-							enemy['passive' + state] = enemy[state];
 						}
 						//console.log(state, enemy['passive' + state], enemy[state]);
 					}
