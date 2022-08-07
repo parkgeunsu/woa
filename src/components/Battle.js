@@ -604,12 +604,12 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 					if (defEnemy.state !== 'die') { //적이 살았을 경우
 						//마법 방어와 방어 분기 처리
 						if (skType < 7) {//물리공격인지
-							const hitChance =  Math.min((80 + 30 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100) / 100, 0.95); //물리 적중 확률
+							const hitChance =  Math.min((80 + 30 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100) / 100, 0.95); //물리 적중 확률
 							if (team[defData.idx] === undefined || team[defData.idx].indexOf('defence0') < 0) { //방어를 안했으면
 								// console.log("pgs", chance, hitChance);
 								if (chance < hitChance) {
 									const criticalChance = Math.random();
-									const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100, 0.1);//치명타 확률 계산
+									const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100, 0.1);//치명타 확률 계산
 									if (criticalChance < critical) {
 										criticalAtk = true;
 										team[defData.idx] = team[defData.idx] + ' dmgCri'
@@ -623,7 +623,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 								}
 							} else { //defence를 했으면
 								const criticalChance = Math.random();
-								const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100, 0.1);//치명타 확률 계산
+								const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100, 0.1);//치명타 확률 계산
 								if (criticalChance < critical) {
 									criticalAtk = true;
 									team[defData.idx] = team[defData.idx] + ' dmgCri'
@@ -636,7 +636,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 							if (team[defData.idx] === undefined || team[defData.idx].indexOf('defence2') < 0) { //마법방어를 안했으면
 								if (chance < magicChance) {
 									const criticalChance = Math.random();
-									const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100, 0.1);//치명타 확률 계산
+									const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100, 0.1);//치명타 확률 계산
 									if (criticalChance < critical) {
 										criticalAtk = true;
 										team[defData.idx] = team[defData.idx] + ' dmgCri'
@@ -650,7 +650,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 								}
 							} else { //마법방어를 했으면
 								const criticalChance = Math.random();
-								const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.stateLuk - defEnemy.stateLuk) / 100, 0.1);//치명타 확률 계산
+								const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100, 0.1);//치명타 확률 계산
 								if (criticalChance < critical) {
 									criticalAtk = true;
 									team[defData.idx] = team[defData.idx] + ' dmgCri'
@@ -1235,17 +1235,28 @@ const Battle = ({
 				hasExp:saveCh.hasExp,
 				state: 'alive',
 				buffDebuff:[],
+				currenthp: hp,
 				hp: hp,
+				currenthp_: hp,
 				hp_: hp,
+				currentsp: saveCh.bSt1,
 				sp: Math.floor(saveCh.bSt1/2),
 				sp_: saveCh.bSt1,
+				currentrsp: rsp,
 				rsp: rsp,
+				currentatk: atk,
 				atk: atk,
+				currentdef: def,
 				def: def,
+				currentmak: mak,
 				mak: mak,
+				currentmdf: mdf,
 				mdf: mdf,
+				currentrcv: rcv,
 				rcv: rcv,
+				currentspd: spd,
 				spd: spd,
+				currentluk: luk,
 				luk: luk,
 			});
 		});
@@ -1272,7 +1283,8 @@ const Battle = ({
 				mak = enemyData.bSt5 + enemyData.iSt5 + (effData?.rtSt5 || 0),
 				mdf = enemyData.bSt6 + enemyData.iSt6 + (effData?.rtSt6 || 0),
 				rcv = enemyData.bSt7 + enemyData.iSt7 + (effData?.rtSt7 || 0),
-				spd = enemyData.bSt8 + enemyData.iSt8 + (effData?.rtSt8 || 0);
+				spd = enemyData.bSt8 + enemyData.iSt8 + (effData?.rtSt8 || 0),
+				luk = enemyData.bSt9 + enemyData.iSt9 + (effData?.rtSt9 || 0);
 			enemy.push({
 				state: 'alive',
 				buffDebuff:[],
@@ -1280,17 +1292,29 @@ const Battle = ({
 				...enemyData,
 				lv: data.lv,
 				sk: enemySkill,
+				currenthp: hp,
 				hp: hp,
+				currenthp_: hp,
 				hp_: hp,
+				currentsp: enemyData.bSt1,
 				sp: Math.floor(enemyData.bSt1/2),
 				sp_: enemyData.bSt1,
+				currentrsp: rsp,
 				rsp: rsp,
+				currentatk: atk,
 				atk: atk,
+				currentdef: def,
 				def: def,
+				currentmak: mak,
 				mak: mak,
+				currentmdf: mdf,
 				mdf: mdf,
+				currentrcv: rcv,
 				rcv: rcv,
+				currentspd: spd,
 				spd: spd,
+				currentluk: luk,
+				luk: luk,
 			});
 		});
 		battleEnemy.current = enemy;
@@ -1598,8 +1622,13 @@ const Battle = ({
 						const gameDataSkill = gameData.skill[allySkill.idx];
 						const state = util.getStateName(gameDataSkill.eff[0].type).toLowerCase();
 						battleAllyCopy.forEach((ally_) => {//죽은 캐릭 패시브 제거
-							ally_[state] = ally_['passive' + state];
-							delete ally_['passive' + state];
+							if (state === 'hp') {
+								const remainPercent = ally_['current'+state + '_'] / ally_['passive'+state];
+								ally_[state] = remainPercent * ally_['current'+state];
+								ally_[state + '_'] = ally_['current'+state + '_'];
+							} else {
+								ally_[state] = ally_['current' + state];
+							}
 						});
 					});
 					return;
@@ -1616,11 +1645,7 @@ const Battle = ({
 								passiveAllySkill[chIdx] = [];
 								return;
 							}
-							if (ally_['passive' + state]) {
-								ally_[state] = ally_['passive' + state];
-							} else {
-								ally_['passive' + state] = ally_[state];
-							}
+							ally_[state] = ally_['current' + state];//수정
 							if (gameData.skill[allySkill.idx].cate[0] === 2) {//패시브 스킬인지
 								let passiveOverlap = false;
 								if (passiveAllySkill[chIdx] === undefined) {
@@ -1654,14 +1679,13 @@ const Battle = ({
 									ally_[state] = ally_[state] + Number(passiveNum)  < 0 ? 0 : ally_[state] + Number(passiveNum);
 								}
 							}
+							if (state === 'hp' && !ally_['passive' + state]) {
+								ally_['passive' + state] = ally_[state];
+							}
 							//console.log(state, ally_['passive' + state], ally_[state]);
 						});
 					} else {//단일 대상 패시브 적용
-						if (ally['passive' + state]) {
-							ally[state] = ally['passive' + state];
-						} else {
-							ally['passive' + state] = ally[state];
-						}
+						ally[state] = ally['current' + state];
 						if (gameData.skill[allySkill.idx].cate[0] === 2) {//패시브 스킬인지
 							let passiveOverlap = false;
 							passiveAllySkill[allyIdx].forEach((passiveData, idx) => {
@@ -1692,6 +1716,9 @@ const Battle = ({
 							} else {
 								ally[state] = ally[state] + Number(passiveNum)  < 0 ? 0 : ally[state] + Number(passiveNum);
 							}
+						}
+						if (state === 'hp' && !ally['passive' + state]) {
+							ally['passive' + state] = ally[state];
 						}
 						//console.log(state, ally['passive' + state], ally[state]);
 					}
@@ -1774,8 +1801,13 @@ const Battle = ({
 						const gameDataSkill = gameData.skill[enemySkill.idx];
 						const state = util.getStateName(gameDataSkill.eff[0].type).toLowerCase();
 						battleEnemyCopy.forEach((enemy_) => {//죽은 캐릭 패시브 제거
-							enemy_[state] = enemy_['passive' + state];
-							delete enemy_['passive' + state];
+							if (state === 'hp') {
+								const remainPercent = enemy_['current'+state + '_'] / enemy_['passive'+state];
+								enemy_[state] = remainPercent * enemy_['current'+state];
+								enemy_[state + '_'] = enemy_['current'+state + '_'];
+							} else {
+								enemy_[state] = enemy_['current' + state];
+							}
 						});
 					});
 					return;
@@ -1792,11 +1824,7 @@ const Battle = ({
 								passiveEnemySkill[chIdx] = [];
 								return;
 							}
-							if (enemy_['passive' + state]) {
-								enemy_[state] = enemy_['passive' + state];
-							} else {
-								enemy_['passive' + state] = enemy_[state];
-							}
+							enemy_[state] = enemy_['current' + state];
 							if (gameData.skill[enemySkill.idx].cate[0] === 2) {//패시브 스킬인지
 								let passiveOverlap = false;
 								if (passiveEnemySkill[chIdx] === undefined) {
@@ -1830,14 +1858,13 @@ const Battle = ({
 									enemy_[state] = enemy_[state] + Number(passiveNum)  < 0 ? 0 : enemy_[state] + Number(passiveNum);
 								}
 							}
+							if (state === 'hp' && !enemy_['passive' + state]) {
+								enemy_['passive' + state] = enemy_[state];
+							}
 							//console.log(state, enemy_['passive' + state], enemy_[state]);
 						});
 					} else {//단일 대상 패시브 적용
-						if (enemy['passive' + state]) {
-							enemy[state] = enemy['passive' + state];
-						} else {
-							enemy['passive' + state] = enemy[state];
-						}
+						enemy[state] = enemy['current' + state];
 						if (gameData.skill[enemySkill.idx].cate[0] === 2) {//패시브 스킬인지
 							let passiveOverlap = false;
 							passiveEnemySkill[enemyIdx].forEach((passiveData, idx) => {
@@ -1867,6 +1894,9 @@ const Battle = ({
 							} else {
 								enemy[state] = enemy[state] + Number(passiveNum)  < 0 ? 0 : enemy[state] + Number(passiveNum);
 							}
+						}
+						if (state === 'hp' && !enemy['passive' + state]) {
+							enemy['passive' + state] = enemy[state];
 						}
 						//console.log(state, enemy['passive' + state], enemy[state]);
 					}
