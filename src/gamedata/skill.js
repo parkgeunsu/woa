@@ -50,7 +50,7 @@ export const skill = [
 	{idx:8,
 		na:'물정령',element_type:9,cate:[2],txt:'<u>전체</u> 체력(HP)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
 		,ta_:0,ta:10,effAnimation:4
-		,eff:[{type:0,num:['20%','25%','30%','35%','40%']}],atkCount:[0],turn:0,sp:0},
+		,eff:[{type:5,num:['20%','25%','30%','35%','40%']}],atkCount:[0],turn:0,sp:0},
 	{idx:9,
 		na:'집중타',element_type:0,cate:[3],txt:'<u>단일</u>, <b dmg>$(0)</b>의 강한 공격을 한다.'
 		,ta_:1,ta:1,effAnimation:1
