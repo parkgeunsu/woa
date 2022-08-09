@@ -25,9 +25,7 @@ const Msg = ({
 	return (
 		<MsgContinaer>
 			<div ref={msgRef} className="msg transition">
-				<div className="msg_cont">
-          {text}
-				</div>
+				<div className="msg_cont" dangerouslySetInnerHTML={{__html: text}}></div>
 			</div>
 		</MsgContinaer>
 	)

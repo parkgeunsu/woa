@@ -30,12 +30,12 @@ const ChracterHeader = ({
   const chMenu = [
     {backImg: imgSet.menu[0], title: "카드기본"},
     {backImg: imgSet.menu[1], title: "속성치"},
-    {backImg: imgSet.menu[1], title: "능력치"},
-    {backImg: imgSet.menu[2], title: "동물스킬"},
-    {backImg: imgSet.menu[2], title: "스킬"},
-    {backImg: imgSet.menu[3], title: "인연"},
-    {backImg: imgSet.menu[3], title: "장비"},
-    {backImg: imgSet.menu[4], title: "적용치"},
+    {backImg: imgSet.menu[2], title: "능력치"},
+    {backImg: imgSet.menu[3], title: "동물스킬"},
+    {backImg: imgSet.menu[4], title: "스킬"},
+    {backImg: imgSet.menu[5], title: "인연"},
+    {backImg: imgSet.menu[6], title: "장비"},
+    {backImg: imgSet.menu[7], title: "적용치"},
   ];
   return (
     <>

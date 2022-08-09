@@ -3,8 +3,8 @@ import { AppContext } from 'App';
 import styled from 'styled-components';
 
 const SkillElement = styled.span`
-  &.el0{background-image:url(${({ elementIcon }) => elementIcon[0]});background-size:100%;}
-  &.el1{background-image:url(${({ elementIcon }) => elementIcon[1]});background-size:100%;}
+  background:url(${({ frameImg }) => frameImg}), radial-gradient(closest-side at 40% 40%, #ddd, #333);background-size:100%;
+  ${'' /* &.el1{background-image:url(${({ elementIcon }) => elementIcon[1]});background-size:100%;}
   &.el2{background-image:url(${({ elementIcon }) => elementIcon[2]});background-size:100%;}
   &.el3{background-image:url(${({ elementIcon }) => elementIcon[3]});background-size:100%;}
   &.el4{background-image:url(${({ elementIcon }) => elementIcon[4]});background-size:100%;}
@@ -15,7 +15,13 @@ const SkillElement = styled.span`
   &.el9{background-image:url(${({ elementIcon }) => elementIcon[9]});background-size:100%;}
   &.el10{background-image:url(${({ elementIcon }) => elementIcon[10]});background-size:100%;}
   &.el11{background-image:url(${({ elementIcon }) => elementIcon[11]});background-size:100%;}
-  &.el12{background-image:url(${({ elementIcon }) => elementIcon[12]});background-size:100%;}
+  &.el12{background-image:url(${({ elementIcon }) => elementIcon[12]});background-size:100%;} */}
+  &:before{background:url(${({skillIcon}) => skillIcon});background-size:500% auto;background-position:${({skillScene, skillFrame}) => {
+    return `${skillScene%5 * 25}% ${Math.floor(skillScene/5) * 100/(Math.floor((skillFrame - 1) / 5))}%`
+  }}};
+  &:after{background:url(${({skillIcon}) => skillIcon});background-size:500% auto;background-position:${({skillScene, skillFrame}) => {
+    return `${skillScene%5 * 25}% ${Math.floor(skillScene/5) * 100/(Math.floor((skillFrame - 1) / 5))}%`
+  }}};
 `;
 
 const CharacterSkill = ({
@@ -43,8 +49,8 @@ const CharacterSkill = ({
               return (
                 <div key={idx} className={`sk cate${cate}`} flex-h="true">
                   <div className="sk_info" flex="true">
-                    <SkillElement className={`sk_element el${skData_.element_type}`} elementIcon={elementIcon}/>
-                    <div style={{padding:"0 0 5px 10px",width:"100%"}} flex-h-center="true">
+                    <SkillElement className={`sk_element el${skData_.element_type}`} skillIcon={imgSet.eff[skData_.effAnimation]} skillScene={gameData.effect[skData_.effAnimation].imgScene} skillFrame={gameData.effect[skData_.effAnimation].frame} frameImg={imgSet.etc.skillFrame}/>
+                    <div style={{padding:"0 0 5px 10px",width:"100%", flex:1}} flex-h-center="true">
                       <div className="name">{skData_.na}</div>
                       <div className="txt" dangerouslySetInnerHTML={{__html: replaceText}} />
                     </div>

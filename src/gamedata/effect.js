@@ -1,8 +1,8 @@
 export const effect = [
-  {idx:0,frame:15,repeat:1},
-  {idx:1,frame:26,repeat:1},
-  {idx:2,frame:30,repeat:1},
-  {idx:3,frame:30,repeat:1},
+  {idx:0,frame:15,repeat:1,imgScene:4},
+  {idx:1,frame:26,repeat:1,imgScene:8},
+  {idx:2,frame:30,repeat:1,imgScene:5},
+  {idx:3,frame:30,repeat:1,imgScene:17},
   {idx:4,frame:0,repeat:1},
   {idx:5,frame:0,repeat:1},
   {idx:6,frame:0,repeat:1},
@@ -10,6 +10,6 @@ export const effect = [
   {idx:8,frame:0,repeat:1},
   {idx:9,frame:0,repeat:1},
   {idx:10,frame:0,repeat:1},
-  {idx:11,frame:13,repeat:''},
-  {idx:12,frame:11,repeat:''},
+  {idx:11,frame:13,repeat:'',imgScene:7},
+  {idx:12,frame:11,repeat:'',imgScene:7},
 ];

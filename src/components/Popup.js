@@ -141,6 +141,9 @@ const buttonEvent = (dataObj) => {
             dataObj.msgText("착용할려는 장비가 무겁습니다.");
           } else { //착용 가능 무게일 경우
             saveCh.items[itemSlot] = {...dataObj.saveData.items['equip'][dataObj.data.itemSaveSlot]};//캐릭에 아이템 넣기
+            if (dataObj.data.saveItemData.mark === gameData.ch[saveCh.idx].animal_type) {//동물 뱃지 수정
+              saveCh.animalBeige += dataObj.data.saveItemData.markNum;
+            }
             sData.items['equip'].splice(dataObj.data.itemSaveSlot, 1);//인벤에서 아이템 제거
             overlapCheck = false;
             dataObj.changeSaveData(util.saveCharacter({//데이터 저장
@@ -158,8 +161,24 @@ const buttonEvent = (dataObj) => {
       }
     });
   } else if (dataObj.type === 'itemRelease') { //아이템 해제
+    const saveCh = sData.ch[dataObj.data.slotIdx];
     sData.items['equip'].push(dataObj.data.saveItemData);//인벤에 아이템 넣기
     sData.ch[dataObj.data.slotIdx].items[dataObj.data.itemSaveSlot] = {}; //아이템 삭제
+    if (dataObj.data.saveItemData.mark === gameData.ch[saveCh.idx].animal_type) {//동물 뱃지 수정
+      saveCh.animalBeige = util.getAnimalPoint(saveCh.items, gameData.ch[saveCh.idx].animal_type, saveCh.mark);
+    }
+    saveCh.animalSkill = saveCh.animalSkill.map((skGroup) => {//동물 스킬 초기화
+      return skGroup.map((skData) => {
+        if (Object.keys(skData).length !== 0) {
+          return {
+            idx:skData.idx,
+            lv:0,
+          }
+        } else {
+          return {}
+        }
+      });
+    });
     dataObj.changeSaveData(util.saveCharacter({//데이터 저장
       saveData: sData,
       slotIdx: dataObj.data.slotIdx,

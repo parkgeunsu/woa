@@ -17,12 +17,16 @@ import frameRight from 'images/frame/frame_battle2.png';
 import bar0 from 'images/frame/bar0.png';
 import bar1 from 'images/frame/bar1.png';
 import frameMain from 'images/frame/frame_main.png';
+import skillFrame from 'images/frame/skill_frame.png';
 
 import menu0 from 'images/ico/ch_menu0.png';
 import menu1 from 'images/ico/ch_menu1.png';
 import menu2 from 'images/ico/ch_menu2.png';
 import menu3 from 'images/ico/ch_menu3.png';
 import menu4 from 'images/ico/ch_menu4.png';
+import menu5 from 'images/ico/ch_menu5.png';
+import menu6 from 'images/ico/ch_menu6.png';
+import menu7 from 'images/ico/ch_menu7.png';
 
 import iconBack from 'images/ico/ico_back.png';
 import iconChat from 'images/ico/ico_chat.png';
@@ -255,27 +259,28 @@ import passive10 from 'images/ico/passive10.png';
 import passive11 from 'images/ico/passive11.png';
 
 //이펙트 애니메이션
-import attack from 'images/effect/attack.png';
-import bite from 'images/effect/bite.png';
-import claw from 'images/effect/claw.png';
-import saliva from 'images/effect/saliva.png';
+import attack0 from 'images/effect/attack0.png';
+import bite1 from 'images/effect/bite1.png';
+import claw2 from 'images/effect/claw2.png';
+import saliva3 from 'images/effect/saliva3.png';
 // import eff1 from 'images/effect/Sword1.png';
 // import eff2 from 'images/effect/Sword2.png';
 // import eff3 from 'images/effect/Sword4.png';
 // import eff4 from 'images/effect/Death1.png';
 // import eff5 from 'images/effect/light_004.png';
 // import eff6 from 'images/effect/ice.png';
-import buff0 from 'images/effect/buff0.png';
-import buff1 from 'images/effect/buff1.png';
+// import eff6 from 'images/effect/ice.png';
+import buff11 from 'images/effect/buff11.png';
+import buff12 from 'images/effect/buff12.png';
 
 export const back = [
   back0,back1,back2,back3
 ];
 export const menu = [
-  menu0,menu1,menu2,menu3,menu4
+  menu0,menu1,menu2,menu3,menu4,menu5,menu6,menu7
 ]
 export const etc = {
-  imgRing:imgRing,imgCardBack:imgCardBack,frameChBack:frameChBack,stateBack:stateBack,imgCardFrame:imgCardFrame,imgCardLv:imgCardLv,iconCardName:iconCardName,imgRingBack:imgRingBack,frameRope:frameRope,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,
+  imgRing:imgRing,imgCardBack:imgCardBack,frameChBack:frameChBack,stateBack:stateBack,imgCardFrame:imgCardFrame,imgCardLv:imgCardLv,iconCardName:iconCardName,imgRingBack:imgRingBack,frameRope:frameRope,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,
 };
 export const icon = {
   iconBack:iconBack,iconChat:iconChat,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,
@@ -334,6 +339,6 @@ export const passive = [
   passive0,passive1,passive2,passive3,passive4,passive5,passive6,passive7,passive8,passive9,passive10,passive11,
 ];
 export const eff = [
-  attack,bite,claw,saliva,'','','','','','',
-  '',buff0,buff1
+  attack0,bite1,claw2,saliva3,'','','','','','',
+  '',buff11,buff12
 ];

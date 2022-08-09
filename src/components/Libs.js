@@ -1011,4 +1011,16 @@ export const util = { //this.loadImage();
     save.items[type].push(itemObj);
     changeSaveData(save);
   },
+  getAnimalPoint: (items, animal, addMark) => {
+    let mark = 0;
+    items.forEach((item) => {
+      if (Object.keys(item).length !== 0 && animal === item.mark) {
+        mark += item.markNum;
+      }
+    });
+    return mark + addMark;
+  },
+  getAnimalSkill: () => {
+    
+  }
 }

@@ -138,7 +138,16 @@ const Character = ({
             lv:Math.round(Math.random()*40 + 60),
           }
           util.getItem(saveData, gameData, changeSaveData, option);
-        }}>아이템 추가</button>
+        }}>아이템 추가</button><br/>
+        <button onClick={() => {
+          const option = {
+            type:'equip',
+            part:Math.ceil(Math.random()*2),//장비만 해당
+            grade:1,
+            lv:Math.round(Math.random()*40 + 60),
+          }
+          util.getItem(saveData, gameData, changeSaveData, option);
+        }}>동물스킬 리셋</button>
       </div>
       <div ref={chRef} className="ch_card transition">
         <Img imgurl={imgSet.etc.imgRing} />
@@ -150,7 +159,7 @@ const Character = ({
       <ChInfo frameBack={imgSet.etc.frameChBack} className="ch_info transition">
         <CharacterState saveData={saveData} slotIdx={slotIdx} />
         <CharacterElement saveData={saveData} slotIdx={slotIdx} />
-        <CharacterAnimalSkill saveData={saveData} slotIdx={slotIdx} />
+        <CharacterAnimalSkill saveData={saveData} slotIdx={slotIdx} changeSaveData={changeSaveData} />
         <CharacterSkill saveData={saveData} slotIdx={slotIdx} />
         <CharacterRelation saveData={saveData} slotIdx={slotIdx} />
         <CharacterItems saveData={saveData} slotIdx={slotIdx} changeSaveData={changeSaveData} />

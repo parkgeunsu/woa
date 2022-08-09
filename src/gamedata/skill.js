@@ -41,7 +41,7 @@ export const skill = [
 		,eff:[{type:100,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
 	{idx:6,
 		na:'불정령',element_type:10,cate:[2],txt:'전쟁 참여시 <u>전체</u> 물리 공격력(ATK)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
-		,ta_:0,ta:10,effAnimation:2
+		,ta_:0,ta:10,effAnimation:11
 		,eff:[{type:3,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
 	{idx:7,
 		na:'빛정령',element_type:7,cate:[2],txt:'전쟁 참여시 <u>전체</u> 술법 공격력(MAK)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
@@ -49,7 +49,7 @@ export const skill = [
 		,eff:[{type:5,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
 	{idx:8,
 		na:'물정령',element_type:9,cate:[2],txt:'전쟁 참여시 <u>전체</u> 체력(HP)이 <b buff>$(0)</b> <i icon up>증가</i> 한다.'
-		,ta_:0,ta:10,effAnimation:4
+		,ta_:0,ta:10,effAnimation:12
 		,eff:[{type:0,num:['20%','25%','30%','35%','40%']}],atkCount:[0],turn:0,sp:0},
 	{idx:9,
 		na:'집중타',element_type:0,cate:[3],txt:'<u>단일</u>, <b dmg>$(0)</b>의 강한 공격을 한다.'
@@ -93,46 +93,46 @@ export const skill = [
 		,eff:[{type:4,num:['-300','-400','-500','-600','-150'],count:[2,2,2,2,2]}],turn:1,atkCount:[1],sp:6},
 ]
 
-export const skillAnimal = [
+export const animalSkill = [
 	{idx:0,
 		na:'할퀴기',element_type:2,cate:[3],txt:`<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.`
-		,ta_:1,ta:1,effAnimation:0
+		,ta_:1,ta:1,effAnimation:0,skillClass:0
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[2],turn:1,sp:5},
 	{idx:1,
 		na:'그루밍',element_type:2,cate:[3],txt:`<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.`
-		,ta_:1,ta:1,effAnimation:0
+		,ta_:1,ta:1,effAnimation:1,skillClass:0
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[0],turn:1,sp:6},
 	{idx:2,
 		na:'빵굽기',element_type:2,cate:[3],txt:`<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.`
-		,ta_:1,ta:1,effAnimation:0
+		,ta_:1,ta:1,effAnimation:2,skillClass:0
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[0],turn:1,sp:4},
 	{idx:3,
 		na:'꾹꾹이',element_type:2,cate:[3],txt:`<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.`
-		,ta_:1,ta:1,effAnimation:0
+		,ta_:1,ta:1,effAnimation:3,skillClass:0
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[0],turn:1,sp:7},
 	{idx:4,
 		na:'하악질',element_type:2,cate:[3],txt:`<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.`
-		,ta_:1,ta:1,effAnimation:0
+		,ta_:1,ta:1,effAnimation:0,skillClass:0
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[0],turn:1,sp:7},
 	{idx:5,
 		na:'할퀴기1',element_type:2,cate:[3],txt:`<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.`
-		,ta_:1,ta:1,effAnimation:0
+		,ta_:1,ta:1,effAnimation:1,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[2],turn:1,sp:5},
 	{idx:6,
 		na:'그루밍1',element_type:2,cate:[3],txt:`<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.`
-		,ta_:1,ta:1,effAnimation:0
+		,ta_:1,ta:1,effAnimation:2,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[0],turn:1,sp:2},
 	{idx:7,
 		na:'빵굽기1',element_type:2,cate:[3],txt:`<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.`
-		,ta_:1,ta:1,effAnimation:0
+		,ta_:1,ta:1,effAnimation:3,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[0],turn:1,sp:4},
 	{idx:8,
 		na:'꾹꾹이1',element_type:2,cate:[3],txt:`<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.`
-		,ta_:1,ta:1,effAnimation:0
+		,ta_:1,ta:1,effAnimation:0,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[0],turn:1,sp:5},
 	{idx:9,
 		na:'하악질1',element_type:2,cate:[3],txt:`<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.`
-		,ta_:1,ta:1,effAnimation:0
+		,ta_:1,ta:1,effAnimation:1,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[0],turn:1,sp:7},
 ];
 //물리: 두번 공격, 연속 공격, 무차별 공격, 세게 공격, 몸통박치기, 침뱉기, xx펀치(속성), 기습 공격, 죽기살기, 방어, 철벽방어, 이동, 다구리,

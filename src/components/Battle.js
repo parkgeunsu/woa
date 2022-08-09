@@ -121,7 +121,8 @@ const Buff = styled.div`
 	}
 `;
 const Passive = styled.div`
-	top:${({idx}) => idx*15}%;background:url(${({effImg}) => effImg}) no-repeat center center;background-size:100%;
+	left:${({idx}) => idx % 2 === 0 ? -30 : -40}%;
+	top:${({idx}) => idx*20 - 25}%;background:url(${({effImg}) => effImg}) no-repeat center center;background-size:100%;
 `;
 const BattleLand = styled.div`
 	& > div {width:${({containerW}) => containerW}px;transition:all ${({ gameSpd }) => 1/ gameSpd}s;}
