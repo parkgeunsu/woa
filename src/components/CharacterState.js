@@ -1,7 +1,10 @@
 import { AppContext } from 'App';
 import { util } from 'components/Libs';
-import React, { useContext, useLayoutEffect, useState } from 'react';
+import React, { useContext, useLayoutEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
+import GuideQuestion from 'components/GuideQuestion';
+import PopupContainer from 'components/PopupContainer';
+import Popup from 'components/Popup';
 
 const FrameBar = styled.span`
   width: ${({chMaxSt, maxSt}) => {
@@ -33,6 +36,11 @@ const CharacterState = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
+	const setting = useContext(AppContext).setting,
+    lang = setting.lang;
+  const [popupOn, setPopupOn] = useState(false);
+  const popupType = useRef('');
+  const [popupInfo, setPopupInfo] = useState({});
   const stateArr = gameData.stateName;
   const [slotCh, setSlotCh] = useState(saveData.ch[slotIdx]);
   // const chIdx = saveCh.idx;
@@ -44,7 +52,16 @@ const CharacterState = ({
     <>
       <div className="state">
         <dl className="info_group ch_group">
-          <dt>STATE<span>(스탯)</span></dt>
+          <dt>STATE<span>(스탯)</span>
+            <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
+              popupType.current = 'guide';
+              setPopupOn(true);
+              setPopupInfo({
+                data:gameData.guide["characterState"],
+                lang:lang,
+              });
+            }} />
+          </dt>
           <dd className="scroll-y">
             {stateArr && stateArr.map((data, idx) => {
               return (
@@ -88,6 +105,9 @@ const CharacterState = ({
           </dd>
         </dl>
       </div>
+      <PopupContainer>
+        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} imgSet={imgSet}/>}
+      </PopupContainer>
     </>
   );
 }

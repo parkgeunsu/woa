@@ -18,6 +18,8 @@ import bar0 from 'images/frame/bar0.png';
 import bar1 from 'images/frame/bar1.png';
 import frameMain from 'images/frame/frame_main.png';
 import skillFrame from 'images/frame/skill_frame.png';
+import questionBlack from 'images/ico/question_black.png';
+import questionWhite from 'images/ico/question_white.png';
 
 import menu0 from 'images/ico/ch_menu0.png';
 import menu1 from 'images/ico/ch_menu1.png';
@@ -280,7 +282,7 @@ export const menu = [
   menu0,menu1,menu2,menu3,menu4,menu5,menu6,menu7
 ]
 export const etc = {
-  imgRing:imgRing,imgCardBack:imgCardBack,frameChBack:frameChBack,stateBack:stateBack,imgCardFrame:imgCardFrame,imgCardLv:imgCardLv,iconCardName:iconCardName,imgRingBack:imgRingBack,frameRope:frameRope,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,
+  imgRing:imgRing,imgCardBack:imgCardBack,frameChBack:frameChBack,stateBack:stateBack,imgCardFrame:imgCardFrame,imgCardLv:imgCardLv,iconCardName:iconCardName,imgRingBack:imgRingBack,frameRope:frameRope,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,questionBlack:questionBlack,questionWhite:questionWhite,
 };
 export const icon = {
   iconBack:iconBack,iconChat:iconChat,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,

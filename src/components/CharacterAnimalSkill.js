@@ -2,6 +2,9 @@ import React, { useState, useContext, useLayoutEffect, useRef } from 'react';
 import { AppContext } from 'App';
 import { util } from 'components/Libs';
 import styled from 'styled-components';
+import GuideQuestion from 'components/GuideQuestion';
+import PopupContainer from 'components/PopupContainer';
+import Popup from 'components/Popup';
 import MsgContainer from 'components/MsgContainer';
 import Msg from 'components/Msg';
 
@@ -57,6 +60,8 @@ const CharacterAnimalSkill = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
+	const setting = useContext(AppContext).setting,
+    lang = setting.lang;
   const saveCh = saveData.ch[slotIdx];
   const [animalPoint, setAnimalPoint] = useState(saveCh.animalBeige);
   const [animalSkill, setAnimalSkill] = useState(saveCh.animalSkill);
@@ -64,6 +69,9 @@ const CharacterAnimalSkill = ({
   const itemRef = useRef(saveData.ch[slotIdx].items);
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
+  const [popupOn, setPopupOn] = useState(false);
+  const popupType = useRef('');
+  const [popupInfo, setPopupInfo] = useState({});
 
   useLayoutEffect(() => {
     itemRef.current = saveData.ch[slotIdx].items;
@@ -78,7 +86,16 @@ const CharacterAnimalSkill = ({
     <>
       <div className="skillAnimal scroll-y">
         <dl className="info_group">
-          <dt>ANIMAL SKILL<span>(동물 스킬)</span></dt>
+          <dt>ANIMAL SKILL<span>(동물 스킬)</span>
+            <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
+              popupType.current = 'guide';
+              setPopupOn(true);
+              setPopupInfo({
+                data:gameData.guide["characterAnimalSkill"],
+                lang:lang,
+              });
+            }}/>
+          </dt>
           <dd>
             <div flex="true" className="skill_header">
               <div className="skill_reset" onClick={() => {
@@ -109,40 +126,60 @@ const CharacterAnimalSkill = ({
                       if (Object.keys(skData).length !== 0){
                         const sk = gameData.animalSkill[skData.idx];
                         return (
-                          <SkillButton key={skIdx} skillIcon={imgSet.eff[sk.effAnimation]} skillScene={gameData.effect[sk.effAnimation].imgScene} skillFrame={gameData.effect[sk.effAnimation].frame} frameImg={imgSet.etc.skillFrame} className={`skill_button pos${skIdx % 4} ${skData.lv > 0 ? "used" : ""}`} flex-h-center="true" onClick={() => {
-                            let sData = {...saveData};
-                            if (sData.ch[slotIdx].animalBeige <= 0) {
-                              setMsgOn(true);
-                              setMsg('동물 벳지가 부족합니다.');
-                            } else {
-                              if (skIdx % 4 === 3) {
-                                if (sData.ch[slotIdx].animalBeige > 0) {
-                                  sData.ch[slotIdx].animalBeige -= 1;
-                                    sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv += 1;
-                                    changeSaveData(sData);
-                                } else {
-                                  sData.ch[slotIdx].animalBeige = 0;
-                                }
+                          <div key={skIdx} className={`skill_list pos${skIdx % 4}`}>
+                            <SkillButton skillIcon={imgSet.eff[sk.effAnimation]} skillScene={gameData.effect[sk.effAnimation].imgScene} skillFrame={gameData.effect[sk.effAnimation].frame} frameImg={imgSet.etc.skillFrame} className={`skill_button ${skData.lv > 0 ? "used" : ""}`} flex-h-center="true" onClick={() => {
+                              let sData = {...saveData};
+                              if (sData.ch[slotIdx].animalBeige <= 0) {
+                                setMsgOn(true);
+                                setMsg('동물 벳지가 부족합니다.');
                               } else {
-                                if (!saveCh.animalSkill[groupIdx - 1] || (saveCh.animalSkill[groupIdx - 1][skIdx] && saveCh.animalSkill[groupIdx - 1][skIdx].lv > groupIdx - 1)) {//선행 스킬 체크
+                                if (skIdx % 4 === 3) {
                                   if (sData.ch[slotIdx].animalBeige > 0) {
                                     sData.ch[slotIdx].animalBeige -= 1;
-                                    sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv += 1;
-                                    changeSaveData(sData);
+                                      sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv += 1;
+                                      changeSaveData(sData);
                                   } else {
                                     sData.ch[slotIdx].animalBeige = 0;
                                   }
                                 } else {
-                                  setMsgOn(true);
-                                  const beforeSkill = gameData.animalSkill[saveCh.animalSkill[groupIdx - 1][skIdx].idx].na;
-                                  setMsg(`선행 스킬(${beforeSkill})의 레벨이<br/> ${groupIdx}레벨 이상 이어야 가능합니다.`);
+                                  if (!saveCh.animalSkill[groupIdx - 1] || (saveCh.animalSkill[groupIdx - 1][skIdx] && saveCh.animalSkill[groupIdx - 1][skIdx].lv > groupIdx - 1)) {//선행 스킬 체크
+                                    if (sData.ch[slotIdx].animalBeige > 0) {
+                                      sData.ch[slotIdx].animalBeige -= 1;
+                                      if (sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv > 4) {
+                                        setMsgOn(true);
+                                        setMsg('스킬 최대 레벨입니다.');
+                                      } else {
+                                        sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv += 1;
+                                        changeSaveData(sData);
+                                      }
+                                    } else {
+                                      sData.ch[slotIdx].animalBeige = 0;
+                                    }
+                                  } else {
+                                    setMsgOn(true);
+                                    const beforeSkill = gameData.animalSkill[saveCh.animalSkill[groupIdx - 1][skIdx].idx].na;
+                                    setMsg(`선행 스킬(${beforeSkill})의 레벨이<br/> ${groupIdx}레벨 이상 이어야 가능합니다.`);
+                                  }
                                 }
                               }
-                            }
-                          }}>
-                            <div className="limitLv">{`${skData.lv} / ${groupIdx + 1}`}</div>
-                            {sk.na} {skData.lv > 0 && `Lv.${skData.lv}`}
-                          </SkillButton>
+                            }}>
+                              <div className="limitLv">{`${skData.lv} / ${groupIdx + 1}`}</div>
+                              {/* {sk.na}  */}
+                              <div className="lv">{skData.lv > 0 && `Lv.${skData.lv}`}</div>
+                            </SkillButton>
+                            <button className="skill_description" onClick={(e) => {
+                              popupType.current = 'skillDescription';
+                              setPopupOn(true);
+                              setPopupInfo({
+                                sk:sk,
+                                skData:skData,
+                                skillIcon:imgSet.eff[sk.effAnimation],
+                                skillScene:gameData.effect[sk.effAnimation].imgScene,
+                                skillFrame:gameData.effect[sk.effAnimation].frame,
+                                frameImg:imgSet.etc.skillFrame,
+                              });
+                            }}>스킬</button>
+                          </div>
                         )
                       }
                     })}
@@ -170,6 +207,9 @@ const CharacterAnimalSkill = ({
           </dd>
         </dl>
       </div>
+      <PopupContainer>
+        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} imgSet={imgSet}/>}
+      </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
       </MsgContainer>

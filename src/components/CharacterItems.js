@@ -2,6 +2,7 @@ import React, { useState, useLayoutEffect, useContext, useRef } from 'react';
 import { AppContext } from 'App';
 import styled from 'styled-components';
 import { util } from 'components/Libs';
+import GuideQuestion from 'components/GuideQuestion';
 import PopupContainer from 'components/PopupContainer';
 import Popup from 'components/Popup';
 import MsgContainer from 'components/MsgContainer';
@@ -24,6 +25,8 @@ const CharacterItems = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
+	const setting = useContext(AppContext).setting,
+    lang = setting.lang;
   const [animalIdx, setAnimalIdx] = useState(gameData.ch[saveData.ch[slotIdx].idx].animal_type);
 
   // const [saveItems, setSaveItems] = useState(saveData.ch[slotIdx].items);
@@ -32,9 +35,9 @@ const CharacterItems = ({
   const gameItem = gameData.items;
   const [invenItems, setInvenItems] = useState(saveData.items);
   const [popupOn, setPopupOn] = useState(false);
+  const popupType = useRef('');
+  const [popupInfo, setPopupInfo] = useState({});
   const [msgOn, setMsgOn] = useState(false);
-  const [itemInfo, setItemInfo] = useState({});
-  const [itemType, setItemType] = useState('equip');
   const [kg, setKg] = useState([0,0]);
   const [msg, setMsg] = useState("");
   const handlePopup = (itemType, itemIdx, itemSaveSlot, itemPart) => {
@@ -47,14 +50,14 @@ const CharacterItems = ({
       } else {
         saveItemData = invenItems[itemType][itemSaveSlot];
       }
-      setItemType(itemType);
+      popupType.current = itemType;
       let gameItemData = '';
       if (itemType === 'hequip' || itemType === 'equip') {
         gameItemData = gameItem['equip'][itemPart][itemIdx];
       } else {
         gameItemData = gameItem[itemType][itemIdx];
       }
-      setItemInfo({
+      setPopupInfo({
         slotIdx: slotIdx,
         gameItem: gameItemData,
         itemSaveSlot: itemSaveSlot,
@@ -82,7 +85,16 @@ const CharacterItems = ({
       <div className="items">
         <dl className="info_group it_group">
           <dt flex="true">
-            <div><em>ITEM</em><span>(아이템 착용)</span></div>
+            <div><em>ITEM</em><span>(아이템 착용)</span>
+              <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
+                popupType.current = 'guide';
+                setPopupOn(true);
+                setPopupInfo({
+                  data:gameData.guide["characterItem"],
+                  lang:lang,
+                });
+              }} />
+            </div>
             <div className="kg">{`${kg[0]}kg / ${kg[1]}kg`}</div>
           </dt>
           <dd className="item_area">
@@ -196,7 +208,7 @@ const CharacterItems = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={itemType} dataObj={itemInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} gameData={gameData} imgSet={imgSet} msgText={setMsg} showMsg={setMsgOn}/>}
+        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} gameData={gameData} imgSet={imgSet} msgText={setMsg} showMsg={setMsgOn}/>}
       </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}

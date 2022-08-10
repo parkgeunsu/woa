@@ -1,6 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import { AppContext } from 'App';
 import styled from 'styled-components';
+import GuideQuestion from 'components/GuideQuestion';
+import PopupContainer from 'components/PopupContainer';
+import Popup from 'components/Popup';
 
 const CardChRing = styled.span`
 	${({lv, ringBack, ringDisplay, ringDisplay1}) => {
@@ -25,6 +28,11 @@ const CharacterRelation = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
+	const setting = useContext(AppContext).setting,
+    lang = setting.lang;
+  const [popupOn, setPopupOn] = useState(false);
+  const popupType = useRef('');
+  const [popupInfo, setPopupInfo] = useState({});
   const chRelation = gameData.ch[saveData.ch[slotIdx].idx].relation;
   let relationAll = [];
   chRelation.forEach((rtIdx, idx) => {
@@ -34,7 +42,15 @@ const CharacterRelation = ({
     <>
       <div className="relation">
         <dl className="info_group rt_group">
-          <dt>RELATION<span>(인연)</span></dt>
+          <dt>RELATION<span>(인연)</span><GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
+              popupType.current = 'guide';
+              setPopupOn(true);
+              setPopupInfo({
+                data:gameData.guide["characterRelation"],
+                lang:lang,
+              });
+            }} />
+          </dt>
           <dd className="scroll-y">
             { chRelation && chRelation.map((rtData, idx) => {
               const relationData = gameData.relation[rtData];
@@ -82,6 +98,9 @@ const CharacterRelation = ({
           </dd>
         </dl>
       </div>
+      <PopupContainer>
+        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} imgSet={imgSet}/>}
+      </PopupContainer>
     </>
   );
 }

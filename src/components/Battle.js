@@ -1068,7 +1068,8 @@ const Battle = ({
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
 	const setting = useContext(AppContext).setting,
-		gameSpd = setting.speed;
+		gameSpd = setting.speed,
+		lang = setting.lang;
 	const scenarioDetail = gameData.scenario[scenario.country][scenario.period][scenario.title][scenario.stage] || gameData.scenario.korea.joseon2.LSS.stage[0];
 	const viewScenario = saveData.scenario[scenario.country][scenario.period][scenario.title][scenario.stage];
 	const [mapLand] = useState(scenarioDetail.map);
@@ -1133,11 +1134,11 @@ const Battle = ({
   	const [msg, setMsg] = useState("");
 	const conversationInterval = useCallback(() => {
 		conversationCount.current ++;
-		if (conversationList.current[conversationStepRef.current - 1].txt.substr(conversationCount.current,1).indexOf("<") !== -1) {
+		if (conversationList.current[conversationStepRef.current - 1].txt[lang].substr(conversationCount.current,1).indexOf("<") !== -1) {
 			conversationCount.current += 5;
 		}
-		setConversationMsg(conversationList.current[conversationStepRef.current - 1].txt.substr(0,conversationCount.current) + "_");
-		if (conversationCount.current >= conversationList.current[conversationStepRef.current - 1].txt.length) {
+		setConversationMsg(conversationList.current[conversationStepRef.current - 1].txt[lang].substr(0,conversationCount.current) + "_");
+		if (conversationCount.current >= conversationList.current[conversationStepRef.current - 1].txt[lang].length) {
 			clearInterval(conversationTimeout.current);
 		}
 	});
@@ -1203,7 +1204,7 @@ const Battle = ({
 			conversationList.current.push(conversationData.current[0]);
 			setMode('scenario');
 			conversationCount.current = 0;
-			conversationTimeout.current = setInterval(conversationInterval, 100);
+			conversationTimeout.current = setInterval(conversationInterval, 50);
 		} else {//시나리오 패스
 			setTimeout(() => {
 				setMode('relation');
@@ -2120,7 +2121,7 @@ const Battle = ({
           }}></span></li>
 				</ul>
 				<div className="battle_title" flex-h-center="true">
-					<div className="scenario_title">{scenarioDetail.title}</div>
+					<div className="scenario_title">{scenarioDetail.title[lang]}</div>
 					<div className="team_summary">
 						<div style={{width: teamPower.current.allyPercent+"%"}}className="ally_team gradient_dark"></div>
 						<div style={{width: teamPower.current.enemyPercent+"%"}} className="enemy_team gradient_dark"></div>
@@ -2150,7 +2151,7 @@ const Battle = ({
 					
 					clearInterval(conversationTimeout.current);
 					conversationCount.current = 0;
-					conversationTimeout.current = setInterval(conversationInterval, 100);
+					conversationTimeout.current = setInterval(conversationInterval, 50);
 				}}>
 					{conversationList.current.map((data, idx) => {
 						const chData = gameData.ch[data.idx];
@@ -2165,7 +2166,7 @@ const Battle = ({
 									<div className="scenario_talk" dangerouslySetInnerHTML={{__html: conversationMsg}} />
 								)}
 								{idx < conversationStepRef.current - 1 && (
-									<div className="scenario_talk" dangerouslySetInnerHTML={{__html: conversationList.current[idx].txt}} />
+									<div className="scenario_talk" dangerouslySetInnerHTML={{__html: conversationList.current[idx].txt[lang]}} />
 								)}
 						</div>
 						)

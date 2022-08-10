@@ -95,6 +95,15 @@ const PopupItemPic = styled.div`
 const PopupItemName = styled.div`
   .item_grade{color:${({ color }) => color};}
 `;
+const SkillImg = styled.div`
+  background:url(${({ frameImg }) => frameImg}), radial-gradient(closest-side at 40% 40%, #ddd, #333);background-size:100%;
+  &:before{background:url(${({skillIcon}) => skillIcon});background-size:500% auto;background-position:${({skillScene, skillFrame}) => {
+    return `${skillScene%5 * 25}% ${Math.floor(skillScene/5) * 100/(Math.floor((skillFrame - 1) / 5))}%`
+  }}};
+  &:after{background:url(${({skillIcon}) => skillIcon});background-size:500% auto;background-position:${({skillScene, skillFrame}) => {
+    return `${skillScene%5 * 25}% ${Math.floor(skillScene/5) * 100/(Math.floor((skillFrame - 1) / 5))}%`
+  }}};
+`;
 const getSetChk = (has_item, n) => {//셋트 아이템 체크
   let chk = false;
   has_item.forEach((v)=>{
@@ -737,6 +746,49 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         </li>
       </PopupItemContainer>
     )
+  } else if (type === 'guide') {
+    const guide_txt = dataObj.data.txt[dataObj.lang];
+    return (
+      <div className="guide">
+        <dl>
+          <dt className="guide_title">{dataObj.data.title[dataObj.lang]}</dt>
+          <dd className="guide_cont">
+            <ul>
+            {guide_txt && guide_txt.map((txt, idx) => {
+              return (
+                <li key={idx}>{txt}</li>
+              )
+            })}
+            </ul>
+          </dd>
+        </dl>
+      </div>
+    );
+  } else if (type === 'skillDescription') {
+    const replaceArr = dataObj.sk.txt.match(/[$][(]\d[)]*/g);
+    let replaceText = dataObj.sk.txt;
+    replaceArr.forEach((data, idx) => {
+      const skillLv = dataObj.skData.lv - 1;
+      replaceText = replaceText.replace(data, dataObj.sk.eff[idx].num[skillLv >= 0 ? skillLv : 0]);
+    });
+    return (
+      <div className="skill_description">
+        <SkillImg className="skill_icon" skillIcon={dataObj.skillIcon} skillScene={dataObj.skillScene} skillFrame={dataObj.skillFrame} frameImg={dataObj.frameImg}></SkillImg>
+        <dl>
+          <dt>{`${dataObj.skData.lv > 0 ? 'Lv.' + dataObj.skData.lv : '(미습득)'} ${dataObj.sk.na}`}</dt>
+          <dd dangerouslySetInnerHTML={{__html: replaceText}}></dd>
+        </dl>
+        <ul className="skill_eff">
+          {dataObj.sk.eff.map((skillEff) => {
+            return skillEff.num.map((eff, idx) => {
+              return (
+                <li className="skill_eff_list" key={idx}>{`Lv.${idx + 1}: ${dataObj.sk.cate[0] !== 3 ? util.getEffectType(skillEff.type) : ''} ${eff}`}</li>
+              )
+            });
+          })}
+        </ul>
+      </div>
+    );
   }
 }
 

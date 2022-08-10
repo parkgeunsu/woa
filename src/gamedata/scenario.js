@@ -239,14 +239,35 @@ export const scenario = {
 				name:"이순신",
 				stage:[
 					{
-						title:"1592년 옥포해전",
+						title:{
+							en:"1592년 옥포해전",
+							ko:"Battle of Okpo in 1592"
+						},
 						conversation:[
-							{idx:28, team:"enemy", pos:"left", txt: "쯧쯧.. <br/>멍청한 조선놈들, 어짜피 조선 군부는 이나라를 포기했다. 안봐도 나 도도의 승리다."},// 도도 다카토라
-							{idx:54, team:"enemy", pos:"right", txt:"당연한 말씀입니다.<br/> 당연히 우리 대일본제국 해군의 위력에 비할수 있겠습니까?"},// 호리노우치 우지요시
-							{idx:"", team:"ally", pos:"right", txt:"대장.. <br/>일본의 적함이 상당합니다.<br/> 도도 저자는 많은 정공을 세운 일본 제일의 장수라 하옵니다. <br/>우리 수군에 승산이 있을까요?"},// 조선병사1
-							{idx:21, team:"ally", pos:"left", txt:"그들은 많은 승리로 콧대가 하늘을 찌를 것이다. 오히려 이때가 우리에겐 기회다."},// 이순신
-							{idx:"", team:"ally", pos:"right", txt:"... <br/>(그렇다 하기엔 적군이 너무 많다..)"},// 조선병사2
-							{idx:21, team:"ally", pos:"left", txt: "가자! 나를 따르라!!"},// 이순신
+							{idx:28, team:"enemy", pos:"left", txt:{
+								ko:"쯧쯧.. <br/>멍청한 조선놈들, 어짜피 조선 군부는 이나라를 포기했다. 안봐도 나 도도의 승리다.",
+								en:"SMH..<br/>Stupid Josenjing, the Joseon military gave up on this country anyway. It's a victory for me."
+							}},// 도도 다카토라
+							{idx:54, team:"enemy", pos:"right", txt:{
+								ko:"당연한 말씀입니다.<br/> 당연히 우리 대일본제국 해군의 위력에 비할수 있겠습니까?",
+								en:"That's obvious. the captain<br/>Of course, can you compare the power of our navy against the Japanese Empire?"
+							}},// 호리노우치 우지요시
+							{idx:"", team:"ally", pos:"right", txt:{
+								ko:"대장.. <br/>일본의 적함이 상당합니다.<br/> 도도 저자는 많은 정공을 세운 일본 제일의 장수라 하옵니다. <br/>우리 수군에 승산이 있을까요?",
+								en:"Captain.. <br/>There are a lot of enemy ships in Japan.<br/>The author of Dodo is said to be the best general in Japan who has achieved many achievements. Will our navy stand a chance?"
+							}},// 조선병사1
+							{idx:21, team:"ally", pos:"left", txt:{
+								ko:"그들은 많은 승리로 콧대가 하늘을 찌를 것이다. 오히려 이때가 우리에겐 기회다.",
+								en:"They will be arrogant with many wins. Rather, this is our chance."
+							}},// 이순신
+							{idx:"", team:"ally", pos:"right", txt:{
+								ko:"... <br/>(그렇다 하기엔 적군이 너무 많다..)",
+								en:"... <br/>(There are too many enemies to say that..)"
+							}},// 조선병사2
+							{idx:21, team:"ally", pos:"left", txt:{
+								ko:"가자! 나를 따르라!!",
+								en:"Let's go! Follow me!"
+							}},// 이순신
 						],
 						lineup:0,
 						map:[

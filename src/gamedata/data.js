@@ -8,7 +8,8 @@ import { lineup } from 'gamedata/lineup';
 import { relation } from 'gamedata/relation';
 import { skill, animalSkill } from 'gamedata/skill';
 import { scenario } from 'gamedata/scenario';
-import { effect, effFrame } from 'gamedata/effect';
+import { effect } from 'gamedata/effect';
+import { guide } from 'gamedata/guide';
 
 export const version = "0.1";
 export const gameData = {
@@ -44,4 +45,5 @@ export const gameData = {
     scenario:scenario,
     effect:effect,
     itemsSvg:itemsSvg,
+    guide:guide,
   }

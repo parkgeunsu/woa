@@ -2,6 +2,9 @@ import React, { useContext, useLayoutEffect, useState, useRef } from 'react';
 import { AppContext } from 'App';
 import { util } from 'components/Libs';
 import styled from 'styled-components';
+import GuideQuestion from 'components/GuideQuestion';
+import PopupContainer from 'components/PopupContainer';
+import Popup from 'components/Popup';
 
 const Element = styled.div`
   .element_icon{background-image:url(${({ icon }) => icon});background-size:100%;}
@@ -21,6 +24,11 @@ const CharacterElement = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
+	const setting = useContext(AppContext).setting,
+    lang = setting.lang;
+  const [popupOn, setPopupOn] = useState(false);
+  const popupType = useRef('');
+  const [popupInfo, setPopupInfo] = useState({});
   const [slotCh, setSlotCh] = useState(saveData.ch[slotIdx]);
   const elArr = [];
   const elRadial = Math.PI*2 / gameData.element.length;
@@ -51,7 +59,16 @@ const CharacterElement = ({
     <>
       <div className="element">
         <dl className="info_group ch_group">
-          <dt>ELEMENT<span>(속성)</span></dt>
+          <dt>ELEMENT<span>(속성)</span>
+            <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
+              popupType.current = 'guide';
+              setPopupOn(true);
+              setPopupInfo({
+                data:gameData.guide["characterElement"],
+                lang:lang,
+              });
+            }} />
+          </dt>
           <dd className="scroll-y" flex-h="true">
             {elArr && elArr.map((data, idx) => {
               const num = slotCh['el' + idx];
@@ -59,7 +76,7 @@ const CharacterElement = ({
               return (
                 <Element key={`chst${idx}`} percent={elementPercent} icon={imgSet.element[idx + 1]} className={`el el${idx}`}>
                   <div className="element_icon"></div>
-                  <div className="element_bar"><span className={`element_currentBar transition gradient_dark_element${idx%2 === 0 ? "" : "R"}`}><span className="element_iconMini"></span></span></div>
+                  <div className="element_bar"><span className={`element_currentBar transition gradient_dark_element${idx%2 === 0 ? "" : "R"}`}><span className="element_iconMini"></span><span className="element_num">{num}</span></span></div>
                 </Element>
               )
               // return (
@@ -83,6 +100,9 @@ const CharacterElement = ({
           </dd>
         </dl>
       </div>
+      <PopupContainer>
+        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} imgSet={imgSet}/>}
+      </PopupContainer>
     </>
   );
 }

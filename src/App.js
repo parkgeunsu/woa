@@ -111,6 +111,7 @@ const App = () => {
   const data = {
     setting: {
       speed: 2,
+      lang:'ko',//ko & en
       bgSound: false,
       effSound: false,
     },
