@@ -92,7 +92,6 @@ const CharacterAnimalSkill = ({
               setPopupOn(true);
               setPopupInfo({
                 data:gameData.guide["characterAnimalSkill"],
-                lang:lang,
               });
             }}/>
           </dt>
@@ -114,7 +113,7 @@ const CharacterAnimalSkill = ({
                   });
                 });
                 changeSaveData(sData);
-              }}>스킬리셋</div>
+              }}>{lang === 'ko' ? '스킬리셋' : 'Reset Skill'}</div>
               <div className="skill_point" dangerouslySetInnerHTML={{__html: makeMark(animalPoint, imgSet.animalType[animalTypeRef.current])}}>
               </div>
             </div>
@@ -131,7 +130,7 @@ const CharacterAnimalSkill = ({
                               let sData = {...saveData};
                               if (sData.ch[slotIdx].animalBeige <= 0) {
                                 setMsgOn(true);
-                                setMsg('동물 벳지가 부족합니다.');
+                                setMsg(lang === 'ko' ? '동물 뱃지가 부족합니다.' : 'There are not enough animal badges.');
                               } else {
                                 if (skIdx % 4 === 3) {
                                   if (sData.ch[slotIdx].animalBeige > 0) {
@@ -147,7 +146,7 @@ const CharacterAnimalSkill = ({
                                       sData.ch[slotIdx].animalBeige -= 1;
                                       if (sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv > 4) {
                                         setMsgOn(true);
-                                        setMsg('스킬 최대 레벨입니다.');
+                                        setMsg(lang === 'ko' ? '스킬 최대 레벨입니다.' : 'Maximum skill level.');
                                       } else {
                                         sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv += 1;
                                         changeSaveData(sData);
@@ -157,14 +156,14 @@ const CharacterAnimalSkill = ({
                                     }
                                   } else {
                                     setMsgOn(true);
-                                    const beforeSkill = gameData.animalSkill[saveCh.animalSkill[groupIdx - 1][skIdx].idx].na;
-                                    setMsg(`선행 스킬(${beforeSkill})의 레벨이<br/> ${groupIdx}레벨 이상 이어야 가능합니다.`);
+                                    const beforeSkill = gameData.animalSkill[saveCh.animalSkill[groupIdx - 1][skIdx].idx].na[lang];
+                                    setMsg(lang === 'ko' ? `선행 스킬(${beforeSkill})의 레벨이<br/> ${groupIdx}레벨 이상 이어야 가능합니다.` : `Leading skill(${beforeSkill}) level must be<br/>at least ${groupIdx} level.`);
                                   }
                                 }
                               }
                             }}>
                               <div className="limitLv">{`${skData.lv} / ${groupIdx + 1}`}</div>
-                              {/* {sk.na}  */}
+                              {/* {sk.na[lang]}  */}
                               <div className="lv">{skData.lv > 0 && `Lv.${skData.lv}`}</div>
                             </SkillButton>
                             <button className="skill_description" onClick={(e) => {
@@ -178,7 +177,7 @@ const CharacterAnimalSkill = ({
                                 skillFrame:gameData.effect[sk.effAnimation].frame,
                                 frameImg:imgSet.etc.skillFrame,
                               });
-                            }}>스킬</button>
+                            }}>{lang === 'ko' ? '스킬' : 'skill'}</button>
                           </div>
                         )
                       }
@@ -208,7 +207,7 @@ const CharacterAnimalSkill = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} imgSet={imgSet}/>}
+        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn}/>}
       </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}

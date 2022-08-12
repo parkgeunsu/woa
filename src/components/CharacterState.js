@@ -58,7 +58,6 @@ const CharacterState = ({
               setPopupOn(true);
               setPopupInfo({
                 data:gameData.guide["characterState"],
-                lang:lang,
               });
             }} />
           </dt>
@@ -106,7 +105,7 @@ const CharacterState = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} imgSet={imgSet}/>}
+        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn}/>}
       </PopupContainer>
     </>
   );

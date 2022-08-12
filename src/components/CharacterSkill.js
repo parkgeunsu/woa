@@ -5,7 +5,7 @@ import GuideQuestion from 'components/GuideQuestion';
 import PopupContainer from 'components/PopupContainer';
 import Popup from 'components/Popup';
 
-const SkillElement = styled.span`
+const SkillIcon = styled.span`
   background:url(${({ frameImg }) => frameImg}), radial-gradient(closest-side at 40% 40%, #ddd, #333);background-size:100%;
   ${'' /* &.el1{background-image:url(${({ elementIcon }) => elementIcon[1]});background-size:100%;}
   &.el2{background-image:url(${({ elementIcon }) => elementIcon[2]});background-size:100%;}
@@ -26,7 +26,10 @@ const SkillElement = styled.span`
     return `${skillScene%5 * 25}% ${Math.floor(skillScene/5) * 100/(Math.floor((skillFrame - 1) / 5))}%`
   }}};
 `;
-
+const SkillIcon2 = styled.span`
+  background:url(${({ frameImg }) => frameImg}), radial-gradient(closest-side at 40% 40%, #ddd, #333);background-size:100%;
+  &:before{background:url(${({skillIcon}) => skillIcon});background-size:100%;};
+`;
 const CharacterSkill = ({
   saveData,
   slotIdx,
@@ -51,7 +54,6 @@ const CharacterSkill = ({
               setPopupOn(true);
               setPopupInfo({
                 data:gameData.guide["characterSkill"],
-                lang:lang,
               });
             }} />
           </dt>
@@ -59,18 +61,23 @@ const CharacterSkill = ({
             { saveSkill && saveSkill.map((skData, idx) => {
               const skData_ = gameData.skill[skData.idx];
               const cate = skData_.cate[0];
-              const replaceArr = skData_.txt.match(/[$][(]\d[)]*/g);
-              let replaceText = skData_.txt;
+              const replaceArr = skData_.txt[lang].match(/[$][(]\d[)]*/g) || [];
+              let replaceText = skData_.txt[lang];
               replaceArr.forEach((data, idx) => {
                 replaceText = replaceText.replace(data, skData_.eff[idx].num[skData.lv - 1]);
               });
               return (
                 <div key={idx} className={`sk cate${cate}`} flex-h="true">
                   <div className="sk_info" flex="true">
-                    <SkillElement className={`sk_element el${skData_.element_type}`} skillIcon={imgSet.eff[skData_.effAnimation]} skillScene={gameData.effect[skData_.effAnimation].imgScene} skillFrame={gameData.effect[skData_.effAnimation].frame} frameImg={imgSet.etc.skillFrame}/>
+                    {cate !== 4 && (
+                      <SkillIcon className={`sk_icon el${skData_.element_type}`} skillIcon={imgSet.eff[skData_.effAnimation]} skillScene={gameData.effect[skData_.effAnimation].imgScene} skillFrame={gameData.effect[skData_.effAnimation].frame} frameImg={imgSet.etc.skillFrame}/>
+                    )}
+                    {cate === 4 && (
+                      <SkillIcon2 className={`sk_icon el${skData_.element_type}`} skillIcon={imgSet.actionIcon[skData_.effAnimation]} frameImg={imgSet.etc.skillFrame}/>
+                    )}
                     <div style={{padding:"0 0 5px 10px",width:"100%", flex:1}} flex-h-center="true">
                       <div className="name">
-                        <span className="lv">LV.{skData.lv}</span>{skData_.na}
+                        <span className="lv">LV.{skData.lv}</span>{skData_.na[lang]}
                       </div>
                       <div className="txt" dangerouslySetInnerHTML={{__html: replaceText}} />
                     </div>
@@ -88,18 +95,18 @@ const CharacterSkill = ({
                 if (Object.keys(skData).length > 0 && skData.lv > 0) {
                   const skData_ = gameData.animalSkill[skData.idx];
                   const cate = skData_.cate[0];
-                  const replaceArr = skData_.txt.match(/[$][(]\d[)]*/g);
-                  let replaceText = skData_.txt;
+                  const replaceArr = skData_.txt[lang].match(/[$][(]\d[)]*/g) || [];
+                  let replaceText = skData_.txt[lang];
                   replaceArr.forEach((data, idx) => {
                     replaceText = replaceText.replace(data, skData_.eff[idx].num[skData.lv - 1]);
                   });
                   return (
                     <div key={idx} className={`sk cate${cate}`} flex-h="true">
                       <div className="sk_info" flex="true">
-                        <SkillElement className={`sk_element el${skData_.element_type}`} skillIcon={imgSet.eff[skData_.effAnimation]} skillScene={gameData.effect[skData_.effAnimation].imgScene} skillFrame={gameData.effect[skData_.effAnimation].frame} frameImg={imgSet.etc.skillFrame}/>
+                        <SkillIcon className={`sk_icon el${skData_.element_type}`} skillIcon={imgSet.eff[skData_.effAnimation]} skillScene={gameData.effect[skData_.effAnimation].imgScene} skillFrame={gameData.effect[skData_.effAnimation].frame} frameImg={imgSet.etc.skillFrame}/>
                         <div style={{padding:"0 0 5px 10px",width:"100%", flex:1}} flex-h-center="true">
                           <div className="name">
-                            <span className="lv">LV.{skData.lv}</span>{skData_.na}
+                            <span className="lv">LV.{skData.lv}</span>{skData_.na[lang]}
                           </div>
                           <div className="txt" dangerouslySetInnerHTML={{__html: replaceText}} />
                         </div>
@@ -113,7 +120,7 @@ const CharacterSkill = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} imgSet={imgSet}/>}
+        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn}/>}
       </PopupContainer>
     </>
   );

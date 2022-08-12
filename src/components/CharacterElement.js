@@ -31,12 +31,9 @@ const CharacterElement = ({
   const [popupInfo, setPopupInfo] = useState({});
   const [slotCh, setSlotCh] = useState(saveData.ch[slotIdx]);
   const elArr = [];
-  const elRadial = Math.PI*2 / gameData.element.length;
   gameData.element.forEach((elName, idx) => {
     elArr[idx] = {
       na: elName,
-      x: Math.cos(elRadial * idx),
-      y: Math.sin(elRadial * idx),
     };
   })
   // const chIdx = saveCh.idx;
@@ -65,7 +62,6 @@ const CharacterElement = ({
               setPopupOn(true);
               setPopupInfo({
                 data:gameData.guide["characterElement"],
-                lang:lang,
               });
             }} />
           </dt>
@@ -101,7 +97,7 @@ const CharacterElement = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} imgSet={imgSet}/>}
+        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn}/>}
       </PopupContainer>
     </>
   );

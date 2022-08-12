@@ -30,7 +30,6 @@ const CharacterApplyState = ({
               setPopupOn(true);
               setPopupInfo({
                 data:gameData.guide["characterTotalState"],
-                lang:lang,
               });
             }} />
           </dt>
@@ -52,7 +51,7 @@ const CharacterApplyState = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} imgSet={imgSet}/>}
+        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn}/>}
       </PopupContainer>
     </>
   );

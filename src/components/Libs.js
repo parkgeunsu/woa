@@ -420,8 +420,8 @@ export const util = { //this.loadImage();
     '','','','','','','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','진형'];
-    let arr_en = ['HP','SP','RSP','ATK','DEF','MAK','MDF','RCV','SPD','LUK','Sting','Scratch','Bite','Hit','Crush','Throw','','','','','',
-    'Light','Dark','Water','Fire','Wind','Land','','','','',
+    let arr_en = ['HP','SP','RSP','ATK','DEF','MAK','MDF','RCV','SPD','LUK','Sting','Claw','Bite','Hit','Crush','Throw','','','','','',
+    'Light','Darkness','Water','Fire','Wind','Land','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',
@@ -442,7 +442,7 @@ export const util = { //this.loadImage();
   },
   getEnemySkill: (data, gameData) => {
     const chData = gameData.ch[data.idx],
-      animalSkill = gameData.animal_type[chData.animal_type].skill,
+      animalSkill = gameData.animal_type[chData.animal_type].skill0,
       jobSkill = gameData.job[chData.job].skill,
       skillArr = [2, ...animalSkill, ...jobSkill];
     const skillNums = [3,6,9,12,15],
@@ -874,7 +874,7 @@ export const util = { //this.loadImage();
       return 1;
     }
   },
-  getItem: (saveData, gameData, changeSaveData, option ) => {
+  getItem: (saveData, gameData, changeSaveData, option, lang) => {
     let save = {...saveData};//장비 아이템 복사
     let itemLv = option.lv;
     const type = option.type || 'equip',
@@ -993,7 +993,8 @@ export const util = { //this.loadImage();
         return 1;
       }
     })();
-    const modifier = `${gameData.items.slotModifier[slotNum]} ${mark !== '' ? gameData.animal_type[mark].na : ''}${gameData.items.markModifier[markNum]}`;
+    const animalModifier = [`${mark !== '' ? gameData.animal_type[mark].na.ko : ''}${gameData.items.markModifier.ko[markNum]}`,`${gameData.items.markModifier.en[markNum]} ${mark !== '' ? gameData.animal_type[mark].na.en : ''}${markNum > 1 ? 's' : ''}`];
+    const modifier = {ko:gameData.items.slotModifier.ko[slotNum] + ' ' + animalModifier[0],en:gameData.items.slotModifier.en[slotNum] + ' ' + animalModifier[1]};
     itemLv -= slotNum * 5;
     const itemObj = {
       idx:selectItem.idx,

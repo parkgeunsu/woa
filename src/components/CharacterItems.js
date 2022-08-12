@@ -91,7 +91,6 @@ const CharacterItems = ({
                 setPopupOn(true);
                 setPopupInfo({
                   data:gameData.guide["characterItem"],
-                  lang:lang,
                 });
               }} />
             </div>
@@ -208,7 +207,7 @@ const CharacterItems = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} gameData={gameData} imgSet={imgSet} msgText={setMsg} showMsg={setMsgOn}/>}
+        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn}/>}
       </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}

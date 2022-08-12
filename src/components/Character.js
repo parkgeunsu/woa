@@ -54,6 +54,8 @@ const Character = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
+	const setting = useContext(AppContext).setting,
+    lang = setting.lang;
   const chLength = saveData.ch.length;
   const [slotIdx, setSlotIdx] = useState(0);
   const [chPage, setChPage] = useState(0);
@@ -137,7 +139,7 @@ const Character = ({
             grade:1,
             lv:Math.round(Math.random()*40 + 60),
           }
-          util.getItem(saveData, gameData, changeSaveData, option);
+          util.getItem(saveData, gameData, changeSaveData, option, lang);
         }}>아이템 추가</button><br/>
         <button onClick={() => {
           const option = {
@@ -146,7 +148,7 @@ const Character = ({
             grade:1,
             lv:Math.round(Math.random()*40 + 60),
           }
-          util.getItem(saveData, gameData, changeSaveData, option);
+          util.getItem(saveData, gameData, changeSaveData, option, lang);
         }}>동물스킬 리셋</button>
       </div>
       <div ref={chRef} className="ch_card transition">

@@ -25,7 +25,7 @@ const ChracterHeader = ({
   const gameData = useContext(AppContext).gameData;
   const chLength = saveData.ch.length;
   const scrolluseRef = useRef(null);
-  const cardWidth = window.innerHeight * 0.05;
+  const cardWidth = window.innerWidth * 0.1;
 
   useLayoutEffect(() => {
     if (scrolluseRef.current) { //카드리스트 스크롤 잡기

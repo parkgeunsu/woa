@@ -7,8 +7,8 @@ export const save = {
     },
     "ch":[
       {"idx":1,"stateType":0,"element":[11],"grade":6,"mark":2,"stateLuk":146,"lv":45,"exp":10,"hasExp":50000,"actionPoint":20,"battleBeige":[0,0,0,0],"animalBeige":8,"sk":[{"idx":1,"lv":1,"exp":0},{"idx":2,"lv":1,"exp":0},{"idx":6,"lv":1,"exp":0},{"idx":7,"lv":1,"exp":0}],"items":[
-        {"idx": 2,"part": 1,"grade": 2,"slot": 1,"hole": [0],"color": ["#d9e506","#52057f"],"baseEff": [{"type": 4,"num": ["82","98","121","140"]}],"addEff": [{"type": 13,"num": ["46"]},{"type": 4,"num": ["178"]},{"type": 8,"num": ["4"]},{"type": 11,"num": ["25"]}],"mark": 0,"markNum": 2,"modifier": "사파이어의 고양이두마리"},
-        {"idx": 8,"part": 2,"grade": 2,"slot": 4,"hole": [0,0,0,0],"color": ["#706357"],"baseEff": [{"type": 4,"num": ["305","386","480","583"]}],"addEff": [{"type": 13,"num": ["2"]},{"type": 13,"num": ["18"]},{"type": 4,"num": ["359"]}],"mark": 0,"markNum": 4,"modifier": "다이아몬드의 고양이네마리"},
+        {"idx": 2,"part": 1,"grade": 2,"slot": 1,"hole": [0],"color": ["#d9e506","#52057f"],"baseEff": [{"type": 4,"num": ["82","98","121","140"]}],"addEff": [{"type": 13,"num": ["46"]},{"type": 4,"num": ["178"]},{"type": 8,"num": ["4"]},{"type": 11,"num": ["25"]}],"mark": 0,"markNum": 2,"modifier": {"ko":"사파이어의 고양이두마리","en":"Sappire's two Cats"}},
+        {"idx": 8,"part": 2,"grade": 2,"slot": 4,"hole": [0,0,0,0],"color": ["#706357"],"baseEff": [{"type": 4,"num": ["305","386","480","583"]}],"addEff": [{"type": 13,"num": ["2"]},{"type": 13,"num": ["18"]},{"type": 4,"num": ["359"]}],"mark": 0,"markNum": 4,"modifier": {"ko":"다이아몬드의 고양이네마리","en":"Diamods's four Cats"}},
         // {"idx":11,"slot":3,"hole":[],"grade":2},
         {},
         {},
@@ -23,7 +23,7 @@ export const save = {
         [{},{},{},{}],
       ]},
       {"idx":0,"stateType":0,"element":[8],"grade":5,"mark":0,"stateLuk":20,"lv":40,"exp":0,"hasExp":1000,"actionPoint":20,"battleBeige":[0,0,0,0],"animalBeige":0,"sk":[{"idx":1,"lv":1,"exp":0},{"idx":2,"lv":1,"exp":0}],"items":[
-        {"idx":0,"part":1,"slot":0,"hole":[4,0,12,23],"grade":1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[],mark:24,modifier:'king의 '},
+        {},
         {},
         {},
         {},
@@ -59,25 +59,6 @@ export const save = {
     ],
     "items":{
       "equip":[
-        // {"idx":0,"part":1,"slot":0,"hole":[4,0,12,23],"grade":1,color:["#f00","#0f0"],baseEff:[{type:4,num:['15']}],addEff:[],mark:0,modifier:''},
-        // {"idx":0,"part":1,"slot":0,"hole":[],"grade":3,color:["#fff","#f60"],baseEff:[{type:4,num:['12','25','35']}],addEff:[],mark:"",modifier:''},
-        // {"idx":0,"part":1,"slot":0,"hole":[],"grade":1,color:["#000","#fff"],baseEff:[{type:4,num:['16']}],addEff:[],mark:1,modifier:''},
-        // {"idx":0,"part":1,"slot":0,"hole":[12,0,13],"grade":1,color:["#06f","#066"],baseEff:[{type:4,num:['20']}],addEff:[],mark:10,modifier:''},
-        // {"idx":1,"part":1,"slot":0,"hole":[12,0,13],"grade":1,color:["#fff","#f00","#0f4036"],baseEff:[{type:4,num:['120']}],addEff:[],mark:16,modifier:''},
-        // {"idx":0,"part":2,"slot":0,"hole":[12,0,13],"grade":1,color:["#06f"],baseEff:[{type:4,num:['71']}],addEff:[],mark:"",modifier:''},
-        // {"idx":1,"part":2,"slot":0,"hole":[12,0,13],"grade":1,color:["#06f"],baseEff:[{type:4,num:['45']}],addEff:[{type:4,num:['77']}],mark:3,modifier:''},
-        // {"idx":0,"part":2,"slot":0,"hole":[12,0,13],"grade":2,color:["#06f"],baseEff:[{type:4,num:['120','175']}],addEff:[{type:0,num:['330']},{type:4,num:['150']}],mark:2,modifier:''},
-        // {"idx":1,"part":2,"slot":0,"hole":[12,0,13],"grade":2,color:["#06f"],baseEff:[{type:4,num:['120','175']}],addEff:[{type:0,num:['330']},{type:4,num:['150']}],mark:2,modifier:''},
-        // {"idx":2,"part":2,"slot":0,"hole":[12,0,13],"grade":2,color:["#06f"],baseEff:[{type:4,num:['120','175']}],addEff:[{type:0,num:['330']},{type:4,num:['150']}],mark:2,modifier:''},
-        // {"idx":3,"part":2,"slot":0,"hole":[12,0,13],"grade":1,color:["#06f"],baseEff:[{type:4,num:['137']}],addEff:[],mark:5,modifier:''},
-        // {"idx":4,"part":2,"slot":0,"hole":[12,0,13],"grade":3,color:["#06f"],baseEff:[{type:4,num:['150','180','220']}],addEff:[],mark:"",modifier:''},
-        // {"idx":5,"part":2,"slot":0,"hole":[12,0,13],"grade":1,color:["#06f"],baseEff:[{type:4,num:['220']}],addEff:[],mark:24,modifier:''},
-        // {"idx":6,"part":2,"slot":0,"hole":[12,0,13],"grade":1,color:["#06f"],baseEff:[{type:4,num:['225']}],addEff:[],mark:22,modifier:''},
-        // {"idx":7,"part":2,"slot":0,"hole":[12,0,13],"grade":4,color:["#ff0"],baseEff:[{type:4,num:['210','250','303','452']}],addEff:[],mark:0,modifier:''},
-        // {"idx":8,"part":2,"slot":0,"hole":[12,0,13],"grade":1,color:["#06f"],baseEff:[{type:4,num:['333']}],addEff:[],mark:19,modifier:''},
-        // {"idx":9,"part":2,"slot":0,"hole":[12,0,13],"grade":1,color:["#06f"],baseEff:[{type:4,num:['525']}],addEff:[],mark:20,modifier:''},
-        // {"idx":10,"part":2,"slot":0,"hole":[12,0,13],"grade":1,color:["#06f"],baseEff:[{type:4,num:['802']}],addEff:[],mark:15,modifier:''},
-        // {"idx":11,"part":2,"slot":0,"hole":[12,0,13],"grade":1,color:["#06f"],baseEff:[{type:4,num:['802']}],addEff:[],mark:15,modifier:''},
       ],
       "hole":[
         {"idx":1,baseEff:[{type:4,num:['802']}],addEff:[]},

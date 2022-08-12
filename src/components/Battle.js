@@ -2238,7 +2238,7 @@ const Battle = ({
 					<RelationArea className={`relation_area ${mode === "relation" ? "on" : ""}`} rtHeight={relationHeight.current} gameSpd={gameSpd}>
 						<div className="relationTitle"><span>인!</span><span>연!</span><span>발!</span><span>동!</span></div>
 						{allyRelationArr.current.map((rtData, idx) => {
-							const rtName = gameData.relation[rtData.idx].na;
+							const rtName = gameData.relation[rtData.idx].na[lang];
 							return (
 								<RelationName key={idx} className="relationName" idx={idx} color={rtData.color} gameSpd={gameSpd}>{rtName}</RelationName>
 							)
@@ -2475,7 +2475,7 @@ const Battle = ({
 					</BattleLand>
 					<BattleOrder className={`battle_order ${skillMsg ? 'on' : ''} ${typeof turnIdx === 'number' && timeLine.current[turnIdx]?.order.team === 'ally' ? 'ally' : 'enemy'} ${typeof turnIdx === 'number' && gameData.ch[timeLine.current[turnIdx]?.order.idx]?.face_d}`} gameSpd={gameSpd}>
 						<div className="battle_msg">
-							{typeof turnIdx === 'number' && gameData.skill[timeLine.current[turnIdx]?.order.skIdx]?.na}
+							{typeof turnIdx === 'number' && gameData.skill[timeLine.current[turnIdx]?.order.skIdx]?.na[lang]}
 						</div>
 					</BattleOrder>
 				</BattleArea>
@@ -2491,17 +2491,17 @@ const Battle = ({
 									<ul className="scroll-x">
 										<li><button onClick={() => {
 											battleCommand('cancel');
-										}}><span className="skName">취소</span></button></li>
+										}}><span className="skName">{lang === 'ko' ? '취소' : 'Cancel'}</span></button></li>
 										<li><button onClick={() => {
 											battleCommand('wait');
-										}}><span className="skSp">{battleAlly.current[orderIdx]?.bSt2}</span><span className="skName">대기</span></button></li>
+										}}><span className="skSp">{battleAlly.current[orderIdx]?.bSt2}</span><span className="skName">{lang === 'ko' ? '대기' : 'Wait'}</span></button></li>
 										{battleAlly.current[orderIdx]?.sk && battleAlly.current[orderIdx]?.sk.map((data, idx) => {
 											const sk = gameData.skill;
 											if (sk[data.idx].cate[0] !== 2) {
 												return (
 													<li key={idx}><button onClick={() => {
 														battleCommand(sk[data.idx], data.lv);
-													}}><span className="skSp">{sk[data.idx].sp}</span><span className="skName">{sk[data.idx].na}</span></button></li>
+													}}><span className="skSp">{sk[data.idx].sp}</span><span className="skName">{sk[data.idx].na[lang]}</span></button></li>
 												);
 											}
 										})}

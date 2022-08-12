@@ -247,18 +247,18 @@ import defenceIcon2 from 'images/ico/shield2.png';
 import tombstone from 'images/ico/tombstone.png';
 
 //패시브 아이콘
-import passive0 from 'images/ico/passive0.png';
-import passive1 from 'images/ico/passive1.png';
-import passive2 from 'images/ico/passive2.png';
-import passive3 from 'images/ico/passive3.png';
-import passive4 from 'images/ico/passive4.png';
-import passive5 from 'images/ico/passive5.png';
-import passive6 from 'images/ico/passive6.png';
-import passive7 from 'images/ico/passive7.png';
-import passive8 from 'images/ico/passive8.png';
-import passive9 from 'images/ico/passive9.png';
-import passive10 from 'images/ico/passive10.png';
-import passive11 from 'images/ico/passive11.png';
+import passive0 from 'images/passive/passive0.png';
+import passive1 from 'images/passive/passive1.png';
+import passive2 from 'images/passive/passive2.png';
+import passive3 from 'images/passive/passive3.png';
+import passive4 from 'images/passive/passive4.png';
+import passive5 from 'images/passive/passive5.png';
+import passive6 from 'images/passive/passive6.png';
+import passive7 from 'images/passive/passive7.png';
+import passive8 from 'images/passive/passive8.png';
+import passive9 from 'images/passive/passive9.png';
+import passive10 from 'images/passive/passive10.png';
+import passive11 from 'images/passive/passive11.png';
 
 //이펙트 애니메이션
 import attack0 from 'images/effect/attack0.png';

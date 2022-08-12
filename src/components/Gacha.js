@@ -258,6 +258,8 @@ const Gacha = ({
 	changeSaveData,
 }) => {
   const imgSet = useContext(AppContext).images;
+	const setting = useContext(AppContext).setting,
+    lang = setting.lang;
 	const iconStar = [imgSet.iconStar[0], imgSet.iconStar[1], imgSet.iconStar[2], imgSet.iconStar[3], imgSet.iconStar[4], imgSet.iconStar[5], imgSet.iconStar[6]]
   const gameData = useContext(AppContext).gameData;
 	const [gachaMode, setGachaMode] = useState('init');
@@ -602,7 +604,7 @@ const Gacha = ({
 									<dd>
 										{gameData.ch[infoIdx].relation && gameData.ch[infoIdx].relation.map((data, idx) => {
 											return (
-												<span key={idx}>{gameData.relation[data].na}</span>
+												<span key={idx}>{gameData.relation[data].na[lang]}</span>
 											);
 										})}
 									</dd>

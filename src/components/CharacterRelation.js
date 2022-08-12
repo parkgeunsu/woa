@@ -57,8 +57,8 @@ const CharacterRelation = ({
               return (
                 <div key={idx} className="rt" flex-h="true">
                   <div className="relationInfo" flex="true">
-                    <span className="name">{relationData.na}</span>
-                    <span className="txt" dangerouslySetInnerHTML={{__html: relationData.txt}} />
+                    <span className="name">{relationData.na[lang]}</span>
+                    <span className="txt" dangerouslySetInnerHTML={{__html: relationData.txt[lang]}} />
                   </div>
                   <div className={`relationMember`} flex="true">
                     {relationData.member && relationData.member.map((data, idx_) => {

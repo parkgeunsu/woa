@@ -240,8 +240,8 @@ export const scenario = {
 				stage:[
 					{
 						title:{
-							en:"1592년 옥포해전",
-							ko:"Battle of Okpo in 1592"
+							ko:"1592년 옥포해전",
+							en:"Battle of Okpo in 1592"
 						},
 						conversation:[
 							{idx:28, team:"enemy", pos:"left", txt:{

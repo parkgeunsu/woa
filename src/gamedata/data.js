@@ -13,7 +13,7 @@ import { guide } from 'gamedata/guide';
 
 export const version = "0.1";
 export const gameData = {
-    itemType: ["","투구","갑옷","무기","반지","목걸이"],
+    itemType: [{ko:'',en:''},{ko:'투구',en:'Helm'},{ko:'갑옷',en:'Armor'},{ko:'무기',en:'Weapon'},{ko:'반지',en:'Ring'},{ko:'목걸이',en:'Necklace'}],
     stateName: ["통솔", "체력", "완력", "민첩", "지력", "정신", "매력","행운"],
     addGradeArr: [1,1.2,1.3,1.4,1.5,1.6,1.7],//등급에 따른 추가 능력치
     animal_type:animals,//'독0','빛1','암2','물3','불4','바람5','땅6'
@@ -37,7 +37,7 @@ export const gameData = {
       {na:'예측불허',arr:[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,92,94,96,98,105]}
     ],
     gradeUp:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,5,5,5,10,10,10,10,10,20,20,20,20,20,25,25,25,30,40],//인물 초월시재료
-    element:['찌르기','할퀴기','물기','치기','누르기','던지기','빛','어둠','물','불','바람','땅'],
+    element:[{ko:'찌르기',en:'Sting'},{ko:'할퀴기',en:'Claw'},{ko:'물기',en:'Bite'},{ko:'치기',en:'Hit'},{ko:'누르기',en:'Crush'},{ko:'던지기',en:'Throw'},{ko:'빛',en:'Light'},{ko:'어둠',en:'Darkness'},{ko:'물',en:'Water'},{ko:'불',en:'Fire'},{ko:'바람',en:'Wind'},{ko:'땅',en:'Earth'}],
     lineup:lineup,
     skill:skill,
     animalSkill:animalSkill,
