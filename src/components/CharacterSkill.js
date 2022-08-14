@@ -31,6 +31,11 @@ const SkillIcon2 = styled.span`
   &:before{background:url(${({skillIcon}) => skillIcon});background-size:contain;};
   &:after{background:url(${({skillIcon}) => skillIcon});background-size:contain;};
 `;
+const SkillIcon3 = styled.span`
+  background:url(${({ frameImg }) => frameImg}), radial-gradient(closest-side at 40% 40%, #ddd, #333);background-size:100%;
+  &:before{background:url(${({skillIcon}) => skillIcon});background-size:contain;};
+  &:after{background:url(${({skillIcon}) => skillIcon});background-size:contain;};
+`;
 const CharacterSkill = ({
   saveData,
   slotIdx,
@@ -70,11 +75,14 @@ const CharacterSkill = ({
               return (
                 <div key={idx} className={`sk cate${cate}`} flex-h="true">
                   <div className="sk_info" flex="true">
-                    {cate !== 4 && (
-                      <SkillIcon className={`sk_icon el${skData_.element_type}`} skillIcon={imgSet.eff[skData_.effAnimation]} skillScene={gameData.effect[skData_.effAnimation].imgScene} skillFrame={gameData.effect[skData_.effAnimation].frame} frameImg={imgSet.etc.skillFrame}/>
+                    {cate === 2 && ( //passive
+                      <SkillIcon3 className={`sk_icon3 el${skData_.element_type}`} skillIcon={imgSet.passive[skData_.effAnimation]} frameImg={imgSet.etc.skillFrame}/>
                     )}
-                    {cate === 4 && (
+                    {cate === 4 && ( //defence
                       <SkillIcon2 className={`sk_icon2 el${skData_.element_type}`} skillIcon={imgSet.actionIcon[skData_.effAnimation]} frameImg={imgSet.etc.skillFrame}/>
+                    )}
+                    {cate !== 2 && cate !== 4 && (
+                      <SkillIcon className={`sk_icon el${skData_.element_type}`} skillIcon={imgSet.eff[skData_.effAnimation]} skillScene={gameData.effect[skData_.effAnimation].imgScene} skillFrame={gameData.effect[skData_.effAnimation].frame} frameImg={imgSet.etc.skillFrame}/>
                     )}
                     <div style={{padding:"0 0 5px 10px",width:"100%", flex:1}} flex-h-center="true">
                       <div className="name">
@@ -104,7 +112,15 @@ const CharacterSkill = ({
                   return (
                     <div key={idx} className={`sk cate${cate}`} flex-h="true">
                       <div className="sk_info" flex="true">
+                      {cate === 2 && ( //passive
+                        <SkillIcon3 className={`sk_icon3 el${skData_.element_type}`} skillIcon={imgSet.passive[skData_.effAnimation]} frameImg={imgSet.etc.skillFrame}/>
+                      )}
+                      {cate === 4 && ( //defence
+                        <SkillIcon2 className={`sk_icon2 el${skData_.element_type}`} skillIcon={imgSet.actionIcon[skData_.effAnimation]} frameImg={imgSet.etc.skillFrame}/>
+                      )}
+                      {cate !== 2 && cate !== 4 && (
                         <SkillIcon className={`sk_icon el${skData_.element_type}`} skillIcon={imgSet.eff[skData_.effAnimation]} skillScene={gameData.effect[skData_.effAnimation].imgScene} skillFrame={gameData.effect[skData_.effAnimation].frame} frameImg={imgSet.etc.skillFrame}/>
+                      )}
                         <div style={{padding:"0 0 5px 10px",width:"100%", flex:1}} flex-h-center="true">
                           <div className="name">
                             <span className="lv">LV.{skData.lv}</span>{skData_.na[lang]}
