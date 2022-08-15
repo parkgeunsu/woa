@@ -31,12 +31,25 @@ const makeMark = (markNum, img) => {
 }
 const SkillButton = styled.div`
   background:url(${({ frameImg }) => frameImg}), radial-gradient(closest-side at 40% 40%, #ddd, #333);background-size:100%;
-  &:before{background:url(${({skillIcon}) => skillIcon});background-size:500% auto;background-position:${({skillScene, skillFrame}) => {
-    return `${skillScene%5 * 25}% ${Math.floor(skillScene/5) * 100/(Math.floor((skillFrame - 1) / 5))}%`
-  }}};
-  &:after{background:url(${({skillIcon}) => skillIcon});background-size:500% auto;background-position:${({skillScene, skillFrame}) => {
-    return `${skillScene%5 * 25}% ${Math.floor(skillScene/5) * 100/(Math.floor((skillFrame - 1) / 5))}%`
-  }}};
+  ${({skillCate, skillIcon, skillScene, skillFrame}) => {
+    if (skillCate === 2) {
+      return `
+        &:before{background:url(${skillIcon});background-size:100%;}
+        &:after{background:url(${skillIcon});background-size:100%;}
+      `;
+    } else if (skillCate === 4) {
+      return `
+        &:before{background:url(${skillIcon});background-size:contain;}
+        &:after{background:url(${skillIcon});background-size:contain;}
+      `;
+    } else {
+      return `
+        &:before{background:url(${skillIcon});}
+        &:after{background:url(${skillIcon});background-size:500% auto;background-position:${skillScene%5 * 25}% ${Math.floor(skillScene/5) * 100/(Math.floor((skillFrame - 1) / 5))}%};
+      `;
+    }
+  }}
+  
 `;
 const SkillElement = styled.span`
   ${'' /* &.el0{background-image:url(${({ elementIcon }) => elementIcon[0]});background-size:100%;}
@@ -124,9 +137,19 @@ const CharacterAnimalSkill = ({
                     {skGroup.map((skData, skIdx) => {
                       if (Object.keys(skData).length !== 0){
                         const sk = gameData.animalSkill[skData.idx];
+                        const skCate = sk.cate[0];
+                        const skillIcon = (() => {
+                          if (skCate === 2) {//passive
+                            return imgSet.passive[sk.effAnimation];
+                          } else if (skCate === 4) {//defence
+                            return imgSet.actionIcon[sk.effAnimation];
+                          } else {
+                            return imgSet.eff[sk.effAnimation];
+                          }
+                        })();
                         return (
                           <div key={skIdx} className={`skill_list pos${skIdx % 4}`}>
-                            <SkillButton skillIcon={imgSet.eff[sk.effAnimation]} skillScene={gameData.effect[sk.effAnimation].imgScene} skillFrame={gameData.effect[sk.effAnimation].frame} frameImg={imgSet.etc.skillFrame} className={`skill_button ${skData.lv > 0 ? "used" : ""}`} flex-h-center="true" onClick={() => {
+                            <SkillButton skillCate={skCate} skillIcon={skillIcon} skillScene={gameData.effect[sk.effAnimation].imgScene} skillFrame={gameData.effect[sk.effAnimation].frame} frameImg={imgSet.etc.skillFrame} className={`skill_button cate${skCate} ${skData.lv > 0 ? "used" : ""}`} flex-h-center="true" onClick={() => {
                               let sData = {...saveData};
                               if (sData.ch[slotIdx].animalBeige <= 0) {
                                 setMsgOn(true);
@@ -172,7 +195,8 @@ const CharacterAnimalSkill = ({
                               setPopupInfo({
                                 sk:sk,
                                 skData:skData,
-                                skillIcon:imgSet.eff[sk.effAnimation],
+                                skillCate:skCate,
+                                skillIcon:skillIcon,
                                 skillScene:gameData.effect[sk.effAnimation].imgScene,
                                 skillFrame:gameData.effect[sk.effAnimation].frame,
                                 frameImg:imgSet.etc.skillFrame,

@@ -98,12 +98,24 @@ const PopupItemName = styled.div`
 `;
 const SkillImg = styled.div`
   background:url(${({ frameImg }) => frameImg}), radial-gradient(closest-side at 40% 40%, #ddd, #333);background-size:100%;
-  &:before{background:url(${({skillIcon}) => skillIcon});background-size:500% auto;background-position:${({skillScene, skillFrame}) => {
-    return `${skillScene%5 * 25}% ${Math.floor(skillScene/5) * 100/(Math.floor((skillFrame - 1) / 5))}%`
-  }}};
-  &:after{background:url(${({skillIcon}) => skillIcon});background-size:500% auto;background-position:${({skillScene, skillFrame}) => {
-    return `${skillScene%5 * 25}% ${Math.floor(skillScene/5) * 100/(Math.floor((skillFrame - 1) / 5))}%`
-  }}};
+  ${({skillCate, skillIcon, skillScene, skillFrame}) => {
+    if (skillCate === 2) {
+      return `
+        &:before{background:url(${skillIcon});background-size:100%;}
+        &:after{background:url(${skillIcon});background-size:100%;}
+      `;
+    } else if (skillCate === 4) {
+      return `
+        &:before{background:url(${skillIcon});background-size:contain;}
+        &:after{background:url(${skillIcon});background-size:contain;}
+      `;
+    } else {
+      return `
+        &:before{background:url(${skillIcon});}
+        &:after{background:url(${skillIcon});background-size:500% auto;background-position:${skillScene%5 * 25}% ${Math.floor(skillScene/5) * 100/(Math.floor((skillFrame - 1) / 5))}%};
+      `;
+    }
+  }}
 `;
 const getSetChk = (has_item, n) => {//셋트 아이템 체크
   let chk = false;
@@ -774,7 +786,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     });
     return (
       <div className="skill_description">
-        <SkillImg className="skill_icon" skillIcon={dataObj.skillIcon} skillScene={dataObj.skillScene} skillFrame={dataObj.skillFrame} frameImg={dataObj.frameImg}></SkillImg>
+        <SkillImg className={`skill_icon cate${dataObj.skillCate}`} skillCate={dataObj.skillCate} skillIcon={dataObj.skillIcon} skillScene={dataObj.skillScene} skillFrame={dataObj.skillFrame} frameImg={dataObj.frameImg}></SkillImg>
         <dl>
           <dt>{`${dataObj.skData.lv > 0 ? 'Lv.' + dataObj.skData.lv : lang === 'ko' ? '(미습득)' : '(Item not acquired)'} ${dataObj.sk.na[lang]}`}</dt>
           <dd dangerouslySetInnerHTML={{__html: replaceText}}></dd>

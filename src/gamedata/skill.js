@@ -36,19 +36,19 @@ export const skill = [
 		,ta_:0,ta:10,effAnimation:0
 		,eff:[{type:100,num:['20%','25%','30%','35%','40%']}],atkCount:[0],turn:0,sp:0}, //이순신
 	{idx:5,
-		na:{ko:'격려',en:'Encouragement'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>전체</u>, 진형효과 <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, The Formative Effect <b buff>$(0)</b> <i icon up></i> increase'}
+		na:{ko:'격려',en:'Encouragement'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 진형효과 <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, The Formative Effect <b buff>$(0)</b> <i icon up></i> increase'}
 		,ta_:0,ta:10,effAnimation:1
 		,eff:[{type:100,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
 	{idx:6,
-		na:{ko:'불정령',en:'Spirit of Fire'},element_type:10,cate:[2],txt:{ko:'전투 참여시 <u>전체</u>, 공격(ATK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Attack(ATK) <b buff>$(0)</b> <i icon up></i> increase'}
+		na:{ko:'불정령',en:'Spirit of Fire'},element_type:10,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 공격(ATK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Attack(ATK) <b buff>$(0)</b> <i icon up></i> increase'}
 		,ta_:0,ta:10,effAnimation:0
 		,eff:[{type:3,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
 	{idx:7,
-		na:{ko:'빛정령',en:'Spirit of Light'},element_type:7,cate:[2],txt:{ko:'전투 참여시 <u>전체</u>, 술법공격(MAK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Magic Attack(MAK) <b buff>$(0)</b> <i icon up></i> increase'}
+		na:{ko:'빛정령',en:'Spirit of Light'},element_type:7,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 술법공격(MAK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Magic Attack(MAK) <b buff>$(0)</b> <i icon up></i> increase'}
 		,ta_:0,ta:10,effAnimation:3
 		,eff:[{type:5,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
 	{idx:8,
-		na:{ko:'물정령',en:'Spirit of Water'},element_type:9,cate:[2],txt:{ko:'전투 참여시 <u>전체</u>, 체력(HP) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Health Point(HP) <b buff>$(0)</b> <i icon up></i> increase'}
+		na:{ko:'물정령',en:'Spirit of Water'},element_type:9,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 체력(HP) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Health Point(HP) <b buff>$(0)</b> <i icon up></i> increase'}
 		,ta_:0,ta:10,effAnimation:1
 		,eff:[{type:0,num:['20%','25%','30%','35%','40%']}],atkCount:[0],turn:0,sp:0},
 	{idx:9,
@@ -91,18 +91,38 @@ export const animalSkill = [
 		,ta_:1,ta:1,effAnimation:2,skillClass:0
 		,eff:[{type:8,num:['5','10','15','20','25']}],atkCount:[1],turn:1,sp:0},
 	{idx:1,
-		na:{ko:'손톱 갈기',en:'Nail Clipper'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 공격(ATK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Attack(ATK) <b buff>$(0)</b> <i icon up></i> increase'}
-		,ta_:1,ta:1,effAnimation:0,skillClass:0
-		,eff:[{type:8,num:['10%','20%','30%','40%','50%']}],atkCount:[1],turn:1,sp:0},
+		na:{ko:'사자의 빛나는 영광',en:'Lion\'s Shining Glory'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 공격(ATK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Attack(ATK) <b buff>$(0)</b> <i icon up></i> increase'}
+		,ta_:1,ta:10,effAnimation:2,skillClass:0
+		,eff:[{type:3,num:['10%','15%','20%','25%','30%']}],atkCount:[1],turn:1,sp:0},
 	{idx:2,
-		na:{ko:'영역표시',en:'Mark the Area.'},element_type:2,cate:[2],txt:{ko:'전투 참여시 <u>전체</u>, 속도(SPD) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Speed(SPD) <b buff>$(0)</b> <i icon up></i> increase'}
+		na:{ko:'호랑이의 거친 용맹',en:'Tiger\'s Wild Bravery'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 공격(ATK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Attack(ATK) <b buff>$(0)</b> <i icon up></i> increase'}
+		,ta_:1,ta:1,effAnimation:2,skillClass:0
+		,eff:[{type:3,num:['10%','20%','30%','40%','50%']}],atkCount:[1],turn:1,sp:0},
+	{idx:3,
+		na:{ko:'곰의 강철 피부',en:'Bear\'s Steel Skin'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 방어(DEF) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Defence(DEF) <b buff>$(0)</b> <i icon up></i> increase'}
+		,ta_:1,ta:1,effAnimation:2,skillClass:0
+		,eff:[{type:4,num:['20%','25%','30%','35%','45%']}],atkCount:[1],turn:1,sp:0},
+	{idx:4,
+		na:{ko:'독수리의 영리함',en:'Eagle\'s Cleverness'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 술법공격(MAK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Magic Attack(MAK) <b buff>$(0)</b> <i icon up></i> increase'}
+		,ta_:1,ta:10,effAnimation:2,skillClass:0
+		,eff:[{type:5,num:['10%','15%','20%','25%','30%']}],atkCount:[1],turn:1,sp:0},
+	{idx:5,
+		na:{ko:'뱀의 교활함',en:'Snake\'s Craftiness'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 술법공격(MAK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Magic Attack(MAK) <b buff>$(0)</b> <i icon up></i> increase'}
+		,ta_:1,ta:1,effAnimation:2,skillClass:0
+		,eff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],turn:1,sp:0},
+	{idx:6,
+		na:{ko:'손톱 갈기',en:'Nail Clipper'},element_type:0,cate:[5],txt:{ko:'<u>자신</u>, 공격(ATK) <b buff>$(0)</b> <i icon up></i> 증가',en:'<u>Self</u>, Attack(ATK) <b buff>$(0)</b> <i icon up></i> increase'}
+		,ta_:1,ta:1,effAnimation:0,skillClass:0
+		,eff:[{type:3,num:['30%','40%','50%','60%','70%']}],atkCount:[1],turn:1,sp:0},
+	{idx:7,
+		na:{ko:'영역표시',en:'Mark the Area.'},element_type:2,cate:[5],txt:{ko:'<u>전체</u>, 속도(SPD) <b buff>$(0)</b> <i icon up></i> 증가',en:'<u>All Allies</u>, Speed(SPD) <b buff>$(0)</b> <i icon up></i> increase'}
 		,ta_:1,ta:10,effAnimation:0,skillClass:1
 		,eff:[{type:8,num:['3','6','9','12','15']}],atkCount:[1],turn:1,sp:0},
-	{idx:3,
+	{idx:8,
 		na:{ko:'몸집 키우기',en:'Grows in Size'},element_type:2,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 체력(HP) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Heath Point(HP) <b buff>$(0)</b> <i icon up></i> increase'}
 		,ta_:1,ta:1,effAnimation:1,skillClass:0
 		,eff:[{type:0,num:['50%','75%','100%','125%','150%']}],atkCount:[1],turn:1,sp:0},
-	{idx:4,
+	{idx:9,
 		na:{ko:'빵굽기',en:'Baking Cat'},element_type:2,cate:[5],txt:{ko:'<u>자신</u>, 공격력(ATK) <b buff>$(0)</b>, 방어력(DEF) <b buff>$(1)</b> 3턴 <i icon up></i> 증가',en:'in battle <u>Self</u>, Attack(ATK) <b buff>$(0)</b>, 3turn Defense(DEF) <b buff>$(1)</b> <i icon up></i> increase'}
 		,ta_:1,ta:1,effAnimation:2,skillClass:0
 		,eff:[{type:3,num:['50%','60%','70%','80%','100%']},{type:4,num:['50%','60%','70%','80%','100%']}],atkCount:[0],turn:3,sp:10},
@@ -111,15 +131,15 @@ export const animalSkill = [
 		,ta_:1,ta:1,effAnimation:11
 		,eff:[{type:8,num:['50%','70','90','120','150']}],turn:1,atkCount:[1],sp:5},
 	{idx:6,
-		na:{ko:'포효',en:'Roar'},element_type:2,cate:[6],txt:{ko:'<u>전체</u>, 속도(SPD) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Speed(SPD) <b buff>$(0)</b> <i icon up></i> increase'}
+		na:{ko:'포효',en:'Roar'},element_type:2,cate:[6],txt:{ko:'<u>전체</u>, 속도(SPD) <b buff>$(0)</b> <i icon down></i> 감소',en:'in battle <u>All Allies</u>, Speed(SPD) <b buff>$(0)</b> <i icon down></i> reduction'}
 		,ta_:1,ta:20,effAnimation:0,skillClass:1
 		,eff:[{type:8,num:['-10','-15','-20','-25','-30']}],atkCount:[1],turn:1,sp:15},
 	{idx:7,
-		na:{ko:'하악질',en:'Animal Yells'},element_type:2,cate:[6],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 공격(ATK) 3턴 <i icon up></i> 증가',en:'<u>Single Enemy</u>, Attack(ATK) <b buff>$(0)</b>, a 3turn <i icon down></i> reduction'}
+		na:{ko:'하악질',en:'Animal Yells'},element_type:2,cate:[6],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 공격(ATK) 3턴 <i icon down></i> 감소',en:'<u>Single Enemy</u>, Attack(ATK) <b buff>$(0)</b>, a 3turn <i icon down></i> reduction'}
 		,ta_:1,ta:1,effAnimation:0
 		,eff:[{type:3,num:['-30%','-35%','-40%','-45%','-50%']}],atkCount:[0],turn:1,sp:11},
 	{idx:8,
-		na:{ko:'꾹꾹이',en:'Cat Pokes'},element_type:2,cate:[6],txt:{ko:'<u>단일 적군</u>, 방어력(DEF) <b buff>$(0)</b> 3턴 <i icon up></i> 감소',en:''}
+		na:{ko:'꾹꾹이',en:'Cat Pokes'},element_type:2,cate:[6],txt:{ko:'<u>단일 적군</u>, 방어력(DEF) <b buff>$(0)</b> 3턴 <i icon down></i> 감소',en:''}
 		,ta_:1,ta:1,effAnimation:3,skillClass:0
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[0],turn:1,sp:7},
 	{idx:9,
@@ -148,6 +168,55 @@ export const animalSkill = [
 		,ta_:1,ta:1,effAnimation:1,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[2],turn:1,sp:5},
 ];
+// 모아치기
+// 중독, 출혈 기능 구현
+
+// 동물타입
+// * 0고양이 - 고양이의 예민한 직감
+// * 1사자 - 사자의 빛나는 영광
+// 	1톤 타격
+// * 2호랑이 - 호랑이의 거친 용맹
+// 	양손 타격
+// * 3강아지 - 강아지의 충성스러운 용기
+// * 4늑대 - 늑대의 강인한 의리
+// * 5물개 - 물개의 유연한 가르기
+// * 6너구리 - 너구리의 영특한 계산
+// * 7쥐 - 쥐의 민첩한 은든술
+// * 8토끼 -  토끼의 뛰어난 점프력
+// * 9원숭이 - 원숭이의 영리한 지략
+// * 10고릴라 - 고릴리의 막강한 파괴
+// 	강철 펀치
+// * 11캥거루 - 캥거루의 치유의 주머니
+// 	하이킥
+// * 12소 - 소의 우직한 전진
+// 	돌격
+// * 13곰 - 곰의 우렁찬 포효
+// 	모아치기
+// * 14말 - 말의 날쌘 이동력
+// 	뒷발질
+// * 15사슴 - 사슴의 성스러운 보호	
+	
+// * 16코뿔소 - 코뿔소의 돌진하는 용맹
+// 	코뿔박치기, 뚤기
+// * 17코끼리 - 코끼리의 무거운 한방
+// 	발구르기
+// * 18기린 - 기린의 충실한 정찰력
+// 	목치기
+// * 19새 - 새의 청량한 노래
+	
+// * 20독수리 - 독수리의 영리한 전략
+// 	고속 
+// * 21뱀 - 뱀의 교활한 계략
+	
+// * 22도마뱀 - 도마뱀의 뛰어난 은둔술
+// * 23거북이 - 거북이의 강철 피부
+// * 24개구리 - 개구리의 신속한 점프력
+// 	개구리 기우제
+
+// #전용패시브 1개씩 필수
+// #공용패시브 10개
+
+
 //물리: 두번 공격, 연속 공격, 무차별 공격, 세게 공격, 몸통박치기, 침뱉기, xx펀치(속성), 기습 공격, 죽기살기, 방어, 철벽방어, 이동, 다구리,
 //불: 불바다, 불침, 불대포
 //물: 바다폭풍, 폭풍우, 물대포, 물안개
@@ -161,7 +230,7 @@ export const animalSkill = [
 //독수리: 날개치기
 //사자: 갈퀴뽐내기, 물고버티기, 물어뜯기
 //수달: 조개던지기, 찹찹, 고함치기
-//호랑이: 물고버티기, 물어뜯기
+//호랑이: 물고버티기, 물어뜯기, 양손때리기
 //코끼리: 깔아뭉개기, 바위던지기
 //고릴라: 가슴치기, 바위던지기
 //점프, 노려보기, 짖기, 꼬리치기,
