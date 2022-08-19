@@ -92,6 +92,7 @@
 .battle_land .turnLine{position:relative;width:100%;height:0;}
 .battle_land .turnLine.on{height:50px;}
 .battle_land.ready .land{outline-width:2px;}
+.battle_land.critical{animation:landCritical .2s ease-in-out;}
 
 .battle_effect{display:flex;flex-direction:column;position:absolute;left:0;right:0;bottom:0;top:0;}
 .battle_effect > div{position:relative;margin:0 auto;box-sizing:border-box;}

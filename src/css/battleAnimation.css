@@ -1996,3 +1996,11 @@
   50%{transform:translate(0,50%);}
   100%{transform:translate(0%, 0);}
 }
+@keyframes landCritical{
+  0%{transform:translate(0,0);}
+  20%{transform:translate(10px,0);}
+  40%{transform:translate(-10px,0);}
+  60%{transform:translate(5px,0);}
+  80%{transform:translate(-5px,0);}
+  100%{transform:translate(0,0);}
+}

@@ -779,10 +779,15 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     );
   } else if (type === 'skillDescription') {
     const replaceArr = dataObj.sk.txt[lang].match(/[$][(]\d[)]*/g) || [];
+    const replaceArr_ = dataObj.sk.txt[lang].match(/[$][<]\d[>]*/g) || [];
     let replaceText = dataObj.sk.txt[lang];
     replaceArr.forEach((data, idx) => {
       const skillLv = dataObj.skData.lv - 1;
       replaceText = replaceText.replace(data, dataObj.sk.eff[idx].num[skillLv >= 0 ? skillLv : 0]);
+    });
+    replaceArr_.forEach((data, idx) => {
+      const skillLv = dataObj.skData.lv - 1;
+      replaceText = replaceText.replace(data, dataObj.sk.buff[idx].num[skillLv >= 0 ? skillLv : 0]);
     });
     return (
       <div className="skill_description">

@@ -47,8 +47,8 @@ const CharacterSkill = ({
   const [popupOn, setPopupOn] = useState(false);
   const popupType = useRef('');
   const [popupInfo, setPopupInfo] = useState({});
-  const saveSkill = saveData.ch[slotIdx].sk;
-  const animalSkill = saveData.ch[slotIdx].animalSkill;
+  const saveSkill = saveData.ch[slotIdx].hasSkill;
+  // const animalSkill = saveData.ch[slotIdx].animalSkill;
   const elementIcon = [imgSet.element[0],imgSet.element[1],imgSet.element[2],imgSet.element[3],imgSet.element[4],imgSet.element[5],imgSet.element[6],imgSet.element[7],imgSet.element[8],imgSet.element[9],imgSet.element[10],imgSet.element[11],imgSet.element[12]];
   return (
     <>
@@ -68,9 +68,13 @@ const CharacterSkill = ({
               const skData_ = gameData.skill[skData.idx];
               const cate = skData_.cate[0];
               const replaceArr = skData_.txt[lang].match(/[$][(]\d[)]*/g) || [];
+              const replaceArr_ = skData_.txt[lang].match(/[$][<]\d[>]*/g) || [];
               let replaceText = skData_.txt[lang];
               replaceArr.forEach((data, idx) => {
                 replaceText = replaceText.replace(data, skData_.eff[idx].num[skData.lv - 1]);
+              });
+              replaceArr_.forEach((data, idx) => {
+                replaceText = replaceText.replace(data, skData_.buff[idx].num[skData.lv - 1]);
               });
               return (
                 <div key={idx} className={`sk cate${cate}`} flex-h="true">
@@ -91,47 +95,15 @@ const CharacterSkill = ({
                       <div className="txt" dangerouslySetInnerHTML={{__html: replaceText}} />
                     </div>
                   </div>
-                  <div flex="true" className="lv_exp">
-                    <span className="exp">
-                      <span className="gradient_dark" skdata={skData} style={{width:`${skData.exp || 0}%`}}></span>
-                    </span>
-                  </div>
+                  {typeof skData.exp === "number" && (
+                    <div flex="true" className="lv_exp">
+                      <span className="exp">
+                        <span className="gradient_dark" skdata={skData} style={{width:`${skData.exp || 0}%`}}></span>
+                      </span>
+                    </div>
+                  )}
                 </div>
               )
-            })}
-            {animalSkill && animalSkill.map((skCol, idx) => {
-              return skCol.map((skData, idx) => {
-                if (Object.keys(skData).length > 0 && skData.lv > 0) {
-                  const skData_ = gameData.animalSkill[skData.idx];
-                  const cate = skData_.cate[0];
-                  const replaceArr = skData_.txt[lang].match(/[$][(]\d[)]*/g) || [];
-                  let replaceText = skData_.txt[lang];
-                  replaceArr.forEach((data, idx) => {
-                    replaceText = replaceText.replace(data, skData_.eff[idx].num[skData.lv - 1]);
-                  });
-                  return (
-                    <div key={idx} className={`sk cate${cate}`} flex-h="true">
-                      <div className="sk_info" flex="true">
-                      {cate === 2 && ( //passive
-                        <SkillIcon3 className={`sk_icon3 el${skData_.element_type}`} skillIcon={imgSet.passive[skData_.effAnimation]} frameImg={imgSet.etc.skillFrame}/>
-                      )}
-                      {cate === 4 && ( //defence
-                        <SkillIcon2 className={`sk_icon2 el${skData_.element_type}`} skillIcon={imgSet.actionIcon[skData_.effAnimation]} frameImg={imgSet.etc.skillFrame}/>
-                      )}
-                      {cate !== 2 && cate !== 4 && (
-                        <SkillIcon className={`sk_icon el${skData_.element_type}`} skillIcon={imgSet.eff[skData_.effAnimation]} skillScene={gameData.effect[skData_.effAnimation].imgScene} skillFrame={gameData.effect[skData_.effAnimation].frame} frameImg={imgSet.etc.skillFrame}/>
-                      )}
-                        <div style={{padding:"0 0 5px 10px",width:"100%", flex:1}} flex-h-center="true">
-                          <div className="name">
-                            <span className="lv">LV.{skData.lv}</span>{skData_.na[lang]}
-                          </div>
-                          <div className="txt" dangerouslySetInnerHTML={{__html: replaceText}} />
-                        </div>
-                      </div>
-                    </div>
-                  );
-                }
-              });
             })}
           </dd>
         </dl>

@@ -585,8 +585,20 @@ export const util = { //this.loadImage();
         return 'SPD';
       case 9:
         return 'LUK';
+      case 50:
+        return 'BLEEDING';
+      case 51:
+        return 'ADDICTED';
+      case 52:
+        return 'PETRIFICATION';
+      case 53:
+        return 'CONFUSION';
+      case 54:
+        return 'FAINT';
+      case 55:
+        return 'TRANSFORM';
       case 100:
-        return 'formation';
+        return 'FORMATION';
       default:
         break;
     }

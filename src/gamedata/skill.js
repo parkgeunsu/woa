@@ -1,11 +1,14 @@
-//cate(스킬종류, 배열) 중복가능
+// cate(스킬종류, 배열) 중복가능
 // none1
 // passive2,
 // active3(적군), 턴제로 실행
 // active4(본인), 바로실행 
 // buff5(아군전체), debuff6(적군전체) 턴제로 실행
+// active7(적군), 디버프 추가
+// active8(적군), 버프 추가
+// active9(적군), 상태이상 추가
 //element_type 무속성(0),찌르기(1),할퀴기(2),물기(3),치기(4),누르기(5),던지기(6),빛(7),어둠(8),물(9),불(10),바람(11),땅(12)
-//eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 행운LUK(9), 패시브(100)
+//eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 행운LUK(9), 출혈(50), 중독(51), 석화(52), 혼란(53), 기절(54), 변이(55), 패시브(100)
 //ta_ 아군0, 적군1
 //ta getEffectArea 효과범위, passive일 경우 1:단일, 10:전체
 //num 효과
@@ -20,13 +23,13 @@ export const skill = [
 		,ta_:0,ta:1,effAnimation:0
 		,eff:[{type:4,num:['100%','110%','125%','135%','150%']}],atkCount:[1],turn:1,sp:0},
 	{idx:1,
-		na:{ko:'공격',en:'Attack'},element_type:0,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 공격',en:'<u>Single</u>, <b dmg>$(0)</b> attack'}
+		na:{ko:'공격',en:'Attack'},element_type:0,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 공격',en:'<u>Single</u>, <b dmg>$(0)</b> attack'}
 		,ta_:1,ta:1,effAnimation:0
 		,eff:[{type:3,num:['100%','110%','125%','135%','150%']}],atkCount:[1],turn:1,sp:5},
 	{idx:2,
 		na:{ko:'방어',en:'Defense'},element_type:0,cate:[4],txt:{ko:'<u>자신</u>, <b buff>$(0)</b> 방어(DEF) <i icon up></i> 증가',en:'<u>Self</u>, <b buff>$(0)</b> Defense(DEF) <i icon up></i> increase'}
 		,ta_:0,ta:1,effAnimation:0
-		,eff:[{type:4,num:['50%','70%','100%','120%','150%']}],atkCount:[1],turn:1,sp:4},
+		,eff:[{type:4,num:['100%','110%','125%','135%','150%']}],atkCount:[1],turn:1,sp:4},
 	{idx:3,
 		na:{ko:'침뱉기',en:'Spitting'},element_type:9,cate:[3],txt:{ko:'<u>가로한줄</u>, <b dmg>$(0)</b> <i el el4>수속성</i> 공격',en:'<u>A horizontal line</u>, <b dmg>$(0)</b> Attack of <i el el4>Water elements</i>'}
 		,ta_:1,ta:6,effAnimation:3
@@ -82,94 +85,100 @@ export const skill = [
 	{idx:16,
 		na:{ko:'테스트',en:'Test'},element_type:0,cate:[6],txt:{ko:`<u>적군</u>, 방어(DEF) <b dmg>$(0)</b>, 3턴 <i icon down></i> 감소`,en:'<u>Single Enemy</u>, Defense(MDF) <b buff>$(0)</b>, a 3turn <i icon down></i> reduction'}
 		,ta_:1,ta:15,effAnimation:12
-		,eff:[{type:4,num:['-300','-400','-500','-600','-150']}],turn:1,atkCount:[1],sp:6},
-]
-
-export const animalSkill = [
-	{idx:0,
+		,eff:[{type:4,num:['-300','-400','-500','-600','-150']}],turn:1,atkCount:[1],sp:6},{},{},{},{},
+	{},{},{},{},{},{},{},{},{},{},
+	{},{},{},{},{},{},{},{},{},{},
+	{},{},{},{},{},{},{},{},{},{},
+	{},{},{},{},{},{},{},{},{},{},
+	{},{},{},{},{},{},{},{},{},{},
+	{},{},{},{},{},{},{},{},{},{},
+	{},{},{},{},{},{},{},{},{},{},
+	{},{},{},{},{},{},{},{},{},{},
+	{idx:101,
 		na:{ko:'재빠른 움직임',en:'Quick Movement'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 속도(SPD) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Speed(SPD) <b buff>$(0)</b> <i icon up></i> increase'}
 		,ta_:1,ta:1,effAnimation:2,skillClass:0
 		,eff:[{type:8,num:['5','10','15','20','25']}],atkCount:[1],turn:1,sp:0},
-	{idx:1,
+	{idx:102,
 		na:{ko:'사자의 빛나는 영광',en:'Lion\'s Shining Glory'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 공격(ATK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Attack(ATK) <b buff>$(0)</b> <i icon up></i> increase'}
 		,ta_:1,ta:10,effAnimation:2,skillClass:0
 		,eff:[{type:3,num:['10%','15%','20%','25%','30%']}],atkCount:[1],turn:1,sp:0},
-	{idx:2,
+	{idx:103,
 		na:{ko:'호랑이의 거친 용맹',en:'Tiger\'s Wild Bravery'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 공격(ATK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Attack(ATK) <b buff>$(0)</b> <i icon up></i> increase'}
 		,ta_:1,ta:1,effAnimation:2,skillClass:0
 		,eff:[{type:3,num:['10%','20%','30%','40%','50%']}],atkCount:[1],turn:1,sp:0},
-	{idx:3,
+	{idx:104,
 		na:{ko:'곰의 강철 피부',en:'Bear\'s Steel Skin'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 방어(DEF) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Defence(DEF) <b buff>$(0)</b> <i icon up></i> increase'}
 		,ta_:1,ta:1,effAnimation:2,skillClass:0
 		,eff:[{type:4,num:['20%','25%','30%','35%','45%']}],atkCount:[1],turn:1,sp:0},
-	{idx:4,
+	{idx:105,
 		na:{ko:'독수리의 영리함',en:'Eagle\'s Cleverness'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 술법공격(MAK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Magic Attack(MAK) <b buff>$(0)</b> <i icon up></i> increase'}
 		,ta_:1,ta:10,effAnimation:2,skillClass:0
 		,eff:[{type:5,num:['10%','15%','20%','25%','30%']}],atkCount:[1],turn:1,sp:0},
-	{idx:5,
+	{idx:106,
 		na:{ko:'뱀의 교활함',en:'Snake\'s Craftiness'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 술법공격(MAK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Magic Attack(MAK) <b buff>$(0)</b> <i icon up></i> increase'}
 		,ta_:1,ta:1,effAnimation:2,skillClass:0
 		,eff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],turn:1,sp:0},
-	{idx:6,
+	{idx:107,
 		na:{ko:'손톱 갈기',en:'Nail Clipper'},element_type:0,cate:[5],txt:{ko:'<u>자신</u>, 공격(ATK) <b buff>$(0)</b> <i icon up></i> 증가',en:'<u>Self</u>, Attack(ATK) <b buff>$(0)</b> <i icon up></i> increase'}
-		,ta_:1,ta:1,effAnimation:0,skillClass:0
-		,eff:[{type:3,num:['30%','40%','50%','60%','70%']}],atkCount:[1],turn:1,sp:0},
-	{idx:7,
-		na:{ko:'영역표시',en:'Mark the Area.'},element_type:2,cate:[5],txt:{ko:'<u>전체</u>, 속도(SPD) <b buff>$(0)</b> <i icon up></i> 증가',en:'<u>All Allies</u>, Speed(SPD) <b buff>$(0)</b> <i icon up></i> increase'}
-		,ta_:1,ta:10,effAnimation:0,skillClass:1
-		,eff:[{type:8,num:['3','6','9','12','15']}],atkCount:[1],turn:1,sp:0},
-	{idx:8,
+		,ta_:1,ta:1,effAnimation:0,buffAnimation:0,skillClass:0
+		,buff:[{type:3,num:['30%','40%','50%','60%','70%']}],buffCount:[2,2,2,2,2],atkCount:[1],turn:1,sp:0},
+	{idx:108,
+		na:{ko:'영역표시',en:'Mark the Area.'},element_type:2,cate:[5],txt:{ko:'<u>전체</u>, 속도(SPD) <b buff>$(0)</b> 3턴 <i icon up></i> 증가',en:'<u>All Allies</u>, 3turn Speed(SPD) <b buff>$(0)</b> <i icon up></i> increase'}
+		,ta_:1,ta:10,effAnimation:0,buffAnimation:0,skillClass:1
+		,buff:[{type:8,num:['3','6','9','12','15']}],buffCount:[2,2,2,2,2],atkCount:[1],turn:3,sp:0},
+	{idx:109,
 		na:{ko:'몸집 키우기',en:'Grows in Size'},element_type:2,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 체력(HP) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Heath Point(HP) <b buff>$(0)</b> <i icon up></i> increase'}
 		,ta_:1,ta:1,effAnimation:1,skillClass:0
 		,eff:[{type:0,num:['50%','75%','100%','125%','150%']}],atkCount:[1],turn:1,sp:0},
-	{idx:9,
+	{idx:110,
 		na:{ko:'빵굽기',en:'Baking Cat'},element_type:2,cate:[5],txt:{ko:'<u>자신</u>, 공격력(ATK) <b buff>$(0)</b>, 방어력(DEF) <b buff>$(1)</b> 3턴 <i icon up></i> 증가',en:'in battle <u>Self</u>, Attack(ATK) <b buff>$(0)</b>, 3turn Defense(DEF) <b buff>$(1)</b> <i icon up></i> increase'}
-		,ta_:1,ta:1,effAnimation:2,skillClass:0
-		,eff:[{type:3,num:['50%','60%','70%','80%','100%']},{type:4,num:['50%','60%','70%','80%','100%']}],atkCount:[0],turn:3,sp:10},
-	{idx:5,
+		,ta_:1,ta:1,effAnimation:0,buffAnimation:2,skillClass:0
+		,buff:[{type:3,num:['50%','60%','70%','80%','100%']},{type:4,num:['50%','60%','70%','80%','100%']}],buffCount:[2,2,2,2,2],atkCount:[0],turn:3,sp:10},
+	{idx:111,
 		na:{ko:'그루밍',en:'Grooming'},element_type:0,cate:[5],txt:{ko:'<u>단일 아군</u>, <b dmg>$(0)</b> 속도(SPD) 3턴 <i icon up></i> 증가',en:'<u>Single Ally</u>, Speed(SPD) <b buff>$(0)</b>, a 3turn <i icon up></i> increase'}
-		,ta_:1,ta:1,effAnimation:11
-		,eff:[{type:8,num:['50%','70','90','120','150']}],turn:1,atkCount:[1],sp:5},
-	{idx:6,
-		na:{ko:'포효',en:'Roar'},element_type:2,cate:[6],txt:{ko:'<u>전체</u>, 속도(SPD) <b buff>$(0)</b> <i icon down></i> 감소',en:'in battle <u>All Allies</u>, Speed(SPD) <b buff>$(0)</b> <i icon down></i> reduction'}
-		,ta_:1,ta:20,effAnimation:0,skillClass:1
-		,eff:[{type:8,num:['-10','-15','-20','-25','-30']}],atkCount:[1],turn:1,sp:15},
-	{idx:7,
+		,ta_:1,ta:1,effAnimation:0,buffAnimation:11
+		,buff:[{type:8,num:['50%','70','90','120','150']}],buffCount:[2,2,2,2,2],turn:3,atkCount:[1],sp:5},
+	{idx:112,
+		na:{ko:'포효',en:'Roar'},element_type:2,cate:[6],txt:{ko:'<u>적군 전체</u>, 속도(SPD) <b buff>$(0)</b> <i icon down></i> 감소',en:'in battle <u>All Enemy</u>, Speed(SPD) <b buff>$(0)</b> <i icon down></i> reduction'}
+		,ta_:1,ta:20,effAnimation:0,buffAnimation:0,skillClass:1
+		,buff:[{type:8,num:['-10','-15','-20','-25','-30']}],buffCount:[2,2,2,2,2],atkCount:[1],turn:1,sp:15},
+	{idx:113,
 		na:{ko:'하악질',en:'Animal Yells'},element_type:2,cate:[6],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 공격(ATK) 3턴 <i icon down></i> 감소',en:'<u>Single Enemy</u>, Attack(ATK) <b buff>$(0)</b>, a 3turn <i icon down></i> reduction'}
-		,ta_:1,ta:1,effAnimation:0
-		,eff:[{type:3,num:['-30%','-35%','-40%','-45%','-50%']}],atkCount:[0],turn:1,sp:11},
-	{idx:8,
-		na:{ko:'꾹꾹이',en:'Cat Pokes'},element_type:2,cate:[6],txt:{ko:'<u>단일 적군</u>, 방어력(DEF) <b buff>$(0)</b> 3턴 <i icon down></i> 감소',en:''}
-		,ta_:1,ta:1,effAnimation:3,skillClass:0
-		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[0],turn:1,sp:7},
-	{idx:9,
-		na:{ko:'할퀴기',en:'Scratching'},element_type:2,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:''}
-		,ta_:1,ta:1,effAnimation:1,skillClass:1
-		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[2],turn:1,sp:5},
+		,ta_:1,ta:1,effAnimation:0,buffAnimation:0
+		,buff:[{type:3,num:['-30%','-35%','-40%','-45%','-50%']}],buffCount:[2,2,2,2,2],atkCount:[0],turn:1,sp:11},
+	{idx:114,
+		na:{ko:'꾹꾹이',en:'Cat Pokes'},element_type:2,cate:[6],txt:{ko:'<u>단일 적군</u>, 방어력(DEF) <b buff>$(0)</b> 3턴 <i icon down></i> 감소',en:'<u>Single Enemy</u>, Defence(DEF) <b buff>$(0)</b>, a 3turn <i icon down></i> reduction'}
+		,ta_:1,ta:1,effAnimation:0,buffAnimation:3,skillClass:0
+		,buff:[{type:3,num:['-20%','-30%','-40%','-50%','-60%']}],buffCount:[2,2,2,2,2],atkCount:[0],turn:1,sp:7},
+	{idx:115,
+		na:{ko:'할퀴기',en:'Scratching'},element_type:2,cate:[7],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 출혈 공격, 3턴 <b dmg>$<0></b>',en:'<u>Single</u>, <b dmg>$(0)</b> bleeding attack 2turns <b dmg>$<0></b>'}
+		,ta_:1,ta:1,effAnimation:1,buffAnimation:3,skillClass:1
+		,eff:[{type:3,num:['100%','130%','150%','170%','200%']}],buff:[{type:50,num:['-100','-200','-300','-400','-500']}],buffCount:[3,3,3,3,3],atkCount:[1],turn:2,sp:5},
 //---------------------------------------------------
-	{idx:9,
+	{idx:116,
 		na:{ko:'후려치기',en:'Scratching'},element_type:2,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:''}
 		,ta_:1,ta:1,effAnimation:1,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[2],turn:1,sp:5},
-	{idx:9,
+	{idx:117,
 		na:{ko:'광견병',en:'Scratching'},element_type:2,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:''}
 		,ta_:1,ta:1,effAnimation:1,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[2],turn:1,sp:5},
-	{idx:9,
+	{idx:118,
 		na:{ko:'화염 발톱',en:'Scratching'},element_type:2,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:''}
 		,ta_:1,ta:1,effAnimation:1,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[2],turn:1,sp:5},
-	{idx:9,
+	{idx:119,
 		na:{ko:'굶주림',en:'Scratching'},element_type:2,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:''}
 		,ta_:1,ta:1,effAnimation:1,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[2],turn:1,sp:5},
-	{idx:9,
+	{idx:120,
 		na:{ko:'충격파',en:'Scratching'},element_type:2,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:''}
 		,ta_:1,ta:1,effAnimation:1,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[2],turn:1,sp:5},
 ];
 // 모아치기
 // 중독, 출혈 기능 구현
+// 빙결, 석화, 스킬 캔슬기
 
 // 동물타입
 // * 0고양이 - 고양이의 예민한 직감

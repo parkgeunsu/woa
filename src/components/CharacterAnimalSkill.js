@@ -125,6 +125,7 @@ const CharacterAnimalSkill = ({
                     }
                   });
                 });
+                saveCh.hasSkill = [...saveCh.sk];
                 changeSaveData(sData);
               }}>{lang === 'ko' ? '스킬리셋' : 'Reset Skill'}</div>
               <div className="skill_point" dangerouslySetInnerHTML={{__html: makeMark(animalPoint, imgSet.animalType[animalTypeRef.current])}}>
@@ -136,7 +137,7 @@ const CharacterAnimalSkill = ({
                   <div className="skill_group" >
                     {skGroup.map((skData, skIdx) => {
                       if (Object.keys(skData).length !== 0){
-                        const sk = gameData.animalSkill[skData.idx];
+                        const sk = gameData.skill[skData.idx];
                         const skCate = sk.cate[0];
                         const skillIcon = (() => {
                           if (skCate === 2) {//passive
@@ -157,21 +158,48 @@ const CharacterAnimalSkill = ({
                               } else {
                                 if (skIdx % 4 === 3) {
                                   if (sData.ch[slotIdx].animalBeige > 0) {
-                                    sData.ch[slotIdx].animalBeige -= 1;
+                                    if (sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv > 4) {
+                                      setMsgOn(true);
+                                        setMsg(lang === 'ko' ? '스킬 최대 레벨입니다.' : 'Maximum skill level.');
+                                    } else {
+                                      sData.ch[slotIdx].animalBeige -= 1;
                                       sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv += 1;
+                                      const animalIdx = sData.ch[slotIdx].animalSkill[groupIdx][skIdx].idx;
+                                      const overlapIdx = sData.ch[slotIdx].hasSkill.findIndex((hSkill, idx) => {
+                                        if (hSkill.idx === animalIdx) {
+                                          return idx;
+                                        }
+                                      });
+                                      if (overlapIdx >= 0) {
+                                        sData.ch[slotIdx].hasSkill[overlapIdx].lv = sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv;
+                                      } else {
+                                        sData.ch[slotIdx].hasSkill.push(sData.ch[slotIdx].animalSkill[groupIdx][skIdx]);
+                                      }
                                       changeSaveData(sData);
+                                    }
                                   } else {
                                     sData.ch[slotIdx].animalBeige = 0;
                                   }
                                 } else {
                                   if (!saveCh.animalSkill[groupIdx - 1] || (saveCh.animalSkill[groupIdx - 1][skIdx] && saveCh.animalSkill[groupIdx - 1][skIdx].lv > groupIdx - 1)) {//선행 스킬 체크
                                     if (sData.ch[slotIdx].animalBeige > 0) {
-                                      sData.ch[slotIdx].animalBeige -= 1;
                                       if (sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv > 4) {
                                         setMsgOn(true);
                                         setMsg(lang === 'ko' ? '스킬 최대 레벨입니다.' : 'Maximum skill level.');
                                       } else {
+                                        sData.ch[slotIdx].animalBeige -= 1;
                                         sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv += 1;
+                                        const animalIdx = sData.ch[slotIdx].animalSkill[groupIdx][skIdx].idx;
+                                        const overlapIdx = sData.ch[slotIdx].hasSkill.findIndex((hSkill, idx) => {
+                                          if (hSkill.idx === animalIdx) {
+                                            return idx;
+                                          }
+                                        });
+                                        if (overlapIdx >= 0) {
+                                          sData.ch[slotIdx].hasSkill[overlapIdx].lv = sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv;
+                                        } else {
+                                          sData.ch[slotIdx].hasSkill.push(sData.ch[slotIdx].animalSkill[groupIdx][skIdx]);
+                                        }
                                         changeSaveData(sData);
                                       }
                                     } else {
@@ -179,7 +207,7 @@ const CharacterAnimalSkill = ({
                                     }
                                   } else {
                                     setMsgOn(true);
-                                    const beforeSkill = gameData.animalSkill[saveCh.animalSkill[groupIdx - 1][skIdx].idx].na[lang];
+                                    const beforeSkill = gameData.skill[saveCh.animalSkill[groupIdx - 1][skIdx].idx].na[lang];
                                     setMsg(lang === 'ko' ? `선행 스킬(${beforeSkill})의 레벨이<br/> ${groupIdx}레벨 이상 이어야 가능합니다.` : `Leading skill(${beforeSkill}) level must be<br/>at least ${groupIdx} level.`);
                                   }
                                 }

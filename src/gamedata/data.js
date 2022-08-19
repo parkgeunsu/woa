@@ -6,7 +6,7 @@ import { itemsSvg } from 'gamedata/itemsSvg';
 import { job } from 'gamedata/job';
 import { lineup } from 'gamedata/lineup';
 import { relation } from 'gamedata/relation';
-import { skill, animalSkill } from 'gamedata/skill';
+import { skill } from 'gamedata/skill';
 import { scenario } from 'gamedata/scenario';
 import { effect } from 'gamedata/effect';
 import { guide } from 'gamedata/guide';
@@ -40,7 +40,6 @@ export const gameData = {
     element:[{ko:'찌르기',en:'Sting'},{ko:'할퀴기',en:'Claw'},{ko:'물기',en:'Bite'},{ko:'치기',en:'Hit'},{ko:'누르기',en:'Crush'},{ko:'던지기',en:'Throw'},{ko:'빛',en:'Light'},{ko:'어둠',en:'Darkness'},{ko:'물',en:'Water'},{ko:'불',en:'Fire'},{ko:'바람',en:'Wind'},{ko:'땅',en:'Earth'}],
     lineup:lineup,
     skill:skill,
-    animalSkill:animalSkill,
     relation:relation,
     scenario:scenario,
     effect:effect,
