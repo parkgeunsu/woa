@@ -152,7 +152,7 @@ export const skill = [
 		,buff:[{type:3,num:['-20%','-30%','-40%','-50%','-60%']}],buffCount:[2,2,2,2,2],atkCount:[0],turn:1,sp:7},
 	{idx:115,
 		na:{ko:'할퀴기',en:'Scratching'},element_type:2,cate:[7],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 출혈 공격, 3턴 <b dmg>$<0></b>',en:'<u>Single</u>, <b dmg>$(0)</b> bleeding attack 2turns <b dmg>$<0></b>'}
-		,ta_:1,ta:1,effAnimation:1,buffAnimation:3,skillClass:1
+		,ta_:1,ta:20,effAnimation:1,buffAnimation:3,skillClass:1
 		,eff:[{type:3,num:['100%','130%','150%','170%','200%']}],buff:[{type:50,num:['-100','-200','-300','-400','-500']}],buffCount:[3,3,3,3,3],atkCount:[1],turn:2,sp:5},
 //---------------------------------------------------
 	{idx:116,
