@@ -71,6 +71,15 @@
 .battle_ch .ch_passive.passive4{animation:fadeIn 0.5s 1.2s linear;animation-fill-mode:forwards;}
 .battle_ch .ch_passive.passive5{animation:fadeIn 0.5s 1.5s linear;animation-fill-mode:forwards;}
 .battle_ch .ch_passive.remove{animation:fadeOut 0.5s linear;}
+/*상태이상*/
+.battle_ch.bleeding .ch_box{filter:hue-rotate(180deg);}
+.battle_ch.addicted .ch_box{animation:poison 5s infinite alternate;}
+.battle_ch.petrification .ch_box{filter:grayscale(1) brightness(2);}
+.battle_ch.petrification .ring_style span{animation-play-state:paused;}
+@keyframes poison{
+  0%{filter:brightness(1) hue-rotate(0deg);}
+  100%{filter:brightness(1) hue-rotate(360deg);}
+}
 @keyframes fadeIn{
   0%{opacity:0;}
   100%{opacity:1;}
@@ -128,6 +137,8 @@
 .battle_menu .chInfo .spR{margin:0 0 0 5px;}
 .battle_menu .chInfo .spR:before{content:'('}
 .battle_menu .chInfo .spR:after{content:')'}
+.battle_menu .fix_button{height:100%;}
+.battle_menu .fix_button button{display:flex;margin:5px;height:40px;border-radius:10px;background: #fff;box-sizing:border-box;align-items:center;}
 .battle_menu ul{display:flex;flex:1;height:100%;align-items:center;justify-content:flex-start;}
 .battle_menu ul li{height:100%;}
 .battle_menu ul li button{display:flex;margin:5px;height:40px;border-radius:10px;background:#fff;box-sizing:border-box;align-items:center;}

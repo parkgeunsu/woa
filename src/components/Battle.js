@@ -361,32 +361,45 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 		//console.log('pgs', timeLine, turnIdx);
 		let atkC = [0, false], //공격 횟수
 			atkS = atkOption?.atkStay || 0; //한캐릭이 공격한 횟수 체크
-		let buffDebuff = []; //버프 임시저장 변수
+		let buffDebuff = [], //버프 임시저장 변수
+			ccState = '';
 		if (timeLine[turnIdx].order.team === 'ally') {//캐릭 상태이상으로 스킵 체크
 			const allyState = battleAlly[timeLine[turnIdx].order.idx].state;
 			if (allyState.indexOf('die') >= 0) {//죽은 상태
+				ccState = 'die';
 				skillCate = 1;
 			} else if (allyState.indexOf('bleeding') >= 0) {//출혈
+				ccState = 'bleeding';
 			} else if (allyState.indexOf('petrification') >= 0) {//석화
+				ccState = 'petrification';
 				skillCate = 1;
 			} else if (allyState.indexOf('confusion') >= 0) {//혼란
+				ccState = 'confusion';
 				skillCate = 1;
 			} else if (allyState.indexOf('faint') >= 0) {//기절
+				ccState = 'faint';
 				skillCate = 1;
 			} else if (allyState.indexOf('transform') >= 0) {//변이
+				ccState = 'transform';
 			}
 		} else {
 			const enemyState = battleEnemy[timeLine[turnIdx].order.idx].state;
 			if (enemyState.indexOf('die') >= 0) {//죽은 상태
+				ccState = 'die';
 				skillCate = 1;
 			} else if (enemyState.indexOf('bleeding') >= 0) {//출혈
+				ccState = 'bleeding';
 			} else if (enemyState.indexOf('petrification') >= 0) {//석화
+				ccState = 'petrification';
 				skillCate = 1;
 			} else if (enemyState.indexOf('confusion') >= 0) {//혼란
+				ccState = 'confusion';
 				skillCate = 1;
 			} else if (enemyState.indexOf('faint') >= 0) {//기절
+				ccState = 'faint';
 				skillCate = 1;
 			} else if (enemyState.indexOf('transform') >= 0) {//변이
+				ccState = 'transform';
 			}
 		}
 		if (skillCate === 1 || skillCate === 4){ //대기, 방어, 철벽방어
@@ -886,7 +899,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 							const hitChance =  Math.min((80 + 30 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100) / 100, 0.95); //물리 적중 확률
 							if (team[defData.idx] === undefined || team[defData.idx].indexOf('defence0') < 0) { //방어를 안했으면
 								// console.log("pgs", chance, hitChance);
-								if (chance < hitChance) {
+								if (defEnemy.state.indexOf('petrification') >= 0) { //석화 상태면
 									const criticalChance = Math.random();
 									const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100, 0.1);//치명타 확률 계산
 									if (criticalChance < critical) {
@@ -897,9 +910,21 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 										team[defData.idx] = team[defData.idx] + ' dmg'
 									}
 								} else {
-									const avoidNum = Math.floor(Math.random()*4);//회피 종류
-									avoid = true;
-									team[defData.idx] = 'avoid' + avoidNum;
+									if (chance < hitChance) {
+										const criticalChance = Math.random();
+										const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100, 0.1);//치명타 확률 계산
+										if (criticalChance < critical) {
+											criticalAtk = true;
+											landCritical = true;
+											team[defData.idx] = team[defData.idx] + ' dmgCri'
+										} else {
+											team[defData.idx] = team[defData.idx] + ' dmg'
+										}
+									} else {
+										const avoidNum = Math.floor(Math.random()*4);//회피 종류
+										avoid = true;
+										team[defData.idx] = 'avoid' + avoidNum;
+									}
 								}
 							} else { //defence를 했으면
 								const criticalChance = Math.random();
@@ -915,7 +940,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 						} else {
 							const magicChance = Math.min((60 + 20 * (attacker.spd - defEnemy.spd) / 100) /100, 0.9); //마법 적중 확률
 							if (team[defData.idx] === undefined || team[defData.idx].indexOf('defence2') < 0) { //마법방어를 안했으면
-								if (chance < magicChance) {
+								if (defEnemy.state.indexOf('petrification') >= 0) { //석화 상태면
 									const criticalChance = Math.random();
 									const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100, 0.1);//치명타 확률 계산
 									if (criticalChance < critical) {
@@ -926,9 +951,21 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 										team[defData.idx] = team[defData.idx] + ' dmg';
 									}
 								} else {
-									const avoidNum = Math.floor(Math.random()*4);//회피 종류
-									avoid = true;
-									team[defData.idx] = 'avoid' + avoidNum;
+									if (chance < magicChance) {
+										const criticalChance = Math.random();
+										const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100, 0.1);//치명타 확률 계산
+										if (criticalChance < critical) {
+											criticalAtk = true;
+											landCritical = true;
+											team[defData.idx] = team[defData.idx] + ' dmgCri'
+										} else {
+											team[defData.idx] = team[defData.idx] + ' dmg';
+										}
+									} else {
+										const avoidNum = Math.floor(Math.random()*4);//회피 종류
+										avoid = true;
+										team[defData.idx] = 'avoid' + avoidNum;
+									}
 								}
 							} else { //마법방어를 했으면
 								const criticalChance = Math.random();
@@ -2067,7 +2104,8 @@ const Battle = ({
 				timeDelay = 0;//버프 이펙트 효과 딜레이
 			battleAllyCopy.forEach((ally, chIdx) => {
 				let cc = '',
-					ccSingle = '';
+					ccSingle = '',
+					priorityState = 0;//우선순위 능력치 적용
 				if (ally.state === 'die') {
 					ally.buffDebuff = [];
 					return;
@@ -2090,7 +2128,8 @@ const Battle = ({
 							cc += ' addicted';
 							break;
 						case 'petrification':
-							state = '';
+							state = 'def';
+							priorityState = '2000';
 							ccSingle = 'petrification';
 							cc += ' petrification';
 							break;
@@ -2108,6 +2147,13 @@ const Battle = ({
 							state = '';
 							ccSingle = 'transform';
 							cc += ' transform';
+							//거북이 buffState['def'] = 1000;
+							//곰 buffState['atk'] = 1000;
+							//독수리 buffState['mak'] = 1000;
+							//사슴 buffState['mdf'] = 1000;
+							//말 buffState['spd'] = 50;
+							//코끼리 buffState['kg'] = 500;
+							//너구리 buffState['luk'] = 100;
 							break;
 						default:
 							break;
@@ -2164,12 +2210,13 @@ const Battle = ({
 								}
 							});
 						} else {//버프 효과 진행시
-							if (buff.num.indexOf('%') > 0) {
-								const percent = parseInt(buff.num) / 100;
+							const num = priorityState > 0 ? priorityState : buff.num;
+							if (num.indexOf('%') > 0) {
+								const percent = parseInt(num) / 100;
 								ally[state] = percent < 0 ? ally[state] - ally[state] * Math.abs(percent) : ally[state] + ally[state] * percent;
 								ally[state] = ally[state] < 0 ? 0 : ally[state];
 							} else {
-								ally[state] = ally[state] + Number(buff.num)  < 0 ? 0 : ally[state] + Number(buff.num);
+								ally[state] = ally[state] + Number(num)  < 0 ? 0 : ally[state] + Number(num);
 							}
 							//데미지 애니메이션
 							if (allyDmgArr[ccSingle] === undefined) {
@@ -2352,7 +2399,8 @@ const Battle = ({
 				enemyDmgArr = [];//데미지 애니메이션
 			battleEnemyCopy.forEach((enemy, chIdx) => {
 				let cc = '',
-					ccSingle = '';
+					ccSingle = '',
+					priorityState = 0;//우선순위 능력치 적용
 				if (enemy.state === 'die') {
 					enemy.buffDebuff = [];
 					return;
@@ -2375,7 +2423,8 @@ const Battle = ({
 							cc += ' addicted';
 							break;
 						case 'petrification':
-							state = '';
+							state = 'def';
+							priorityState = '2000';
 							ccSingle = 'petrification';
 							cc += ' petrification';
 							break;
@@ -2393,12 +2442,20 @@ const Battle = ({
 							state = '';
 							ccSingle = 'transform';
 							cc += ' transform';
+							//거북이 buffState['def'] = 1000;
+							//곰 buffState['atk'] = 1000;
+							//독수리 buffState['mak'] = 1000;
+							//사슴 buffState['mdf'] = 1000;
+							//말 buffState['spd'] = 50;
+							//코끼리 buffState['kg'] = 500;
+							//너구리 buffState['luk'] = 100;
 							break;
 						default:
 							break;
 					}
 					const buffIdx = buff.type;
 					if (state === '') {//능력치 변화가 없는 경우(x)
+						console.log(buff.count,'a');
 						if (buff.count <= 0) {//버프 횟수 종료시
 							enemy.state = '';
 							delete enemy.buffDebuff[buffIdx];
@@ -2432,12 +2489,12 @@ const Battle = ({
 							}
 						}
 					} else {//능력치 변화가 있는 경우(o)
-						timeDelay = 1000;
 						if (enemy['buff' + state]) {
 							enemy[state] = enemy['buff' + state];
 						} else {
 							enemy['buff' + state] = enemy[state];
 						}
+						console.log(buff.count,'b');
 						if (buff.count <= 0) {//버프 횟수 종료시
 							enemy.state = '';
 							delete enemy.buffDebuff[buffIdx];
@@ -2450,12 +2507,13 @@ const Battle = ({
 								}
 							});
 						} else {//버프 효과 진행시
-							if (buff.num.indexOf('%') > 0) {
-								const percent = parseInt(buff.num) / 100;
+							const num = priorityState > 0 ? priorityState : buff.num;
+							if (num.indexOf('%') > 0) {
+								const percent = parseInt(num) / 100;
 								enemy[state] = percent < 0 ? enemy[state] - enemy[state] * Math.abs(percent) : enemy[state] + enemy[state] * percent;
 								enemy[state] = enemy[state] < 0 ? 0 : enemy[state];
 							} else {
-								enemy[state] = enemy[state] + Number(buff.num)  < 0 ? 0 : enemy[state] + Number(buff.num);
+								enemy[state] = enemy[state] + Number(num)  < 0 ? 0 : enemy[state] + Number(num);
 							}
 							//데미지 애니메이션
 							if (enemyDmgArr[ccSingle] === undefined) {
@@ -2506,7 +2564,7 @@ const Battle = ({
 				}
 			});
 			if (enemyDmgArr['bleeding'] || allyDmgArr['bleeding']) {
-				timeDelay += 700;
+				timeDelay += 500 / gameSpd;
 				if (allyDmgArr['bleeding']) {
 					setAllyEffect(allyDmgArr['bleeding']);
 				}
@@ -2514,7 +2572,7 @@ const Battle = ({
 					setEnemyEffect(enemyDmgArr['bleeding']);
 				}
 				if (enemyDmgArr['addicted'] || allyDmgArr['addicted']) {
-					timeDelay += 500;
+					timeDelay += 500 / gameSpd;
 					setTimeout(() => {
 						if (allyDmgArr['addicted']) {
 							setAllyEffect(allyDmgArr['addicted']);
@@ -2522,10 +2580,10 @@ const Battle = ({
 						if (enemyDmgArr['addicted']) {
 							setEnemyEffect(enemyDmgArr['addicted']);
 						}
-					}, 500);
+					}, 1000 / gameSpd);
 				}
 			} else if (enemyDmgArr['addicted'] || allyDmgArr['addicted']) {
-				timeDelay += 700;
+				timeDelay += 500 / gameSpd;
 				if (allyDmgArr['addicted']) {
 					setAllyEffect(allyDmgArr['addicted']);
 				}
@@ -3012,10 +3070,12 @@ const Battle = ({
 										<span className="sp">{battleAlly.current[orderIdx]?.sp}</span>
 										{/* <span className="spR">{battleAlly.current[orderIdx]?.bSt2}</span> */}
 									</div>
-									<ul className="scroll-x">
-										<li><button onClick={() => {
+									<div className="fix_button">
+										<button onClick={() => {
 											battleCommand('cancel');
-										}}><span className="skName">{lang === 'ko' ? '취소' : 'Cancel'}</span></button></li>
+										}}><span className="skName">{lang === 'ko' ? '취소' : 'Cancel'}</span></button>
+									</div>
+									<ul className="scroll-x">
 										<li><button onClick={() => {
 											battleCommand('wait');
 										}}><span className="skSp">{battleAlly.current[orderIdx]?.bSt2}</span><span className="skName">{lang === 'ko' ? '대기' : 'Wait'}</span></button></li>

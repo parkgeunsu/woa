@@ -265,9 +265,10 @@ import attack0 from 'images/effect/attack0.png';
 import bite1 from 'images/effect/bite1.png';
 import claw2 from 'images/effect/claw2.png';
 import saliva3 from 'images/effect/saliva3.png';
-// import eff1 from 'images/effect/Sword1.png';
-// import eff2 from 'images/effect/Sword2.png';
-// import eff3 from 'images/effect/Sword4.png';
+import death from 'images/effect/15_Death.png';
+import Water_4 from 'images/effect/15_EF_Water_4.png';
+import Water_1 from 'images/effect/15_EF_Water_1.png';
+import ACCK019_Corrupt from 'images/effect/ACCK019_Corrupt.png';
 // import eff4 from 'images/effect/Death1.png';
 // import eff5 from 'images/effect/light_004.png';
 // import eff6 from 'images/effect/ice.png';
@@ -341,6 +342,6 @@ export const passive = [
   passive0,passive1,passive2,passive3,passive4,passive5,passive6,passive7,passive8,passive9,passive10,passive11,
 ];
 export const eff = [
-  attack0,bite1,claw2,saliva3,'','','','','','',
-  '',buff11,buff12
+  '',attack0,bite1,claw2,saliva3,death,Water_4,Water_1,ACCK019_Corrupt,'',
+  '','',buff11,buff12
 ];
