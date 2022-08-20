@@ -363,42 +363,30 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 			atkS = atkOption?.atkStay || 0; //한캐릭이 공격한 횟수 체크
 		let buffDebuff = []; //버프 임시저장 변수
 		if (timeLine[turnIdx].order.team === 'ally') {//캐릭 상태이상으로 스킵 체크
-			switch(battleAlly[timeLine[turnIdx].order.idx].state) {
-				case 'die'://죽은 상태
-					skillCate = 1;
-					break;
-				case 'bleeding'://출혈
-					skillCate = 1;
-					break;
-				case 'petrification'://석화
-					break;
-				case 'confusion'://혼란
-					break;
-				case 'faint'://기절
-					break;
-				case 'transform'://변이
-					break;
-				default:
-					break;
+			const allyState = battleAlly[timeLine[turnIdx].order.idx].state;
+			if (allyState.indexOf('die') >= 0) {//죽은 상태
+				skillCate = 1;
+			} else if (allyState.indexOf('bleeding') >= 0) {//출혈
+			} else if (allyState.indexOf('petrification') >= 0) {//석화
+				skillCate = 1;
+			} else if (allyState.indexOf('confusion') >= 0) {//혼란
+				skillCate = 1;
+			} else if (allyState.indexOf('faint') >= 0) {//기절
+				skillCate = 1;
+			} else if (allyState.indexOf('transform') >= 0) {//변이
 			}
 		} else {
-			switch(battleEnemy[timeLine[turnIdx].order.idx].state) {
-				case 'die'://죽은 상태
-					skillCate = 1;
-					break;
-				case 'bleeding'://출혈
-					skillCate = 1;
-					break;
-				case 'petrification'://석화
-					break;
-				case 'confusion'://혼란
-					break;
-				case 'faint'://기절
-					break;
-				case 'transform'://변이
-					break;
-				default:
-					break;
+			const enemyState = battleEnemy[timeLine[turnIdx].order.idx].state;
+			if (enemyState.indexOf('die') >= 0) {//죽은 상태
+				skillCate = 1;
+			} else if (enemyState.indexOf('bleeding') >= 0) {//출혈
+			} else if (enemyState.indexOf('petrification') >= 0) {//석화
+				skillCate = 1;
+			} else if (enemyState.indexOf('confusion') >= 0) {//혼란
+				skillCate = 1;
+			} else if (enemyState.indexOf('faint') >= 0) {//기절
+				skillCate = 1;
+			} else if (enemyState.indexOf('transform') >= 0) {//변이
 			}
 		}
 		if (skillCate === 1 || skillCate === 4){ //대기, 방어, 철벽방어
@@ -426,18 +414,21 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 						}
 					});
 					defencer.forEach((defData) => {
-						buffDebuff = [...battleAlly[defData.idx].buffDebuff];
+						if (buffDebuff[defData.idx]) {
+							buffDebuff[defData.idx] = [];
+						}
+						buffDebuff[defData.idx] = [...battleAlly[defData.idx].buffDebuff];
 						skill.buff.forEach((data_) => {
 							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
 							const maxCount = skill.buffCount[skLvIdx];
-							if (buffDebuff[data_.type] === undefined) {
-								buffDebuff[data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
+							if (buffDebuff[defData.idx][data_.type] === undefined) {
+								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 							}
-							buffDebuff[data_.type].count = maxCount;
-							buffDebuff[data_.type].maxCount = maxCount;
-							buffDebuff[data_.type].type = data_.type;
-							buffDebuff[data_.type].num = data_.num[skLvIdx];
-							buffDebuff[data_.type].animation = skill.buffAnimation;
+							buffDebuff[defData.idx][data_.type].count = maxCount;
+							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
+							buffDebuff[defData.idx][data_.type].type = data_.type;
+							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
 						});
 					});
 				} else if (skillCate === 6) {//적군 디버프 방어자 셋팅
@@ -448,21 +439,24 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 						}
 					});
 					defencer.forEach((defData) => {
-						buffDebuff = [...battleEnemy[defData.idx].buffDebuff];
+						if (buffDebuff[defData.idx]) {
+							buffDebuff[defData.idx] = [];
+						}
+						buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
 						skill.buff.forEach((data_) => {
 							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
 							const maxCount = skill.buffCount[skLvIdx];
-							if (buffDebuff[data_.type] === undefined) {
-								buffDebuff[data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
+							if (buffDebuff[defData.idx][data_.type] === undefined) {
+								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 							}
-							buffDebuff[data_.type].count = maxCount;
-							buffDebuff[data_.type].maxCount = maxCount;
-							buffDebuff[data_.type].type = data_.type;
-							buffDebuff[data_.type].num = data_.num[skLvIdx];
-							buffDebuff[data_.type].animation = skill.buffAnimation;
+							buffDebuff[defData.idx][data_.type].count = maxCount;
+							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
+							buffDebuff[defData.idx][data_.type].type = data_.type;
+							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
 						});
 					});
-				} else if (skillCate === 7 ){ //액티브스킬 디버프추가
+				} else if (skillCate === 7){ //액티브스킬 디버프추가
 					defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
 						return {
 							ch: battleEnemy[data],
@@ -470,19 +464,27 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 						}
 					});
 					defencer.forEach((defData) => {
-						buffDebuff = [...battleEnemy[defData.idx].buffDebuff];
-						skill.buff.forEach((data_) => {
-							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
-							const maxCount = skill.buffCount[skLvIdx];
-							if (buffDebuff[data_.type] === undefined) {
-								buffDebuff[data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
-							}
-							buffDebuff[data_.type].count = maxCount;
-							buffDebuff[data_.type].maxCount = maxCount;
-							buffDebuff[data_.type].type = data_.type;
-							buffDebuff[data_.type].num = data_.num[skLvIdx];
-							buffDebuff[data_.type].animation = skill.buffAnimation;
-						});
+						if (buffDebuff[defData.idx]) {
+							buffDebuff[defData.idx] = [];
+						}
+						buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
+						const skLvIdx = timeLine[turnIdx].order.skLv - 1;
+						//상태이상 확률
+						const chance = parseInt(skill.buffChance[skLvIdx]) / 100;
+						const percent = Math.random();
+						if (percent < chance) {
+							skill.buff.forEach((data_) => {
+								const maxCount = skill.buffCount[skLvIdx];
+								if (buffDebuff[defData.idx][data_.type] === undefined) {
+									buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
+								}
+								buffDebuff[defData.idx][data_.type].count = maxCount;
+								buffDebuff[defData.idx][data_.type].maxCount = maxCount;
+								buffDebuff[defData.idx][data_.type].type = data_.type;
+								buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+								buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
+							});
+						}
 					});
 					timeLine.forEach((data) => { //방어중 체크
 						if (data.order.team === 'enemy'){
@@ -514,18 +516,21 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 						}
 					});
 					defencer.forEach((defData) => {
-						buffDebuff = [...battleAlly[defData.idx].buffDebuff];
+						if (buffDebuff[defData.idx]) {
+							buffDebuff[defData.idx] = [];
+						}
+						buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
 						skill.buff.forEach((data_) => {
 							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
 							const maxCount = skill.buffCount[skLvIdx];
-							if (buffDebuff[data_.type] === undefined) {
-								buffDebuff[data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
+							if (buffDebuff[defData.idx][data_.type] === undefined) {
+								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 							}
-							buffDebuff[data_.type].count = maxCount;
-							buffDebuff[data_.type].maxCount = maxCount;
-							buffDebuff[data_.type].type = data_.type;
-							buffDebuff[data_.type].num = data_.num[skLvIdx];
-							buffDebuff[data_.type].animation = skill.buffAnimation;
+							buffDebuff[defData.idx][data_.type].count = maxCount;
+							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
+							buffDebuff[defData.idx][data_.type].type = data_.type;
+							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
 						});
 					});
 					timeLine.forEach((data) => { //방어중 체크
@@ -558,18 +563,21 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 						}
 					});
 					defencer.forEach((defData) => {
-						buffDebuff = [...battleEnemy[defData.idx].buffDebuff];
+						if (buffDebuff[defData.idx]) {
+							buffDebuff[defData.idx] = [];
+						}
+						buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
 						skill.buff.forEach((data_) => {
 							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
 							const maxCount = skill.buffCount[skLvIdx];
-							if (buffDebuff[data_.type] === undefined) {
-								buffDebuff[data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
+							if (buffDebuff[defData.idx][data_.type] === undefined) {
+								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 							}
-							buffDebuff[data_.type].count = maxCount;
-							buffDebuff[data_.type].maxCount = maxCount;
-							buffDebuff[data_.type].type = data_.type;
-							buffDebuff[data_.type].num = data_.num[skLvIdx];
-							buffDebuff[data_.type].animation = skill.buffAnimation;
+							buffDebuff[defData.idx][data_.type].count = maxCount;
+							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
+							buffDebuff[defData.idx][data_.type].type = data_.type;
+							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
 						});
 					});
 					timeLine.forEach((data) => { //방어중 체크
@@ -653,18 +661,21 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 						}
 					});
 					defencer.forEach((defData, idx) => {
-						buffDebuff = [...battleEnemy[defData.idx].buffDebuff];
+						if (buffDebuff[defData.idx]) {
+							buffDebuff[defData.idx] = [];
+						}
+						buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
 						skill.buff.forEach((data_) => {
 							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
 							const maxCount = skill.buffCount[skLvIdx];
-							if (buffDebuff[data_.type] === undefined) {
-								buffDebuff[data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
+							if (buffDebuff[defData.idx][data_.type] === undefined) {
+								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 							}
-							buffDebuff[data_.type].count = maxCount;
-							buffDebuff[data_.type].maxCount = maxCount;
-							buffDebuff[data_.type].type = data_.type;
-							buffDebuff[data_.type].num = data_.num[skLvIdx];
-							buffDebuff[data_.type].animation = skill.buffAnimation;
+							buffDebuff[defData.idx][data_.type].count = maxCount;
+							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
+							buffDebuff[defData.idx][data_.type].type = data_.type;
+							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
 						});
 					});
 				} else if (skillCate === 6) {//아군 디버프 방어자 셋팅
@@ -675,18 +686,21 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 						}
 					});
 					defencer.forEach((defData, idx) => {
-						buffDebuff = [...battleAlly[defData.idx].buffDebuff];
+						if (buffDebuff[defData.idx]) {
+							buffDebuff[defData.idx] = [];
+						}
+						buffDebuff[defData.idx] = [...battleAlly[defData.idx].buffDebuff];
 						skill.buff.forEach((data_) => {
 							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
 							const maxCount = skill.buffCount[skLvIdx];
-							if (buffDebuff[data_.type] === undefined) {
-								buffDebuff[data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
+							if (buffDebuff[defData.idx][data_.type] === undefined) {
+								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 							}
-							buffDebuff[data_.type].count = maxCount;
-							buffDebuff[data_.type].maxCount = maxCount;
-							buffDebuff[data_.type].type = data_.type;
-							buffDebuff[data_.type].num = data_.num[skLvIdx];
-							buffDebuff[data_.type].animation = skill.buffAnimation;
+							buffDebuff[defData.idx][data_.type].count = maxCount;
+							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
+							buffDebuff[defData.idx][data_.type].type = data_.type;
+							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
 						});
 					});
 				} else if (skillCate === 7) { //액티브스킬 디버프추가
@@ -696,20 +710,27 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 							idx: data,
 						}
 					});
-					defencer.forEach((defData, idx) => {
-						buffDebuff = [...battleAlly[defData.idx].buffDebuff];
-						skill.buff.forEach((data_) => {
-							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
-							const maxCount = skill.buffCount[skLvIdx];
-							if (buffDebuff[data_.type] === undefined) {
-								buffDebuff[data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
-							}
-							buffDebuff[data_.type].count = maxCount;
-							buffDebuff[data_.type].maxCount = maxCount;
-							buffDebuff[data_.type].type = data_.type;
-							buffDebuff[data_.type].num = data_.num[skLvIdx];
-							buffDebuff[data_.type].animation = skill.buffAnimation;
-						});
+					defencer.forEach((defData) => {
+						if (buffDebuff[defData.idx]) {
+							buffDebuff[defData.idx] = [];
+						}
+						buffDebuff[defData.idx] = [...battleAlly[defData.idx].buffDebuff];
+						const skLvIdx = timeLine[turnIdx].order.skLv - 1;
+						//상태이상 확률
+						const chance = parseInt(skill.buffChance[skLvIdx]) / 100;
+						if (Math.random() < chance) {
+							skill.buff.forEach((data_) => {
+								const maxCount = skill.buffCount[skLvIdx];
+								if (buffDebuff[defData.idx][data_.type] === undefined) {
+									buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
+								}
+								buffDebuff[defData.idx][data_.type].count = maxCount;
+								buffDebuff[defData.idx][data_.type].maxCount = maxCount;
+								buffDebuff[defData.idx][data_.type].type = data_.type;
+								buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+								buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
+							});
+						}
 					});
 					timeLine.forEach((data) => {//방어중 체크
 						if (data.order.team === 'ally'){
@@ -742,18 +763,21 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 						}
 					});
 					defencer.forEach((defData, idx) => {
-						buffDebuff = [...battleAlly[defData.idx].buffDebuff];
+						if (buffDebuff[defData.idx]) {
+							buffDebuff[defData.idx] = [];
+						}
+						buffDebuff[defData.idx] = [...battleAlly[defData.idx].buffDebuff];
 						skill.buff.forEach((data_) => {
 							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
 							const maxCount = skill.buffCount[skLvIdx];
-							if (buffDebuff[data_.type] === undefined) {
-								buffDebuff[data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
+							if (buffDebuff[defData.idx][data_.type] === undefined) {
+								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 							}
-							buffDebuff[data_.type].count = maxCount;
-							buffDebuff[data_.type].maxCount = maxCount;
-							buffDebuff[data_.type].type = data_.type;
-							buffDebuff[data_.type].num = data_.num[skLvIdx];
-							buffDebuff[data_.type].animation = skill.buffAnimation;
+							buffDebuff[defData.idx][data_.type].count = maxCount;
+							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
+							buffDebuff[defData.idx][data_.type].type = data_.type;
+							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
 						});
 					});
 					timeLine.forEach((data) => {//방어중 체크
@@ -1129,17 +1153,21 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 							});
 							if (timeLine[turnIdx].order.team === 'ally') { //적군 영역 effect효과
 								if (skillCate === 5) {//버프
-									setEnemyEffect([
-										...targetArr,
-									]);
-								} else {
 									setAllyEffect([
 										...targetArr,
 									]);
+								} else {
+									setEnemyEffect([
+										...targetArr,
+									]);
+									console.log(buffDebuff);
 									defencer.forEach((defData, idx) => {
 										battleEnemy[defData.idx].hp -= dmg[idx];
 										if (typeof dmg[idx] === 'number') {
-											battleEnemy[defData.idx].buffDebuff = buffDebuff;
+											if (buffDebuff[defData.idx] === undefined){
+												buffDebuff[defData.idx] = [];
+											}
+											battleEnemy[defData.idx].buffDebuff = [...buffDebuff[defData.idx]];
 										}
 										if (battleEnemy[defData.idx].hp < 0) {//다이
 											enemyAction[defData.idx] = 'die';
@@ -1152,17 +1180,20 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 								}
 							} else { //아군 영역 effect효과
 								if (skillCate === 5) {//버프
-									setAllyEffect([
+									setEnemyEffect([
 										...targetArr
 									]);
 								} else{
-									setEnemyEffect([
+									setAllyEffect([
 										...targetArr
 									]);
 									defencer.forEach((defData, idx) => {
 										battleAlly[defData.idx].hp -= dmg[idx];
 										if (typeof dmg[idx] === 'number') {
-											battleAlly[defData.idx].buffDebuff = buffDebuff;
+											if (buffDebuff[defData.idx] === undefined){
+												buffDebuff[defData.idx] = [];
+											}
+											battleAlly[defData.idx].buffDebuff = [...buffDebuff[defData.idx]];
 										}
 										if (battleAlly[defData.idx].hp < 0) {//다이
 											allyAction[defData.idx] = 'die';
@@ -1182,18 +1213,18 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 								setLandCriticalEffect(false);
 								if (timeLine[turnIdx].order.team === 'ally') {
 									if (skillCate === 5) {//버프
-										setEnemyEffect([]);
+										setAllyEffect([]);
 										setAllyAction([]);
 									} else {
-										setAllyEffect([]);
+										setEnemyEffect([]);
 										setEnemyAction([]);
 									}
 								} else {
 									if (skillCate === 5) {//버프
-										setAllyEffect([]);
+										setEnemyEffect([]);
 										setEnemyAction([]);
 									} else {
-										setEnemyEffect([]);
+										setAllyEffect([]);
 										setAllyAction([]);
 									}
 								}
@@ -1391,8 +1422,8 @@ const Battle = ({
 	const [effectAllyArea, setEffectAllyArea] = useState([]); //아군스킬 영역
 	const [effectEnemyArea, setEffectEnemyArea] = useState([]); //적군스킬 영역
 	const [skillMsg, setSkillMsg] = useState(false); //메시지창 on/off
-	const [allyEffect, setAllyEffect] = useState([]);//아군 공격효과
-	const [enemyEffect, setEnemyEffect] = useState([]);//적군 공격효과
+	const [allyEffect, setAllyEffect] = useState([]);//아군 데미지효과
+	const [enemyEffect, setEnemyEffect] = useState([]);//적군 데미지효과
 
 	const [orderIdx, setOrderIdx] = useState(); //명령 지시 순서
 	const [mode, setMode] = useState();
@@ -1863,7 +1894,7 @@ const Battle = ({
 	};
 	useLayoutEffect(() => {
 		const state = battleAlly.current[orderIdx]?.state;
-		if (state === 'addicted' || state === 'petrification' || state === 'confusion' || state === 'faint') { //상태 이상일 경우 다음 캐릭으로 이동
+		if (state && (state.indexOf('petrification') >= 0 || state.indexOf('confusion') >= 0 || state.indexOf('faint') >= 0)) { //상태 이상일 경우 다음 캐릭으로 이동
 			setOrderIdx((prev) => ++prev);
 		}
 	}, [orderIdx]);
@@ -2031,38 +2062,52 @@ const Battle = ({
 			});
 
 			//아군 버프 체크
-			let allyBuff = [...allyEnemyBuffRef.current[0]] || [];
+			let allyBuff = [...allyEnemyBuffRef.current[0]] || [],
+				allyDmgArr = [],//데미지 애니메이션
+				timeDelay = 0;//버프 이펙트 효과 딜레이
 			battleAllyCopy.forEach((ally, chIdx) => {
+				let cc = '',
+					ccSingle = '';
 				if (ally.state === 'die') {
+					ally.buffDebuff = [];
 					return;
 				}
-				ally.buffDebuff.forEach((buff) => {
-					let state = util.getStateName(buff.type).toLowerCase(),
-						cc = '';
+				ally.buffDebuff.forEach((buff_) => {
+					if (buff_ === undefined) {
+						return;
+					}
+					let buff = {...buff_},
+						state = util.getStateName(buff.type).toLowerCase();
 					switch(state) {
 						case 'bleeding':
 							state = 'hp';
-							cc = 'bleeding';
+							ccSingle = 'bleeding';
+							cc += ' bleeding';
 							break;
 						case 'addicted':
 							state = 'hp';
-							cc = 'addicted';
+							ccSingle = 'addicted';
+							cc += ' addicted';
 							break;
 						case 'petrification':
 							state = '';
-							cc = 'petrification';
+							ccSingle = 'petrification';
+							cc += ' petrification';
 							break;
 						case 'confusion':
 							state = '';
-							cc = 'confusion';
+							ccSingle = 'confusion';
+							cc += ' confusion';
 							break;
 						case 'faint':
 							state = '';
-							cc = 'faint';
+							ccSingle = 'faint';
+							cc += ' faint';
 							break;
 						case 'transform':
 							state = '';
-							cc = 'transform';
+							ccSingle = 'transform';
+							cc += ' transform';
 							break;
 						default:
 							break;
@@ -2126,6 +2171,15 @@ const Battle = ({
 							} else {
 								ally[state] = ally[state] + Number(buff.num)  < 0 ? 0 : ally[state] + Number(buff.num);
 							}
+							//데미지 애니메이션
+							if (allyDmgArr[ccSingle] === undefined) {
+								allyDmgArr[ccSingle] = [];
+							}
+							allyDmgArr[ccSingle].push({
+								posIdx:allyPos.current[chIdx],
+								animation:buff.animation,
+								dmg:Number(buff.num),
+							});
 							if (state === 'hp') {
 								ally['buff' + state] = ally[state];
 							}
@@ -2295,39 +2349,50 @@ const Battle = ({
 
 			//적군 버프 체크
 			let enemyBuff = [...allyEnemyBuffRef.current[1]] || [],
-				targetArr = [],//데미지 애니메이션 대상
-				timeDelay = 0;//버프 이펙트 효과 딜레이
+				enemyDmgArr = [];//데미지 애니메이션
 			battleEnemyCopy.forEach((enemy, chIdx) => {
+				let cc = '',
+					ccSingle = '';
 				if (enemy.state === 'die') {
+					enemy.buffDebuff = [];
 					return;
 				}
-				enemy.buffDebuff.forEach((buff) => {
-					let state = util.getStateName(buff.type).toLowerCase(),
-						cc = '';
+				enemy.buffDebuff.forEach((buff_) => {
+					if (buff_ === undefined) {
+						return;
+					}
+					let buff = {...buff_},
+						state = util.getStateName(buff.type).toLowerCase();
 					switch(state) {
 						case 'bleeding':
 							state = 'hp';
-							cc = 'bleeding';
+							ccSingle = 'bleeding';
+							cc += ' bleeding';
 							break;
 						case 'addicted':
 							state = 'hp';
-							cc = 'addicted';
+							ccSingle = 'addicted';
+							cc += ' addicted';
 							break;
 						case 'petrification':
 							state = '';
-							cc = 'petrification';
+							ccSingle = 'petrification';
+							cc += ' petrification';
 							break;
 						case 'confusion':
 							state = '';
-							cc = 'confusion';
+							ccSingle = 'confusion';
+							cc += ' confusion';
 							break;
 						case 'faint':
 							state = '';
-							cc = 'faint';
+							ccSingle = 'faint';
+							cc += ' faint';
 							break;
 						case 'transform':
 							state = '';
-							cc = 'transform';
+							ccSingle = 'transform';
+							cc += ' transform';
 							break;
 						default:
 							break;
@@ -2393,14 +2458,14 @@ const Battle = ({
 								enemy[state] = enemy[state] + Number(buff.num)  < 0 ? 0 : enemy[state] + Number(buff.num);
 							}
 							//데미지 애니메이션
-							targetArr[chIdx] = {
+							if (enemyDmgArr[ccSingle] === undefined) {
+								enemyDmgArr[ccSingle] = [];
+							}
+							enemyDmgArr[ccSingle].push({
 								posIdx:enemyPos.current[chIdx],
 								animation:buff.animation,
 								dmg:Number(buff.num),
-							};
-							setAllyEffect([
-								...targetArr,
-							]);
+							});
 							if (state === 'hp') {
 								enemy['buff' + state] = enemy[state];
 							}
@@ -2440,6 +2505,34 @@ const Battle = ({
 					data.sp = data.sp_;
 				}
 			});
+			if (enemyDmgArr['bleeding'] || allyDmgArr['bleeding']) {
+				timeDelay += 700;
+				if (allyDmgArr['bleeding']) {
+					setAllyEffect(allyDmgArr['bleeding']);
+				}
+				if (enemyDmgArr['bleeding']) {
+					setEnemyEffect(enemyDmgArr['bleeding']);
+				}
+				if (enemyDmgArr['addicted'] || allyDmgArr['addicted']) {
+					timeDelay += 500;
+					setTimeout(() => {
+						if (allyDmgArr['addicted']) {
+							setAllyEffect(allyDmgArr['addicted']);
+						}
+						if (enemyDmgArr['addicted']) {
+							setEnemyEffect(enemyDmgArr['addicted']);
+						}
+					}, 500);
+				}
+			} else if (enemyDmgArr['addicted'] || allyDmgArr['addicted']) {
+				timeDelay += 700;
+				if (allyDmgArr['addicted']) {
+					setAllyEffect(allyDmgArr['addicted']);
+				}
+				if (enemyDmgArr['addicted']) {
+					setEnemyEffect(enemyDmgArr['addicted']);
+				}
+			}
 			setTimeout(() => {
 				setAllyEffect([]);
 				setEnemyEffect([]);
@@ -2685,7 +2778,7 @@ const Battle = ({
 							let effectChk = false,
 								effAnimation = '',
 								effNum = '';
-							allyEffect.forEach((effData) => {
+							enemyEffect.forEach((effData) => {
 								if (effData.posIdx === idx) {
 									effectChk = true;
 									effAnimation = effData.animation;
@@ -2713,7 +2806,7 @@ const Battle = ({
 							let effectChk = false,
 								effAnimation = '',
 								effNum = '';
-							enemyEffect.forEach((effData) => {
+							allyEffect.forEach((effData) => {
 								if (effData.posIdx === idx) {
 									effectChk = true;
 									effAnimation = effData.animation;

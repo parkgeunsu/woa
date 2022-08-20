@@ -135,25 +135,25 @@ export const skill = [
 		,ta_:1,ta:1,effAnimation:0,buffAnimation:2,skillClass:0
 		,buff:[{type:3,num:['50%','60%','70%','80%','100%']},{type:4,num:['50%','60%','70%','80%','100%']}],buffCount:[2,2,2,2,2],atkCount:[0],turn:3,sp:10},
 	{idx:111,
-		na:{ko:'그루밍',en:'Grooming'},element_type:0,cate:[5],txt:{ko:'<u>단일 아군</u>, <b dmg>$(0)</b> 속도(SPD) 3턴 <i icon up></i> 증가',en:'<u>Single Ally</u>, Speed(SPD) <b buff>$(0)</b>, a 3turn <i icon up></i> increase'}
+		na:{ko:'그루밍',en:'Grooming'},element_type:0,cate:[5],txt:{ko:'<u>단일 아군</u>, <b dmg>$<0></b> 속도(SPD) 3턴 <i icon up></i> 증가',en:'<u>Single Ally</u>, Speed(SPD) <b buff>$<0></b>, a 3turn <i icon up></i> increase'}
 		,ta_:1,ta:1,effAnimation:0,buffAnimation:11
 		,buff:[{type:8,num:['50%','70','90','120','150']}],buffCount:[2,2,2,2,2],turn:3,atkCount:[1],sp:5},
 	{idx:112,
-		na:{ko:'포효',en:'Roar'},element_type:2,cate:[6],txt:{ko:'<u>적군 전체</u>, 속도(SPD) <b buff>$(0)</b> <i icon down></i> 감소',en:'in battle <u>All Enemy</u>, Speed(SPD) <b buff>$(0)</b> <i icon down></i> reduction'}
+		na:{ko:'포효',en:'Roar'},element_type:2,cate:[6],txt:{ko:'<u>적군 전체</u>, 속도(SPD) <b buff>$<0></b> <i icon down></i> 감소',en:'in battle <u>All Enemy</u>, Speed(SPD) <b buff>$<0></b> <i icon down></i> reduction'}
 		,ta_:1,ta:20,effAnimation:0,buffAnimation:0,skillClass:1
 		,buff:[{type:8,num:['-10','-15','-20','-25','-30']}],buffCount:[2,2,2,2,2],atkCount:[1],turn:1,sp:15},
 	{idx:113,
-		na:{ko:'하악질',en:'Animal Yells'},element_type:2,cate:[6],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 공격(ATK) 3턴 <i icon down></i> 감소',en:'<u>Single Enemy</u>, Attack(ATK) <b buff>$(0)</b>, a 3turn <i icon down></i> reduction'}
+		na:{ko:'하악질',en:'Animal Yells'},element_type:2,cate:[6],txt:{ko:'<u>단일 적군</u>, <b dmg>$<0></b> 공격(ATK) 3턴 <i icon down></i> 감소',en:'<u>Single Enemy</u>, Attack(ATK) <b buff>$<0></b>, a 3turn <i icon down></i> reduction'}
 		,ta_:1,ta:1,effAnimation:0,buffAnimation:0
 		,buff:[{type:3,num:['-30%','-35%','-40%','-45%','-50%']}],buffCount:[2,2,2,2,2],atkCount:[0],turn:1,sp:11},
 	{idx:114,
-		na:{ko:'꾹꾹이',en:'Cat Pokes'},element_type:2,cate:[6],txt:{ko:'<u>단일 적군</u>, 방어력(DEF) <b buff>$(0)</b> 3턴 <i icon down></i> 감소',en:'<u>Single Enemy</u>, Defence(DEF) <b buff>$(0)</b>, a 3turn <i icon down></i> reduction'}
+		na:{ko:'꾹꾹이',en:'Cat Pokes'},element_type:2,cate:[6],txt:{ko:'<u>단일 적군</u>, 방어력(DEF) <b buff>$<0></b> 3턴 <i icon down></i> 감소',en:'<u>Single Enemy</u>, Defence(DEF) <b buff>$<0></b>, a 3turn <i icon down></i> reduction'}
 		,ta_:1,ta:1,effAnimation:0,buffAnimation:3,skillClass:0
 		,buff:[{type:3,num:['-20%','-30%','-40%','-50%','-60%']}],buffCount:[2,2,2,2,2],atkCount:[0],turn:1,sp:7},
 	{idx:115,
 		na:{ko:'할퀴기',en:'Scratching'},element_type:2,cate:[7],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 출혈 공격, 3턴 <b dmg>$<0></b>',en:'<u>Single</u>, <b dmg>$(0)</b> bleeding attack 2turns <b dmg>$<0></b>'}
 		,ta_:1,ta:20,effAnimation:1,buffAnimation:3,skillClass:1
-		,eff:[{type:3,num:['100%','130%','150%','170%','200%']}],buff:[{type:50,num:['-100','-200','-300','-400','-500']}],buffCount:[3,3,3,3,3],atkCount:[1],turn:2,sp:5},
+		,eff:[{type:3,num:['10%','130%','150%','170%','200%']}],buff:[{type:50,num:['-100','-200','-300','-400','-500']}],buffCount:[3,3,3,3,3],buffChance:['60%','70%','80%','90%','90%'],atkCount:[1],turn:2,sp:5},
 //---------------------------------------------------
 	{idx:116,
 		na:{ko:'후려치기',en:'Scratching'},element_type:2,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:''}
@@ -175,6 +175,10 @@ export const skill = [
 		na:{ko:'충격파',en:'Scratching'},element_type:2,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:''}
 		,ta_:1,ta:1,effAnimation:1,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[2],turn:1,sp:5},
+	{idx:121,
+		na:{ko:'테스트',en:'Test'},element_type:2,cate:[7],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 중독 공격, 3턴 <b dmg>$<0></b>',en:'<u>Single</u>, <b dmg>$(0)</b> poison attack 2turns <b dmg>$<0></b>'}
+		,ta_:1,ta:1,effAnimation:2,buffAnimation:0,skillClass:1
+		,eff:[{type:3,num:['10%','100%','150%','170%','200%']}],buff:[{type:51,num:['-50','-100','-300','-400','-500']}],buffCount:[2,2,2,2,2],buffChance:['70%','75%','80%','85%','90%'],atkCount:[1],turn:2,sp:5},
 ];
 // 모아치기
 // 중독, 출혈 기능 구현
