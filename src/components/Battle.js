@@ -106,7 +106,7 @@ const BattleCh = styled.div`
 	}
 	&.die:after{
 		background:url(${({tombstone}) => tombstone}) no-repeat center center;background-size:80%;
-		animation:tombstone ${({ gameSpd }) => 1/ gameSpd}s;opacity:0;animation-fill-mode:forwards;transform-origin:50% 100%;
+		animation:tombstone ${({ gameSpd }) => 1.5/ gameSpd}s;opacity:0;animation-fill-mode:forwards;transform-origin:50% 100%;
 	}
 `;
 const Buff = styled.div`
@@ -115,7 +115,7 @@ const Buff = styled.div`
 			return Math.ceil(frame / 5) * 100;
 		}}%;
 		background:url(${({effImg}) => effImg}) no-repeat center center;background-size:100%;z-index:1;
-		animation:frame${({frame}) => frame} ${({gameSpd}) => 1 / gameSpd}s steps(1);
+		animation:frame${({frame}) => frame} ${({gameSpd}) => 1.5 / gameSpd}s steps(1);
 		animation-iteration-count: infinite;
 	}
 `;
@@ -124,10 +124,10 @@ const Passive = styled.div`
 	top:${({idx}) => idx*20 - 25}%;background:url(${({effImg}) => effImg}) no-repeat center center;background-size:100%;
 `;
 const BattleLand = styled.div`
-	& > div {width:${({containerW}) => containerW}px;transition:all ${({ gameSpd }) => 1/ gameSpd}s;}
+	& > div {width:${({containerW}) => containerW}px;transition:all ${({ gameSpd }) => 1.5/ gameSpd}s;}
 `;
 const BattleEffect = styled.div`
-	& > div {width:${({containerW}) => containerW}px;transition:all ${({ gameSpd }) => 1/ gameSpd}s;}
+	& > div {width:${({containerW}) => containerW}px;transition:all ${({ gameSpd }) => 1.5/ gameSpd}s;}
 `;
 const EffLand = styled.div`
 	left:${({left}) => left}%;
@@ -140,7 +140,7 @@ const Eff = styled.img`
 	height:${({frame}) => {
 		return Math.ceil(frame / 5) * 100;
 	}}%;
-	animation:frame${({frame}) => frame} ${({gameSpd}) => 1 / gameSpd}s steps(1);
+	animation:frame${({frame}) => frame} ${({gameSpd}) => 1.5 / gameSpd}s steps(1);
 	animation-iteration-count: ${({repeat}) => repeat || "infinite"};
 `;
 const Land = styled.div`

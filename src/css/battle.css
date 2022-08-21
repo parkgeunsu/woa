@@ -72,7 +72,7 @@
 .battle_ch .ch_passive.passive5{animation:fadeIn 0.5s 1.5s linear;animation-fill-mode:forwards;}
 .battle_ch .ch_passive.remove{animation:fadeOut 0.5s linear;}
 /*상태이상*/
-.battle_ch.bleeding .ch_box{filter:hue-rotate(180deg);}
+.battle_ch.bleeding .ch_box:before{content:'';position:absolute;left:0;right:0;top:0;bottom:0;background:rgba(255,0,0,.35);}
 .battle_ch.addicted .ch_box{animation:poison 5s infinite alternate;}
 .battle_ch.petrification .ch_box{filter:grayscale(1) brightness(2);}
 .battle_ch.petrification .ring_style span{animation-play-state:paused;}
