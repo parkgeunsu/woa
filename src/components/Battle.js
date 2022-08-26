@@ -151,6 +151,13 @@ const Land = styled.div`
 const BattleOrder = styled.div`
 	transition:all ${({gameSpd}) => 0.5 / gameSpd}s;opacity:0;
 `;
+const WeatherIcon = styled.div`
+	position:absolute;left:${({idx}) => 50 * idx}px;background-image:url(${({src}) => src});background-size:80%;background-position:center center;background-repeat:no-repeat;width:46px;height:46px;
+`;
+const WeatherWind = styled.div`
+	.weather_arrow{background-image:url(${({src}) => src});background-size:100%;background-repeat:no-repeat;background-position:center center;transform:rotate(${({weatherInfo}) => weatherInfo.wind}deg);
+	}
+`;
 const BattleMenu = styled.div`
 	height:${({mode}) => {
 		if (mode === "order" || mode === "area") {
@@ -204,11 +211,41 @@ const RelationName = styled.div`
 	&:after{content:'';position:absolute;left:0;top:50%;transform:translate(0, -50%);width:5px;height:5px;background:${({color}) => color};box-shadow:0 0 8px 5px ${({color}) => color};}
 `;
 const BgEffect = styled.div`
-	div{transition:all ${({gameSpd}) => 2 / gameSpd}s;}
+	.cloud{transition:all ${({gameSpd}) => 2 / gameSpd}s;}
 	.cloud1{top:0;animation:cloudAnimation ${({gameSpd}) => 210 / gameSpd}s linear infinite;background-image:url(${({img1}) => img1});background-size:100%;}
 	.cloud2{top:30%;animation:cloudAnimationReverse ${({gameSpd}) => 130 / gameSpd}s linear infinite;background-image:url(${({img2}) => img2});background-size:100%;opacity:1;}
 `;
-
+const BgLight = styled.div`
+	&:after{
+		content:'';position:absolute;left:0;top:0;height:100%;width:100%;
+		background:${({type, day}) => {
+			if (type === 'w0' && day) {
+				return `conic-gradient(at 5% -10%, rgba(255,255,255,0.4) 25%, 25%,
+			rgba(255,255,255,0.6) 26%, rgba(255,255,255,0) 27%,
+			rgba(255,255,255,0) 29%, rgba(255,255,255,0.5) 30.5%, rgba(255,255,255,0) 32%,
+			rgba(255,255,255,0) 37.3%, rgba(255,255,255,0.6) 37.5%, rgba(255,255,255,0) 37.8%,
+			rgba(255,255,255,0) 39%, rgba(255,255,255,0.5) 39.5%, rgba(255,255,255,0) 40%,
+			rgba(255,255,255,0) 44%, rgba(255,255,255,0.6) 45.5%, rgba(255,255,255,0) 47%,
+			rgba(255,255,255,0) 50%);`;
+			} else if ((type === 'w3' && day) || (type === 'w4' && day)) {
+				return `conic-gradient(at 5% -10%, rgba(0,0,0,.5) 25%, rgba(0,0,0,0.2) 37.5%,rgba(0,0,0,0.5) 50%);`;
+			}
+			if (!day) {
+				return `conic-gradient(at 5% -10%, rgba(0,0,0,.9) 25%, rgba(0,0,0,0.3) 37.5%,rgba(0,0,0,0.9) 50%);`;
+			}
+		}
+	}}
+	&:before{
+		content:'';position:absolute;left:0;top:0;padding-top:100%;width:100%;background:${({type, day}) => {
+			if (type === 'w0' && day) {
+				return `radial-gradient(at 10% 0%, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 50%),
+				radial-gradient(at 10% 0%, rgba(255,220,255,0) 10%, rgba(255,255,255,0.6) 12.5%, rgba(255,255,255,0) 25%),
+				radial-gradient(at 10% 0%, rgba(255,220,0,0) 18%, rgba(255,245,0,0.6) 20%, rgba(255,220,0,0) 34%),
+				radial-gradient(at 10% 0%, rgba(255,255,255,0) 35%, rgba(255,255,255,0.4) 38%, rgba(255,255,255,0) 60%)`;
+			}
+		}};
+	}
+`;
 const chkString = (arr, index) => {
 	let chk = false;
 	arr.forEach((data, idx) => {
@@ -326,7 +363,7 @@ const activeSk = (timeLineData) => { //타임라인에 처리되는 방어등.. 
 		return 'none die';
 	}
 }
-const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, atkOption) => {
+const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, atkOption) => {
 	if (modeRef.indexOf('battle') >= 0){ //battleLose, battleWin시 
 		return;
 	}
@@ -361,50 +398,25 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 		//console.log('pgs', timeLine, turnIdx);
 		let atkC = [0, false], //공격 횟수
 			atkS = atkOption?.atkStay || 0; //한캐릭이 공격한 횟수 체크
-		let buffDebuff = [], //버프 임시저장 변수
-			ccState = '';
+		let buffDebuff = []; //버프 임시저장 변수
 		if (timeLine[turnIdx].order.team === 'ally') {//캐릭 상태이상으로 스킵 체크
 			const allyState = battleAlly[timeLine[turnIdx].order.idx].state;
-			if (allyState.indexOf('die') >= 0) {//죽은 상태
-				ccState = 'die';
+			if (allyState.indexOf('die') >= 0 || allyState.indexOf('petrification') >= 0 || allyState.indexOf('confusion') >= 0 || allyState.indexOf('faint') >= 0) {//죽은 상태, 석화, 혼란, 기절
 				skillCate = 1;
 			} else if (allyState.indexOf('bleeding') >= 0) {//출혈
-				ccState = 'bleeding';
-			} else if (allyState.indexOf('petrification') >= 0) {//석화
-				ccState = 'petrification';
-				skillCate = 1;
-			} else if (allyState.indexOf('confusion') >= 0) {//혼란
-				ccState = 'confusion';
-				skillCate = 1;
-			} else if (allyState.indexOf('faint') >= 0) {//기절
-				ccState = 'faint';
-				skillCate = 1;
 			} else if (allyState.indexOf('transform') >= 0) {//변이
-				ccState = 'transform';
 			}
 		} else {
 			const enemyState = battleEnemy[timeLine[turnIdx].order.idx].state;
-			if (enemyState.indexOf('die') >= 0) {//죽은 상태
-				ccState = 'die';
+			if (enemyState.indexOf('die') >= 0 || enemyState.indexOf('petrification') >= 0 || enemyState.indexOf('confusion') >= 0 || enemyState.indexOf('faint') >= 0) {//죽은 상태
 				skillCate = 1;
 			} else if (enemyState.indexOf('bleeding') >= 0) {//출혈
-				ccState = 'bleeding';
-			} else if (enemyState.indexOf('petrification') >= 0) {//석화
-				ccState = 'petrification';
-				skillCate = 1;
-			} else if (enemyState.indexOf('confusion') >= 0) {//혼란
-				ccState = 'confusion';
-				skillCate = 1;
-			} else if (enemyState.indexOf('faint') >= 0) {//기절
-				ccState = 'faint';
-				skillCate = 1;
 			} else if (enemyState.indexOf('transform') >= 0) {//변이
-				ccState = 'transform';
 			}
 		}
 		if (skillCate === 1 || skillCate === 4){ //대기, 방어, 철벽방어
 			setTurnIdx(turnIdx + 1);
-			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, {
+			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, {
 				atkCount: atkC,
 				atkStay: atkS,
 			});
@@ -615,6 +627,21 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 							});
 						}
 					});
+				} else if (skillCate === 10) {//날씨 변경
+					if (Math.random() < skill.buff[0].num[timeLine[turnIdx].order.skLv - 1].split('%')[0] / 100) {
+						setTimeout(() => {
+							setWeather((prev) => {
+								return {
+									...prev,
+									type:'w' + String(skill.buff[0].type).split('.')[0],
+									day: String(skill.buff[0].type).split('.')[1],
+									delay:1,
+								}
+							});
+						}, 500);
+					} else {
+						console.log('fail');
+					}
 				} else {//액티브스킬 방어자 셋팅
 					if (atkC[1] === "another") {
 						const defencerIdx = [Math.floor(Math.random()* battleEnemy.length)];
@@ -815,6 +842,21 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 							});
 						}
 					});
+				} else if (skillCate === 10) {//날씨 변경
+					if (Math.random() < skill.buff[0].num[timeLine[turnIdx].order.skLv - 1].split('%')[0] / 100) {
+						setTimeout(() => {
+							setWeather((prev) => {
+								return {
+									...prev,
+									type:'w' + String(skill.buff[0].type).split('.')[0],
+									day: String(skill.buff[0].type).split('.')[1],
+									delay:1,
+								}
+							});
+						}, 500);
+					} else {
+						console.log('fail');
+					}
 				} else {//액티브스킬 방어자 셋팅
 					if (atkC[1] === "another") {
 						const defencerIdx = [Math.floor(Math.random()* battleAlly.length)];
@@ -1167,27 +1209,54 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 									});
 								}
 							}
-							targets.forEach((data, idx) => {
-								let chk = false;
-								targetIdx.forEach((taIdx) => {
-									if (taIdx === data) {
-										chk = true;
+							if (targets.length === 25){
+								targets.forEach((data, idx) => {
+									let chk = false;
+									targetIdx.forEach((taIdx) => {
+										if (taIdx === data) {
+											chk = true;
+											return;
+										}
+									});
+									if (chk) { //스킬 맞는 위치와 범위값중 일치하는지 확인
+										targetArr[idx] = {
+											posIdx:data,
+											animation:0,
+											dmg:Math.floor(dmg[targetCount]),
+										};
+										targetCount ++;
+									} else {
+										targetArr[idx] = {
+											posIdx:data,
+											animation:0,
+										};
 									}
 								});
-								if (chk) { //스킬 맞는 위치와 범위값중 일치하는지 확인
-									targetArr[idx] = {
-										posIdx:data,
-										animation:gameData.skill[skillIdx].effAnimation,
-										dmg:Math.floor(dmg[targetCount]),
-									};
-									targetCount ++;
-								} else {
-									targetArr[idx] = {
-										posIdx:data,
-										animation:gameData.skill[skillIdx].effAnimation,
-									};
-								}
-							});
+								targetArr[12].posIdx = 12;
+								targetArr[12].animation = gameData.skill[skillIdx].effAnimation;
+							} else {
+								targets.forEach((data, idx) => {
+									let chk = false;
+									targetIdx.forEach((taIdx) => {
+										if (taIdx === data) {
+											chk = true;
+										}
+									});
+									if (chk) { //스킬 맞는 위치와 범위값중 일치하는지 확인
+										targetArr[idx] = {
+											posIdx:data,
+											animation:gameData.skill[skillIdx].effAnimation,
+											dmg:Math.floor(dmg[targetCount]),
+										};
+										targetCount ++;
+									} else {
+										targetArr[idx] = {
+											posIdx:data,
+											animation:gameData.skill[skillIdx].effAnimation,
+										};
+									}
+								});
+							}
 							if (timeLine[turnIdx].order.team === 'ally') { //적군 영역 effect효과
 								if (skillCate === 5) {//버프
 									setAllyEffect([
@@ -1266,7 +1335,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 									}
 								}
 								setTurnIdx(turnIdx_);
-								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, {
+								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, {
 									atkCount: atkC,
 									atkStay: atkS,
 								});
@@ -1395,6 +1464,48 @@ const getExp = (currentAlly, enemyData) => {
 		exp: exp,
 	}
 }
+const getWeather = (weather) => {
+	return weather.type.split('w')[1]*2 + (weather.day ? 0 : 1);
+}
+const changeWeather = (weather) => {
+	let type = weather.type.split('w')[1]*1,
+		type_ = type,
+		wind = weather.wind,
+		delay = weather.delay;
+	const typePercent = Math.random(),
+		windPercent = Math.random();
+	if (typePercent < .1) {
+		type = 4;
+	} else if (typePercent < .3) {
+		type = type - 1 < 0 ? 0 : type - 1;
+	} else if (typePercent < .5) {
+		type = type + 1 > 4 ? 4 : type + 1;
+	}
+	if (windPercent < .1) {
+		wind = wind - 20 < 0 ? 0 : wind - 20;
+	} else if (windPercent < .2) {
+		wind = wind + 20 < 360 ? 360 : wind + 20;
+	} else if (windPercent < .4) {
+		wind = wind - 10 < 0 ? 0 : wind - 10;
+	} else if (windPercent < .6) {
+		wind = wind + 10 < 360 ? 360 : wind + 10;
+	}
+	if (delay <= 0) {
+		return {
+			type:'w' + type,
+			wind:wind,
+			day:weather.day === 0 ? 1 : 0,
+			delay:delay,
+		}
+	} else {
+		return {
+			type:'w' + type_,
+			wind:wind,
+			day:weather.day,
+			delay:delay - 1,
+		}
+	}
+}
 const Battle = ({
 	navigate,
 	saveData,
@@ -1414,7 +1525,15 @@ const Battle = ({
 	const enemyDeck = scenarioDetail.entry;
 	const containerRef = useRef(null);
 	const [containerW, setContainerW] = useState();
+	const containerWH = useRef([0,0]);
 	const mapSize = 20;
+	const [weather, setWeather] = useState({
+		type:'w0',//w0:맑음, w1:흐림, w2:비, w3:천둥, w4:눈
+		day:true,//낮 밤
+		wind:0,//바람
+		delay:0//턴 유지
+	});//날씨
+	const bgCanvasRef = useRef();//날씨 캔버스
 	const allyOrders = useRef([]);//아군 행동저장배열
 	const enemyOrders = useRef([]);//적군 행동저장배열
 	const timeLine = useRef([]);//공격 순번배열
@@ -1751,6 +1870,19 @@ const Battle = ({
 				}
 			});
 		});
+		if (weather.delay <= 0) {
+			setWeather({
+				...weather,
+				type:'w' + Math.floor(Math.random() * 5),
+				wind:Math.floor(Math.random() * 36) * 10,
+				day:true,
+			});
+		} else {
+			setWeather({
+				...weather,
+				delay:weather.delay - 1,
+			})
+		}
 		return () => {//언마운트 리셋
 			clearInterval(conversationTimeout.current);
 			let saveD = {...saveData};
@@ -1758,6 +1890,112 @@ const Battle = ({
 			changeSaveData(saveD);
 		}
 	}, []);
+	useLayoutEffect(() => {
+		if (weather.type === 'w2' || weather.type === 'w3') {
+			const can = bgCanvasRef.current;
+			can.setAttribute('width', containerWH.current[1]);
+			can.setAttribute('height', containerWH.current[1]);
+			can.style.left = (containerWH.current[0] - containerWH.current[1]) / 2 + 'px';
+			can.style.transform = `rotate(${180 + weather.wind}deg)`; 
+			const ctx = can.getContext('2d');
+			const drops = [];
+			class Drop {
+        constructor(index, x, y, speed, length) {
+          this.index = index;
+          this.x = x;
+          this.y = y;
+          this.speed = speed;
+          this.length = length;
+          this.draw();
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.strokeStyle = '#dfdfdf';
+          ctx.moveTo(this.x, this.y);
+          ctx.lineTo(this.x, this.y + this.length);
+          ctx.stroke();
+          ctx.closePath();
+        }
+      }
+			const render = () => {
+				ctx.clearRect(0, 0, can.width, can.height);
+				drops.forEach((drop) => {
+          drop.y += drop.speed;
+          if (drop.y > can.height) {
+            drop.y = Math.random() * -30;
+            drop.x = Math.random() * can.width;
+            drop.speed = Math.random() * 3 + 1;
+            drop.length = Math.random() * 7 + 2;
+          }
+          drop.draw();
+        });
+        requestAnimationFrame(render); //반복
+			}
+			let tempX, tempY, tempSpeed, tempLength;
+			for (let i = 0; i < 250; i++) {
+        tempY = Math.random() * -150;
+        tempX = Math.random() * can.width;
+        tempSpeed = Math.random() * 3 + 1;
+        tempLength = Math.random() * 7 + 2;
+
+        drops.push(new Drop(i, tempX, tempY, tempSpeed, tempLength));
+      }
+      render();
+		} else if (weather.type === 'w4') {
+			const can = bgCanvasRef.current;
+			can.setAttribute('width', containerWH.current[1]);
+			can.setAttribute('height', containerWH.current[1]);
+			can.style.left = (containerWH.current[0] - containerWH.current[1]) / 2 + 'px';
+			can.style.transform = `rotate(${180 + weather.wind}deg)`; 
+			const ctx = can.getContext('2d');
+			const drops = [];
+			class Drop {
+        constructor(index, x, y, speed, size, opacity) {
+          this.index = index;
+          this.x = x;
+          this.y = y;
+          this.speed = speed;
+          this.size = size;
+					this.opacity = opacity;
+          this.draw();
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.moveTo(this.x, this.y);
+          ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+          ctx.fillStyle = `rgba(255,255,255,${this.opacity})`;
+          ctx.fill();
+          ctx.closePath();
+        }
+      }
+			const render = () => {
+				ctx.clearRect(0, 0, can.width, can.height);
+				drops.forEach((drop) => {
+          drop.y += drop.speed;
+          if (drop.y > can.height) {
+            drop.y = Math.random() * -30;
+            drop.x = Math.random() * can.width;
+            drop.speed = Math.random() * 1.5 + 0.2;
+            drop.size = Math.random() * 4 + 1;
+						drop.opacity = Math.random()* 0.7 + 0.3;
+          }
+          drop.draw();
+        });
+        requestAnimationFrame(render); //반복
+			}
+			let tempX, tempY, tempSpeed, tempSize, tempOpacity;
+			for (let i = 0; i < 250; i++) {
+        tempY = Math.random() * -150;
+        tempX = Math.random() * can.width;
+        tempSpeed = Math.random() * 1.5 + 0.2;
+        tempSize = Math.random() * 4 + 1;
+				tempOpacity = Math.random()* 0.7 + 0.3;
+
+        drops.push(new Drop(i, tempX, tempY, tempSpeed, tempSize, tempOpacity));
+      }
+      render();
+		}
+	}, [weather]);
 	const resetOrder = (mode) => {
 		setOrderIdx(0);
 		setTurnIdx('');
@@ -1894,6 +2132,24 @@ const Battle = ({
 						setEffectEnemyArea(util.getEffectArea(skill.ta, 12));
 						setMode('area');
 						break;
+					case 10: //날씨 변경
+						if (orderIdx < battleAlly.current.length - 1) {
+							setOrderIdx((prev) => ++prev);
+						} else {
+							setMode('action');
+							setOrderIdx('');
+						}
+						allyOrders.current.push({
+							team: 'ally',
+							idx: orderIdx,
+							skIdx: skill.idx,
+							skLv: skLv,
+							enemyTarget: false,
+							targetIdx: util.getEffectArea(20, 13),
+							target: allyPos.current[orderIdx].pos,
+							sp: -skill.sp,
+						});
+						break;
 					case 4: //active(방어)
 						if (orderIdx < battleAlly.current.length - 1) {
 							setOrderIdx((prev) => ++prev);
@@ -1960,6 +2216,7 @@ const Battle = ({
 				}, 1000 + allyPassive.current.length * 500 / gameSpd);
 			}, 2000 / gameSpd);
 		} else if (mode === 'action') {
+			setWeather(changeWeather(weather));//날씨 변경
 			let battleAllyCopy = battleAlly.current;
 			//아군 패시브 체크
 			let allyPassive = [],
@@ -2494,7 +2751,7 @@ const Battle = ({
 						} else {
 							enemy['buff' + state] = enemy[state];
 						}
-						console.log(buff.count,'b');
+						console.log(cc,'b');
 						if (buff.count <= 0) {//버프 횟수 종료시
 							enemy.state = '';
 							delete enemy.buffDebuff[buffIdx];
@@ -2596,7 +2853,7 @@ const Battle = ({
 				setEnemyEffect([]);
 				timeLineSet();//타임라인 구성
 				setTurnIdx(0);
-				actionAnimation(setTurnIdx, setSkillMsg, 0, timeLine.current, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly.current, battleEnemy.current, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos.current, enemyPos.current, modeRef.current, setMode)
+				actionAnimation(setTurnIdx, setSkillMsg, 0, timeLine.current, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly.current, battleEnemy.current, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos.current, enemyPos.current, modeRef.current, setMode, setWeather)
 			}, timeDelay);
 		} else if (mode === 'battleWin') {
 			console.log('pgs', '격!퇴!성!공!');
@@ -2688,7 +2945,9 @@ const Battle = ({
 		});
 	}, [battleAlly.current, battleEnemy.current]);
 	useLayoutEffect(() => {
-		setContainerW(containerRef.current.getBoundingClientRect().height * 0.5 - 25);
+		const area = containerRef.current.getBoundingClientRect();
+		setContainerW(area.height * 0.5 - 25);
+		containerWH.current = [area.width, area.height];
 	}, [containerRef.current]);
 	const map = Array.from({length: 25}, (undefined, i) => {
 		return {idx: i}
@@ -2813,8 +3072,46 @@ const Battle = ({
 			)}
       <BattleWarp className={`battle_wrap ${mode}`} backImg={imgSet.back[1]}>
 				<BgEffect className={`bgEffect ${mode === "action" ? "action" : ""}`} img1={imgSet.bgEffect[0]} img2={imgSet.bgEffect[1]} gameSpd={gameSpd}>
-					<div className="cloud1"></div>
-					<div className="cloud2"></div>
+					{weather.type === "w0" && (
+						<>
+							<BgLight className="bg_light" type={weather.type} day={weather.day}>
+								{weather.day && (
+									<div>
+										<span className="circle"></span>
+										<span className="circle"></span>
+										<span className="circle"></span>
+										<span className="circle"></span>
+										<span className="circle"></span>
+									</div>
+								)}
+							</BgLight>
+						</>
+					)}
+					{weather.type === "w1" && (
+						<>
+							<BgLight className="bg_light" type={weather.type} day={weather.day}/>
+							<div className="cloud cloud1" style={{filter:`brightness(${weather.day ? 1 : 0.3})`}}></div>
+							<div className="cloud cloud2" style={{filter:`brightness(${weather.day ? 1 : 0.3})`}}></div>
+						</>
+					)}
+					{weather.type === "w2" && (
+						<>
+							<BgLight className="bg_light" type={weather.type} day={weather.day}/>
+							<canvas className="bg_rain" ref={bgCanvasRef}></canvas>
+						</>
+					)}
+					{weather.type === "w3" && (
+						<>
+							<BgLight className="bg_light lightning" type={weather.type} day={weather.day}/>
+							<canvas className="bg_rain" ref={bgCanvasRef}></canvas>
+						</>
+					)}
+					{weather.type === "w4" && (
+						<>
+							<BgLight className="bg_light" type={weather.type} day={weather.day}/>
+							<canvas className="bg_snow" ref={bgCanvasRef}></canvas>
+						</>
+					)}
 				</BgEffect>
 				{allyRelationArr.current && (
 					<RelationArea className={`relation_area ${mode === "relation" ? "on" : ""}`} rtHeight={relationHeight.current} gameSpd={gameSpd}>
@@ -2829,7 +3126,7 @@ const Battle = ({
 				)}
 				<BattleArea ref={containerRef} className={`battle_area ${mode === "action" ? "action" : ""}`} mode={mode} frameLeft={imgSet.etc.frameLeft} frameRight={imgSet.etc.frameRight}>
 					<BattleEffect containerW={containerW} className="battle_effect">
-						<div className="land_enemy">
+						<div className={`land_enemy ${enemyEffect.length === 25 ? "allEff" : ""}`}>
 						{map.map((data, idx) => {
 							const left = idx % 5 * mapSize,
 								top = Math.floor(idx / 5) * mapSize;
@@ -2857,7 +3154,7 @@ const Battle = ({
 						})}
 						</div>
 						<div className={`turnLine ${mode === 'action' ? 'on' : ''}`}></div>
-						<div className="land_ally">
+						<div className={`land_ally ${allyEffect.length === 25 ? "allEff" : ""}`}>
 						{map.map((data, idx) => {
 							const left = idx % 5 * mapSize,
 								top = Math.floor(idx / 5) * mapSize;
@@ -2906,13 +3203,13 @@ const Battle = ({
 									if (typeof turnIdx === "number" && timeLine.current && timeLine.current[turnIdx]?.order.team === "enemy" && currentEnemyIdx.current === timeLine.current[turnIdx]?.order.idx) {
 										actionCh = "action";
 									}
-									const die = enemyCh?.state || "";
+									const state = enemyCh?.state || "";
 									const actionPos = enemyAction[currentEnemyIdx.current] || "";
 									const passive = allyEnemyPassiveRef.current[1][currentEnemyIdx.current];
 									const buffEff = allyEnemyBuffRef.current[1][currentEnemyIdx.current];
 									currentEnemyIdx.current ++;
 									return (
-										<BattleCh key={idx} className={`battle_ch ${area ? "effect effect" + element_type : ""} ${actionCh} ${rtCh} ${actionPos} ${die}`} data-ch={chData?.display} data-idx={idx} left={left} top={top} size={mapSize} onClick={(e) => {
+										<BattleCh key={idx} className={`battle_ch ${area ? "effect effect" + element_type : ""} ${actionCh} ${rtCh} ${actionPos} ${state}`} data-ch={chData?.display} data-idx={idx} left={left} top={top} size={mapSize} onClick={(e) => {
 											areaEnemySelect(e, idx);
 										}} gameSpd={gameSpd} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]}>
 											{buffEff && buffEff.map((buffData, idx) => {
@@ -2987,13 +3284,13 @@ const Battle = ({
 									if (typeof turnIdx === "number" && timeLine.current && timeLine.current[turnIdx]?.order.team === "ally" && currentAllyIdx.current === timeLine.current[turnIdx]?.order.idx) {
 										actionCh = "action";
 									}
-									const die = saveCh?.state || "";
+									const state = saveCh?.state || "";
 									const actionPos = allyAction[currentAllyIdx.current] || "";
 									const passive = allyEnemyPassiveRef.current[0][currentAllyIdx.current];
 									const buffEff = allyEnemyBuffRef.current[0][currentAllyIdx.current];
 									currentAllyIdx.current ++;
 									return (
-										<BattleCh key={idx} className={`battle_ch ${posCh} ${area ? "effect effect" + element_type : ""} ${actionCh} ${rtCh} ${actionPos} ${die}`} data-ch={chData?.display} data-idx={idx} left={left} top={top} size={mapSize} rtColor={rtColor} onClick={(e) => {
+										<BattleCh key={idx} className={`battle_ch ${posCh} ${area ? "effect effect" + element_type : ""} ${actionCh} ${rtCh} ${actionPos} ${state}`} data-ch={chData?.display} data-idx={idx} left={left} top={top} size={mapSize} rtColor={rtColor} onClick={(e) => {
 											areaAllySelect(e, idx);
 										}}  gameSpd={gameSpd} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]}>
 											{buffEff && buffEff.map((buffData, idx) => {
@@ -3060,6 +3357,18 @@ const Battle = ({
 							{typeof turnIdx === 'number' && gameData.skill[timeLine.current[turnIdx]?.order.skIdx]?.na[lang]}
 						</div>
 					</BattleOrder>
+					<div className="battle_weather" src={[imgSet.weather]} >
+						<div className={`weather_icon weather_type ${weather.day ? "day" : "night"}`}>
+							<div className="weather_typeIcon" style={{left:`${getWeather(weather) * -50}px`}}>
+								{imgSet.weather.map((data, idx) => {
+									return <WeatherIcon src={data} idx={idx} key={idx}></WeatherIcon>;
+								})}
+							</div>
+						</div>
+						<WeatherWind className="weather_icon weather_wind" src={imgSet.etc.wind} weatherInfo={weather}>
+							<div className="weather_arrow"></div>
+						</WeatherWind>
+					</div>
 				</BattleArea>
 				{battleAlly.current ?
 					<>

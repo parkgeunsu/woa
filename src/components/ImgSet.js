@@ -246,6 +246,19 @@ import defenceIcon1 from 'images/ico/shield1.png';
 import defenceIcon2 from 'images/ico/shield2.png';
 import tombstone from 'images/ico/tombstone.png';
 
+//날씨
+import sun from 'images/weather/sun.png';
+import moon from 'images/weather/moon.png';
+import suncloud from 'images/weather/suncloud.png';
+import mooncloud from 'images/weather/mooncloud.png';
+import sunrain from 'images/weather/sunrain.png';
+import moonrain from 'images/weather/moonrain.png';
+import sunthunder from 'images/weather/sunthunder.png';
+import moonthunder from 'images/weather/moonthunder.png';
+import sunsnow from 'images/weather/sunsnow.png';
+import moonsnow from 'images/weather/moonsnow.png';
+import wind from 'images/weather/wind2.png';
+
 //패시브 아이콘
 import passive0 from 'images/passive/passive0.png';
 import passive1 from 'images/passive/passive1.png';
@@ -261,6 +274,7 @@ import passive10 from 'images/passive/passive10.png';
 import passive11 from 'images/passive/passive11.png';
 
 //이펙트 애니메이션
+import blank from 'images/effect/blank.png';
 import attack0 from 'images/effect/attack0.png';
 import bite1 from 'images/effect/bite1.png';
 import claw2 from 'images/effect/claw2.png';
@@ -283,7 +297,7 @@ export const menu = [
   menu0,menu1,menu2,menu3,menu4,menu5,menu6,menu7
 ]
 export const etc = {
-  imgRing:imgRing,imgCardBack:imgCardBack,frameChBack:frameChBack,stateBack:stateBack,imgCardFrame:imgCardFrame,imgCardLv:imgCardLv,iconCardName:iconCardName,imgRingBack:imgRingBack,frameRope:frameRope,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,questionBlack:questionBlack,questionWhite:questionWhite,
+  imgRing:imgRing,imgCardBack:imgCardBack,frameChBack:frameChBack,stateBack:stateBack,imgCardFrame:imgCardFrame,imgCardLv:imgCardLv,iconCardName:iconCardName,imgRingBack:imgRingBack,frameRope:frameRope,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,questionBlack:questionBlack,questionWhite:questionWhite,wind:wind,
 };
 export const icon = {
   iconBack:iconBack,iconChat:iconChat,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,
@@ -326,6 +340,9 @@ export const itemUpgrade = [
 export const itemMaterial = [
 
 ];
+export const weather = [
+  sun,moon,suncloud,mooncloud,sunrain,moonrain,sunthunder,moonthunder,sunsnow,moonsnow
+];
 export const land = [
   grass1,grass2,grass3,land1,land2,land3,stone1,stone2,stone3,water1,water2,water3
 ];
@@ -342,6 +359,6 @@ export const passive = [
   passive0,passive1,passive2,passive3,passive4,passive5,passive6,passive7,passive8,passive9,passive10,passive11,
 ];
 export const eff = [
-  '',attack0,bite1,claw2,saliva3,death,Water_4,Water_1,ACCK019_Corrupt,'',
+  blank,attack0,bite1,claw2,saliva3,death,Water_4,Water_1,ACCK019_Corrupt,'',
   '','',buff11,buff12
 ];

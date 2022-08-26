@@ -797,10 +797,24 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           <dd dangerouslySetInnerHTML={{__html: replaceText}}></dd>
         </dl>
         <ul className="skill_eff">
-          {dataObj.sk.eff.map((skillEff) => {
+          {(dataObj.skillCate === 5 || dataObj.skillCate === 6) && dataObj.sk.buff.map((skillEff) => {
+            return skillEff.num.map((eff, idx) => {
+              return (
+                <li className="skill_eff_list" key={idx}>{`Lv.${idx + 1}: ${util.getEffectType(skillEff.type, lang)} ${eff}`}</li>
+              )
+            });
+          })}
+          {dataObj.skillCate !== 5 && dataObj.skillCate !== 6 && dataObj.skillCate !== 10 && dataObj.sk.eff.map((skillEff) => {
             return skillEff.num.map((eff, idx) => {
               return (
                 <li className="skill_eff_list" key={idx}>{`Lv.${idx + 1}: ${dataObj.sk.cate[0] !== 3 ? util.getEffectType(skillEff.type, lang) : ''} ${eff}`}</li>
+              )
+            });
+          })}
+          {dataObj.skillCate === 10 && dataObj.sk.buff.map((skillEff) => {
+            return skillEff.num.map((eff, idx) => {
+              return (
+                <li className="skill_eff_list" key={idx}>{`Lv.${idx + 1}: ${lang === "ko" ? "확률" : "Percent"} ${eff}`}</li>
               )
             });
           })}

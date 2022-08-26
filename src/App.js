@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
-import { back, animalType, icon, etc, iconStar, element, chImg, iconState, itemEquip, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, passive, eff, menu } from 'components/ImgSet';
+import { back, animalType, icon, etc, iconStar, element, chImg, iconState, itemEquip, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, passive, eff, menu, weather } from 'components/ImgSet';
 import { util } from 'components/Libs';
 import Main from 'components/Main';
 import Menu from 'components/Menu';
@@ -138,6 +138,7 @@ const App = () => {
       passive:passive,
       eff:eff,
       actionIcon:actionIcon,
+      weather:weather,
     },
     gameData: {
       ...gameData,
@@ -254,6 +255,10 @@ const App = () => {
       img.src = image;
     });
     eff.map((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    weather.map((image) => {
       const img = new Image();
       img.src = image;
     });

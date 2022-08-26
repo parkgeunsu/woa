@@ -7,6 +7,7 @@
 // active7(적군), 디버프 추가
 // active8(적군), 버프 추가
 // active9(적군), 상태이상 추가
+// weather10(날씨), 날씨 변환
 //element_type 무속성(0),찌르기(1),할퀴기(2),물기(3),치기(4),누르기(5),던지기(6),빛(7),어둠(8),물(9),불(10),바람(11),땅(12)
 //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 행운LUK(9), 출혈(50), 중독(51), 석화(52), 혼란(53), 기절(54), 변이(55), 패시브(100)
 //ta_ 아군0, 적군1
@@ -183,6 +184,14 @@ export const skill = [
 		na:{ko:'테스트2',en:'Test2'},element_type:2,cate:[7],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 석화 공격, 3턴 <b dmg>$<0></b>',en:'<u>Single</u>, <b dmg>$(0)</b> petrification attack 4turns <b dmg>$<0></b>'}
 		,ta_:1,ta:20,effAnimation:7,buffAnimation:0,skillClass:1
 		,eff:[{type:3,num:['10%','100%','150%','170%','200%']}],buff:[{type:52,num:['-50','-100','-300','-400','-500']}],buffCount:[4,4,4,4,4],buffChance:['70%','75%','80%','85%','90%'],atkCount:[1],turn:2,sp:5},
+	{idx:123,
+		na:{ko:'개구리 기우제',en:'Test2'},element_type:0,cate:[10],txt:{ko:'<u>날씨</u>, 비오는 날씨로 밤으로 변환',en:'<u>Weather</u>, Convert to rainy weather'}
+		,ta_:1,ta:20,effAnimation:7,buffAnimation:0,skillClass:1
+		,buff:[{type:2.0,num:['70%','75%','80%','85%','90%']}],buffCount:[4,4,4,4,4],buffChance:['70%','75%','80%','85%','90%'],atkCount:[1],turn:2,sp:5},
+	{idx:124,
+		na:{ko:'호랑이&여우 결혼식',en:'Test2'},element_type:0,cate:[10],txt:{ko:'<u>날씨</u>, 비오는 날씨로 낮으로 변환',en:'<u>Weather</u>, Convert to rainy weather'}
+		,ta_:1,ta:20,effAnimation:7,buffAnimation:0,skillClass:1
+		,buff:[{type:2.1,num:['70%','75%','80%','85%','90%']}],buffCount:[4,4,4,4,4],buffChance:['70%','75%','80%','85%','90%'],atkCount:[1],turn:2,sp:5},
 ];
 // 모아치기
 // 빙결, 석화, 스킬 캔슬기

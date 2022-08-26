@@ -72,14 +72,11 @@
 .battle_ch .ch_passive.passive5{animation:fadeIn 0.5s 1.5s linear;animation-fill-mode:forwards;}
 .battle_ch .ch_passive.remove{animation:fadeOut 0.5s linear;}
 /*상태이상*/
-.battle_ch.bleeding .ch_box:before{content:'';position:absolute;left:0;right:0;top:0;bottom:0;background:rgba(255,0,0,.35);}
-.battle_ch.addicted .ch_box{animation:poison 5s infinite alternate;}
+.battle_ch.bleeding .ch_box .ch_style{filter:grayscale(1) brightness(.5);}
+.battle_ch.addicted .ch_box .ch_style{filter:blur(1px);}
+.battle_ch.bleeding.addicted .ch_box .ch_style{filter:grayscale(1) brightness(.5) blur(1px);}
 .battle_ch.petrification .ch_box{filter:grayscale(1) brightness(2);}
-.battle_ch.petrification .ring_style span{animation-play-state:paused;}
-@keyframes poison{
-  0%{filter:brightness(1) hue-rotate(0deg);}
-  100%{filter:brightness(1) hue-rotate(360deg);}
-}
+.battle_ch.petrification .ch_ring{animation-play-state:paused;}
 @keyframes fadeIn{
   0%{opacity:0;}
   100%{opacity:1;}
@@ -103,10 +100,12 @@
 .battle_land.ready .land{outline-width:2px;}
 .battle_land.critical{animation:landCritical .2s ease-in-out;}
 
-.battle_effect{display:flex;flex-direction:column;position:absolute;left:0;right:0;bottom:0;top:0;}
+.battle_effect{display:flex;flex-direction:column;position:absolute;left:0;right:0;bottom:0;top:0;z-index:3;pointer-events:none;overflow:hidden;}
 .battle_effect > div{position:relative;margin:0 auto;box-sizing:border-box;}
 .battle_effect .land_ally{position:relative;margin:0 auto;}
+.battle_effect .land_ally.allEff .effect_land:nth-of-type(13){transform:scale(5);z-index:1;}
 .battle_effect .land_enemy{position:relative;margin:0 auto;}
+.battle_effect .land_enemy.allEff .effect_land:nth-of-type(13){transform:scale(5);z-index:1;}
 .battle_effect .turnLine{position:relative;width:100%;height:0;}
 .battle_effect .turnLine.on{height:50px;}
 .battle_effect.ready .land{outline-width:2px;}
@@ -119,7 +118,7 @@
 .land{position:absolute;width:20%;padding-top:20%;box-sizing:border-box;border-radius:0;background-size: 100%;outline:0px solid #fff;transition:outline 1s;}
 .land:before{content:'';position:absolute;left:0;right:0;top:0;bottom:0;background:#000;opacity:.1;}
 
-.battle_order{position:absolute;left:0;right:0;transform:translate(0,-50%);z-index:50;pointer-events:none;}
+.battle_order{position:absolute;left:0;right:0;transform:translate(0,-50%);z-index:30;pointer-events:none;}
 .battle_order.ally{bottom:35%;}
 .battle_order.enemy{top:35%;}
 .battle_order.on{opacity:1;}
@@ -130,7 +129,14 @@
 .battle_order.right:after{right:30%;}
 .battle_order .battle_msg{margin:0 auto;padding:10px;width:50%;height:100%;border-radius:10px;background:#333;box-sizing:border-box;text-align:center;line-height:1.2;font-size:15px;font-weight:600;color:#fff;}
 
-.battle_menu{display:flex;position:relative;background:var(--color-b);background:var(--color-b);overflow:hidden;}
+.battle_weather{position:absolute;right:5px;bottom:0;width:50px;height:115px;transition:all 0.5s;border-radius:10px 0 0 0;z-index:51;}
+.battle_weather .weather_icon{position:relative;margin:0 0 5px 0;width:50px;height:50px;border-radius:25px;box-shadow:0 0 10px #000;border:2px solid #ddd;box-sizing:border-box;background:radial-gradient(at 30% 30%, rgba(200,200,200,1) 0%, rgba(0,0,0,1) 60%);overflow:hidden;}
+.battle_weather .weather_icon.day{background:radial-gradient(at 30% 30%, rgba(200,200,200,1) 0%, rgba(50,50,0,1) 60%);}
+.battle_weather .weather_icon.night{background:radial-gradient(at 30% 30%, rgba(100,100,100,1) 0%, rgba(0,0,0,1) 60%);}
+.battle_weather .weather_typeIcon{position:absolute;left:0;top:0;transition:all .5s;}
+.battle_weather .weather_arrow{position:absolute;width:46px;height:46px;transition:all .5s;}
+
+.battle_menu{display:flex;position:relative;background:var(--color-b);background:var(--color-b);overflow:hidden;z-index:50;}
 .battle_menu .chInfo{display:flex;flex-basis:60px;align-items:center;justify-content:center;}
 .battle_menu .chInfo span{display:inline-block;}
 .battle_menu .chInfo .sp{font-size:20px;}
@@ -151,16 +157,40 @@
 .battle_wrap .ring_style span,.battle_end .ring_style span{position:absolute;left:-25%;width:150%;padding-top:150%;top:-30%;height:100%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;background-position:center center;border:none;pointer-events:none;}
 .battle_wrap .ch_style,.battle_end .ch_style{position:absolute;top:-27%;left:-15%;width:130%;height:130%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;backface-visibility:hidden;background-color:transparent;z-index:1;}
 
-.battle_wrap .relation_area{display:flex;position:absolute;left:0;right:0;top:0;bottom:0;flex-direction:column;z-index:10;align-items:center;justify-content:center;pointer-events:none;}
+.battle_wrap .relation_area{display:flex;position:absolute;left:0;right:0;top:0;bottom:0;flex-direction:column;z-index:50;align-items:center;justify-content:center;pointer-events:none;}
 .battle_wrap .relation_area:after{content:'';position:absolute;width:100%;height:0;box-shadow:0 0 20px 10px rgba(0,0,0,0);background:rgba(0,0,0,.7);}
 .battle_wrap .relation_area .relationTitle{margin:0 0 10px 0;z-index:1;}
 .battle_wrap .relation_area .relationTitle span{display:inline-block;margin:0 2px;font-size:25px;font-weight:600;opacity:0;color:#fff;}
 .battle_wrap .relation_area.on .relationTitle span{opacity:1;}
 .battle_wrap .relation_area.on .relationName{filter:blur(0);}
 .battle_wrap .bgEffect{position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;}
-.battle_wrap .bgEffect div{position:absolute;width:1000px;height:400px;z-index:40;animation-play-state:running;}
-.battle_wrap .bgEffect.action div{animation-play-state:paused;opacity:0;}
+.battle_wrap .bgEffect .cloud{position:absolute;width:1000px;height:400px;z-index:40;animation-play-state:running;}
+.battle_wrap .bgEffect.action .cloud{animation-play-state:paused;opacity:0;}
 .battle_wrap .bgEffect.action .cloud2{left:-1000px;animation-play-state:paused;}
+.battle_wrap .bgEffect .bg_light{position:absolute;left:0;right:0;top:50px;bottom:0;z-index:39;transition:all .5s;overflow:hidden;}
+.battle_wrap .bgEffect .bg_light .circle{position:absolute;border-radius:50%;}
+.battle_wrap .bgEffect .bg_light .circle:first-of-type{left:65%;top:3%;width:10px;height:10px;background:#fff;opacity:.5;filter:blur(2px);}
+.battle_wrap .bgEffect .bg_light .circle:nth-of-type(2){left:37%;top:6%;width:60px;height:60px;background:#fff;opacity:.5;filter:blur(3px);}
+.battle_wrap .bgEffect .bg_light .circle:nth-of-type(3){left:47%;top:28%;width:20px;height:20px;background:#fff;opacity:.5;filter:blur(2px);}
+.battle_wrap .bgEffect .bg_light .circle:nth-of-type(4){left:23%;top:18%;width:30px;height:30px;background:#fff;opacity:.5;filter:blur(3px);}
+.battle_wrap .bgEffect .bg_light .circle:nth-of-type(5){left:8%;top:3%;width:20px;height:20px;background:#fff;}
+.battle_wrap.order .bgEffect .bg_light.lightning, .battle_wrap.action .bgEffect .bg_light.lightning{transition:unset;animation:onoff 8s infinite;}
+@keyframes onoff{
+  10%{opacity:1;}
+  11%{opacity:0;}
+  12%{opacity:1;}
+  14%{opacity:0;}
+  15%{opacity:1;}
+  16%{opacity:0;}
+  18%{opacity:1;}
+  66%{opacity:1;}
+  67%{opacity:0;}
+  69%{opacity:1;}
+  70%{opacity:0;}
+  71%{opacity:1;}
+}
+
+.battle_wrap .bgEffect canvas{position:absolute;left:0;right:0;top:50px;z-index:40;}
 
 .battle_scenario{position:absolute;left:0;right:0;top:0;bottom:0;padding:20px;box-sizing:border-box;z-index:10;background-color:rgba(0,0,0,.85);}
 .scenario_box{margin:15px 0;align-items:center;}
