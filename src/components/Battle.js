@@ -931,7 +931,8 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 				const skType = gameData.skill[timeLine[turnIdx].order.skIdx].element_type;//스킬 속성종류
 				const chance = Math.random();
 				const team = timeLine[turnIdx].order.team === 'ally' ? enemyAction : allyAction;
-				let criticalAtk = false;
+				let criticalAtk = false,
+					counterAtk = false;
 				let avoid = false;
 				defencer.forEach((defData, dIdx) => {
 					const defEnemy = defData.ch;
@@ -966,6 +967,10 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 										const avoidNum = Math.floor(Math.random()*4);//회피 종류
 										avoid = true;
 										team[defData.idx] = 'avoid' + avoidNum;
+									}
+									const counterChance = Math.random();
+									if (counterChance) {//반격 확률 계산
+										counterAtk = true;
 									}
 								}
 							} else { //defence를 했으면
