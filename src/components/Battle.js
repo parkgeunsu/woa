@@ -363,7 +363,7 @@ const activeSk = (timeLineData) => { //타임라인에 처리되는 방어등.. 
 		return 'none die';
 	}
 }
-const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, atkOption) => {
+const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, atkOption) => {
 	if (modeRef.indexOf('battle') >= 0){ //battleLose, battleWin시 
 		return;
 	}
@@ -416,7 +416,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 		}
 		if (skillCate === 1 || skillCate === 4){ //대기, 방어, 철벽방어
 			setTurnIdx(turnIdx + 1);
-			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, {
+			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, {
 				atkCount: atkC,
 				atkStay: atkS,
 			});
@@ -1274,6 +1274,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 												buffDebuff[defData.idx] = [];
 											}
 											battleEnemy[defData.idx].buffDebuff = [...buffDebuff[defData.idx]];
+											passiveBuff(gameData, battleAlly, battleEnemy, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, allyPos, enemyPos, false);
 										}
 										if (battleEnemy[defData.idx].hp < 0) {//다이
 											enemyAction[defData.idx] = 'die';
@@ -1300,6 +1301,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 												buffDebuff[defData.idx] = [];
 											}
 											battleAlly[defData.idx].buffDebuff = [...buffDebuff[defData.idx]];
+											passiveBuff(gameData, battleAlly, battleEnemy, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, allyPos, enemyPos, false);
 										}
 										if (battleAlly[defData.idx].hp < 0) {//다이
 											allyAction[defData.idx] = 'die';
@@ -1335,7 +1337,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 									}
 								}
 								setTurnIdx(turnIdx_);
-								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, {
+								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, {
 									atkCount: atkC,
 									atkStay: atkS,
 								});
@@ -1507,11 +1509,12 @@ const changeWeather = (weather) => {
 	}
 }
 
-const passiveBuff = () => {
-	let battleAllyCopy = battleAlly.current;
+const passiveBuff = (gameData, battleAlly, battleEnemy, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, allyPos, enemyPos, buffTurn) => {
+	allyPassive = [];
+	enemyPassive = [];
+	let battleAllyCopy = battleAlly;
 	//아군 패시브 체크
-	let allyPassive = [],
-	passiveAllySkill = [];
+	let passiveAllySkill = [];
 	battleAllyCopy.forEach((ally) => {
 		ally.nowhp = ally.hp;
 	});
@@ -1647,8 +1650,8 @@ const passiveBuff = () => {
 	});
 
 	//아군 버프 체크
-	let allyBuff = allyEnemyBuff[0] || [],
-		allyDmgArr = [],//데미지 애니메이션
+	allyBuff = allyEnemyBuff[0] || [];
+	let allyDmgArr = [],//데미지 애니메이션
 		timeDelay = 0;//버프 이펙트 효과 딜레이
 	battleAllyCopy.forEach((ally, chIdx) => {
 		let cc = '',
@@ -1718,7 +1721,7 @@ const passiveBuff = () => {
 						}
 					});
 				} else {//버프 효과 진행시
-					const buffCount = --buff.count;
+					const buffCount = buffTurn ? --buff.count : buff.count;
 					ally.state = cc;
 					ally.buffDebuff[buffIdx] = {
 						count: buffCount,
@@ -1759,26 +1762,28 @@ const passiveBuff = () => {
 					});
 				} else {//버프 효과 진행시
 					const num = priorityState > 0 ? priorityState : buff.num;
-					if (num.indexOf('%') > 0) {
-						const percent = parseInt(num) / 100;
-						ally[state] = percent < 0 ? ally[state] - ally[state] * Math.abs(percent) : ally[state] + ally[state] * percent;
-						ally[state] = ally[state] < 0 ? 0 : ally[state];
-					} else {
-						ally[state] = ally[state] + Number(num)  < 0 ? 0 : ally[state] + Number(num);
+					if (buffTurn) {
+						if (num.indexOf('%') > 0) {
+							const percent = parseInt(num) / 100;
+							ally[state] = percent < 0 ? ally[state] - ally[state] * Math.abs(percent) : ally[state] + ally[state] * percent;
+							ally[state] = ally[state] < 0 ? 0 : ally[state];
+						} else {
+							ally[state] = ally[state] + Number(num)  < 0 ? 0 : ally[state] + Number(num);
+						}
 					}
 					//데미지 애니메이션
 					if (allyDmgArr[ccSingle] === undefined) {
 						allyDmgArr[ccSingle] = [];
 					}
 					allyDmgArr[ccSingle].push({
-						posIdx:allyPos.current[chIdx],
+						posIdx:allyPos[chIdx],
 						animation:buff.animation,
 						dmg:Number(buff.num),
 					});
 					if (state === 'hp') {
 						ally['buff' + state] = ally[state];
 					}
-					const buffCount = --buff.count;
+					const buffCount = buffTurn ? --buff.count : buff.count;
 					ally.state = cc;
 					ally.buffDebuff[buffIdx] = {
 						count: buffCount,
@@ -1803,12 +1808,11 @@ const passiveBuff = () => {
 			}
 		});
 	});
-	battleAlly.current = battleAllyCopy;
+	battleAlly = battleAllyCopy;
 
-	let battleEnemyCopy = [...battleEnemy.current];
+	let battleEnemyCopy = [...battleEnemy];
 	//적군 패시브 체크
-	let enemyPassive = [],
-		passiveEnemySkill = [];
+	let passiveEnemySkill = [];
 	battleEnemyCopy.forEach((enemy) => {
 		enemy.nowhp = enemy.hp;
 	});
@@ -1943,8 +1947,8 @@ const passiveBuff = () => {
 	});
 
 	//적군 버프 체크
-	let enemyBuff = allyEnemyBuff[1] || [],
-		enemyDmgArr = [];//데미지 애니메이션
+	enemyBuff = allyEnemyBuff[1] || [];
+	let enemyDmgArr = [];//데미지 애니메이션
 	battleEnemyCopy.forEach((enemy, chIdx) => {
 		let cc = '',
 			ccSingle = '',
@@ -2014,7 +2018,7 @@ const passiveBuff = () => {
 						}
 					});
 				} else {//버프 효과 진행시
-					const buffCount = --buff.count;
+					const buffCount = buffTurn ? --buff.count : buff.count;
 					enemy.state = cc;
 					enemy.buffDebuff[buffIdx] = {
 						count: buffCount,
@@ -2042,7 +2046,6 @@ const passiveBuff = () => {
 				} else {
 					enemy['buff' + state] = enemy[state];
 				}
-				console.log(cc,'b');
 				if (buff.count <= 0) {//버프 횟수 종료시
 					enemy.state = '';
 					delete enemy.buffDebuff[buffIdx];
@@ -2056,26 +2059,28 @@ const passiveBuff = () => {
 					});
 				} else {//버프 효과 진행시
 					const num = priorityState > 0 ? priorityState : buff.num;
-					if (num.indexOf('%') > 0) {
-						const percent = parseInt(num) / 100;
-						enemy[state] = percent < 0 ? enemy[state] - enemy[state] * Math.abs(percent) : enemy[state] + enemy[state] * percent;
-						enemy[state] = enemy[state] < 0 ? 0 : enemy[state];
-					} else {
-						enemy[state] = enemy[state] + Number(num)  < 0 ? 0 : enemy[state] + Number(num);
+					if (buffTurn) {
+						if (num.indexOf('%') > 0) {
+							const percent = parseInt(num) / 100;
+							enemy[state] = percent < 0 ? enemy[state] - enemy[state] * Math.abs(percent) : enemy[state] + enemy[state] * percent;
+							enemy[state] = enemy[state] < 0 ? 0 : enemy[state];
+						} else {
+							enemy[state] = enemy[state] + Number(num)  < 0 ? 0 : enemy[state] + Number(num);
+						}
 					}
 					//데미지 애니메이션
 					if (enemyDmgArr[ccSingle] === undefined) {
 						enemyDmgArr[ccSingle] = [];
 					}
 					enemyDmgArr[ccSingle].push({
-						posIdx:enemyPos.current[chIdx],
+						posIdx:enemyPos[chIdx],
 						animation:buff.animation,
 						dmg:Number(buff.num),
 					});
 					if (state === 'hp') {
 						enemy['buff' + state] = enemy[state];
 					}
-					const buffCount = --buff.count;
+					const buffCount = buffTurn ? --buff.count : buff.count;
 					enemy.state = cc;
 					enemy.buffDebuff[buffIdx] = {
 						count: buffCount,
@@ -2100,7 +2105,14 @@ const passiveBuff = () => {
 			}
 		});
 	});
-	battleEnemy.current = battleEnemyCopy;
+	battleEnemy = battleEnemyCopy;
+	setAllyEnemyPassive([allyPassive, enemyPassive]);//패시브효과 전달
+	setAllyEnemyBuff([allyBuff, enemyBuff]);//버프효과 전달
+	return {
+		allyDmgArr: allyDmgArr,
+		enemyDmgArr: enemyDmgArr,
+		timeDelay:timeDelay,
+	}
 }
 const Battle = ({
 	navigate,
@@ -2171,6 +2183,8 @@ const Battle = ({
 	// const allyEnemyPassiveRef = useRef([[],[]]);//아군,적군 패시브
 	// const allyEnemyBuffRef = useRef([[],[]]);//아군,적군 버프
 	const [allyEnemyPassive, setAllyEnemyPassive] = useState([[],[]]);
+	const allyBuff = useRef([]);//아군 버프
+	const enemyBuff = useRef([]);//적군 버프
 	const [allyEnemyBuff, setAllyEnemyBuff] = useState([[],[]]);
 
 	const [effectAllyArea, setEffectAllyArea] = useState([]); //아군스킬 영역
@@ -2790,7 +2804,6 @@ const Battle = ({
 		}
 	}, [orderIdx]);
 	useLayoutEffect(() => {
-
 	}, [allyEnemyPassive, allyEnemyBuff]);
 	useLayoutEffect(() => { //모드가 바꿨을때
 		if (mode === 'wait') {
@@ -2818,10 +2831,9 @@ const Battle = ({
 			}, 2000 / gameSpd);
 		} else if (mode === 'action') {
 			setWeather(changeWeather(weather));//날씨 변경
-			passiveBuff();
+			const turnPass = true;
+			const pB = passiveBuff(gameData, battleAlly.current, battleEnemy.current, allyEnemyPassive, allyPassive.current, enemyPassive.current, setAllyEnemyPassive, allyEnemyBuff, allyBuff.current, enemyBuff.current, setAllyEnemyBuff, allyPos.current, enemyPos.current, turnPass);
 
-			setAllyEnemyPassive([allyPassive, enemyPassive]);//패시브효과 전달
-			setAllyEnemyBuff([allyBuff, enemyBuff]);//버프효과 전달
 			//행동 포인트 수정
 			battleAlly.current.map((data, idx) => {
 				data.sp += allyOrders.current[idx].sp || 0;
@@ -2829,32 +2841,32 @@ const Battle = ({
 					data.sp = data.sp_;
 				}
 			});
-			if (enemyDmgArr['bleeding'] || allyDmgArr['bleeding']) {
-				timeDelay += 500 / gameSpd;
-				if (allyDmgArr['bleeding']) {
-					setAllyEffect(allyDmgArr['bleeding']);
+			if (pB.enemyDmgArr['bleeding'] || pB.allyDmgArr['bleeding']) {
+				pB.timeDelay += 1000 / gameSpd;
+				if (pB.allyDmgArr['bleeding']) {
+					setAllyEffect(pB.allyDmgArr['bleeding']);
 				}
-				if (enemyDmgArr['bleeding']) {
-					setEnemyEffect(enemyDmgArr['bleeding']);
+				if (pB.enemyDmgArr['bleeding']) {
+					setEnemyEffect(pB.enemyDmgArr['bleeding']);
 				}
-				if (enemyDmgArr['addicted'] || allyDmgArr['addicted']) {
-					timeDelay += 500 / gameSpd;
+				if (pB.enemyDmgArr['addicted'] || pB.allyDmgArr['addicted']) {
+					pB.timeDelay += 1000 / gameSpd;
 					setTimeout(() => {
-						if (allyDmgArr['addicted']) {
-							setAllyEffect(allyDmgArr['addicted']);
+						if (pB.allyDmgArr['addicted']) {
+							setAllyEffect(pB.allyDmgArr['addicted']);
 						}
-						if (enemyDmgArr['addicted']) {
-							setEnemyEffect(enemyDmgArr['addicted']);
+						if (pB.enemyDmgArr['addicted']) {
+							setEnemyEffect(pB.enemyDmgArr['addicted']);
 						}
 					}, 1000 / gameSpd);
 				}
-			} else if (enemyDmgArr['addicted'] || allyDmgArr['addicted']) {
-				timeDelay += 500 / gameSpd;
-				if (allyDmgArr['addicted']) {
-					setAllyEffect(allyDmgArr['addicted']);
+			} else if (pB.enemyDmgArr['addicted'] || pB.allyDmgArr['addicted']) {
+				pB.timeDelay += 1000 / gameSpd;
+				if (pB.allyDmgArr['addicted']) {
+					setAllyEffect(pB.allyDmgArr['addicted']);
 				}
-				if (enemyDmgArr['addicted']) {
-					setEnemyEffect(enemyDmgArr['addicted']);
+				if (pB.enemyDmgArr['addicted']) {
+					setEnemyEffect(pB.enemyDmgArr['addicted']);
 				}
 			}
 			setTimeout(() => {
@@ -2862,8 +2874,8 @@ const Battle = ({
 				setEnemyEffect([]);
 				timeLineSet();//타임라인 구성
 				setTurnIdx(0);
-				actionAnimation(setTurnIdx, setSkillMsg, 0, timeLine.current, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly.current, battleEnemy.current, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos.current, enemyPos.current, modeRef.current, setMode, setWeather)
-			}, timeDelay);
+				actionAnimation(setTurnIdx, setSkillMsg, 0, timeLine.current, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly.current, battleEnemy.current, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos.current, enemyPos.current, modeRef.current, setMode, setWeather, allyEnemyPassive, allyPassive.current, enemyPassive.current, setAllyEnemyPassive, allyEnemyBuff, allyBuff.current, enemyBuff.current, setAllyEnemyBuff);
+			}, pB.timeDelay);
 		} else if (mode === 'battleWin') {
 			console.log('pgs', '격!퇴!성!공!');
 			let saveD = {...saveData};
