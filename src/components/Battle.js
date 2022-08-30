@@ -321,14 +321,14 @@ const enemyPattern = (ai, battleAlly, allyPos, enemy, gameData) => {
 		});
 		const currentSk = data.hasSkill.filter((skData) => {
 			if (skData.idx === skIdx) {
-				return skData.lv;
+				return skData;
 			}
 		});
 		enemySkill.push({
 			team: 'enemy',
 			idx: idx,
 			skIdx: skIdx,
-			skLv: currentSk.lv,
+			skLv: currentSk[0].lv,
 			targetIdx: targetIdx,
 			target: allyPos[target].pos,
 		});
@@ -392,14 +392,10 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 	const gameSpd = setting.speed,
 		gameEffSound = setting.effSound;
 	if (turnIdx <= timeLine.length - 1) {
-		let counterAtk = atkOption?.counterAtk || false, //카운터 어택인지
-			counterAttacker = atkOption?.counterAttacker || null,
-			counterDefencer = atkOption?.counterDefencer || null,
-			counterTeam = atkOption?.counterTeam || null;
-		const skillIdx = counterAtk ? 1 : timeLine[turnIdx].order.skIdx;// {team: 'enemy', idx: 0, skIdx: 0, target: 3}
+		let counterAtk = false; //카운터 어택인지
+		const skillIdx = timeLine[turnIdx].order.skIdx;
 		const skill = gameData.skill[skillIdx];
 		let skillCate = skill.cate[0];
-		//console.log('pgs', timeLine, turnIdx);
 		let atkC = [0, false], //공격 횟수
 			atkS = atkOption?.atkStay || 0; //한캐릭이 공격한 횟수 체크
 		let buffDebuff = []; //버프 임시저장 변수
@@ -423,10 +419,6 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, {
 				atkCount: atkC,
 				atkStay: atkS,
-				counterAtk: counterAtk,
-				counterAttacker: counterAttacker,
-				counterDefencer: counterDefencer,
-				counterTeam: counterTeam,
 			});
 		} else { //액티브 스킬
 			let attacker = {},
@@ -437,129 +429,76 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 			//공격 횟수 지정
 			atkC = (atkOption?.atkCount && atkOption?.atkCount[0]) ? atkOption?.atkCount : [...gameData.skill[skillIdx].atkCount];
 			atkC[0] -= 1;
-			if (counterAtk) {
-				console.log(counterAttacker, counterDefencer);
-				attacker = counterAttacker;
-				defencer = counterDefencer;
-			} else {
-				if (timeLine[turnIdx].order.team === 'ally') { //아군 공격
-					attacker = battleAlly[timeLine[turnIdx].order.idx];//공격자 셋팅
-					if (skillCate === 5) {//아군 버프 방어자 셋팅
-						defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
-							return {
-								ch: battleAlly[data],
-								idx: data,
-							}
-						});
-						defencer.forEach((defData) => {
-							if (buffDebuff[defData.idx]) {
-								buffDebuff[defData.idx] = [];
-							}
-							buffDebuff[defData.idx] = [...battleAlly[defData.idx].buffDebuff];
-							skill.buff.forEach((data_) => {
-								const skLvIdx = timeLine[turnIdx].order.skLv - 1;
-								const maxCount = skill.buffCount[skLvIdx];
-								if (buffDebuff[defData.idx][data_.type] === undefined) {
-									buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
-								}
-								buffDebuff[defData.idx][data_.type].count = maxCount;
-								buffDebuff[defData.idx][data_.type].maxCount = maxCount;
-								buffDebuff[defData.idx][data_.type].type = data_.type;
-								buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
-								buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
-							});
-						});
-					} else if (skillCate === 6) {//적군 디버프 방어자 셋팅
-						defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
-							return {
-								ch: battleEnemy[data],
-								idx: data,
-							}
-						});
-						defencer.forEach((defData) => {
-							if (buffDebuff[defData.idx]) {
-								buffDebuff[defData.idx] = [];
-							}
-							buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
-							skill.buff.forEach((data_) => {
-								const skLvIdx = timeLine[turnIdx].order.skLv - 1;
-								const maxCount = skill.buffCount[skLvIdx];
-								if (buffDebuff[defData.idx][data_.type] === undefined) {
-									buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
-								}
-								buffDebuff[defData.idx][data_.type].count = maxCount;
-								buffDebuff[defData.idx][data_.type].maxCount = maxCount;
-								buffDebuff[defData.idx][data_.type].type = data_.type;
-								buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
-								buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
-							});
-						});
-					} else if (skillCate === 7){ //액티브스킬 디버프추가
-						defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
-							return {
-								ch: battleEnemy[data],
-								idx: data,
-							}
-						});
-						defencer.forEach((defData) => {
-							if (buffDebuff[defData.idx]) {
-								buffDebuff[defData.idx] = [];
-							}
-							buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
+			if (timeLine[turnIdx].order.team === 'ally') { //아군 공격
+				attacker = battleAlly[timeLine[turnIdx].order.idx];//공격자 셋팅
+				if (skillCate === 5) {//아군 버프 방어자 셋팅
+					defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
+						return {
+							ch: battleAlly[data],
+							idx: data,
+						}
+					});
+					defencer.forEach((defData) => {
+						if (buffDebuff[defData.idx]) {
+							buffDebuff[defData.idx] = [];
+						}
+						buffDebuff[defData.idx] = [...battleAlly[defData.idx].buffDebuff];
+						skill.buff.forEach((data_) => {
 							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
-							//상태이상 확률
-							const chance = parseInt(skill.buffChance[skLvIdx]) / 100;
-							const percent = Math.random();
-							if (percent < chance) {
-								skill.buff.forEach((data_) => {
-									const maxCount = skill.buffCount[skLvIdx];
-									if (buffDebuff[defData.idx][data_.type] === undefined) {
-										buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
-									}
-									buffDebuff[defData.idx][data_.type].count = maxCount;
-									buffDebuff[defData.idx][data_.type].maxCount = maxCount;
-									buffDebuff[defData.idx][data_.type].type = data_.type;
-									buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
-									buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
-								});
+							const maxCount = skill.buffCount[skLvIdx];
+							if (buffDebuff[defData.idx][data_.type] === undefined) {
+								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 							}
+							buffDebuff[defData.idx][data_.type].count = maxCount;
+							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
+							buffDebuff[defData.idx][data_.type].type = data_.type;
+							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
 						});
-						timeLine.forEach((data) => { //방어중 체크
-							if (data.order.team === 'enemy'){
-								//console.log(dIdx + '적군 방어중');
-								timeLine[turnIdx].order.targetIdx.forEach((tarIdx) => {
-									if (tarIdx === data.order.idx) {
-										defendSkillEnemy[data.order.idx] = {
-											idx: data.order.idx,
-											type: data.order.skIdx,
-										}
-										if (data.order.skIdx === 2) { //방어
-											enemyAction[data.order.idx] = 'defence0';
-										} else if (data.order.skIdx === 14) { //마법방어
-											enemyAction[data.order.idx] = 'defence1'; 
-										} else if (data.order.skIdx === 13) { //철벽방어
-											enemyAction[data.order.idx] = 'defence2'; 
-										} else if (data.order.skIdx === 15) { //나무뒤에 숨기
-											enemyAction[data.order.idx] = 'defenceTree'; 
-										}
-									}
-								});
+					});
+				} else if (skillCate === 6) {//적군 디버프 방어자 셋팅
+					defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
+						return {
+							ch: battleEnemy[data],
+							idx: data,
+						}
+					});
+					defencer.forEach((defData) => {
+						if (buffDebuff[defData.idx]) {
+							buffDebuff[defData.idx] = [];
+						}
+						buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
+						skill.buff.forEach((data_) => {
+							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
+							const maxCount = skill.buffCount[skLvIdx];
+							if (buffDebuff[defData.idx][data_.type] === undefined) {
+								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 							}
+							buffDebuff[defData.idx][data_.type].count = maxCount;
+							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
+							buffDebuff[defData.idx][data_.type].type = data_.type;
+							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
 						});
-					} else if (skillCate === 8 ){ //액티브스킬 버프추가
-						defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
-							return {
-								ch: battleAlly[data],
-								idx: data,
-							}
-						});
-						defencer.forEach((defData) => {
-							if (buffDebuff[defData.idx]) {
-								buffDebuff[defData.idx] = [];
-							}
-							buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
+					});
+				} else if (skillCate === 7){ //액티브스킬 디버프추가
+					defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
+						return {
+							ch: battleEnemy[data],
+							idx: data,
+						}
+					});
+					defencer.forEach((defData) => {
+						if (buffDebuff[defData.idx]) {
+							buffDebuff[defData.idx] = [];
+						}
+						buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
+						const skLvIdx = timeLine[turnIdx].order.skLv - 1;
+						//상태이상 확률
+						const chance = parseInt(skill.buffChance[skLvIdx]) / 100;
+						const percent = Math.random();
+						if (percent < chance) {
 							skill.buff.forEach((data_) => {
-								const skLvIdx = timeLine[turnIdx].order.skLv - 1;
 								const maxCount = skill.buffCount[skLvIdx];
 								if (buffDebuff[defData.idx][data_.type] === undefined) {
 									buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
@@ -570,258 +509,257 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 								buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
 								buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
 							});
-						});
-						timeLine.forEach((data) => { //방어중 체크
-							if (data.order.team === 'enemy'){
-								//console.log(dIdx + '적군 방어중');
-								timeLine[turnIdx].order.targetIdx.forEach((tarIdx) => {
-									if (tarIdx === data.order.idx) {
-										defendSkillEnemy[data.order.idx] = {
-											idx: data.order.idx,
-											type: data.order.skIdx,
-										}
-										if (data.order.skIdx === 2) { //방어
-											enemyAction[data.order.idx] = 'defence0';
-										} else if (data.order.skIdx === 14) { //마법방어
-											enemyAction[data.order.idx] = 'defence1'; 
-										} else if (data.order.skIdx === 13) { //철벽방어
-											enemyAction[data.order.idx] = 'defence2'; 
-										} else if (data.order.skIdx === 15) { //나무뒤에 숨기
-											enemyAction[data.order.idx] = 'defenceTree'; 
-										}
+						}
+					});
+					timeLine.forEach((data) => { //방어중 체크
+						if (data.order.team === 'enemy'){
+							//console.log(dIdx + '적군 방어중');
+							timeLine[turnIdx].order.targetIdx.forEach((tarIdx) => {
+								if (tarIdx === data.order.idx) {
+									defendSkillEnemy[data.order.idx] = {
+										idx: data.order.idx,
+										type: data.order.skIdx,
 									}
-								});
+									if (data.order.skIdx === 2) { //방어
+										enemyAction[data.order.idx] = 'defence0';
+									} else if (data.order.skIdx === 14) { //마법방어
+										enemyAction[data.order.idx] = 'defence1'; 
+									} else if (data.order.skIdx === 13) { //철벽방어
+										enemyAction[data.order.idx] = 'defence2'; 
+									} else if (data.order.skIdx === 15) { //나무뒤에 숨기
+										enemyAction[data.order.idx] = 'defenceTree'; 
+									}
+								}
+							});
+						}
+					});
+				} else if (skillCate === 8 ){ //액티브스킬 버프추가
+					defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
+						return {
+							ch: battleAlly[data],
+							idx: data,
+						}
+					});
+					defencer.forEach((defData) => {
+						if (buffDebuff[defData.idx]) {
+							buffDebuff[defData.idx] = [];
+						}
+						buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
+						skill.buff.forEach((data_) => {
+							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
+							const maxCount = skill.buffCount[skLvIdx];
+							if (buffDebuff[defData.idx][data_.type] === undefined) {
+								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 							}
+							buffDebuff[defData.idx][data_.type].count = maxCount;
+							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
+							buffDebuff[defData.idx][data_.type].type = data_.type;
+							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
 						});
-					} else if (skillCate === 9 ){ //액티브스킬 상태이상추가
+					});
+					timeLine.forEach((data) => { //방어중 체크
+						if (data.order.team === 'enemy'){
+							//console.log(dIdx + '적군 방어중');
+							timeLine[turnIdx].order.targetIdx.forEach((tarIdx) => {
+								if (tarIdx === data.order.idx) {
+									defendSkillEnemy[data.order.idx] = {
+										idx: data.order.idx,
+										type: data.order.skIdx,
+									}
+									if (data.order.skIdx === 2) { //방어
+										enemyAction[data.order.idx] = 'defence0';
+									} else if (data.order.skIdx === 14) { //마법방어
+										enemyAction[data.order.idx] = 'defence1'; 
+									} else if (data.order.skIdx === 13) { //철벽방어
+										enemyAction[data.order.idx] = 'defence2'; 
+									} else if (data.order.skIdx === 15) { //나무뒤에 숨기
+										enemyAction[data.order.idx] = 'defenceTree'; 
+									}
+								}
+							});
+						}
+					});
+				} else if (skillCate === 9 ){ //액티브스킬 상태이상추가
+					defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
+						return {
+							ch: battleEnemy[data],
+							idx: data,
+						}
+					});
+					defencer.forEach((defData) => {
+						if (buffDebuff[defData.idx]) {
+							buffDebuff[defData.idx] = [];
+						}
+						buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
+						skill.buff.forEach((data_) => {
+							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
+							const maxCount = skill.buffCount[skLvIdx];
+							if (buffDebuff[defData.idx][data_.type] === undefined) {
+								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
+							}
+							buffDebuff[defData.idx][data_.type].count = maxCount;
+							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
+							buffDebuff[defData.idx][data_.type].type = data_.type;
+							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
+						});
+					});
+					timeLine.forEach((data) => { //방어중 체크
+						if (data.order.team === 'enemy'){
+							//console.log(dIdx + '적군 방어중');
+							timeLine[turnIdx].order.targetIdx.forEach((tarIdx) => {
+								if (tarIdx === data.order.idx) {
+									defendSkillEnemy[data.order.idx] = {
+										idx: data.order.idx,
+										type: data.order.skIdx,
+									}
+									if (data.order.skIdx === 2) { //방어
+										enemyAction[data.order.idx] = 'defence0';
+									} else if (data.order.skIdx === 14) { //마법방어
+										enemyAction[data.order.idx] = 'defence1'; 
+									} else if (data.order.skIdx === 13) { //철벽방어
+										enemyAction[data.order.idx] = 'defence2'; 
+									} else if (data.order.skIdx === 15) { //나무뒤에 숨기
+										enemyAction[data.order.idx] = 'defenceTree'; 
+									}
+								}
+							});
+						}
+					});
+				} else if (skillCate === 10) {//날씨 변경
+					if (Math.random() < skill.buff[0].num[timeLine[turnIdx].order.skLv - 1].split('%')[0] / 100) {
+						setTimeout(() => {
+							setWeather((prev) => {
+								return {
+									...prev,
+									type:'w' + String(skill.buff[0].type).split('.')[0],
+									day: String(skill.buff[0].type).split('.')[1],
+									delay:1,
+								}
+							});
+						}, 500);
+					} else {
+						console.log('fail');
+					}
+				} else {//액티브스킬 방어자 셋팅
+					if (atkC[1] === "another") {
+						const defencerIdx = [Math.floor(Math.random()* battleEnemy.length)];
+						defencer = [{
+							ch: battleEnemy[defencerIdx],
+							idx: defencerIdx,
+						}];
+						timeLine[turnIdx].order.targetIdx = [defencerIdx];
+						timeLine[turnIdx].order.target = enemyPos[defencerIdx];
+					} else {
+						if (atkC[1] === "randomCount") {
+							atkS ++;
+							const randomCountPercent = 0.5 - atkS / 10;
+							if (Math.random() < randomCountPercent) {
+								atkC[0] ++;
+							} else {
+								atkC[0] --;
+							}
+						}
 						defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
 							return {
 								ch: battleEnemy[data],
 								idx: data,
-							}
-						});
-						defencer.forEach((defData) => {
-							if (buffDebuff[defData.idx]) {
-								buffDebuff[defData.idx] = [];
-							}
-							buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
-							skill.buff.forEach((data_) => {
-								const skLvIdx = timeLine[turnIdx].order.skLv - 1;
-								const maxCount = skill.buffCount[skLvIdx];
-								if (buffDebuff[defData.idx][data_.type] === undefined) {
-									buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
-								}
-								buffDebuff[defData.idx][data_.type].count = maxCount;
-								buffDebuff[defData.idx][data_.type].maxCount = maxCount;
-								buffDebuff[defData.idx][data_.type].type = data_.type;
-								buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
-								buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
-							});
-						});
-						timeLine.forEach((data) => { //방어중 체크
-							if (data.order.team === 'enemy'){
-								//console.log(dIdx + '적군 방어중');
-								timeLine[turnIdx].order.targetIdx.forEach((tarIdx) => {
-									if (tarIdx === data.order.idx) {
-										defendSkillEnemy[data.order.idx] = {
-											idx: data.order.idx,
-											type: data.order.skIdx,
-										}
-										if (data.order.skIdx === 2) { //방어
-											enemyAction[data.order.idx] = 'defence0';
-										} else if (data.order.skIdx === 14) { //마법방어
-											enemyAction[data.order.idx] = 'defence1'; 
-										} else if (data.order.skIdx === 13) { //철벽방어
-											enemyAction[data.order.idx] = 'defence2'; 
-										} else if (data.order.skIdx === 15) { //나무뒤에 숨기
-											enemyAction[data.order.idx] = 'defenceTree'; 
-										}
-									}
-								});
-							}
-						});
-					} else if (skillCate === 10) {//날씨 변경
-						if (Math.random() < skill.buff[0].num[timeLine[turnIdx].order.skLv - 1].split('%')[0] / 100) {
-							setTimeout(() => {
-								setWeather((prev) => {
-									return {
-										...prev,
-										type:'w' + String(skill.buff[0].type).split('.')[0],
-										day: String(skill.buff[0].type).split('.')[1],
-										delay:1,
-									}
-								});
-							}, 500);
-						} else {
-							console.log('fail');
-						}
-					} else {//액티브스킬 방어자 셋팅
-						if (atkC[1] === "another") {
-							const defencerIdx = [Math.floor(Math.random()* battleEnemy.length)];
-							defencer = [{
-								ch: battleEnemy[defencerIdx],
-								idx: defencerIdx,
-							}];
-							timeLine[turnIdx].order.targetIdx = [defencerIdx];
-							timeLine[turnIdx].order.target = enemyPos[defencerIdx];
-						} else {
-							if (atkC[1] === "randomCount") {
-								atkS ++;
-								const randomCountPercent = 0.5 - atkS / 10;
-								if (Math.random() < randomCountPercent) {
-									atkC[0] ++;
-								} else {
-									atkC[0] --;
-								}
-							}
-							defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
-								return {
-									ch: battleEnemy[data],
-									idx: data,
-								}
-							});
-						}
-						timeLine.forEach((data) => { //방어중 체크
-							if (data.order.team === 'enemy'){
-								//console.log(dIdx + '적군 방어중');
-								timeLine[turnIdx].order.targetIdx.forEach((tarIdx) => {
-									if (tarIdx === data.order.idx) {
-										defendSkillEnemy[data.order.idx] = {
-											idx: data.order.idx,
-											type: data.order.skIdx,
-										}
-										if (data.order.skIdx === 2) { //방어
-											enemyAction[data.order.idx] = 'defence0';
-										} else if (data.order.skIdx === 14) { //마법방어
-											enemyAction[data.order.idx] = 'defence1'; 
-										} else if (data.order.skIdx === 13) { //철벽방어
-											enemyAction[data.order.idx] = 'defence2'; 
-										} else if (data.order.skIdx === 15) { //나무뒤에 숨기
-											enemyAction[data.order.idx] = 'defenceTree'; 
-										}
-									}
-								});
 							}
 						});
 					}
-				} else { //적군 공격
-					attacker = battleEnemy[timeLine[turnIdx].order.idx];//공격자 셋팅
-					if (skillCate === 5) {//적군 버프 방어자 셋팅
-						defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
-							return {
-								ch: battleEnemy[data],
-								idx: data,
-							}
-						});
-						defencer.forEach((defData, idx) => {
-							if (buffDebuff[defData.idx]) {
-								buffDebuff[defData.idx] = [];
-							}
-							buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
-							skill.buff.forEach((data_) => {
-								const skLvIdx = timeLine[turnIdx].order.skLv - 1;
-								const maxCount = skill.buffCount[skLvIdx];
-								if (buffDebuff[defData.idx][data_.type] === undefined) {
-									buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
+					timeLine.forEach((data) => { //방어중 체크
+						if (data.order.team === 'enemy'){
+							//console.log(dIdx + '적군 방어중');
+							timeLine[turnIdx].order.targetIdx.forEach((tarIdx) => {
+								if (tarIdx === data.order.idx) {
+									defendSkillEnemy[data.order.idx] = {
+										idx: data.order.idx,
+										type: data.order.skIdx,
+									}
+									if (data.order.skIdx === 2) { //방어
+										enemyAction[data.order.idx] = 'defence0';
+									} else if (data.order.skIdx === 14) { //마법방어
+										enemyAction[data.order.idx] = 'defence1'; 
+									} else if (data.order.skIdx === 13) { //철벽방어
+										enemyAction[data.order.idx] = 'defence2'; 
+									} else if (data.order.skIdx === 15) { //나무뒤에 숨기
+										enemyAction[data.order.idx] = 'defenceTree'; 
+									}
 								}
-								buffDebuff[defData.idx][data_.type].count = maxCount;
-								buffDebuff[defData.idx][data_.type].maxCount = maxCount;
-								buffDebuff[defData.idx][data_.type].type = data_.type;
-								buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
-								buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
 							});
-						});
-					} else if (skillCate === 6) {//아군 디버프 방어자 셋팅
-						defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
-							return {
-								ch: battleAlly[data],
-								idx: data,
-							}
-						});
-						defencer.forEach((defData, idx) => {
-							if (buffDebuff[defData.idx]) {
-								buffDebuff[defData.idx] = [];
-							}
-							buffDebuff[defData.idx] = [...battleAlly[defData.idx].buffDebuff];
-							skill.buff.forEach((data_) => {
-								const skLvIdx = timeLine[turnIdx].order.skLv - 1;
-								const maxCount = skill.buffCount[skLvIdx];
-								if (buffDebuff[defData.idx][data_.type] === undefined) {
-									buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
-								}
-								buffDebuff[defData.idx][data_.type].count = maxCount;
-								buffDebuff[defData.idx][data_.type].maxCount = maxCount;
-								buffDebuff[defData.idx][data_.type].type = data_.type;
-								buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
-								buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
-							});
-						});
-					} else if (skillCate === 7) { //액티브스킬 디버프추가
-						defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
-							return {
-								ch: battleAlly[data],
-								idx: data,
-							}
-						});
-						defencer.forEach((defData) => {
-							if (buffDebuff[defData.idx]) {
-								buffDebuff[defData.idx] = [];
-							}
-							buffDebuff[defData.idx] = [...battleAlly[defData.idx].buffDebuff];
+						}
+					});
+				}
+			} else { //적군 공격
+				attacker = battleEnemy[timeLine[turnIdx].order.idx];//공격자 셋팅
+				if (skillCate === 5) {//적군 버프 방어자 셋팅
+					defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
+						return {
+							ch: battleEnemy[data],
+							idx: data,
+						}
+					});
+					defencer.forEach((defData, idx) => {
+						if (buffDebuff[defData.idx]) {
+							buffDebuff[defData.idx] = [];
+						}
+						buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
+						skill.buff.forEach((data_) => {
 							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
-							//상태이상 확률
-							const chance = parseInt(skill.buffChance[skLvIdx]) / 100;
-							if (Math.random() < chance) {
-								skill.buff.forEach((data_) => {
-									const maxCount = skill.buffCount[skLvIdx];
-									if (buffDebuff[defData.idx][data_.type] === undefined) {
-										buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
-									}
-									buffDebuff[defData.idx][data_.type].count = maxCount;
-									buffDebuff[defData.idx][data_.type].maxCount = maxCount;
-									buffDebuff[defData.idx][data_.type].type = data_.type;
-									buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
-									buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
-								});
+							const maxCount = skill.buffCount[skLvIdx];
+							if (buffDebuff[defData.idx][data_.type] === undefined) {
+								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 							}
+							buffDebuff[defData.idx][data_.type].count = maxCount;
+							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
+							buffDebuff[defData.idx][data_.type].type = data_.type;
+							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
 						});
-						timeLine.forEach((data) => {//방어중 체크
-							if (data.order.team === 'ally'){
-								//console.log(dIdx + '적군 방어중');
-								timeLine[turnIdx].order.targetIdx.forEach((tarIdx) => {
-									if (tarIdx === data.order.idx) {
-										defendSkillEnemy[data.order.idx] = {
-											idx: data.order.idx,
-											type: data.order.skIdx,
-										}
-										if (data.order.skIdx === 2) { //방어
-											allyAction[data.order.idx] = 'defence0';
-										} else if (data.order.skIdx === 14) { //마법방어
-											allyAction[data.order.idx] = 'defence1'; 
-										} else if (data.order.skIdx === 13) { //철벽방어
-											allyAction[data.order.idx] = 'defence2'; 
-										} else if (data.order.skIdx === 15) { //나무뒤에 숨기
-											allyAction[data.order.idx] = 'defenceTree'; 
-										}
-									}
-								});
+					});
+				} else if (skillCate === 6) {//아군 디버프 방어자 셋팅
+					defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
+						return {
+							ch: battleAlly[data],
+							idx: data,
+						}
+					});
+					defencer.forEach((defData, idx) => {
+						if (buffDebuff[defData.idx]) {
+							buffDebuff[defData.idx] = [];
+						}
+						buffDebuff[defData.idx] = [...battleAlly[defData.idx].buffDebuff];
+						skill.buff.forEach((data_) => {
+							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
+							const maxCount = skill.buffCount[skLvIdx];
+							if (buffDebuff[defData.idx][data_.type] === undefined) {
+								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 							}
+							buffDebuff[defData.idx][data_.type].count = maxCount;
+							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
+							buffDebuff[defData.idx][data_.type].type = data_.type;
+							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
 						});
-					} else if (skillCate === 8) { //액티브스킬 버프추가
-					} else if (skillCate === 9) { //액티브스킬 상태이상추가
-						defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
-							return {
-								ch: battleAlly[data],
-								idx: data,
-							}
-						});
-						defencer.forEach((defData, idx) => {
-							if (buffDebuff[defData.idx]) {
-								buffDebuff[defData.idx] = [];
-							}
-							buffDebuff[defData.idx] = [...battleAlly[defData.idx].buffDebuff];
+					});
+				} else if (skillCate === 7) { //액티브스킬 디버프추가
+					defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
+						return {
+							ch: battleAlly[data],
+							idx: data,
+						}
+					});
+					defencer.forEach((defData) => {
+						if (buffDebuff[defData.idx]) {
+							buffDebuff[defData.idx] = [];
+						}
+						buffDebuff[defData.idx] = [...battleAlly[defData.idx].buffDebuff];
+						const skLvIdx = timeLine[turnIdx].order.skLv - 1;
+						//상태이상 확률
+						const chance = parseInt(skill.buffChance[skLvIdx]) / 100;
+						if (Math.random() < chance) {
 							skill.buff.forEach((data_) => {
-								const skLvIdx = timeLine[turnIdx].order.skLv - 1;
 								const maxCount = skill.buffCount[skLvIdx];
 								if (buffDebuff[defData.idx][data_.type] === undefined) {
 									buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
@@ -832,93 +770,141 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 								buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
 								buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
 							});
-						});
-						timeLine.forEach((data) => {//방어중 체크
-							if (data.order.team === 'ally'){
-								//console.log(dIdx + '적군 방어중');
-								timeLine[turnIdx].order.targetIdx.forEach((tarIdx) => {
-									if (tarIdx === data.order.idx) {
-										defendSkillEnemy[data.order.idx] = {
-											idx: data.order.idx,
-											type: data.order.skIdx,
-										}
-										if (data.order.skIdx === 2) { //방어
-											allyAction[data.order.idx] = 'defence0';
-										} else if (data.order.skIdx === 14) { //마법방어
-											allyAction[data.order.idx] = 'defence1'; 
-										} else if (data.order.skIdx === 13) { //철벽방어
-											allyAction[data.order.idx] = 'defence2'; 
-										} else if (data.order.skIdx === 15) { //나무뒤에 숨기
-											allyAction[data.order.idx] = 'defenceTree'; 
-										}
-									}
-								});
-							}
-						});
-					} else if (skillCate === 10) {//날씨 변경
-						if (Math.random() < skill.buff[0].num[timeLine[turnIdx].order.skLv - 1].split('%')[0] / 100) {
-							setTimeout(() => {
-								setWeather((prev) => {
-									return {
-										...prev,
-										type:'w' + String(skill.buff[0].type).split('.')[0],
-										day: String(skill.buff[0].type).split('.')[1],
-										delay:1,
-									}
-								});
-							}, 500);
-						} else {
-							console.log('fail');
 						}
-					} else {//액티브스킬 방어자 셋팅
-						if (atkC[1] === "another") {
-							const defencerIdx = [Math.floor(Math.random()* battleAlly.length)];
-							defencer = [{
-								ch: battleAlly[defencerIdx],
-								idx: defencerIdx,
-							}];
-							timeLine[turnIdx].order.targetIdx = [defencerIdx];
-							timeLine[turnIdx].order.target = allyPos[defencerIdx].pos;
-						} else {
-							if (atkC[1] === "randomCount") {
-								atkS ++;
-								const randomCountPercent = 0.5 - atkS / 10;
-								if (Math.random() < randomCountPercent) {
-									atkC[0] ++;
-								} else {
-									atkC[0] --;
-								}
-							}
-							defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
-								return {
-									ch: battleAlly[data],
-									idx: data,
+					});
+					timeLine.forEach((data) => {//방어중 체크
+						if (data.order.team === 'ally'){
+							//console.log(dIdx + '적군 방어중');
+							timeLine[turnIdx].order.targetIdx.forEach((tarIdx) => {
+								if (tarIdx === data.order.idx) {
+									defendSkillEnemy[data.order.idx] = {
+										idx: data.order.idx,
+										type: data.order.skIdx,
+									}
+									if (data.order.skIdx === 2) { //방어
+										allyAction[data.order.idx] = 'defence0';
+									} else if (data.order.skIdx === 14) { //마법방어
+										allyAction[data.order.idx] = 'defence1'; 
+									} else if (data.order.skIdx === 13) { //철벽방어
+										allyAction[data.order.idx] = 'defence2'; 
+									} else if (data.order.skIdx === 15) { //나무뒤에 숨기
+										allyAction[data.order.idx] = 'defenceTree'; 
+									}
 								}
 							});
 						}
-						timeLine.forEach((data) => {//방어중 체크
-							if (data.order.team === 'ally'){
-								//console.log(dIdx + '적군 방어중');
-								timeLine[turnIdx].order.targetIdx.forEach((tarIdx) => {
-									if (tarIdx === data.order.idx) {
-										defendSkillEnemy[data.order.idx] = {
-											idx: data.order.idx,
-											type: data.order.skIdx,
-										}
-										if (data.order.skIdx === 2) { //방어
-											allyAction[data.order.idx] = 'defence0';
-										} else if (data.order.skIdx === 14) { //마법방어
-											allyAction[data.order.idx] = 'defence1'; 
-										} else if (data.order.skIdx === 13) { //철벽방어
-											allyAction[data.order.idx] = 'defence2'; 
-										} else if (data.order.skIdx === 15) { //나무뒤에 숨기
-											allyAction[data.order.idx] = 'defenceTree'; 
-										}
+					});
+				} else if (skillCate === 8) { //액티브스킬 버프추가
+				} else if (skillCate === 9) { //액티브스킬 상태이상추가
+					defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
+						return {
+							ch: battleAlly[data],
+							idx: data,
+						}
+					});
+					defencer.forEach((defData, idx) => {
+						if (buffDebuff[defData.idx]) {
+							buffDebuff[defData.idx] = [];
+						}
+						buffDebuff[defData.idx] = [...battleAlly[defData.idx].buffDebuff];
+						skill.buff.forEach((data_) => {
+							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
+							const maxCount = skill.buffCount[skLvIdx];
+							if (buffDebuff[defData.idx][data_.type] === undefined) {
+								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
+							}
+							buffDebuff[defData.idx][data_.type].count = maxCount;
+							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
+							buffDebuff[defData.idx][data_.type].type = data_.type;
+							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
+						});
+					});
+					timeLine.forEach((data) => {//방어중 체크
+						if (data.order.team === 'ally'){
+							//console.log(dIdx + '적군 방어중');
+							timeLine[turnIdx].order.targetIdx.forEach((tarIdx) => {
+								if (tarIdx === data.order.idx) {
+									defendSkillEnemy[data.order.idx] = {
+										idx: data.order.idx,
+										type: data.order.skIdx,
 									}
-								});
+									if (data.order.skIdx === 2) { //방어
+										allyAction[data.order.idx] = 'defence0';
+									} else if (data.order.skIdx === 14) { //마법방어
+										allyAction[data.order.idx] = 'defence1'; 
+									} else if (data.order.skIdx === 13) { //철벽방어
+										allyAction[data.order.idx] = 'defence2'; 
+									} else if (data.order.skIdx === 15) { //나무뒤에 숨기
+										allyAction[data.order.idx] = 'defenceTree'; 
+									}
+								}
+							});
+						}
+					});
+				} else if (skillCate === 10) {//날씨 변경
+					if (Math.random() < skill.buff[0].num[timeLine[turnIdx].order.skLv - 1].split('%')[0] / 100) {
+						setTimeout(() => {
+							setWeather((prev) => {
+								return {
+									...prev,
+									type:'w' + String(skill.buff[0].type).split('.')[0],
+									day: String(skill.buff[0].type).split('.')[1],
+									delay:1,
+								}
+							});
+						}, 500);
+					} else {
+						console.log('fail');
+					}
+				} else {//액티브스킬 방어자 셋팅
+					if (atkC[1] === "another") {
+						const defencerIdx = [Math.floor(Math.random()* battleAlly.length)];
+						defencer = [{
+							ch: battleAlly[defencerIdx],
+							idx: defencerIdx,
+						}];
+						timeLine[turnIdx].order.targetIdx = [defencerIdx];
+						timeLine[turnIdx].order.target = allyPos[defencerIdx].pos;
+					} else {
+						if (atkC[1] === "randomCount") {
+							atkS ++;
+							const randomCountPercent = 0.5 - atkS / 10;
+							if (Math.random() < randomCountPercent) {
+								atkC[0] ++;
+							} else {
+								atkC[0] --;
+							}
+						}
+						defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
+							return {
+								ch: battleAlly[data],
+								idx: data,
 							}
 						});
 					}
+					timeLine.forEach((data) => {//방어중 체크
+						if (data.order.team === 'ally'){
+							//console.log(dIdx + '적군 방어중');
+							timeLine[turnIdx].order.targetIdx.forEach((tarIdx) => {
+								if (tarIdx === data.order.idx) {
+									defendSkillEnemy[data.order.idx] = {
+										idx: data.order.idx,
+										type: data.order.skIdx,
+									}
+									if (data.order.skIdx === 2) { //방어
+										allyAction[data.order.idx] = 'defence0';
+									} else if (data.order.skIdx === 14) { //마법방어
+										allyAction[data.order.idx] = 'defence1'; 
+									} else if (data.order.skIdx === 13) { //철벽방어
+										allyAction[data.order.idx] = 'defence2'; 
+									} else if (data.order.skIdx === 15) { //나무뒤에 숨기
+										allyAction[data.order.idx] = 'defenceTree'; 
+									}
+								}
+							});
+						}
+					});
 				}
 			}
 			let turnIdx_ = turnIdx;
@@ -981,16 +967,21 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 										avoid = true;
 										team[defData.idx] = 'avoid' + avoidNum;
 									}
-									const counterChance = Math.random();
-									if (false) {//반격 확률 계산
-										//&& defencer.length > 1
-										counterAtk = true;
-										counterAttacker = defencer[0].ch;
-										counterDefencer = [{
-											ch: attacker,
-											idx: timeLine[turnIdx].order.idx,
-										}];
-										counterTeam = timeLine[turnIdx].order.team;
+									const counterChance = Math.random() < .1; //반격 확률
+									if (counterChance && atkS === 0 && timeLine[turnIdx].order.skIdx !== 17 && timeLine[turnIdx].order.targetIdx.length === 1) {//반격 확률 계산, 연속공격중 마지막일때만, 반격이 아닐경우, 광역기가 아닐경우
+										timeLine.splice(turnIdx + 1, 0, {
+											order:{
+												team: timeLine[turnIdx].order.team === 'ally' ? 'enemy' : 'ally',
+												idx: timeLine[turnIdx].order.targetIdx[0],
+												skIdx: 17,
+												skLv: 1,
+												enemyTarget: true,
+												target: timeLine[turnIdx].order.team === 'ally' ? allyPos[timeLine[turnIdx].order.idx].pos : enemyPos[timeLine[turnIdx].order.idx],
+												targetIdx: [timeLine[turnIdx].order.idx],
+												sp: 0,
+											},
+											state:defencer[0].ch.state,
+										});
 									}
 								}
 							} else { //defence를 했으면
@@ -1173,13 +1164,17 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 						} else {
 							defNum = defEnemy;
 						}
-						const attackerSkill = attacker.hasSkill.filter((skData) => {
-							if (counterAtk) {
-								return skData.idx === 1; 
-							} else {
+						let attackerSkill = [];
+						if (timeLine[turnIdx].order.skIdx === 17) {
+							attackerSkill = [{
+								idx: 17,
+								lv: 1,
+							}];
+						} else {
+							attackerSkill = attacker.hasSkill.filter((skData) => {
 								return skData.idx === timeLine[turnIdx].order.skIdx;
-							}
-						});
+							});
+						}
 						gameData.skill[attackerSkill[0].idx].eff.forEach((skData) => {
 							const stateName = util.getStateName(skData.type).toLocaleLowerCase();
 							const skill = attackerSkill[0].lv > 5 ? 5 : attackerSkill[0].lv;
@@ -1217,7 +1212,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 							let targetIdx = [],
 								targetArr = [],
 								targetCount = 0;
-							if (timeLine[turnIdx].order.team === 'ally' || counterTeam === 'ally') {//아군 공격경우
+							if (timeLine[turnIdx].order.team === 'ally') {//아군 공격경우
 								if (skillCate === 5) {//버프
 									defencer.forEach((data) => {
 										targetIdx.push(allyPos[data.idx].pos);
@@ -1295,7 +1290,6 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 									setEnemyEffect([
 										...targetArr,
 									]);
-									console.log(buffDebuff);
 									defencer.forEach((defData, idx) => {
 										battleEnemy[defData.idx].hp -= dmg[idx];
 										if (typeof dmg[idx] === 'number') {
@@ -1369,10 +1363,6 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, {
 									atkCount: atkC,
 									atkStay: atkS,
-									counterAtk : counterAtk,
-									counterAttacker: counterAttacker,
-									counterDefencer: counterDefencer,
-									counterTeam : counterTeam,
 								});
 							}, 1000 / gameSpd);//공격 이펙트 효과시간
 						}, 200 / gameSpd);
