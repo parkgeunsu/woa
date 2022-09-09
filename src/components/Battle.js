@@ -1602,6 +1602,7 @@ const passiveBuff = (gameData, battleAlly, battleEnemy, allyEnemyPassive, allyPa
 								eff: passiveEff,
 							});
 						}
+						//test
 						if (state !== 'hp' || (state === 'hp' && !ally_['passive' + state])) {
 							if (passiveNum.indexOf('%') > 0) {
 								const percent = parseInt(passiveNum) / 100;
