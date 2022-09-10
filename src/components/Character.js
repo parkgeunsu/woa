@@ -135,7 +135,7 @@ const Character = ({
         <button onClick={() => {
           const option = {
             type:'equip',
-            part:Math.ceil(Math.random()*2),//장비만 해당
+            part:Math.ceil(Math.random()*3),//장비만 해당
             grade:1,
             lv:Math.round(Math.random()*40 + 60),
           }

@@ -45,6 +45,57 @@ export const items = {
             {idx:9,part:2,grade:1,display:29,na:{ko:'브리간딘',en:'Brigandine'},kg:20,price:1200,color:["#D1D3D4"],socket:4,txt:{ko:'가죽 겉 감 안에 철판을 덧댄 갑옷, 두정갑',en:'Armor with iron plate inside leather cover'},eff:[{type:4,num:['300','450']}],set:0},
             {idx:10,part:2,grade:1,display:30,na:{ko:'플레이트 메일',en:'Plate Mail'},kg:27,price:1500,color:["#000"],socket:5,txt:{ko:'강철판으로 만든 갑옷, 판금갑',en:'Armor made of steel plates'},eff:[{type:4,num:['450','600']}],set:0},
             {idx:11,part:2,grade:1,display:31,na:{ko:'풀 플레이트',en:'Full Plate'},kg:35,price:2000,color:["#fff"],socket:5,txt:{ko:'전신을 강철판으로 만든 갑옷, 판금갑',en:'Upgraded form of plate mail'},eff:[{type:4,num:['600','1000']}],set:0},
+        ],
+        3:[
+            {idx:0,part:3,grade:1,display:100,na:{ko:'마키리',en:'Makiri'},kg:1,price:100,color:["#EE1C4E, #987E2E"],socket:2,txt:{ko:'아이누족의 전통적인 칼. 마키리 자체가 아이누어로 칼이라는 의미이다. 여성용은 메노코마키리(メノコマキリ)라고 하며, 메노코(メノコ)라는 단어가 아이누어로 여자를 의미한다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:1,part:3,grade:1,display:101,na:{ko:'자마다르',en:'Jamadar'},kg:1,price:100,color:["#3E53A4, #FEE05F"],socket:2,txt:{ko:'인도에서 사용된 단검의 일종으로 서양권에 전파되어 서양에서는 자마다르를 \'카타르\'라 부름.'},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:2,part:3,grade:1,display:102,na:{ko:'장도',en:'Self Defense Knife'},kg:1,price:100,color:["#3E53A4","#000000","#FFFFFF"],socket:2,txt:{ko:'인도에서 사용된 단검의 일종으로 서양권에 전파되어 서양에서는 자마다르를 \'카타르\'라 부름.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:3,part:3,grade:1,display:103,na:{ko:'탄토',en:'Dagger'},kg:1,price:100,color:["#3E53A4","#FEBC12"],socket:2,txt:{ko:'탄토(短刀)란, 날 길이 1척(30, 3cm) 이하의 일본도의 총칭이다. 국내에서는 단도라고도 널리 불린다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:4,part:3,grade:1,display:104,na:{ko:'카람빗',en:'Karambit'},kg:1,price:100,color:["#3E53A4","#461422"],socket:2,txt:{ko:'말레이시아와 필리핀을 뿌리로 인도네시아 군도, 정확히는 술라웨시 서부에서 탄생한 유명한 다용도 나이프로 고대 원주민의 일상용 포켓나이프였다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:5,part:3,grade:1,display:105,na:{ko:'쿠나이',en:'Kunai'},kg:1,price:100,color:["#3E53A4","#27367A"],socket:2,txt:{ko:'닌자들이 사용했다고 알려진 무기. 성인 남성 손바닥만한 길이의 단검 손잡이 끝에 고리가 달린 형태를 하고 있다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:6,part:3,grade:1,display:106,na:{ko:'쿠크리',en:'Kukri'},kg:1,price:100,color:["#3E53A4","#FEBC12"],socket:2,txt:{ko:'네팔 구르카족의 전통 도검. Kukri가 가장 보편화되었지만 Khukri, Khukuri 등으로 적기도 한다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:7,part:3,grade:1,display:107,na:{ko:'크리스',en:'Kris'},kg:1,price:100,color:["#3E53A4","#814F20"],socket:2,txt:{ko:'기본적으로 말레이시아와 인도네시아 등지의 검으로, 물결처럼 구불구불한 모양의 특이한 날을 가진 도검.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:8,part:3,grade:1,display:108,na:{ko:'월도',en:'Moon Blade'},kg:1,price:100,color:["#6DBE45","#3C2415"],socket:2,txt:{ko:'월도(月刀)는 외날에 긴 자루를 가진 도(刀) 계열의 무기를 일컫는다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:9,part:3,grade:1,display:109,na:{ko:'일본도',en:'Japanese Sword'},kg:1,price:100,color:["#3E53A4", "#EE1C4E"],socket:2,txt:{ko:'타치(太刀)나 우치가타나(打刀) 등을 포함하는 일본의 전통 도검이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:10,part:3,grade:1,display:110,na:{ko:'환도',en:'Military Sword'},kg:1,price:100,color:["#6DBE45", "#EE1C4E"],socket:2,txt:{ko:'한반도 지역 국가들의 전통 무기로, 고리를 사용하여 패용(佩用)하였던 도검(刀劍)들을 일컫는다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:11,part:3,grade:1,display:111,na:{ko:'환두대도',en:'Military Large Sword'},kg:1,price:100,color:["#6DBE45", "#FEBC12"],socket:2,txt:{ko:'대한민국 역사에서 가장 오랫동안 사용한 군사 도검이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:12,part:3,grade:1,display:112,na:{ko:'글라디우스',en:'Gradius'},kg:1,price:100,color:["#EE1C4E", "#B39C31"],socket:2,txt:{ko:'글라디우스는 로마군의 대표적인 한손검이다. 로마군의 표준 제식 무장이자 주력 무기였다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:13,part:3,grade:1,display:113,na:{ko:'레이피어',en:'Rapier'},kg:1,price:100,color:["#EE1C4E", "#A7A9AC"],socket:2,txt:{ko:'16~17세기 유럽에서 사용된 검으로 베기보다는 찌르기에 특화된 형태의 검.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:14,part:3,grade:1,display:114,na:{ko:'세이버',en:'Sabre'},kg:1,price:100,color:["#3E53A4", "#FBB040","#754C29"],socket:2,txt:{ko:'근대 유럽을 대표하는 기병용 장검. 주로 한손으로 쓰는 휘어진 외날도(刀)로 알려져 있다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:15,part:3,grade:1,display:115,na:{ko:'시미터',en:'Scimitar'},kg:1,price:100,color:["#3E53A4", "#FBB040","#754C29"],socket:2,txt:{ko:'중동에서 기원한 곡도를 일컫는 말. 흔히 초승달처럼 휘어있는 곡률이 큰 중동제 곡도.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:16,part:3,grade:1,display:116,na:{ko:'브로드소드',en:'Broad Sword'},kg:1,price:100,color:["#EE1C4E", "#A5A4A4"],socket:2,txt:{ko:'중국의 도(刀, Dao)를 영어로 번역할 때 브로드소드라고 하는 경우도 종종 있다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:17,part:3,grade:1,display:117,na:{ko:'팔카타',en:'Falcata'},kg:1,price:100,color:["#EE1C4E", "#FBB040","#754C29"],socket:2,txt:{ko:'그리스의 중장보병 호플리테스들이 즐겨 쓴 검.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:18,part:3,grade:1,display:118,na:{ko:'편',en:'Whip'},kg:1,price:100,color:["#603913"],socket:2,txt:{ko:'중국의 병장기. 간혹 簡이라고 쓰기도 한다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:19,part:3,grade:1,display:119,na:{ko:'철편',en:'Bull Whip'},kg:1,price:100,color:["#603913"],socket:2,txt:{ko:'철편(鐵鞭)은 회초리와 비슷하게 생긴 타격 무기의 일종이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:20,part:3,grade:1,display:120,na:{ko:'금쇄봉',en:'Gold Mace'},kg:1,price:100,color:["#603913"],socket:2,txt:{ko:'중세 일본의 철퇴 중 하나. 카나사이보라고 읽으며, 테츠보(鉄棒), 혹은 카나보(金棒)라고도 불린다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:21,part:3,grade:1,display:121,na:{ko:'철퇴',en:'Mace'},kg:1,price:100,color:["#A7A9AC"],socket:2,txt:{ko:'철퇴(鐵槌)는 병장기의 하나로, 막대끝에 돌기나 무게추가 달려있어 한손으로 휘두를 수 있는 몽둥이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:22,part:3,grade:1,display:122,na:{ko:'톤파',en:'Tonfa'},kg:1,price:100,color:["#F7941E"],socket:2,txt:{ko:'중국 拐(괴) 단봉형 무기가 오키나와에 와서 변형되어 오키나와에서 유래한 날없는 타격 무기다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:23,part:3,grade:1,display:123,na:{ko:'극',en:'Oriental Polearm'},kg:1,price:100,color:["#3E53A4"],socket:2,txt:{ko:'戟. 중국의 고대 폴암으로 긴 손잡이 끝에 단검이 붙었고 그보다 조금 밑에 보조날이 달린 무기.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:24,part:3,grade:1,display:124,na:{ko:'나기나타',en:'Oriental Glaive'},kg:1,price:100,color:["#3E53A4","#FBB040"],socket:2,txt:{ko:'일본 헤이안 시대부터 쓰이기 시작한 전근대 장병도(長柄刀) 계열 무기이며, 장병기의 일종이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:25,part:3,grade:1,display:125,na:{ko:'차크람',en:'Chakram'},kg:1,price:100,color:["#ED1F24"],socket:2,txt:{ko:'시크교 신도의 전통 투척 무기, 산스크리트어로 \'둥근\', \'원\', \'바퀴\' 등을 뜻하는 차크라에서 유래하였다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:26,part:3,grade:1,display:126,na:{ko:'수리검',en:'Shuriken'},kg:1,price:100,color:["#BCBEC0","#000000"],socket:2,txt:{ko:'던져서 적을 맞히는 것을 목적으로 하는 표창 계열의 무기.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:27,part:3,grade:1,display:127,na:{ko:'궁',en:'Short Bow'},kg:1,price:100,color:["#70C169","#FBA919"],socket:2,txt:{ko:'화살을 먼거리로 보내기위한 도구, 원거리 무기',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:28,part:3,grade:1,display:128,na:{ko:'장궁',en:'Long Bow'},kg:1,price:100,color:["#ED1F24","#FBA919"],socket:2,txt:{ko:'궁(활)보다 크기가 큰 원거리 무기',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:29,part:3,grade:1,display:129,na:{ko:'석궁',en:'Crossbow'},kg:1,price:100,color:["#A76928","#991B1E","#FBA919"],socket:2,txt:{ko:'활과 유사한 대표적인 발사 무기. 옛 한국에서는 쇠뇌라고 불렀다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:30,part:3,grade:1,display:130,na:{ko:'철선',en:'Iron Fan'},kg:1,price:100,color:["#EE1C4E"],socket:2,txt:{ko:'Iron Fan. War Fan. 쇠로 만든 부채. 믿기 어렵겠지만 무기이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:31,part:3,grade:1,display:131,na:{ko:'롱소드',en:'Long Sword'},kg:1,price:100,color:["#3E53A4"],socket:2,txt:{ko:'유럽에서 쓰인 양날 양손 도검이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:32,part:3,grade:1,display:132,na:{ko:'바스타드소드',en:'Bastard Sword'},kg:1,price:100,color:["#EE1C4E"],socket:2,txt:{ko:'폭의 변화가 매우 큰(테이퍼진) 검신을 지닌 롱소드.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:33,part:3,grade:1,display:133,na:{ko:'그레이트소드',en:'Great Sword'},kg:1,price:100,color:["#3E53A4","#831529"],socket:2,txt:{ko:'그레이트소드는 말 그대로 대검이라는 의미. 대검이라는 것 외에 단어가 특정짓는 특징은 없다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:34,part:3,grade:1,display:134,na:{ko:'익스큐셔너소드',en:'Executioner Sword'},kg:1,price:100,color:["#EE1C4E","#FBB040","#754C29"],socket:2,txt:{ko:'이름 그대로 사형집행인들이 죄인을 참수형에 처할때 쓰기 위해 특별히 만들어진 도검이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+
+
+
+
+
+
+
+
+
+
+
+
+            {idx:25,part:3,grade:3,display:125,na:{ko:'죽창',en:'Oriental Glaive'},kg:1,price:100,color:["#3E53A4","#FBB040"],socket:2,txt:{ko:'무기의 일종, 삼지창처럼 생겼으나 좌우의 가지 부분이 옆으로 갈라지는 형태로 생겼다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+            {idx:25,part:3,grade:3,display:125,na:{ko:'당파',en:'Oriental Glaive'},kg:1,price:100,color:["#3E53A4","#FBB040"],socket:2,txt:{ko:'죽창(竹槍)은 대나무로 만든 창을 말한다. 대창이라고도 불린다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
         ]
         //두석린갑(豆錫鱗甲) : 황동, 붉은 칠한 황동, 검은 칠한 황동을 번갈아 사용한 의장용 갑옷
         //도금동엽갑(塗金銅葉甲) : 도금한 비늘을 사용한 의장용 황금 갑옷
