@@ -135,18 +135,21 @@ const Character = ({
         <button onClick={() => {
           const option = {
             type:'equip',
-            part:Math.ceil(Math.random()*3),//장비만 해당
+            items:"3-4-3",//Math.ceil(Math.random()*3),//장비만 해당
+            //아이템종류, 세부종류(검,단검), 매직등급
             grade:1,
             lv:Math.round(Math.random()*40 + 60),
+            sealed:true,
           }
           util.getItem(saveData, gameData, changeSaveData, option, lang);
         }}>아이템 추가</button><br/>
         <button onClick={() => {
           const option = {
             type:'equip',
-            part:Math.ceil(Math.random()*2),//장비만 해당
+            items:Math.ceil(Math.random()*2),//장비만 해당
             grade:1,
             lv:Math.round(Math.random()*40 + 60),
+            sealed:true,
           }
           util.getItem(saveData, gameData, changeSaveData, option, lang);
         }}>동물스킬 리셋</button>

@@ -889,11 +889,20 @@ export const util = { //this.loadImage();
   getItem: (saveData, gameData, changeSaveData, option, lang) => {
     let save = {...saveData};//장비 아이템 복사
     let itemLv = option.lv;
-    const type = option.type || 'equip',
-      part = option.part || 2,//아이템 부위(장비만 해당)
-      itemGroup = gameData.items[type][part],
-      itemIdx = Math.floor(Math.random() * itemGroup.length),//아이템 번호
-      selectItem = itemGroup[itemIdx];
+    const type = option.type || 'equip';
+    let item = '';
+    if (type === 'equip') {
+      if (typeof option.items === 'object') {//["3-4-3","3-4-8"]
+
+      } else {
+        const items = option.items.split('-');//아이템 부위(장비만 해당)
+        item = items[0] === 3 ? gameData.items[type][items[0]][0][items[1]][items[2]] : gameData.items[type][items[0]][0][0][items[1]];
+      }
+    } else {
+      item = option.items;
+    }
+    const itemIdx = Math.floor(Math.random() * item.length),//아이템 번호
+      selectItem = item[itemIdx];
     const grade = util.getItemGrade();
     const slotNum = Math.round(Math.random() * selectItem.socket);
     let hole = new Array(slotNum).fill(0);
