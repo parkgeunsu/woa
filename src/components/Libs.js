@@ -1,3 +1,5 @@
+import { items } from "gamedata/items"
+
 export const fn = { //this.el = {};this.set_element();this.prototype();
   canvas: () => {
     CanvasRenderingContext2D.prototype.roundedRectangle = function(x, y, width, height, rounded) {
@@ -890,19 +892,80 @@ export const util = { //this.loadImage();
     let save = {...saveData};//장비 아이템 복사
     let itemLv = option.lv;
     const type = option.type || 'equip';
-    let item = '';
-    if (type === 'equip') {
-      if (typeof option.items === 'object') {//["3-4-3","3-4-8"]
-
+    let item = '',
+      itemData = {},
+      itemLength = 0,
+      weaponType = 0;
+    if (typeof option.items === 'object') {//object["3-4-3","3-4-8"]
+      item = option.items[Math.floor(Math.random() * option.items.length)];
+      if (type === 'equip') {
+        const items = item.split('-');
+        itemData = items[0] === "3" ? gameData.items[type][items[0]][items[1]][0][items[2]] : gameData.items[type][items[0]][0][0][items[1]];
+        if (items[0] === "3") {
+          weaponType = items[1];
+        }
       } else {
-        const items = option.items.split('-');//아이템 부위(장비만 해당)
-        item = items[0] === 3 ? gameData.items[type][items[0]][0][items[1]][items[2]] : gameData.items[type][items[0]][0][0][items[1]];
+        itemData = gameData.items[type][item];
       }
-    } else {
+    } else if (typeof option.items === 'string'){//string"3-4-3"
       item = option.items;
+      if (type === 'equip') {
+        const items = item.split('-');
+        itemData = items[0] === "3" ? gameData.items[type][items[0]][items[1]][0][items[2]] : gameData.items[type][items[0]][0][0][items[1]];
+        if (items[0] === "3") {
+          weaponType = items[1];
+        }
+      } else {
+        itemData = gameData.items[type][item];
+      }
+    } else {//number(그룹중 선택)34
+      if (type === 'equip') {//장비일 경우
+        const cate = String(option.items);
+        if(cate[0] === "3") {//무기일 경우
+          itemLength = gameData.items[type][cate[0]][cate[1]][0].length;
+          itemData = gameData.items[type][cate[0]][cate[1]][0][Math.floor(Math.random() * itemLength)];
+          weaponType = cate[1];
+        } else {//무기가 아닐 경우
+          itemLength = gameData.items[type][option.items][0].length;
+          itemData = gameData.items[type][option.items][0][Math.floor(Math.random() * itemLength)];
+        }
+      } else {//장비가 아닐 경우
+        itemLength = gameData.items[type].length;
+        itemData = gameData.items[type][Math.floor(Math.random() * itemLength)];
+      }
     }
-    const itemIdx = Math.floor(Math.random() * item.length),//아이템 번호
-      selectItem = item[itemIdx];
+    // if (type === 'equip') {
+    //   const items = item.split('-');//아이템 부위(장비만 해당)
+    //   itemData = items[0] === 3 ? gameData.items[type][items[0]][0][items[1]][items[2]] : gameData.items[type][items[0]][0][0][items[1]];
+    // } else {
+    //   item = option.items;
+    // }
+    // const itemIdx = Math.floor(Math.random() * item.length),//아이템 번호
+    //const selectItem = item[itemIdx];
+    const selectItem = itemData;
+    if (option.sealed) {
+      console.log(selectItem.eff)
+      const itemObj = {
+        idx:selectItem.idx,
+        part:selectItem.part,
+        grade:1,
+        slot:0,//아이템 홀착용 갯수
+        hole:[],
+        color:[],
+        baseEff:[{
+          type:selectItem.eff[0].type,
+          num:selectItem.eff[0].num[0] + ' ~ ' + selectItem.eff[0].num[1],
+        }],
+        addEff:[],
+        mark:'',
+        markNum:0,
+        modifier:{ko:'미개봉',en:'Sealed'},
+        weaponType:0,
+      }
+      save.items[type].push(itemObj);
+      changeSaveData(save);
+      return;
+    }
     const grade = util.getItemGrade();
     const slotNum = Math.round(Math.random() * selectItem.socket);
     let hole = new Array(slotNum).fill(0);
@@ -1029,6 +1092,7 @@ export const util = { //this.loadImage();
       mark:mark,
       markNum:markNum,
       modifier:modifier,
+      weaponType:weaponType,
     }
     save.items[type].push(itemObj);
     changeSaveData(save);

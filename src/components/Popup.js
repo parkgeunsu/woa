@@ -150,7 +150,8 @@ const buttonEvent = (dataObj) => {
     const totalKg = Math.floor(gameData.ch[saveCh.idx].st1 / 0.3)/10;
     saveCh.items.forEach((item) => {
       if (Object.keys(item).length !== 0) {
-        currentKg += gameData.items.equip[item.part][item.idx].kg;
+        const itemsGrade = item.grade < 5 ? 0 : item.grade - 5;
+        currentKg += item.part === 3 ? gameData.items.equip[item.part][item.weaponType][itemsGrade][item.idx].kg : gameData.items.equip[item.part][0][itemsGrade][item.idx].kg;
       }
     });
     saveCh.items.forEach((item, itemSlot)=>{
@@ -282,7 +283,8 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
 			</ul>
 		);
 	} else if (type === 'equip') {
-    const items = gameData.items.equip[dataObj.saveItemData.part][dataObj.saveItemData.idx];
+    const itemsGrade = dataObj.saveItemData.grade < 5 ? 0 : dataObj.saveItemData.grade - 5;
+    const items = dataObj.saveItemData.part === 3 ? gameData.items.equip[dataObj.saveItemData.part][dataObj.saveItemData.weaponType][itemsGrade][dataObj.saveItemData.idx] : gameData.items.equip[dataObj.saveItemData.part][0][itemsGrade][dataObj.saveItemData.idx];
     const saveItems = dataObj.saveItemData;
     const grade = saveItems.grade || items.grade;
     const setsInfo = gameData.items.set_type[items.set];
@@ -415,7 +417,8 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
       </PopupItemContainer>
 		);
 	} else if (type === 'hequip') {
-    const items = gameData.items.equip[dataObj.saveItemData.part][dataObj.saveItemData.idx];
+    const itemsGrade = dataObj.saveItemData.grade < 5 ? 0 : dataObj.saveItemData.grade - 5;
+    const items = dataObj.saveItemData.part === 3 ? gameData.items.equip[dataObj.saveItemData.part][dataObj.saveItemData.weaponType][itemsGrade][dataObj.saveItemData.idx] : gameData.items.equip[dataObj.saveItemData.part][0][itemsGrade][dataObj.saveItemData.idx];
     const saveItems = dataObj.saveItemData;
     const grade = saveItems.grade || items.grade;
     const setsInfo = gameData.items.set_type[items.set];

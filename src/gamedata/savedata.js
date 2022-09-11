@@ -27,7 +27,7 @@ export const save = {
       ]},
       {"idx":0,"stateType":0,"element":[8],"grade":5,"mark":0,"stateLuk":200,"lv":40,"exp":0,"hasExp":1000,"actionPoint":20,"battleBeige":[0,0,0,0],"animalBeige":0,"items":[
         {"idx": 2,"part": 1,"grade": 2,"slot": 1,"hole": [0],"color": ["#d9e506","#52057f"],"baseEff": [{"type": 4,"num": ["82","98","121","140"]}],"addEff": [{"type": 13,"num": ["46"]},{"type": 4,"num": ["178"]},{"type": 8,"num": ["4"]},{"type": 11,"num": ["25"]}],"mark": 0,"markNum": 2,"modifier": {"ko":"사파이어의 고양이두마리","en":"Sappire's two Cats"}},
-        {"idx": 8,"part": 2,"grade": 2,"slot": 4,"hole": [0,0,0,0],"color": ["#706357"],"baseEff": [{"type": 4,"num": ["305","386","480","583"]}],"addEff": [{"type": 13,"num": ["2"]},{"type": 13,"num": ["18"]},{"type": 4,"num": ["359"]}],"mark": 0,"markNum": 4,"modifier": {"ko":"다이아몬드의 고양이네마리","en":"Diamods's four Cats"}},
+        {"idx": 0,"part": 2,"grade": 2,"slot": 4,"hole": [0,0,0,0],"color": ["#706357"],"baseEff": [{"type": 4,"num": ["305","386","480","583"]}],"addEff": [{"type": 13,"num": ["2"]},{"type": 13,"num": ["18"]},{"type": 4,"num": ["359"]}],"mark": 0,"markNum": 4,"modifier": {"ko":"다이아몬드의 고양이네마리","en":"Diamods's four Cats"}},
         {},
         {},
         {},

@@ -40,7 +40,7 @@ const CharacterItems = ({
   const [msgOn, setMsgOn] = useState(false);
   const [kg, setKg] = useState([0,0]);
   const [msg, setMsg] = useState("");
-  const handlePopup = (itemType, itemIdx, itemSaveSlot, itemPart) => {
+  const handlePopup = (itemType, itemIdx, itemSaveSlot, itemPart, itemGrade, itemWeaponType) => {
     if( itemType ){
       let saveItemData;
       if (itemType === 'equip') {
@@ -51,9 +51,10 @@ const CharacterItems = ({
         saveItemData = invenItems[itemType][itemSaveSlot];
       }
       popupType.current = itemType;
+      const itemsGrade = itemGrade < 5 ? 0 : itemGrade - 5;
       let gameItemData = '';
       if (itemType === 'hequip' || itemType === 'equip') {
-        gameItemData = gameItem['equip'][itemPart][itemIdx];
+        gameItemData = itemPart === 3 ? gameItem['equip'][itemPart][itemWeaponType][itemsGrade][itemIdx] : gameItem['equip'][itemPart][0][itemsGrade][itemIdx];
       } else {
         gameItemData = gameItem[itemType][itemIdx];
       }
@@ -74,7 +75,8 @@ const CharacterItems = ({
     let kg = 0;
     saveItems.current.forEach((itemData) => {
       if (Object.keys(itemData).length !== 0) {
-        kg += gameItem.equip[itemData.part][itemData.idx].kg;
+        const itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5;
+        kg += itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx].kg : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx].kg;
       }
     })
     setKg([kg, Math.floor(gameData.ch[saveData.ch[slotIdx].idx].st1 / 0.3)/10]);
@@ -112,10 +114,11 @@ const CharacterItems = ({
                 { saveItems.current && saveItems.current.map((data, idx) => {
                   const itemChk = Object.keys(data).length;
                   if (itemChk !== 0) {
-                    const items = gameItem.equip[data.part][data.idx];
+                    const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
+                    const items = data.part === 3 ? gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx] : gameItem.equip[data.part][0][itemsGrade][data.idx];
                     const itemsHole = data.hole;
                     return (
-                      <li key={`equip${idx}`} onClick={() => {handlePopup('equip', data.idx, idx, data.part)}} className={`item item${gameData.animal_type[animalIdx].equip[idx]} ${gameData.itemGrade.txt_e[data.grade].toLowerCase()}`}>
+                      <li key={`equip${idx}`} onClick={() => {handlePopup('equip', data.idx, idx, data.part, data.grade, data.weaponType)}} className={`item item${gameData.animal_type[animalIdx].equip[idx]} ${gameData.itemGrade.txt_e[data.grade].toLowerCase()}`}>
                         <em link={`equip_${data.idx}_${idx}`}>
                           {/* <ItemPic className="pic" itemPic={imgSet.itemEquip[items.display]}></ItemPic> */}
                           <ItemPic className="pic">
@@ -141,10 +144,11 @@ const CharacterItems = ({
             <div className="has_items scroll-y">
               <ul className="h_items">
                 { invenItems.equip && invenItems.equip.map((data, idx) => {
-                  const items = gameItem.equip[data.part][data.idx];
+                  const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
+                  const items = data.part === 3 ? gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx] : gameItem.equip[data.part][0][itemsGrade][data.idx];
                   const itemsHole = data.hole;
                   return (
-                    <li key={`hequip${idx}`} onClick={() => {handlePopup('hequip', data.idx, idx, data.part)}} className={`item item${data.part} ${gameData.itemGrade.txt_e[data.grade].toLowerCase()}`} data-itemnum={`equip_${data.idx}`}>
+                    <li key={`hequip${idx}`} onClick={() => {handlePopup('hequip', data.idx, idx, data.part, data.grade, data.weaponType)}} className={`item item${data.part} ${gameData.itemGrade.txt_e[data.grade].toLowerCase()}`} data-itemnum={`equip_${data.idx}`}>
                       <em link={`hequip_${data.idx}_${idx}`}>
                         <ItemPic className="pic">
                           <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color)}}>
