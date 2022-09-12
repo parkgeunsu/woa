@@ -1077,6 +1077,7 @@
 
 .ch_wrap .items li .txt{position:absolute;left:2px;right:2px;bottom:2px;font-size:11px;text-align:center;z-index:1;}
 .ch_wrap .items li .pic{position:absolute;left:0;right:0;bottom:0;top:0;width:100%;}
+.ch_wrap .items li .pic.sealed{filter:brightness(0.3) drop-shadow(0px 0px 1px #fff);}
 .ch_wrap .items li .lv{position:absolute;left:2px;top:2px;right:2px;bottom:2px;z-index:2;text-align:left;}
 .ch_wrap .items li .hole{position:absolute;left:2px;right:2px;bottom:2px;z-index:3;}
 .ch_wrap .items li .hole .hole_slot{margin:auto 1px;width:calc(25% - 2px);}

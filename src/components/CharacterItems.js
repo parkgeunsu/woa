@@ -150,7 +150,7 @@ const CharacterItems = ({
                   return (
                     <li key={`hequip${idx}`} onClick={() => {handlePopup('hequip', data.idx, idx, data.part, data.grade, data.weaponType)}} className={`item item${data.part} ${gameData.itemGrade.txt_e[data.grade].toLowerCase()}`} data-itemnum={`equip_${data.idx}`}>
                       <em link={`hequip_${data.idx}_${idx}`}>
-                        <ItemPic className="pic">
+                        <ItemPic className={`pic ${data.sealed ? "sealed" : ""}`}>
                           <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color)}}>
                           </svg>
                         </ItemPic>

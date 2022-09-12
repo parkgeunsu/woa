@@ -3,7 +3,7 @@ import { AppContext } from 'App';
 import { util } from 'components/Libs';
 import PopupContainer from 'components/PopupContainer';
 import imgRing from 'images/ring/ring_.png';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useLayoutEffect, useState} from 'react';
 import styled from 'styled-components';
 
   //   //이벤트 바인딩
@@ -267,20 +267,20 @@ const buttonEvent = (dataObj) => {
     dataObj.changeSaveData(sData);//데이터 저장
     dataObj.showPopup(false);
   } else if (dataObj.type === 'itemUnpack') { //아이템 포장풀기
-    console.log(sData.items, dataObj.data);
-    // sData.info.money += dataObj.data.gameItem.price;//돈 계산
-    // sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
+    //sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
+    const itemInfo = dataObj.data.saveItemData.part === 3 ? `${dataObj.data.saveItemData.part}-${dataObj.data.saveItemData.weaponType}-${dataObj.data.saveItemData.idx}` : `${dataObj.data.saveItemData.part}-${dataObj.data.saveItemData.idx}`;
     const option = {
       type:'equip',
-      items:3,//Math.ceil(Math.random()*3),//장비만 해당
+      items:itemInfo,
       //아이템종류, 세부종류(검,단검), 매직등급
       grade:1,
       lv:Math.round(Math.random()*40 + 60),
-      sealed:true,
+      sealed:false,
+      unpackSlot:dataObj.data.itemSaveSlot,
     }
-    //util.getItem(saveData, gameData, changeSaveData, option, lang);
+    util.getItem(sData, gameData, dataObj.changeSaveData, option, dataObj.lang);
     //dataObj.changeSaveData(sData);//데이터 저장
-    //dataObj.showPopup(false);
+    // dataObj.showPopup(false);
   } else if (dataObj.type === 'holeEquip') {
     dataObj.showPopup(false);
   }
@@ -431,6 +431,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               msgText: msgText,
               showMsg: showMsg,
               showPopup: showPopup,
+              lang: lang,
             })}} data-buttontype="itemRelease">{lang === 'ko' ? '해제' : 'Release'}</button>
           </div>
         </li>
@@ -474,7 +475,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
       <PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[grade]}>
         <li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${saveItems.modifier[lang]}<br/>${items.na[lang]}`}}></span></li>
         <li flex="true">
-          <PopupItemPic className={`item item${items.part} ${gameData.itemGrade.txt_e[saveItems.grade].toLowerCase()}`}>
+          <PopupItemPic className={`item item${items.part} ${gameData.itemGrade.txt_e[saveItems.grade].toLowerCase()} ${dataObj.saveItemData.sealed ? "sealed" : ""}`}>
             <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color)}}>
             </svg>
           </PopupItemPic>
@@ -571,6 +572,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   msgText: msgText,
                   showMsg: showMsg,
                   showPopup: showPopup,
+                  lang: lang,
                 })}} data-buttontype="itemUnpack">{lang === 'ko' ? '포장풀기' : 'Unpack'}</button>
                 <button text="true" onClick={(e) => {buttonEvent({
                   event: e,
@@ -582,6 +584,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   msgText: msgText,
                   showMsg: showMsg,
                   showPopup: showPopup,
+                  lang: lang,
                 })}} data-buttontype="itemSell">{lang === 'ko' ? '판매' : 'Sell'}</button>
               </div>
             )}
@@ -597,6 +600,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   msgText: msgText,
                   showMsg: showMsg,
                   showPopup: showPopup,
+                  lang: lang,
                 })}} data-buttontype="itemEnhancement">{lang === 'ko' ? '강화' : 'Enhance'}</button>
                 <button text="true" onClick={(e) => {buttonEvent({
                   event: e,
@@ -608,6 +612,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   msgText: msgText,
                   showMsg: showMsg,
                   showPopup: showPopup,
+                  lang: lang,
                 })}} data-buttontype="itemEquip">{lang === 'ko' ? '장착' : 'Equip'}</button>
                 <button text="true" onClick={(e) => {buttonEvent({
                   event: e,
@@ -619,6 +624,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   msgText: msgText,
                   showMsg: showMsg,
                   showPopup: showPopup,
+                  lang: lang,
                 })}} data-buttontype="itemSell">{lang === 'ko' ? '판매' : 'Sell'}</button>
               </div>
             )}
@@ -674,6 +680,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               msgText: msgText,
               showMsg: showMsg,
               showPopup: showPopup,
+              lang: lang,
             })}} data-buttontype="holeEquip">{lang === 'ko' ? '장착' : 'Equip'}</button>
             <button text="true" onClick={(e) => {buttonEvent({
               event: e,
@@ -685,6 +692,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               msgText: msgText,
               showMsg: showMsg,
               showPopup: showPopup,
+              lang: lang,
             })}} data-buttontype="itemSell">{lang === 'ko' ? '판매' : 'Sell'}</button>
           </div>
         </li>
@@ -720,6 +728,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               msgText: msgText,
               showMsg: showMsg,
               showPopup: showPopup,
+              lang: lang,
             })}} data-buttontype="itemUse">{lang === 'ko' ? '사용' : 'Use'}</button>
             <button text="true" onClick={(e) => {buttonEvent({
               event: e,
@@ -731,6 +740,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               msgText: msgText,
               showMsg: showMsg,
               showPopup: showPopup,
+              lang: lang,
             })}} data-buttontype="itemSell">{lang === 'ko' ? '판매' : 'Sell'}</button>
           </div>
         </li>
@@ -766,6 +776,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               msgText: msgText,
               showMsg: showMsg,
               showPopup: showPopup,
+              lang: lang,
             })}} data-buttontype="itemSell">{lang === 'ko' ? '판매' : 'Sell'}</button>
           </div>
         </li>
@@ -801,6 +812,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               msgText: msgText,
               showMsg: showMsg,
               showPopup: showPopup,
+              lang: lang,
             })}} data-buttontype="itemUse">{lang === 'ko' ? '사용' : 'Use'}</button>
             <button text="true" onClick={(e) => {buttonEvent({
               event: e,
@@ -812,6 +824,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               msgText: msgText,
               showMsg: showMsg,
               showPopup: showPopup,
+              lang: lang,
             })}} data-buttontype="itemSell">{lang === 'ko' ? '판매' : 'Sell'}</button>
           </div>
         </li>
@@ -895,6 +908,15 @@ const Popup = ({
   const gameData = useContext(AppContext).gameData;
 	const setting = useContext(AppContext).setting,
     lang = setting.lang;
+  const [content, setContent] = useState(typeAsContent(type, dataObj, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, showPopup, lang));
+  useLayoutEffect(() => {
+    if (dataObj.saveItemData.sealed) {
+      setContent(typeAsContent(type, {
+        ...dataObj,
+        saveItemData: saveData.items[dataObj.type][dataObj.itemSaveSlot],
+      }, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, showPopup, lang));
+    }
+  }, [saveData]);
 	return (
     <>
       <PopupContainer>
@@ -902,7 +924,7 @@ const Popup = ({
           <div className="popup_cont" onClick={(e) => {
             showPopup(false);
           }}>
-            {typeAsContent(type, dataObj, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, showPopup, lang)}
+            {content}
           </div>
           <div className="popup_close">
             <span></span><span></span>

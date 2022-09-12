@@ -933,9 +933,15 @@ export const util = { //this.loadImage();
         } else {
           const itemTypeLength = gameData.items[type][cate].length,
             itemType = String(Math.floor(Math.random() * itemTypeLength));
-          itemLength = gameData.items[type][cate][itemType][0].length;
-          itemData = gameData.items[type][cate][itemType][0][Math.floor(Math.random() * itemLength)];
-          weaponType = itemType;
+          if(cate === "3") {//무기일 경우
+            itemLength = gameData.items[type][cate][itemType][0].length;
+            itemData = gameData.items[type][cate][itemType][0][Math.floor(Math.random() * itemLength)];
+            weaponType = itemType;
+          } else {
+            itemLength = gameData.items[type][cate][0][0].length;
+            itemData = gameData.items[type][cate][0][0][Math.floor(Math.random() * itemLength)];
+            weaponType = itemType;
+          }
         }
       } else {//장비가 아닐 경우
         itemLength = gameData.items[type].length;
@@ -952,7 +958,6 @@ export const util = { //this.loadImage();
     //const selectItem = item[itemIdx];
     const selectItem = itemData;
     if (option.sealed) {
-      console.log(selectItem)
       const itemObj = {
         idx:selectItem.idx,
         part:selectItem.part,
@@ -1104,7 +1109,11 @@ export const util = { //this.loadImage();
       weaponType:weaponType,
       sealed:false,
     }
-    save.items[type].push(itemObj);
+    if (typeof option.unpackSlot === 'number') {
+      save.items[type].splice(option.unpackSlot,1,itemObj);
+    } else {
+      save.items[type].push(itemObj);
+    }
     changeSaveData(save);
   },
   getAnimalPoint: (items, animal, addMark) => {
