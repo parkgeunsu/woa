@@ -156,12 +156,17 @@ const buttonEvent = (dataObj) => {
     });
     saveCh.items.forEach((item, itemSlot)=>{
       const chType = gameData.ch[saveCh.idx].animal_type;
+      if (dataObj.data.saveItemData.sealed) {
+        dataObj.showMsg(true);
+        dataObj.msgText("미개봉 아이템입니다.");
+        return;
+      }
       if (invenPart === gameData.animal_type[chType].equip[itemSlot] && overlapCheck) {//해당파트와 같은파트인지? && 빈칸인지? && 같은파트가 비었을경우 한번만 발생하게
         if (item.idx === undefined) { //해당 슬롯이 비었을 비었을 경우
           currentKg += dataObj.data.gameItem.kg
           if (currentKg > totalKg) { //가능 무게를 넘어 갈 경우
             dataObj.showMsg(true);
-            dataObj.msgText("착용할려는 장비가 무겁습니다.");
+            dataObj.msgText("착용하려는 장비가 무겁습니다.");
           } else { //착용 가능 무게일 경우
             saveCh.items[itemSlot] = {...dataObj.saveData.items['equip'][dataObj.data.itemSaveSlot]};//캐릭에 아이템 넣기
             if (dataObj.data.saveItemData.mark === gameData.ch[saveCh.idx].animal_type) {//동물 뱃지 수정
@@ -261,6 +266,21 @@ const buttonEvent = (dataObj) => {
     sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
     dataObj.changeSaveData(sData);//데이터 저장
     dataObj.showPopup(false);
+  } else if (dataObj.type === 'itemUnpack') { //아이템 포장풀기
+    console.log(sData.items, dataObj.data);
+    // sData.info.money += dataObj.data.gameItem.price;//돈 계산
+    // sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
+    const option = {
+      type:'equip',
+      items:3,//Math.ceil(Math.random()*3),//장비만 해당
+      //아이템종류, 세부종류(검,단검), 매직등급
+      grade:1,
+      lv:Math.round(Math.random()*40 + 60),
+      sealed:true,
+    }
+    //util.getItem(saveData, gameData, changeSaveData, option, lang);
+    //dataObj.changeSaveData(sData);//데이터 저장
+    //dataObj.showPopup(false);
   } else if (dataObj.type === 'holeEquip') {
     dataObj.showPopup(false);
   }
@@ -422,13 +442,18 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     const saveItems = dataObj.saveItemData;
     const grade = saveItems.grade || items.grade;
     const setsInfo = gameData.items.set_type[items.set];
+    const sealed = dataObj.saveItemData.sealed;
     //아이템 기본, 추가, 홀 효과
     let totalEff = [];
     saveItems.baseEff.forEach((data, idx) => {
       if (totalEff[data.type] === undefined) {
         totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
       }
-      totalEff[data.type].base += parseInt(data.num[grade - 1]);
+      if (sealed) {
+        totalEff[data.type].base = data.num;
+      } else {
+        totalEff[data.type].base += parseInt(data.num[grade - 1]);
+      }
     });
     saveItems.addEff.forEach((data, idx) => {
       if (totalEff[data.type] === undefined) {
@@ -479,20 +504,22 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           <div className="item_title">{lang === 'ko' ? '아이템 효과' : 'Item effect'}</div>
           {totalEff.map((eff, idx) => {
             return (
-              <div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
+              <div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{sealed ? eff.base : eff.base + eff.add + eff.hole}</span></div>
             )
           })}
         </li>
         <div style={{width:"100%"}} className="scroll-y">
-          <li className="item_list item_eff">
-            <div className="item_title">{lang === 'ko' ? '기본 효과' : 'Base effect'}</div>
-            {saveItems.baseEff && saveItems.baseEff.map((data, idx) => {
-              const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
-              return (
-                <div key={idx} className="item_effs">{`${util.getEffectType(data.type, lang)} ${data.num[grade]}`}</div>
-              ) 
-            })}
-          </li>
+          {!sealed && (
+            <li className="item_list item_eff">
+              <div className="item_title">{lang === 'ko' ? '기본 효과' : 'Base effect'}</div>
+              {saveItems.baseEff && saveItems.baseEff.map((data, idx) => {
+                const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
+                return (
+                  <div key={idx} className="item_effs">{`${util.getEffectType(data.type, lang)} ${data.num[grade]}`}</div>
+                ) 
+              })}
+            </li>
+          )}
           {saveItems.addEff.length > 0 && (
             <li className="item_list item_eff">
               <div className="item_title">{lang === 'ko' ? '추가 효과' : 'Additional effect'}</div>
@@ -532,41 +559,69 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         </div>
         <li className="item_footer" flex="true">
           <div className="item_price"><span>{lang === 'ko' ? '판매가:' : 'Selling Price'}</span><em>{`₩${items.price * saveItems.grade}`}</em></div>
-          <div className="item_button" flex="true">
-            <button text="true" onClick={(e) => {buttonEvent({
-              event: e,
-              type: 'itemEnhancement',
-              data: dataObj,
-              saveData: saveData,
-              changeSaveData: changeSaveData,
-              gameData: gameData,
-              msgText: msgText,
-              showMsg: showMsg,
-              showPopup: showPopup,
-            })}} data-buttontype="itemEnhancement">{lang === 'ko' ? '강화' : 'Enhance'}</button>
-            <button text="true" onClick={(e) => {buttonEvent({
-              event: e,
-              type: 'itemEquip',
-              data: dataObj,
-              saveData: saveData,
-              changeSaveData: changeSaveData,
-              gameData: gameData,
-              msgText: msgText,
-              showMsg: showMsg,
-              showPopup: showPopup,
-            })}} data-buttontype="itemEquip">{lang === 'ko' ? '장착' : 'Equip'}</button>
-            <button text="true" onClick={(e) => {buttonEvent({
-              event: e,
-              type: 'itemSell',
-              data: dataObj,
-              saveData: saveData,
-              changeSaveData: changeSaveData,
-              gameData: gameData,
-              msgText: msgText,
-              showMsg: showMsg,
-              showPopup: showPopup,
-            })}} data-buttontype="itemSell">{lang === 'ko' ? '판매' : 'Sell'}</button>
-          </div>
+            {sealed && (
+              <div className="item_button" flex="true">
+                <button text="true" onClick={(e) => {buttonEvent({
+                  event: e,
+                  type: 'itemUnpack',
+                  data: dataObj,
+                  saveData: saveData,
+                  changeSaveData: changeSaveData,
+                  gameData: gameData,
+                  msgText: msgText,
+                  showMsg: showMsg,
+                  showPopup: showPopup,
+                })}} data-buttontype="itemUnpack">{lang === 'ko' ? '포장풀기' : 'Unpack'}</button>
+                <button text="true" onClick={(e) => {buttonEvent({
+                  event: e,
+                  type: 'itemSell',
+                  data: dataObj,
+                  saveData: saveData,
+                  changeSaveData: changeSaveData,
+                  gameData: gameData,
+                  msgText: msgText,
+                  showMsg: showMsg,
+                  showPopup: showPopup,
+                })}} data-buttontype="itemSell">{lang === 'ko' ? '판매' : 'Sell'}</button>
+              </div>
+            )}
+            {!sealed && (
+              <div className="item_button" flex="true">
+                <button text="true" onClick={(e) => {buttonEvent({
+                  event: e,
+                  type: 'itemEnhancement',
+                  data: dataObj,
+                  saveData: saveData,
+                  changeSaveData: changeSaveData,
+                  gameData: gameData,
+                  msgText: msgText,
+                  showMsg: showMsg,
+                  showPopup: showPopup,
+                })}} data-buttontype="itemEnhancement">{lang === 'ko' ? '강화' : 'Enhance'}</button>
+                <button text="true" onClick={(e) => {buttonEvent({
+                  event: e,
+                  type: 'itemEquip',
+                  data: dataObj,
+                  saveData: saveData,
+                  changeSaveData: changeSaveData,
+                  gameData: gameData,
+                  msgText: msgText,
+                  showMsg: showMsg,
+                  showPopup: showPopup,
+                })}} data-buttontype="itemEquip">{lang === 'ko' ? '장착' : 'Equip'}</button>
+                <button text="true" onClick={(e) => {buttonEvent({
+                  event: e,
+                  type: 'itemSell',
+                  data: dataObj,
+                  saveData: saveData,
+                  changeSaveData: changeSaveData,
+                  gameData: gameData,
+                  msgText: msgText,
+                  showMsg: showMsg,
+                  showPopup: showPopup,
+                })}} data-buttontype="itemSell">{lang === 'ko' ? '판매' : 'Sell'}</button>
+              </div>
+            )}
         </li>
       </PopupItemContainer>
     );

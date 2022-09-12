@@ -135,7 +135,7 @@ const Character = ({
         <button onClick={() => {
           const option = {
             type:'equip',
-            items:"3-4-3",//Math.ceil(Math.random()*3),//장비만 해당
+            items:3,//Math.ceil(Math.random()*3),//장비만 해당
             //아이템종류, 세부종류(검,단검), 매직등급
             grade:1,
             lv:Math.round(Math.random()*40 + 60),

@@ -921,13 +921,21 @@ export const util = { //this.loadImage();
     } else {//number(그룹중 선택)34
       if (type === 'equip') {//장비일 경우
         const cate = String(option.items);
-        if(cate[0] === "3") {//무기일 경우
-          itemLength = gameData.items[type][cate[0]][cate[1]][0].length;
-          itemData = gameData.items[type][cate[0]][cate[1]][0][Math.floor(Math.random() * itemLength)];
-          weaponType = cate[1];
-        } else {//무기가 아닐 경우
-          itemLength = gameData.items[type][option.items][0].length;
-          itemData = gameData.items[type][option.items][0][Math.floor(Math.random() * itemLength)];
+        if (cate.length > 1) {
+          if(cate[0] === "3") {//무기일 경우
+            itemLength = gameData.items[type][cate[0]][cate[1]][0].length;
+            itemData = gameData.items[type][cate[0]][cate[1]][0][Math.floor(Math.random() * itemLength)];
+            weaponType = cate[1];
+          } else {//무기가 아닐 경우
+            itemLength = gameData.items[type][option.items][0].length;
+            itemData = gameData.items[type][option.items][0][Math.floor(Math.random() * itemLength)];
+          }
+        } else {
+          const itemTypeLength = gameData.items[type][cate].length,
+            itemType = String(Math.floor(Math.random() * itemTypeLength));
+          itemLength = gameData.items[type][cate][itemType][0].length;
+          itemData = gameData.items[type][cate][itemType][0][Math.floor(Math.random() * itemLength)];
+          weaponType = itemType;
         }
       } else {//장비가 아닐 경우
         itemLength = gameData.items[type].length;
@@ -944,14 +952,14 @@ export const util = { //this.loadImage();
     //const selectItem = item[itemIdx];
     const selectItem = itemData;
     if (option.sealed) {
-      console.log(selectItem.eff)
+      console.log(selectItem)
       const itemObj = {
         idx:selectItem.idx,
         part:selectItem.part,
         grade:1,
         slot:0,//아이템 홀착용 갯수
         hole:[],
-        color:[],
+        color:selectItem.color,
         baseEff:[{
           type:selectItem.eff[0].type,
           num:selectItem.eff[0].num[0] + ' ~ ' + selectItem.eff[0].num[1],
@@ -960,7 +968,8 @@ export const util = { //this.loadImage();
         mark:'',
         markNum:0,
         modifier:{ko:'미개봉',en:'Sealed'},
-        weaponType:0,
+        weaponType:weaponType,
+        sealed:true,
       }
       save.items[type].push(itemObj);
       changeSaveData(save);
@@ -1093,6 +1102,7 @@ export const util = { //this.loadImage();
       markNum:markNum,
       modifier:modifier,
       weaponType:weaponType,
+      sealed:false,
     }
     save.items[type].push(itemObj);
     changeSaveData(save);

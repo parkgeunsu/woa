@@ -78,11 +78,11 @@ export const items = {
                     {idx:5,part:3,grade:1,display:105,na:{ko:'쿠나이',en:'Kunai'},kg:0.5,price:100,color:["#ffffff","#27367A"],socket:2,txt:{ko:'닌자들이 사용했다고 알려진 무기. 성인 남성 손바닥만한 길이의 단검 손잡이 끝에 고리가 달린 형태를 하고 있다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
                     {idx:6,part:3,grade:1,display:106,na:{ko:'쿠크리',en:'Kukri'},kg:0.7,price:100,color:["#ffffff","#FEBC12"],socket:2,txt:{ko:'네팔 구르카족의 전통 도검. Kukri가 가장 보편화되었지만 Khukri, Khukuri 등으로 적기도 한다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
                     {idx:7,part:3,grade:1,display:107,na:{ko:'크리스',en:'Kris'},kg:0.7,price:100,color:["#ffffff","#814F20"],socket:2,txt:{ko:'기본적으로 말레이시아와 인도네시아 등지의 검으로, 물결처럼 구불구불한 모양의 특이한 날을 가진 도검.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:38,part:3,grade:1,display:138,na:{ko:'런들대거',en:'Rondel Dagger'},kg:0.5,price:100,color:["#ffffff","#FBB040","#754C29"],socket:2,txt:{ko:'중세 후기(14세기경 부근)에 기사와 중장병 계급이 흔히 쓰던 단검이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:39,part:3,grade:1,display:139,na:{ko:'망고슈',en:'Main-gauche'},kg:1,price:100,color:["#ffffff","#3C56A6","#FBB040"],socket:2,txt:{ko:'중세 후기에서 르네상스 시대에 사용하던 방어용 단검을 뜻한다.영국에서는 패링 대거(Parring Dagger)라고 불렀다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:40,part:3,grade:1,display:140,na:{ko:'배즐러드',en:'Baselard'},kg:0.6,price:100,color:["#ffffff","#FBB040","#754C29"],socket:2,txt:{ko:'칼날 끝부분이 손잡이 끝부분과 마찬가지로 막대기 모향으로 평행을 이루는 단검.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:41,part:3,grade:1,display:141,na:{ko:'스틸레토',en:'Stiletto'},kg:0.5,price:100,color:["#ffffff","#FBB040","#754C29"],socket:2,txt:{ko:'검신이 가늘고 길며 끝이 매우 뾰족하여 검이 갑옷의 틈새를 파고들어가 깊은 곳까지 관통할 수 있어서 찌르는 무기.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:42,part:3,grade:1,display:142,na:{ko:'페스카즈',en:'Persqabz'},kg:0.4,price:100,color:["#FBB040","#FBB040","#754C29"],socket:2,txt:{ko:'페스카즈는 예리한 날을 갖추고 있으며 면도칼 같이 날카로운 느낌을 갖는 단검으로 알려져 있다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:8,part:3,grade:1,display:138,na:{ko:'런들대거',en:'Rondel Dagger'},kg:0.5,price:100,color:["#ffffff","#FBB040","#754C29"],socket:2,txt:{ko:'중세 후기(14세기경 부근)에 기사와 중장병 계급이 흔히 쓰던 단검이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:9,part:3,grade:1,display:139,na:{ko:'망고슈',en:'Main-gauche'},kg:1,price:100,color:["#ffffff","#3C56A6","#FBB040"],socket:2,txt:{ko:'중세 후기에서 르네상스 시대에 사용하던 방어용 단검을 뜻한다.영국에서는 패링 대거(Parring Dagger)라고 불렀다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:10,part:3,grade:1,display:140,na:{ko:'배즐러드',en:'Baselard'},kg:0.6,price:100,color:["#ffffff","#FBB040","#754C29"],socket:2,txt:{ko:'칼날 끝부분이 손잡이 끝부분과 마찬가지로 막대기 모향으로 평행을 이루는 단검.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:11,part:3,grade:1,display:141,na:{ko:'스틸레토',en:'Stiletto'},kg:0.5,price:100,color:["#ffffff","#FBB040","#754C29"],socket:2,txt:{ko:'검신이 가늘고 길며 끝이 매우 뾰족하여 검이 갑옷의 틈새를 파고들어가 깊은 곳까지 관통할 수 있어서 찌르는 무기.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:12,part:3,grade:1,display:142,na:{ko:'페스카즈',en:'Persqabz'},kg:0.4,price:100,color:["#FBB040","#FBB040","#754C29"],socket:2,txt:{ko:'페스카즈는 예리한 날을 갖추고 있으며 면도칼 같이 날카로운 느낌을 갖는 단검으로 알려져 있다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
                 ],
                 [//unique
 
@@ -93,16 +93,16 @@ export const items = {
             ],
             [//검1
                 [//normal,magic,rare,epic
-                    {idx:8,part:3,grade:1,display:108,na:{ko:'월도',en:'Moon Blade'},kg:2.5,price:100,color:["#ffffff","#3C2415"],socket:2,txt:{ko:'월도(月刀)는 외날에 긴 자루를 가진 도(刀) 계열의 무기를 일컫는다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:9,part:3,grade:1,display:109,na:{ko:'일본도',en:'Japanese Sword'},kg:1,price:100,color:["#ffffff", "#EE1C4E"],socket:2,txt:{ko:'타치(太刀)나 우치가타나(打刀) 등을 포함하는 일본의 전통 도검이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:10,part:3,grade:1,display:110,na:{ko:'환도',en:'Military Sword'},kg:1,price:100,color:["#ffffff", "#EE1C4E"],socket:2,txt:{ko:'한반도 지역 국가들의 전통 무기로, 고리를 사용하여 패용(佩用)하였던 도검(刀劍)들을 일컫는다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:11,part:3,grade:1,display:111,na:{ko:'환두대도',en:'Military Large Sword'},kg:1,price:100,color:["#ffffff", "#FEBC12"],socket:2,txt:{ko:'대한민국 역사에서 가장 오랫동안 사용한 군사 도검이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:12,part:3,grade:1,display:112,na:{ko:'글라디우스',en:'Gradius'},kg:1.1,price:100,color:["#ffffff", "#B39C31"],socket:2,txt:{ko:'글라디우스는 로마군의 대표적인 한손검이다. 로마군의 표준 제식 무장이자 주력 무기였다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:13,part:3,grade:1,display:113,na:{ko:'레이피어',en:'Rapier'},kg:1.5,price:100,color:["#ffffff", "#A7A9AC"],socket:2,txt:{ko:'16~17세기 유럽에서 사용된 검으로 베기보다는 찌르기에 특화된 형태의 검.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:14,part:3,grade:1,display:114,na:{ko:'세이버',en:'Sabre'},kg:1.1,price:100,color:["#ffffff", "#FBB040","#754C29"],socket:2,txt:{ko:'근대 유럽을 대표하는 기병용 장검. 주로 한손으로 쓰는 휘어진 외날도(刀)로 알려져 있다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:15,part:3,grade:1,display:115,na:{ko:'시미터',en:'Scimitar'},kg:1.5,price:100,color:["#ffffff", "#FBB040","#754C29"],socket:2,txt:{ko:'중동에서 기원한 곡도를 일컫는 말. 흔히 초승달처럼 휘어있는 곡률이 큰 중동제 곡도.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:16,part:3,grade:1,display:116,na:{ko:'브로드소드',en:'Broad Sword'},kg:1.6,price:100,color:["#ffffff", "#A5A4A4"],socket:2,txt:{ko:'중국의 도(刀, Dao)를 영어로 번역할 때 브로드소드라고 하는 경우도 종종 있다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:17,part:3,grade:1,display:117,na:{ko:'팔카타',en:'Falcata'},kg:1.2,price:100,color:["#ffffff", "#FBB040","#754C29"],socket:2,txt:{ko:'그리스의 중장보병 호플리테스들이 즐겨 쓴 검.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:0,part:3,grade:1,display:108,na:{ko:'월도',en:'Moon Blade'},kg:2.5,price:100,color:["#ffffff","#3C2415"],socket:2,txt:{ko:'월도(月刀)는 외날에 긴 자루를 가진 도(刀) 계열의 무기를 일컫는다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:1,part:3,grade:1,display:109,na:{ko:'일본도',en:'Japanese Sword'},kg:1,price:100,color:["#ffffff", "#EE1C4E"],socket:2,txt:{ko:'타치(太刀)나 우치가타나(打刀) 등을 포함하는 일본의 전통 도검이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:2,part:3,grade:1,display:110,na:{ko:'환도',en:'Military Sword'},kg:1,price:100,color:["#ffffff", "#EE1C4E"],socket:2,txt:{ko:'한반도 지역 국가들의 전통 무기로, 고리를 사용하여 패용(佩用)하였던 도검(刀劍)들을 일컫는다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:3,part:3,grade:1,display:111,na:{ko:'환두대도',en:'Military Large Sword'},kg:1,price:100,color:["#ffffff", "#FEBC12"],socket:2,txt:{ko:'대한민국 역사에서 가장 오랫동안 사용한 군사 도검이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:4,part:3,grade:1,display:112,na:{ko:'글라디우스',en:'Gradius'},kg:1.1,price:100,color:["#ffffff", "#B39C31"],socket:2,txt:{ko:'글라디우스는 로마군의 대표적인 한손검이다. 로마군의 표준 제식 무장이자 주력 무기였다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:5,part:3,grade:1,display:113,na:{ko:'레이피어',en:'Rapier'},kg:1.5,price:100,color:["#ffffff", "#A7A9AC"],socket:2,txt:{ko:'16~17세기 유럽에서 사용된 검으로 베기보다는 찌르기에 특화된 형태의 검.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:6,part:3,grade:1,display:114,na:{ko:'세이버',en:'Sabre'},kg:1.1,price:100,color:["#ffffff", "#FBB040","#754C29"],socket:2,txt:{ko:'근대 유럽을 대표하는 기병용 장검. 주로 한손으로 쓰는 휘어진 외날도(刀)로 알려져 있다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:7,part:3,grade:1,display:115,na:{ko:'시미터',en:'Scimitar'},kg:1.5,price:100,color:["#ffffff", "#FBB040","#754C29"],socket:2,txt:{ko:'중동에서 기원한 곡도를 일컫는 말. 흔히 초승달처럼 휘어있는 곡률이 큰 중동제 곡도.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:8,part:3,grade:1,display:116,na:{ko:'브로드소드',en:'Broad Sword'},kg:1.6,price:100,color:["#ffffff", "#A5A4A4"],socket:2,txt:{ko:'중국의 도(刀, Dao)를 영어로 번역할 때 브로드소드라고 하는 경우도 종종 있다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:9,part:3,grade:1,display:117,na:{ko:'팔카타',en:'Falcata'},kg:1.2,price:100,color:["#ffffff", "#FBB040","#754C29"],socket:2,txt:{ko:'그리스의 중장보병 호플리테스들이 즐겨 쓴 검.',en:''},eff:[{type:4,num:['5','50']}],set:0},
                 ],
                 [//unique
 
@@ -113,13 +113,13 @@ export const items = {
             ],
             [//양손검2
                 [//normal,magic,rare,epic
-                    {idx:31,part:3,grade:1,display:131,na:{ko:'롱소드',en:'Long Sword'},kg:2,price:100,color:["#ffffff"],socket:2,txt:{ko:'유럽에서 쓰인 양날 양손 도검이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:32,part:3,grade:1,display:132,na:{ko:'바스타드소드',en:'Bastard Sword'},kg:3,price:100,color:["#ffffff"],socket:2,txt:{ko:'폭의 변화가 매우 큰(테이퍼진) 검신을 지닌 롱소드.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:33,part:3,grade:1,display:133,na:{ko:'그레이트소드',en:'Great Sword'},kg:3,price:100,color:["#ffffff","#831529"],socket:2,txt:{ko:'그레이트소드는 말 그대로 대검이라는 의미. 대검이라는 것 외에 단어가 특정짓는 특징은 없다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:34,part:3,grade:1,display:134,na:{ko:'익시큐셔너소드',en:'Executioner Sword'},kg:2,price:100,color:["#ffffff","#FBB040","#754C29"],socket:2,txt:{ko:'이름 그대로 사형집행인들이 죄인을 참수형에 처할때 쓰기 위해 특별히 만들어진 도검이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:35,part:3,grade:1,display:135,na:{ko:'츠바이헨더',en:'Zweihänder'},kg:6,price:100,color:["#ffffff","#FBB040","#754C29"],socket:2,txt:{ko:'르네상스 시대, 16세기경에 주로 사용된 독일제 트루 투핸더를 말한다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:36,part:3,grade:1,display:136,na:{ko:'클레이모어',en:'Claymore'},kg:4.5,price:100,color:["#ffffff","#831529"],socket:2,txt:{ko:'15세기에서 17세기까지 스코틀랜드의 하이랜더들이 사용한 것으로 유명하다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:37,part:3,grade:1,display:137,na:{ko:'플랑베르주',en:'Flamberge'},kg:3.5,price:100,color:["#ffffff","#FCEE22"],socket:2,txt:{ko:'서양의 도검류 중 한 종류로, 물결치는 형태의 날을 가진 검이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:0,part:3,grade:1,display:131,na:{ko:'롱소드',en:'Long Sword'},kg:2,price:100,color:["#ffffff"],socket:2,txt:{ko:'유럽에서 쓰인 양날 양손 도검이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:1,part:3,grade:1,display:132,na:{ko:'바스타드소드',en:'Bastard Sword'},kg:3,price:100,color:["#ffffff"],socket:2,txt:{ko:'폭의 변화가 매우 큰(테이퍼진) 검신을 지닌 롱소드.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:2,part:3,grade:1,display:133,na:{ko:'그레이트소드',en:'Great Sword'},kg:3,price:100,color:["#ffffff","#831529"],socket:2,txt:{ko:'그레이트소드는 말 그대로 대검이라는 의미. 대검이라는 것 외에 단어가 특정짓는 특징은 없다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:3,part:3,grade:1,display:134,na:{ko:'익시큐셔너소드',en:'Executioner Sword'},kg:2,price:100,color:["#ffffff","#FBB040","#754C29"],socket:2,txt:{ko:'이름 그대로 사형집행인들이 죄인을 참수형에 처할때 쓰기 위해 특별히 만들어진 도검이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:4,part:3,grade:1,display:135,na:{ko:'츠바이헨더',en:'Zweihänder'},kg:6,price:100,color:["#ffffff","#FBB040","#754C29"],socket:2,txt:{ko:'르네상스 시대, 16세기경에 주로 사용된 독일제 트루 투핸더를 말한다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:5,part:3,grade:1,display:136,na:{ko:'클레이모어',en:'Claymore'},kg:4.5,price:100,color:["#ffffff","#831529"],socket:2,txt:{ko:'15세기에서 17세기까지 스코틀랜드의 하이랜더들이 사용한 것으로 유명하다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:6,part:3,grade:1,display:137,na:{ko:'플랑베르주',en:'Flamberge'},kg:3.5,price:100,color:["#ffffff","#FCEE22"],socket:2,txt:{ko:'서양의 도검류 중 한 종류로, 물결치는 형태의 날을 가진 검이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
                 ],
                 [//unique
 
@@ -130,11 +130,11 @@ export const items = {
             ],
             [//둔기3
                 [//normal,magic,rare,epic
-                    {idx:18,part:3,grade:1,display:118,na:{ko:'편',en:'Whip'},kg:1.5,price:100,color:["#603913"],socket:2,txt:{ko:'중국의 병장기. 간혹 簡이라고 쓰기도 한다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:19,part:3,grade:1,display:119,na:{ko:'철편',en:'Bull Whip'},kg:3.5,price:100,color:["#603913"],socket:2,txt:{ko:'철편(鐵鞭)은 회초리와 비슷하게 생긴 타격 무기의 일종이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:20,part:3,grade:1,display:120,na:{ko:'금쇄봉',en:'Gold Mace'},kg:5,price:100,color:["#603913"],socket:2,txt:{ko:'중세 일본의 철퇴 중 하나. 카나사이보라고 읽으며, 테츠보(鉄棒), 혹은 카나보(金棒)라고도 불린다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:21,part:3,grade:1,display:121,na:{ko:'철퇴',en:'Mace'},kg:4,price:100,color:["#ffffff"],socket:2,txt:{ko:'철퇴(鐵槌)는 병장기의 하나로, 막대끝에 돌기나 무게추가 달려있어 한손으로 휘두를 수 있는 몽둥이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:44,part:3,grade:1,display:144,na:{ko:'워해머',en:'War Hammer'},kg:3,price:100,color:["#ffffff"],socket:2,txt:{ko:'전투용으로 쓰이는 무거운 망치.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:0,part:3,grade:1,display:118,na:{ko:'편',en:'Whip'},kg:1.5,price:100,color:["#603913"],socket:2,txt:{ko:'중국의 병장기. 간혹 簡이라고 쓰기도 한다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:1,part:3,grade:1,display:119,na:{ko:'철편',en:'Bull Whip'},kg:3.5,price:100,color:["#603913"],socket:2,txt:{ko:'철편(鐵鞭)은 회초리와 비슷하게 생긴 타격 무기의 일종이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:2,part:3,grade:1,display:120,na:{ko:'금쇄봉',en:'Gold Mace'},kg:5,price:100,color:["#603913"],socket:2,txt:{ko:'중세 일본의 철퇴 중 하나. 카나사이보라고 읽으며, 테츠보(鉄棒), 혹은 카나보(金棒)라고도 불린다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:3,part:3,grade:1,display:121,na:{ko:'철퇴',en:'Mace'},kg:4,price:100,color:["#ffffff"],socket:2,txt:{ko:'철퇴(鐵槌)는 병장기의 하나로, 막대끝에 돌기나 무게추가 달려있어 한손으로 휘두를 수 있는 몽둥이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:4,part:3,grade:1,display:144,na:{ko:'워해머',en:'War Hammer'},kg:3,price:100,color:["#ffffff"],socket:2,txt:{ko:'전투용으로 쓰이는 무거운 망치.',en:''},eff:[{type:4,num:['5','50']}],set:0},
                 ],
                 [//unique
 
@@ -185,11 +185,11 @@ export const items = {
             ],
             [//활6
                 [//normal,magic,rare,epic
-                    {idx:26,part:3,grade:1,display:126,na:{ko:'수리검',en:'Shuriken'},kg:0.5,price:100,color:["#BCBEC0","#000000"],socket:2,txt:{ko:'던져서 적을 맞히는 것을 목적으로 하는 표창 계열의 무기.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:27,part:3,grade:1,display:127,na:{ko:'궁',en:'Short Bow'},kg:1.2,price:100,color:["#70C169","#FBA919"],socket:2,txt:{ko:'화살을 먼거리로 보내기위한 도구, 원거리 무기',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:28,part:3,grade:1,display:128,na:{ko:'장궁',en:'Long Bow'},kg:2,price:100,color:["#ED1F24","#FBA919"],socket:2,txt:{ko:'궁(활)보다 크기가 큰 원거리 무기',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:29,part:3,grade:1,display:129,na:{ko:'석궁',en:'Crossbow'},kg:2.2,price:100,color:["#A76928","#991B1E","#FBA919"],socket:2,txt:{ko:'활과 유사한 대표적인 발사 무기. 옛 한국에서는 쇠뇌라고 불렀다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:30,part:3,grade:1,display:130,na:{ko:'철선',en:'Iron Fan'},kg:0.3,price:100,color:["#ffffff"],socket:2,txt:{ko:'Iron Fan. War Fan. 쇠로 만든 부채. 믿기 어렵겠지만 무기이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:0,part:3,grade:1,display:126,na:{ko:'수리검',en:'Shuriken'},kg:0.5,price:100,color:["#BCBEC0","#000000"],socket:2,txt:{ko:'던져서 적을 맞히는 것을 목적으로 하는 표창 계열의 무기.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:1,part:3,grade:1,display:127,na:{ko:'궁',en:'Short Bow'},kg:1.2,price:100,color:["#70C169","#FBA919"],socket:2,txt:{ko:'화살을 먼거리로 보내기위한 도구, 원거리 무기',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:2,part:3,grade:1,display:128,na:{ko:'장궁',en:'Long Bow'},kg:2,price:100,color:["#ED1F24","#FBA919"],socket:2,txt:{ko:'궁(활)보다 크기가 큰 원거리 무기',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:3,part:3,grade:1,display:129,na:{ko:'석궁',en:'Crossbow'},kg:2.2,price:100,color:["#A76928","#991B1E","#FBA919"],socket:2,txt:{ko:'활과 유사한 대표적인 발사 무기. 옛 한국에서는 쇠뇌라고 불렀다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:4,part:3,grade:1,display:130,na:{ko:'철선',en:'Iron Fan'},kg:0.3,price:100,color:["#ffffff"],socket:2,txt:{ko:'Iron Fan. War Fan. 쇠로 만든 부채. 믿기 어렵겠지만 무기이다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
                 ],
                 [//unique
                 ],
@@ -198,9 +198,9 @@ export const items = {
             ],
             [//타격7
                 [//normal,magic,rare,epic
-                    {idx:22,part:3,grade:1,display:122,na:{ko:'톤파',en:'Tonfa'},kg:1,price:100,color:["#F7941E"],socket:2,txt:{ko:'중국 拐(괴) 단봉형 무기가 오키나와에 와서 변형되어 오키나와에서 유래한 날없는 타격 무기다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:25,part:3,grade:1,display:125,na:{ko:'차크람',en:'Chakram'},kg:1.2,price:100,color:["#ffffff"],socket:2,txt:{ko:'시크교 신도의 전통 투척 무기, 산스크리트어로 \'둥근\', \'원\', \'바퀴\' 등을 뜻하는 차크라에서 유래하였다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:59,part:3,grade:1,display:159,na:{ko:'너클',en:'Knuckle'},kg:0.5,price:100,color:["#939598","#000000"],socket:2,txt:{ko:'뾰족한 돌기가 있는 금속의 맨손무기.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:0,part:3,grade:1,display:122,na:{ko:'톤파',en:'Tonfa'},kg:1,price:100,color:["#F7941E"],socket:2,txt:{ko:'중국 拐(괴) 단봉형 무기가 오키나와에 와서 변형되어 오키나와에서 유래한 날없는 타격 무기다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:1,part:3,grade:1,display:125,na:{ko:'차크람',en:'Chakram'},kg:1.2,price:100,color:["#ffffff"],socket:2,txt:{ko:'시크교 신도의 전통 투척 무기, 산스크리트어로 \'둥근\', \'원\', \'바퀴\' 등을 뜻하는 차크라에서 유래하였다.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:2,part:3,grade:1,display:159,na:{ko:'너클',en:'Knuckle'},kg:0.5,price:100,color:["#939598","#000000"],socket:2,txt:{ko:'뾰족한 돌기가 있는 금속의 맨손무기.',en:''},eff:[{type:4,num:['5','50']}],set:0},
                 ],
                 [//unique
                 ],
@@ -209,13 +209,13 @@ export const items = {
             ],
             [//방패8
                 [//normal,magic,rare,epic
-                    {idx:52,part:3,grade:1,display:152,na:{ko:'버클러',en:'Buckler'},kg:1,price:100,color:["#ffffff","#58595B"],socket:2,txt:{ko:'직경 또는 둘레가 30cm정도 되는 원형, 사각형 소형 방패.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:53,part:3,grade:1,display:153,na:{ko:'타지',en:'Targa'},kg:0.7,price:100,color:["#603913","#FBB040"],socket:2,txt:{ko:'직경 또는 둘레가 30cm정도 되는 원형, 사각형 소형 방패.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:54,part:3,grade:1,display:154,na:{ko:'라운드실드',en:'Round Shield'},kg:1.5,price:100,color:["#ffffff","#000000","#ED1C24"],socket:2,txt:{ko:'고대부터 사용된 원형형태의 방패.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:55,part:3,grade:1,display:155,na:{ko:'카이트실드',en:'Kite Shield'},kg:1,price:100,color:["#603913","#FBB040"],socket:2,txt:{ko:'중세 초기에 유럽 각지에서 사용한 가오리연과 비슷하게 생긴 방패.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:56,part:3,grade:1,display:156,na:{ko:'히터실드',en:'Heater Shield'},kg:6.5,price:100,color:["#3F6731","#EE1C4E","#FEEB00"],socket:2,txt:{ko:'10세기 중엽부터 등장한 외형은 카이트 실드의 위아래를 짧게 자른듯한 축소형 중세 유럽의 방패.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:57,part:3,grade:1,display:157,na:{ko:'스쿠툼',en:'Scutum'},kg:8,price:100,color:["#939598","#000000"],socket:2,txt:{ko:'목제 방패로, 타원형과 직사각형 모양의 로마군이 장비한 제식 방패.',en:''},eff:[{type:4,num:['5','50']}],set:0},
-                    {idx:58,part:3,grade:1,display:158,na:{ko:'파비스',en:'Pavise'},kg:8,price:100,color:["#939598","#000000","#19469B"],socket:2,txt:{ko:'중세 유럽의 전쟁에서 궁병이나 쇠뇌병들이 사용한 대형방패.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:0,part:3,grade:1,display:152,na:{ko:'버클러',en:'Buckler'},kg:1,price:100,color:["#ffffff","#58595B"],socket:2,txt:{ko:'직경 또는 둘레가 30cm정도 되는 원형, 사각형 소형 방패.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:1,part:3,grade:1,display:153,na:{ko:'타지',en:'Targa'},kg:0.7,price:100,color:["#603913","#FBB040"],socket:2,txt:{ko:'직경 또는 둘레가 30cm정도 되는 원형, 사각형 소형 방패.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:2,part:3,grade:1,display:154,na:{ko:'라운드실드',en:'Round Shield'},kg:1.5,price:100,color:["#ffffff","#000000","#ED1C24"],socket:2,txt:{ko:'고대부터 사용된 원형형태의 방패.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:3,part:3,grade:1,display:155,na:{ko:'카이트실드',en:'Kite Shield'},kg:1,price:100,color:["#603913","#FBB040"],socket:2,txt:{ko:'중세 초기에 유럽 각지에서 사용한 가오리연과 비슷하게 생긴 방패.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:4,part:3,grade:1,display:156,na:{ko:'히터실드',en:'Heater Shield'},kg:6.5,price:100,color:["#3F6731","#EE1C4E","#FEEB00"],socket:2,txt:{ko:'10세기 중엽부터 등장한 외형은 카이트 실드의 위아래를 짧게 자른듯한 축소형 중세 유럽의 방패.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:5,part:3,grade:1,display:157,na:{ko:'스쿠툼',en:'Scutum'},kg:8,price:100,color:["#939598","#000000"],socket:2,txt:{ko:'목제 방패로, 타원형과 직사각형 모양의 로마군이 장비한 제식 방패.',en:''},eff:[{type:4,num:['5','50']}],set:0},
+                    {idx:6,part:3,grade:1,display:158,na:{ko:'파비스',en:'Pavise'},kg:8,price:100,color:["#939598","#000000","#19469B"],socket:2,txt:{ko:'중세 유럽의 전쟁에서 궁병이나 쇠뇌병들이 사용한 대형방패.',en:''},eff:[{type:4,num:['5','50']}],set:0},
                 ],
                 [//unique
                 ],
