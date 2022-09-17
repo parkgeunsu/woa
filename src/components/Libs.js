@@ -961,7 +961,7 @@ export const util = { //this.loadImage();
       const itemObj = {
         idx:selectItem.idx,
         part:selectItem.part,
-        grade:1,
+        grade:util.getItemGrade(),
         slot:0,//아이템 홀착용 갯수
         hole:[],
         color:selectItem.color,
@@ -980,7 +980,7 @@ export const util = { //this.loadImage();
       changeSaveData(save);
       return;
     }
-    const grade = util.getItemGrade();
+    const grade = (option.grade > 1 ? option.grade : util.getItemGrade()) || util.getItemGrade();
     const slotNum = Math.round(Math.random() * selectItem.socket);
     let hole = new Array(slotNum).fill(0);
     let colorArr = Math.random() < .5 ? [gameData.items.item_point_light, gameData.items.item_point_dark] : [gameData.items.item_point_dark, gameData.items.item_point_light];
@@ -1127,5 +1127,8 @@ export const util = { //this.loadImage();
   },
   getAnimalSkill: () => {
     
+  },
+  getTimeGap: (lastTime, currentTime) => {
+
   }
 }

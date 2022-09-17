@@ -161,9 +161,10 @@ b[buff]{color:#02f;text-shadow:-1px -1px 0px #0df,1px 1px 0px #000;}
 .popup_cont .items .item_price span{display:inline-block;margin:0 5px 0 0;font-size:14px;color:#c80;}
 .popup_cont .items .item_price em{font-size:14px;color:#fff;vertical-align:middle;}
 .popup_cont .items .item_footer button{margin:0;}
-.popup_cont .items .item{width:80px;height:80px;border:5px double #c80;}
+.popup_cont .items .item{position:relative;width:80px;height:80px;border:5px double #c80;}
 .popup_cont .items .item:after{display:block;content:"";width:100%;height:100%;}
-.popup_cont .items .item.sealed{filter:brightness(0.3) drop-shadow(0px 0px 1px #fff);}
+.popup_cont .items .item.sealed svg{filter:brightness(0.3) drop-shadow(0px 0px 1px #fff);}
+.popup_cont .items .item.sealed:before{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);content:'?';z-index:1;font-size:40px;}
 .popup_cont .items svg{width:100%;height:100%;}
 .popup_cont .items .item_cont{display:flex;flex-direction:column;
   margin:0 0 0 10px;flex:1;}

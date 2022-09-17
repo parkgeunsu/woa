@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState, useRef } from 'react';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import { back, animalType, icon, etc, iconStar, element, chImg, iconState, itemEquip, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, passive, eff, menu, weather } from 'components/ImgSet';
 import { util } from 'components/Libs';
@@ -106,7 +106,20 @@ const ContentContainer = styled.div`
 const FooterContainer = styled.div`
   ${'' /* min-height: 35px; */}
 `;
-
+const timer = (currentTime, setCurrentTime, saveData, setSaveData) => {
+  if (currentTime > 49) {
+    let sData = {...saveData};
+    sData.ch.forEach((data) => {
+      data.actionPoint += 1;
+      data.pointTime -= 50;
+    })
+    setSaveData(sData);
+    setCurrentTime(1);
+    localStorage.setItem('closeTime', new Date());
+  } else {
+    setCurrentTime(currentTime + 1);
+  };
+};
 const App = () => {
   const data = {
     setting: {
@@ -147,11 +160,23 @@ const App = () => {
   const navigate = useNavigate();
   const location = useLocation().pathname.split("/")[1];
   const [page, setPage] = useState(location);
+  const [time, setTime] = useState(new Date());
+  const timerRef = useRef(null);
+  const [currentTime, setCurrentTime] = useState(1);
   const slotIdx = 'all';
   const changePage = (pagename) => {
     setPage(pagename);
   }
-
+  const changeSaveData = (objData) => {
+    setSaveData(objData);
+    util.saveData('saveData', objData);
+  }
+  useEffect(() => {
+    Math.floor(currentTime / 50)
+    timerRef.current = setTimeout(() => {
+      timer(currentTime, setCurrentTime, saveData, setSaveData);
+    }, 1000);
+  }, [currentTime]);
   const storageVer = util.loadData("version");
   let useSaveData = {}
   if (storageVer === version){ //데이터가 저장되어 있을때
@@ -177,7 +202,23 @@ const App = () => {
       }
     }
   );
-  useEffect(() => { //이미지 프리로드
+  useEffect(() => {
+    console.log('a');
+  }, [time]);
+  useEffect(() => {
+    if(localStorage.getItem('closeTime')){
+      const timeGap = Math.floor((time.getTime() - new Date(localStorage.getItem('closeTime')).getTime())/1000);//마지막 접속시간과 현재시간과 차이
+      useSaveData.ch.forEach((data) => {
+        data.actionPoint += Math.floor(timeGap / 50);
+        data.pointTime -= timeGap;
+      });
+      changeSaveData(useSaveData);
+      console.log(useSaveData, timeGap);
+      localStorage.setItem('closeTime', time);
+    } else {
+      localStorage.setItem('closeTime', time);
+    }
+    //이미지 프리로드
     back.map((image) => {
       const img = new Image();
       img.src = image;
@@ -262,11 +303,12 @@ const App = () => {
       const img = new Image();
       img.src = image;
     });
+    console.log(time);
+    return () => {
+      localStorage.setItem('closeTime', new Date());
+      clearTimeout(timerRef.current);
+    }
   }, []);
-  const changeSaveData = (objData) => {
-    setSaveData(objData);
-    util.saveData('saveData', objData);
-  }
   const scenario = {
     country: "korea",
     period: "joseon2",
@@ -282,7 +324,7 @@ const App = () => {
         <ContentContainer className="content">
           <Routes>
             <Route path="/" element={<Main changePage={changePage} />} />
-            <Route path="/character" element={<Character saveData={saveData} changeSaveData={changeSaveData} />} />
+            <Route path="/character" element={<Character saveData={saveData} changeSaveData={changeSaveData} currentTime={currentTime} />} />
             <Route path="/gacha" element={<Gacha saveData={saveData} changeSaveData={changeSaveData} />} />
             <Route path="/lineup" element={<Lineup saveData={saveData} changeSaveData={changeSaveData} />} />
             <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} scenario={scenario} />} />

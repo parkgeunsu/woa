@@ -51,6 +51,7 @@ const ChInfo = styled.div`
 const Character = ({
   saveData,
   changeSaveData,
+  currentTime,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
@@ -137,7 +138,6 @@ const Character = ({
             type:'equip',
             items:2,//Math.ceil(Math.random()*3),//장비만 해당
             //아이템종류, 세부종류(검,단검), 매직등급
-            grade:1,
             lv:Math.round(Math.random()*40 + 60),
             sealed:true,
           }
@@ -147,12 +147,12 @@ const Character = ({
           const option = {
             type:'equip',
             items:Math.ceil(Math.random()*2),//장비만 해당
-            grade:1,
             lv:Math.round(Math.random()*40 + 60),
             sealed:true,
           }
           util.getItem(saveData, gameData, changeSaveData, option, lang);
         }}>동물스킬 리셋</button>
+        {currentTime}
       </div>
       <div ref={chRef} className="ch_card transition">
         <Img imgurl={imgSet.etc.imgRing} />
@@ -160,7 +160,7 @@ const Character = ({
         <ChBack cardBack={imgSet.etc.imgCardBack} className="ch_back transition" />
       </div>
       <CharacterList saveData={saveData} changeChSlot={changeChSlot} slotIdx={slotIdx} />
-      <CharacterHeader saveData={saveData} chPage={chPage} changeChPage={changeChPage} slotIdx={slotIdx} changeSaveData={changeSaveData} />
+      <CharacterHeader saveData={saveData} chPage={chPage} changeChPage={changeChPage} slotIdx={slotIdx} changeSaveData={changeSaveData} currentTime={currentTime} />
       <ChInfo frameBack={imgSet.etc.frameChBack} className="ch_info transition">
         <CharacterState saveData={saveData} slotIdx={slotIdx} />
         <CharacterElement saveData={saveData} slotIdx={slotIdx} />

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useLayoutEffect } from 'react';
 import { AppContext } from 'App';
 import styled from 'styled-components';
 import { util } from 'components/Libs';
@@ -16,6 +16,8 @@ const ChracterHeader = ({
   slotIdx,
   chPage,
   changeChPage,
+  changeSaveData,
+  currentTime,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
@@ -44,7 +46,7 @@ const ChracterHeader = ({
           <li className="stateType_actionPoint" flex="true">
             <span className="state_type">{gameData.stateType[saveData.ch[slotIdx].stateType].na}</span>
             <span className="action_point">
-              <span className="current">{saveData.ch[slotIdx].actionPoint}</span><span className="bar">/</span><span className="max">{saveData.ch[slotIdx].rSt6}</span>
+              <span className="current">{saveData.ch[slotIdx].actionPoint}</span><span className="bar">/</span><span className="max">50</span>
             </span>
           </li>
           <li className="exp" flex-h="true">
