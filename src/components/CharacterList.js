@@ -10,7 +10,7 @@ const ListCh = styled.span`
 `;
 const ListRing = styled.span`
   background-image:url(${({ringBack}) => ringBack});
-  background-size:95%;
+  background-size:85%;
 `;
 const ListElement = styled.span`
   background-image:url(${({ringDisplay}) => ringDisplay});

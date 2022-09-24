@@ -124,7 +124,7 @@ const App = () => {
   const data = {
     setting: {
       speed: 2,
-      lang:'en',//ko & en
+      lang:'ko',//ko & en
       bgSound: false,
       effSound: false,
     },
