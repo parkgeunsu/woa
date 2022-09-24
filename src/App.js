@@ -106,14 +106,14 @@ const ContentContainer = styled.div`
 const FooterContainer = styled.div`
   ${'' /* min-height: 35px; */}
 `;
-const timer = (currentTime, setCurrentTime, saveData, setSaveData) => {
+const timer = (currentTime, setCurrentTime, saveData, changeSaveData) => {
   if (currentTime > 49) {
     let sData = {...saveData};
     sData.ch.forEach((data) => {
       data.actionPoint += 1;
       data.pointTime -= 50;
     })
-    setSaveData(sData);
+    changeSaveData(sData);
     setCurrentTime(1);
     localStorage.setItem('closeTime', new Date());
   } else {
@@ -174,7 +174,7 @@ const App = () => {
   useEffect(() => {
     Math.floor(currentTime / 50)
     timerRef.current = setTimeout(() => {
-      timer(currentTime, setCurrentTime, saveData, setSaveData);
+      timer(currentTime, setCurrentTime, saveData, changeSaveData);
     }, 1000);
   }, [currentTime]);
   const storageVer = util.loadData("version");
