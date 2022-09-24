@@ -215,6 +215,7 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 			grade: cardG,
 			newState: {
 				actionPoint: 25,
+				actionMax: Math.floor(gameData.ch[newIdx].st1 / 3 + gameData.ch[newIdx].st6 / 3),
 				pointTime: 25*5*60,//5분, 초단위로 변환
 				stateLuk: Math.round(Math.random() * 200),
 				element: gameData.ch[newIdx].element,

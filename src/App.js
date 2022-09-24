@@ -124,7 +124,7 @@ const App = () => {
   const data = {
     setting: {
       speed: 2,
-      lang:'ko',//ko & en
+      lang:'en',//ko & en
       bgSound: false,
       effSound: false,
     },
@@ -179,16 +179,19 @@ const App = () => {
   }, [currentTime]);
   const storageVer = util.loadData("version");
   let useSaveData = {}
-  if (storageVer === version){ //데이터가 저장되어 있을때
+  if (storageVer === version) { //데이터가 저장되어 있을때
     useSaveData = util.loadData('saveData'); //저장된 데이터
   } else {
     useSaveData = save; //가상데이터
     util.saveData('saveData', save);
     util.saveData('version', version);
   }
+  if (useSaveData.newGame) { //신규 게임인지 판단
+    // console.log('new game');
+  }
   const [saveData, setSaveData] = useState(
     () => {
-      if (useSaveData.ch[0].bSt0) { //캐릭 추가 능력치가 없을 경우
+      if (useSaveData.ch[0].bSt0) { //캐릭 전투능력치 설정이 안되어 있을 경우
         util.saveData('saveData', useSaveData);
         return useSaveData;
       } else {

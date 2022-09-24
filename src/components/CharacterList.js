@@ -2,10 +2,6 @@ import React, { useLayoutEffect, useRef, useContext } from 'react';
 import { AppContext } from 'App';
 import styled from 'styled-components';
 
-const ChList = styled.div`
-  ul li{background: url(${({ cardFrame }) => cardFrame});background-size:100% 100%;}
-  ul li .list_ring{background-image:url(${({ ringBack }) => ringBack});}
-`;
 const ChListUl = styled.ul`
   width: ${({chSize, chLength}) => Math.ceil(chSize) * chLength}px !important;
 `;
@@ -13,13 +9,22 @@ const ListCh = styled.span`
   background-image:url(${({chDisplay}) => chDisplay});background-size:100%;
 `;
 const ListRing = styled.span`
-  background-size:100%;
   background-image:url(${({ringBack}) => ringBack});
+  background-size:95%;
+`;
+const ListElement = styled.span`
+  background-image:url(${({ringDisplay}) => ringDisplay});
+  background-size:100%;
+`;
+const ListFrame = styled.span`
+  background: url(${({ cardFrame }) => cardFrame});background-size:100%;
 `;
 const ChracterHeader = ({
   saveData,
   slotIdx,
   changeChSlot,
+  cardShow,
+  type,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
@@ -36,20 +41,47 @@ const ChracterHeader = ({
   }, [slotIdx, cardWidth]);
   return (
     <>
-      <ChList ref={scrolluseRef} ringBack={imgSet.etc.imgRingBack} cardFrame={imgSet.etc.imgCardFrame} className="ch_list scroll-x">
-        <ChListUl chSize={cardWidth} chLength={chLength}>
-          { saveData.ch && saveData.ch.map((data, idx) => {
-            const saveCh = saveData.ch[idx];
-            const chData = gameData.ch[saveCh.idx];
-            return (
-              <li className={`g${saveCh.grade} ${slotIdx === idx ? 'on' : ''}`} key={idx} onClick={() => {changeChSlot(idx)}}>
-                <ListRing className="list_ring" ringBack={imgSet.etc.imgRingBack} />
-                <ListCh className="list_ch" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
-              </li>
-            )
-          })}
-        </ChListUl>
-      </ChList>
+      {type === 'paging' && (
+        <div ref={scrolluseRef} className={`ch_list scroll-x ${type}`}>
+          <ChListUl chSize={cardWidth} chLength={chLength} type={type}>
+            { saveData.ch && saveData.ch.map((data, idx) => {
+              const saveCh = saveData.ch[idx];
+              const chData = gameData.ch[saveCh.idx];
+              return (
+                <li className={`g${saveCh.grade} ${slotIdx === idx ? 'on' : ''}`} key={idx} onClick={() => {
+                  changeChSlot(idx);
+                }}>
+                  <ListRing className="list_ring" ringBack={imgSet.etc.imgRingBack} />
+                  <ListCh className="list_ch" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
+                  <ListFrame className="list_frame" cardFrame={imgSet.etc.imgCardFrame} />
+                </li>
+              )
+            })}
+          </ChListUl>
+        </div>
+      )}
+      {type === 'list' && (
+        <div ref={scrolluseRef} className={`ch_list scroll-y ${type}`}>
+          <ul>
+            { saveData.ch && saveData.ch.map((data, idx) => {
+              const saveCh = saveData.ch[idx];
+              const chData = gameData.ch[saveCh.idx];
+              return (
+                <li className={`g${saveCh.grade}`} key={idx} onClick={() => {
+                  changeChSlot(idx);
+                  cardShow();
+                }}>
+                  <ListRing className="list_ring" ringBack={imgSet.etc.imgRingBack} />
+                  <ListElement className="list_element" ringDisplay={imgSet.ringImg[chData.element]} />
+                  <ListCh className="list_ch" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
+                  <ListFrame className="list_frame" cardFrame={imgSet.etc.imgCardFrame} />
+                  <div className="list_actionPoint">{`${saveCh.actionPoint} / ${saveCh.actionMax}`}</div>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      )}
     </>
   );
 }

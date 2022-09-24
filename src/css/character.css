@@ -41,10 +41,14 @@
 }
 
 .ch_back{position:absolute;top:0;left:0;width:100%;height:100%;backface-visibility:hidden;z-index:1;box-shadow:0 0 1px #ff0,0 0 2px #fff,0 0 10px #000;border-radius:20px;overflow:hidden;transform:translate(-50%,-50%) rotateY(-180deg);}
-
-.ch_list{position:absolute;bottom:4%;left:20px;right:20px;height:10.2vh;}
-.ch_list ul{padding:5px;width:100%;height:100%;}
-.ch_list ul li{display:inline-block;position:relative;width:5vh;height:calc(5vh * 1.3);transform-origin:center bottom;font-size:0;transform:translate(0,50%);transition:all .3s;}
+.card_grid{padding:0 20px;height:100%;}
+.ch_list.list{position:relative;height:100%;}
+.ch_list.paging{position:absolute;bottom:4%;left:20px;right:20px;height:10.2vh;}
+.ch_list ul{padding:5px;width:100%;}
+.ch_list.list ul{display:flex;flex-direction:row;flex-wrap:wrap;}
+.ch_list.list ul li{display:inline-block;position:relative;margin:0 4px 4px 0;width:calc(25% - 5px);padding-top:calc(32.5% - 5px);border-radius:10px;overflow:hidden;}
+.ch_list.list ul li:nth-of-type(5n){margin:0 0 4px 0;}
+.ch_list.paging ul li{display:inline-block;position:relative;width:5vh;height:calc(5vh * 1.3);transform-origin:center bottom;font-size:0;transform:translate(0,50%);transition:all .3s;}
 .ch_list ul li.g1{background-color:#fff;}
 .ch_list ul li.g2{background-color:#00a90c;}
 .ch_list ul li.g3{background-color:#0090ff;}
@@ -63,7 +67,10 @@
 
 .ch_list .list_ch{position:absolute;left:0;right:0;top:0;bottom:0;background-repeat:no-repeat;background-position:center 0;z-index:1;}
 .ch_list .list_chstyle{position:absolute;left:0;right:0;top:0;bottom:0;background-repeat:no-repeat;background-position:center 0;z-index:2;}
-.ch_list .list_ring{position:absolute;left:0;right:0;top:0;bottom:0;background-repeat:no-repeat;background-position:center 0;}
+.ch_list .list_ring{position:absolute;left:0;right:0;top:0;bottom:0;background-repeat:no-repeat;background-position:center 0;z-index:1;}
+.ch_list .list_frame{position:absolute;left:0;right:0;top:0;bottom:0;background-repeat:no-repeat;background-position:center 0;}
+.ch_list .list_element{position:absolute;left:0;right:0;top:0;bottom:40%;background-repeat:no-repeat;background-position:center center;}
+.ch_list .list_actionPoint{position:absolute;left:50%;bottom:10px;transform:translate(-50%, 0);white-space:nowrap;text-shadow:1px 1px 1px #000;}
 
 .ch_header{display:flex;position:absolute;right:5%;bottom:59%;padding:5;width:40%;flex-direction:column;background:rgba(0,0,0,.6);box-sizing:border-box;border:5px solid transparent;}
 .ch_header ul{margin:5px 0;}
