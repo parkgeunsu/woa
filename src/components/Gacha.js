@@ -202,6 +202,7 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 			}
 		}
 		const cardG = cardGrade.arr[i] + luckyGradePoint;
+		const animalAction = gameData.animal_type[gameData.ch[newIdx].animal_type].actionType;
 		chArr.push({
 			idx: newIdx,
 			grade: cardG,
@@ -219,6 +220,7 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 				pointTime: 25*5*60,//5분, 초단위로 변환
 				stateLuk: Math.round(Math.random() * 200),
 				element: gameData.ch[newIdx].element,
+				actionType: animalAction[Math.floor(Math.random() * animalAction.length)],
 				exp: 0,
 				hasExp: 0,
 				battleBeige:[0,0,0,0],

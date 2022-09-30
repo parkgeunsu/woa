@@ -42,6 +42,9 @@ const ListChElement2 = styled.span`
     }
   }});
 `;
+const ListActionType = styled.span`
+  top:4px;left:4px;width:20%;padding-top:20%;background:url(${({actionType}) => actionType});background-repeat:no-repeat;background-position:center center;background-size:100% 100%;z-index:5;pointer-events:none;
+`;
 const ListChFrame = styled.span`
   top:0;width:100%;height:100%;background:url(${({cardFrame}) => cardFrame});background-repeat:no-repeat;background-position:center center;background-size:100% 100%;z-index:5;pointer-events:none;
 `;
@@ -59,6 +62,7 @@ const CharacterList = ({
 			<ListChElement ringDisplay={imgSet.ringImg[chData.element]} className="element" />
 			<ListChElement1 chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
 			<ListChElement2 chLv={saveCh.lv} ringDisplay={imgSet.ssringImg[chData.element]} className="element_2" />
+			<ListActionType className="action_type" actionType={imgSet.element[saveCh.actionType + 1]} />
 			<ListChFrame cardFrame={imgSet.etc.imgCardFrame} className="frame" />
 		</>
 	)

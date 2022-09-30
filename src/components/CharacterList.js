@@ -8,6 +8,9 @@ const ChListUl = styled.ul`
 const ListCh = styled.span`
   background-image:url(${({chDisplay}) => chDisplay});background-size:100%;
 `;
+const ListActionType = styled.span`
+  background-image:url(${({actionType}) => actionType});background-size:100%;
+`;
 const ListRing = styled.span`
   background-image:url(${({ringBack}) => ringBack});
   background-size:85%;
@@ -17,7 +20,7 @@ const ListElement = styled.span`
   background-size:100%;
 `;
 const ListFrame = styled.span`
-  background: url(${({ cardFrame }) => cardFrame});background-size:100%;
+  background: url(${({ cardFrame }) => cardFrame});background-size:100% 100%;
 `;
 const ChracterHeader = ({
   saveData,
@@ -53,6 +56,7 @@ const ChracterHeader = ({
                 }}>
                   <ListRing className="list_ring" ringBack={imgSet.etc.imgRingBack} />
                   <ListCh className="list_ch" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
+                  <ListActionType className="list_action_type" actionType={imgSet.element[saveCh.actionType + 1]} />
                   <ListFrame className="list_frame" cardFrame={imgSet.etc.imgCardFrame} />
                 </li>
               )
@@ -74,6 +78,7 @@ const ChracterHeader = ({
                   <ListRing className="list_ring" ringBack={imgSet.etc.imgRingBack} />
                   <ListElement className="list_element" ringDisplay={imgSet.ringImg[chData.element]} />
                   <ListCh className="list_ch" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
+                  <ListActionType className="list_action_type" actionType={imgSet.element[saveCh.actionType + 1]} />
                   <ListFrame className="list_frame" cardFrame={imgSet.etc.imgCardFrame} />
                   <div className="list_actionPoint">{`${saveCh.actionPoint} / ${saveCh.actionMax}`}</div>
                 </li>

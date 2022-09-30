@@ -1007,7 +1007,7 @@ export const util = { //this.loadImage();
     });
     const baseEff = selectItem.eff.map((data) => {
       let num = [];
-      num[0] = String(Math.round(Math.random() * (Number(data.num[1]) - Number(data.num[0]))) + Number(data.num[0]));
+      num[0] = String(Math.round(Math.random() * (Number(data.num[1]) - Number(data.num[0]))) + (Number(data.num[1]) - Number(data.num[0])));
       for (let i = 1; i < 4; ++i) {
         num[i] = String(Number(num[i - 1]) + Math.round(Number(data.num[0]) * 0.25 + Math.random() * (Number(data.num[0]) * .25)));
       }
@@ -1018,7 +1018,7 @@ export const util = { //this.loadImage();
     });
     const addEff = [];
     const getAddEff = (grade, upEff) => {
-      const effList = [
+      const effList = [//매직, 레어, 에픽
         [[100,200],[200,400],[100,1000]], //체력
         [[1,10],[10,20],[1,30]], //행동력
         [[1,3],[3,6],[1,15]], //행동회복력
@@ -1128,7 +1128,4 @@ export const util = { //this.loadImage();
   getAnimalSkill: () => {
     
   },
-  getTimeGap: (lastTime, currentTime) => {
-
-  }
 }

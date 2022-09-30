@@ -61,6 +61,9 @@ const ListCh = styled.li`
 const ListChRing = styled.li`
   top:0;width:100%;height:100%;background-repeat:no-repeat;background:url(${({ringBack}) => ringBack});background-position:center center;background-size:85%;z-index:3;
 `;
+const ListChActionType = styled.li`
+  top:15px;left:15px;width:15%;padding-top:15%;background-repeat:no-repeat;background:url(${({actionType}) => actionType});background-position:center center;background-size:100%;z-index:5;
+`;
 const ListChElement = styled.li`
   top:0;width:100%;height:100%;background-repeat:no-repeat;background-image:url(${({ringDisplay}) => ringDisplay});background-position:center center;background-size:100%;z-index:1;
 `;
@@ -124,6 +127,7 @@ const ChracterDetail = ({
         </ListNameLv>
         <ListCh chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
         <ListChRing ringBack={imgRingBack} className="ring" />
+        <ListChActionType actionType={imgSet.element[saveCh.actionType + 1]} className="action_type"/>
         <ListChElement ringDisplay={imgSet.ringImg[chData.element]} className="element" />
         <ListChElement1 chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
         <ListChElement2 chLv={saveCh.lv} ringDisplay={imgSet.ssringImg[chData.element]} className="element_2" />
