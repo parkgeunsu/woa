@@ -147,6 +147,7 @@ const buttonEvent = (dataObj) => {
     const saveCh = sData.ch[dataObj.data.slotIdx];
     //아이템 무게 측정
     let currentKg = 0;
+    let itemSubmit = false;
     const totalKg = Math.floor(gameData.ch[saveCh.idx].st1 / 0.3)/10;
     saveCh.items.forEach((item) => {
       if (Object.keys(item).length !== 0) {
@@ -161,7 +162,7 @@ const buttonEvent = (dataObj) => {
         dataObj.msgText("미개봉 아이템입니다.");
         return;
       }
-      if (invenPart === gameData.animal_type[chType].equip[itemSlot] && overlapCheck) {//해당파트와 같은파트인지? && 빈칸인지? && 같은파트가 비었을경우 한번만 발생하게
+      if (invenPart === gameData.animal_type[chType].equip[itemSlot] && overlapCheck) {//해당파트와 같은파트인지? && 빈칸인지? && 같은파트가 비었을경우 한번만 발생하게 
         if (item.idx === undefined) { //해당 슬롯이 비었을 비었을 경우
           currentKg += dataObj.data.gameItem.kg
           if (currentKg > totalKg) { //가능 무게를 넘어 갈 경우
@@ -172,6 +173,7 @@ const buttonEvent = (dataObj) => {
             if (dataObj.data.saveItemData.mark === gameData.ch[saveCh.idx].animal_type) {//동물 뱃지 수정
               saveCh.animalBeige += dataObj.data.saveItemData.markNum;
             }
+            saveCh.newActionType = dataObj.data.gameItem.actionType;
             sData.items['equip'].splice(dataObj.data.itemSaveSlot, 1);//인벤에서 아이템 제거
             overlapCheck = false;
             dataObj.changeSaveData(util.saveCharacter({//데이터 저장
@@ -180,14 +182,16 @@ const buttonEvent = (dataObj) => {
               gameData: gameData,
             }));
             dataObj.showPopup(false);
+            itemSubmit = true;
             return;
           }
-        } else { //해당 슬롯에 아이템이 있을 경우
-          dataObj.showMsg(true);
-          dataObj.msgText("같은 부위에 이미 다른 아이템이 착용 중입니다.");
         }
       }
     });
+    if (!itemSubmit) { //해당 슬롯에 아이템이 있을 경우, 아이템 다른부위로 적용된 경우 파악
+      dataObj.showMsg(true);
+      dataObj.msgText("같은 부위에 이미 다른 아이템이 착용 중입니다.");
+    }
   } else if (dataObj.type === 'itemRelease') { //아이템 해제
     const saveCh = sData.ch[dataObj.data.slotIdx];
     sData.items['equip'].push(dataObj.data.saveItemData);//인벤에 아이템 넣기
@@ -206,6 +210,13 @@ const buttonEvent = (dataObj) => {
           return {}
         }
       });
+    });
+    saveCh.newActionType = [saveCh.actionType];
+    saveCh.items.forEach((item, itemSlot) => {
+      const chType = gameData.ch[saveCh.idx].animal_type;
+      if (gameData.animal_type[chType].equip[itemSlot] === 3 && item.idx !== undefined) {
+        saveCh.newActionType = gameData.items.equip[item.part][item.weaponType][0][item.idx].actionType;
+      }
     });
     dataObj.changeSaveData(util.saveCharacter({//데이터 저장
       saveData: sData,

@@ -56,7 +56,11 @@ const ChracterHeader = ({
                 }}>
                   <ListRing className="list_ring" ringBack={imgSet.etc.imgRingBack} />
                   <ListCh className="list_ch" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
-                  <ListActionType className="list_action_type" actionType={imgSet.element[saveCh.actionType + 1]} />
+                  {saveCh.newActionType.map((data, idx) => {
+                    return (
+                      <ListActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="list_action_type"/>
+                    )
+                  })}
                   <ListFrame className="list_frame" cardFrame={imgSet.etc.imgCardFrame} />
                 </li>
               )
@@ -78,7 +82,11 @@ const ChracterHeader = ({
                   <ListRing className="list_ring" ringBack={imgSet.etc.imgRingBack} />
                   <ListElement className="list_element" ringDisplay={imgSet.ringImg[chData.element]} />
                   <ListCh className="list_ch" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
-                  <ListActionType className="list_action_type" actionType={imgSet.element[saveCh.actionType + 1]} />
+                  {saveCh.newActionType.map((data, idx) => {
+                    return (
+                      <ListActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="list_action_type"/>
+                    )
+                  })}
                   <ListFrame className="list_frame" cardFrame={imgSet.etc.imgCardFrame} />
                   <div className="list_actionPoint">{`${saveCh.actionPoint} / ${saveCh.actionMax}`}</div>
                 </li>

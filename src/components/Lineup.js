@@ -62,7 +62,11 @@ const CharacterList = ({
 			<ListChElement ringDisplay={imgSet.ringImg[chData.element]} className="element" />
 			<ListChElement1 chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
 			<ListChElement2 chLv={saveCh.lv} ringDisplay={imgSet.ssringImg[chData.element]} className="element_2" />
-			<ListActionType className="action_type" actionType={imgSet.element[saveCh.actionType + 1]} />
+			{saveCh.newActionType.map((data, idx) => {
+				return (
+					<ListActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="list_action_type"/>
+				)
+			})}
 			<ListChFrame cardFrame={imgSet.etc.imgCardFrame} className="frame" />
 		</>
 	)

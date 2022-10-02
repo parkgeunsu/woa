@@ -127,7 +127,11 @@ const ChracterDetail = ({
         </ListNameLv>
         <ListCh chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
         <ListChRing ringBack={imgRingBack} className="ring" />
-        <ListChActionType actionType={imgSet.element[saveCh.actionType + 1]} className="action_type"/>
+        {saveCh.newActionType.map((data, idx) => {
+          return (
+            <ListChActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="action_type"/>
+          )
+        })}
         <ListChElement ringDisplay={imgSet.ringImg[chData.element]} className="element" />
         <ListChElement1 chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
         <ListChElement2 chLv={saveCh.lv} ringDisplay={imgSet.ssringImg[chData.element]} className="element_2" />

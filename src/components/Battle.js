@@ -3435,7 +3435,19 @@ const Battle = ({
 										}}><span className="skSp">{battleAlly.current[orderIdx]?.bSt2}</span><span className="skName">{lang === 'ko' ? '대기' : 'Wait'}</span></button></li>
 										{battleAlly.current[orderIdx]?.hasSkill && battleAlly.current[orderIdx]?.hasSkill.map((data, idx) => {
 											const sk = gameData.skill;
-											if (sk[data.idx].cate[0] !== 2) {
+											const characterActionType = battleAlly.current[orderIdx].newActionType;//동물 actionType과 skill element간 속성싱크가 1차이가 남
+											const skillType = sk[data.idx].element_type;
+											let actionType = true;
+											if (skillType > 0 && skillType < 7) {
+												characterActionType.forEach((data) => {
+													actionType = (data + 1) === skillType;
+													if (actionType) {
+														return;
+													}
+												});
+												//스킬 공격타입과 캐릭공격타입이 같은지 확인
+											}
+											if (sk[data.idx].cate[0] !== 2 && actionType) {
 												return (
 													<li key={idx}><button onClick={() => {
 														battleCommand(sk[data.idx], data.lv);
