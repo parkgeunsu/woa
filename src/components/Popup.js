@@ -274,7 +274,7 @@ const buttonEvent = (dataObj) => {
       items:itemInfo,
       //아이템종류, 세부종류(검,단검), 매직등급
       grade:dataObj.data.saveItemData.grade,
-      lv:Math.round(Math.random()*40 + 60),
+      lv:dataObj.data.saveItemData.itemLv,
       sealed:false,
       unpackSlot:dataObj.data.itemSaveSlot,
     }

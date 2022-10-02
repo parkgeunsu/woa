@@ -87,10 +87,41 @@ export const util = { //this.loadImage();
       }
     });
     const element = enemyData.element || gameData.ch[enemyData.idx].element;
-    element.forEach((elData, index) => {
-      enemy = {
-        ...enemy,
-        ['el' + elData]: Math.round(enemy['el' + elData] + 50 * (enemyData.grade / 6)),
+    element.forEach((elData) => {
+      if (elData === 6) { //빛속성 경우
+        enemy = {
+          ...enemy,
+          el7: Math.round(enemy.el7 - 50 * (enemyData.grade / 5)),
+        }
+      } else if (elData === 7) { //암속성 경우
+        enemy = {
+          ...enemy,
+          el6: Math.round(enemy.el6 - 50 * (enemyData.grade / 5)),
+        }
+      } else if (elData === 8) { //수속성 경우
+        enemy = {
+          ...enemy,
+          el8: Math.round(enemy.el8 + 20 * (enemyData.grade / 5)),
+          el9: Math.round(enemy.el9 + 50 * (enemyData.grade / 5)),
+        }
+      } else if (elData === 9) { //화속성 경우
+        enemy = {
+          ...enemy,
+          el9: Math.round(enemy.el9 + 20 * (enemyData.grade / 5)),
+          el10: Math.round(enemy.el10 + 50 * (enemyData.grade / 5)),
+        }
+      } else if (elData === 10) { //바람속성 경우
+        enemy = {
+          ...enemy,
+          el10: Math.round(enemy.el10 + 20 * (enemyData.grade / 5)),
+          el11: Math.round(enemy.el11 + 50 * (enemyData.grade / 5)),
+        }
+      } else if (elData === 11) { //땅속성 경우
+        enemy = {
+          ...enemy,
+          el11: Math.round(enemy.el11 + 20 * (enemyData.grade / 5)),
+          el8: Math.round(enemy.el8 + 50 * (enemyData.grade / 5)),
+        }
       }
     });
     enemy = {
@@ -140,9 +171,40 @@ export const util = { //this.loadImage();
     });
     const element = saveChSlot.element || gameData.ch[saveChSlot.idx].element;
     element.forEach((elData, index) => {
-      saveChSlot = {
-        ...saveChSlot,
-        ['el' + elData]: Math.round(saveChSlot['el' + elData] + 50 * (obj.grade / 6)),
+      if (elData === 6) { //빛속성 경우
+        saveChSlot = {
+          ...saveChSlot,
+          el7: Math.round(saveChSlot.el7 - 50 * (obj.grade / 5)),
+        }
+      } else if (elData === 7) { //암속성 경우
+        saveChSlot = {
+          ...saveChSlot,
+          el6: Math.round(saveChSlot.el6 - 50 * (obj.grade / 5)),
+        }
+      } else if (elData === 8) { //수속성 경우
+        saveChSlot = {
+          ...saveChSlot,
+          el8: Math.round(saveChSlot.el8 + 20 * (obj.grade / 5)),
+          el9: Math.round(saveChSlot.el9 + 50 * (obj.grade / 5)),
+        }
+      } else if (elData === 9) { //화속성 경우
+        saveChSlot = {
+          ...saveChSlot,
+          el9: Math.round(saveChSlot.el9 + 20 * (obj.grade / 5)),
+          el10: Math.round(saveChSlot.el10 + 50 * (obj.grade / 5)),
+        }
+      } else if (elData === 10) { //바람속성 경우
+        saveChSlot = {
+          ...saveChSlot,
+          el10: Math.round(saveChSlot.el10 + 20 * (obj.grade / 5)),
+          el11: Math.round(saveChSlot.el11 + 50 * (obj.grade / 5)),
+        }
+      } else if (elData === 11) { //땅속성 경우
+        saveChSlot = {
+          ...saveChSlot,
+          el11: Math.round(saveChSlot.el11 + 20 * (obj.grade / 5)),
+          el8: Math.round(saveChSlot.el8 + 50 * (obj.grade / 5)),
+        }
       }
     });
     saveChSlot = {
@@ -405,8 +467,8 @@ export const util = { //this.loadImage();
   getEffectType: (num, type) => {
     //eff type(효과 dmg_type&buff_type) 찌르기(0),할퀴기(1),물기(2),치기(3),누르기(4),독(11),명(12),암(13),수(14),화(15),풍(16),지(17), 공(21),방(22),술공(23),술방(24),HP(25),SP(26),RSP(27),속도(28),명중(29),진형(100)
     let arr = ['체력(HP)','행동력(SP)','행동회복력(RSP)','공격력(ATK)','방어력(DEF)','술법공격력(MAK)','술법방어력(MDF)','회복력(RCV)','속도(SPD)','행운(LUK)','찌르기','할퀴기','물기','치기','누르기','던지기','','','','','',
-    '빛','어둠','물','불','바람','땅','','','','',
-    '','','','','','','','','','',
+    '빛','어둠','물','불','바람','땅','빛 강화','어둠 강화','물 강화','불 강화',
+    '바람 강화','땅 강화','','','','','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',
@@ -414,8 +476,8 @@ export const util = { //this.loadImage();
     '','','','','','','','','','',
     '','','','','','','','','','진형'];
     let arr_ko = ['체력','행동력','행동회복력','공격력','방어력','술법공격력','술법방어력','회복력','속도','행운','찌르기','할퀴기','물기','치기','누르기','던지기','','','','','',
-    '빛','어둠','물','불','바람','땅','','','','',
-    '','','','','','','','','','',
+    '빛','어둠','물','불','바람','땅','어둠 강화','물 강화','불 강화',
+    '바람 강화','땅 강화','','','','','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',
@@ -423,8 +485,8 @@ export const util = { //this.loadImage();
     '','','','','','','','','','',
     '','','','','','','','','','진형'];
     let arr_en = ['HP','SP','RSP','ATK','DEF','MAK','MDF','RCV','SPD','LUK','Sting','Claw','Bite','Hit','Crush','Throw','','','','','',
-    'Light','Darkness','Water','Fire','Wind','Land','','','','',
-    '','','','','','','','','','',
+    'Light','Darkness','Water','Fire','Wind','Earth','Enhancement Light','Enhancement Darkness','Enhancement Water','Enhancement Fire',
+    'Enhancement Wind','Enhancement Earth','','','','','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',
@@ -962,6 +1024,7 @@ export const util = { //this.loadImage();
         idx:selectItem.idx,
         part:selectItem.part,
         grade:util.getItemGrade(),
+        itemLv:option.lv,
         slot:0,//아이템 홀착용 갯수
         hole:[],
         color:selectItem.color,
@@ -1017,8 +1080,8 @@ export const util = { //this.loadImage();
       }
     });
     const addEff = [];
-    const getAddEff = (grade, upEff) => {
-      const effList = [//매직, 레어, 에픽
+    const getAddEff = (grade) => {
+      const effList = [// 레어, 에픽, 매직
         [[100,200],[200,400],[100,1000]], //체력
         [[1,10],[10,20],[1,30]], //행동력
         [[1,3],[3,6],[1,15]], //행동회복력
@@ -1029,25 +1092,33 @@ export const util = { //this.loadImage();
         [[10,30],[30,60],[10,100]], //회복력
         [[1,10],[10,25],[1,40]], //속도
         [[10,20],[20,50],[10,100]], //행운
-        [[1,15],[15,30],[1,50]], //찌르기
-        [[1,15],[15,30],[1,50]], //할퀴기
-        [[1,15],[15,30],[1,50]], //물기
-        [[1,15],[15,30],[1,50]], //치기
-        [[1,15],[15,30],[1,50]], //누르기
-        [[1,15],[15,30],[1,50]], //던지기
-        [[1,15],[15,30],[1,50]], //빛
-        [[1,15],[15,30],[1,50]], //어둠
-        [[1,15],[15,30],[1,50]], //물
-        [[1,15],[15,30],[1,50]], //불
-        [[1,15],[15,30],[1,50]], //바람
-        [[1,15],[15,30],[1,50]], //땅
+        [[1,15],[5,15],[1,20]], //찌르기
+        [[1,15],[5,15],[1,20]], //할퀴기
+        [[1,15],[5,15],[1,20]], //물기
+        [[1,15],[5,15],[1,20]], //치기
+        [[1,15],[5,15],[1,20]], //누르기
+        [[1,15],[5,15],[1,20]], //던지기
+        [[1,15],[5,15],[1,20]], //빛
+        [[1,15],[5,15],[1,20]], //어둠
+        [[1,15],[5,15],[1,20]], //물
+        [[1,15],[5,15],[1,20]], //불
+        [[1,15],[5,15],[1,20]], //바람
+        [[1,15],[5,15],[1,20]], //땅
+        [[1,10],[5,10],[1,15]], //빛 강화
+        [[1,10],[5,10],[1,15]], //어둠 강화
+        [[1,10],[5,10],[1,15]], //물 강화
+        [[1,10],[5,10],[1,15]], //불 강화
+        [[1,10],[5,10],[1,15]], //바람 강화
+        [[1,10],[5,10],[1,15]], //땅 강화
       ]
-      const effType = Math.round(Math.random()*21);
+      const effType = Math.round(Math.random()*(Math.random() < .3 ? 27 : 21));//마법 강화 확률 30퍼센트 이하
       let effRandomNum = [];
       if (grade === 2) {
         effRandomNum = effList[effType][2];
-      } else {
-        effRandomNum = effList[effType][upEff ? 1 : 0];
+      } else if (grade === 3) {
+        effRandomNum = effList[effType][0];
+      } else if (grade === 4) {
+        effRandomNum = effList[effType][1];
       }
       const effNum = Math.floor(Math.random()*(effRandomNum[1] - effRandomNum[0])) + effRandomNum[0];
       return {
@@ -1056,6 +1127,16 @@ export const util = { //this.loadImage();
       }
     }
     if (grade === 2) {
+      const addEffLength = Math.floor(itemLv / 30);
+      for (let i = 0; i < addEffLength; ++i) {
+        if (itemLv > 30) {
+          itemLv -= 30;
+          addEff.push(getAddEff(grade));
+        } else {
+          break;
+        }
+      }
+    } else if (grade === 3) {
       const addEffLength = Math.floor(itemLv / 20);
       for (let i = 0; i < addEffLength; ++i) {
         if (itemLv > 20) {
@@ -1065,18 +1146,16 @@ export const util = { //this.loadImage();
           break;
         }
       }
-    } else if ( grade === 3 || grade === 4) {
-      const addEffLength = Math.floor(itemLv / 10);
+    } else if (grade === 4) {
+      const addEffLength = Math.floor(itemLv / 15);
       for (let i = 0; i < addEffLength; ++i) {
-        const upEff = Math.random() > 0.5;
-        if (itemLv > 10) {
-          itemLv -= upEff ? 15 : 10;
-          addEff.push(getAddEff(grade, upEff));
+        if (itemLv > 15) {
+          itemLv -= 15;
+          addEff.push(getAddEff(grade));
         } else {
           break;
         }
       }
-
     }
     const mark = Math.random() < .8 ? Math.round(Math.random() * 24) : '';
     const markNum = mark === '' ? 0 : (() => {

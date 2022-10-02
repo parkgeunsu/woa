@@ -145,7 +145,7 @@ const Character = ({
             type:'equip',
             items:Math.ceil(Math.random()*3),//장비만 해당
             //아이템종류, 세부종류(검,단검), 매직등급
-            lv:Math.round(Math.random()*40 + 60),
+            lv:Math.round(Math.random()*100),
             sealed:true,
           }
           util.getItem(saveData, gameData, changeSaveData, option, lang);
@@ -154,7 +154,7 @@ const Character = ({
           const option = {
             type:'equip',
             items:Math.ceil(Math.random()*2),//장비만 해당
-            lv:Math.round(Math.random()*40 + 60),
+            lv:Math.round(Math.random()*100),
             sealed:true,
           }
           util.getItem(saveData, gameData, changeSaveData, option, lang);

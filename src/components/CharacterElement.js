@@ -7,8 +7,9 @@ import PopupContainer from 'components/PopupContainer';
 import Popup from 'components/Popup';
 
 const Element = styled.div`
+  .element_bar{overflow:${({ percent }) => percent > 100 ? 'unset' : 'hidden'};}
   .element_icon{background-image:url(${({ icon }) => icon});background-size:100%;}
-  .element_currentBar{width:${({ percent }) => percent}%;}
+  .element_currentBar{width:${({ percent }) => percent > 100 ? 100 : percent}%;}
   .element_iconMini{background-image:url(${({ icon }) => icon});background-size:100%;}
 `;
 const stateColor = () => {
