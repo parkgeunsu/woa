@@ -155,13 +155,18 @@ const buttonEvent = (dataObj) => {
         currentKg += item.part === 3 ? gameData.items.equip[item.part][item.weaponType][itemsGrade][item.idx].kg : gameData.items.equip[item.part][0][itemsGrade][item.idx].kg;
       }
     });
+    const chType = gameData.ch[saveCh.idx].animal_type;
+    if (dataObj.data.saveItemData.sealed) { //개봉된 아이템인지 확인
+      dataObj.showMsg(true);
+      dataObj.msgText("미개봉 아이템입니다.");
+      return;
+    }
+    if (!dataObj.data.gameItem.limit[saveCh.job]) { //직업 착용가능 확인
+      dataObj.showMsg(true);
+      dataObj.msgText("착용이 불가능한 직업입니다.");
+      return;
+    }
     saveCh.items.forEach((item, itemSlot)=>{
-      const chType = gameData.ch[saveCh.idx].animal_type;
-      if (dataObj.data.saveItemData.sealed) {
-        dataObj.showMsg(true);
-        dataObj.msgText("미개봉 아이템입니다.");
-        return;
-      }
       if (invenPart === gameData.animal_type[chType].equip[itemSlot] && overlapCheck) {//해당파트와 같은파트인지? && 빈칸인지? && 같은파트가 비었을경우 한번만 발생하게 
         if (item.idx === undefined) { //해당 슬롯이 비었을 비었을 경우
           currentKg += dataObj.data.gameItem.kg
@@ -173,7 +178,9 @@ const buttonEvent = (dataObj) => {
             if (dataObj.data.saveItemData.mark === gameData.ch[saveCh.idx].animal_type) {//동물 뱃지 수정
               saveCh.animalBeige += dataObj.data.saveItemData.markNum;
             }
-            saveCh.newActionType = dataObj.data.gameItem.actionType;
+            if (dataObj.data.gameItem.actionType !== '') {
+              saveCh.newActionType = dataObj.data.gameItem.actionType;
+            }
             sData.items['equip'].splice(dataObj.data.itemSaveSlot, 1);//인벤에서 아이템 제거
             overlapCheck = false;
             dataObj.changeSaveData(util.saveCharacter({//데이터 저장
@@ -215,7 +222,8 @@ const buttonEvent = (dataObj) => {
     saveCh.items.forEach((item, itemSlot) => {
       const chType = gameData.ch[saveCh.idx].animal_type;
       if (gameData.animal_type[chType].equip[itemSlot] === 3 && item.idx !== undefined) {
-        saveCh.newActionType = gameData.items.equip[item.part][item.weaponType][0][item.idx].actionType;
+        const anotherWeaponActionType = gameData.items.equip[item.part][item.weaponType][0][item.idx].actionType;
+        saveCh.newActionType = anotherWeaponActionType === '' ? [saveCh.actionType] : anotherWeaponActionType;
       }
     });
     dataObj.changeSaveData(util.saveCharacter({//데이터 저장

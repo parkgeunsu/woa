@@ -246,6 +246,21 @@ import defenceIcon1 from 'images/ico/shield1.png';
 import defenceIcon2 from 'images/ico/shield2.png';
 import tombstone from 'images/ico/tombstone.png';
 
+//직업
+import job0 from 'images/job/job0.png';
+import job1 from 'images/job/job1.png';
+import job2 from 'images/job/job2.png';
+import job3 from 'images/job/job3.png';
+import job4 from 'images/job/job4.png';
+import job5 from 'images/job/job5.png';
+import job6 from 'images/job/job6.png';
+import job7 from 'images/job/job7.png';
+import job8 from 'images/job/job8.png';
+import job9 from 'images/job/job9.png';
+import job10 from 'images/job/job10.png';
+import job11 from 'images/job/job11.png';
+import job12 from 'images/job/job12.png';
+
 //날씨
 import sun from 'images/weather/sun.png';
 import moon from 'images/weather/moon.png';
@@ -339,6 +354,9 @@ export const itemUpgrade = [
 ];
 export const itemMaterial = [
 
+];
+export const job = [
+  job0,job1,job2,job3,job4,job5,job6,job7,job8,job9,job10,job11,job12
 ];
 export const weather = [
   sun,moon,suncloud,mooncloud,sunrain,moonrain,sunthunder,moonthunder,sunsnow,moonsnow

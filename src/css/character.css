@@ -65,10 +65,12 @@
 .ch_list ul li.g6.on{box-shadow:0 0 8px #ff8000,0 0 3px #ff8000;}
 .ch_list ul li.g7.on{box-shadow:0 0 8px #ff2a00,0 0 3px #ff2a00;}
 
+.ch_list .list_job_actiontype{position:absolute;left:3px;top:3px;width:20%;font-size:0;}
 .ch_list .list_ch{position:absolute;left:0;right:0;top:0;bottom:0;background-repeat:no-repeat;background-position:center 0;z-index:1;}
 .ch_list .list_chstyle{position:absolute;left:0;right:0;top:0;bottom:0;background-repeat:no-repeat;background-position:center 0;z-index:2;}
 .ch_list .list_ring{position:absolute;left:0;right:0;top:0;bottom:0;background-repeat:no-repeat;background-position:center 170%;z-index:1;}
-.ch_list .list_action_type{position:absolute;left:3px;top:3px;width:20%;padding-top:20%;background-repeat:no-repeat;background-position:center center;z-index:5;}
+.ch_list .list_job{display:inline-block;width:100%;padding-top:100%;background-repeat:no-repeat;background-position:center center;z-index:5;}
+.ch_list .list_action_type{display:inline-block;width:100%;padding-top:100%;background-repeat:no-repeat;background-position:center center;z-index:5;}
 .ch_list .list_frame{position:absolute;left:0;right:0;top:0;bottom:0;background-repeat:no-repeat;background-position:center 0;}
 .ch_list .list_element{position:absolute;left:0;right:0;top:0;bottom:20%;background-repeat:no-repeat;background-position:center center;}
 .ch_list .list_actionPoint{position:absolute;left:50%;bottom:5px;transform:translate(-50%, 0);white-space:nowrap;text-shadow:1px 1px 1px #000;}

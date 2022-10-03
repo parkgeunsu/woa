@@ -35,4 +35,7 @@ export const job = [
     {idx:11,
         na:'상인',txt:'',
         skill:[]},
+    {idx:12,
+        na:'한량',txt:'',
+        skill:[]},
 ]

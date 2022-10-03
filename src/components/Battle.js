@@ -914,7 +914,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 			}
 
 			let dmg = [],
-				elementDmg = 0;
+				elementDefencePercent = 0;
 			let totalDmg = 0,
 				landCritical = false;
 			if (skillCate === 5) {//아군 버프 데미지
@@ -1037,81 +1037,10 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 								}
 							}
 						}
-						//속성공격 추뎀
+
 						//찌르기(0),할퀴기(1),물기(2),치기(3),누르기(4),던지기(5),빛(6),어둠(7),물(8),불(9),바람(10),땅(11)
-						const elementFilter = (elementArr, idx) => {
-							let elementChk = false;
-							elementArr.forEach((element) => {
-								if (element === idx) {
-									elementChk = true;
-									return;
-								}
-							});
-							return elementChk;
-						}
-						switch (skType - 1) {
-							case 0:
-							case 1:
-							case 2:
-							case 3:
-							case 4:
-							case 5:
-								elementDmg = (attacker['el'+(skType - 1)] - defEnemy['el'+(skType - 1)]) / 100 + 1;
-								break;
-							case 6: //빛
-								if (elementFilter(defEnemy.element, 7)) { //어둠 속성이면
-									elementDmg = (attacker['el'+(skType - 1)] * 2) / 100 + 1;
-								} else {
-									elementDmg = attacker['el'+(skType - 1)] / 100 + 1;
-								}
-								break;
-							case 7: //어둠
-								if (elementFilter(defEnemy.element, 6)) { //빛 속성이면
-									elementDmg = (attacker['el'+(skType - 1)] * 2) / 100 + 1;
-								} else {
-									elementDmg = attacker['el'+(skType - 1)] / 100 + 1;
-								}
-								break;
-							case 8: //물
-								if (elementFilter(defEnemy.element, 9)) { //불 속성이면
-									elementDmg = (attacker['el'+(skType - 1)] * 2) / 100 + 1;
-								} else if (elementFilter(defEnemy.element, 11)) {//땅 속성이면
-									elementDmg = (attacker['el'+(skType - 1)] * 0.5) / 100 + 1;
-								} else {
-									elementDmg = attacker['el'+(skType - 1)] / 100 + 1;
-								}
-								break;
-							case 9: //불
-								if (elementFilter(defEnemy.element, 10)) { //바람 속성이면
-									elementDmg = (attacker['el'+(skType - 1)] * 2) / 100 + 1;
-								} else if (elementFilter(defEnemy.element, 8)) {//물 속성이면
-									elementDmg = (attacker['el'+(skType - 1)] * 0.5) / 100 + 1;
-								} else {
-									elementDmg = attacker['el'+(skType - 1)] / 100 + 1;
-								}
-								break; //바람
-							case 10:
-								if (elementFilter(defEnemy.element, 11)) { //땅 속성이면
-									elementDmg = (attacker['el'+(skType - 1)] * 2) / 100 + 1;
-								} else if (elementFilter(defEnemy.element, 9)) {//불 속성이면
-									elementDmg = (attacker['el'+(skType - 1)] * 0.5) / 100 + 1;
-								} else {
-									elementDmg = attacker['el'+(skType - 1)] / 100 + 1;
-								}
-								break;
-							case 11: //땅
-								if (elementFilter(defEnemy.element, 8)) { //물 속성이면
-									elementDmg = (attacker['el'+(skType - 1)] * 2) / 100 + 1;
-								} else if (elementFilter(defEnemy.element, 10)) {//바람 속성이면
-									elementDmg = (attacker['el'+(skType - 1)] * 0.5) / 100 + 1;
-								} else {
-									elementDmg = attacker['el'+(skType - 1)] / 100 + 1;
-								}
-								break;
-							default:
-								break;
-						}
-						elementDmg = elementDmg <= 1 ? 1 : elementDmg;
+						elementDefencePercent = skType > 0 ? defEnemy[`el${skType - 1}`] / 100 : 1; //속성치에 따른 방어적용치
+
 						//스킬 공격치 적용
 						//skill dmg
 						let dmg_ = 0,
@@ -1129,25 +1058,25 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 						}
 						defendSkillEnemy.forEach((defEnemy_, idx) => {
 							const chkIdx = defEnemy_.idx;
-							if (chkIdx === 2) {
+							if (chkIdx === 2) { //방어
 								sk = defEnemy.hasSkill.filter((skData) => {
 									if (skData.idx === 2) {
 										return skData;
 									};
 								});
-							} else if (chkIdx === 13) {
+							} else if (chkIdx === 13) { //철벽방어
 								sk = defEnemy.hasSkill.filter((skData) => {
 									if (skData.idx === 13) {
 										return skData;
 									};
 								});	
-							} else if (chkIdx === 14) {
+							} else if (chkIdx === 14) { //마법방어
 								sk = defEnemy.hasSkill.filter((skData) => {
 									if (skData.idx === 14) {
 										return skData;
 									};
 								});	
-							} else if (chkIdx === 15) {
+							} else if (chkIdx === 15) { //나무뒤에 숨기
 								sk = defEnemy.hasSkill.filter((skData) => {
 									if (skData.idx === 15) {
 										return skData;
@@ -1181,8 +1110,8 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 							atkNum[stateName] = util.getPercentNumber(skData.num[skill - 1], attacker[stateName]);
 						});
 						// dmg_ = (criticalAtk ? atkNum[attackType] * elementDmg * 2 : atkNum[attackType] * elementDmg) - (defNum[defenceType] || defEnemy[defenceType]);
-						const defCount = defNum[defenceType] || defEnemy[defenceType];
-						dmg_ = atkNum[attackType] * elementDmg - (criticalAtk ? defCount * .33 : defCount);//크리티컬이면 방어 1/3로 줄임
+						const defCount = (defNum[defenceType] || defEnemy[defenceType]) * elementDefencePercent;
+						dmg_ = atkNum[attackType] - (criticalAtk ? defCount * .33 : defCount);//크리티컬이면 방어 1/3로 줄임
 						//console.log(atkNum[attackType], defCount);
 						//console.log(criticalAtk, dmg_);
 						if (avoid) {

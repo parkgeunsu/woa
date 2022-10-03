@@ -202,8 +202,10 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 			}
 		}
 		const cardG = cardGrade.arr[i] + luckyGradePoint;
-		const animalAction = gameData.animal_type[gameData.ch[newIdx].animal_type].actionType;
-		const actionType = animalAction[Math.floor(Math.random() * animalAction.length)];
+		const animalAction = gameData.animal_type[gameData.ch[newIdx].animal_type].actionType,
+			actionType = animalAction[Math.floor(Math.random() * animalAction.length)];
+		const jobs = gameData.ch[newIdx].job,
+			job = jobs[Math.floor(Math.random() * jobs.length)];
 		chArr.push({
 			idx: newIdx,
 			grade: cardG,
@@ -223,6 +225,7 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 				element: gameData.ch[newIdx].element,
 				actionType: actionType,
 				newActionType : [actionType],
+				job: job,
 				exp: 0,
 				hasExp: 0,
 				battleBeige:[0,0,0,0],

@@ -38,6 +38,9 @@ const ChCard = styled.ul`
   &.page {
     position:relative;width:100%;height:85%;padding:0 3% 3% 3%;
   }
+  .job_actiontype{
+    position:absolute;top:15px;left:15px;width:15%;
+  }
 `;
 
 // .ch_wrap .page0 .ring{background-position:center center;background-size:320px;}
@@ -61,8 +64,11 @@ const ListCh = styled.li`
 const ListChRing = styled.li`
   top:0;width:100%;height:100%;background-repeat:no-repeat;background:url(${({ringBack}) => ringBack});background-position:center center;background-size:85%;z-index:3;
 `;
+const ListChJob = styled.li`
+  position:relative;width:100%;padding-top:100%;background-repeat:no-repeat;background:url(${({jobIcon}) => jobIcon});background-position:center center;background-size:100%;z-index:5;
+`;
 const ListChActionType = styled.li`
-  top:15px;left:15px;width:15%;padding-top:15%;background-repeat:no-repeat;background:url(${({actionType}) => actionType});background-position:center center;background-size:100%;z-index:5;
+  position:relative;width:100%;padding-top:100%;background-repeat:no-repeat;background:url(${({actionType}) => actionType});background-position:center center;background-size:100%;z-index:5;
 `;
 const ListChElement = styled.li`
   top:0;width:100%;height:100%;background-repeat:no-repeat;background-image:url(${({ringDisplay}) => ringDisplay});background-position:center center;background-size:100%;z-index:1;
@@ -127,11 +133,14 @@ const ChracterDetail = ({
         </ListNameLv>
         <ListCh chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
         <ListChRing ringBack={imgRingBack} className="ring" />
-        {saveCh.newActionType.map((data, idx) => {
-          return (
-            <ListChActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="action_type"/>
-          )
-        })}
+        <div className="job_actiontype">
+          <ListChJob jobIcon={imgSet.job[saveCh.job]} className="job"/>
+          {saveCh.newActionType.map((data, idx) => {
+            return (
+              <ListChActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="action_type"/>
+            )
+          })}
+        </div>
         <ListChElement ringDisplay={imgSet.ringImg[chData.element]} className="element" />
         <ListChElement1 chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
         <ListChElement2 chLv={saveCh.lv} ringDisplay={imgSet.ssringImg[chData.element]} className="element_2" />
