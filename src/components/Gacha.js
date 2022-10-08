@@ -65,6 +65,14 @@ const CardRing = styled.li`
 	background-image:url(${({ringBack}) => ringBack});
 	background-size:85%;
 `;
+const CardJob = styled.li`
+	background-image:url(${({jobIcon}) => jobIcon});
+	background-size:100%;
+`;
+const CardActionType = styled.li`
+	background-image:url(${({actionType}) => actionType});
+	background-size:100%;
+`;
 const CardFrame = styled.li`
 	background:url(${({cardFrame}) => cardFrame});
 	background-size:100% 100%;
@@ -286,6 +294,7 @@ const Gacha = ({
 	const cardRef = useRef([]); //단일 카드
 	const openCardIdx = useRef(0); //카드 뒤짚기 순번
 	const [infoIdx, setInfoIdx] = useState(0); //카드정보 카드번호
+	const [slotIdx, setSlotIdx] = useState(0); //카드 슬롯번호
 	const changeGachaMode = (mode, data) => {
 		if (mode === 'start') { // 뽑기모드
 			let sData = {...saveData};
@@ -528,6 +537,7 @@ const Gacha = ({
 							return (
 								<GachaCard onClick={() => {
 									setInfoIdx(data.idx);
+									setSlotIdx(data.slotIdx);
 									infoRef.current.classList.add('on');
 									popCard(gameData.ch[infoIdx]);
 									setCardStateType(gameData.stateType[saveData.ch[data.slotIdx].stateType].na);
@@ -545,6 +555,14 @@ const Gacha = ({
 								 			<CardStar className="gacha_star" starIcon={iconStar}>
 											 	{star && makeStar(star)}
 											</CardStar>
+											<div className="gacha_job_actiontype">
+												<CardJob jobIcon={imgSet.job[saveData.ch[data.slotIdx].job]} className="gacha_job"/>
+												{saveData.ch[data.slotIdx].newActionType.map((data, idx) => {
+													return (
+														<CardActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="gacha_action_type"/>
+													)
+												})}
+											</div>
 								 			<CardFrame className="gacha_frame" cardFrame={imgSet.etc.imgCardFrame} />
 										</ul>
 									</GachaFront>
@@ -581,6 +599,14 @@ const Gacha = ({
 							<CardStar type={'open'} className="gacha_star" starIcon={iconStar}>
 								{cardStar && makeStar(cardStar)}
 							</CardStar>
+							<div className="gacha_job_actiontype">
+								<CardJob jobIcon={imgSet.job[saveData.ch[slotIdx].job]} className="gacha_job"/>
+								{saveData.ch[slotIdx].newActionType.map((data, idx) => {
+									return (
+										<CardActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="gacha_action_type"/>
+									)
+								})}
+							</div>
 							<CardFrame className="gacha_frame" cardFrame={imgSet.etc.imgCardFrame} />
 						</ul>
 					</div>

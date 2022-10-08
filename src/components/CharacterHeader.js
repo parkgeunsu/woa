@@ -17,10 +17,10 @@ const ChracterHeader = ({
   chPage,
   changeChPage,
   changeSaveData,
-  currentTime,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
+  const currentTime = useContext(AppContext).currentTime;
   const saveExp = {
     current: saveData.ch[slotIdx].exp,
     max: gameData.exp['grade'+saveData.ch[slotIdx].grade][saveData.ch[slotIdx].lv-1]
@@ -42,6 +42,7 @@ const ChracterHeader = ({
   return (
     <>
       <ChHeader frameBack={imgSet.etc.frameChBack} className="ch_header transition">
+        {currentTime}
         <ul>
           <li className="stateType_actionPoint" flex="true">
             <span className="state_type">{gameData.stateType[saveData.ch[slotIdx].stateType].na}</span>

@@ -148,7 +148,7 @@ const Character = ({
             lv:Math.round(Math.random()*100),
             sealed:true,
           }
-          util.getItem(saveData, gameData, changeSaveData, option, lang);
+          util.getItem(saveData, gameData, changeSaveData, option, true, lang);
         }}>아이템 추가</button><br/>
         <button onClick={() => {
           const option = {
@@ -157,7 +157,7 @@ const Character = ({
             lv:Math.round(Math.random()*100),
             sealed:true,
           }
-          util.getItem(saveData, gameData, changeSaveData, option, lang);
+          util.getItem(saveData, gameData, changeSaveData, option, true, lang);
         }}>동물스킬 리셋</button>
         {currentTime}
       </div>

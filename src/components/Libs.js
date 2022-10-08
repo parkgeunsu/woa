@@ -922,10 +922,10 @@ export const util = { //this.loadImage();
     }
     return num;
   },
-  setItemColor: (svgData, colorSet) => {
+  setItemColor: (svgData, colorSet, id) => {
     let svg = svgData;
     const idPattern = new RegExp("==id==","g");
-    svg = svg.replace(idPattern, Math.random().toString(36).substring(2, 11));
+    svg = svg.replace(idPattern, id);
     colorSet.forEach((data, idx) => {
       const pattern = new RegExp("=="+idx+"==","g");
       svg = svg.replace(pattern, data);
@@ -950,7 +950,7 @@ export const util = { //this.loadImage();
       return 1;
     }
   },
-  getItem: (saveData, gameData, changeSaveData, option, lang) => {
+  getItem: (saveData, gameData, changeSaveData, option, Save, lang) => {
     let save = {...saveData};//장비 아이템 복사
     let itemLv = option.lv;
     const type = option.type || 'equip';
@@ -1018,9 +1018,11 @@ export const util = { //this.loadImage();
     // }
     // const itemIdx = Math.floor(Math.random() * item.length),//아이템 번호
     //const selectItem = item[itemIdx];
+    const id = Math.random().toString(36).substring(2, 11);
     const selectItem = itemData;
     if (option.sealed) {
       const itemObj = {
+        id:id,
         idx:selectItem.idx,
         part:selectItem.part,
         grade:util.getItemGrade(),
@@ -1174,6 +1176,7 @@ export const util = { //this.loadImage();
     const modifier = {ko:gameData.items.slotModifier.ko[slotNum] + ' ' + animalModifier[0],en:gameData.items.slotModifier.en[slotNum] + ' ' + animalModifier[1]};
     itemLv -= slotNum * 5;
     const itemObj = {
+      id:id,
       idx:selectItem.idx,
       part:selectItem.part,
       grade:grade,
@@ -1188,12 +1191,16 @@ export const util = { //this.loadImage();
       weaponType:weaponType,
       sealed:false,
     }
-    if (typeof option.unpackSlot === 'number') {
-      save.items[type].splice(option.unpackSlot,1,itemObj);
+    if (Save) {
+      if (typeof option.unpackSlot === 'number') {
+        save.items[type].splice(option.unpackSlot,1,itemObj);
+      } else {
+        save.items[type].push(itemObj);
+      }
+      changeSaveData(save);
     } else {
-      save.items[type].push(itemObj);
+      return itemObj;
     }
-    changeSaveData(save);
   },
   getAnimalPoint: (items, animal, addMark) => {
     let mark = 0;
@@ -1203,6 +1210,21 @@ export const util = { //this.loadImage();
       }
     });
     return mark + addMark;
+  },
+  getTimeGap: (saveData, changeSaveData) => {
+    const time = new Date();
+    if (localStorage.getItem('closeTime')) {
+      const timeGap = Math.floor((time.getTime() - new Date(localStorage.getItem('closeTime')).getTime())/1000);//마지막 접속시간과 현재시간과 차이
+      saveData.ch.forEach((data) => {
+        data.actionPoint += Math.floor(timeGap / 50);
+        data.pointTime -= timeGap;
+      });
+      changeSaveData(saveData);
+      console.log(saveData, timeGap);
+      localStorage.setItem('closeTime', time);
+    } else {
+      localStorage.setItem('closeTime', time);
+    }
   },
   getAnimalSkill: () => {
     

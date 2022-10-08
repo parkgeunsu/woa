@@ -106,20 +106,6 @@ const ContentContainer = styled.div`
 const FooterContainer = styled.div`
   ${'' /* min-height: 35px; */}
 `;
-const timer = (currentTime, setCurrentTime, saveData, changeSaveData) => {
-  if (currentTime > 49) {
-    let sData = {...saveData};
-    sData.ch.forEach((data) => {
-      data.actionPoint += 1;
-      data.pointTime -= 50;
-    })
-    changeSaveData(sData);
-    setCurrentTime(1);
-    localStorage.setItem('closeTime', new Date());
-  } else {
-    setCurrentTime(currentTime + 1);
-  };
-};
 const App = () => {
   const data = {
     setting: {
@@ -161,9 +147,6 @@ const App = () => {
   const navigate = useNavigate();
   const location = useLocation().pathname.split("/")[1];
   const [page, setPage] = useState(location);
-  const [time, setTime] = useState(new Date());
-  const timerRef = useRef(null);
-  const [currentTime, setCurrentTime] = useState(1);
   const slotIdx = 'all';
   const changePage = (pagename) => {
     setPage(pagename);
@@ -172,12 +155,7 @@ const App = () => {
     setSaveData(objData);
     util.saveData('saveData', objData);
   }
-  useEffect(() => {
-    Math.floor(currentTime / 50)
-    timerRef.current = setTimeout(() => {
-      timer(currentTime, setCurrentTime, saveData, changeSaveData);
-    }, 1000);
-  }, [currentTime]);
+  
   const storageVer = util.loadData("version");
   let useSaveData = {}
   if (storageVer === version) { //데이터가 저장되어 있을때
@@ -207,23 +185,9 @@ const App = () => {
     }
   );
   useEffect(() => {
-    console.log('a');
-  }, [time]);
-  useEffect(() => {
-    if(localStorage.getItem('closeTime')){
-      const timeGap = Math.floor((time.getTime() - new Date(localStorage.getItem('closeTime')).getTime())/1000);//마지막 접속시간과 현재시간과 차이
-      useSaveData.ch.forEach((data) => {
-        data.actionPoint += Math.floor(timeGap / 50);
-        data.pointTime -= timeGap;
-      });
-      changeSaveData(useSaveData);
-      console.log(useSaveData, timeGap);
-      localStorage.setItem('closeTime', time);
-    } else {
-      localStorage.setItem('closeTime', time);
-    }
+    util.getTimeGap(useSaveData, changeSaveData);//시간 저장
     //이미지 프리로드
-    back.map((image) => {
+    back.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
@@ -235,11 +199,11 @@ const App = () => {
       const img = new Image();
       img.src = etc[v];
     }
-    animalType.map((image) => {
+    animalType.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
-    element.map((image) => {
+    element.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
@@ -247,74 +211,72 @@ const App = () => {
       const img = new Image();
       img.src = chImg[v];
     }
-    iconState.map((image) => {
+    iconState.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
-    itemEquip.map((image) => {
+    itemEquip.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
-    itemEtc.map((image) => {
+    itemEtc.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
-    itemHole.map((image) => {
+    itemHole.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
-    itemMaterial.map((image) => {
+    itemMaterial.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
-    itemUpgrade.map((image) => {
+    itemUpgrade.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
-    ringImg.map((image) => {
+    ringImg.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
-    sringImg.map((image) => {
+    sringImg.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
-    ssringImg.map((image) => {
+    ssringImg.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
-    land.map((image) => {
+    land.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
-    bgEffect.map((image) => {
+    bgEffect.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
-    actionIcon.map((image) => {
+    actionIcon.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
-    passive.map((image) => {
+    passive.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
-    eff.map((image) => {
+    eff.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
-    weather.map((image) => {
+    weather.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
-    job.map((image) => {
+    job.forEach((image) => {
       const img = new Image();
       img.src = image;
     });
-    console.log(time);
     return () => {
       localStorage.setItem('closeTime', new Date());
-      clearTimeout(timerRef.current);
     }
   }, []);
   const scenario = {
@@ -324,7 +286,7 @@ const App = () => {
     stage: 0
   }
   return (
-    <RootContainer value={data} >
+    <RootContainer value={data}>
       <div style={{height: "100%",overflowY:"overlay",overflowX:"hidden"}} className={`root ${page}`}>
         {location !== "battle" && (
           <Menu saveData={saveData} changePage={changePage} navigate={navigate} />
@@ -332,7 +294,7 @@ const App = () => {
         <ContentContainer className="content">
           <Routes>
             <Route path="/" element={<Main changePage={changePage} />} />
-            <Route path="/character" element={<Character saveData={saveData} changeSaveData={changeSaveData} currentTime={currentTime} />} />
+            <Route path="/character" element={<Character saveData={saveData} changeSaveData={changeSaveData} />} />
             <Route path="/gacha" element={<Gacha saveData={saveData} changeSaveData={changeSaveData} />} />
             <Route path="/lineup" element={<Lineup saveData={saveData} changeSaveData={changeSaveData} />} />
             <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} scenario={scenario} />} />

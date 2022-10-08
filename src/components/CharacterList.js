@@ -25,6 +25,21 @@ const ListElement = styled.span`
 const ListFrame = styled.span`
   background: url(${({ cardFrame }) => cardFrame});background-size:100% 100%;
 `;
+
+// const timer = (currentTime, setCurrentTime, saveData, changeSaveData) => {
+//   if (currentTime > 49) {
+//     let sData = {...saveData};
+//     sData.ch.forEach((data) => {
+//       data.actionPoint += 1;
+//       data.pointTime -= 50;
+//     })
+//     changeSaveData(sData);
+//     setCurrentTime(1);
+//     localStorage.setItem('closeTime', new Date());
+//   } else {
+//     setCurrentTime(currentTime + 1);
+//   };
+// };
 const ChracterHeader = ({
   saveData,
   slotIdx,
@@ -37,6 +52,15 @@ const ChracterHeader = ({
   const chLength = saveData.ch.length;
   const scrolluseRef = useRef(null);
   const cardWidth = window.innerWidth * 0.1;
+
+  //const timerRef = useRef(null); //시간계산
+  //const [currentTime, setCurrentTime] = useState(1);
+  // useEffect(() => {
+  //   Math.floor(currentTime / 50)
+  //   timerRef.current = setTimeout(() => {
+  //     timer(currentTime, setCurrentTime, saveData, changeSaveData);
+  //   }, 1000);
+  // }, [currentTime]);
 
   useLayoutEffect(() => {
     if (scrolluseRef.current) { //카드리스트 스크롤 잡기

@@ -274,14 +274,6 @@
 .item.unique{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-unique) 100%);}
 .item.legend{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-legend) 100%);}
 
-/*
-.item .txt{position:absolute;left:2px;right:2px;bottom:2px;font-size:11px;text-align:center;z-index:1;}
-.item .pic{position:absolute;left:0;right:0;bottom:0;top:0;width:100%;}
-.item .lv{position:absolute;left:2px;top:2px;right:2px;bottom:2px;z-index:2;text-align:left;}
-.item .hole{position:absolute;left:2px;right:2px;bottom:2px;z-index:3;}
-.item .hole .hole_slot{margin:auto 1px;width:calc(25% - 2px);}
-.item .hole .hole_slot:after{display:block;content:'';width:90%;height:0;padding-top:90%;border-radius:30px;border:1px solid #000;}
-*/
 .stone_w:after{background:radial-gradient(farthest-side at 35% 35%, #fff, #000);}
 .stone_k:after{background:radial-gradient(farthest-side at 35% 35%, #777, #000);}
 .stone_r:after{background:radial-gradient(farthest-side at 35% 35%, #f38, #000);}

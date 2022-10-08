@@ -297,7 +297,7 @@ const buttonEvent = (dataObj) => {
       sealed:false,
       unpackSlot:dataObj.data.itemSaveSlot,
     }
-    util.getItem(sData, gameData, dataObj.changeSaveData, option, dataObj.lang);
+    util.getItem(sData, gameData, dataObj.changeSaveData, option, true, dataObj.lang);
     //dataObj.changeSaveData(sData);//데이터 저장
     // dataObj.showPopup(false);
   } else if (dataObj.type === 'holeEquip') {
@@ -355,7 +355,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         <li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${saveItems.modifier[lang]}<br/>${items.na[lang]}`}}></span></li>
         <li flex="true">
           <PopupItemPic className={`item item${items.part} ${gameData.itemGrade.txt_e[saveItems.grade].toLowerCase()}`}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color)}}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color, saveItems.id)}}>
             </svg>
           </PopupItemPic>
           <div flex-h="true" style={{flex: 1,}}>
@@ -495,7 +495,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         <li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${saveItems.modifier[lang]}<br/>${items.na[lang]}`}}></span></li>
         <li flex="true">
           <PopupItemPic className={`item item${items.part} ${gameData.itemGrade.txt_e[saveItems.grade].toLowerCase()} ${dataObj.saveItemData.sealed ? "sealed" : ""}`}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color)}}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color, saveItems.id)}}>
             </svg>
           </PopupItemPic>
           <div flex-h="true" style={{flex: 1,}}>
