@@ -20,6 +20,8 @@
 .shop_area .shop_top .buy_item.unique{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-unique) 100%);}
 .shop_area .shop_top .buy_item.legend{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-legend) 100%);}
 .shop_area .shop_top .buy_item .pic{position:absolute;left:0;right:0;bottom:0;top:0;}
+.shop_area .shop_top .buy_item .pic.sealed svg{filter:brightness(0.3) drop-shadow(0px 0px 1px #fff);}
+.shop_area .shop_top .buy_item .pic.sealed:before{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);content:'?';z-index:1;font-size:20px;}
 .shop_area .shop_top .buy_item .hole{position:absolute;left:2px;right:2px;bottom:2px;z-index:3;}
 .shop_area .shop_top .buy_item .hole .hole_slot{margin:auto 1px;width:calc(25% - 2px);}
 .shop_area .shop_top .buy_item .hole .hole_slot:after{display:block;content:'';width:90%;height:0;padding-top:90%;border-radius:10px;border:1px solid #000;}
@@ -27,7 +29,7 @@
 .shop_area .shop_top .buy_item.select1{outline:2px solid #ffac2f;box-shadow:0 0 20px #ffac2f;}
 .shop_area .shop_top .buy_item.select2{outline:2px solid #e14040;box-shadow:0 0 20px #e14040;}
 .shop_area .shop_bottom{display:flex;margin:10px 0 20px 0;height:50%;}
-.shop_area .item_select{display:flex;flex-direction:column;width:50%;background:rgba(0,0,0,.5);}
+.shop_area .item_select{display:flex;flex-direction:column;width:50%;background:rgba(0,0,0,.7);}
 .shop_area .item_select1{border:5px double #ffac2f;}
 .shop_area .item_select2{margin:0 0 0 5px;width:50%;border:5px double #e14040;}
 .shop_area .item_select > div{padding:5px;width:100%;box-sizing:border-box;}

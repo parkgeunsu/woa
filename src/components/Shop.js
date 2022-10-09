@@ -83,6 +83,9 @@ const Shop = ({
   const [modalOn, setModalOn] = useState(false);
 	const [modalInfo, setModalInfo] = useState({});
   const [modalType, setModalType] = useState();
+  const [popupOn, setPopupOn] = useState(false);
+  const [msgOn, setMsgOn] = useState(false);
+  const [msg, setMsg] = useState("");
 	const [selectTab, setSelectTab] = useState(0);
 	const [item, setItem] = useState([]);
 	const selectCount = useRef(0);
@@ -108,7 +111,6 @@ const Shop = ({
 		}
 		setItem(items);
 	}, []);
-	//-------------------선택된 컬러 넣기, 아이템 정보처리
   return (
 		<>
 			<ShopWrap className="shop_wrap" backImg={imgSet.back[2]} >
@@ -148,6 +150,8 @@ const Shop = ({
 										});
 										cloneItem[selectTab][idx].select2 = 'select2';
 										selectItem2Display.current.buttonType = 'buy';
+										selectItem2Display.current.selectTab = selectTab;
+										selectItem2Display.current.selectIdx = idx;
 									} else {
 										setSelectItem1(itemSelect);
 										selectItem1Display.current = items;
@@ -158,6 +162,8 @@ const Shop = ({
 										});
 										cloneItem[selectTab][idx].select1 = 'select1';
 										selectItem1Display.current.buttonType = 'buy';
+										selectItem1Display.current.selectTab = selectTab;
+										selectItem1Display.current.selectIdx = idx;
 									}
 								}}>
 									<span className="pic">
@@ -191,6 +197,8 @@ const Shop = ({
 										});
 										cloneItem[idx].select2 = 'select2';
 										selectItem2Display.current.buttonType = 'sell';
+										selectItem1Display.current.selectTab = 3;
+										selectItem1Display.current.selectIdx = idx;
 									} else {
 										setSelectItem1(itemSelect);
 										selectItem1Display.current = items;
@@ -199,9 +207,11 @@ const Shop = ({
 										});
 										cloneItem[idx].select1 = 'select1';
 										selectItem1Display.current.buttonType = 'sell';
+										selectItem1Display.current.selectTab = 3;
+										selectItem1Display.current.selectIdx = idx;
 									}
 								}}>
-									<span className="pic">
+									<span className={`pic ${data.sealed ? "sealed" : ""}`}>
 										<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.id)}}>
 										</svg>
 									</span>
@@ -218,8 +228,9 @@ const Shop = ({
 					<div className="shop_bottom">
 						{selectItem1 ? (
 							<ItemContainer className="item_select item_select1 items" color={gameData.itemGrade.color[selectItem1.grade]}>
+								<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.modifier[lang]} ${selectItem1Display.current.na[lang]}`}}></span></li>
 								<li className="item_fix" flex="true">
-									<ItemPic className={`item item${selectItem1Display.current.part} ${gameData.itemGrade.txt_e[selectItem1.grade].toLowerCase()}`}>
+									<ItemPic className={`item item${selectItem1Display.current.part} ${gameData.itemGrade.txt_e[selectItem1.grade].toLowerCase()} ${selectItem1.sealed ? "sealed" : ""}`}>
 										<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem1Display.current.display], selectItem1.color, selectItem1.id)}}></svg>
 									</ItemPic>
 									<div flex-h="true" style={{flex: 1,}}>
@@ -284,22 +295,31 @@ const Shop = ({
 								<li className="item_footer" flex-v="true">
 									{selectItem1Display.current.buttonType === "buy" ? (
 										<>
-											<div className="item_price"><span>{lang === 'ko' ? '구입가:' : 'Buying Price'}</span><em>{`₩${selectItem1Display.current.price * selectItem1.grade}`}</em></div>
+											<div className="item_price"><span>{lang === 'ko' ? '구입가:' : 'Buying Price'}</span><em>{`₩${(selectItem1Display.current.price < 1000 ? 1000 : selectItem1Display.current.price) * 2 * selectItem1.grade}`}</em></div>
 											<div className="item_button" flex="true">
 												<button text="true" onClick={(e) => {
-													// buttonEvent({
-													// 	event: e,
-													// 	type: 'itemRelease',
-													// 	data: dataObj,
-													// 	saveData: saveData,
-													// 	changeSaveData: changeSaveData,
-													// 	gameData: gameData,
-													// 	msgText: msgText,
-													// 	showMsg: showMsg,
-													// 	showPopup: showPopup,
-													// 	lang: lang,
-													// })
-												}} data-buttontype="itemRelease">{lang === 'ko' ? '구입' : 'Buy'}</button>
+													let item_ = [...item];
+													item_[selectItem1Display.current.selectTab].splice(selectItem1Display.current.selectIdx, 1);
+													setItem(item_);
+													util.buttonEvent({
+														event: e,
+														type: 'itemBuy',
+														data: {
+															slotIdx: 0,
+															gameItem: selectItem1Display.current,
+															saveItemData: selectItem1,
+															type: 'equip',
+														},
+														saveData: saveData,
+														changeSaveData: changeSaveData,
+														gameData: gameData,
+														msgText: setMsg,
+														showMsg: setMsgOn,
+														showPopup: setPopupOn,
+														lang: lang,
+													});
+													setSelectItem1(null);
+												}} data-buttontype="itemBuy">{lang === 'ko' ? '구입' : 'Buy'}</button>
 											</div>
 										</>
 									) : (
@@ -307,19 +327,25 @@ const Shop = ({
 											<div className="item_price"><span>{lang === 'ko' ? '판매가:' : 'Selling Price'}</span><em>{`₩${selectItem1Display.current.price * selectItem1.grade}`}</em></div>
 											<div className="item_button" flex="true">
 												<button text="true" onClick={(e) => {
-													// buttonEvent({
-													// 	event: e,
-													// 	type: 'itemRelease',
-													// 	data: dataObj,
-													// 	saveData: saveData,
-													// 	changeSaveData: changeSaveData,
-													// 	gameData: gameData,
-													// 	msgText: msgText,
-													// 	showMsg: showMsg,
-													// 	showPopup: showPopup,
-													// 	lang: lang,
-													// })
-												}} data-buttontype="itemRelease">{lang === 'ko' ? '판매' : 'Sell'}</button>
+													util.buttonEvent({
+														event: e,
+														type: 'itemSell',
+														data: {
+															slotIdx: 0,
+															gameItem: selectItem1Display.current,
+															itemSaveSlot:selectItem1Display.current.selectIdx,
+															type: 'equip',
+														},
+														saveData: saveData,
+														changeSaveData: changeSaveData,
+														gameData: gameData,
+														msgText: setMsg,
+														showMsg: setMsgOn,
+														showPopup: setPopupOn,
+														lang: lang,
+													});
+													setSelectItem1(null);
+												}} data-buttontype="itemSell">{lang === 'ko' ? '판매' : 'Sell'}</button>
 											</div>
 										</>
 									)}
@@ -330,8 +356,9 @@ const Shop = ({
 						)}
 						{selectItem2 ? (
 							<ItemContainer className="item_select item_select2 items" color={gameData.itemGrade.color[selectItem2.grade]}>
+								<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.modifier[lang]} ${selectItem2Display.current.na[lang]}`}}></span></li>
 								<li className="item_fix" flex="true">
-									<ItemPic className={`item item${selectItem2Display.current.part} ${gameData.itemGrade.txt_e[selectItem2.grade].toLowerCase()}`}>
+									<ItemPic className={`item item${selectItem2Display.current.part} ${gameData.itemGrade.txt_e[selectItem2.grade].toLowerCase()} ${selectItem2.sealed ? "sealed" : ""}`}>
 										<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem2Display.current.display], selectItem2.color, selectItem2.id)}}></svg>
 									</ItemPic>
 									<div flex-h="true" style={{flex: 1,}}>
@@ -396,21 +423,30 @@ const Shop = ({
 								<li className="item_footer" flex-v="true">
 									{selectItem2Display.current.buttonType === "buy" ? (
 										<>
-											<div className="item_price"><span>{lang === 'ko' ? '구입가:' : 'Buying Price'}</span><em>{`₩${selectItem2Display.current.price * selectItem2.grade}`}</em></div>
+											<div className="item_price"><span>{lang === 'ko' ? '구입가:' : 'Buying Price'}</span><em>{`₩${(selectItem2Display.current.price < 1000 ? 1000 : selectItem2Display.current.price) * 2 * selectItem2.grade}`}</em></div>
 											<div className="item_button" flex="true">
 												<button text="true" onClick={(e) => {
-													// buttonEvent({
-													// 	event: e,
-													// 	type: 'itemRelease',
-													// 	data: dataObj,
-													// 	saveData: saveData,
-													// 	changeSaveData: changeSaveData,
-													// 	gameData: gameData,
-													// 	msgText: msgText,
-													// 	showMsg: showMsg,
-													// 	showPopup: showPopup,
-													// 	lang: lang,
-													// })
+													let item_ = [...item];
+													item_[selectItem2Display.current.selectTab].splice(selectItem2Display.current.selectIdx, 1);
+													setItem(item_);
+													util.buttonEvent({
+														event: e,
+														type: 'itemBuy',
+														data: {
+															slotIdx: 0,
+															gameItem: selectItem2Display.current,
+															saveItemData: selectItem2,
+															type: 'equip',
+														},
+														saveData: saveData,
+														changeSaveData: changeSaveData,
+														gameData: gameData,
+														msgText: setMsg,
+														showMsg: setMsgOn,
+														showPopup: setPopupOn,
+														lang: lang,
+													});
+													setSelectItem2(null);
 												}} data-buttontype="itemRelease">{lang === 'ko' ? '구입' : 'Buy'}</button>
 											</div>
 										</>
@@ -419,19 +455,25 @@ const Shop = ({
 											<div className="item_price"><span>{lang === 'ko' ? '판매가:' : 'Selling Price'}</span><em>{`₩${selectItem2Display.current.price * selectItem2.grade}`}</em></div>
 											<div className="item_button" flex="true">
 												<button text="true" onClick={(e) => {
-													// buttonEvent({
-													// 	event: e,
-													// 	type: 'itemRelease',
-													// 	data: dataObj,
-													// 	saveData: saveData,
-													// 	changeSaveData: changeSaveData,
-													// 	gameData: gameData,
-													// 	msgText: msgText,
-													// 	showMsg: showMsg,
-													// 	showPopup: showPopup,
-													// 	lang: lang,
-													// })
-												}} data-buttontype="itemRelease">{lang === 'ko' ? '판매' : 'Sell'}</button>
+													util.buttonEvent({
+														event: e,
+														type: 'itemSell',
+														data: {
+															slotIdx: 0,
+															gameItem: selectItem2Display.current,
+															itemSaveSlot:selectItem2Display.current.selectIdx,
+															type: 'equip',
+														},
+														saveData: saveData,
+														changeSaveData: changeSaveData,
+														gameData: gameData,
+														msgText: setMsg,
+														showMsg: setMsgOn,
+														showPopup: setPopupOn,
+														lang: lang,
+													});
+													setSelectItem2(null);
+												}} data-buttontype="itemSell">{lang === 'ko' ? '판매' : 'Sell'}</button>
 											</div>
 										</>
 									)}

@@ -1229,4 +1229,179 @@ export const util = { //this.loadImage();
   getAnimalSkill: () => {
     
   },
+  buttonEvent: (dataObj) => {
+    dataObj.event.stopPropagation();
+    console.log(dataObj);
+    const gameData = dataObj.gameData;
+    let sData = {...dataObj.saveData};
+    if (dataObj.type === 'item_enhancement') {
+
+    } else if (dataObj.type === 'itemEquip') { //아이템 착용
+      const invenPart = dataObj.data.saveItemData.part;
+      let overlapCheck = true;
+      const saveCh = sData.ch[dataObj.data.slotIdx];
+      //아이템 무게 측정
+      let currentKg = 0;
+      let itemSubmit = false;
+      const totalKg = Math.floor(gameData.ch[saveCh.idx].st1 / 0.3)/10;
+      saveCh.items.forEach((item) => {
+        if (Object.keys(item).length !== 0) {
+          const itemsGrade = item.grade < 5 ? 0 : item.grade - 5;
+          currentKg += item.part === 3 ? gameData.items.equip[item.part][item.weaponType][itemsGrade][item.idx].kg : gameData.items.equip[item.part][0][itemsGrade][item.idx].kg;
+        }
+      });
+      const chType = gameData.ch[saveCh.idx].animal_type;
+      if (dataObj.data.saveItemData.sealed) { //개봉된 아이템인지 확인
+        dataObj.showMsg(true);
+        dataObj.msgText("미개봉 아이템입니다.");
+        return;
+      }
+      if (!dataObj.data.gameItem.limit[saveCh.job]) { //직업 착용가능 확인
+        dataObj.showMsg(true);
+        dataObj.msgText("착용이 불가능한 직업입니다.");
+        return;
+      }
+      saveCh.items.forEach((item, itemSlot)=>{
+        if (invenPart === gameData.animal_type[chType].equip[itemSlot] && overlapCheck) {//해당파트와 같은파트인지? && 빈칸인지? && 같은파트가 비었을경우 한번만 발생하게 
+          if (item.idx === undefined) { //해당 슬롯이 비었을 비었을 경우
+            currentKg += dataObj.data.gameItem.kg
+            if (currentKg > totalKg) { //가능 무게를 넘어 갈 경우
+              dataObj.showMsg(true);
+              dataObj.msgText("착용하려는 장비가 무겁습니다.");
+            } else { //착용 가능 무게일 경우
+              saveCh.items[itemSlot] = {...dataObj.saveData.items['equip'][dataObj.data.itemSaveSlot]};//캐릭에 아이템 넣기
+              if (dataObj.data.saveItemData.mark === gameData.ch[saveCh.idx].animal_type) {//동물 뱃지 수정
+                saveCh.animalBeige += dataObj.data.saveItemData.markNum;
+              }
+              if (dataObj.data.gameItem.actionType !== '') {
+                saveCh.newActionType = dataObj.data.gameItem.actionType;
+              }
+              sData.items['equip'].splice(dataObj.data.itemSaveSlot, 1);//인벤에서 아이템 제거
+              overlapCheck = false;
+              dataObj.changeSaveData(util.saveCharacter({//데이터 저장
+                saveData: sData,
+                slotIdx: dataObj.data.slotIdx,
+                gameData: gameData,
+              }));
+              dataObj.showPopup(false);
+              itemSubmit = true;
+              return;
+            }
+          }
+        }
+      });
+      if (!itemSubmit) { //해당 슬롯에 아이템이 있을 경우, 아이템 다른부위로 적용된 경우 파악
+        dataObj.showMsg(true);
+        dataObj.msgText("같은 부위에 이미 다른 아이템이 착용 중입니다.");
+      }
+    } else if (dataObj.type === 'itemRelease') { //아이템 해제
+      const saveCh = sData.ch[dataObj.data.slotIdx];
+      sData.items['equip'].push(dataObj.data.saveItemData);//인벤에 아이템 넣기
+      sData.ch[dataObj.data.slotIdx].items[dataObj.data.itemSaveSlot] = {}; //아이템 삭제
+      if (dataObj.data.saveItemData.mark === gameData.ch[saveCh.idx].animal_type) {//동물 뱃지 수정
+        saveCh.animalBeige = util.getAnimalPoint(saveCh.items, gameData.ch[saveCh.idx].animal_type, saveCh.mark);
+      }
+      saveCh.animalSkill = saveCh.animalSkill.map((skGroup) => {//동물 스킬 초기화
+        return skGroup.map((skData) => {
+          if (Object.keys(skData).length !== 0) {
+            return {
+              idx:skData.idx,
+              lv:0,
+            }
+          } else {
+            return {}
+          }
+        });
+      });
+      saveCh.newActionType = [saveCh.actionType];
+      saveCh.items.forEach((item, itemSlot) => {
+        const chType = gameData.ch[saveCh.idx].animal_type;
+        if (gameData.animal_type[chType].equip[itemSlot] === 3 && item.idx !== undefined) {
+          const anotherWeaponActionType = gameData.items.equip[item.part][item.weaponType][0][item.idx].actionType;
+          saveCh.newActionType = anotherWeaponActionType === '' ? [saveCh.actionType] : anotherWeaponActionType;
+        }
+      });
+      dataObj.changeSaveData(util.saveCharacter({//데이터 저장
+        saveData: sData,
+        slotIdx: dataObj.data.slotIdx,
+        gameData: gameData,
+      }));
+      dataObj.showPopup(false);
+    } else if (dataObj.type === 'itemUse') { //아이템 사용
+      const saveCh = sData.ch[dataObj.data.slotIdx];
+      switch (dataObj.data.gameItem.action) {
+        case 99: //골드 획득
+          sData.info.money += dataObj.data.gameItem.price;//돈 계산
+          break;
+        case 98: //경험치 획득
+          if(saveCh.lv >= 50) {
+            const hasMaxExp = gameData.hasMaxExp[saveCh.grade];
+            saveCh.hasExp += dataObj.data.gameItem.eff;
+            saveCh.hasExp += saveCh.exp;
+            saveCh.lv = 50;
+            saveCh.exp = 0;
+            if (saveCh.hasExp > hasMaxExp) {
+              saveCh.hasExp = hasMaxExp;
+            }
+          } else {
+            saveCh.exp += dataObj.data.gameItem.eff;
+          }
+          const lvUp = (ch, dataObj) => {
+            const maxExp = gameData.exp['grade'+ch.grade][ch.lv-1];
+            dataObj.changeSaveData(util.saveCharacter({//데이터 저장
+              saveData: sData,
+              slotIdx: dataObj.data.slotIdx,
+              gameData: gameData,
+            }));
+            if (ch.exp >= maxExp) { //레벨업
+              util.effect.lvUp();
+              if (ch.lv <= 50) {
+                ch.lv += 1;
+                ch.exp -= maxExp;
+                setTimeout(() => {
+                  lvUp(ch, dataObj);
+                }, 300);
+                if(ch.lv % 10 === 0) {
+                  util.getSkill(gameData, ch, dataObj.data.slotIdx, dataObj.saveData, dataObj.changeSaveData);
+                }
+              }
+            }
+          }
+          lvUp(saveCh, dataObj);
+          break;
+        default:
+          break;
+      } //사용 타입
+      sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
+      dataObj.changeSaveData(sData);//데이터 저장
+      dataObj.showPopup(false);
+    } else if (dataObj.type === 'itemBuy') { //아이템 구입
+      sData.info.money -= dataObj.data.gameItem.price;//돈 계산
+      sData.items[dataObj.data.type].push(dataObj.data.saveItemData);//아이템 추가
+      dataObj.changeSaveData(sData);//데이터 저장
+      dataObj.showPopup(false);
+    }else if (dataObj.type === 'itemSell') { //아이템 판매
+      sData.info.money += dataObj.data.gameItem.price;//돈 계산
+      sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
+      dataObj.changeSaveData(sData);//데이터 저장
+      dataObj.showPopup(false);
+    } else if (dataObj.type === 'itemUnpack') { //아이템 포장풀기
+      //sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
+      const itemInfo = dataObj.data.saveItemData.part === 3 ? `${dataObj.data.saveItemData.part}-${dataObj.data.saveItemData.weaponType}-${dataObj.data.saveItemData.idx}` : `${dataObj.data.saveItemData.part}-${dataObj.data.saveItemData.idx}`;
+      const option = {
+        type:'equip',
+        items:itemInfo,
+        //아이템종류, 세부종류(검,단검), 매직등급
+        grade:dataObj.data.saveItemData.grade,
+        lv:dataObj.data.saveItemData.itemLv,
+        sealed:false,
+        unpackSlot:dataObj.data.itemSaveSlot,
+      }
+      util.getItem(sData, gameData, dataObj.changeSaveData, option, true, dataObj.lang);
+      //dataObj.changeSaveData(sData);//데이터 저장
+      // dataObj.showPopup(false);
+    } else if (dataObj.type === 'holeEquip') {
+      dataObj.showPopup(false);
+    }
+  }
 }
