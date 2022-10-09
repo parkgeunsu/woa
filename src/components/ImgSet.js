@@ -41,6 +41,7 @@ import iconLargeview from 'images/ico/ico_largeview.png';
 import iconHelm from 'images/ico/helm.png';
 import iconArmor from 'images/ico/armor.png';
 import iconWeapon from 'images/ico/weapon.png';
+import iconBag from 'images/ico/bag.png';
 
 import iconStar1 from 'images/star/star1.png';
 import iconStar2 from 'images/star/star2.png';
@@ -138,16 +139,6 @@ import animalType6 from 'images/item/animal_item6.png';
 import animalType7 from 'images/item/animal_item7.png';
 import animalType8 from 'images/item/animal_item8.png';
 import animalType9 from 'images/item/animal_item9.png';
-import itemEquip0 from 'images/item/equip0.png';
-import itemEquip1 from 'images/item/equip1.png';
-import itemEquip2 from 'images/item/equip2.png';
-import itemEquip3 from 'images/item/equip3.png';
-import itemEquip4 from 'images/item/equip4.png';
-import itemEquip5 from 'images/item/equip5.png';
-import itemEquip6 from 'images/item/equip6.png';
-import itemEquip7 from 'images/item/equip7.png';
-import itemEquip8 from 'images/item/equip8.png';
-import itemEquip9 from 'images/item/equip9.png';
 import itemEtc0 from 'images/item/etc0.png';
 import itemEtc1 from 'images/item/etc1.png';
 import itemEtc10 from 'images/item/etc10.png';
@@ -315,7 +306,7 @@ export const etc = {
   imgRing:imgRing,imgCardBack:imgCardBack,frameChBack:frameChBack,stateBack:stateBack,imgCardFrame:imgCardFrame,imgCardLv:imgCardLv,iconCardName:iconCardName,imgRingBack:imgRingBack,frameRope:frameRope,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,questionBlack:questionBlack,questionWhite:questionWhite,wind:wind,
 };
 export const icon = {
-  iconBack:iconBack,iconChat:iconChat,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,iconHelm:iconHelm,iconArmor:iconArmor,iconWeapon:iconWeapon
+  iconBack:iconBack,iconChat:iconChat,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,iconHelm:iconHelm,iconArmor:iconArmor,iconWeapon:iconWeapon,iconBag:iconBag
 };
 export const iconStar = [
   iconStar1,iconStar2,iconStar3,iconStar4,iconStar5,iconStar6,iconStar7
@@ -339,9 +330,6 @@ export const animalType = [
 ];
 export const iconState = [
   iconState0,iconState1,iconState2,iconState3,iconState4,iconState5,iconState6
-];
-export const itemEquip = [
-  itemEquip0,itemEquip1,itemEquip2,itemEquip3,itemEquip4,itemEquip5,itemEquip6,itemEquip7,itemEquip8,itemEquip9,
 ];
 export const itemEtc = [
   itemEtc0,itemEtc1,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc10,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc20,itemEtc21

@@ -36,7 +36,7 @@ const shopList = [
 	{na:{ko:"모자", en:"Helm"},icon:"iconHelm"},
 	{na:{ko:"갑옷", en:"Armor"},icon:"iconArmor"},
 	{na:{ko:"무기", en:"Weapon"},icon:"iconWeapon"},
-	{na:{ko:"팔기", en:"Sell"},icon:"iconWeapon"},
+	{na:{ko:"팔기", en:"Sell"},icon:"iconBag"},
 ];
 const makeMark = (markNum, img) => {
   let markTag = '';
@@ -94,7 +94,7 @@ const Shop = ({
 	const selectItem1Display = useRef();
 	const selectItem2Display = useRef();
 	useEffect(() => {
-		let items = [[],[],[]];
+		let items = [[],[],[],[]];
 		for (let i = 0; i < 20; i ++) {
 			for (let j = 1; j < 4; j ++) {
 					items[j - 1][i] = {...util.getItem(saveData, gameData, changeSaveData, {
@@ -109,8 +109,10 @@ const Shop = ({
 				};
 			}
 		}
+		items[3] = [...saveData.items.equip];
+		console.log(items);
 		setItem(items);
-	}, []);
+	}, [saveData]);
   return (
 		<>
 			<ShopWrap className="shop_wrap" backImg={imgSet.back[2]} >
@@ -130,7 +132,7 @@ const Shop = ({
 				</div>
 				<div className="shop_area">
 					<div className="shop_top scroll-y">
-						{selectTab < 3 && item[selectTab] && item[selectTab].map((data, idx) => {
+						{item[selectTab] && item[selectTab].map((data, idx) => {
 							const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
 							const items = data.part === 3 ? gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx] : gameItem.equip[data.part][0][itemsGrade][data.idx];
 							const itemsHole = data.hole;
@@ -149,7 +151,11 @@ const Shop = ({
 											});
 										});
 										cloneItem[selectTab][idx].select2 = 'select2';
-										selectItem2Display.current.buttonType = 'buy';
+										if (selectTab < 3) {
+											selectItem2Display.current.buttonType = 'buy';
+										} else {
+											selectItem2Display.current.buttonType = 'sell';
+										}
 										selectItem2Display.current.selectTab = selectTab;
 										selectItem2Display.current.selectIdx = idx;
 									} else {
@@ -161,7 +167,11 @@ const Shop = ({
 											});
 										});
 										cloneItem[selectTab][idx].select1 = 'select1';
-										selectItem1Display.current.buttonType = 'buy';
+										if (selectTab < 3) {
+											selectItem1Display.current.buttonType = 'buy';
+										} else {
+											selectItem1Display.current.buttonType = 'sell';
+										}
 										selectItem1Display.current.selectTab = selectTab;
 										selectItem1Display.current.selectIdx = idx;
 									}
@@ -178,51 +188,6 @@ const Shop = ({
 									</span>
 								</div>
 							)
-						})}
-						{selectTab === 3 && saveData.items.equip.map((data, idx) => {
-							const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
-							const items = data.part === 3 ? gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx] : gameItem.equip[data.part][0][itemsGrade][data.idx];
-							const itemsHole = data.hole;
-							return (
-								<div className={`buy_item ${gameData.itemGrade.txt_e[data.grade].toLowerCase()} ${data.select1} ${data.select2}`} key={`items${idx}`} onClick={() => {
-									let itemSelect = {...saveData.items.equip[idx]};
-									const itemsGrade = itemSelect.grade < 5 ? 0 : itemSelect.grade - 5;
-	 								const items = itemSelect.part === 3 ? gameItem.equip[itemSelect.part][itemSelect.weaponType][itemsGrade][itemSelect.idx] : gameItem.equip[itemSelect.part][0][itemsGrade][itemSelect.idx];
-									let cloneItem = [...saveData.items.equip];
-									if (++selectCount.current % 2 === 0) {
-										setSelectItem2(itemSelect);
-										selectItem2Display.current = items;
-										cloneItem.forEach((itemData) => {
-											itemData.select2 = '';
-										});
-										cloneItem[idx].select2 = 'select2';
-										selectItem2Display.current.buttonType = 'sell';
-										selectItem1Display.current.selectTab = 3;
-										selectItem1Display.current.selectIdx = idx;
-									} else {
-										setSelectItem1(itemSelect);
-										selectItem1Display.current = items;
-										cloneItem.forEach((itemData) => {
-											itemData.select1 = '';
-										});
-										cloneItem[idx].select1 = 'select1';
-										selectItem1Display.current.buttonType = 'sell';
-										selectItem1Display.current.selectTab = 3;
-										selectItem1Display.current.selectIdx = idx;
-									}
-								}}>
-									<span className={`pic ${data.sealed ? "sealed" : ""}`}>
-										<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.id)}}>
-										</svg>
-									</span>
-									<span className="hole" flex-center="true">
-										{itemsHole.map((holedata, holeidx) => {
-											const stoneColor = gameItem.hole[data.hole[holeidx]].stone;
-											return <span key={`${idx}_${holeidx}`} className={`hole_slot hole${holeidx} stone_${stoneColor}`}></span>;
-										})}
-									</span>
-								</div>
-							);
 						})}
 					</div>
 					<div className="shop_bottom">

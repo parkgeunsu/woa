@@ -147,7 +147,6 @@ const CharacterItems = ({
                   const items = data.part === 3 ? gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx] : gameItem.equip[data.part][0][itemsGrade][data.idx];
                   const itemsHole = data.hole;
                   const equipPossible = data.part === 3 && !data.sealed ? items.limit[saveData.ch[slotIdx].job] : true;
-                  console.log(items);
                   return (
                     <li key={`hequip${idx}`} onClick={() => {handlePopup('hequip', data.idx, idx, data.part, data.grade, data.weaponType)}} className={`item item${data.part} ${gameData.itemGrade.txt_e[data.grade].toLowerCase()}`} data-itemnum={`equip_${data.idx}`}>
                       <em link={`hequip_${data.idx}_${idx}`}>
