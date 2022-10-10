@@ -21,6 +21,9 @@ const ShopIcon = styled.span`
 const ItemContainer = styled.ul`
   border:5px solid transparent;
   border-image:url(${({frameBack}) => frameBack}) 5 round;
+	&.on{
+		outline:5px solid #000;
+	}
   .item_header{border:5px solid transparent;
   border-image:url(${({frameBack}) => frameBack}) 5 round;
   }
@@ -88,7 +91,8 @@ const Shop = ({
   const [msg, setMsg] = useState("");
 	const [selectTab, setSelectTab] = useState(0);
 	const [item, setItem] = useState([]);
-	const selectCount = useRef(0);
+	const itemRef = useRef();
+	const [selectArea, setSelectArea] = useState('area1');
 	const [selectItem1, setSelectItem1] = useState();
 	const [selectItem2, setSelectItem2] = useState();
 	const selectItem1Display = useRef();
@@ -110,8 +114,13 @@ const Shop = ({
 			}
 		}
 		items[3] = [...saveData.items.equip];
-		console.log(items);
-		setItem(items);
+		itemRef.current = items;
+	}, []);
+	useEffect(() => {
+		let copyItem = [...itemRef.current];
+		copyItem[3] = [...saveData.items.equip];
+		itemRef.current  = copyItem;
+		setItem(itemRef.current);
 	}, [saveData]);
   return (
 		<>
@@ -142,7 +151,7 @@ const Shop = ({
 									const itemsGrade = itemSelect.grade < 5 ? 0 : itemSelect.grade - 5;
 	 								const items = itemSelect.part === 3 ? gameItem.equip[itemSelect.part][itemSelect.weaponType][itemsGrade][itemSelect.idx] : gameItem.equip[itemSelect.part][0][itemsGrade][itemSelect.idx];
 									let cloneItem = [...item];
-									if (++selectCount.current % 2 === 0) {
+									if (selectArea === 'area2') {
 										setSelectItem2(itemSelect);
 										selectItem2Display.current = items;
 										cloneItem.forEach((itemData) => {
@@ -192,7 +201,9 @@ const Shop = ({
 					</div>
 					<div className="shop_bottom">
 						{selectItem1 ? (
-							<ItemContainer className="item_select item_select1 items" color={gameData.itemGrade.color[selectItem1.grade]}>
+							<ItemContainer className={`item_select item_select1 items ${selectArea === "area1" ? "on" : ""}`} color={gameData.itemGrade.color[selectItem1.grade]} onClick={() => {
+								setSelectArea('area1');
+							}}>
 								<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.modifier[lang]} ${selectItem1Display.current.na[lang]}`}}></span></li>
 								<li className="item_fix" flex="true">
 									<ItemPic className={`item item${selectItem1Display.current.part} ${gameData.itemGrade.txt_e[selectItem1.grade].toLowerCase()} ${selectItem1.sealed ? "sealed" : ""}`}>
@@ -317,10 +328,14 @@ const Shop = ({
 								</li>
 							</ItemContainer>
 						) : (
-							<ItemContainer className="item_select item_select1 items"></ItemContainer>
+							<ItemContainer className={`item_select item_select1 items ${selectArea === "area1" ? "on" : ""}`} onClick={() => {
+								setSelectArea('area1');
+							}}></ItemContainer>
 						)}
 						{selectItem2 ? (
-							<ItemContainer className="item_select item_select2 items" color={gameData.itemGrade.color[selectItem2.grade]}>
+							<ItemContainer className={`item_select item_select2 items ${selectArea === "area2" ? "on" : ""}`} color={gameData.itemGrade.color[selectItem2.grade]} onClick={() => {
+								setSelectArea('area2');
+							}}>
 								<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.modifier[lang]} ${selectItem2Display.current.na[lang]}`}}></span></li>
 								<li className="item_fix" flex="true">
 									<ItemPic className={`item item${selectItem2Display.current.part} ${gameData.itemGrade.txt_e[selectItem2.grade].toLowerCase()} ${selectItem2.sealed ? "sealed" : ""}`}>
@@ -445,7 +460,9 @@ const Shop = ({
 								</li>
 							</ItemContainer>
 						) : (
-							<ItemContainer className="item_select item_select2 items"></ItemContainer>
+							<ItemContainer className={`item_select item_select2 items ${selectArea === "area2" ? "on" : ""}`} onClick={() => {
+								setSelectArea('area2');
+							}}></ItemContainer>
 						)}
 					</div>
 				</div>
