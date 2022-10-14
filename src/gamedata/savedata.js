@@ -68,12 +68,12 @@ export const save = {
     "equip":[
     ],
     "hole":[
-      {"idx":1,baseEff:[{type:4,num:['802']}],addEff:[]},
-      {"idx":3,baseEff:[{type:4,num:['802']}],addEff:[]},
-      {"idx":10,baseEff:[{type:4,num:['802']}],addEff:[]},
-      {"idx":20,baseEff:[{type:4,num:['802']}],addEff:[]},
-      {"idx":22,baseEff:[{type:4,num:['802']}],addEff:[]},
-      {"idx":23,baseEff:[{type:4,num:['802']}],addEff:[]},
+      {"idx":1,"grade":1,"baseEff":[{type:4,num:['802']}],"addEff":[]},
+      {"idx":3,"grade":1,"baseEff":[{type:4,num:['802']}],"addEff":[]},
+      {"idx":10,"grade":3,"baseEff":[{type:4,num:['802']}],"addEff":[]},
+      {"idx":11,"grade":4,"baseEff":[{type:4,num:['802']}],"addEff":[]},
+      {"idx":12,"grade":2,"baseEff":[{type:4,num:['802']}],"addEff":[]},
+      {"idx":13,"grade":1,"baseEff":[{type:4,num:['802']}],"addEff":[]},
     ],
     "upgrade":[
       {"idx":1},

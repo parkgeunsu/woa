@@ -119,7 +119,7 @@ const CharacterItems = ({
                     const itemsHole = data.hole;
                     return (
                       <li key={`equip${idx}`} onClick={() => {handlePopup('equip', data.idx, idx, data.part, data.grade, data.weaponType)}} className={`item item${gameData.animal_type[animalIdx].equip[idx]} ${gameData.itemGrade.txt_e[data.grade].toLowerCase()}`}>
-                        <em link={`equip_${data.idx}_${idx}`}>
+                        <em>
                           {/* <ItemPic className="pic" itemPic={imgSet.itemEquip[items.display]}></ItemPic> */}
                           <ItemPic className="pic">
                             <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.id)}}>
@@ -149,7 +149,7 @@ const CharacterItems = ({
                   const equipPossible = data.part === 3 && !data.sealed ? items.limit[saveData.ch[slotIdx].job] : true;
                   return (
                     <li key={`hequip${idx}`} onClick={() => {handlePopup('hequip', data.idx, idx, data.part, data.grade, data.weaponType)}} className={`item item${data.part} ${gameData.itemGrade.txt_e[data.grade].toLowerCase()}`} data-itemnum={`equip_${data.idx}`}>
-                      <em link={`hequip_${data.idx}_${idx}`}>
+                      <em>
                         <ItemPic className={`pic ${data.sealed ? "sealed" : ""} ${equipPossible ? "possible" : ""}`}>
                           <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.id)}}>
                           </svg>
@@ -168,7 +168,7 @@ const CharacterItems = ({
                   const items = gameItem.hole[data.idx];
                   return (
                     <li key={`hole${idx}`} onClick={() => {handlePopup('hole', data.idx, idx)}} className="item item11" data-itemnum={`hole_${data.idx}`}>
-                      <em link={`hole_${data.idx}_${idx}`}>
+                      <em>
                         <ItemPic className="pic" itemPic={imgSet.itemHole[items.display]} />
                       </em>
                     </li>
@@ -178,7 +178,7 @@ const CharacterItems = ({
                   const items = gameItem.upgrade[data.idx];
                   return (
                     <li key={`upgrade${idx}`} onClick={() => {handlePopup('upgrade', data.idx, idx)}} className="item item12" data-itemnum={`upgrade_${data.idx}`}>
-                      <em link={`upgrade_${data.idx}_${idx}`}>
+                      <em>
                         <ItemPic className="pic" itemPic={imgSet.itemUpgrade[items.display]} />
                       </em>
                     </li>
@@ -188,7 +188,7 @@ const CharacterItems = ({
                   const items = gameItem.material[data.idx];
                   return (
                     <li key={`material${idx}`} onClick={() => {handlePopup('material', data.idx, idx)}} className="item item13" data-itemnum={`material_${data.idx}`}>
-                      <em link={`material_${data.idx}_${idx}`}>
+                      <em>
                         <ItemPic className="pic" itemPic={imgSet.itemMaterial[items.display]} />
                       </em>
                     </li>
@@ -198,7 +198,7 @@ const CharacterItems = ({
                   const items = gameItem.etc[data.idx];
                   return (
                     <li key={`etc${idx}`} onClick={() => {handlePopup('etc', data.idx, idx)}} className="item item13" data-itemnum={`etc_${data.idx}`}>
-                      <em link={`etc_${data.idx}_${idx}`}>
+                      <em>
                         <ItemPic className="pic" itemPic={imgSet.itemEtc[items.display]} />
                       </em>
                     </li>

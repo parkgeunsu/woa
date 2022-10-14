@@ -507,7 +507,7 @@ export const util = { //this.loadImage();
   getEnemySkill: (data, gameData) => {
     const chData = gameData.ch[data.idx],
       animalSkill = gameData.animal_type[chData.animal_type].skill0,
-      jobSkill = gameData.job[chData.job].skill,
+      jobSkill = gameData.job[chData.job[0]].skill,
       skillArr = [2, ...animalSkill, ...jobSkill];
     const skillNums = [3,6,9,12,15],
       skillLength = skillNums[Math.floor(data.lv / 10) - 1];
@@ -1376,16 +1376,28 @@ export const util = { //this.loadImage();
       dataObj.changeSaveData(sData);//데이터 저장
       dataObj.showPopup(false);
     } else if (dataObj.type === 'itemBuy') { //아이템 구입
-      sData.info.money -= dataObj.data.gameItem.price;//돈 계산
+      if (dataObj.data.type === 'equip') {
+        sData.info.money -= (dataObj.data.gameItem.price < 1000 ? 1000 : dataObj.data.gameItem.price) * 2 * dataObj.data.gameItem.grade;
+      } else if (dataObj.data.type === 'hole') {
+        sData.info.money -= dataObj.data.gameItem.price * 2;
+      } else {
+        sData.info.money -= dataObj.data.gameItem.price;//돈 계산
+      }
       sData.items[dataObj.data.type].push(dataObj.data.saveItemData);//아이템 추가
       dataObj.changeSaveData(sData);//데이터 저장
       dataObj.showPopup(false);
     }else if (dataObj.type === 'itemSell') { //아이템 판매
-      sData.info.money += dataObj.data.gameItem.price;//돈 계산
+      console.log(dataObj.data.type);
+      if (dataObj.data.type === 'equip' || dataObj.data.type === 'hole') {
+        console.log(dataObj.data.gameItem.price, dataObj.data.gameItem.grade);
+        sData.info.money += dataObj.data.gameItem.price * dataObj.data.gameItem.grade;//돈 계산
+      } else {
+        sData.info.money += dataObj.data.gameItem.price;//돈 계산
+      }
       sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
       dataObj.changeSaveData(sData);//데이터 저장
       dataObj.showPopup(false);
-    } else if (dataObj.type === 'itemUnpack') { //아이템 포장풀기
+    } else if (dataObj.type === 'itemUnpack') { //아이템 확인
       //sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
       const itemInfo = dataObj.data.saveItemData.part === 3 ? `${dataObj.data.saveItemData.part}-${dataObj.data.saveItemData.weaponType}-${dataObj.data.saveItemData.idx}` : `${dataObj.data.saveItemData.part}-${dataObj.data.saveItemData.idx}`;
       const option = {

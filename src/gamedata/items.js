@@ -251,31 +251,31 @@ export const items = {
     hole:[//홀 장착 아이템
         //type 장착 타입
         //stone 아이템창 색상
-        {idx:0,grade:0,stone:'empty',display:0,na:'',price:0,action:9,eff:[]},//
-        {idx:1,grade:1,stone:'w',display:1,na:{ko:'작은 흰돌',en:''},price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:3,num:'10'}]},//
-        {idx:2,grade:2,stone:'w',display:2,na:{ko:'흰돌',en:''},price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:3,num:'30'}]},
-        {idx:3,grade:3,stone:'w',display:3,na:{ko:'빛나는 흰돌',en:''},price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:3,num:'60'}]},
-        {idx:4,grade:4,stone:'w',display:4,na:{ko:'큰 흰돌',en:''},price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:3,num:'100'}]},
-        {idx:5,grade:1,stone:'k',display:5,na:{ko:'작은 흑돌',en:''},price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'10'}]},//HP
-        {idx:6,grade:2,stone:'k',display:6,na:{ko:'흑돌',en:''},price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'30'}]},
-        {idx:7,grade:3,stone:'k',display:7,na:{ko:'빛나는 흑돌',en:''},price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'60'}]},
-        {idx:8,grade:4,stone:'k',display:8,na:{ko:'큰 흑돌',en:''},price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'100'}]},
-        {idx:9,grade:1,stone:'r',display:9,na:{ko:'작은 적돌',en:''},price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'10'}]},//공
-        {idx:10,grade:2,stone:'r',display:10,na:{ko:'적돌',en:''},price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'30'}]},
-        {idx:11,grade:3,stone:'r',display:11,na:{ko:'빛나는 적돌',en:''},price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'60'}]},
-        {idx:12,grade:4,stone:'r',display:12,na:{ko:'큰 적돌',en:''},price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'100'}]},
-        {idx:13,grade:1,stone:'b',display:13,na:{ko:'작은 청돌',en:''},price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'1'}]},//방
-        {idx:14,grade:2,stone:'b',display:14,na:{ko:'청돌',en:''},price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'2'}]},
-        {idx:15,grade:3,stone:'b',display:15,na:{ko:'빛나는 청돌',en:''},price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'2'}]},
-        {idx:16,grade:4,stone:'b',display:16,na:{ko:'큰 청돌',en:''},price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'100'}]},
-        {idx:17,grade:1,stone:'y',display:17,na:{ko:'작은 황돌',en:''},price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'10'}]},//술공
-        {idx:18,grade:2,stone:'y',display:18,na:{ko:'황돌',en:''},price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'30'}]},
-        {idx:19,grade:3,stone:'y',display:19,na:{ko:'빛나는 황돌',en:''},price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'60'}]},
-        {idx:20,grade:4,stone:'y',display:20,na:{ko:'큰 황돌',en:''},price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'100'}]},
-        {idx:21,grade:1,stone:'g',display:21,na:{ko:'작은 녹돌',en:''},price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'10'}]},//술방
-        {idx:22,grade:2,stone:'g',display:22,na:{ko:'녹돌',en:''},price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'30'}]},
-        {idx:23,grade:3,stone:'g',display:23,na:{ko:'빛나는 녹돌',en:''},price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'60'}]},
-        {idx:24,grade:4,stone:'g',display:24,na:{ko:'큰 녹돌',en:''},price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'100'}]},
+        {idx:0,grade:0,stone:'empty',display:0,na:'',kg:0,price:0,action:9,eff:[]},//
+        {idx:1,grade:1,stone:'w',display:1,na:{ko:'작은 흰돌',en:''},kg:0.1,price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:3,num:'10'}]},//
+        {idx:2,grade:2,stone:'w',display:2,na:{ko:'흰돌',en:''},kg:0.2,price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:3,num:'30'}]},
+        {idx:3,grade:3,stone:'w',display:3,na:{ko:'빛나는 흰돌',en:''},kg:0.4,price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:3,num:'60'}]},
+        {idx:4,grade:4,stone:'w',display:4,na:{ko:'큰 흰돌',en:''},kg:0.7,price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:3,num:'100'}]},
+        {idx:5,grade:1,stone:'k',display:5,na:{ko:'작은 흑돌',en:''},kg:0.1,price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'10'}]},//HP
+        {idx:6,grade:2,stone:'k',display:6,na:{ko:'흑돌',en:''},kg:0.2,price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'30'}]},
+        {idx:7,grade:3,stone:'k',display:7,na:{ko:'빛나는 흑돌',en:''},kg:0.4,price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'60'}]},
+        {idx:8,grade:4,stone:'k',display:8,na:{ko:'큰 흑돌',en:''},kg:0.7,price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'100'}]},
+        {idx:9,grade:1,stone:'r',display:9,na:{ko:'작은 적돌',en:''},kg:0.1,price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'10'}]},//공
+        {idx:10,grade:2,stone:'r',display:10,na:{ko:'적돌',en:''},kg:0.2,price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'30'}]},
+        {idx:11,grade:3,stone:'r',display:11,na:{ko:'빛나는 적돌',en:''},kg:0.4,price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'60'}]},
+        {idx:12,grade:4,stone:'r',display:12,na:{ko:'큰 적돌',en:''},kg:0.7,price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'100'}]},
+        {idx:13,grade:1,stone:'b',display:13,na:{ko:'작은 청돌',en:''},kg:0.1,price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'1'}]},//방
+        {idx:14,grade:2,stone:'b',display:14,na:{ko:'청돌',en:''},kg:0.2,price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'2'}]},
+        {idx:15,grade:3,stone:'b',display:15,na:{ko:'빛나는 청돌',en:''},kg:0.4,price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'2'}]},
+        // {idx:16,grade:4,stone:'b',display:16,na:{ko:'큰 청돌',en:''},kg:0.7,price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'100'}]},
+        // {idx:17,grade:1,stone:'y',display:17,na:{ko:'작은 황돌',en:''},kg:0.1,price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'10'}]},//술공
+        // {idx:18,grade:2,stone:'y',display:18,na:{ko:'황돌',en:''},kg:0.2,price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'30'}]},
+        // {idx:19,grade:3,stone:'y',display:19,na:{ko:'빛나는 황돌',en:''},kg:0.4,price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'60'}]},
+        // {idx:20,grade:4,stone:'y',display:20,na:{ko:'큰 황돌',en:''},kg:0.7,price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'100'}]},
+        // {idx:21,grade:1,stone:'g',display:21,na:{ko:'작은 녹돌',en:''},kg:0.1,price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'10'}]},//술방
+        // {idx:22,grade:2,stone:'g',display:22,na:{ko:'녹돌',en:''},kg:0.2,price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'30'}]},
+        // {idx:23,grade:3,stone:'g',display:23,na:{ko:'빛나는 녹돌',en:''},kg:0.4,price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'60'}]},
+        // {idx:24,grade:4,stone:'g',display:24,na:{ko:'큰 녹돌',en:''},kg:0.7,price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:'100'}]},
     ],
     upgrade:[//업그레이드 아이템
         {idx:0,grade:1,display:0,na:{ko:'작은 강화의돌',en:''},price:50,
@@ -292,25 +292,25 @@ export const items = {
     material:[//재료
     ],
     etc:[
-        {idx:0,grade:0,display:0,na:{ko:'동전더미(동)',en:''},price:1000,
+        {idx:0,grade:1,display:2,na:{ko:'동전더미(동)',en:''},price:1000,
         action:99,txt:{ko:'G조각 1000개로 판매할 수 있다.',en:''},eff:1000},
-        {idx:1,grade:1,display:1,na:{ko:'동전더미(은)',en:''},price:5000,
+        {idx:1,grade:2,display:1,na:{ko:'동전더미(은)',en:''},price:5000,
         action:99,txt:{ko:'G조각 5000개로 판매할 수 있다.',en:''},eff:5000},
-        {idx:2,grade:2,display:2,na:{ko:'동전더미(금)',en:''},price:10000,
+        {idx:2,grade:3,display:0,na:{ko:'동전더미(금)',en:''},price:10000,
         action:99,txt:{ko:'G조각 10000개로 판매할 수 있다.',en:''},eff:10000},
-        {idx:3,grade:3,display:10,na:{ko:'경험의책I',en:''},price:100,
+        {idx:3,grade:4,display:22,na:{ko:'경험의책I',en:''},price:100,
         action:98,txt:{ko:'100의 경험치를 획들 할 수 있다.',en:''},eff:100},
-        {idx:4,grade:4,display:10,na:{ko:'경험의책II',en:''},price:100,
+        {idx:4,grade:5,display:22,na:{ko:'경험의책II',en:''},price:100,
         action:98,txt:{ko:'1000의 경험치를 획들 할 수 있다.',en:''},eff:1000},
-        {idx:5,grade:5,display:10,na:{ko:'경험의책III',en:''},price:100,
+        {idx:5,grade:5,display:22,na:{ko:'경험의책III',en:''},price:100,
         action:98,txt:{ko:'10000의 경험치를 획들 할 수 있다.',en:''},eff:10000},
-        {idx:6,grade:6,display:10,na:{ko:'경험의책IV',en:''},price:100,
+        {idx:6,grade:6,display:22,na:{ko:'경험의책IV',en:''},price:100,
         action:98,txt:{ko:'50000의 경험치를 획들 할 수 있다.',en:''},eff:50000},
-        {idx:7,grade:7,display:10,na:{ko:'경험의책V',en:''},price:100,
+        {idx:7,grade:6,display:22,na:{ko:'경험의책V',en:''},price:100,
         action:98,txt:{ko:'100000의 경험치를 획들 할 수 있다.',en:''},eff:100000},
         {idx:8,grade:0,display:0,na:'',txt:'',eff:[]},
         {idx:9,grade:0,display:0,na:'',txt:'',eff:[]},
-        {idx:10,grade:0,display:10,na:{ko:'선물상자',en:''},price:100,action:100,txt:{ko:'무언가 나올 것 같은 기분좋은 상자',en:''},eff:['?']},
+        {idx:10,grade:1,display:10,na:{ko:'선물상자',en:''},price:100,action:100,txt:{ko:'무언가 나올 것 같은 기분좋은 상자',en:''},eff:['?']},
         {idx:11,grade:0,display:0,na:'',txt:'',eff:[]},
         {idx:12,grade:0,display:0,na:'',txt:'',eff:[]},
         {idx:13,grade:0,display:0,na:'',txt:'',eff:[]},
@@ -320,7 +320,7 @@ export const items = {
         {idx:17,grade:0,display:0,na:'',txt:'',eff:[]},
         {idx:18,grade:0,display:0,na:'',txt:'',eff:[]},
         {idx:19,grade:0,display:0,na:'',txt:'',eff:[]},
-        {idx:20,grade:0,display:10,na:{ko:'ID교환권',en:''},price:100,action:1,txt:{ko:'ID를 변경할수 있다.',en:''},eff:['?']},
-        {idx:21,grade:0,display:10,na:{ko:'스킬제거권',en:''},price:100,action:11,txt:{ko:'캐릭터의 스킬을 제거할수 있다.',en:''},eff:['?']},
+        {idx:20,grade:1,display:21,na:{ko:'ID교환권',en:''},price:100,action:1,txt:{ko:'ID를 변경할수 있다.',en:''},eff:['?']},
+        {idx:21,grade:1,display:20,na:{ko:'스킬제거권',en:''},price:100,action:11,txt:{ko:'캐릭터의 스킬을 제거할수 있다.',en:''},eff:['?']},
     ]
 }

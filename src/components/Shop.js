@@ -185,7 +185,7 @@ const Shop = ({
 										selectItem1Display.current.selectIdx = idx;
 									}
 								}}>
-									<span className="pic">
+									<span className={`pic ${data.sealed ? "sealed" : ""}`}>
 										<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.id)}}>
 										</svg>
 									</span>
@@ -300,7 +300,7 @@ const Shop = ({
 										</>
 									) : (
 										<>
-											<div className="item_price"><span>{lang === 'ko' ? '판매가:' : 'Selling Price'}</span><em>{`₩${selectItem1Display.current.price * selectItem1.grade}`}</em></div>
+											<div className="item_price"><span>{lang === 'ko' ? '판매가:' : 'Selling Price'}</span><em>{`₩${selectItem1Display.current.price * (selectItem1Display.current.grade || selectItem1.grade)}`}</em></div>
 											<div className="item_button" flex="true">
 												<button text="true" onClick={(e) => {
 													util.buttonEvent({
@@ -432,7 +432,7 @@ const Shop = ({
 										</>
 									) : (
 										<>
-											<div className="item_price"><span>{lang === 'ko' ? '판매가:' : 'Selling Price'}</span><em>{`₩${selectItem2Display.current.price * selectItem2.grade}`}</em></div>
+											<div className="item_price"><span>{lang === 'ko' ? '판매가:' : 'Selling Price'}</span><em>{`₩${selectItem2Display.current.price * (selectItem2Display.current.grade || selectItem2.grade)}`}</em></div>
 											<div className="item_button" flex="true">
 												<button text="true" onClick={(e) => {
 													util.buttonEvent({

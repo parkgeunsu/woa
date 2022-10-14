@@ -1,11 +1,12 @@
 import React, { createContext, useEffect, useState, useRef } from 'react';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
-import { back, animalType, icon, etc, iconStar, element, chImg, iconState, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, passive, eff, menu, weather, job } from 'components/ImgSet';
+import { back, animalType, icon, etc, iconStar, element, chImg, iconState, itemEtc, itemHole, colorant, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, passive, eff, menu, weather, job } from 'components/ImgSet';
 import { util } from 'components/Libs';
 import Main from 'components/Main';
 import Menu from 'components/Menu';
 import Battle from 'components/Battle';
 import Character from 'components/Character';
+import Inven from 'components/Inven';
 import Gacha from 'components/Gacha';
 import Lineup from 'components/Lineup';
 import Shop from 'components/Shop';
@@ -218,6 +219,10 @@ const App = () => {
       const img = new Image();
       img.src = image;
     });
+    colorant.forEach((image) => {
+      const img = new Image();
+      img.src = image;
+    });
     itemHole.forEach((image) => {
       const img = new Image();
       img.src = image;
@@ -290,6 +295,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Main changePage={changePage} />} />
             <Route path="/character" element={<Character saveData={saveData} changeSaveData={changeSaveData} />} />
+            <Route path="/inven" element={<Inven saveData={saveData} changeSaveData={changeSaveData} />} />
             <Route path="/gacha" element={<Gacha saveData={saveData} changeSaveData={changeSaveData} />} />
             <Route path="/lineup" element={<Lineup saveData={saveData} changeSaveData={changeSaveData} />} />
             <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} scenario={scenario} />} />

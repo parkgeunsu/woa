@@ -426,7 +426,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                     showPopup: showPopup,
                     lang: lang,
                   })
-                }} data-buttontype="itemUnpack">{lang === 'ko' ? '포장풀기' : 'Unpack'}</button>
+                }} data-buttontype="itemUnpack">{lang === 'ko' ? '확인' : 'Unpack'}</button>
                 <button text="true" onClick={(e) => {
                   util.buttonEvent({
                     event: e,

@@ -139,37 +139,80 @@ import animalType6 from 'images/item/animal_item6.png';
 import animalType7 from 'images/item/animal_item7.png';
 import animalType8 from 'images/item/animal_item8.png';
 import animalType9 from 'images/item/animal_item9.png';
-import itemEtc0 from 'images/item/etc0.png';
-import itemEtc1 from 'images/item/etc1.png';
-import itemEtc10 from 'images/item/etc10.png';
-import itemEtc2 from 'images/item/etc2.png';
-import itemEtc20 from 'images/item/etc20.png';
-import itemEtc21 from 'images/item/etc21.png';
-import itemHole0 from 'images/item/hole0.png';
-import itemHole1 from 'images/item/hole1.png';
-import itemHole10 from 'images/item/hole10.png';
-import itemHole11 from 'images/item/hole11.png';
-import itemHole12 from 'images/item/hole12.png';
-import itemHole13 from 'images/item/hole13.png';
-import itemHole14 from 'images/item/hole14.png';
-import itemHole15 from 'images/item/hole15.png';
-import itemHole16 from 'images/item/hole16.png';
-import itemHole17 from 'images/item/hole17.png';
-import itemHole18 from 'images/item/hole18.png';
-import itemHole19 from 'images/item/hole19.png';
-import itemHole2 from 'images/item/hole2.png';
-import itemHole20 from 'images/item/hole20.png';
-import itemHole21 from 'images/item/hole21.png';
-import itemHole22 from 'images/item/hole22.png';
-import itemHole23 from 'images/item/hole23.png';
-import itemHole24 from 'images/item/hole24.png';
-import itemHole3 from 'images/item/hole3.png';
-import itemHole4 from 'images/item/hole4.png';
-import itemHole5 from 'images/item/hole5.png';
-import itemHole6 from 'images/item/hole6.png';
-import itemHole7 from 'images/item/hole7.png';
-import itemHole8 from 'images/item/hole8.png';
-import itemHole9 from 'images/item/hole9.png';
+import itemEtc0 from 'images/item/gold0.png';
+import itemEtc1 from 'images/item/gold1.png';
+import itemEtc2 from 'images/item/gold2.png';
+import itemEtc10 from 'images/item/box0.png';
+import itemEtc11 from 'images/item/box1.png';
+import itemEtc20 from 'images/item/book6.png';
+import itemEtc21 from 'images/item/book7.png';
+import itemEtc22 from 'images/item/book0.png';
+import itemEtc23 from 'images/item/book1.png';
+import itemEtc24 from 'images/item/book2.png';
+import itemEtc25 from 'images/item/book3.png';
+import itemEtc26 from 'images/item/book4.png';
+import itemEtc27 from 'images/item/book5.png';
+import itemHole0 from 'images/item/jewel0.png';
+import itemHole1 from 'images/item/jewel1.png';
+import itemHole2 from 'images/item/jewel2.png';
+import itemHole3 from 'images/item/jewel3.png';
+import itemHole4 from 'images/item/jewel4.png';
+import itemHole5 from 'images/item/jewel5.png';
+import itemHole6 from 'images/item/jewel6.png';
+import itemHole7 from 'images/item/jewel7.png';
+import itemHole8 from 'images/item/jewel8.png';
+import itemHole9 from 'images/item/jewel9.png';
+import itemHole10 from 'images/item/jewel10.png';
+import itemHole11 from 'images/item/jewel11.png';
+import itemHole12 from 'images/item/jewel12.png';
+import itemHole13 from 'images/item/jewel13.png';
+import itemHole14 from 'images/item/jewel14.png';
+import itemHole15 from 'images/item/jewel15.png';
+import colorant0 from 'images/item/colorant0.png';
+import colorant1 from 'images/item/colorant1.png';
+import colorant2 from 'images/item/colorant2.png';
+import colorant3 from 'images/item/colorant3.png';
+import colorant4 from 'images/item/colorant4.png';
+import colorant5 from 'images/item/colorant5.png';
+import colorant6 from 'images/item/colorant6.png';
+import colorant7 from 'images/item/colorant7.png';
+import colorant8 from 'images/item/colorant8.png';
+import colorant9 from 'images/item/colorant9.png';
+import colorant10 from 'images/item/colorant10.png';
+import colorant11 from 'images/item/colorant11.png';
+import colorant12 from 'images/item/colorant12.png';
+import colorant13 from 'images/item/colorant13.png';
+import colorant14 from 'images/item/colorant14.png';
+import colorant20 from 'images/item/colorant20.png';
+import colorant21 from 'images/item/colorant21.png';
+import colorant22 from 'images/item/colorant22.png';
+import colorant23 from 'images/item/colorant23.png';
+import colorant24 from 'images/item/colorant24.png';
+import colorant25 from 'images/item/colorant25.png';
+import colorant26 from 'images/item/colorant26.png';
+import colorant27 from 'images/item/colorant27.png';
+import colorant28 from 'images/item/colorant28.png';
+import colorant29 from 'images/item/colorant29.png';
+import colorant30 from 'images/item/colorant30.png';
+import colorant31 from 'images/item/colorant31.png';
+import colorant32 from 'images/item/colorant32.png';
+import colorant33 from 'images/item/colorant33.png';
+import colorant34 from 'images/item/colorant34.png';
+import colorant40 from 'images/item/colorant40.png';
+import colorant41 from 'images/item/colorant41.png';
+import colorant42 from 'images/item/colorant42.png';
+import colorant43 from 'images/item/colorant43.png';
+import colorant44 from 'images/item/colorant44.png';
+import colorant45 from 'images/item/colorant45.png';
+import colorant46 from 'images/item/colorant46.png';
+import colorant47 from 'images/item/colorant47.png';
+import colorant48 from 'images/item/colorant48.png';
+import colorant49 from 'images/item/colorant49.png';
+import colorant50 from 'images/item/colorant50.png';
+import colorant51 from 'images/item/colorant51.png';
+import colorant52 from 'images/item/colorant52.png';
+import colorant53 from 'images/item/colorant53.png';
+import colorant54 from 'images/item/colorant54.png';
 import itemUpgrade0 from 'images/item/upgrade0.png';
 import itemUpgrade1 from 'images/item/upgrade1.png';
 import itemUpgrade2 from 'images/item/upgrade2.png';
@@ -332,10 +375,13 @@ export const iconState = [
   iconState0,iconState1,iconState2,iconState3,iconState4,iconState5,iconState6
 ];
 export const itemEtc = [
-  itemEtc0,itemEtc1,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc10,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc2,itemEtc20,itemEtc21
+  itemEtc0,itemEtc1,itemEtc2,'','','','','','','',itemEtc10,itemEtc11,'','','','','','','','',itemEtc20,itemEtc21,itemEtc22,itemEtc23,itemEtc24,itemEtc25,itemEtc26,itemEtc27
 ];
 export const itemHole = [
-  itemHole0,itemHole1,itemHole2,itemHole3,itemHole4,itemHole5,itemHole6,itemHole7,itemHole8,itemHole9,itemHole10,itemHole11,itemHole12,itemHole13,itemHole14,itemHole15,itemHole16,itemHole17,itemHole18,itemHole19,itemHole20,itemHole21,itemHole22,itemHole23,itemHole24
+  itemHole0,itemHole1,itemHole2,itemHole3,itemHole4,itemHole5,itemHole6,itemHole7,itemHole8,itemHole9,itemHole10,itemHole11,itemHole12,itemHole13,itemHole14,itemHole15
+];
+export const colorant = [
+  colorant0,colorant1,colorant2,colorant3,colorant4,colorant5,colorant6,colorant7,colorant8,colorant9,colorant10,colorant11,colorant12,colorant13,colorant14,colorant20,colorant21,colorant22,colorant23,colorant24,colorant25,colorant26,colorant27,colorant28,colorant29,colorant30,colorant31,colorant32,colorant33,colorant34,colorant40,colorant41,colorant42,colorant43,colorant44,colorant45,colorant46,colorant47,colorant48,colorant49,colorant50,colorant51,colorant52,colorant53,colorant54
 ];
 export const itemUpgrade = [
   itemUpgrade0,itemUpgrade1,itemUpgrade2,itemUpgrade3,itemUpgrade4

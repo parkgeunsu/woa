@@ -126,6 +126,8 @@ b[dmg]{color:#f20;text-shadow:-1px -1px 0px #f90,1px 1px 0px #000;}
 b[buff]{color:#02f;text-shadow:-1px -1px 0px #0df,1px 1px 0px #000;}
 
 [flex]{display:flex !important;flex-direction:row !important;}
+[flex-start]{display:flex !important;justify-content:flex-start;}
+[flex-end]{display:flex !important;justify-content:flex-end;}
 [flex-center]{display:flex !important;justify-content:center;}
 [flex-h]{display:flex !important;flex-direction:column !important;}
 [flex-h-center]{display:flex !important;flex-direction:column !important;align-items:center;}
