@@ -14,7 +14,6 @@ const Img = styled.img.attrs(
 const InvenWrap = styled.div`
 	background:url(${({backImg}) => backImg});background-size:cover;
 `;
-const MenuButton = styled.button``;
 const ShopIcon = styled.span`
 	background:url(${({ icoType }) => icoType}) no-repeat left center;background-size:100%;
 `;
@@ -38,10 +37,10 @@ const ItemName = styled.div`
 //equip, hole, upgrade, merterial, etc
 const invenList = [
 	{na:{ko:"장비", en:"Equip"},icon:"iconArmor",keyName:"equip"},
-	{na:{ko:"소켓", en:"Hole"},icon:"iconBag",keyName:"hole"},
-	{na:{ko:"강화", en:"Upgrade"},icon:"iconBag",keyName:"upgrade"},
-	{na:{ko:"재료", en:"Material"},icon:"iconBag",keyName:"material"},
-	{na:{ko:"기타", en:"Etc"},icon:"iconBag",keyName:"etc"},
+	{na:{ko:"소켓", en:"Hole"},icon:"iconSocket",keyName:"hole"},
+	{na:{ko:"강화", en:"Upgrade"},icon:"iconUpgrade",keyName:"upgrade"},
+	{na:{ko:"재료", en:"Material"},icon:"iconMaterial",keyName:"material"},
+	{na:{ko:"기타", en:"Etc"},icon:"iconEtc",keyName:"etc"},
 ];
 const makeMark = (markNum, img) => {
   let markTag = '';
@@ -123,13 +122,13 @@ const Inven = ({
 				<div className="inven_menu transition">
 					{invenList && invenList.map((data, idx) => {
 						return (
-							<li key={idx} className={idx === selectTab ? "on" : ""} onClick={() => {
+							<li key={`inven_${idx}`} className={idx === selectTab ? "on" : ""} onClick={() => {
 								setSelectTab(idx);
 							}}>
-								<MenuButton className="inven_menu_button">
+								<button className="inven_menu_button">
 									<span className="name">{`${lang === "ko" ? data.na.ko : data.na.en}`}</span>
 									<ShopIcon className="icon" icoType={imgSet.icon[data.icon]} />
-								</MenuButton>
+								</button>
 							</li>
 						);
 					})}
@@ -143,7 +142,7 @@ const Inven = ({
 								const items = data.part === 3 ? gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx] : gameItem.equip[data.part][0][itemsGrade][data.idx];
 								const itemsHole = data.hole;
 								return (
-									<div className={`buy_item ${gameData.itemGrade.txt_e[data.grade].toLowerCase()} ${data.select1} ${data.select2}`} key={`items${idx}`} onClick={() => {
+									<div className={`item_layout ${gameData.itemGrade.txt_e[data.grade].toLowerCase()} ${data.select1} ${data.select2}`} key={`items${idx}`} onClick={() => {
 										let cloneItem = {...item};
 										if (selectArea === 'area2') {
 											if (selectItem1 && (Object.entries(data).toString() === Object.entries(selectItem1).toString())) {
@@ -209,7 +208,7 @@ const Inven = ({
 								const items = gameItem.hole[data.idx];
 								const grade = data.grade || items.grade;
 								return (
-									<div className={`buy_item ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${data.select1} ${data.select2}`} key={`items${idx}`} onClick={() => {
+									<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${data.select1} ${data.select2}`} key={`items${idx}`} onClick={() => {
 										let cloneItem = {...item};
 										if (selectArea === 'area2') {
 											if (selectItem1 && (Object.entries(data).toString() === Object.entries(selectItem1).toString())) {
@@ -260,7 +259,7 @@ const Inven = ({
 								const items = gameItem.upgrade[data.idx];
 								const grade = data.grade || items.grade;
 								return (
-									<div className={`buy_item ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${data.select1} ${data.select2}`} key={`items${idx}`} onClick={() => {
+									<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${data.select1} ${data.select2}`} key={`items${idx}`} onClick={() => {
 										let cloneItem = {...item};
 										if (selectArea === 'area2') {
 											if (selectItem1 && (Object.entries(data).toString() === Object.entries(selectItem1).toString())) {
@@ -301,7 +300,7 @@ const Inven = ({
 								const items = gameItem.etc[data.idx];
 								const grade = data.grade || items.grade;
 								return (
-									<div className={`buy_item ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${data.select1} ${data.select2}`} key={`items${idx}`} onClick={() => {
+									<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${data.select1} ${data.select2}`} key={`items${idx}`} onClick={() => {
 										let cloneItem = {...item};
 										if (selectArea === 'area2') {
 											if (selectItem1 && (Object.entries(data).toString() === Object.entries(selectItem1).toString())) {
@@ -342,7 +341,7 @@ const Inven = ({
 								const items = gameItem.etc[data.idx];
 								const grade = data.grade || items.grade;
 								return (
-									<div className={`buy_item ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${data.select1} ${data.select2}`} key={`items${idx}`} onClick={() => {
+									<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${data.select1} ${data.select2}`} key={`items${idx}`} onClick={() => {
 										let cloneItem = {...item};
 										if (selectArea === 'area2') {
 											if (selectItem1 && (Object.entries(data).toString() === Object.entries(selectItem1).toString())) {
@@ -357,6 +356,9 @@ const Inven = ({
 											}
 											cloneItem[invenList[selectTab].keyName][idx].select2 = 'select2';
 											selectItem2Display.current.buttonType = ['sell'];
+											if (items.invenUse) {
+												selectItem2Display.current.buttonType.push('use');
+											}
 											selectItem2Display.current.selectTab = invenList[selectTab].keyName;
 											selectItem2Display.current.selectIdx = idx;
 										} else {
@@ -372,6 +374,9 @@ const Inven = ({
 											}
 											cloneItem[invenList[selectTab].keyName][idx].select1 = 'select1';
 											selectItem1Display.current.buttonType = ['sell'];
+											if (items.invenUse) {
+												selectItem1Display.current.buttonType.push('use');
+											}
 											selectItem1Display.current.selectTab = invenList[selectTab].keyName;
 											selectItem1Display.current.selectIdx = idx;
 										}
@@ -471,16 +476,18 @@ const Inven = ({
 												</ItemName>
 											</div>
 										</li>
-										<div className="scroll-y">
-											<li className="item_list item_eff">
-												<div className="item_title">{lang === 'ko' ? '아이템 효과' : 'Item effect'}</div>
-												{getTotalEff(selectItem1, 1, gameData).map((eff, idx) => {
-													return (
-														<div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
-													)
-												})}
-											</li>
-										</div>
+										{selectItem1Display.current.idx <= 100 && (
+											<div className="scroll-y">
+												<li className="item_list item_eff">
+													<div className="item_title">{lang === 'ko' ? '아이템 효과' : 'Item effect'}</div>
+													{getTotalEff(selectItem1, 1, gameData).map((eff, idx) => {
+														return (
+															<div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
+														)
+													})}
+												</li>
+											</div>
+										)}
 									</>
 								)}
 								{selectItem1Display.current.selectTab !== 'equip' && selectItem1Display.current.selectTab !== 'hole' && (
@@ -569,6 +576,31 @@ const Inven = ({
 														}} data-buttontype="itemSell">{lang === 'ko' ? '확인' : 'Unpack'}</button>
 													</div>
 												);
+											case 'use':
+												return (
+													<div key={`button${idx}`} className="item_button" flex="true">
+														<button text="true" onClick={(e) => {
+															util.buttonEvent({
+																event: e,
+																type: 'itemUse',
+																data: {
+																	slotIdx: 0,
+																	gameItem: selectItem1Display.current,
+																	itemSaveSlot:selectItem1Display.current.selectIdx,
+																	type: selectItem1Display.current.selectTab,
+																},
+																saveData: saveData,
+																changeSaveData: changeSaveData,
+																gameData: gameData,
+																msgText: setMsg,
+																showMsg: setMsgOn,
+																showPopup: setPopupOn,
+																lang: lang,
+															});
+															setSelectItem1(null);
+														}} data-buttontype="itemUse">{lang === 'ko' ? '사용' : 'Use'}</button>
+													</div>
+												)
 											default:
 												break;
 										}
@@ -669,16 +701,18 @@ const Inven = ({
 												</ItemName>
 											</div>
 										</li>
-										<div className="scroll-y">
-											<li className="item_list item_eff">
-												<div className="item_title">{lang === 'ko' ? '아이템 효과' : 'Item effect'}</div>
-												{getTotalEff(selectItem2, 1, gameData).map((eff, idx) => {
-													return (
-														<div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
-													)
-												})}
-											</li>
-										</div>
+										{selectItem2Display.current.idx <= 100 && (
+											<div className="scroll-y">
+												<li className="item_list item_eff">
+													<div className="item_title">{lang === 'ko' ? '아이템 효과' : 'Item effect'}</div>
+													{getTotalEff(selectItem2, 1, gameData).map((eff, idx) => {
+														return (
+															<div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
+														)
+													})}
+												</li>
+											</div>
+										)}
 									</>
 								)}
 								{selectItem2Display.current.selectTab !== 'equip' && selectItem2Display.current.selectTab !== 'hole' && (
@@ -767,6 +801,31 @@ const Inven = ({
 														}} data-buttontype="itemSell">{lang === 'ko' ? '확인' : 'Unpack'}</button>
 													</div>
 												);
+											case 'use':
+												return (
+													<div key={`button${idx}`} className="item_button" flex="true">
+														<button text="true" onClick={(e) => {
+															util.buttonEvent({
+																event: e,
+																type: 'itemUse',
+																data: {
+																	slotIdx: 0,
+																	gameItem: selectItem2Display.current,
+																	itemSaveSlot:selectItem2Display.current.selectIdx,
+																	type: selectItem2Display.current.selectTab,
+																},
+																saveData: saveData,
+																changeSaveData: changeSaveData,
+																gameData: gameData,
+																msgText: setMsg,
+																showMsg: setMsgOn,
+																showPopup: setPopupOn,
+																lang: lang,
+															});
+															setSelectItem2(null);
+														}} data-buttontype="itemUse">{lang === 'ko' ? '사용' : 'Use'}</button>
+													</div>
+												)
 											default:
 												break;
 										}

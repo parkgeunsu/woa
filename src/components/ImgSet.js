@@ -349,7 +349,7 @@ export const etc = {
   imgRing:imgRing,imgCardBack:imgCardBack,frameChBack:frameChBack,stateBack:stateBack,imgCardFrame:imgCardFrame,imgCardLv:imgCardLv,iconCardName:iconCardName,imgRingBack:imgRingBack,frameRope:frameRope,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,questionBlack:questionBlack,questionWhite:questionWhite,wind:wind,
 };
 export const icon = {
-  iconBack:iconBack,iconChat:iconChat,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,iconHelm:iconHelm,iconArmor:iconArmor,iconWeapon:iconWeapon,iconBag:iconBag
+  iconBack:iconBack,iconChat:iconChat,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,iconHelm:iconHelm,iconArmor:iconArmor,iconWeapon:iconWeapon,iconBag:iconBag,iconSocket:itemHole1,iconEtc:itemEtc25,iconUpgrade:itemUpgrade0,iconMaterial:itemUpgrade0,
 };
 export const iconStar = [
   iconStar1,iconStar2,iconStar3,iconStar4,iconStar5,iconStar6,iconStar7
@@ -378,10 +378,18 @@ export const itemEtc = [
   itemEtc0,itemEtc1,itemEtc2,'','','','','','','',itemEtc10,itemEtc11,'','','','','','','','',itemEtc20,itemEtc21,itemEtc22,itemEtc23,itemEtc24,itemEtc25,itemEtc26,itemEtc27
 ];
 export const itemHole = [
-  itemHole0,itemHole1,itemHole2,itemHole3,itemHole4,itemHole5,itemHole6,itemHole7,itemHole8,itemHole9,itemHole10,itemHole11,itemHole12,itemHole13,itemHole14,itemHole15
-];
-export const colorant = [
-  colorant0,colorant1,colorant2,colorant3,colorant4,colorant5,colorant6,colorant7,colorant8,colorant9,colorant10,colorant11,colorant12,colorant13,colorant14,colorant20,colorant21,colorant22,colorant23,colorant24,colorant25,colorant26,colorant27,colorant28,colorant29,colorant30,colorant31,colorant32,colorant33,colorant34,colorant40,colorant41,colorant42,colorant43,colorant44,colorant45,colorant46,colorant47,colorant48,colorant49,colorant50,colorant51,colorant52,colorant53,colorant54
+  itemHole0,itemHole1,itemHole2,itemHole3,itemHole4,itemHole5,itemHole6,itemHole7,itemHole8,itemHole9,itemHole10,itemHole11,itemHole12,itemHole13,itemHole14,itemHole15,'','','','','',
+  '','','','','','','','','','',
+  '','','','','','','','','','',
+  '','','','','','','','','','',
+  '','','','','','','','','','',
+  '','','','','','','','','','',
+  '','','','','','','','','','',
+  '','','','','','','','','','',
+  '','','','','','','','','','',
+  colorant0,colorant1,colorant2,colorant3,colorant4,colorant5,colorant6,colorant7,colorant8,colorant9,colorant10,colorant11,colorant12,colorant13,colorant14,'','','','','',
+  colorant20,colorant21,colorant22,colorant23,colorant24,colorant25,colorant26,colorant27,colorant28,colorant29,colorant30,colorant31,colorant32,colorant33,colorant34,'','','','','',
+  colorant40,colorant41,colorant42,colorant43,colorant44,colorant45,colorant46,colorant47,colorant48,colorant49,colorant50,colorant51,colorant52,colorant53,colorant54
 ];
 export const itemUpgrade = [
   itemUpgrade0,itemUpgrade1,itemUpgrade2,itemUpgrade3,itemUpgrade4

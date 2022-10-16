@@ -1234,7 +1234,7 @@ export const util = { //this.loadImage();
     console.log(dataObj);
     const gameData = dataObj.gameData;
     let sData = {...dataObj.saveData};
-    if (dataObj.type === 'item_enhancement') {
+    if (dataObj.type === 'itemEnhancement') {
 
     } else if (dataObj.type === 'itemEquip') { //아이템 착용
       const invenPart = dataObj.data.saveItemData.part;
