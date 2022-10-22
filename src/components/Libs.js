@@ -932,11 +932,136 @@ export const util = { //this.loadImage();
     })
     return svg;
   },
-  getRandomColor: () => {
+  getRgbColor: () => {
     const r = Math.round(Math.random() * 255);
     const g = Math.round(Math.random() * 255);
     const b = Math.round(Math.random() * 255);
-    return `rgba(${r},${g},${b},1)`;
+    return `rgb(${r},${g},${b})`;
+  },
+  getHslColor: (colorLight, opacity) => {
+    const h = Math.round(Math.random() * 360);
+    let s = 0;
+    let l = 0;
+    if (colorLight === "point") {
+      s = Math.round(Math.random() * 20 + 80);
+      l = Math.round(Math.random() * 35 + 35);
+    } else if (colorLight === "light") {
+      s = Math.round(Math.random() * 20 + 80);
+      l = Math.round(Math.random() * 30 + 50);
+    } else {
+      s = Math.round(Math.random() * 20 + 80);
+      l = Math.round(Math.random() * 30 + 20);
+    }
+    return `hsla(${h},${s}%,${l}%,${opacity})`;
+  },
+  getHslaToRgba: (hslaType) => {
+    let hsla = hslaType.replace( /[hsla\(\)]| /gi, "" ); 
+    hsla = hsla.split( "," ); 
+
+    let H = parseFloat( hsla[0] ),
+      S = parseFloat( hsla[1] ), 
+      L = parseFloat( hsla[2] ),
+      A = 0;
+
+    if (hsla.length === 4) {
+      A = parseFloat( hsla[ 3 ] ); 
+    }
+
+    const hueToRgb = (m1, m2, h) => { 
+      h = (h < 0) ? h + 1 : (h > 1) ? h - 1 : h; 
+      if (h * 6 < 1) {
+        return m1 + (m2 - m1) * h * 6;
+      }
+      if (h * 2 < 1) {
+        return m2;
+      }
+      if (h * 3 < 2) {
+        return m1 + (m2 - m1) * (2 / 3 - h) * 6; 
+      }
+      return m1; 
+    } 
+    H = H / 360; 
+    S = S / 100; 
+    L = L / 100; 
+
+    const m2 = (L <= 0.5) ? L * (S + 1) : L + S - L * S, 
+      m1 = L * 2 - m2; 
+
+    let R = hueToRgb(m1, m2, H + 1 / 3),
+      G = hueToRgb(m1, m2, H ),
+      B = hueToRgb(m1, m2, H - 1 / 3);
+    R = parseInt(R * 255 , 10); 
+    G = parseInt(G * 255 , 10); 
+    B = parseInt(B * 255 , 10); 
+
+    let rgbaType = (isNaN(A)) ? "rgb(" : "rgba("; 
+    rgbaType += R + ", " + G + ", " + B; 
+    rgbaType += (isNaN(A)) ? ")" : ", " + A + ")"; 
+
+    return rgbaType; 
+  },
+  getRgbaToHsla: ( rgbaType ) =>{
+    let rgba = rgbaType.replace( /[rgba\(\)]| /gi, "" ).split( "," ); 
+    if (rgbaType.indexOf( "%" ) > -1 ){ 
+      for (let i = 0; i < 3; i ++) {
+        rgba[i] = Math.round(parseFloat(rgba[i]) * 2.55);
+      }
+    } 
+
+    let R = parseInt(rgba[0] , 10),
+      G = parseInt(rgba[1] , 10),
+      B = parseInt(rgba[2] , 10),
+      A = 0,
+      S = 0,
+      H = 0;
+
+    if (rgba.length === 4) {
+      A = parseFloat(rgba[3]);
+    } 
+    R = (R + 1) / 256; 
+    G = (G + 1) / 256; 
+    B = (B + 1) / 256; 
+
+    const min = Math.min(R, G, B),
+      max = Math.max(R, G, B),
+      chroma = max - min;
+
+    let L = ( max + min ) / 2; 
+
+    if ( chroma !== 0 ) { 
+      S = 1 - Math.abs(2 * L - 1); 
+      S = chroma / S; 
+      switch (max) { 
+        case R: 
+          H = ( (G - B) / chroma) % 6; 
+          break;
+        case G: 
+          H = (B - R) / chroma + 2; 
+          break;
+        case B: 
+          H = (R - G) / chroma + 4; 
+          break;
+        default:
+          break;
+      }
+      H = H * 60; 
+      if (H < 0) {
+        H += 360; 
+      }
+    } 
+    S = S * 100; 
+    L = L * 100; 
+
+    // 소수점 이하 둘째자리까지 구하기. 
+    H = parseFloat(H.toFixed(2)); 
+    S = parseFloat(S.toFixed(2)); 
+    L = parseFloat(L.toFixed(2)); 
+
+    let hslaType = (isNaN(A)) ? "hsl(" : "hsla("; 
+    hslaType += H + ", " + S + "%, " + L + "%"; 
+    hslaType += (isNaN(A)) ? ")" : ", " + A + ")"; 
+
+    return hslaType; 
   },
   getItemGrade: () => {
     const gradeNum = Math.random();
@@ -1048,27 +1173,15 @@ export const util = { //this.loadImage();
     const grade = (option.grade > 1 ? option.grade : util.getItemGrade()) || util.getItemGrade();
     const slotNum = Math.round(Math.random() * selectItem.socket);
     let hole = new Array(slotNum).fill(0);
-    let colorArr = Math.random() < .5 ? [gameData.items.item_point_light, gameData.items.item_point_dark] : [gameData.items.item_point_dark, gameData.items.item_point_light];
+    const darkColor = util.getHslColor('dark',1),
+      lightColor = util.getHslColor('light',1);
+    let colorArr = Math.random() < .5 ? [lightColor, darkColor] : [darkColor, lightColor];
     const color = selectItem.color.map((data, idx) => {
       if (idx < 2) {
-        const pointColor = Math.floor(Math.random() * colorArr[idx].length);
-        return colorArr[idx][pointColor];
+        return colorArr[idx];
       } else {
-        return util.getRandomColor();
+        return util.getHslColor('point',1);
       }
-      // if (idx === 1) {
-      //   light = light > 0 ? 0 : 155;
-      // }
-      // if (idx > 1) {
-      //   ranNum = 155;
-      //   light = 0;
-      // }
-      // for (let i = 0; i < 3; ++i) {
-      //   colorArr[i] = Math.round(Math.random() * (100 + ranNum) + light);
-      // }
-      // console.log(`rgba(${colorArr[0]},${colorArr[1]},${colorArr[2]},1)`);
-      // return gameData.items.item_point_color[pointColor];
-      //util.getRandomColor();
     });
     const baseEff = selectItem.eff.map((data) => {
       let num = [];

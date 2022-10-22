@@ -1080,14 +1080,11 @@
 .ch_wrap .items li .pic.sealed svg{filter:brightness(0.3) drop-shadow(0px 0px 1px #fff);}
 .ch_wrap .items li .pic.sealed:before{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);content:'?';z-index:1;font-size:20px;}
 .ch_wrap .items li .pic.possible:after{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);content:'';z-index:2;}
-.ch_wrap .items li .hole{position:absolute;left:2px;right:2px;bottom:2px;z-index:3;}
-.ch_wrap .items li .hole .hole_slot{margin:auto 1px;width:calc(25% - 2px);}
-.ch_wrap .items li .hole .hole_slot:after{display:block;content:'';width:90%;height:0;padding-top:90%;border-radius:10px;border:1px solid #000;}
-
-.stone_w:after{background:radial-gradient(farthest-side at 35% 35%, #fff, #000);}
-.stone_k:after{background:radial-gradient(farthest-side at 35% 35%, #777, #000);}
-.stone_r:after{background:radial-gradient(farthest-side at 35% 35%, #f38, #000);}
-.stone_b:after{background:radial-gradient(farthest-side at 35% 35%, #37f, #000);}
-.stone_y:after{background:radial-gradient(farthest-side at 35% 35%, #f83, #000);}
-.stone_g:after{background:radial-gradient(farthest-side at 35% 35%, #3f7, #000);}
-.stone_empty:after{background:#000;}
+.ch_wrap .items li .hole{position:absolute;left:0;right:0;top:0;bottom:0;z-index:3;pointer-events:none;}
+.ch_wrap .items li .hole .hole_slot{position:absolute;width:25%;padding-top:25%;border-radius:50%;border:1px solid #000;background:rgba(0,0,0,.7);}
+.ch_wrap .items li .hole .hole_slot.fixed{background:rgba(255,172,47,.7)}
+.ch_wrap .items li .hole .hole_slot.hole0{left:0;top:0;}
+.ch_wrap .items li .hole .hole_slot.hole1{right:0;top:0;}
+.ch_wrap .items li .hole .hole_slot.hole2{right:0;bottom:0;}
+.ch_wrap .items li .hole .hole_slot.hole3{left:0;bottom:0;}
+.ch_wrap .items li .hole .hole_slot.hole4{left:50%;top:50%;transform:translate(-50%,-50%);}

@@ -66,6 +66,8 @@ export const save = {
   ],
   "items":{
     "equip":[
+      {addEff:[],baseEff:[{type: 4, num: ["578", "763", "1024", "1213"]}, {type: 6, num: ["174", "332", "471", "606"]}],color:["hsla(223,99%,75%,1)"],grade: 2,hole:[{idx:101}, {idx:4,eff:[{type:6,num: ["76"]}]},0,0,0],id:"355goma5g",idx:11,mark:5,markNum:2,modifier:{ko:"다이아몬드의 물개두마리", en:"Diamond's two Seals"},part:2,sealed:false,slot:4,weaponType:0},
+      {addEff:[],baseEff:[{type: 4, num: ["72", "74", "76", "77"]}, {type: 6, num: ["76", "89", "109", "131"]},{type: 8, num: ["14", "14", "14", "14"]}],color:["hsla(289,100%,34%,1)"],grade:2,hole:[0,0,0],id:"j0mu47it2",idx:0,mark:22,markNum:1,modifier:{ko: "사파이어의 도마뱀", en: "Sapphire's a Lizard"},part:1,sealed:false,select1:"",select2:"",slot:1,weaponType:0}
     ],
     "hole":[
       {"idx":1,"grade":1,"baseEff":[{type:4,num:['802']}],"addEff":[]},
@@ -80,10 +82,10 @@ export const save = {
       {"idx":123},
       {"idx":142},
       {"idx":144},
-      {"idx":150},
+      {"idx":146},
       {"idx":150},
       {"idx":151},
-      {"idx":151},
+      {"idx":152},
     ],
     "upgrade":[
       {"idx":1},

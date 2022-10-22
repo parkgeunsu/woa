@@ -65,13 +65,15 @@ const getTotalEff = (saveItems, grade, gameData) => {
 	});
 	if (saveItems.hole) {
 		saveItems.hole.forEach((data, idx) => {
-			const holeItem = gameData.items.hole[data].eff;
-			holeItem.forEach((holeData, idx) => {
-				if (totalEff[holeData.type] === undefined) {
-					totalEff[holeData.type] = {type: holeData.type, base: 0, add:0, hole:0};
-				}
-				totalEff[holeData.type].hole += parseInt(holeData.num);
-			});
+			if (data) {
+				const holeItem = gameData.items.hole[data.idx].eff;
+				holeItem.forEach((holeData, idx) => {
+					if (totalEff[holeData.type] === undefined) {
+						totalEff[holeData.type] = {type: holeData.type, base: 0, add:0, hole:0};
+					}
+					totalEff[holeData.type].hole += parseInt(holeData.num);
+				});
+			}
 		});
 	}
 	return totalEff;
@@ -95,27 +97,13 @@ const Inven = ({
 	const [selectTab, setSelectTab] = useState(0);
 	const [item, setItem] = useState(saveData.items);
 	const [selectArea, setSelectArea] = useState('area1');
-	const [selectItem1, setSelectItem1] = useState();
-	const [selectItem2, setSelectItem2] = useState();
-	const selectItem1Display = useRef();
-	const selectItem2Display = useRef();
+	const [selectItem1, setSelectItem1] = useState({save:[],game:[],buttonType:[],selectTab:'',select:''});
+	const [selectItem2, setSelectItem2] = useState({save:[],game:[],buttonType:[],selectTab:'',select:''});
 	useEffect(() => {
 		//equip, hole, upgrade, merterial, etc
 		console.log(saveData.items);
 		setItem(saveData.items);
 	}, [saveData]);
-	useEffect(() => {
-		if (item) {
-			let cloneItem = {...item};
-			for (let v in cloneItem) {
-				cloneItem[v].forEach((itemData_) => {
-					itemData_.select1 = '';
-					itemData_.select2 = '';
-				});
-			}
-			setItem(cloneItem);
-		}
-	}, []);
   return (
 		<>
 			<InvenWrap className="inven_wrap" backImg={imgSet.back[2]} >
@@ -142,54 +130,37 @@ const Inven = ({
 								const items = data.part === 3 ? gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx] : gameItem.equip[data.part][0][itemsGrade][data.idx];
 								const itemsHole = data.hole;
 								return (
-									<div className={`item_layout ${gameData.itemGrade.txt_e[data.grade].toLowerCase()} ${data.select1} ${data.select2}`} key={`items${idx}`} onClick={() => {
-										let cloneItem = {...item};
+									<div className={`item_layout ${gameData.itemGrade.txt_e[data.grade].toLowerCase()} ${selectItem1.selectTab === invenList[selectTab].keyName && selectItem1.select === idx ? 'select1' : ''} ${selectItem2.selectTab === invenList[selectTab].keyName && selectItem2.select === idx ? 'select2' : ''}`} key={`items${idx}`} onClick={() => {
 										if (selectArea === 'area2') {
-											if (selectItem1 && (Object.entries(data).toString() === Object.entries(selectItem1).toString())) {
-												setSelectItem1(null);
-												for (let v in cloneItem) {
-													cloneItem[v].forEach((itemData_) => {
-														itemData_.select1 = '';
-													});
-												}
-											}
-											setSelectItem2(data);
-											selectItem2Display.current = items;
-											for (let v in cloneItem) {
-												cloneItem[v].forEach((itemData_) => {
-													itemData_.select2 = '';
-												});
-											}
-											cloneItem[invenList[selectTab].keyName][idx].select2 = 'select2';
-											selectItem2Display.current.buttonType = ['sell'];
+											let button = ['sell'];
 											if (data.sealed) {
-												selectItem2Display.current.buttonType.push('unpack');
+												button.push('unpack');
 											}
-											selectItem2Display.current.selectTab = invenList[selectTab].keyName;
-											selectItem2Display.current.selectIdx = idx;
+											if (selectItem1.select !== '' && selectItem1.selectTab === invenList[selectTab].keyName && selectItem1.select === idx) {
+												setSelectItem1({save:{},game:{},select:'',selectTab:'',buttonType:[]});
+											}
+											setSelectItem2({
+												save:data,
+												game:items,
+												select:idx,
+												selectTab:invenList[selectTab].keyName,
+												buttonType:button,
+											});
 										} else {
-											if (selectItem2 && (Object.entries(data).toString() === Object.entries(selectItem2).toString())) {
-												setSelectItem2(null);
-												for (let v in cloneItem) {
-													cloneItem[v].forEach((itemData_) => {
-														itemData_.select2 = '';
-													});
-												}
-											}
-											setSelectItem1(data);
-											selectItem1Display.current = items;
-											for (let v in cloneItem) {
-												cloneItem[v].forEach((itemData_) => {
-													itemData_.select1 = '';
-												});
-											}
-											cloneItem[invenList[selectTab].keyName][idx].select1 = 'select1';
-											selectItem1Display.current.buttonType = ['sell'];
+											let button = ['sell'];
 											if (data.sealed) {
-												selectItem1Display.current.buttonType.push('unpack');
+												button.push('unpack');
 											}
-											selectItem1Display.current.selectTab = invenList[selectTab].keyName;
-											selectItem1Display.current.selectIdx = idx;
+											if (selectItem2.select !== '' && selectItem2.selectTab === invenList[selectTab].keyName && selectItem2.select === idx) {
+												setSelectItem2({save:{},game:{},select:'',selectTab:'',buttonType:[]});
+											}
+											setSelectItem1({
+												save:data,
+												game:items,
+												select:idx,
+												selectTab:invenList[selectTab].keyName,
+												buttonType:button,
+											});
 										}
 									}}>
 										<span className={`pic ${data.sealed ? "sealed" : ""}`}>
@@ -197,9 +168,13 @@ const Inven = ({
 											</svg>
 										</span>
 										<span className="hole" flex-center="true">
-											{itemsHole.map((holedata, holeidx) => {
-												const stoneColor = gameItem.hole[data.hole[holeidx]].stone;
-												return <span key={`${idx}_${holeidx}`} className={`hole_slot hole${holeidx} stone_${stoneColor}`}></span>;
+											{itemsHole.map((holeData, holeidx) => {
+												const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
+												return (
+													<span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
+														<ItemPic className="pic" itemPic={imgSet.itemHole[holePic]} />
+													</span>
+												);
 											})}
 										</span>
 									</div>
@@ -208,48 +183,37 @@ const Inven = ({
 								const items = gameItem.hole[data.idx];
 								const grade = data.grade || items.grade;
 								return (
-									<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${data.select1} ${data.select2}`} key={`items${idx}`} onClick={() => {
-										let cloneItem = {...item};
+									<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${selectItem1.selectTab === invenList[selectTab].keyName && selectItem1.select === idx ? 'select1' : ''} ${selectItem2.selectTab === invenList[selectTab].keyName && selectItem2.select === idx ? 'select2' : ''}`} key={`items${idx}`} onClick={() => {
 										if (selectArea === 'area2') {
-											if (selectItem1 && (Object.entries(data).toString() === Object.entries(selectItem1).toString())) {
-												setSelectItem1(null);
-												for (let v in cloneItem) {
-													cloneItem[v].forEach((itemData_) => {
-														itemData_.select1 = '';
-													});
-												}
+											if (selectItem1.save && (Object.entries(data).toString() === Object.entries(selectItem1.save).toString())) {
+												setSelectItem1({save:[],game:[],buttonType:[],selectTab:'',select:''});
 											}
-											setSelectItem2(data);
-											selectItem2Display.current = items;
-											for (let v in cloneItem) {
-												cloneItem[v].forEach((itemData_) => {
-													itemData_.select2 = '';
-												});
+											let button = ['sell'];
+											if (selectItem1.select !== '' && selectItem1.selectTab === invenList[selectTab].keyName && selectItem1.select === idx) {
+												setSelectItem1({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 											}
-											cloneItem[invenList[selectTab].keyName][idx].select2 = 'select2';
-											selectItem2Display.current.buttonType = ['sell'];
-											selectItem2Display.current.selectTab = invenList[selectTab].keyName;
-											selectItem2Display.current.selectIdx = idx;
+											setSelectItem2({
+												save:data,
+												game:items,
+												select:idx,
+												selectTab:invenList[selectTab].keyName,
+												buttonType:button,
+											});
 										} else {
-											if (selectItem2 && (Object.entries(data).toString() === Object.entries(selectItem2).toString())) {
-												setSelectItem2(null);
-												for (let v in cloneItem) {
-													cloneItem[v].forEach((itemData_) => {
-														itemData_.select2 = '';
-													});
-												}
+											if (selectItem2.save && (Object.entries(data).toString() === Object.entries(selectItem2.save).toString())) {
+												setSelectItem2({save:[],game:[],buttonType:[],selectTab:'',select:''});
 											}
-											setSelectItem1(data);
-											selectItem1Display.current = items;
-											for (let v in cloneItem) {
-												cloneItem[v].forEach((itemData_) => {
-													itemData_.select1 = '';
-												});
+											let button = ['sell'];
+											if (selectItem2.select !== '' && selectItem2.selectTab === invenList[selectTab].keyName && selectItem2.select === idx) {
+												setSelectItem2({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 											}
-											cloneItem[invenList[selectTab].keyName][idx].select1 = 'select1';
-											selectItem1Display.current.buttonType = ['sell'];
-											selectItem1Display.current.selectTab = invenList[selectTab].keyName;
-											selectItem1Display.current.selectIdx = idx;
+											setSelectItem1({
+												save:data,
+												game:items,
+												select:idx,
+												selectTab:invenList[selectTab].keyName,
+												buttonType:button,
+											});
 										}
 									}}>
 										<ItemPic className="pic" itemPic={imgSet[`item${invenList[selectTab].keyName.replace(/^[a-z]/, char => char.toUpperCase())}`][items.display]} />
@@ -259,38 +223,37 @@ const Inven = ({
 								const items = gameItem.upgrade[data.idx];
 								const grade = data.grade || items.grade;
 								return (
-									<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${data.select1} ${data.select2}`} key={`items${idx}`} onClick={() => {
-										let cloneItem = {...item};
+									<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${selectItem1.selectTab === invenList[selectTab].keyName && selectItem1.select === idx ? 'select1' : ''} ${selectItem2.selectTab === invenList[selectTab].keyName && selectItem2.select === idx ? 'select2' : ''}`} key={`items${idx}`} onClick={() => {
 										if (selectArea === 'area2') {
-											if (selectItem1 && (Object.entries(data).toString() === Object.entries(selectItem1).toString())) {
-												setSelectItem1(null);
+											if (selectItem1.save && (Object.entries(data).toString() === Object.entries(selectItem1.save).toString())) {
+												setSelectItem1({save:[],game:[],buttonType:[],selectTab:'',select:''});
 											}
-											setSelectItem2(data);
-											selectItem2Display.current = items;
-											for (let v in cloneItem) {
-												cloneItem[v].forEach((itemData_) => {
-													itemData_.select2 = '';
-												});
+											let button = ['sell'];
+											if (selectItem1.select !== '' && selectItem1.selectTab === invenList[selectTab].keyName && selectItem1.select === idx) {
+												setSelectItem1({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 											}
-											cloneItem[invenList[selectTab].keyName][idx].select2 = 'select2';
-											selectItem2Display.current.buttonType = ['sell'];
-											selectItem2Display.current.selectTab = invenList[selectTab].keyName;
-											selectItem2Display.current.selectIdx = idx;
+											setSelectItem2({
+												save:data,
+												game:items,
+												select:idx,
+												selectTab:invenList[selectTab].keyName,
+												buttonType:button,
+											});
 										} else {
-											if (selectItem2 && (Object.entries(data).toString() === Object.entries(selectItem2).toString())) {
-												setSelectItem2(null);
+											if (selectItem2.save && (Object.entries(data).toString() === Object.entries(selectItem2.save).toString())) {
+												setSelectItem2({save:[],game:[],buttonType:[],selectTab:'',select:''});
 											}
-											setSelectItem1(data);
-											selectItem1Display.current = items;
-											for (let v in cloneItem) {
-												cloneItem[v].forEach((itemData_) => {
-													itemData_.select1 = '';
-												});
+											let button = ['sell'];
+											if (selectItem2.select !== '' && selectItem2.selectTab === invenList[selectTab].keyName && selectItem2.select === idx) {
+												setSelectItem2({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 											}
-											cloneItem[invenList[selectTab].keyName][idx].select1 = 'select1';
-											selectItem1Display.current.buttonType = ['sell'];
-											selectItem1Display.current.selectTab = invenList[selectTab].keyName;
-											selectItem1Display.current.selectIdx = idx;
+											setSelectItem1({
+												save:data,
+												game:items,
+												select:idx,
+												selectTab:invenList[selectTab].keyName,
+												buttonType:button,
+											});
 										}
 									}}>
 										<ItemPic className="pic" itemPic={imgSet[`item${invenList[selectTab].keyName.replace(/^[a-z]/, char => char.toUpperCase())}`][items.display]} />
@@ -300,38 +263,37 @@ const Inven = ({
 								const items = gameItem.etc[data.idx];
 								const grade = data.grade || items.grade;
 								return (
-									<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${data.select1} ${data.select2}`} key={`items${idx}`} onClick={() => {
-										let cloneItem = {...item};
+									<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${selectItem1.selectTab === invenList[selectTab].keyName && selectItem1.select === idx ? 'select1' : ''} ${selectItem2.selectTab === invenList[selectTab].keyName && selectItem2.select === idx ? 'select2' : ''}`} key={`items${idx}`} onClick={() => {
 										if (selectArea === 'area2') {
-											if (selectItem1 && (Object.entries(data).toString() === Object.entries(selectItem1).toString())) {
-												setSelectItem1(null);
+											if (selectItem1.save && (Object.entries(data).toString() === Object.entries(selectItem1.save).toString())) {
+												setSelectItem1({save:[],game:[],buttonType:[],selectTab:'',select:''});
 											}
-											setSelectItem2(data);
-											selectItem2Display.current = items;
-											for (let v in cloneItem) {
-												cloneItem[v].forEach((itemData_) => {
-													itemData_.select2 = '';
-												});
+											let button = ['sell'];
+											if (selectItem1.select !== '' && selectItem1.selectTab === invenList[selectTab].keyName && selectItem1.select === idx) {
+												setSelectItem1({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 											}
-											cloneItem[invenList[selectTab].keyName][idx].select2 = 'select2';
-											selectItem2Display.current.buttonType = ['sell'];
-											selectItem2Display.current.selectTab = invenList[selectTab].keyName;
-											selectItem2Display.current.selectIdx = idx;
+											setSelectItem2({
+												save:data,
+												game:items,
+												select:idx,
+												selectTab:invenList[selectTab].keyName,
+												buttonType:button,
+											});
 										} else {
-											if (selectItem2 && (Object.entries(data).toString() === Object.entries(selectItem2).toString())) {
-												setSelectItem2(null);
+											if (selectItem2.save && (Object.entries(data).toString() === Object.entries(selectItem2.save).toString())) {
+												setSelectItem2({save:[],game:[],buttonType:[],selectTab:'',select:''});
 											}
-											setSelectItem1(data);
-											selectItem1Display.current = items;
-											for (let v in cloneItem) {
-												cloneItem[v].forEach((itemData_) => {
-													itemData_.select1 = '';
-												});
+											let button = ['sell'];
+											if (selectItem2.select !== '' && selectItem2.selectTab === invenList[selectTab].keyName && selectItem2.select === idx) {
+												setSelectItem2({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 											}
-											cloneItem[invenList[selectTab].keyName][idx].select1 = 'select1';
-											selectItem1Display.current.buttonType = ['sell'];
-											selectItem1Display.current.selectTab = invenList[selectTab].keyName;
-											selectItem1Display.current.selectIdx = idx;
+											setSelectItem1({
+												save:data,
+												game:items,
+												select:idx,
+												selectTab:invenList[selectTab].keyName,
+												buttonType:button,
+											});
 										}
 									}}>
 										<ItemPic className="pic" itemPic={imgSet[`item${invenList[selectTab].keyName.replace(/^[a-z]/, char => char.toUpperCase())}`][items.display]} />
@@ -341,44 +303,43 @@ const Inven = ({
 								const items = gameItem.etc[data.idx];
 								const grade = data.grade || items.grade;
 								return (
-									<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${data.select1} ${data.select2}`} key={`items${idx}`} onClick={() => {
-										let cloneItem = {...item};
+									<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${selectItem1.selectTab === invenList[selectTab].keyName && selectItem1.select === idx ? 'select1' : ''} ${selectItem2.selectTab === invenList[selectTab].keyName && selectItem2.select === idx ? 'select2' : ''}`} key={`items${idx}`} onClick={() => {
 										if (selectArea === 'area2') {
-											if (selectItem1 && (Object.entries(data).toString() === Object.entries(selectItem1).toString())) {
-												setSelectItem1(null);
+											if (selectItem1.save && (Object.entries(data).toString() === Object.entries(selectItem1.save).toString())) {
+												setSelectItem1({save:[],game:[],buttonType:[],selectTab:'',select:''});
 											}
-											setSelectItem2(data);
-											selectItem2Display.current = items;
-											for (let v in cloneItem) {
-												cloneItem[v].forEach((itemData_) => {
-													itemData_.select2 = '';
-												});
-											}
-											cloneItem[invenList[selectTab].keyName][idx].select2 = 'select2';
-											selectItem2Display.current.buttonType = ['sell'];
+											let button = ['sell'];
 											if (items.invenUse) {
-												selectItem2Display.current.buttonType.push('use');
+												button.push('use');
 											}
-											selectItem2Display.current.selectTab = invenList[selectTab].keyName;
-											selectItem2Display.current.selectIdx = idx;
+											if (selectItem1.select !== '' && selectItem1.selectTab === invenList[selectTab].keyName && selectItem1.select === idx) {
+												setSelectItem1({save:{},game:{},select:'',selectTab:'',buttonType:[]});
+											}
+											setSelectItem2({
+												save:data,
+												game:items,
+												select:idx,
+												selectTab:invenList[selectTab].keyName,
+												buttonType:button,
+											});
 										} else {
-											if (selectItem2 && (Object.entries(data).toString() === Object.entries(selectItem2).toString())) {
-												setSelectItem2(null);
+											if (selectItem2.save && (Object.entries(data).toString() === Object.entries(selectItem2.save).toString())) {
+												setSelectItem2({save:[],game:[],buttonType:[],selectTab:'',select:''});
 											}
-											setSelectItem1(data);
-											selectItem1Display.current = items;
-											for (let v in cloneItem) {
-												cloneItem[v].forEach((itemData_) => {
-													itemData_.select1 = '';
-												});
-											}
-											cloneItem[invenList[selectTab].keyName][idx].select1 = 'select1';
-											selectItem1Display.current.buttonType = ['sell'];
+											let button = ['sell'];
 											if (items.invenUse) {
-												selectItem1Display.current.buttonType.push('use');
+												button.push('use');
 											}
-											selectItem1Display.current.selectTab = invenList[selectTab].keyName;
-											selectItem1Display.current.selectIdx = idx;
+											if (selectItem2.select !== '' && selectItem2.selectTab === invenList[selectTab].keyName && selectItem2.select === idx) {
+												setSelectItem2({save:{},game:{},select:'',selectTab:'',buttonType:[]});
+											}
+											setSelectItem1({
+												save:data,
+												game:items,
+												select:idx,
+												selectTab:invenList[selectTab].keyName,
+												buttonType:button,
+											});
 										}
 									}}>
 										<ItemPic className="pic" itemPic={imgSet[`item${invenList[selectTab].keyName.replace(/^[a-z]/, char => char.toUpperCase())}`][items.display]} />
@@ -388,99 +349,100 @@ const Inven = ({
 						})}
 					</div>
 					<div className="inven_bottom">
-						{selectItem1 ? (
-							<ItemContainer className={`item_select item_select1 items ${selectArea === "area1" ? "on" : ""}`} color={gameData.itemGrade.color[selectItem1.grade]} onClick={() => {
+						{Object.keys(selectItem1.save).length !== 0 ? (
+							<ItemContainer className={`item_select item_select1 items ${selectArea === "area1" ? "on" : ""}`} color={gameData.itemGrade.color[selectItem1.save.grade]} onClick={() => {
 								setSelectArea('area1');
 							}}>
-								{selectItem1Display.current.selectTab === 'equip' && (
+								{selectItem1.selectTab === 'equip' && (
 									<>
-										<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.modifier[lang]} ${selectItem1Display.current.na[lang]}`}}></span></li>
+										<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.save.modifier[lang]} ${selectItem1.game.na[lang]}`}}></span></li>
 										<li className="item_fix" flex="true">
-											<ItemPic className={`item item${selectItem1Display.current.part} ${gameData.itemGrade.txt_e[selectItem1.grade].toLowerCase()} ${selectItem1.sealed ? "sealed" : ""}`}>
-												<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem1Display.current.display], selectItem1.color, selectItem1.id)}}></svg>
+											<ItemPic className={`item item${selectItem1.game.part} ${gameData.itemGrade.txt_e[selectItem1.save.grade].toLowerCase()} ${selectItem1.save.sealed ? "sealed" : ""}`}>
+												<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem1.game.display], selectItem1.save.color, selectItem1.save.id)}}></svg>
 											</ItemPic>
 											<div flex-h="true" style={{flex: 1,}}>
-												<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem1.grade]}>
+												<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem1.save.grade]}>
 													<div className="item_top">
-														<span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[selectItem1.grade] : gameData.itemGrade.txt_e[selectItem1.grade]}</span> <span className="item_type">{gameData.itemType[selectItem1Display.current.part][lang]}</span>
+														<span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[selectItem1.save.grade] : gameData.itemGrade.txt_e[selectItem1.save.grade]}</span> <span className="item_type">{gameData.itemType[selectItem1.game.part][lang]}</span>
 													</div>
-													<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectItem1Display.current.txt[lang]}"`}}></div>
-													<div className="item_kg">{selectItem1Display.current.kg}kg</div>
+													<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectItem1.game.txt[lang]}"`}}></div>
+													<div className="item_kg">{selectItem1.game.kg}kg</div>
 												</ItemName>
 											</div>
 										</li>
 										<div className="scroll-y">
 											<li className="item_list item_typeSlot">
-												<div className="item_type" dangerouslySetInnerHTML={{__html: makeMark(selectItem1.markNum, imgSet.animalType[selectItem1.mark])}}>
+												<div className="item_type" dangerouslySetInnerHTML={{__html: makeMark(selectItem1.save.markNum, imgSet.animalType[selectItem1.save.mark])}}>
 												</div>
 												<div className="item_slot">
-													{selectItem1.hole.map((data, idx) => {
+													{selectItem1.save.hole.map((holeData, idx) => {
+														const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 														return (
-															<div key={idx} className="item_holes"><span className="item_holeback"><Img imgurl={imgSet.itemHole[data]} /></span></div>
+															<div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}><span className="item_holeback"><Img imgurl={imgSet.itemHole[holePic]} /></span></div>
 														)
 													})}
 												</div>
 											</li>
 											<li className="item_list item_eff">
 												<div className="item_title">{lang === 'ko' ? '아이템 효과' : 'Item effect'}</div>
-												{getTotalEff(selectItem1, selectItem1Display.current.grade, gameData).map((eff, idx) => {
+												{getTotalEff(selectItem1.save, selectItem1.game.grade, gameData).map((eff, idx) => {
 													return (
 														<div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
 													)
 												})}
 											</li>
 											<div style={{width:"100%"}} className="scroll-y">
-												{selectItem1.baseEff.length > 0 && (
+												{selectItem1.save.baseEff.length > 0 && (
 													<li className="item_list item_eff">
 														<div className="item_title">{lang === 'ko' ? '기본 효과' : 'Base effect'}</div>
-														{selectItem1.baseEff.map((data, idx) => {
-															const grade = selectItem1.grade > 3 ? 3 : selectItem1.grade - 1;
+														{selectItem1.save.baseEff.map((data, idx) => {
+															const grade = selectItem1.save.grade > 3 ? 3 : selectItem1.save.grade - 1;
 															return (
 																<div key={idx} className="item_effs">{`${util.getEffectType(data.type, lang)} ${data.num[grade]}`}</div>
 															) 
 														})}
 													</li>
 												)}
-												{selectItem1.addEff.length > 0 && (
+												{selectItem1.save.addEff.length > 0 && (
 													<li className="item_list item_eff">
 														<div className="item_title">{lang === 'ko' ? '추가 효과' : 'Additional effect'}</div>
-														{selectItem1.addEff.map((data, idx) => {
+														{selectItem1.save.addEff.map((data, idx) => {
 															return (
 																<div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
 															) 
 														})}
 													</li>
 												)}
-												{selectItem1Display.current.set !== 0 && (<li className="item_list item_set">
-													<div className="item_setNa">{gameData.items.set_type[selectItem1Display.current.set].na}</div>
+												{selectItem1.game.set !== 0 && (<li className="item_list item_set">
+													<div className="item_setNa">{gameData.items.set_type[selectItem1.game.set].na}</div>
 												</li>
 												)}
 											</div>
 										</div>
 									</>
 								)}
-								{selectItem1Display.current.selectTab === 'hole' && (
+								{selectItem1.selectTab === 'hole' && (
 									<>
-										<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1Display.current.na[lang]}`}}></span></li>
+										<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.game.na[lang]}`}}></span></li>
 										<li className="item_fix" flex="true">
-											<div className={`item ${gameData.itemGrade.txt_e[selectItem1.grade || selectItem1Display.current.grade].toLowerCase()}`}>
-												<ItemPic className="pic" itemPic={imgSet[`item${selectItem1Display.current.selectTab.replace(/^[a-z]/, char => char.toUpperCase())}`][selectItem1Display.current.display]} />
+											<div className={`item ${gameData.itemGrade.txt_e[selectItem1.save.grade || selectItem1.game.grade].toLowerCase()}`}>
+												<ItemPic className="pic" itemPic={imgSet[`item${selectItem1.selectTab.replace(/^[a-z]/, char => char.toUpperCase())}`][selectItem1.game.display]} />
 											</div>
 											<div flex-h="true" style={{flex: 1,}}>
-												<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem1.grade]}>
+												<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem1.save.grade]}>
 													<div className="item_top">
-														<span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[selectItem1.grade] : gameData.itemGrade.txt_e[selectItem1.grade]}</span>
+														<span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[selectItem1.save.grade] : gameData.itemGrade.txt_e[selectItem1.save.grade]}</span>
 													</div>
-													<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectItem1Display.current.txt[lang]}"`}}></div>
-													<div className="item_kg">{selectItem1Display.current.kg}kg</div>
+													<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectItem1.game.txt[lang]}"`}}></div>
+													<div className="item_kg">{selectItem1.game.kg}kg</div>
 												</ItemName>
 											</div>
 										</li>
-										{selectItem1Display.current.idx <= 100 && (
+										{selectItem1.game.idx <= 100 && (
 											<div className="scroll-y">
 												<li className="item_list item_eff">
 													<div className="item_title">{lang === 'ko' ? '아이템 효과' : 'Item effect'}</div>
-													{getTotalEff(selectItem1, 1, gameData).map((eff, idx) => {
+													{getTotalEff(selectItem1.save, 1, gameData).map((eff, idx) => {
 														return (
 															<div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
 														)
@@ -490,53 +452,53 @@ const Inven = ({
 										)}
 									</>
 								)}
-								{selectItem1Display.current.selectTab !== 'equip' && selectItem1Display.current.selectTab !== 'hole' && (
+								{selectItem1.selectTab !== 'equip' && selectItem1.selectTab !== 'hole' && (
 									<>
-										<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1Display.current.na[lang]}`}}></span></li>
+										<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.game.na[lang]}`}}></span></li>
 										<li className="item_fix" flex="true">
-											<div className={`item ${gameData.itemGrade.txt_e[selectItem1.grade || selectItem1Display.current.grade].toLowerCase()}`}>
-												<ItemPic className="pic" itemPic={imgSet[`item${selectItem1Display.current.selectTab.replace(/^[a-z]/, char => char.toUpperCase())}`][selectItem1Display.current.display]} />
+											<div className={`item ${gameData.itemGrade.txt_e[selectItem1.save.grade || selectItem1.game.grade].toLowerCase()}`}>
+												<ItemPic className="pic" itemPic={imgSet[`item${selectItem1.selectTab.replace(/^[a-z]/, char => char.toUpperCase())}`][selectItem1.game.display]} />
 											</div>
 											<div flex-h="true" style={{flex: 1,}}>
-												<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem1.grade]}>
+												<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem1.save.grade]}>
 													<div className="item_top">
-														<span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[selectItem1.grade] : gameData.itemGrade.txt_e[selectItem1.grade]}</span>
+														<span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[selectItem1.save.grade] : gameData.itemGrade.txt_e[selectItem1.save.grade]}</span>
 													</div>
-													<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectItem1Display.current.txt[lang]}"`}}></div>
-													<div className="item_kg">{selectItem1Display.current.kg}kg</div>
+													<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectItem1.game.txt[lang]}"`}}></div>
+													<div className="item_kg">{selectItem1.game.kg}kg</div>
 												</ItemName>
 											</div>
 										</li>
 										<div className="scroll-y">
 											<li className="item_list item_eff">
 												<div className="item_title">
-													{selectItem1Display.current.txt[lang]}
+													{selectItem1.game.txt[lang]}
 												</div>
 											</li>
 										</div>
 									</>
 								)}
 								<li className="item_footer" flex-v="true">
-									{(selectItem1Display.current.selectTab === 'equip' || selectItem1Display.current.selectTab === 'hole') ? (
-										<div className="item_price"><span>{lang === 'ko' ? '판매가:' : 'Selling Price'}</span><em>{`₩${selectItem1Display.current.price * (selectItem1Display.current.grade || selectItem1.grade)}`}</em></div>
+									{(selectItem1.selectTab === 'equip' || selectItem1.selectTab === 'hole') ? (
+										<div className="item_price"><span>{lang === 'ko' ? '판매가:' : 'Selling Price'}</span><em>{`₩${selectItem1.game.price * (selectItem1.game.grade || selectItem1.save.grade)}`}</em></div>
 									) : (
-										<div className="item_price"><span>{lang === 'ko' ? '판매가:' : 'Selling Price'}</span><em>{`₩${selectItem1Display.current.price}`}</em></div>
+										<div className="item_price"><span>{lang === 'ko' ? '판매가:' : 'Selling Price'}</span><em>{`₩${selectItem1.game.price}`}</em></div>
 									)}
 									<div flex-end="true">
-									{selectItem1Display.current.buttonType && selectItem1Display.current.buttonType.map((buttonData, idx) => {
+									{selectItem1.buttonType && selectItem1.buttonType.map((buttonData, idx) => {
 										switch(buttonData) {
 											case "sell":
 												return (
 													<div key={`button${idx}`} className="item_button" flex="true">
-														<button text="true" onClick={(e) => {
+														<button text="true" className="button_small" onClick={(e) => {
 															util.buttonEvent({
 																event: e,
 																type: 'itemSell',
 																data: {
 																	slotIdx: 0,
-																	gameItem: selectItem1Display.current,
-																	itemSaveSlot:selectItem1Display.current.selectIdx,
-																	type: selectItem1Display.current.selectTab,
+																	gameItem: selectItem1.game,
+																	itemSaveSlot:selectItem1.select,
+																	type: selectItem1.selectTab,
 																},
 																saveData: saveData,
 																changeSaveData: changeSaveData,
@@ -546,22 +508,22 @@ const Inven = ({
 																showPopup: setPopupOn,
 																lang: lang,
 															});
-															setSelectItem1(null);
+															setSelectItem1({save:[],game:[],buttonType:[],selectTab:'',select:''});
 														}} data-buttontype="itemSell">{lang === 'ko' ? '판매' : 'Sell'}</button>
 													</div>
 												);
 											case "unpack":
 												return (
 													<div key={`button${idx}`} className="item_button" flex="true">
-														<button text="true" onClick={(e) => {
+														<button text="true" className="button_small" onClick={(e) => {
 															util.buttonEvent({
 																event: e,
 																type: 'itemUnpack',
 																data: {
 																	slotIdx:0,
-																	gameItem:selectItem1Display.current,
-																	itemSaveSlot:selectItem1Display.current.selectIdx,
-																	saveItemData:saveData.items.equip[selectItem1Display.current.selectIdx],
+																	gameItem:selectItem1.game,
+																	itemSaveSlot:selectItem1.select,
+																	saveItemData:saveData.items.equip[selectItem1.select],
 																	type:'hequip',
 																},
 																saveData: saveData,
@@ -572,22 +534,25 @@ const Inven = ({
 																showPopup: setPopupOn,
 																lang: lang,
 															});
-															setSelectItem1({...item[invenList[selectTab].keyName][selectItem1Display.current.selectIdx]});
+															setSelectItem1({
+																...selectItem1,
+																save:{...item[invenList[selectTab].keyName][selectItem1.select]},
+															});
 														}} data-buttontype="itemSell">{lang === 'ko' ? '확인' : 'Unpack'}</button>
 													</div>
 												);
 											case 'use':
 												return (
 													<div key={`button${idx}`} className="item_button" flex="true">
-														<button text="true" onClick={(e) => {
+														<button text="true" className="button_small" onClick={(e) => {
 															util.buttonEvent({
 																event: e,
 																type: 'itemUse',
 																data: {
 																	slotIdx: 0,
-																	gameItem: selectItem1Display.current,
-																	itemSaveSlot:selectItem1Display.current.selectIdx,
-																	type: selectItem1Display.current.selectTab,
+																	gameItem: selectItem1.game,
+																	itemSaveSlot:selectItem1.select,
+																	type: selectItem1.selectTab,
 																},
 																saveData: saveData,
 																changeSaveData: changeSaveData,
@@ -597,7 +562,7 @@ const Inven = ({
 																showPopup: setPopupOn,
 																lang: lang,
 															});
-															setSelectItem1(null);
+															setSelectItem1({save:[],game:[],buttonType:[],selectTab:'',select:''});
 														}} data-buttontype="itemUse">{lang === 'ko' ? '사용' : 'Use'}</button>
 													</div>
 												)
@@ -613,99 +578,100 @@ const Inven = ({
 								setSelectArea('area1');
 							}}></ItemContainer>
 						)}
-						{selectItem2 ? (
-							<ItemContainer className={`item_select item_select2 items ${selectArea === "area2" ? "on" : ""}`} color={gameData.itemGrade.color[selectItem2.grade]} onClick={() => {
+						{Object.keys(selectItem2.save).length !== 0 ? (
+							<ItemContainer className={`item_select item_select2 items ${selectArea === "area2" ? "on" : ""}`} color={gameData.itemGrade.color[selectItem2.save.grade]} onClick={() => {
 								setSelectArea('area2');
 							}}>
-								{selectItem2Display.current.selectTab === 'equip' && (
+								{selectItem2.selectTab === 'equip' && (
 									<>
-										<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.modifier[lang]} ${selectItem2Display.current.na[lang]}`}}></span></li>
+										<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.save.modifier[lang]} ${selectItem2.game.na[lang]}`}}></span></li>
 										<li className="item_fix" flex="true">
-											<ItemPic className={`item item${selectItem2Display.current.part} ${gameData.itemGrade.txt_e[selectItem2.grade].toLowerCase()} ${selectItem2.sealed ? "sealed" : ""}`}>
-												<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem2Display.current.display], selectItem2.color, selectItem2.id)}}></svg>
+											<ItemPic className={`item item${selectItem2.game.part} ${gameData.itemGrade.txt_e[selectItem2.save.grade].toLowerCase()} ${selectItem2.sealed ? "sealed" : ""}`}>
+												<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem2.game.display], selectItem2.save.color, selectItem2.save.id)}}></svg>
 											</ItemPic>
 											<div flex-h="true" style={{flex: 1,}}>
-												<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem2.grade]}>
+												<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem2.save.grade]}>
 													<div className="item_top">
-														<span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[selectItem2.grade] : gameData.itemGrade.txt_e[selectItem2.grade]}</span> <span className="item_type">{gameData.itemType[selectItem2Display.current.part][lang]}</span>
+														<span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[selectItem2.save.grade] : gameData.itemGrade.txt_e[selectItem2.save.grade]}</span> <span className="item_type">{gameData.itemType[selectItem2.game.part][lang]}</span>
 													</div>
-													<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectItem2Display.current.txt[lang]}"`}}></div>
-													<div className="item_kg">{selectItem2Display.current.kg}kg</div>
+													<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectItem2.game.txt[lang]}"`}}></div>
+													<div className="item_kg">{selectItem2.game.kg}kg</div>
 												</ItemName>
 											</div>
 										</li>
 										<div className="scroll-y">
 											<li className="item_list item_typeSlot">
-												<div className="item_type" dangerouslySetInnerHTML={{__html: makeMark(selectItem2.markNum, imgSet.animalType[selectItem2.mark])}}>
+												<div className="item_type" dangerouslySetInnerHTML={{__html: makeMark(selectItem2.save.markNum, imgSet.animalType[selectItem2.save.mark])}}>
 												</div>
 												<div className="item_slot">
-													{selectItem2.hole.map((data, idx) => {
+													{selectItem2.save.hole.map((holeData, idx) => {
+														const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 														return (
-															<div key={idx} className="item_holes"><span className="item_holeback"><Img imgurl={imgSet.itemHole[data]} /></span></div>
+															<div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}><span className="item_holeback"><Img imgurl={imgSet.itemHole[holePic]} /></span></div>
 														)
 													})}
 												</div>
 											</li>
 											<li className="item_list item_eff">
 												<div className="item_title">{lang === 'ko' ? '아이템 효과' : 'Item effect'}</div>
-												{getTotalEff(selectItem2, selectItem2Display.current.grade, gameData).map((eff, idx) => {
+												{getTotalEff(selectItem2.save, selectItem2.game.grade, gameData).map((eff, idx) => {
 													return (
 														<div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
 													)
 												})}
 											</li>
 											<div style={{width:"100%"}} className="scroll-y">
-												{selectItem2.baseEff.length > 0 && (
+												{selectItem2.save.baseEff.length > 0 && (
 													<li className="item_list item_eff">
 														<div className="item_title">{lang === 'ko' ? '기본 효과' : 'Base effect'}</div>
-														{selectItem2.baseEff.map((data, idx) => {
-															const grade = selectItem2.grade > 3 ? 3 : selectItem2.grade - 1;
+														{selectItem2.save.baseEff.map((data, idx) => {
+															const grade = selectItem2.save.grade > 3 ? 3 : selectItem2.save.grade - 1;
 															return (
 																<div key={idx} className="item_effs">{`${util.getEffectType(data.type, lang)} ${data.num[grade]}`}</div>
 															) 
 														})}
 													</li>
 												)}
-												{selectItem2.addEff.length > 0 && (
+												{selectItem2.save.addEff.length > 0 && (
 													<li className="item_list item_eff">
 														<div className="item_title">{lang === 'ko' ? '추가 효과' : 'Additional effect'}</div>
-														{selectItem2.addEff.map((data, idx) => {
+														{selectItem2.save.addEff.map((data, idx) => {
 															return (
 																<div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
 															) 
 														})}
 													</li>
 												)}
-												{selectItem2Display.current.set !== 0 && (<li className="item_list item_set">
-													<div className="item_setNa">{gameData.items.set_type[selectItem2Display.current.set].na}</div>
+												{selectItem2.game.set !== 0 && (<li className="item_list item_set">
+													<div className="item_setNa">{gameData.items.set_type[selectItem2.game.set].na}</div>
 												</li>
 												)}
 											</div>
 										</div>
 									</>
 								)}
-								{selectItem2Display.current.selectTab === 'hole' && (
+								{selectItem2.selectTab === 'hole' && (
 									<>
-										<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2Display.current.na[lang]}`}}></span></li>
+										<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.game.na[lang]}`}}></span></li>
 										<li className="item_fix" flex="true">
-											<div className={`item ${gameData.itemGrade.txt_e[selectItem2.grade || selectItem2Display.current.grade].toLowerCase()}`}>
-												<ItemPic className="pic" itemPic={imgSet[`item${selectItem2Display.current.selectTab.replace(/^[a-z]/, char => char.toUpperCase())}`][selectItem2Display.current.display]} />
+											<div className={`item ${gameData.itemGrade.txt_e[selectItem2.save.grade || selectItem2.game.grade].toLowerCase()}`}>
+												<ItemPic className="pic" itemPic={imgSet[`item${selectItem2.selectTab.replace(/^[a-z]/, char => char.toUpperCase())}`][selectItem2.game.display]} />
 											</div>
 											<div flex-h="true" style={{flex: 1,}}>
-												<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem2.grade]}>
+												<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem2.save.grade]}>
 													<div className="item_top">
-														<span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[selectItem2.grade] : gameData.itemGrade.txt_e[selectItem2.grade]}</span>
+														<span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[selectItem2.save.grade] : gameData.itemGrade.txt_e[selectItem2.save.grade]}</span>
 													</div>
-													<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectItem2Display.current.txt[lang]}"`}}></div>
-													<div className="item_kg">{selectItem2Display.current.kg}kg</div>
+													<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectItem2.game.txt[lang]}"`}}></div>
+													<div className="item_kg">{selectItem2.game.kg}kg</div>
 												</ItemName>
 											</div>
 										</li>
-										{selectItem2Display.current.idx <= 100 && (
+										{selectItem2.game.idx <= 100 && (
 											<div className="scroll-y">
 												<li className="item_list item_eff">
 													<div className="item_title">{lang === 'ko' ? '아이템 효과' : 'Item effect'}</div>
-													{getTotalEff(selectItem2, 1, gameData).map((eff, idx) => {
+													{getTotalEff(selectItem2.save, 1, gameData).map((eff, idx) => {
 														return (
 															<div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
 														)
@@ -715,53 +681,53 @@ const Inven = ({
 										)}
 									</>
 								)}
-								{selectItem2Display.current.selectTab !== 'equip' && selectItem2Display.current.selectTab !== 'hole' && (
+								{selectItem2.selectTab !== 'equip' && selectItem2.selectTab !== 'hole' && (
 									<>
-										<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2Display.current.na[lang]}`}}></span></li>
+										<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.game.na[lang]}`}}></span></li>
 										<li className="item_fix" flex="true">
-											<div className={`item ${gameData.itemGrade.txt_e[selectItem2.grade || selectItem2Display.current.grade].toLowerCase()}`}>
-												<ItemPic className="pic" itemPic={imgSet[`item${selectItem2Display.current.selectTab.replace(/^[a-z]/, char => char.toUpperCase())}`][selectItem2Display.current.display]} />
+											<div className={`item ${gameData.itemGrade.txt_e[selectItem2.save.grade || selectItem2.game.grade].toLowerCase()}`}>
+												<ItemPic className="pic" itemPic={imgSet[`item${selectItem2.selectTab.replace(/^[a-z]/, char => char.toUpperCase())}`][selectItem2.game.display]} />
 											</div>
 											<div flex-h="true" style={{flex: 1,}}>
-												<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem2.grade]}>
+												<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem2.save.grade]}>
 													<div className="item_top">
-														<span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[selectItem2.grade] : gameData.itemGrade.txt_e[selectItem2.grade]}</span>
+														<span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[selectItem2.save.grade] : gameData.itemGrade.txt_e[selectItem2.save.grade]}</span>
 													</div>
-													<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectItem2Display.current.txt[lang]}"`}}></div>
-													<div className="item_kg">{selectItem2Display.current.kg}kg</div>
+													<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectItem2.game.txt[lang]}"`}}></div>
+													<div className="item_kg">{selectItem2.game.kg}kg</div>
 												</ItemName>
 											</div>
 										</li>
 										<div className="scroll-y">
 											<li className="item_list item_eff">
 												<div className="item_title">
-													{selectItem2Display.current.txt[lang]}
+													{selectItem2.game.txt[lang]}
 												</div>
 											</li>
 										</div>
 									</>
 								)}
 								<li className="item_footer" flex-v="true">
-									{selectItem2Display.current.selectTab === 'equip' ? (
-										<div className="item_price"><span>{lang === 'ko' ? '판매가:' : 'Selling Price'}</span><em>{`₩${(selectItem2Display.current.price < 1000 ? 1000 : selectItem2Display.current.price) * 2 * selectItem2.grade}`}</em></div>
+									{selectItem2.selectTab === 'equip' ? (
+										<div className="item_price"><span>{lang === 'ko' ? '판매가:' : 'Selling Price'}</span><em>{`₩${(selectItem2.game.price < 1000 ? 1000 : selectItem2.game.price) * 2 * selectItem2.save.grade}`}</em></div>
 									) : (
-										<div className="item_price"><span>{lang === 'ko' ? '판매가:' : 'Selling Price'}</span><em>{`₩${selectItem2Display.current.price}`}</em></div>
+										<div className="item_price"><span>{lang === 'ko' ? '판매가:' : 'Selling Price'}</span><em>{`₩${selectItem2.game.price}`}</em></div>
 									)}
 									<div flex-end="true">
-									{selectItem2Display.current.buttonType && selectItem2Display.current.buttonType.map((buttonData, idx) => {
+									{selectItem2.buttonType && selectItem2.buttonType.map((buttonData, idx) => {
 										switch(buttonData) {
 											case "sell":
 												return (
 													<div key={`button${idx}`} className="item_button" flex="true">
-														<button text="true" onClick={(e) => {
+														<button text="true" className="button_small" onClick={(e) => {
 															util.buttonEvent({
 																event: e,
 																type: 'itemSell',
 																data: {
 																	slotIdx: 0,
-																	gameItem: selectItem2Display.current,
-																	itemSaveSlot:selectItem2Display.current.selectIdx,
-																	type: selectItem2Display.current.selectTab,
+																	gameItem: selectItem2.game,
+																	itemSaveSlot:selectItem2.select,
+																	type: selectItem2.selectTab,
 																},
 																saveData: saveData,
 																changeSaveData: changeSaveData,
@@ -771,22 +737,22 @@ const Inven = ({
 																showPopup: setPopupOn,
 																lang: lang,
 															});
-															setSelectItem2(null);
+															setSelectItem2({save:[],game:[],buttonType:[],selectTab:'',select:''});
 														}} data-buttontype="itemSell">{lang === 'ko' ? '판매' : 'Sell'}</button>
 													</div>
 												);
 											case "unpack":
 												return (
 													<div key={`button${idx}`} className="item_button" flex="true">
-														<button text="true" onClick={(e) => {
+														<button text="true" className="button_small" onClick={(e) => {
 															util.buttonEvent({
 																event: e,
 																type: 'itemUnpack',
 																data: {
 																	slotIdx:0,
-																	gameItem:selectItem2Display.current,
-																	itemSaveSlot:selectItem2Display.current.selectIdx,
-																	saveItemData:saveData.items.equip[selectItem2Display.current.selectIdx],
+																	gameItem:selectItem2.game,
+																	itemSaveSlot:selectItem2.select,
+																	saveItemData:saveData.items.equip[selectItem2.select],
 																	type:'hequip',
 																},
 																saveData: saveData,
@@ -797,22 +763,25 @@ const Inven = ({
 																showPopup: setPopupOn,
 																lang: lang,
 															});
-															setSelectItem2({...item[invenList[selectTab].keyName][selectItem2Display.current.selectIdx]});
+															setSelectItem2({
+																...selectItem2,
+																save:{...item[invenList[selectTab].keyName][selectItem2.select]},
+															});
 														}} data-buttontype="itemSell">{lang === 'ko' ? '확인' : 'Unpack'}</button>
 													</div>
 												);
 											case 'use':
 												return (
 													<div key={`button${idx}`} className="item_button" flex="true">
-														<button text="true" onClick={(e) => {
+														<button text="true" className="button_small" onClick={(e) => {
 															util.buttonEvent({
 																event: e,
 																type: 'itemUse',
 																data: {
 																	slotIdx: 0,
-																	gameItem: selectItem2Display.current,
-																	itemSaveSlot:selectItem2Display.current.selectIdx,
-																	type: selectItem2Display.current.selectTab,
+																	gameItem: selectItem2.game,
+																	itemSaveSlot:selectItem2.select,
+																	type: selectItem2.selectTab,
 																},
 																saveData: saveData,
 																changeSaveData: changeSaveData,
@@ -822,7 +791,7 @@ const Inven = ({
 																showPopup: setPopupOn,
 																lang: lang,
 															});
-															setSelectItem2(null);
+															setSelectItem2({save:[],game:[],buttonType:[],selectTab:'',select:''});
 														}} data-buttontype="itemUse">{lang === 'ko' ? '사용' : 'Use'}</button>
 													</div>
 												)

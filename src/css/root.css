@@ -254,15 +254,23 @@ b[buff]{color:#02f;text-shadow:-1px -1px 0px #0df,1px 1px 0px #000;}
 .item_layout.rare{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-rare) 100%);}
 .item_layout.epic{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-epic) 100%);}
 .item_layout.set{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-set) 100%);}
-.itemEn_area .inven_top {background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-unique) 100%);}
+.item_layout.unique{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-unique) 100%);}
 .item_layout.legend{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-legend) 100%);}
 .item_layout .pic{position:absolute;left:0;right:0;bottom:0;top:0;}
 
 .item_layout .pic.sealed svg{filter:brightness(0.3) drop-shadow(0px 0px 1px #fff);}
 .item_layout .pic.sealed:before{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);content:'?';z-index:1;font-size:20px;}
-.item_layout .hole{position:absolute;left:2px;right:2px;bottom:2px;z-index:3;}
-.item_layout .hole .hole_slot{margin:auto 1px;width:calc(25% - 2px);}
-.item_layout .hole .hole_slot:after{display:block;content:'';width:90%;height:0;padding-top:90%;border-radius:10px;border:1px solid #000;}
+.item_layout .hole{position:absolute;left:0;right:0;top:0;bottom:0;z-index:3;pointer-events:none;}
+.item_layout .hole .hole_slot{position:absolute;width:25%;padding-top:25%;border-radius:50%;border:1px solid #000;background:rgba(0,0,0,.7);}
+.item_layout .hole .hole_slot.fixed{background:rgba(255,172,47,.7)}
+.item_layout .hole .hole_slot.hole0{left:0;top:0;}
+.item_layout .hole .hole_slot.hole1{right:0;top:0;}
+.item_layout .hole .hole_slot.hole2{right:0;bottom:0;}
+.item_layout .hole .hole_slot.hole3{left:0;bottom:0;}
+.item_layout .hole .hole_slot.hole4{left:50%;top:50%;transform:translate(-50%,-50%);}
 .item_layout svg{width:100%;height:100%;}
 .item_layout.select1{outline:2px solid #ffac2f;box-shadow:0 0 20px #ffac2f;}
 .item_layout.select2{outline:2px solid #e14040;box-shadow:0 0 20px #e14040;}
+
+/*common button*/
+.button_small{margin:5px 3px;padding:5px 10px;border-radius:10px;background-image:-webkit-linear-gradient(bottom, rgba(0,0,0,0.075), rgba(255,255,255,0.5));background-image: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(255,255,255,0.5));box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.5), 0 0 1px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0,0,0,1);border-radius: 20px;color:rgba(255,255,255,0.9);line-height:1;}

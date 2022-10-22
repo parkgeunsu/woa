@@ -203,9 +203,10 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           <div className="item_type" dangerouslySetInnerHTML={{__html: makeMark(saveItems.markNum, imgSet.animalType[saveItems.mark])}}>
           </div>
           <div className="item_slot">
-            {saveItems.hole.map((data, idx) => {
+            {saveItems.hole.map((holeData, idx) => {
+              const holePic = holeData !== 0 ? gameData.items.hole[holeData.idx].display : 0;
               return (
-                <div key={idx} className="item_holes"><span className="item_holeback"><Img imgurl={itemHole[data]} /></span></div>
+                <div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}><span className="item_holeback"><Img imgurl={imgSet.itemHole[holePic]} /></span></div>
               )
             })}
           </div>
@@ -251,11 +252,6 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   )
                 }
               })}
-              {/* {saveItems.hole.map((data, idx) => {
-                return (
-                  <div key={idx} className="item_holes"><span className="item_holeback"><Img imgurl={itemHole[data]} /></span><span className="item_holeName">{`${gameData.items.hole[data].na}`}</span></div>
-                ) 
-              })} */}
             </li>
           )}
           <li className="item_list item_set">
@@ -314,13 +310,15 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
       totalEff[data.type].add += parseInt(data.num[0]);
     });
     saveItems.hole.forEach((data, idx) => {
-      const holeItem = gameData.items.hole[data].eff;
-      holeItem.forEach((holeData, idx) => {
-        if (totalEff[holeData.type] === undefined) {
-          totalEff[holeData.type] = {type: holeData.type, base: 0, add:0, hole:0};
-        }
-        totalEff[holeData.type].hole += parseInt(holeData.num);
-      });
+      if (data) {
+        const holeItem = gameData.items.hole[data.idx].eff;
+        holeItem.forEach((holeData, idx) => {
+          if (totalEff[holeData.type] === undefined) {
+            totalEff[holeData.type] = {type: holeData.type, base: 0, add:0, hole:0};
+          }
+          totalEff[holeData.type].hole += parseInt(holeData.num);
+        });
+      }
     });
     return (
       <PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[grade]}>
@@ -345,9 +343,10 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           <div className="item_type" dangerouslySetInnerHTML={{__html: makeMark(saveItems.markNum, imgSet.animalType[saveItems.mark])}}>
           </div>
           <div className="item_slot">
-            {saveItems.hole.map((data, idx) => {
+            {saveItems.hole.map((holeData, idx) => {
+              const holePic = holeData !== 0 ? gameData.items.hole[holeData.idx].display : 0;
               return (
-                <div key={idx} className="item_holes"><span className="item_holeback"><Img imgurl={itemHole[data]} /></span></div>
+                <div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}><span className="item_holeback"><Img imgurl={imgSet.itemHole[holePic]} /></span></div>
               )
             })}
           </div>
@@ -393,11 +392,6 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   )
                 }
               })}
-              {/* {saveItems.hole.map((data, idx) => {
-                return (
-                  <div key={idx} className="item_holes"><span className="item_holeback"><Img imgurl={itemHole[data]} /></span><span className="item_holeName">{`${gameData.items.hole[data].na}`}</span></div>
-                ) 
-              })} */}
             </li>
           )}
           <li className="item_list item_set">
