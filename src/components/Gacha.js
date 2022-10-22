@@ -351,6 +351,7 @@ const Gacha = ({
 	];
 	const [gachaCard, setGachaCard] = useState([]);
 	const handleModal = (modalType, gachaIdx) => {
+		setModalOn(true);
     if( modalType ){
 			const price = gachaList[gachaIdx].price;
 			const num = gachaList[gachaIdx].num;
@@ -394,7 +395,6 @@ const Gacha = ({
 			}
       setModalType(modalType);
     }
-    setModalOn(!modalOn);
   }
 	const popCard = useCallback((chData) => {
 		const can = graphRef.current;
@@ -658,7 +658,9 @@ const Gacha = ({
 				</GachaInfo>
 			</GachaWrap>
 			<ModalContainer>
-				{modalOn && <Modal fn={changeGachaMode} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {handleModal()}} gameData={gameData}/>}
+				{modalOn && <Modal fn={changeGachaMode} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {
+					setModalOn(false);
+				}} gameData={gameData}/>}
 			</ModalContainer>
 		</>
   );

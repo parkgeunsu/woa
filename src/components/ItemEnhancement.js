@@ -127,6 +127,9 @@ const getTotalEff = (saveItems, gameData, socketEff) => {
 	}
 	return totalEff;
 }
+const removeSocket = () => {
+	console.log('remove');
+}
 const ItemEnhancement = ({
 	saveData,
 	changeSaveData,
@@ -139,7 +142,7 @@ const ItemEnhancement = ({
 	const gameItem = gameData.items;
   const [modalOn, setModalOn] = useState(false);
 	const [modalInfo, setModalInfo] = useState({});
-  const [modalType, setModalType] = useState();
+  const [modalType] = useState('confirm');
   const [popupOn, setPopupOn] = useState(false);
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
@@ -177,21 +180,23 @@ const ItemEnhancement = ({
 	const [mainColor, setMainColor] = useState(saveData.items.equip[0].color);//합성된 장비 색상
 	const [itemEffShow, setItemEffShow] = useState(false);//아이템 효과 보기
 	const [mItemEff, setMItemEff] = useState();//아이템 효과 문구
+	const handleModal = () => {
+		setModalInfo({
+			type: 'confirm',
+			msg: `소켓 보석을 제거 하시겠습니까?`,
+			info: {
+				// type: gachaType,
+				// price: price,
+				// num: num,
+			},
+			bt: [{txt:'사용',action:'itemEn'},{txt:'취소',action:'popClose'}],
+		});
+    setModalOn(true);
+  }
 	useEffect(() => {
 		//equip, hole, upgrade, merterial, etc
 		setItem(saveData.items);
 	}, [saveData]);
-	useEffect(() => {
-		if (item) {
-			let cloneItem = {...item};
-			for (let v in cloneItem) {
-				cloneItem[v].forEach((itemData_) => {
-					itemData_.select1 = '';
-				});
-			}
-			setItem(cloneItem);
-		}
-	}, []);
   return (
 		<>
 			<ItemEnWrap className="itemEnhancement_wrap" backImg={imgSet.back[2]} >
@@ -220,19 +225,31 @@ const ItemEnhancement = ({
 								}}>
 								<button className="button_small" text="true" onClick={(e) => {
 									e.stopPropagation();
+									let pHole = [],
+										possibleColorantIdx = '';
+									let sData = {...saveData};
 									console.log("확정");
-                  //util.buttonEvent({
-                    // event: e,
-                    // type: 'itemUnpack',
-                    // data: dataObj,
-                    // saveData: saveData,
-                    // changeSaveData: changeSaveData,
-                    // gameData: gameData,
-                    // msgText: msgText,
-                    // showMsg: showMsg,
-                    // showPopup: showPopup,
-                    // lang: lang,
-                  //})
+									let holeArr = [];
+									console.log(selectItem2.select);
+									for(let i = 0; i < selectItem1.save.hole.length; ++i) {
+										if (selectItem2.save[i]) {
+											holeArr[i] = selectItem2.save[i];
+											pHole[i] = false;
+										} else {
+											holeArr[i] = 0;
+											pHole[i] = true;
+											if (typeof possibleColorantIdx !== 'number') {
+												possibleColorantIdx = i;
+											}
+										}
+									}
+									selectItem2.select.forEach((data) => {
+										sData.items.hole.splice(data,1);
+									})
+									sData.items.equip[selectItem1.select].hole = holeArr;
+									changeSaveData(sData);
+									setPossibleHole(pHole);
+									setColorantIdx(possibleColorantIdx);
                 }} data-buttontype="itemUnpack">{lang === 'ko' ? '확정' : 'Confirm'}</button>
 								<ColorArea className={`itemEn_colorArea hole${Object.keys(selectItem1.save).length !== 0 ? selectItem1.save?.hole.length : '0'}`} mainColor={mainColor} color={selectItem2.game}>
 									<div className="colorant_item" onClick={() => {
@@ -332,6 +349,7 @@ const ItemEnhancement = ({
 														</div>
 														<LockIcon iconLock={imgSet.icon.iconLock} className="lock" onClick={(e) => {
 															e.stopPropagation();
+															handleModal();
 															console.log("슬롯 해제");
 														}}/>
 													</>
@@ -482,9 +500,11 @@ const ItemEnhancement = ({
 					)}
 				</div>
 			</ItemEnWrap>
-			{/* <ModalContainer>
-				{modalOn && <Modal fn={changeGachaMode} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {handleModal()}} gameData={gameData}/>}
-			</ModalContainer> */}
+			<ModalContainer>
+				{modalOn && <Modal fn={removeSocket} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {
+					setModalOn(false);
+				}} gameData={gameData}/>}
+			</ModalContainer>
 		</>
   );
 }

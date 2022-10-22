@@ -122,7 +122,7 @@ const Inven = ({
 					})}
 				</div>
 				<div className="inven_area">
-					<div className="inven_top scroll-y">
+					<div className="inven_top num6 scroll-y">
 						{item[invenList[selectTab].keyName] && item[invenList[selectTab].keyName].map((data, idx) => {
 							const invenCate = invenList[selectTab].keyName;
 							if (invenCate === 'equip') {

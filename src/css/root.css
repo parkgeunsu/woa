@@ -249,6 +249,8 @@ b[buff]{color:#02f;text-shadow:-1px -1px 0px #0df,1px 1px 0px #000;}
 .item_layout{display:inline-block;position:relative;margin:1%;padding-top:18%;width:18%;border-radius:20px;box-shadow:0px 0px 10px #000;}
 .num3 .item_layout{padding-top:31%;width:31%;}
 .num4 .item_layout{padding-top:23%;width:23%;}
+.num5 .item_layout{padding-top:18%;width:18%;}
+.num6 .item_layout{padding-top:14.65%;width:14.65%;}
 .item_layout.normal{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-normal) 100%);}
 .item_layout.magic{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-magic) 100%);}
 .item_layout.rare{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-rare) 100%);}

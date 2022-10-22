@@ -139,11 +139,8 @@ export const util = { //this.loadImage();
         per_current = gameData.stateType[saveChSlot.stateType].arr[saveChSlot.lv-1]*0.01,//성장타입에 따른 LV당 %
         stateCurrent = Math.round(st*per_current),//성장타입에 따른 LV당 능력치
         stateMax = Math.round(gameData.stateType[saveChSlot.stateType].arr[49]*0.01*st);//성장타입에 따른 최대 능력치
-      saveChSlot = {
-        ...saveChSlot,
-        ['rSt' + index]: stateCurrent, //레벨당 현재능력치
-        ['maxSt' + index]: stateMax, //레벨당 최대능력치
-      }
+      saveChSlot['rSt' + index] = stateCurrent; //레벨당 현재능력치
+      saveChSlot['maxSt' + index] = stateMax; //레벨당 최대능력치
       battleState_[index] = stateCurrent;
     });
     battleState_[7] = gameData.ch[saveChSlot.idx].st3 + gameData.ch[saveChSlot.idx].st5 + gameData.ch[saveChSlot.idx].st6;
@@ -154,14 +151,17 @@ export const util = { //this.loadImage();
       addGradePercent *= gameData.addGradeArr[i];
     }
     const battleState = util.getTotalState(battleState_);
+    console.log('pgs',obj.itemEff);
     battleState.forEach((bState, index) => {
       const iSt = util.compileState(bState, obj.itemEff[index]);
-      saveChSlot = {
-        ...saveChSlot,
-        ['iSt' + index]: iSt,
-        ['bSt' + index]: (index !== 1 && index !== 2 && index !== 8 && index !== 9) ? Math.round(bState * addGradePercent) : bState,
-      }
+      saveChSlot['iSt' + index] = iSt;
+      saveChSlot['bSt' + index] = (index !== 1 && index !== 2 && index !== 8 && index !== 9) ? Math.round(bState * addGradePercent) : bState;
     });
+
+    for (let i = 0; i < 12; ++i) {//아이템 능력치
+      const iSt = util.compileState(saveChSlot[`el${i}`], obj.itemEff[i+15]);
+      saveChSlot['iSt' + (i+15)] = iSt;
+    }
     // console.log(saveChSlot);//animal_type
     gameData.element.forEach((elData, index) => {
       saveChSlot = {
@@ -251,7 +251,7 @@ export const util = { //this.loadImage();
     } else {
       saveItems = typeof idx === 'number' ? saveCh[idx].items : [{}, {}, {}, {}, {}, {}, {}, {}];
     }
-    //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(20),암(21),수(22),화(23),풍(24),지(25), 진형(100)
+    //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(21),암(22),수(23),화(24),풍(25),지(26), 진형(100)
     let effData = [];
     saveItems.forEach((item) => {
       if(Object.keys(item).length !== 0){
@@ -277,11 +277,11 @@ export const util = { //this.loadImage();
         });
       }
       if(item.hole){
-        item.hole.forEach((holeNum)=>{//stone 정보
-          const stone = gameItem.hole[holeNum];
-          if(holeNum !== 0){
-            stone.eff.forEach((eff)=>{
-              if(effData[eff.type] === undefined) {
+        item.hole.forEach((data)=>{
+          if(data) {
+            const holeItem = gameItem.hole[data.idx].eff;
+            holeItem.forEach((eff, ) => {
+              if (effData[eff.type] === undefined) {
                 effData[eff.type] = {percent:0, number:0};
               }
               if(eff.num.indexOf('%') > 0){
@@ -377,6 +377,8 @@ export const util = { //this.loadImage();
             break;
           case 'LUK':
             arr[9] += eff[v][peopleNum];
+            break;
+          default:
             break;
         }
       }

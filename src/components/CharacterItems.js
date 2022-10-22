@@ -126,9 +126,13 @@ const CharacterItems = ({
                             </svg>
                           </ItemPic>
                           <span className="hole" flex-center="true">
-                            {itemsHole.map((holedata, holeidx) => {
-                              const stoneColor = gameItem.hole[data.hole[holeidx]].stone;
-                              return <span key={`${idx}_${holeidx}`} className={`hole_slot hole${holeidx} stone_${stoneColor}`}></span>;
+                            {itemsHole.map((holeData, holeidx) => {
+                              const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
+                              return (
+                                <span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
+                                  <ItemPic className="pic" itemPic={imgSet.itemHole[holePic]} />
+                                </span>
+                              );
                             })}
                           </span>
                         </em>

@@ -68,7 +68,7 @@ const CharacterElement = ({
           </dt>
           <dd className="scroll-y" flex-h="true">
             {elArr && elArr.map((data, idx) => {
-              const num = slotCh['el' + idx];
+              const num = slotCh['el' + idx] + slotCh['iSt' + (15 + idx)];
               const elementPercent = num * .5;
               return (
                 <Element key={`chst${idx}`} percent={elementPercent} icon={imgSet.element[idx + 1]} className={`el el${idx}`}>

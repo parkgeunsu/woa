@@ -15,7 +15,7 @@ export const version = "0.1";
 export const gameData = {
     itemType: [{ko:'',en:''},{ko:'투구',en:'Helm'},{ko:'갑옷',en:'Armor'},{ko:'무기',en:'Weapon'},{ko:'반지',en:'Ring'},{ko:'목걸이',en:'Necklace'}],
     stateName: ["통솔", "체력", "완력", "민첩", "지력", "정신", "매력","행운"],
-    addGradeArr: [1,1.2,1.3,1.4,1.5,1.6,1.7],//등급에 따른 추가 능력치
+    addGradeArr: [1,1.2,1.3,1.4,1.5,1.6,1.8],//등급에 따른 추가 능력치
     animal_type:animals,//'독0','빛1','암2','물3','불4','바람5','땅6'
     ch:ch,//face_d 얼굴방향, stateType 성장타입, awaken 각성속성
     job:job,//직업

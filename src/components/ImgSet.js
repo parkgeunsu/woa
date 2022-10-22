@@ -153,6 +153,7 @@ import itemEtc24 from 'images/item/book2.png';
 import itemEtc25 from 'images/item/book3.png';
 import itemEtc26 from 'images/item/book4.png';
 import itemEtc27 from 'images/item/book5.png';
+import itemEtc28 from 'images/item/tongs.png';
 import itemHole0 from 'images/item/jewel0.png';
 import itemHole1 from 'images/item/jewel1.png';
 import itemHole2 from 'images/item/jewel2.png';
@@ -214,11 +215,20 @@ import colorant51 from 'images/item/colorant51.png';
 import colorant52 from 'images/item/colorant52.png';
 import colorant53 from 'images/item/colorant53.png';
 import colorant54 from 'images/item/colorant54.png';
-import itemUpgrade0 from 'images/item/upgrade0.png';
-import itemUpgrade1 from 'images/item/upgrade1.png';
-import itemUpgrade2 from 'images/item/upgrade2.png';
-import itemUpgrade3 from 'images/item/upgrade3.png';
-import itemUpgrade4 from 'images/item/upgrade4.png';
+import itemUpgrade0 from 'images/item/hammer0.png';
+import itemUpgrade1 from 'images/item/hammer1.png';
+import itemUpgrade2 from 'images/item/hammer2.png';
+import itemUpgrade3 from 'images/item/hammer3.png';
+import itemUpgrade4 from 'images/item/hammer4.png';
+import itemUpgrade5 from 'images/item/hammer5.png';
+import itemUpgrade6 from 'images/item/hone0.png';
+import itemUpgrade7 from 'images/item/hone1.png';
+import itemUpgrade8 from 'images/item/hone2.png';
+import itemUpgrade9 from 'images/item/hone3.png';
+import itemUpgrade10 from 'images/item/hone4.png';
+import itemUpgrade11 from 'images/item/hone5.png';
+import itemMaterial0 from 'images/item/food.png';
+import itemMaterial1 from 'images/item/water.png';
 import ring0 from 'images/ring/ring0.png';
 import ring1 from 'images/ring/ring1.png';
 import ring2 from 'images/ring/ring2.png';
@@ -350,7 +360,7 @@ export const etc = {
   imgRing:imgRing,imgCardBack:imgCardBack,frameChBack:frameChBack,stateBack:stateBack,imgCardFrame:imgCardFrame,imgCardLv:imgCardLv,iconCardName:iconCardName,imgRingBack:imgRingBack,frameRope:frameRope,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,questionBlack:questionBlack,questionWhite:questionWhite,wind:wind,
 };
 export const icon = {
-  iconBack:iconBack,iconChat:iconChat,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,iconHelm:iconHelm,iconArmor:iconArmor,iconWeapon:iconWeapon,iconBag:iconBag,iconSocket:itemHole1,iconEtc:itemEtc25,iconUpgrade:itemUpgrade0,iconMaterial:itemUpgrade0,iconLock:iconLock,
+  iconBack:iconBack,iconChat:iconChat,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,iconHelm:iconHelm,iconArmor:iconArmor,iconWeapon:iconWeapon,iconBag:iconBag,iconSocket:itemHole1,iconEtc:itemEtc25,iconUpgrade:itemUpgrade0,iconMaterial:itemMaterial0,iconLock:iconLock,
 };
 export const iconStar = [
   iconStar1,iconStar2,iconStar3,iconStar4,iconStar5,iconStar6,iconStar7
@@ -376,7 +386,7 @@ export const iconState = [
   iconState0,iconState1,iconState2,iconState3,iconState4,iconState5,iconState6
 ];
 export const itemEtc = [
-  itemEtc0,itemEtc1,itemEtc2,'','','','','','','',itemEtc10,itemEtc11,'','','','','','','','',itemEtc20,itemEtc21,itemEtc22,itemEtc23,itemEtc24,itemEtc25,itemEtc26,itemEtc27
+  itemEtc0,itemEtc1,itemEtc2,'','','','','','','',itemEtc10,itemEtc11,'','','','','','','','',itemEtc20,itemEtc21,itemEtc22,itemEtc23,itemEtc24,itemEtc25,itemEtc26,itemEtc27,itemEtc28,'',
 ];
 export const itemHole = [
   itemHole0,itemHole1,itemHole2,itemHole3,itemHole4,itemHole5,itemHole6,itemHole7,itemHole8,itemHole9,itemHole10,itemHole11,itemHole12,itemHole13,itemHole14,itemHole15,'','','','','',
@@ -393,10 +403,10 @@ export const itemHole = [
   colorant40,colorant41,colorant42,colorant43,colorant44,colorant45,colorant46,colorant47,colorant48,colorant49,colorant50,colorant51,colorant52,colorant53,colorant54
 ];
 export const itemUpgrade = [
-  itemUpgrade0,itemUpgrade1,itemUpgrade2,itemUpgrade3,itemUpgrade4
+  itemUpgrade0,itemUpgrade1,itemUpgrade2,itemUpgrade3,itemUpgrade4,itemUpgrade5,itemUpgrade6,itemUpgrade7,itemUpgrade8,itemUpgrade9,itemUpgrade10,itemUpgrade11,
 ];
 export const itemMaterial = [
-
+  itemMaterial0,itemMaterial1,
 ];
 export const job = [
   job0,job1,job2,job3,job4,job5,job6,job7,job8,job9,job10,job11,job12

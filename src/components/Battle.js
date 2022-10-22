@@ -1039,7 +1039,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 						}
 
 						//찌르기(0),할퀴기(1),물기(2),치기(3),누르기(4),던지기(5),빛(6),어둠(7),물(8),불(9),바람(10),땅(11)
-						elementDefencePercent = skType > 0 ? defEnemy[`el${skType - 1}`] / 100 : 1; //속성치에 따른 방어적용치
+						elementDefencePercent = skType > 0 ? (defEnemy[`el${skType - 1}`] + defEnemy[`iSt${skType + 15}`]) / 100 : 1; //속성치에 따른 방어적용치
 
 						//스킬 공격치 적용
 						//skill dmg

@@ -117,18 +117,7 @@ const Map = ({
 	const cardRef = useRef([]); //단일 카드
 	const openCardIdx = useRef(0); //카드 뒤짚기 순번
 	const [infoIdx, setInfoIdx] = useState(0); //카드정보 카드번호
-	const changeGachaMode = (mode, data) => {
-		if (mode === 'start') { // 뽑기모드
-			let sData = {...saveData};
-			if (data.type === 'p') {
-				sData.info.diamond -= data.price; //다이아 계산
-			} else {
-				sData.info.money -= data.price; //돈 계산
-			}
-			changeSaveData(sData); //세이브
-		}
-		setGachaMode(mode);
-	}
+	
 	useLayoutEffect(() => {
 		if (gachaMode === 'start') { // 뽑기모드
 			const gachaLength = cardRef.current.length;
@@ -451,7 +440,7 @@ const Map = ({
 				</GachaInfo>
 			</GachaWrap>
 			{/* <ModalContainer>
-				{modalOn && <Modal fn={changeGachaMode} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {handleModal()}} gameData={gameData}/>}
+				{modalOn && <Modal fn={} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {handleModal()}} gameData={gameData}/>}
 			</ModalContainer> */}
 		</>
   );

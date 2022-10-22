@@ -99,6 +99,10 @@ const buttonEvent = (dataInfo, btInfo, fn) => {
 			break;
 		case 'popClose':
 			break;
+		case 'itemEn':
+			fn();
+			console.log('bbb');
+			break;
 		default:
 			break;
 	}

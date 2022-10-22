@@ -172,13 +172,15 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
       totalEff[data.type].add += parseInt(data.num[0]);
     });
     saveItems.hole.forEach((data, idx) => {
-      const holeItem = gameData.items.hole[data].eff;
-      holeItem.forEach((holeData, idx) => {
-        if (totalEff[holeData.type] === undefined) {
-          totalEff[holeData.type] = {type: holeData.type, base: 0, add:0, hole:0};
-        }
-        totalEff[holeData.type].hole += parseInt(holeData.num);
-      });
+      if (data) {
+        const holeItem = gameData.items.hole[data.idx].eff;
+        holeItem.forEach((holeData, idx) => {
+          if (totalEff[holeData.type] === undefined) {
+            totalEff[holeData.type] = {type: holeData.type, base: 0, add:0, hole:0};
+          }
+          totalEff[holeData.type].hole += parseInt(holeData.num);
+        });
+      }
     });
 		return (
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[grade]}>
