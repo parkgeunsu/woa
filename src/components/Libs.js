@@ -151,7 +151,6 @@ export const util = { //this.loadImage();
       addGradePercent *= gameData.addGradeArr[i];
     }
     const battleState = util.getTotalState(battleState_);
-    console.log('pgs',obj.itemEff);
     battleState.forEach((bState, index) => {
       const iSt = util.compileState(bState, obj.itemEff[index]);
       saveChSlot['iSt' + index] = iSt;
@@ -1368,12 +1367,12 @@ export const util = { //this.loadImage();
       const chType = gameData.ch[saveCh.idx].animal_type;
       if (dataObj.data.saveItemData.sealed) { //개봉된 아이템인지 확인
         dataObj.showMsg(true);
-        dataObj.msgText("미개봉 아이템입니다.");
+        dataObj.msgText("<span caution>미개봉 아이템입니다.</span>");
         return;
       }
       if (!dataObj.data.gameItem.limit[saveCh.job]) { //직업 착용가능 확인
         dataObj.showMsg(true);
-        dataObj.msgText("착용이 불가능한 직업입니다.");
+        dataObj.msgText("<span caution>착용이 불가능한 직업입니다.</span>");
         return;
       }
       saveCh.items.forEach((item, itemSlot)=>{
@@ -1382,7 +1381,7 @@ export const util = { //this.loadImage();
             currentKg += dataObj.data.gameItem.kg
             if (currentKg > totalKg) { //가능 무게를 넘어 갈 경우
               dataObj.showMsg(true);
-              dataObj.msgText("착용하려는 장비가 무겁습니다.");
+              dataObj.msgText("<span caution>착용하려는 장비가 무겁습니다.</span>");
             } else { //착용 가능 무게일 경우
               saveCh.items[itemSlot] = {...dataObj.saveData.items['equip'][dataObj.data.itemSaveSlot]};//캐릭에 아이템 넣기
               if (dataObj.data.saveItemData.mark === gameData.ch[saveCh.idx].animal_type) {//동물 뱃지 수정
@@ -1407,7 +1406,7 @@ export const util = { //this.loadImage();
       });
       if (!itemSubmit) { //해당 슬롯에 아이템이 있을 경우, 아이템 다른부위로 적용된 경우 파악
         dataObj.showMsg(true);
-        dataObj.msgText("같은 부위에 이미 다른 아이템이 착용 중입니다.");
+        dataObj.msgText("<span caution>같은 부위에 이미 다른 아이템이 착용 중입니다.</span>");
       }
     } else if (dataObj.type === 'itemRelease') { //아이템 해제
       const saveCh = sData.ch[dataObj.data.slotIdx];

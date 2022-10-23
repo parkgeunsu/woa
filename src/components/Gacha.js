@@ -295,7 +295,7 @@ const Gacha = ({
 	const openCardIdx = useRef(0); //카드 뒤짚기 순번
 	const [infoIdx, setInfoIdx] = useState(0); //카드정보 카드번호
 	const [slotIdx, setSlotIdx] = useState(0); //카드 슬롯번호
-	const changeGachaMode = (mode, data) => {
+	const changeGachaMode = (mode, data, saveData, gameData, changeSaveData) => {
 		if (mode === 'start') { // 뽑기모드
 			let sData = {...saveData};
 			if (data.type === 'p') {

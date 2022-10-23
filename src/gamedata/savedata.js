@@ -97,6 +97,8 @@ export const save = {
     "material":[
     ],
     "etc":[
+      {"idx":22},
+      {"idx":22},
       {"idx":3},
       {"idx":3},
       {"idx":4},

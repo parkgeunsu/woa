@@ -4,6 +4,8 @@ import Modal from 'components/Modal';
 import ModalContainer from 'components/ModalContainer';
 import React, { useEffect, useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
+import MsgContainer from 'components/MsgContainer';
+import Msg from 'components/Msg';
 import 'css/itemEnhancement.css';
 
 const Img = styled.img.attrs(
@@ -127,8 +129,20 @@ const getTotalEff = (saveItems, gameData, socketEff) => {
 	}
 	return totalEff;
 }
-const removeSocket = () => {
-	console.log('remove');
+const removeSocket = (data, saveData, gameData, changeSaveData) => {
+	let sData = {...saveData};
+	let removeIdx = sData.items.etc.findIndex((itemEtc) => itemEtc.idx === 22);
+	if (removeIdx >= 0) {
+		sData.items.etc.splice(removeIdx,1);
+		sData.items.equip[data.item.select].hole.splice(data.socketIdx,1,0);
+		data.showMsg(true);
+    data.msgText('<span remove>-1 보석제거 집게</span>');
+		changeSaveData(sData);
+	} else {
+		data.showMsg(true);
+    data.msgText('보석제거 집게가 부족합니다.');
+	}
+	console.log(data);
 }
 const ItemEnhancement = ({
 	saveData,
@@ -143,51 +157,44 @@ const ItemEnhancement = ({
   const [modalOn, setModalOn] = useState(false);
 	const [modalInfo, setModalInfo] = useState({});
   const [modalType] = useState('confirm');
-  const [popupOn, setPopupOn] = useState(false);
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
 	const [selectTab, setSelectTab] = useState(0);
 	const [item, setItem] = useState(saveData.items);
-	const [selectItem1, setSelectItem1] = useState({
+	const [selectItem1, setSelectItem1] = useState(saveData.items.equip[0] ? {
 		save:saveData.items.equip[0],
 		select:0,
 		game:gameItem.equip[saveData.items.equip[0].part][saveData.items.equip[0].weaponType][saveData.items.equip[0].grade < 5 ? 0 : saveData.items.equip[0].grade - 5][saveData.items.equip[0].idx],
+	} : {
+		save:{},
+		select:'',
+		game:{},
 	});//좌측 장비 save, game
-	useEffect(() => {
-		let baseSelectItem = {save:[],select:[],game:[]},
-		possibleColorantIdx = '';
-		let pHole = [];
-		saveData.items.equip[selectItem1.select].hole.forEach((data,idx) => {
-			if (data) {
-				baseSelectItem.save[idx] = data;
-				baseSelectItem.game[idx] = gameItem.hole[data.idx];
-				pHole[idx] = false;
-			} else {
-				pHole[idx] = true;
-				if (typeof possibleColorantIdx !== 'number') {
-					possibleColorantIdx = idx;
-				}
-			}
-		});
-		setPossibleHole(pHole);
-		setSelectItem2(baseSelectItem);
-		setColorantIdx(possibleColorantIdx);
-		setMItemEff(getTotalEff(selectItem1.save, gameData, baseSelectItem));
-	}, [])
 	const [possibleHole, setPossibleHole] = useState([]);
 	const [selectItem2, setSelectItem2] = useState({save:[],select:[],game:[]});//우측 홀 save, game
 	const [colorantIdx, setColorantIdx] = useState(0);
-	const [mainColor, setMainColor] = useState(saveData.items.equip[0].color);//합성된 장비 색상
+	const [mainColor, setMainColor] = useState(saveData.items.equip[0] ? saveData.items.equip[0].color : '');//합성된 장비 색상
 	const [itemEffShow, setItemEffShow] = useState(false);//아이템 효과 보기
 	const [mItemEff, setMItemEff] = useState();//아이템 효과 문구
-	const handleModal = () => {
+	const handleModal = (socketIdx) => {
+		let num = 0;
+		const hasSocketRemover = () => {
+			item.etc.forEach((itemEtc) => {
+				if (itemEtc.idx === 22) {
+					num ++;
+				};
+			});
+			return num;
+		}
 		setModalInfo({
 			type: 'confirm',
-			msg: `소켓 보석을 제거 하시겠습니까?`,
+			msg: `소켓 보석을 제거 하시겠습니까?<br/><em>(${gameData.items.etc[22].na[lang]}: ${hasSocketRemover()}개 보유)</em>`,
 			info: {
-				// type: gachaType,
-				// price: price,
-				// num: num,
+				item:selectItem1,
+				socket:selectItem2,
+				socketIdx:socketIdx,
+				showMsg:setMsgOn,
+				msgText:setMsg,
 			},
 			bt: [{txt:'사용',action:'itemEn'},{txt:'취소',action:'popClose'}],
 		});
@@ -196,6 +203,27 @@ const ItemEnhancement = ({
 	useEffect(() => {
 		//equip, hole, upgrade, merterial, etc
 		setItem(saveData.items);
+		let baseSelectItem = {save:[],select:[],game:[]},
+		possibleColorantIdx = '';
+		let pHole = [];
+		if (saveData.items.equip[selectItem1.select]) {
+			saveData.items.equip[selectItem1.select].hole.forEach((data,idx) => {
+				if (data) {
+					baseSelectItem.save[idx] = data;
+					baseSelectItem.game[idx] = gameItem.hole[data.idx];
+					pHole[idx] = false;
+				} else {
+					pHole[idx] = true;
+					if (typeof possibleColorantIdx !== 'number') {
+						possibleColorantIdx = idx;
+					}
+				}
+			});
+			setPossibleHole(pHole);
+			setSelectItem2(baseSelectItem);
+			setColorantIdx(possibleColorantIdx);
+			setMItemEff(getTotalEff(selectItem1.save, gameData, baseSelectItem));
+		}
 	}, [saveData]);
   return (
 		<>
@@ -349,7 +377,7 @@ const ItemEnhancement = ({
 														</div>
 														<LockIcon iconLock={imgSet.icon.iconLock} className="lock" onClick={(e) => {
 															e.stopPropagation();
-															handleModal();
+															handleModal(idx);
 															console.log("슬롯 해제");
 														}}/>
 													</>
@@ -505,6 +533,9 @@ const ItemEnhancement = ({
 					setModalOn(false);
 				}} gameData={gameData}/>}
 			</ModalContainer>
+      <MsgContainer>
+        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+      </MsgContainer>
 		</>
   );
 }
