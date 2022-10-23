@@ -11,6 +11,7 @@ import Gacha from 'components/Gacha';
 import Lineup from 'components/Lineup';
 import Shop from 'components/Shop';
 import ItemEnhancement from 'components/ItemEnhancement';
+import CombinedItem from 'components/CombinedItem';
 import CharacterEnhancement from 'components/CharacterEnhancement';
 import Map from 'components/Map';
 import 'css/root.css';
@@ -297,6 +298,7 @@ const App = () => {
             <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} scenario={scenario} />} />
             <Route path="/characterEnhancement" element={<CharacterEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
             <Route path="/itemEnhancement" element={<ItemEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
+            <Route path="/combinedItem" element={<CombinedItem saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
             <Route path="/shop" element={<Shop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
             <Route path="/map" element={<Map saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
           </Routes>

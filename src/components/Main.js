@@ -45,6 +45,7 @@ const Main = ({
             <li><MenuButton to="/shop" onClick={() => {changePage("shop");}}>Shop</MenuButton></li>
             <li><MenuButton to="/characterEnhancement" onClick={() => {changePage("characterEnhancement");}}>Character Enhancement</MenuButton></li>
             <li><MenuButton to="/itemEnhancement" onClick={() => {changePage("itemEnhancement");}}>Item Enhancement</MenuButton></li>
+            <li><MenuButton to="/combinedItem" onClick={() => {changePage("combinedItem");}}>Combined Item</MenuButton></li>
             <li><MenuButton to="/gacha" onClick={() => {changePage("gacha");}}>Gacha</MenuButton></li>
             <li><MenuButton to="/lineup" onClick={() => {changePage("lineup");}}>Lineup</MenuButton></li>
             <li><MenuButton to="/battle" onClick={() => {changePage("battle");}}>Battle</MenuButton></li>
