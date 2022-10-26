@@ -13,15 +13,16 @@ export const items = {
     ],
     colorant:{//색료조합 아이템
         2:[
-            {idx:0,na:{ko:'흑백',en:'Black and white'},socket:['000','fff'],eff:[{type:5,num:['300']}],color:['#888']},
+            {idx:0,na:{ko:'흑백',en:'Black and white'},socket:['000','fff'],eff:[{type:5,num:['300']}],color:['#888'],svgColor:''},
         ],
         3:[],
         4:[
-            {idx:0,na:{ko:'피로 물든',en:'Stained with Blood'},socket:['f00','f00','f00','f00'],eff:[{type:5,num:['300']}],color:['#f00']},
-            {idx:1,na:{ko:'채식주의자',en:'Vegetarian'},socket:['080','080','080','080'],eff:[{type:0,num:['1000']}],color:['#080']}
+            {idx:0,na:{ko:'피로 물든',en:'Stained with Blood'},socket:['f00','f00','f00','f00'],eff:[{type:5,num:['300']}],color:['#f00'],svgColor:''},
+            {idx:1,na:{ko:'채식주의자',en:'Vegetarian'},socket:['080','080','080','080'],eff:[{type:0,num:['1000']}],color:['#080'],svgColor:''}
         ],
         5:[
-            {idx:0,na:{ko:'무지개',en:'Rainbow'},socket:['f00','f80','ff0','080','00f'],eff:[{type:5,num:['300']}],color:['#f00']},
+            {idx:0,na:{ko:'무지개',en:'Rainbow'},socket:['f00','f80','ff0','080','00f'],eff:[{type:5,num:['300']}],color:['#fff'],svgColor:'linear_rainbow'},
+            {idx:1,na:{ko:'얼룩덜룩',en:'Mottled'},socket:['000','fff','000','fff','000'],eff:[{type:4,num:['300']}],color:['#000'],svgColor:'Mottled'},
         ],
     },
     equip:{//part 부위 head1, body2, weapon3, ring4, necklace5, baggage짐, 보석11, 업그레이드12, 기타13, 재료14
@@ -265,9 +266,9 @@ export const items = {
         //type 장착 타입
         //stone 아이템창 색상
         {idx:0,grade:0,imgCate:'itemHole',display:0,na:'',color:'transparent',kg:0,price:0,action:9,eff:[]},
-        {idx:1,grade:1,imgCate:'itemHole',display:1,na:{ko:'큰 다이아몬드',en:''},colorSet:'000',color:'rgba(255,255,255,.8)',kg:0.1,price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:['30']}]},//
-        {idx:2,grade:2,imgCate:'itemHole',display:2,na:{ko:'다이아몬드',en:''},colorSet:'000',color:'rgba(255,255,255,.6)',kg:0.2,price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:['20']}]},
-        {idx:3,grade:3,imgCate:'itemHole',display:3,na:{ko:'작은 다이아몬드',en:''},colorSet:'000',color:'rgba(255,255,255,.4)',kg:0.4,price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:['10']}]},
+        {idx:1,grade:1,imgCate:'itemHole',display:1,na:{ko:'큰 다이아몬드',en:''},colorSet:'fff',color:'rgba(255,255,255,.8)',kg:0.1,price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:['30']}]},//
+        {idx:2,grade:2,imgCate:'itemHole',display:2,na:{ko:'다이아몬드',en:''},colorSet:'fff',color:'rgba(255,255,255,.6)',kg:0.2,price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:['20']}]},
+        {idx:3,grade:3,imgCate:'itemHole',display:3,na:{ko:'작은 다이아몬드',en:''},colorSet:'fff',color:'rgba(255,255,255,.4)',kg:0.4,price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:['10']}]},
         {idx:4,grade:4,imgCate:'itemHole',display:4,na:{ko:'큰 에메랄드',en:''},colorSet:'0f0',color:'rgba(0,255,0,.8)',kg:0.7,price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:0,num:['30']}]},
         {idx:5,grade:1,imgCate:'itemHole',display:5,na:{ko:'에메랄드',en:''},colorSet:'0f0',color:'rgba(0,255,0,.6)',kg:0.1,price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:0,num:['20']}]},//HP
         {idx:6,grade:2,imgCate:'itemHole',display:6,na:{ko:'작은 에메랄드',en:''},colorSet:'0f0',color:'rgba(0,255,0,.4)',kg:0.2,price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:0,num:['10']}]},
@@ -351,33 +352,37 @@ export const items = {
         {idx:11,grade:5,imgCate:'itemUpgrade',display:11,na:{ko:'숫돌IIV',en:''},kg:0.1,price:10000,action:'',invenUse:false,txt:{ko:'무기 업그레이드에 쓰인다.',en:''},eff:['?']},
     ],
     material:[//재료
-        {idx:0,grade:1,imgCate:'itemMaterial',display:0,na:{ko:'식량',en:''},price:1000,action:'',invenUse:false,txt:{ko:'항해 할때 먹는 식량.',en:''},eff:['?']},
-        {idx:1,grade:1,imgCate:'itemMaterial',display:0,na:{ko:'물',en:''},price:1000,action:'',invenUse:false,txt:{ko:'항해 할때 마시는 물.',en:''},eff:['?']},
+        {idx:0,grade:1,imgCate:'itemMaterial',display:0,na:{ko:'식량',en:''},kg:10,price:100,action:'',invenUse:false,txt:{ko:'항해 할때 먹는 식량.',en:''},eff:['?']},
+        {idx:1,grade:1,imgCate:'itemMaterial',display:1,na:{ko:'물',en:''},kg:10,price:100,action:'',invenUse:false,txt:{ko:'항해 할때 마시는 물.',en:''},eff:['?']},
     ],
     etc:[
-        {idx:0,grade:1,imgCate:'itemEtc',display:2,na:{ko:'동전더미(동)',en:''},price:1000,
+        {idx:0,grade:1,imgCate:'itemEtc',display:2,na:{ko:'동전더미(동)',en:''},kg:10,price:1000,
         action:99,invenUse:true,txt:{ko:'G조각 1000개로 판매할 수 있다.',en:''},eff:1000},
-        {idx:1,grade:2,imgCate:'itemEtc',display:1,na:{ko:'동전더미(은)',en:''},price:5000,
+        {idx:1,grade:2,imgCate:'itemEtc',display:1,na:{ko:'동전더미(은)',en:''},kg:20,price:5000,
         action:99,invenUse:true,txt:{ko:'G조각 5000개로 판매할 수 있다.',en:''},eff:5000},
-        {idx:2,grade:3,imgCate:'itemEtc',display:0,na:{ko:'동전더미(금)',en:''},price:10000,
+        {idx:2,grade:3,imgCate:'itemEtc',display:0,na:{ko:'동전더미(금)',en:''},kg:30,price:10000,
         action:99,invenUse:true,txt:{ko:'G조각 10000개로 판매할 수 있다.',en:''},eff:10000},
-        {idx:3,grade:4,imgCate:'itemEtc',display:22,na:{ko:'경험의책I',en:''},price:100,
+        {idx:3,grade:4,imgCate:'itemEtc',displayText:'I',display:22,na:{ko:'경험의서I',en:''},kg:0.1,price:100,
         action:98,invenUse:false,txt:{ko:'100의 경험치를 획들 할 수 있다.',en:''},eff:100},
-        {idx:4,grade:5,imgCate:'itemEtc',display:22,na:{ko:'경험의책II',en:''},price:100,
+        {idx:4,grade:5,imgCate:'itemEtc',displayText:'II',display:22,na:{ko:'경험의서II',en:''},kg:0.1,price:1000,
         action:98,invenUse:false,txt:{ko:'1000의 경험치를 획들 할 수 있다.',en:''},eff:1000},
-        {idx:5,grade:5,imgCate:'itemEtc',display:22,na:{ko:'경험의책III',en:''},price:100,
+        {idx:5,grade:5,imgCate:'itemEtc',displayText:'III',display:22,na:{ko:'경험의서III',en:''},kg:0.1,price:10000,
         action:98,invenUse:false,txt:{ko:'10000의 경험치를 획들 할 수 있다.',en:''},eff:10000},
-        {idx:6,grade:6,imgCate:'itemEtc',display:22,na:{ko:'경험의책IV',en:''},price:100,
+        {idx:6,grade:6,imgCate:'itemEtc',displayText:'IV',display:22,na:{ko:'경험의서IV',en:''},kg:0.1,price:50000,
         action:98,invenUse:false,txt:{ko:'50000의 경험치를 획들 할 수 있다.',en:''},eff:50000},
-        {idx:7,grade:6,imgCate:'itemEtc',display:22,na:{ko:'경험의책V',en:''},price:100,
+        {idx:7,grade:6,imgCate:'itemEtc',displayText:'V',display:22,na:{ko:'경험의서V',en:''},kg:0.1,price:100000,
         action:98,invenUse:false,txt:{ko:'100000의 경험치를 획들 할 수 있다.',en:''},eff:100000},
-        '',
-        '',
-        {idx:10,grade:1,imgCate:'itemEtc',display:10,na:{ko:'선물상자',en:''},price:100,action:100,invenUse:true,txt:{ko:'무언가 나올 것 같은 기분좋은 상자',en:''},eff:['?']},
-        '','','','','','','','','',
-        {idx:20,grade:1,imgCate:'itemEtc',display:21,na:{ko:'ID교환권',en:''},price:100,action:1,invenUse:true,txt:{ko:'ID를 변경할수 있다.',en:''},eff:['?']},
-        {idx:21,grade:1,imgCate:'itemEtc',display:20,na:{ko:'스킬제거권',en:''},price:100,action:11,invenUse:false,txt:{ko:'캐릭터의 스킬을 제거할수 있다.',en:''},eff:['?']},
-        {idx:22,grade:1,imgCate:'itemEtc',display:28,na:{ko:'보석제거 집게',en:''},price:100,action:11,invenUse:false,txt:{ko:'아이템에 박힌 보석을 제거 할 수 있다.',en:''},eff:['?']},
+        {idx:8,grade:1,imgCate:'itemEtc',displayText:'I',display:23,na:{ko:'아이템강화서I',en:''},kg:0.1,price:100,
+        action:0,invenUse:false,txt:{ko:'일반 아이템 업그레이드 할 수 있다.',en:''},eff:['?']},
+        {idx:9,grade:2,imgCate:'itemEtc',displayText:'II',display:23,na:{ko:'아이템강화서II',en:''},kg:0.1,price:1000,
+        action:0,invenUse:false,txt:{ko:'매직 아이템 업그레이드 할 수 있다.',en:''},eff:['?']},
+        {idx:10,grade:3,imgCate:'itemEtc',displayText:'III',display:23,na:{ko:'아이템강화서III',en:''},kg:0.1,price:5000,
+        action:0,invenUse:false,txt:{ko:'레어 아이템 업그레이드 할 수 있다.',en:''},eff:['?']},
+        '','','','','','','','',
+        {idx:19,grade:1,imgCate:'itemEtc',display:10,na:{ko:'선물상자',en:''},price:100,action:100,invenUse:true,txt:{ko:'무언가 나올 것 같은 기분좋은 상자',en:''},kg:15,eff:['?']},
+        {idx:20,grade:1,imgCate:'itemEtc',display:21,na:{ko:'ID교환권',en:''},price:100,action:1,invenUse:true,txt:{ko:'ID를 변경할수 있다.',en:''},kg:0.1,eff:['?']},
+        {idx:21,grade:1,imgCate:'itemEtc',display:20,na:{ko:'스킬제거권',en:''},price:100,action:11,invenUse:false,txt:{ko:'캐릭터의 스킬을 제거할수 있다.',en:''},kg:0.1,eff:['?']},
+        {idx:22,grade:1,imgCate:'itemEtc',display:28,na:{ko:'보석제거 집게',en:''},price:100,action:0,invenUse:false,txt:{ko:'아이템에 박힌 보석을 제거 할 수 있다.',en:''},kg:0.3,eff:['?']},
         '','','','','','','',
     ]
 }

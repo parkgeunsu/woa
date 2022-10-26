@@ -1,6 +1,7 @@
 import React from 'react';
 import ModalContainer from 'components/ModalContainer';
 import styled from 'styled-components';
+import { Prices } from 'components/Components';
 
 const buttonEvent = (dataInfo, btInfo, fn, saveData, gameData, changeSaveData) => {
 	switch(btInfo.action) {
@@ -19,36 +20,33 @@ const buttonEvent = (dataInfo, btInfo, fn, saveData, gameData, changeSaveData) =
 const typeAsContent = (type, dataObj, fn, saveData, gameData, changeSaveData) => {
 	if (type === 'confirm') {
 		return (
-			<div className="modal_box">
-				<p dangerouslySetInnerHTML={{__html: dataObj.msg}}></p>
-				<div className="bt_box" flex="true">
-					{dataObj?.bt && dataObj.bt.map((btData, idx) => {
-						return <button className="button_small" key={idx} onClick={() => {buttonEvent(dataObj.info, dataObj.bt[idx], fn, saveData, gameData, changeSaveData);}} msg="true">{btData.txt}</button>
-					})}
-				</div>
+			<div className="bt_box" flex="true">
+				{dataObj?.bt && dataObj.bt.map((btData, idx) => {
+					return <button className="button_small" key={idx} onClick={() => {
+							buttonEvent(dataObj.info, dataObj.bt[idx], fn, saveData, gameData, changeSaveData);
+						}} msg="true">{btData.txt}</button>
+				})}
 			</div>
 		);
 	} else if (type === 'prompt') {
 		return (
-			<div className="modal_box">
-				<p dangerouslySetInnerHTML={{__html: dataObj.msg}}></p>
+			<>
 				<input type="text" placeholder={dataObj.hint} />
 				<div className="bt_box" flex="true">
 					{dataObj?.bt && dataObj.bt.map((btData, idx) => {
-						return <button className="button_small" key={idx} onClick={() => {buttonEvent(dataObj.info, dataObj.bt[idx], fn);}} msg="true">{btData.txt}</button>
+						return <button className="button_small" key={idx} onClick={() => {
+							buttonEvent(dataObj.info, dataObj.bt[idx], fn);
+						}} msg="true">{btData.txt}</button>
 					})}
 				</div>
-			</div>
+			</>
 		);
 	} else if (type === 'alert') {
 		return (
-			<div className="modal_box">
-				<p dangerouslySetInnerHTML={{__html: dataObj.msg}}></p>
-				<div className="bt_box" flex="true">
-					{dataObj?.bt && dataObj.bt.map((btData, idx) => {
-						return <button className="button_small" key={idx} msg="true">{btData.txt}</button>
-					})}
-				</div>
+			<div className="bt_box" flex="true">
+				{dataObj?.bt && dataObj.bt.map((btData, idx) => {
+					return <button className="button_small" key={idx} msg="true">{btData.txt}</button>
+				})}
 			</div>
 		);
 	} 
@@ -56,6 +54,8 @@ const typeAsContent = (type, dataObj, fn, saveData, gameData, changeSaveData) =>
 const Modal = ({ 
 	onClose,
 	type,
+	payment,//비용 지불창인지 판단
+	imgSet,
 	dataObj,
 	saveData,
 	gameData,
@@ -66,7 +66,17 @@ const Modal = ({
 		<ModalContainer>
 			<div className="modal transition">
 				<div className="modal_cont" onClick={() => {onClose()}}>
-					{typeAsContent(type, dataObj, fn, saveData, gameData, changeSaveData)}
+					<div className="modal_box">
+						<p dangerouslySetInnerHTML={{__html: dataObj.msg}}></p>
+						{payment && (
+							<>
+								<div className="price_group">
+									<Prices payment={gameData.prices.itemEnhancement[payment]} imgSet={imgSet} saveData={saveData} gameData={gameData}/>
+								</div>
+							</>
+						)}
+						{typeAsContent(type, dataObj, fn, saveData, gameData, changeSaveData)}
+					</div>
 				</div>
 				<div className="modal_close">
 					<span></span><span></span>

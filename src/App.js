@@ -284,6 +284,35 @@ const App = () => {
   }
   return (
     <RootContainer value={data}>
+      <svg style={{position:"absolute",width:0,height:0,visibility:"hidden"}}xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100">
+				<radialGradient id="radial_rainbow" cx="43.5693" cy="42.9141" r="43.8667" gradientUnits="userSpaceOnUse">
+					<stop offset="0" style={{"stopColor":"#FF0000"}}/>
+					<stop offset="0.25" style={{"stopColor":"#FF8800"}}/>
+					<stop offset="0.5" style={{"stopColor":"#FFFF00"}}/>
+					<stop offset="0.7" style={{"stopColor":"#008800"}}/>
+					<stop offset="0.8" style={{"stopColor":"#0000FF"}}/>
+					<stop offset="0.95" style={{"stopColor":"#000088"}}/>
+					<stop offset="1" style={{"stopColor":"#880088"}}/>
+				</radialGradient>
+				<linearGradient id="linear_rainbow" gradientUnits="userSpaceOnUse" x1="6.1328" y1="50.0005" x2="93.8662" y2="50.0005">
+					<stop offset="0" style={{"stopColor":"#FF0000"}}/>
+					<stop offset="0.17" style={{"stopColor":"#FF8800"}}/>
+					<stop offset="0.33" style={{"stopColor":"#FFFF00"}}/>
+					<stop offset="0.50" style={{"stopColor":"#008800"}}/>
+					<stop offset="0.66" style={{"stopColor":"#0000FF"}}/>
+					<stop offset="0.83" style={{"stopColor":"#000088"}}/>
+					<stop offset="1" style={{"stopColor":"#880088"}}/>
+				</linearGradient>
+				<linearGradient id="Mottled" gradientUnits="userSpaceOnUse" x1="6.1328" y1="50.0005" x2="93.8662" y2="50.0005">
+					<stop offset="0" style={{"stopColor":"#000000"}}/>
+					<stop offset="0.17" style={{"stopColor":"#ffffff"}}/>
+					<stop offset="0.33" style={{"stopColor":"#000000"}}/>
+					<stop offset="0.50" style={{"stopColor":"#ffffff"}}/>
+					<stop offset="0.66" style={{"stopColor":"#000000"}}/>
+					<stop offset="0.83" style={{"stopColor":"#ffffff"}}/>
+					<stop offset="1" style={{"stopColor":"#000000"}}/>
+				</linearGradient>
+			</svg>
       <div style={{height: "100%",overflowY:"overlay",overflowX:"hidden"}} className={`root ${page}`}>
         {location !== "battle" && (
           <Menu saveData={saveData} changePage={changePage} navigate={navigate} />

@@ -10,7 +10,15 @@ const ChMenuButton = styled.button`
   background:url(${({backImg}) => backImg}) no-repeat center center;
   background-size:100%;
 `;
-
+const StateType = styled.div`
+  height:20px;
+  &:before{content:'';
+  display:inline-block;margin:0 5px 0 0;width:20px;height:20px;
+  background:#fff url(${({img}) => img}) no-repeat center center;
+  background-size:100%;
+  border-radius:6px;vertical-align:middle;}
+  span{vertical-align:middle;}
+`;
 const ChracterHeader = ({
   saveData,
   slotIdx,
@@ -45,7 +53,7 @@ const ChracterHeader = ({
         {currentTime}
         <ul>
           <li className="stateType_actionPoint" flex="true">
-            <span className="state_type">{gameData.stateType[saveData.ch[slotIdx].stateType].na}</span>
+            <StateType className="state_type" img={imgSet.icon[`iconStateType${saveData.ch[slotIdx].stateType}`]}><span>{gameData.stateType[saveData.ch[slotIdx].stateType].na}</span></StateType>
             <span className="action_point">
               <span className="current">{saveData.ch[slotIdx].actionPoint}</span><span className="bar">/</span><span className="max">50</span>
             </span>

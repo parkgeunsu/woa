@@ -5,8 +5,7 @@
 .gacha_menu li{margin:0 0 10px 0;}
 .gacha_menu li:last-of-type{margin:0;}
 .gacha_menu_button{display:block;padding:10px 0;width:100%;background:rgba(255,255,255,.5);color:#000;border-radius:20px;text-align:center;}
-.gacha_menu_button .price{margin:0 0 0 10px;padding:0 0 0 20px;}
-.gacha_menu_button  .menu{padding:0 20px;}
+.gacha_menu_button .menu{padding:0 20px;}
 
 .gacha_area{flex-grow:1;perspective:300px;perspective-origin:50% 100%;transform-style:flat;}
 

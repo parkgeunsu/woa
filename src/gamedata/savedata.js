@@ -3,13 +3,13 @@ export const save = {
   "info":{
     id:'OngbakKai',
     lv:34,
-    diamond:28200,
+    diamond:50,
     money:352000
   },
   "ch":[
     {"idx":1,"stateType":0,"element":[8],"actionType":1,"job":0,"newActionType":[1],"grade":6,"mark":2,"stateLuk":146,"lv":45,"exp":10,"hasExp":50000,"actionPoint":10,"actionMax":75,"pointTime":2000,"battleBeige":[0,0,0,0],"animalBeige":1,"items":[
-      {"id":"d3a5xzncc","idx": 2,"grade": 2,"hole": [0],"color": ["#d9e506","#52057f"],"baseEff": [{"type": 4,"num": ["82","98","121","140"]}],"addEff": [{"type": 13,"num": ["46"]},{"type": 4,"num": ["178"]},{"type": 8,"num": ["4"]},{"type": 11,"num": ["25"]}],"mark": 0,"markNum": 2,"modifier": {"ko":"사파이어의 고양이두마리","en":"Sappire's two Cats"},"part":1,"sealed":false,"slot":1,"weaponType":0},
-      {"id":"jikz3q7ft","idx": 8,"grade": 2,"hole": [0,0,0,0],"color": ["#706357"],"baseEff": [{"type": 4,"num": ["305","386","480","583"]}],"addEff": [{"type": 13,"num": ["2"]},{"type": 13,"num": ["18"]},{"type": 4,"num": ["359"]}],"mark": 0,"markNum": 4,"modifier": {"ko":"다이아몬드의 고양이네마리","en":"Diamods's four Cats"},"part":2,"sealed":false,"slot":4,"weaponType":0},
+      {"id":"d3a5xzncc","idx": 2,"grade": 2,"hole": [0],"color": ["hsla(63,97%,88%,1)","hsla(278,96%,21%,1)"],"baseEff": [{"type": 4,"num": ["82","98","121","140"]}],"addEff": [{"type": 13,"num": ["46"]},{"type": 4,"num": ["178"]},{"type": 8,"num": ["4"]},{"type": 11,"num": ["25"]}],"mark": 0,"markNum": 2,"modifier": {"ko":"사파이어의 고양이두마리","en":"Sappire's two Cats"},"part":1,"sealed":false,"slot":1,"weaponType":0},
+      {"id":"jikz3q7ft","idx": 8,"grade": 2,"hole": [0,0,0,0],"color": ["hsla(29,22%,43%,1)"],"baseEff": [{"type": 4,"num": ["305","386","480","583"]}],"addEff": [{"type": 13,"num": ["2"]},{"type": 13,"num": ["18"]},{"type": 4,"num": ["359"]}],"mark": 0,"markNum": 4,"modifier": {"ko":"다이아몬드의 고양이네마리","en":"Diamods's four Cats"},"part":2,"sealed":false,"slot":4,"weaponType":0},
       // {"idx":11,"slot":3,"hole":[],"grade":2},
       {},
       {},
@@ -27,8 +27,8 @@ export const save = {
       [{},{},{},{}],
     ]},
     {"idx":0,"stateType":0,"element":[11],"actionType":3,"job":12,"newActionType":[3],"grade":5,"mark":0,"stateLuk":200,"lv":40,"exp":0,"hasExp":1000,"actionPoint":26,"actionMax":55,"pointTime":1200,"battleBeige":[0,0,0,0],"animalBeige":0,"items":[
-      {"id":"xh7lqinoo","idx": 2,"grade": 2,"hole": [0],"color": ["#d9e506","#52057f"],"baseEff": [{"type": 4,"num": ["82","98","121","140"]}],"addEff": [{"type": 13,"num": ["46"]},{"type": 4,"num": ["178"]},{"type": 8,"num": ["4"]},{"type": 11,"num": ["25"]}],"mark": 0,"markNum": 2,"modifier": {"ko":"사파이어의 고양이두마리","en":"Sappire's two Cats"},"part":1,"sealed":false,"slot":1,"weaponType":0},
-      {"id":"papul9e8r","idx": 0,"grade": 2,"hole": [0,0,0,0],"color": ["#706357"],"baseEff": [{"type": 4,"num": ["305","386","480","583"]}],"addEff": [{"type": 13,"num": ["2"]},{"type": 13,"num": ["18"]},{"type": 4,"num": ["359"]}],"mark": 0,"markNum": 4,"modifier": {"ko":"다이아몬드의 고양이네마리","en":"Diamods's four Cats"},"part":2,"sealed":false,"slot":4,"weaponType":0},
+      {"id":"xh7lqinoo","idx": 2,"grade": 2,"hole": [0],"color": ["hsla(63,97%,88%,1)","hsla(278,96%,21%,1)"],"baseEff": [{"type": 4,"num": ["82","98","121","140"]}],"addEff": [{"type": 13,"num": ["46"]},{"type": 4,"num": ["178"]},{"type": 8,"num": ["4"]},{"type": 11,"num": ["25"]}],"mark": 0,"markNum": 2,"modifier": {"ko":"사파이어의 고양이두마리","en":"Sappire's two Cats"},"part":1,"sealed":false,"slot":1,"weaponType":0},
+      {"id":"papul9e8r","idx": 0,"grade": 2,"hole": [0,0,0,0],"color": ["hsla(29,22%,43%,1)"],"baseEff": [{"type": 4,"num": ["305","386","480","583"]}],"addEff": [{"type": 13,"num": ["2"]},{"type": 13,"num": ["18"]},{"type": 4,"num": ["359"]}],"mark": 0,"markNum": 4,"modifier": {"ko":"다이아몬드의 고양이네마리","en":"Diamods's four Cats"},"part":2,"sealed":false,"slot":4,"weaponType":0},
       {},
       {},
       {},
@@ -66,8 +66,9 @@ export const save = {
   ],
   "items":{
     "equip":[
-      {addEff:[],baseEff:[{type: 4, num: ["578", "763", "1024", "1213"]}, {type: 6, num: ["174", "332", "471", "606"]}],color:["hsla(223,99%,75%,1)"],grade: 2,hole:[{idx:101}, {idx:4,eff:[{type:6,num: ["76"]}]},0,0,0],id:"355goma5g",idx:11,mark:5,markNum:2,modifier:{ko:"다이아몬드의 물개두마리", en:"Diamond's two Seals"},part:2,sealed:false,slot:4,weaponType:0},
-      {addEff:[],baseEff:[{type: 4, num: ["72", "74", "76", "77"]}, {type: 6, num: ["76", "89", "109", "131"]},{type: 8, num: ["14", "14", "14", "14"]}],color:["hsla(289,100%,34%,1)"],grade:2,hole:[0,0,0],id:"j0mu47it2",idx:0,mark:22,markNum:1,modifier:{ko: "사파이어의 도마뱀", en: "Sapphire's a Lizard"},part:1,sealed:false,slot:1,weaponType:0}
+      {addEff:[],baseEff:[{type: 4, num: ["578", "763", "1024", "1213"]}, {type: 6, num: ["174", "332", "471", "606"]}],color:["hsla(223,99%,75%,1)"],grade: 2,hole:[0,0,0,0,0],id:"355goma5g",idx:11,mark:5,markNum:2,modifier:{ko:"다이아몬드의 물개두마리", en:"Diamond's two Seals"},part:2,sealed:false,slot:5,weaponType:0},
+      {addEff:[],baseEff:[{type: 4, num: ["578", "763", "1024", "1213"]}, {type: 6, num: ["174", "332", "471", "606"]}],color:["hsla(223,99%,75%,1)"],grade: 2,hole:[{idx:101}, {idx:4,eff:[{type:6,num: ["76"]}]},0,0,0],id:"355goma5g",idx:11,mark:5,markNum:2,modifier:{ko:"다이아몬드의 물개두마리", en:"Diamond's two Seals"},part:2,sealed:false,slot:5,weaponType:0},
+      {addEff:[],baseEff:[{type: 4, num: ["72", "74", "76", "77"]}, {type: 6, num: ["76", "89", "109", "131"]},{type: 8, num: ["14", "14", "14", "14"]}],color:["hsla(289,100%,34%,1)"],grade:2,hole:[0,0,0],id:"j0mu47it2",idx:0,mark:22,markNum:1,modifier:{ko: "사파이어의 도마뱀", en: "Sapphire's a Lizard"},part:1,sealed:false,slot:3,weaponType:0}
     ],
     "hole":[
       {"idx":1,"grade":1,"baseEff":[{type:4,num:['802']}],"addEff":[]},
@@ -78,6 +79,8 @@ export const save = {
       {"idx":13,"grade":1,"baseEff":[{type:4,num:['802']}],"addEff":[]},
       {"idx":101},
       {"idx":110},
+      {"idx":121},
+      {"idx":122},
       {"idx":122},
       {"idx":123},
       {"idx":142},
@@ -86,17 +89,32 @@ export const save = {
       {"idx":150},
       {"idx":151},
       {"idx":152},
+      {"idx":114},
+      {"idx":108},
     ],
     "upgrade":[
+      {"idx":0},
+      {"idx":0},
       {"idx":1},
-      {"idx":4},
+      {"idx":2},
       {"idx":2},
       {"idx":1},
-      {"idx":4},
+      {"idx":6},
+      {"idx":7},
+      {"idx":8},
+      {"idx":8},
     ],
     "material":[
+      {"idx":0},
+      {"idx":1},
     ],
     "etc":[
+      {"idx":8},
+      {"idx":8},
+      {"idx":9},
+      {"idx":9},
+      {"idx":10},
+      {"idx":10},
       {"idx":22},
       {"idx":22},
       {"idx":3},

@@ -2,6 +2,8 @@ import back0 from 'images/back/back0.jpg';
 import back1 from 'images/back/back1.jpg';
 import back2 from 'images/back/back2.jpg';
 import back3 from 'images/back/back5.jpg';
+import itemEn0 from 'images/back/itemEn0.png';
+import itemEn1 from 'images/back/itemEn1.png';
 
 import imgCardBack from 'images/card/card_back.png';
 import imgRing from 'images/ring/ring_.png';
@@ -43,6 +45,10 @@ import iconArmor from 'images/ico/armor.png';
 import iconWeapon from 'images/ico/weapon.png';
 import iconBag from 'images/ico/bag.png';
 import iconLock from 'images/ico/lock.png';
+import iconStateType0 from 'images/ico/state_type0.png';
+import iconStateType1 from 'images/ico/state_type1.png';
+import iconStateType2 from 'images/ico/state_type2.png';
+import iconStateType3 from 'images/ico/state_type3.png';
 
 import iconStar1 from 'images/star/star1.png';
 import iconStar2 from 'images/star/star2.png';
@@ -305,6 +311,10 @@ import job9 from 'images/job/job9.png';
 import job10 from 'images/job/job10.png';
 import job11 from 'images/job/job11.png';
 import job12 from 'images/job/job12.png';
+import job13 from 'images/job/job13.png';
+import job14 from 'images/job/job14.png';
+import job15 from 'images/job/job15.png';
+import job16 from 'images/job/job16.png';
 
 //날씨
 import sun from 'images/weather/sun.png';
@@ -351,7 +361,7 @@ import buff11 from 'images/effect/buff11.png';
 import buff12 from 'images/effect/buff12.png';
 
 export const back = [
-  back0,back1,back2,back3
+  back0,back1,back2,back3,itemEn0,itemEn1
 ];
 export const menu = [
   menu0,menu1,menu2,menu3,menu4,menu5,menu6,menu7
@@ -360,7 +370,7 @@ export const etc = {
   imgRing:imgRing,imgCardBack:imgCardBack,frameChBack:frameChBack,stateBack:stateBack,imgCardFrame:imgCardFrame,imgCardLv:imgCardLv,iconCardName:iconCardName,imgRingBack:imgRingBack,frameRope:frameRope,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,questionBlack:questionBlack,questionWhite:questionWhite,wind:wind,
 };
 export const icon = {
-  iconBack:iconBack,iconChat:iconChat,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,iconHelm:iconHelm,iconArmor:iconArmor,iconWeapon:iconWeapon,iconBag:iconBag,iconSocket:itemHole1,iconEtc:itemEtc25,iconUpgrade:itemUpgrade0,iconMaterial:itemMaterial0,iconLock:iconLock,
+  iconBack:iconBack,iconChat:iconChat,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,iconHelm:iconHelm,iconArmor:iconArmor,iconWeapon:iconWeapon,iconBag:iconBag,iconSocket:itemHole1,iconEtc:itemEtc25,iconUpgrade:itemUpgrade0,iconMaterial:itemMaterial0,iconLock:iconLock,iconStateType0:iconStateType0,iconStateType1:iconStateType1,iconStateType2:iconStateType2,iconStateType3:iconStateType3,
 };
 export const iconStar = [
   iconStar1,iconStar2,iconStar3,iconStar4,iconStar5,iconStar6,iconStar7
@@ -409,7 +419,7 @@ export const itemMaterial = [
   itemMaterial0,itemMaterial1,
 ];
 export const job = [
-  job0,job1,job2,job3,job4,job5,job6,job7,job8,job9,job10,job11,job12
+  job0,job1,job2,job3,job4,job5,job6,job7,job8,job9,job10,job11,job12,job13,job14,job15,job16,
 ];
 export const weather = [
   sun,moon,suncloud,mooncloud,sunrain,moonrain,sunthunder,moonthunder,sunsnow,moonsnow

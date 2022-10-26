@@ -1,8 +1,10 @@
 import { animals } from 'gamedata/animals';
 import { exp } from 'gamedata/exp';
+import { prices } from 'gamedata/prices';
 import { ch } from 'gamedata/heros';
 import { items } from 'gamedata/items';
 import { itemsSvg } from 'gamedata/itemsSvg';
+import { colorSvg } from 'gamedata/colorSvg';
 import { job } from 'gamedata/job';
 import { lineup } from 'gamedata/lineup';
 import { relation } from 'gamedata/relation';
@@ -44,5 +46,7 @@ export const gameData = {
     scenario:scenario,
     effect:effect,
     itemsSvg:itemsSvg,
+    colorSvg:colorSvg,
+    prices:prices,
     guide:guide,
   }

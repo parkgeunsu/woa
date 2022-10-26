@@ -238,10 +238,12 @@ b[buff]{color:#02f;text-shadow:-1px -1px 0px #0df,1px 1px 0px #000;}
 .popup_cont .skill_description .skill_eff_list{margin:0 0 5px 0;font-size:14px;text-align:center;}
 .modal{position:fixed;left:0;right:0;top:0;bottom:0;z-index:20;}
 .modal:after{content:'';position:absolute;left:0;right:0;top:0;bottom:0;background:rgba(0,0,0,.7);}
-.modal_cont{display: flex;position:absolute;left:0;right:0;top:0;bottom:0;z-index:2;flex-direction: column;align-items: center;}
+.modal_cont{display: flex;position:absolute;left:20px;right:20px;top:0;bottom:0;z-index:2;flex-direction: column;align-items: center;}
 .modal_cont .modal_box{display:flex;margin:auto auto;flex-direction:column;align-items:center;}
 .modal_cont p{margin:0 0 10px 0;text-align:center;font-size:14px;line-height:1.5;}
 .modal_cont p em{font-style:normal;font-weight:600;font-size:16px;color:#ff2a00;}
+.modal_cont p .des{color:#999;font-size:12px;}
+.modal_cont .price_group{display:flex;margin:0 0 10px 0;padding:5px;}
 
 .modal_close{position:absolute;right:5px;top:10px;z-index:1;}
 .modal_close span{display:block;position:absolute;right:10px;top:20px;width:30px;height:5px;background:#fff;box-shadow:0 0 10px #fff;}
@@ -274,6 +276,7 @@ b[buff]{color:#02f;text-shadow:-1px -1px 0px #0df,1px 1px 0px #000;}
 .item_layout.unique{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-unique) 100%);}
 .item_layout.legend{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-legend) 100%);}
 .item_layout .pic{position:absolute;left:0;right:0;bottom:0;top:0;}
+.item_layout .pic .display_text{display:block;position:absolute;left:5px;bottom:5px;width:20px;height:20px;line-height:20px;font-size:14px;color:#fff;font-weight:600;background:rgba(0,0,0,.5);border-radius:10px;text-align:center;}
 
 .item_layout .pic.sealed svg{filter:brightness(0.3) drop-shadow(0px 0px 1px #fff);}
 .item_layout .pic.sealed:before{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);content:'?';z-index:1;font-size:20px;}
@@ -291,3 +294,4 @@ b[buff]{color:#02f;text-shadow:-1px -1px 0px #0df,1px 1px 0px #000;}
 
 /*common button*/
 .button_small{margin:5px 3px;padding:5px 10px;border-radius:10px;background-image:-webkit-linear-gradient(bottom, rgba(0,0,0,0.075), rgba(255,255,255,0.5));background-image: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(255,255,255,0.5));box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.5), 0 0 1px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0,0,0,1);border-radius: 20px;color:rgba(255,255,255,0.9);line-height:1;}
+.button_big{margin:5px 3px;padding:8px 14px;border-radius:10px;background-image:-webkit-linear-gradient(bottom, rgba(0,0,0,0.075), rgba(255,255,255,0.5));background-image: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(255,255,255,0.5));box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.5), 0 0 1px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0,0,0,1);border-radius: 20px;color:rgba(255,255,255,0.9);line-height:1;font-size:16px;}

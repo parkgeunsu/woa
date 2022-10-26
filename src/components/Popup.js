@@ -158,36 +158,13 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     const grade = saveItems.grade || items.grade;
     const setsInfo = gameData.items.set_type[items.set];
     //아이템 기본, 추가, 홀 효과
-    let totalEff = [];
-    saveItems.baseEff.forEach((data, idx) => {
-      if (totalEff[data.type] === undefined) {
-        totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
-      }
-      totalEff[data.type].base += parseInt(data.num[grade - 1]);
-    });
-    saveItems.addEff.forEach((data, idx) => {
-      if (totalEff[data.type] === undefined) {
-        totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
-      }
-      totalEff[data.type].add += parseInt(data.num[0]);
-    });
-    saveItems.hole.forEach((data, idx) => {
-      if (data) {
-        const holeItem = gameData.items.hole[data.idx].eff;
-        holeItem.forEach((holeData, idx) => {
-          if (totalEff[holeData.type] === undefined) {
-            totalEff[holeData.type] = {type: holeData.type, base: 0, add:0, hole:0};
-          }
-          totalEff[holeData.type].hole += parseInt(holeData.num);
-        });
-      }
-    });
+    const totalEff = util.getTotalEff(saveItems, gameData);
 		return (
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[grade]}>
-        <li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${saveItems.modifier[lang]}<br/>${items.na[lang]}`}}></span></li>
+        <li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${saveItems.colorantSet ? util.getColorant(saveItems.colorantSet, gameData).na[lang] : ''} ${saveItems.modifier[lang]}<br/>${items.na[lang]}`}}></span></li>
         <li flex="true">
           <PopupItemPic className={`item item${items.part} ${gameData.itemGrade.txt_e[saveItems.grade].toLowerCase()}`}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color, saveItems.id)}}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color, saveItems.svgColor || saveItems.id)}}>
             </svg>
           </PopupItemPic>
           <div flex-h="true" style={{flex: 1,}}>
@@ -294,40 +271,13 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     const setsInfo = gameData.items.set_type[items.set];
     const sealed = dataObj.saveItemData.sealed;
     //아이템 기본, 추가, 홀 효과
-    let totalEff = [];
-    saveItems.baseEff.forEach((data, idx) => {
-      if (totalEff[data.type] === undefined) {
-        totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
-      }
-      if (sealed) {
-        totalEff[data.type].base = data.num;
-      } else {
-        totalEff[data.type].base += parseInt(data.num[grade - 1]);
-      }
-    });
-    saveItems.addEff.forEach((data, idx) => {
-      if (totalEff[data.type] === undefined) {
-        totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
-      }
-      totalEff[data.type].add += parseInt(data.num[0]);
-    });
-    saveItems.hole.forEach((data, idx) => {
-      if (data) {
-        const holeItem = gameData.items.hole[data.idx].eff;
-        holeItem.forEach((holeData, idx) => {
-          if (totalEff[holeData.type] === undefined) {
-            totalEff[holeData.type] = {type: holeData.type, base: 0, add:0, hole:0};
-          }
-          totalEff[holeData.type].hole += parseInt(holeData.num);
-        });
-      }
-    });
+    const totalEff = util.getTotalEff(saveItems, gameData);
     return (
       <PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[grade]}>
-        <li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${saveItems.modifier[lang]}<br/>${items.na[lang]}`}}></span></li>
+        <li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${saveItems.colorantSet ? util.getColorant(saveItems.colorantSet, gameData).na[lang] : ''} ${saveItems.modifier[lang]}<br/>${items.na[lang]}`}}></span></li>
         <li flex="true">
           <PopupItemPic className={`item item${items.part} ${gameData.itemGrade.txt_e[saveItems.grade].toLowerCase()} ${dataObj.saveItemData.sealed ? "sealed" : ""}`}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color, saveItems.id)}}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color, saveItems.svgColor || saveItems.id)}}>
             </svg>
           </PopupItemPic>
           <div flex-h="true" style={{flex: 1,}}>

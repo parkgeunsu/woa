@@ -122,7 +122,7 @@ const CharacterItems = ({
                         <em>
                           {/* <ItemPic className="pic" itemPic={imgSet.itemEquip[items.display]}></ItemPic> */}
                           <ItemPic className="pic">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.id)}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.svgColor || data.id)}}>
                             </svg>
                           </ItemPic>
                           <span className="hole" flex-center="true">
@@ -150,12 +150,20 @@ const CharacterItems = ({
                   const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
                   const items = data.part === 3 ? gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx] : gameItem.equip[data.part][0][itemsGrade][data.idx];
                   const itemsHole = data.hole;
-                  const equipPossible = data.part === 3 && !data.sealed ? items.limit[saveData.ch[slotIdx].job] : true;
+                  const equipPossible = (() => {
+                    let chk;
+                    if (data.sealed) {
+                      chk = true;
+                    } else {
+                      chk = !items.limit[saveData.ch[slotIdx].job];
+                    }
+                    return chk;
+                  })();
                   return (
                     <li key={`hequip${idx}`} onClick={() => {handlePopup('hequip', data.idx, idx, data.part, data.grade, data.weaponType)}} className={`item item${data.part} ${gameData.itemGrade.txt_e[data.grade].toLowerCase()}`} data-itemnum={`equip_${data.idx}`}>
                       <em>
-                        <ItemPic className={`pic ${data.sealed ? "sealed" : ""} ${equipPossible ? "possible" : ""}`}>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.id)}}>
+                        <ItemPic className={`pic ${data.sealed ? "sealed" : ""} ${equipPossible ? "impossible" : ""}`}>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.svgColor || data.id)}}>
                           </svg>
                         </ItemPic>
                         <span className="hole" flex-center="true">
@@ -172,7 +180,7 @@ const CharacterItems = ({
                     </li>
                   )
                 })}
-                { invenItems.hole && invenItems.hole.map((data, idx) => {
+                {/* { invenItems.hole && invenItems.hole.map((data, idx) => {
                   const items = gameItem.hole[data.idx];
                   return (
                     <li key={`hole${idx}`} onClick={() => {handlePopup('hole', data.idx, idx)}} className="item item11" data-itemnum={`hole_${data.idx}`}>
@@ -211,7 +219,7 @@ const CharacterItems = ({
                       </em>
                     </li>
                   )
-                })}
+                })} */}
               </ul>
             </div>
           </dd>

@@ -255,40 +255,52 @@ export const util = { //this.loadImage();
     saveItems.forEach((item) => {
       if(Object.keys(item).length !== 0){
         item.baseEff.forEach((eff) => {
-          if(effData[eff.type] === undefined) {
+          if (effData[eff.type] === undefined) {
             effData[eff.type] = {percent:0, number:0};
           }
-          if(eff.num[item.grade - 1].indexOf('%') > 0){
+          if (eff.num[item.grade - 1].indexOf('%') > 0) {
             effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num[item.grade - 1]);
-          }else{
+          } else {
             effData[eff.type].number = effData[eff.type].number + parseInt(eff.num[item.grade - 1]);
           }
         });
         item.addEff.forEach((eff) => {
-          if(effData[eff.type] === undefined) {
+          if (effData[eff.type] === undefined) {
             effData[eff.type] = {percent:0, number:0};
           }
-          if(eff.num.indexOf('%') > 0){
+          if (eff.num.indexOf('%') > 0) {
             effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num);
-          }else{
+          } else {
             effData[eff.type].number = effData[eff.type].number + parseInt(eff.num);
           }
         });
       }
       if(item.hole){
-        item.hole.forEach((data)=>{
-          if(data) {
-            const holeItem = gameItem.hole[data.idx].eff;
-            holeItem.forEach((eff, ) => {
-              if (effData[eff.type] === undefined) {
-                effData[eff.type] = {percent:0, number:0};
+        item.hole.forEach((eff)=>{
+          if(eff) {
+            const holeItem = gameItem.hole[eff.idx].eff;
+            holeItem.forEach((holeData) => {
+              if (effData[holeData.type] === undefined) {
+                effData[holeData.type] = {percent:0, number:0};
               }
-              if(eff.num.indexOf('%') > 0){
-                effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num);
-              }else{
-                effData[eff.type].number = effData[eff.type].number + parseInt(eff.num);
+              if (holeData.num.indexOf('%') > 0){
+                effData[holeData.type].percent = effData[holeData.type].percent + parseInt(holeData.num);
+              } else {
+                effData[holeData.type].number = effData[holeData.type].number + parseInt(holeData.num);
               }
             });
+          }
+        });
+      }
+      if (item.colorEff) {
+        item.colorEff.forEach((eff) => {
+          if (effData[eff.type] === undefined) {
+            effData[eff.type] = {percent:0, number:0};
+          }
+          if (eff.num.indexOf('%') > 0) {
+            effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num);
+          } else {
+            effData[eff.type].number = effData[eff.type].number + parseInt(eff.num);
           }
         });
       }
@@ -464,6 +476,56 @@ export const util = { //this.loadImage();
     }else{
         return Math.round(current/total*100);
     }
+  },
+  getTotalEff: (saveItems, gameData, socketEff) => {
+    let totalEff = [];
+    const grade = saveItems.hole ? saveItems.grade : 1;
+    saveItems.baseEff.forEach((data, idx) => {
+      if (totalEff[data.type] === undefined) {
+        totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
+      }
+      totalEff[data.type].base += parseInt(data.num[grade - 1]);
+    });
+    saveItems.addEff.forEach((data, idx) => {
+      if (totalEff[data.type] === undefined) {
+        totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
+      }
+      totalEff[data.type].add += parseInt(data.num[0]);
+    });
+    if (socketEff) {
+      socketEff.save.forEach((data, idx) => {
+        if (data) {
+          const holeItem = gameData.items.hole[data.idx].eff;
+          holeItem.forEach((holeData, idx) => {
+            if (totalEff[holeData.type] === undefined) {
+              totalEff[holeData.type] = {type: holeData.type, base: 0, add:0, hole:0};
+            }
+            totalEff[holeData.type].hole += parseInt(holeData.num);
+          });
+        }
+      });
+    } else if (saveItems.hole) {
+      saveItems.hole.forEach((data, idx) => {
+        if (data) {
+          const holeItem = gameData.items.hole[data.idx].eff;
+          holeItem.forEach((holeData, idx) => {
+            if (totalEff[holeData.type] === undefined) {
+              totalEff[holeData.type] = {type: holeData.type, base: 0, add:0, hole:0};
+            }
+            totalEff[holeData.type].hole += parseInt(holeData.num);
+          });
+        }
+      });
+    }
+    if (saveItems.colorEff) {
+      saveItems.colorEff.forEach((data, idx) => {
+        if (totalEff[data.type] === undefined) {
+          totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
+        }
+        totalEff[data.type].hole += parseInt(data.num[0]);
+      });
+    }
+    return totalEff;
   },
   getEffectType: (num, type) => {
     //eff type(효과 dmg_type&buff_type) 찌르기(0),할퀴기(1),물기(2),치기(3),누르기(4),독(11),명(12),암(13),수(14),화(15),풍(16),지(17), 공(21),방(22),술공(23),술방(24),HP(25),SP(26),RSP(27),속도(28),명중(29),진형(100)
@@ -1529,5 +1591,9 @@ export const util = { //this.loadImage();
     } else if (dataObj.type === 'holeEquip') {
       dataObj.showPopup(false);
     }
-  }
+  },
+  getColorant:(colorSet, gameData) => {
+    const dataIdx = colorSet.split('_');
+    return gameData.items.colorant[dataIdx[0]][dataIdx[1]];
+  },
 }

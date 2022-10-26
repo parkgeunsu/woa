@@ -49,35 +49,6 @@ const makeMark = (markNum, img) => {
   }
   return markTag;
 }
-const getTotalEff = (saveItems, grade, gameData) => {
-	let totalEff = [];
-  saveItems.baseEff.forEach((data, idx) => {
-		if (totalEff[data.type] === undefined) {
-			totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
-		}
-		totalEff[data.type].base += parseInt(data.num[grade - 1]);
-	});
-	saveItems.addEff.forEach((data, idx) => {
-		if (totalEff[data.type] === undefined) {
-			totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
-		}
-		totalEff[data.type].add += parseInt(data.num[0]);
-	});
-	if (saveItems.hole) {
-		saveItems.hole.forEach((data, idx) => {
-			if (data) {
-				const holeItem = gameData.items.hole[data.idx].eff;
-				holeItem.forEach((holeData, idx) => {
-					if (totalEff[holeData.type] === undefined) {
-						totalEff[holeData.type] = {type: holeData.type, base: 0, add:0, hole:0};
-					}
-					totalEff[holeData.type].hole += parseInt(holeData.num);
-				});
-			}
-		});
-	}
-	return totalEff;
-}
 const Inven = ({
 	saveData,
 	changeSaveData,
@@ -164,7 +135,7 @@ const Inven = ({
 										}
 									}}>
 										<span className={`pic ${data.sealed ? "sealed" : ""}`}>
-											<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.id)}}>
+											<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.svgColor || data.id)}}>
 											</svg>
 										</span>
 										<span className="hole" flex-center="true">
@@ -259,8 +230,8 @@ const Inven = ({
 										<ItemPic className="pic" itemPic={imgSet[`item${invenList[selectTab].keyName.replace(/^[a-z]/, char => char.toUpperCase())}`][items.display]} />
 									</div>
 								)
-							} else if (invenCate === 'merterial') {
-								const items = gameItem.etc[data.idx];
+							} else if (invenCate === 'material') {
+								const items = gameItem.material[data.idx];
 								const grade = data.grade || items.grade;
 								return (
 									<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${selectItem1.selectTab === invenList[selectTab].keyName && selectItem1.select === idx ? 'select1' : ''} ${selectItem2.selectTab === invenList[selectTab].keyName && selectItem2.select === idx ? 'select2' : ''}`} key={`items${idx}`} onClick={() => {
@@ -342,7 +313,9 @@ const Inven = ({
 											});
 										}
 									}}>
-										<ItemPic className="pic" itemPic={imgSet[`item${invenList[selectTab].keyName.replace(/^[a-z]/, char => char.toUpperCase())}`][items.display]} />
+										<ItemPic className="pic" itemPic={imgSet[`item${invenList[selectTab].keyName.replace(/^[a-z]/, char => char.toUpperCase())}`][items.display]}>
+											{items.displayText && <span className="display_text">{items.displayText}</span>}
+										</ItemPic>
 									</div>
 								)
 							}
@@ -355,10 +328,10 @@ const Inven = ({
 							}}>
 								{selectItem1.selectTab === 'equip' && (
 									<>
-										<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.save.modifier[lang]} ${selectItem1.game.na[lang]}`}}></span></li>
+										<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.save.colorantSet ? util.getColorant(selectItem1.save.colorantSet, gameData).na[lang] : ''} ${selectItem1.save.modifier[lang]} ${selectItem1.game.na[lang]}`}}></span></li>
 										<li className="item_fix" flex="true">
 											<ItemPic className={`item item${selectItem1.game.part} ${gameData.itemGrade.txt_e[selectItem1.save.grade].toLowerCase()} ${selectItem1.save.sealed ? "sealed" : ""}`}>
-												<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem1.game.display], selectItem1.save.color, selectItem1.save.id)}}></svg>
+												<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem1.game.display], selectItem1.save.color, selectItem1.save.svgColor || selectItem1.save.id)}}></svg>
 											</ItemPic>
 											<div flex-h="true" style={{flex: 1,}}>
 												<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem1.save.grade]}>
@@ -385,7 +358,7 @@ const Inven = ({
 											</li>
 											<li className="item_list item_eff">
 												<div className="item_title">{lang === 'ko' ? '아이템 효과' : 'Item effect'}</div>
-												{getTotalEff(selectItem1.save, selectItem1.game.grade, gameData).map((eff, idx) => {
+												{util.getTotalEff(selectItem1.save, gameData).map((eff, idx) => {
 													return (
 														<div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
 													)
@@ -442,7 +415,7 @@ const Inven = ({
 											<div className="scroll-y">
 												<li className="item_list item_eff">
 													<div className="item_title">{lang === 'ko' ? '아이템 효과' : 'Item effect'}</div>
-													{getTotalEff(selectItem1.save, 1, gameData).map((eff, idx) => {
+													{util.getTotalEff(selectItem1.save, gameData).map((eff, idx) => {
 														return (
 															<div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
 														)
@@ -584,10 +557,10 @@ const Inven = ({
 							}}>
 								{selectItem2.selectTab === 'equip' && (
 									<>
-										<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.save.modifier[lang]} ${selectItem2.game.na[lang]}`}}></span></li>
+										<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.save.colorantSet ? util.getColorant(selectItem2.save.colorantSet, gameData).na[lang] : ''} ${selectItem2.save.modifier[lang]} ${selectItem2.game.na[lang]}`}}></span></li>
 										<li className="item_fix" flex="true">
 											<ItemPic className={`item item${selectItem2.game.part} ${gameData.itemGrade.txt_e[selectItem2.save.grade].toLowerCase()} ${selectItem2.sealed ? "sealed" : ""}`}>
-												<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem2.game.display], selectItem2.save.color, selectItem2.save.id)}}></svg>
+												<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem2.game.display], selectItem2.save.color, selectItem2.save.svgColor || selectItem2.save.id)}}></svg>
 											</ItemPic>
 											<div flex-h="true" style={{flex: 1,}}>
 												<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem2.save.grade]}>
@@ -614,7 +587,7 @@ const Inven = ({
 											</li>
 											<li className="item_list item_eff">
 												<div className="item_title">{lang === 'ko' ? '아이템 효과' : 'Item effect'}</div>
-												{getTotalEff(selectItem2.save, selectItem2.game.grade, gameData).map((eff, idx) => {
+												{util.getTotalEff(selectItem2.save, gameData).map((eff, idx) => {
 													return (
 														<div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
 													)
@@ -671,7 +644,7 @@ const Inven = ({
 											<div className="scroll-y">
 												<li className="item_list item_eff">
 													<div className="item_title">{lang === 'ko' ? '아이템 효과' : 'Item effect'}</div>
-													{getTotalEff(selectItem2.save, 1, gameData).map((eff, idx) => {
+													{util.getTotalEff(selectItem2.save, gameData).map((eff, idx) => {
 														return (
 															<div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
 														)

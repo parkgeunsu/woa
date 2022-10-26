@@ -5,6 +5,7 @@ import ModalContainer from 'components/ModalContainer';
 import React, { useCallback, useContext, useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import 'css/gacha.css';
+import { Prices } from 'components/Components';
 
 const Img = styled.img.attrs(
   ({imgurl}) => ({
@@ -20,9 +21,7 @@ const GachaMenu = styled.ul`
 	}};
 `;
 const GachaMenuButton = styled.button``;
-const GachaIcon = styled.span`
-	background:url(${({ icoType }) => icoType}) no-repeat left center;background-size:20px;
-`;
+
 const GachaCard = styled.div`
 	left: ${({posX}) => posX}%;
 	top: ${({posY}) => posY}%;
@@ -277,10 +276,10 @@ const Gacha = ({
 	changeSaveData,
 }) => {
   const imgSet = useContext(AppContext).images;
+  const gameData = useContext(AppContext).gameData;
 	const setting = useContext(AppContext).setting,
     lang = setting.lang;
-	const iconStar = [imgSet.iconStar[0], imgSet.iconStar[1], imgSet.iconStar[2], imgSet.iconStar[3], imgSet.iconStar[4], imgSet.iconStar[5], imgSet.iconStar[6]]
-  const gameData = useContext(AppContext).gameData;
+	const iconStar = [imgSet.iconStar[0], imgSet.iconStar[1], imgSet.iconStar[2], imgSet.iconStar[3], imgSet.iconStar[4], imgSet.iconStar[5], imgSet.iconStar[6]];
 	const [gachaMode, setGachaMode] = useState('init');
 	const [cardStateType, setCardStateType] = useState(''); //카드 성장타입
 	const [cardStar, setCardStar] = useState(0); //카드 성장타입
@@ -344,18 +343,18 @@ const Gacha = ({
 	const [modalInfo, setModalInfo] = useState({});
   const [modalType, setModalType] = useState();
 	const gachaList = [
-		{na: 'Premium 10', type: 'p10', num: 10, price: 1400},
-		{na: 'Premium 1', type: 'p1', num: 1, price: 150},
-		{na: 'Normal 10', type: 'n10', num: 10, price: 20000},
-		{na: 'Normal 1', type: 'n1', num: 1, price: 2000},
+		{na:{ko:'프리미엄 뽑기 10',en:'Premium 10'}, num:10},
+		{na:{ko:'프리미엄 뽑기',en:'Premium 1'}, num:1},
+		{na:{ko:'골드 뽑기 10',en:'Normal 10'}, num:10},
+		{na:{ko:'골드 뽑기',en:'Normal 1'}, num: 1},
 	];
 	const [gachaCard, setGachaCard] = useState([]);
 	const handleModal = (modalType, gachaIdx) => {
 		setModalOn(true);
     if( modalType ){
-			const price = gachaList[gachaIdx].price;
+			const price = gameData.prices.gacha.draw[gachaIdx][0].price;
 			const num = gachaList[gachaIdx].num;
-			const gachaType = gachaList[gachaIdx].type.substr(0,1);
+			const gachaType = gameData.prices.gacha.draw[gachaIdx][0].type;
 			if (gachaIdx < 2){ // 다이아 뽑기
 				if (saveData.info.diamond >= price) { //돈이 충분할 경우
 					setModalInfo({
@@ -522,8 +521,8 @@ const Gacha = ({
 					{gachaList && gachaList.map((data, idx) => {
 						return (
 							<li key={idx} onClick={() => {handleModal('confirm', idx);}}>
-								<GachaMenuButton className="gacha_menu_button">{`${data.na} Gacha`}
-									<GachaIcon className={`price ${data.type.indexOf('p') < 0 ? 'gold' : 'dia'}`} icoType={data.type.indexOf('p') < 0 ? imgSet.icon.iconGold : imgSet.icon.iconDia}>{data.price}</GachaIcon>
+								<GachaMenuButton className="gacha_menu_button">{`${data.na[lang]}`}
+									<Prices style={{marginLeft:'10px'}} payment={gameData.prices.gacha.draw[idx]} imgSet={imgSet} saveData={saveData} gameData={gameData}/>
 								</GachaMenuButton>
 							</li>
 						);
