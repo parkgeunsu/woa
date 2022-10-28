@@ -1,14 +1,4 @@
 @charset "utf-8";
-.itemEnhancement_wrap{display:flex;position:absolute;left:0;right:0;top:0;bottom:0;flex-direction:column;padding:50px 0 0 0;width:100%;height:100%;box-sizing:border-box;overflow:hidden;}
-
-.itemEn_menu{display:flex;padding:0 20px;flex-grow:0;}
-.itemEn_menu li{flex:1;}
-.itemEn_menu_button{display:block;padding:10px 0 5px 0;width:100%;background:rgba(255,255,255,.5);color:#000;border-radius:20px 20px 0 0;text-align:center;}
-.itemEn_menu li.on button{background-color:rgba(0,0,0,.5);color:#fff;font-weight:600;}
-.itemEn_menu_button .name{display:inline-block;vertical-align:middle;}
-.itemEn_menu_button .icon{display:inline-block;margin:0 0 0 10px;width:20px;height:20px;}
-.itemEn_menu_button .menu{padding:0 20px;}
-
 .itemEn_area{display:flex;height:100%;flex-direction:column;padding:0 20px 10px;flex-grow:1;overflow:hidden;}
 .itemEn_area .itemEn_top{position:relative;border-radius:0 0 20px 20px;background:rgba(0,0,0,.5);height:60%;overflow:hidden;}
 .itemEn_area .itemEn_top .button_group{position:absolute;left:50%;bottom:10px;transform:translate(-50%,0);z-index:1;transition:all .5s;}

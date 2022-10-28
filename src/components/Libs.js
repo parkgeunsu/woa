@@ -58,12 +58,12 @@ export const util = { //this.loadImage();
     let battleState_ = [];
     let enemy = {};
     const itemEff = util.getItemEff('', enemyData, gameData.items, true);
-    stateArr.forEach((el,index)=>{
-      const st = gameData.ch[enemyData.idx]['st'+index],
+    for (const idx of stateArr.keys()) {
+      const st = gameData.ch[enemyData.idx]['st' + idx],
         per_current = gameData.stateType[2].arr[enemyData.lv-1]*0.01,
         stateCurrent = Math.round(st*per_current);
-      battleState_[index] = stateCurrent;
-    });
+      battleState_[idx] = stateCurrent;
+    }
     battleState_[7] = gameData.ch[enemyData.idx].st3 + gameData.ch[enemyData.idx].st5 + gameData.ch[enemyData.idx].st6;
     battleState_[8] = Math.round(Math.random()*200);
     const battleState = util.getTotalState(battleState_);
@@ -72,22 +72,22 @@ export const util = { //this.loadImage();
     for (let i = gameData.ch[enemyData.idx].grade; i < enemyData.grade; ++i) {
       addGradePercent *= gameData.addGradeArr[i];
     }
-    battleState.forEach((bState, index) => {
-      const iSt = util.compileState(bState, itemEff[index]);
+    for (const [idx, bState] of battleState.entries()) {
+      const iSt = util.compileState(bState, itemEff[idx]);
       enemy = {
         ...enemy,
-        ['iSt' + index]: iSt,
-        ['bSt' + index]: (index !== 1 && index !== 2 && index !== 8 && index !== 9) ? Math.round(bState * addGradePercent) : bState,
+        ['iSt' + idx]: iSt,
+        ['bSt' + idx]: (idx !== 1 && idx !== 2 && idx !== 8 && idx !== 9) ? Math.round(bState * addGradePercent) : bState,
       }
-    });
-    gameData.element.forEach((elData, index) => {
+    }
+    for (const idx of gameData.element.keys()) {
       enemy = {
         ...enemy,
-        ['el' + index]: gameData.animal_type[gameData.ch[enemyData.idx].animal_type].element[index],
+        ['el' + idx]: gameData.animal_type[gameData.ch[enemyData.idx].animal_type].element[idx],
       }
-    });
+    }
     const element = enemyData.element || gameData.ch[enemyData.idx].element;
-    element.forEach((elData) => {
+    for (const elData of element) {
       if (elData === 6) { //빛속성 경우
         enemy = {
           ...enemy,
@@ -123,7 +123,7 @@ export const util = { //this.loadImage();
           el8: Math.round(enemy.el8 + 50 * (enemyData.grade / 5)),
         }
       }
-    });
+    }
     enemy = {
       ...enemy,
       stateLuk: battleState_[8],
@@ -134,15 +134,15 @@ export const util = { //this.loadImage();
     const stateArr = gameData.stateName;
     let battleState_ = [];
     let saveChSlot = saveData.ch[saveSlot] || obj.newState;
-    stateArr.forEach((el,index)=>{
-      const st = gameData.ch[saveChSlot.idx]['st'+index],//실제 능력치
+    for (const idx of stateArr.keys()) {
+      const st = gameData.ch[saveChSlot.idx]['st' + idx],//실제 능력치
         per_current = gameData.stateType[saveChSlot.stateType].arr[saveChSlot.lv-1]*0.01,//성장타입에 따른 LV당 %
         stateCurrent = Math.round(st*per_current),//성장타입에 따른 LV당 능력치
         stateMax = Math.round(gameData.stateType[saveChSlot.stateType].arr[49]*0.01*st);//성장타입에 따른 최대 능력치
-      saveChSlot['rSt' + index] = stateCurrent; //레벨당 현재능력치
-      saveChSlot['maxSt' + index] = stateMax; //레벨당 최대능력치
-      battleState_[index] = stateCurrent;
-    });
+      saveChSlot['rSt' + idx] = stateCurrent; //레벨당 현재능력치
+      saveChSlot['maxSt' + idx] = stateMax; //레벨당 최대능력치
+      battleState_[idx] = stateCurrent;
+    }
     battleState_[7] = gameData.ch[saveChSlot.idx].st3 + gameData.ch[saveChSlot.idx].st5 + gameData.ch[saveChSlot.idx].st6;
     battleState_[8] = saveChSlot.stateLuk;
     //등급에 따른 추가 능력치
@@ -151,25 +151,25 @@ export const util = { //this.loadImage();
       addGradePercent *= gameData.addGradeArr[i];
     }
     const battleState = util.getTotalState(battleState_);
-    battleState.forEach((bState, index) => {
-      const iSt = util.compileState(bState, obj.itemEff[index]);
-      saveChSlot['iSt' + index] = iSt;
-      saveChSlot['bSt' + index] = (index !== 1 && index !== 2 && index !== 8 && index !== 9) ? Math.round(bState * addGradePercent) : bState;
-    });
+    for (const [idx, bState] of battleState.entries()) {
+      const iSt = util.compileState(bState, obj.itemEff[idx]);
+      saveChSlot['iSt' + idx] = iSt;
+      saveChSlot['bSt' + idx] = (idx !== 1 && idx !== 2 && idx !== 8 && idx !== 9) ? Math.round(bState * addGradePercent) : bState;
+    }
 
     for (let i = 0; i < 12; ++i) {//아이템 능력치
       const iSt = util.compileState(saveChSlot[`el${i}`], obj.itemEff[i+15]);
       saveChSlot['iSt' + (i+15)] = iSt;
     }
     // console.log(saveChSlot);//animal_type
-    gameData.element.forEach((elData, index) => {
+    for (const idx of gameData.element.keys()) {
       saveChSlot = {
         ...saveChSlot,
-        ['el' + index]: gameData.animal_type[gameData.ch[saveChSlot.idx].animal_type].element[index],
+        ['el' + idx]: gameData.animal_type[gameData.ch[saveChSlot.idx].animal_type].element[idx],
       }
-    });
+    }
     const element = saveChSlot.element || gameData.ch[saveChSlot.idx].element;
-    element.forEach((elData, index) => {
+    for (const elData of element) {
       if (elData === 6) { //빛속성 경우
         saveChSlot = {
           ...saveChSlot,
@@ -205,7 +205,7 @@ export const util = { //this.loadImage();
           el8: Math.round(saveChSlot.el8 + 50 * (obj.grade / 5)),
         }
       }
-    });
+    }
     saveChSlot = {
       ...saveChSlot,
       itemEff: obj.itemEff,
@@ -229,14 +229,14 @@ export const util = { //this.loadImage();
         newState: {},
       }, saveData, gameData)
     } else if (dataObj.slotIdx === "all") { //슬롯설정이 없으면 전체 캐릭 실행
-      saveCh.forEach((chData, idx) => {
+      for (const idx of saveCh.keys()) {
         const itemEff = util.getItemEff(idx, saveCh, gameItem);
         saveCh[idx] = util.saveLvState(idx, {
           itemEff: itemEff,
           grade: saveCh[idx].grade || gameData.ch[saveCh[idx].idx].grade,
           newState: {},
         }, saveData, gameData);
-      });
+      }
     }
     return {
       ...saveData,
@@ -252,9 +252,9 @@ export const util = { //this.loadImage();
     }
     //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(21),암(22),수(23),화(24),풍(25),지(26), 진형(100)
     let effData = [];
-    saveItems.forEach((item) => {
+    for (const item of saveItems) {
       if(Object.keys(item).length !== 0){
-        item.baseEff.forEach((eff) => {
+        for (const eff of item.baseEff) {
           if (effData[eff.type] === undefined) {
             effData[eff.type] = {percent:0, number:0};
           }
@@ -263,8 +263,8 @@ export const util = { //this.loadImage();
           } else {
             effData[eff.type].number = effData[eff.type].number + parseInt(eff.num[item.grade - 1]);
           }
-        });
-        item.addEff.forEach((eff) => {
+        }
+        for (const eff of item.addEff) {
           if (effData[eff.type] === undefined) {
             effData[eff.type] = {percent:0, number:0};
           }
@@ -273,13 +273,13 @@ export const util = { //this.loadImage();
           } else {
             effData[eff.type].number = effData[eff.type].number + parseInt(eff.num);
           }
-        });
+        }
       }
       if(item.hole){
-        item.hole.forEach((eff)=>{
+        for (const eff of item.hole) {
           if(eff) {
             const holeItem = gameItem.hole[eff.idx].eff;
-            holeItem.forEach((holeData) => {
+            for (const holeData of holeItem) {
               if (effData[holeData.type] === undefined) {
                 effData[holeData.type] = {percent:0, number:0};
               }
@@ -288,12 +288,12 @@ export const util = { //this.loadImage();
               } else {
                 effData[holeData.type].number = effData[holeData.type].number + parseInt(holeData.num);
               }
-            });
+            }
           }
-        });
+        }
       }
       if (item.colorEff) {
-        item.colorEff.forEach((eff) => {
+        for (const eff of item.colorEff) {
           if (effData[eff.type] === undefined) {
             effData[eff.type] = {percent:0, number:0};
           }
@@ -302,9 +302,9 @@ export const util = { //this.loadImage();
           } else {
             effData[eff.type].number = effData[eff.type].number + parseInt(eff.num);
           }
-        });
+        }
       }
-    });
+    }
     return effData;
   },
   getTotalState: (state) => {
@@ -394,12 +394,14 @@ export const util = { //this.loadImage();
         }
       }
       let effNum = [];
-      arr.forEach((effData, idx) => {
+      for (const [idx, effData] of arr.entries()) {
         effNum[idx] = [[], []];
         effNum[idx][0] = effData;
         effNum[idx][1] = effData * ((ch['bSt' + idx] + ch['iSt' + idx]) / 100);
-        if(effData === NaN) console.log('pgs');
-      })
+        if(effData === NaN) {
+          console.log('pgs');
+        }
+      }
       effArr.push(effNum);
     }
     return effArr;
@@ -413,23 +415,23 @@ export const util = { //this.loadImage();
       const lineSlot = data.no;
       const lineupArea = gameData.lineup[lineSlot];
       let lineNum = [];
-      data.entry.forEach((entry_data, entry_idx) => {
+      for (const [entry_idx, entry_data] of data.entry.entries()) {
         if (entry_data !== '') {
           let line = '';
-          lineupArea.entry.forEach((line_data, line_idx) => {
-            line_data.forEach((lineData) => {
+          for (const [line_idx, line_data] of lineupArea.entry.entries()) {
+            for (const lineData of line_data) {
               if (lineData === entry_idx) {
                 line = line_idx;
-                return;
+                break;
               }
-            });
-          });//엔트리 라인 확인
+            }
+          }//엔트리 라인 확인
           lineNum.push(line);
           peopleLength[idx] ++;
         } else {
           lineNum.push('');
         }
-      });
+      }
       return lineNum;
     });
     //lineupSt 저장
@@ -484,7 +486,11 @@ export const util = { //this.loadImage();
       if (totalEff[data.type] === undefined) {
         totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
       }
-      totalEff[data.type].base += parseInt(data.num[grade - 1]);
+      if (data.num.indexOf('~') >= 0) {
+        totalEff[data.type].base = data.num;
+      } else {
+        totalEff[data.type].base += parseInt(data.num[grade - 1]);
+      }
     });
     saveItems.addEff.forEach((data, idx) => {
       if (totalEff[data.type] === undefined) {
@@ -989,10 +995,10 @@ export const util = { //this.loadImage();
     let svg = svgData;
     const idPattern = new RegExp("==id==","g");
     svg = svg.replace(idPattern, id);
-    colorSet.forEach((data, idx) => {
+    for (const [idx, data] of colorSet.entries()) {
       const pattern = new RegExp("=="+idx+"==","g");
       svg = svg.replace(pattern, data);
-    })
+    }
     return svg;
   },
   getRgbColor: () => {
@@ -1208,12 +1214,13 @@ export const util = { //this.loadImage();
     //const selectItem = item[itemIdx];
     const id = Math.random().toString(36).substring(2, 11);
     const selectItem = itemData;
+    const grade = (option.grade > 1 ? option.grade : util.getItemGrade()) || util.getItemGrade();
     if (option.sealed) {
       const itemObj = {
         id:id,
         idx:selectItem.idx,
         part:selectItem.part,
-        grade:util.getItemGrade(),
+        grade:grade,
         itemLv:option.lv,
         slot:0,//아이템 홀착용 갯수
         hole:[],
@@ -1228,12 +1235,12 @@ export const util = { //this.loadImage();
         modifier:{ko:'미개봉',en:'Sealed'},
         weaponType:weaponType,
         sealed:true,
+        favorite:0,
       }
-      save.items[type].push(itemObj);
+      save.items[type].unshift(itemObj);
       changeSaveData(save);
       return;
     }
-    const grade = (option.grade > 1 ? option.grade : util.getItemGrade()) || util.getItemGrade();
     const slotNum = Math.round(Math.random() * selectItem.socket);
     let hole = new Array(slotNum).fill(0);
     const darkColor = util.getHslColor('dark',1),
@@ -1366,12 +1373,13 @@ export const util = { //this.loadImage();
       modifier:modifier,
       weaponType:weaponType,
       sealed:false,
+      favorite:option.favorite || 0,
     }
     if (Save) {
       if (typeof option.unpackSlot === 'number') {
         save.items[type].splice(option.unpackSlot,1,itemObj);
       } else {
-        save.items[type].push(itemObj);
+        save.items[type].unshift(itemObj);
       }
       changeSaveData(save);
     } else {
@@ -1380,21 +1388,21 @@ export const util = { //this.loadImage();
   },
   getAnimalPoint: (items, animal, addMark) => {
     let mark = 0;
-    items.forEach((item) => {
+    for (const item of items) {
       if (Object.keys(item).length !== 0 && animal === item.mark) {
         mark += item.markNum;
       }
-    });
+    }
     return mark + addMark;
   },
   getTimeGap: (saveData, changeSaveData) => {
     const time = new Date();
     if (localStorage.getItem('closeTime')) {
       const timeGap = Math.floor((time.getTime() - new Date(localStorage.getItem('closeTime')).getTime())/1000);//마지막 접속시간과 현재시간과 차이
-      saveData.ch.forEach((data) => {
+      for (const data of saveData.ch) {
         data.actionPoint += Math.floor(timeGap / 50);
         data.pointTime -= timeGap;
-      });
+      }
       changeSaveData(saveData);
       console.log(saveData, timeGap);
       localStorage.setItem('closeTime', time);
@@ -1420,30 +1428,30 @@ export const util = { //this.loadImage();
       let currentKg = 0;
       let itemSubmit = false;
       const totalKg = Math.floor(gameData.ch[saveCh.idx].st1 / 0.3)/10;
-      saveCh.items.forEach((item) => {
+      for (const item of saveCh.items) {
         if (Object.keys(item).length !== 0) {
           const itemsGrade = item.grade < 5 ? 0 : item.grade - 5;
           currentKg += item.part === 3 ? gameData.items.equip[item.part][item.weaponType][itemsGrade][item.idx].kg : gameData.items.equip[item.part][0][itemsGrade][item.idx].kg;
         }
-      });
+      }
       const chType = gameData.ch[saveCh.idx].animal_type;
       if (dataObj.data.saveItemData.sealed) { //개봉된 아이템인지 확인
         dataObj.showMsg(true);
-        dataObj.msgText("<span caution>미개봉 아이템입니다.</span>");
+        dataObj.msgText(`<span caution>${gameData.msg.sentence.unpackItem[dataObj.lang]}</span>`);
         return;
       }
       if (!dataObj.data.gameItem.limit[saveCh.job]) { //직업 착용가능 확인
         dataObj.showMsg(true);
-        dataObj.msgText("<span caution>착용이 불가능한 직업입니다.</span>");
+        dataObj.msgText(`<span caution>${gameData.msg.sentence.unpossibleJob[dataObj.lang]}</span>`);
         return;
       }
-      saveCh.items.forEach((item, itemSlot)=>{
+      for (const [itemSlot, item] of saveCh.items.entries()) {
         if (invenPart === gameData.animal_type[chType].equip[itemSlot] && overlapCheck) {//해당파트와 같은파트인지? && 빈칸인지? && 같은파트가 비었을경우 한번만 발생하게 
           if (item.idx === undefined) { //해당 슬롯이 비었을 비었을 경우
             currentKg += dataObj.data.gameItem.kg
             if (currentKg > totalKg) { //가능 무게를 넘어 갈 경우
               dataObj.showMsg(true);
-              dataObj.msgText("<span caution>착용하려는 장비가 무겁습니다.</span>");
+              dataObj.msgText(`<span caution>${gameData.msg.sentence.heavyKg[dataObj.lang]}</span>`);
             } else { //착용 가능 무게일 경우
               saveCh.items[itemSlot] = {...dataObj.saveData.items['equip'][dataObj.data.itemSaveSlot]};//캐릭에 아이템 넣기
               if (dataObj.data.saveItemData.mark === gameData.ch[saveCh.idx].animal_type) {//동물 뱃지 수정
@@ -1461,14 +1469,14 @@ export const util = { //this.loadImage();
               }));
               dataObj.showPopup(false);
               itemSubmit = true;
-              return;
+              break;
             }
           }
         }
-      });
+      }
       if (!itemSubmit) { //해당 슬롯에 아이템이 있을 경우, 아이템 다른부위로 적용된 경우 파악
         dataObj.showMsg(true);
-        dataObj.msgText("<span caution>같은 부위에 이미 다른 아이템이 착용 중입니다.</span>");
+        dataObj.msgText(`<span caution>${gameData.msg.sentence.samePart[dataObj.lang]}</span>`);
       }
     } else if (dataObj.type === 'itemRelease') { //아이템 해제
       const saveCh = sData.ch[dataObj.data.slotIdx];
@@ -1490,13 +1498,13 @@ export const util = { //this.loadImage();
         });
       });
       saveCh.newActionType = [saveCh.actionType];
-      saveCh.items.forEach((item, itemSlot) => {
+      for (const [itemSlot, item] of saveCh.items.entries()) {
         const chType = gameData.ch[saveCh.idx].animal_type;
         if (gameData.animal_type[chType].equip[itemSlot] === 3 && item.idx !== undefined) {
           const anotherWeaponActionType = gameData.items.equip[item.part][item.weaponType][0][item.idx].actionType;
           saveCh.newActionType = anotherWeaponActionType === '' ? [saveCh.actionType] : anotherWeaponActionType;
         }
-      });
+      }
       dataObj.changeSaveData(util.saveCharacter({//데이터 저장
         saveData: sData,
         slotIdx: dataObj.data.slotIdx,
@@ -1584,6 +1592,7 @@ export const util = { //this.loadImage();
         lv:dataObj.data.saveItemData.itemLv,
         sealed:false,
         unpackSlot:dataObj.data.itemSaveSlot,
+        favorite:dataObj.data.saveItemData.favorite
       }
       util.getItem(sData, gameData, dataObj.changeSaveData, option, true, dataObj.lang);
       //dataObj.changeSaveData(sData);//데이터 저장

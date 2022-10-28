@@ -74,6 +74,7 @@ const CharacterAnimalSkill = ({
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
 	const setting = useContext(AppContext).setting,
+    gameSpd = setting.speed,
     lang = setting.lang;
   const saveCh = saveData.ch[slotIdx];
   const [animalPoint, setAnimalPoint] = useState(saveCh.animalBeige);
@@ -99,7 +100,7 @@ const CharacterAnimalSkill = ({
     <>
       <div className="skillAnimal scroll-y">
         <dl className="info_group">
-          <dt>ANIMAL SKILL<span>(동물 스킬)</span>
+          <dt>ANIMAL SKILL<span>({gameData.msg.menu.animalSkill[lang]})</span>
             <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
               popupType.current = 'guide';
               setPopupOn(true);
@@ -127,7 +128,7 @@ const CharacterAnimalSkill = ({
                 });
                 saveCh.hasSkill = [...saveCh.sk];
                 changeSaveData(sData);
-              }}>{lang === 'ko' ? '스킬리셋' : 'Reset Skill'}</div>
+              }}>{gameData.msg.button.skillReset[lang]}</div>
               <div className="skill_point" dangerouslySetInnerHTML={{__html: makeMark(animalPoint, imgSet.animalType[animalTypeRef.current])}}>
               </div>
             </div>
@@ -154,13 +155,13 @@ const CharacterAnimalSkill = ({
                               let sData = {...saveData};
                               if (sData.ch[slotIdx].animalBeige <= 0) {
                                 setMsgOn(true);
-                                setMsg(lang === 'ko' ? '동물 뱃지가 부족합니다.' : 'There are not enough animal badges.');
+                                setMsg(gameData.msg.sentence.lackBadges[lang]);
                               } else {
                                 if (skIdx % 4 === 3) {
                                   if (sData.ch[slotIdx].animalBeige > 0) {
                                     if (sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv > 4) {
                                       setMsgOn(true);
-                                        setMsg(lang === 'ko' ? '스킬 최대 레벨입니다.' : 'Maximum skill level.');
+                                        setMsg(gameData.msg.sentence.maxSkillLv[lang]);
                                     } else {
                                       sData.ch[slotIdx].animalBeige -= 1;
                                       sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv += 1;
@@ -185,7 +186,7 @@ const CharacterAnimalSkill = ({
                                     if (sData.ch[slotIdx].animalBeige > 0) {
                                       if (sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv > 4) {
                                         setMsgOn(true);
-                                        setMsg(lang === 'ko' ? '스킬 최대 레벨입니다.' : 'Maximum skill level.');
+                                        setMsg(gameData.msg.sentence.maxSkillLv[lang]);
                                       } else {
                                         sData.ch[slotIdx].animalBeige -= 1;
                                         sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv += 1;
@@ -208,7 +209,7 @@ const CharacterAnimalSkill = ({
                                   } else {
                                     setMsgOn(true);
                                     const beforeSkill = gameData.skill[saveCh.animalSkill[groupIdx - 1][skIdx].idx].na[lang];
-                                    setMsg(lang === 'ko' ? `선행 스킬(${beforeSkill})의 레벨이<br/> ${groupIdx}레벨 이상 이어야 가능합니다.` : `Leading skill(${beforeSkill}) level must be<br/>at least ${groupIdx} level.`);
+                                    setMsg(gameData.msg.sentenceFn.beforeSkill(lang, beforeSkill, groupIdx));
                                   }
                                 }
                               }
@@ -229,7 +230,7 @@ const CharacterAnimalSkill = ({
                                 skillFrame:gameData.effect[sk.effAnimation].frame,
                                 frameImg:imgSet.etc.skillFrame,
                               });
-                            }}>{lang === 'ko' ? '스킬' : 'skill'}</button>
+                            }}>{gameData.msg.button.skill[lang]}</button>
                           </div>
                         )
                       }

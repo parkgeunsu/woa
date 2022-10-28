@@ -52,7 +52,7 @@ const CharacterState = ({
     <>
       <div className="state">
         <dl className="info_group ch_group">
-          <dt>STATE<span>(스탯)</span>
+          <dt>STATE<span>({gameData.msg.menu.state[lang]})</span>
             <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
               popupType.current = 'guide';
               setPopupOn(true);

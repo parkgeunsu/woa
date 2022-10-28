@@ -42,7 +42,7 @@ const CharacterRelation = ({
     <>
       <div className="relation">
         <dl className="info_group rt_group">
-          <dt>RELATION<span>(인연)</span><GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
+          <dt>RELATION<span>({gameData.msg.menu.relation[lang]})</span><GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
               popupType.current = 'guide';
               setPopupOn(true);
               setPopupInfo({

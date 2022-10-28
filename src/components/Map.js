@@ -440,7 +440,7 @@ const Map = ({
 				</GachaInfo>
 			</GachaWrap>
 			{/* <ModalContainer>
-				{modalOn && <Modal fn={} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {handleModal()}} gameData={gameData}/>}
+				{modalOn && <Modal fn={} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} lang={lang} onClose={() => {handleModal()}} gameData={gameData}/>}
 			</ModalContainer> */}
 		</>
   );

@@ -3,27 +3,27 @@ import ModalContainer from 'components/ModalContainer';
 import styled from 'styled-components';
 import { Prices } from 'components/Components';
 
-const buttonEvent = (dataInfo, btInfo, fn, saveData, gameData, changeSaveData) => {
+const buttonEvent = (dataInfo, btInfo, fn, saveData, gameData, changeSaveData, lang) => {
 	switch(btInfo.action) {
 		case 'gacha':
-			fn('start', dataInfo, saveData, gameData, changeSaveData);
+			fn('start', dataInfo, saveData, gameData, changeSaveData, lang);
 			break;
 		case 'popClose':
 			break;
 		case 'itemEn':
-			fn(dataInfo, saveData, gameData, changeSaveData);
+			fn(dataInfo, saveData, gameData, changeSaveData, lang);
 			break;
 		default:
 			break;
 	}
 }
-const typeAsContent = (type, dataObj, fn, saveData, gameData, changeSaveData) => {
+const typeAsContent = (type, dataObj, fn, saveData, gameData, changeSaveData, lang) => {
 	if (type === 'confirm') {
 		return (
 			<div className="bt_box" flex="true">
 				{dataObj?.bt && dataObj.bt.map((btData, idx) => {
 					return <button className="button_small" key={idx} onClick={() => {
-							buttonEvent(dataObj.info, dataObj.bt[idx], fn, saveData, gameData, changeSaveData);
+							buttonEvent(dataObj.info, dataObj.bt[idx], fn, saveData, gameData, changeSaveData, lang);
 						}} msg="true">{btData.txt}</button>
 				})}
 			</div>
@@ -60,6 +60,7 @@ const Modal = ({
 	saveData,
 	gameData,
 	changeSaveData,
+	lang,
 	fn
 }) => {
 	return (
@@ -75,7 +76,7 @@ const Modal = ({
 								</div>
 							</>
 						)}
-						{typeAsContent(type, dataObj, fn, saveData, gameData, changeSaveData)}
+						{typeAsContent(type, dataObj, fn, saveData, gameData, changeSaveData, lang)}
 					</div>
 				</div>
 				<div className="modal_close">

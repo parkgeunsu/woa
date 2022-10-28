@@ -57,7 +57,7 @@ const CharacterElement = ({
     <>
       <div className="element">
         <dl className="info_group ch_group">
-          <dt>ELEMENT<span>(속성)</span>
+          <dt>ELEMENT<span>({gameData.msg.menu.element[lang]})</span>
             <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
               popupType.current = 'guide';
               setPopupOn(true);

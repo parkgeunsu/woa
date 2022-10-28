@@ -266,21 +266,21 @@ export const items = {
         //type 장착 타입
         //stone 아이템창 색상
         {idx:0,grade:0,imgCate:'itemHole',display:0,na:'',color:'transparent',kg:0,price:0,action:9,eff:[]},
-        {idx:1,grade:1,imgCate:'itemHole',display:1,na:{ko:'큰 다이아몬드',en:''},colorSet:'fff',color:'rgba(255,255,255,.8)',kg:0.1,price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:['30']}]},//
+        {idx:1,grade:3,imgCate:'itemHole',display:1,na:{ko:'큰 다이아몬드',en:''},colorSet:'fff',color:'rgba(255,255,255,.8)',kg:0.1,price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:['30']}]},//
         {idx:2,grade:2,imgCate:'itemHole',display:2,na:{ko:'다이아몬드',en:''},colorSet:'fff',color:'rgba(255,255,255,.6)',kg:0.2,price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:['20']}]},
-        {idx:3,grade:3,imgCate:'itemHole',display:3,na:{ko:'작은 다이아몬드',en:''},colorSet:'fff',color:'rgba(255,255,255,.4)',kg:0.4,price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:['10']}]},
-        {idx:4,grade:4,imgCate:'itemHole',display:4,na:{ko:'큰 에메랄드',en:''},colorSet:'0f0',color:'rgba(0,255,0,.8)',kg:0.7,price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:0,num:['30']}]},
-        {idx:5,grade:1,imgCate:'itemHole',display:5,na:{ko:'에메랄드',en:''},colorSet:'0f0',color:'rgba(0,255,0,.6)',kg:0.1,price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:0,num:['20']}]},//HP
-        {idx:6,grade:2,imgCate:'itemHole',display:6,na:{ko:'작은 에메랄드',en:''},colorSet:'0f0',color:'rgba(0,255,0,.4)',kg:0.2,price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:0,num:['10']}]},
+        {idx:3,grade:1,imgCate:'itemHole',display:3,na:{ko:'작은 다이아몬드',en:''},colorSet:'fff',color:'rgba(255,255,255,.4)',kg:0.4,price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:4,num:['10']}]},
+        {idx:4,grade:3,imgCate:'itemHole',display:4,na:{ko:'큰 에메랄드',en:''},colorSet:'0f0',color:'rgba(0,255,0,.8)',kg:0.7,price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:0,num:['30']}]},
+        {idx:5,grade:2,imgCate:'itemHole',display:5,na:{ko:'에메랄드',en:''},colorSet:'0f0',color:'rgba(0,255,0,.6)',kg:0.1,price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:0,num:['20']}]},//HP
+        {idx:6,grade:1,imgCate:'itemHole',display:6,na:{ko:'작은 에메랄드',en:''},colorSet:'0f0',color:'rgba(0,255,0,.4)',kg:0.2,price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:0,num:['10']}]},
         {idx:7,grade:3,imgCate:'itemHole',display:7,na:{ko:'큰 토파즈',en:''},colorSet:'ff0',color:'rgba(255,255,0,.8)',kg:0.4,price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:6,num:['30']}]},
-        {idx:8,grade:4,imgCate:'itemHole',display:8,na:{ko:'토파즈',en:''},colorSet:'ff0',color:'rgba(255,255,0,.6)',kg:0.7,price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:6,num:['20']}]},
+        {idx:8,grade:2,imgCate:'itemHole',display:8,na:{ko:'토파즈',en:''},colorSet:'ff0',color:'rgba(255,255,0,.6)',kg:0.7,price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:6,num:['20']}]},
         {idx:9,grade:1,imgCate:'itemHole',display:9,na:{ko:'작은 토파즈',en:''},colorSet:'ff0',color:'rgba(255,255,0,.4)',kg:0.1,price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:6,num:['10']}]},//공
-        {idx:10,grade:2,imgCate:'itemHole',display:10,na:{ko:'큰 루비',en:''},colorSet:'f00',color:'rgba(255,0,0,.8)',kg:0.2,price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:3,num:['30']}]},
-        {idx:11,grade:3,imgCate:'itemHole',display:11,na:{ko:'루비',en:''},colorSet:'f00',color:'rgba(255,0,0,.6)',kg:0.4,price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:3,num:['20']}]},
-        {idx:12,grade:4,imgCate:'itemHole',display:12,na:{ko:'작은 루비',en:''},colorSet:'f00',color:'rgba(255,0,0,.4)',kg:0.7,price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:3,num:['10']}]},
-        {idx:13,grade:1,imgCate:'itemHole',display:13,na:{ko:'큰 자수정',en:''},colorSet:'f0f',color:'rgba(255,0,255,.8)',kg:0.1,price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:5,num:['30']}]},//방
+        {idx:10,grade:3,imgCate:'itemHole',display:10,na:{ko:'큰 루비',en:''},colorSet:'f00',color:'rgba(255,0,0,.8)',kg:0.2,price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:3,num:['30']}]},
+        {idx:11,grade:2,imgCate:'itemHole',display:11,na:{ko:'루비',en:''},colorSet:'f00',color:'rgba(255,0,0,.6)',kg:0.4,price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:3,num:['20']}]},
+        {idx:12,grade:1,imgCate:'itemHole',display:12,na:{ko:'작은 루비',en:''},colorSet:'f00',color:'rgba(255,0,0,.4)',kg:0.7,price:1000,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:3,num:['10']}]},
+        {idx:13,grade:3,imgCate:'itemHole',display:13,na:{ko:'큰 자수정',en:''},colorSet:'f0f',color:'rgba(255,0,255,.8)',kg:0.1,price:100,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:5,num:['30']}]},//방
         {idx:14,grade:2,imgCate:'itemHole',display:14,na:{ko:'자수정',en:''},colorSet:'f0f',color:'rgba(255,0,255,.6)',kg:0.2,price:200,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:5,num:['20']}]},
-        {idx:15,grade:3,imgCate:'itemHole',display:15,na:{ko:'작은 자수정',en:''},colorSet:'f0f',color:'rgba(255,0,255,.4)',kg:0.4,price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:5,num:['10']}]},'','','','','',
+        {idx:15,grade:1,imgCate:'itemHole',display:15,na:{ko:'작은 자수정',en:''},colorSet:'f0f',color:'rgba(255,0,255,.4)',kg:0.4,price:400,txt:{ko:'마력이 깃든 돌',en:''},action:9,eff:[{type:5,num:['10']}]},'','','','','',
         '','','','','','','','','','',
         '','','','','','','','','','',
         '','','','','','','','','','',
@@ -288,7 +288,8 @@ export const items = {
         '','','','','','','','','','',
         '','','','','','','','','','',
         '','','','','','','','','','',
-        '','','','','','','','','','',
+        '','','','','','','','','',
+        {idx:100,grade:2,imgCate:'itemHole',display:100,na:{ko:'빈 염료병',en:''},kg:0.05,price:1000,txt:{ko:'염료를 소분할때 사용 ',en:''},colorSet:'transparent',color:'rgba(255,255,255,0)',size:0,eff:[{type:21,num:['3']}]},
         {idx:101,grade:2,imgCate:'itemHole',display:101,na:{ko:'작은 백 염료',en:''},kg:0.1,price:1000,txt:{ko:'작은 백색 염료 ',en:''},colorSet:'fff',color:'rgba(255,255,255,.4)',size:0,eff:[{type:21,num:['3']}]},
         {idx:102,grade:2,imgCate:'itemHole',display:102,na:{ko:'작은 흑 염료',en:''},kg:0.1,price:1000,txt:{ko:'작은 흑색 염료 ',en:''},colorSet:'000',color:'rgba(0,0,0,.4)',size:0,eff:[{type:22,num:['3']}]},
         {idx:103,grade:2,imgCate:'itemHole',display:103,na:{ko:'작은 청록 염료',en:''},kg:0.1,price:1000,txt:{ko:'작은 청록색 염료 ',en:''},colorSet:'088',color:'rgba(0,137,137,.4)',size:0,eff:[{type:0,num:['25']}]},

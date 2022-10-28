@@ -16,7 +16,7 @@ const CharacterApplyState = ({
   const [popupOn, setPopupOn] = useState(false);
   const popupType = useRef('');
   const [popupInfo, setPopupInfo] = useState({});
-  const BattleStateName = [{ko:'체력',en:'HP'},{ko:'행동',en:'SP'},{ko:'행동회복',en:'RSP'},{ko:'공격',en:'ATK'},{ko:'방어',en:'DEF'},{ko:'술법공격',en:'MAK'},{ko:'술법방어',en:'MDF'},{ko:'체력회복',en:'RCV'},{ko:'속도',en:'SPD'},{ko:'행운',en:'LUK'}];
+  const BattleStateName = ['hp','sp','rsp','atk','def','mak','mdf','rcv','spd','luk'];
   const scrollMove = (e) => {
     //e.stopPropagation();
   }
@@ -24,7 +24,7 @@ const CharacterApplyState = ({
     <>
       <div className="apply_state scroll-y">
         <dl className="info_group ach_group">
-          <dt>TOTAL STATE<span>(총스탯)</span>
+          <dt>TOTAL STATE<span>({gameData.msg.menu.totalState[lang]})</span>
             <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
               popupType.current = 'guide';
               setPopupOn(true);
@@ -39,8 +39,8 @@ const CharacterApplyState = ({
             <ul className="total_states">
               { BattleStateName && BattleStateName.map((bData, idx) => {
                 return (
-                  <li key={idx} className={BattleStateName[idx].en.toLowerCase()}>
-                    <span className="name">{BattleStateName[idx].ko}<b>{BattleStateName[idx].en}</b></span>
+                  <li key={idx} className={bData}>
+                    <span className="name">{gameData.msg.state[bData].ko}<b>{gameData.msg.state[bData].en}</b></span>
                     <span className="current">{`${saveData.ch[slotIdx]['bSt'+idx]} + `}<b>{`${saveData.ch[slotIdx]['iSt'+idx]}`}</b></span>
                     <span className="total">{saveData.ch[slotIdx]['bSt'+idx] + saveData.ch[slotIdx]['iSt'+idx]}</span>
                   </li>

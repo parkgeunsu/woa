@@ -57,7 +57,7 @@ const CharacterSkill = ({
     <>
       <div className="skill scroll-y">
         <dl className="info_group">
-          <dt>SKILL<span>(스킬)</span>
+          <dt>SKILL<span>({gameData.msg.menu.skill[lang]})</span>
             <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
               popupType.current = 'guide';
               setPopupOn(true);

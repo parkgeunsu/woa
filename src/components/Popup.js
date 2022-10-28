@@ -731,7 +731,7 @@ const Popup = ({
     lang = setting.lang;
   const [content, setContent] = useState(typeAsContent(type, dataObj, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, showPopup, lang));
   useLayoutEffect(() => {
-    if (dataObj.saveItemData.sealed) {
+    if (dataObj?.saveItemData?.sealed) {
       setContent(typeAsContent(type, {
         ...dataObj,
         saveItemData: saveData.items[dataObj.type][dataObj.itemSaveSlot],

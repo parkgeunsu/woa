@@ -176,6 +176,7 @@ import itemHole12 from 'images/item/jewel12.png';
 import itemHole13 from 'images/item/jewel13.png';
 import itemHole14 from 'images/item/jewel14.png';
 import itemHole15 from 'images/item/jewel15.png';
+import colorantNone from 'images/item/colorantNone.png';
 import colorant0 from 'images/item/colorant0.png';
 import colorant1 from 'images/item/colorant1.png';
 import colorant2 from 'images/item/colorant2.png';
@@ -407,7 +408,7 @@ export const itemHole = [
   '','','','','','','','','','',
   '','','','','','','','','','',
   '','','','','','','','','','',
-  '','','','','','','','','','',
+  '','','','','','','','','',colorantNone,
   colorant0,colorant1,colorant2,colorant3,colorant4,colorant5,colorant6,colorant7,colorant8,colorant9,colorant10,colorant11,colorant12,colorant13,colorant14,'','','','','',
   colorant20,colorant21,colorant22,colorant23,colorant24,colorant25,colorant26,colorant27,colorant28,colorant29,colorant30,colorant31,colorant32,colorant33,colorant34,'','','','','',
   colorant40,colorant41,colorant42,colorant43,colorant44,colorant45,colorant46,colorant47,colorant48,colorant49,colorant50,colorant51,colorant52,colorant53,colorant54

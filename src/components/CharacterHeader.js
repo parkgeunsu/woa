@@ -28,6 +28,9 @@ const ChracterHeader = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
+	const setting = useContext(AppContext).setting,
+		gameSpd = setting.speed,
+		lang = setting.lang;
   const currentTime = useContext(AppContext).currentTime;
   const saveExp = {
     current: saveData.ch[slotIdx].exp,
@@ -38,14 +41,14 @@ const ChracterHeader = ({
     max: gameData.hasMaxExp[saveData.ch[slotIdx].grade]
   }
   const chMenu = [
-    {backImg: imgSet.menu[0], title: "카드기본"},
-    {backImg: imgSet.menu[1], title: "속성치"},
-    {backImg: imgSet.menu[2], title: "능력치"},
-    {backImg: imgSet.menu[3], title: "동물스킬"},
-    {backImg: imgSet.menu[4], title: "스킬"},
-    {backImg: imgSet.menu[5], title: "인연"},
-    {backImg: imgSet.menu[6], title: "장비"},
-    {backImg: imgSet.menu[7], title: "적용치"},
+    {idx:0},
+    {idx:1},
+    {idx:2},
+    {idx:3},
+    {idx:4},
+    {idx:5},
+    {idx:6},
+    {idx:7},
   ];
   return (
     <>
@@ -60,7 +63,7 @@ const ChracterHeader = ({
           </li>
           <li className="exp" flex-h="true">
             <div className="gauge" flex-center="true">
-              <span className="na">경험치</span>
+              <span className="na">{gameData.msg.info.exp[lang]}</span>
               <span className="exp_bar">
                 <span className="gradient_dark transition" style={{ width: util.getPercent(saveExp.max, saveExp.current)+'%'}}></span>
               </span>
@@ -71,7 +74,7 @@ const ChracterHeader = ({
           </li>
           <li className="has_exp" flex-h="true">
             <div className="gauge" flex-center="true">
-              <span className="na">누적경험치</span>
+              <span className="na">{gameData.msg.info.cumulativeExp[lang]}</span>
               <span className="exp_bar">
                 <span className="gradient_dark transition" style={{ width: util.getPercent(saveHasExp.max, saveHasExp.current)+'%'}}></span>
               </span>
@@ -84,7 +87,7 @@ const ChracterHeader = ({
         <div className="ch_menu transition">
         {chMenu && chMenu.map((data, idx) => {
           return (
-            <ChMenuButton className={`ch_menu_bt ${idx === chPage ? "on" : ""}`} key={`chmenubutton${idx}`} onClick={() => {changeChPage(idx)}} backImg={data.backImg} title={data.title}>{idx}</ChMenuButton>
+            <ChMenuButton className={`ch_menu_bt ${idx === chPage ? "on" : ""}`} key={`chmenubutton${idx}`} onClick={() => {changeChPage(idx)}} backImg={imgSet.menu[idx]}/>
           )
         })}
         </div>

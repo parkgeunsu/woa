@@ -87,7 +87,7 @@ const CharacterItems = ({
       <div className="items">
         <dl className="info_group it_group">
           <dt flex="true">
-            <div><em>ITEM</em><span>(아이템 착용)</span>
+            <div><em>EQUIPMENT</em><span>({gameData.msg.menu.equipment[lang]})</span>
               <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
                 popupType.current = 'guide';
                 setPopupOn(true);

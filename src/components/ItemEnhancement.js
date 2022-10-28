@@ -23,8 +23,8 @@ const ItemPic = styled.div`
   display:inline-block;width:100%;height:100%;background-image:url(${({itemPic}) => itemPic});background-size:100%;background-repeat:no-repeat;
 `;
 const itemEnList = [
-	{na:{ko:"소켓합성", en:"Socket"},icon:"iconSocket"},
-	{na:{ko:"등급진화", en:"Upgrade"},icon:"iconUpgrade"},
+	{na:'socket',icon:"iconSocket"},
+	{na:'class',icon:"iconUpgrade"},
 ];
 const ColorArea = styled.div`
 	&:after{
@@ -226,7 +226,7 @@ const colorantSetColor = (color) => {
 			break;
 	}
 };
-const removeSocket = (data, saveData, gameData, changeSaveData) => {
+const removeSocket = (data, saveData, gameData, changeSaveData, lang) => {
 	let sData = {...saveData};
 	const removeIdx = sData.items.etc.findIndex((itemEtc) => itemEtc.idx === 22);
 	if (removeIdx >= 0) {//보석제거 집게(22) 있을 경우
@@ -247,15 +247,16 @@ const removeSocket = (data, saveData, gameData, changeSaveData) => {
 		data.setMainColor(saveColor);
 		
 		data.showMsg(true);
-    data.msgText('<span remove>-500</span><br/><span remove>-1 보석제거 집게</span>');
+    data.msgText(`<span remove>-500</span><br/><span remove>-1 ${gameData.items.etc[22].na[lang]}</span>`);
 		changeSaveData(sData);
 	} else {
 		data.showMsg(true);
-    data.msgText('보석제거 집게가 부족합니다.');
+		//여기 요기 작업 수정
+    data.msgText(gameData.msg.sentenceFn.lackItem(lang, gameData.items.etc[22].na));
 	}
 	console.log(data);
 }
-const upgrade = (data, saveData, gameData, changeSaveData) => {
+const upgrade = (data, saveData, gameData, changeSaveData, lang) => {
 	let sData = {...saveData};
 	const removeIdx = sData.items.etc.findIndex((itemEtc) => itemEtc.idx === (7 + data.upgradeItem.game.grade));
 	if (removeIdx >= 0) {//아이템 강화책(8-10) 있을 경우
@@ -277,7 +278,7 @@ const upgrade = (data, saveData, gameData, changeSaveData) => {
 		}
 	} else {
 		data.showMsg(true);
-    data.msgText('아이템강화서가 부족합니다.');
+    data.msgText(gameData.msg.sentenceFn.lackItem(lang, gameData.items.etc[7 + data.upgradeItem.game.grade].na));
 	}
 	console.log(data, data.upgradeItem.save.grade)
 }
@@ -344,7 +345,7 @@ const ItemEnhancement = ({
 		if (type === 'socket') {
 			setModalInfo({
 				type: 'confirm',
-				msg: `소켓 보석을 제거 하시겠습니까?<br/><span class="des">제거 후 보석은 회수되지 않습니다.</span>`,
+				msg: `${gameData.msg.sentence.removeSocket[lang]}<br/><span class="des">${gameData.msg.sentence.notReclaimed[lang]}</span>`,
 				info: {
 					item:selectItem1,
 					socket:selectItem2,
@@ -353,12 +354,12 @@ const ItemEnhancement = ({
 					msgText:setMsg,
 					setMainColor:setMainColor,
 				},
-				bt: [{txt:'사용',action:'itemEn'},{txt:'취소',action:'popClose'}],
+				bt: [{txt:gameData.msg.button.use[lang],action:'itemEn'},{txt:gameData.msg.button.cancel[lang],action:'popClose'}],
 			});
 		} else {
 			setModalInfo({
 				type: 'confirm',
-				msg: `업그레이드를 하시겠습니까?`,
+				msg: gameData.msg.sentence.upgradeQuestion[lang],
 				info: {
 					item:selectItem1,
 					showMsg:setMsgOn,
@@ -369,7 +370,7 @@ const ItemEnhancement = ({
 					timeoutRef:timeoutRef,
 					upgradePercent:upgradePercent,
 				},
-				bt: [{txt:'사용',action:'itemEn'},{txt:'취소',action:'popClose'}],
+				bt: [{txt:gameData.msg.button.use[lang],action:'itemEn'},{txt:gameData.msg.button.cancel[lang],action:'popClose'}],
 			});
 		}
     setModalOn(true);
@@ -406,8 +407,8 @@ const ItemEnhancement = ({
 	}, [saveData]);
   return (
 		<>
-			<ItemEnWrap className="itemEnhancement_wrap" backImg={imgSet.back[2]} >
-				<div className="inven_menu transition">
+			<ItemEnWrap className="wrap" backImg={imgSet.back[2]} >
+				<div className="tab_menu transition">
 					{itemEnList && itemEnList.map((data, idx) => {
 						return (
 								<li key={`itemEn_${idx}`} className={idx === selectTab ? "on" : ""} onClick={() => {
@@ -418,8 +419,8 @@ const ItemEnhancement = ({
 										clearTimeout(timeoutRef.current);
 									}
 								}}>
-									<button className="itemEn_menu_button">
-										<span className="name">{`${lang === "ko" ? data.na.ko : data.na.en}`}</span>
+									<button className="tab_menu_button">
+										<span className="name">{gameData.msg.menu[data.na][lang]}</span>
 										<ShopIcon className="icon" icoType={imgSet.icon[data.icon]} />
 									</button>
 								</li>
@@ -492,13 +493,13 @@ const ItemEnhancement = ({
 										changeSaveData(sData);
 										setPossibleHole(pHole);
 										setColorantIdx(possibleColorantIdx);
-									}}>{lang === 'ko' ? '확정' : 'Confirm'}</button>
+									}}>{gameData.msg.button.confirm[lang]}</button>
 								</div>
 								{itemEffShow && <ItemTotalEff frameBack={imgSet.etc.frameChBack} className="main_itemEff scroll-y" color={gameData.itemGrade.color[selectItem1.save.grade]}>
 									<ul>
 										<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.save.colorantSet ? util.getColorant(selectItem1.save.colorantSet, gameData).na[lang] : ''} ${selectItem1.save.modifier[lang]} ${selectItem1.game.na[lang]}`}}></span></li>
 										<li className="item_list item_eff">
-											<div className="item_title">{lang === 'ko' ? '아이템 효과' : 'Item effect'}</div>
+											<div className="item_title">{gameData.msg.itemInfo.itemEffect[lang]}</div>
 											{mItemEff && mItemEff.map((eff, idx) => {
 												return (
 													<div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
@@ -508,7 +509,7 @@ const ItemEnhancement = ({
 										<div style={{width:"100%"}}>
 											{selectItem1.save.baseEff.length > 0 && (
 												<li className="item_list item_eff">
-													<div className="item_title">{lang === 'ko' ? '기본 효과' : 'Base effect'}</div>
+													<div className="item_title">{gameData.msg.itemInfo.basicEffect[lang]}</div>
 													{selectItem1.save.baseEff.map((data, idx) => {
 														const grade = selectItem1.save.grade > 3 ? 3 : selectItem1.save.grade - 1;
 														return (
@@ -519,7 +520,7 @@ const ItemEnhancement = ({
 											)}
 											{selectItem1.save.addEff.length > 0 && (
 												<li className="item_list item_eff">
-													<div className="item_title">{lang === 'ko' ? '추가 효과' : 'Additional effect'}</div>
+													<div className="item_title">{gameData.msg.itemInfo.addEffect[lang]}</div>
 													{selectItem1.save.addEff.map((data, idx) => {
 														return (
 															<div key={`add${idx}`} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
@@ -529,7 +530,7 @@ const ItemEnhancement = ({
 											)}
 											{selectItem1.save.hole.length > 0 && (
 												<li className="item_list item_hole">
-													<div className="item_title">{lang === 'ko' ? '소켓 효과' : 'Socket effect'}</div>
+													<div className="item_title">{gameData.msg.itemInfo.socketEffect[lang]}</div>
 													{mItemEff && mItemEff.map((data, idx) => {
 														if (data.hole > 0) {
 															return (
@@ -734,7 +735,7 @@ const ItemEnhancement = ({
 										if (typeof selectItem3.select === 'number') {
 											if (selectItem1.save.grade > 3) {
 												setMsgOn(true);
-												setMsg('최대 등급입니다.');
+												setMsg(gameData.msg.sentence.maxGrade[lang]);
 											} else {
 												if (selectItem1.save.part === 3) { //무기면
 													if (selectItem3.save.idx > 5) { //숫돌이면
@@ -745,7 +746,7 @@ const ItemEnhancement = ({
 														handleModal('upgrade');
 													} else {
 														setMsgOn(true);
-														setMsg('숫돌을 선택해 주세요.');
+														setMsg(gameData.msg.sentence.selectWhetstone[lang]);
 													}
 												} else { //방어구면
 													if (selectItem3.save.idx <= 5) { //대장장이망치면
@@ -756,15 +757,15 @@ const ItemEnhancement = ({
 														handleModal('upgrade');
 													} else {
 														setMsgOn(true);
-														setMsg('대장장이 망치를 선택해 주세요.');
+														setMsg(gameData.msg.sentence.selectHammer[lang]);
 													}
 												}
 											}
 										} else {
 											setMsgOn(true);
-    									setMsg('업그레이드 도구를 선택해주세요.');
+    									setMsg(gameData.msg.sentence.selectUpgradeTools[lang]);
 										}
-									}}>{lang === 'ko' ? '업그레이드' : 'Upgrade'}</button>
+									}}>{gameData.msg.button.upgrade[lang]}</button>
 								</div>
 								<UpgradeArea className={`itemEn_upgradeArea`}>
 									<div className="upgrade_item" onClick={() => {
@@ -788,7 +789,7 @@ const ItemEnhancement = ({
 										<ul>
 											<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.save.colorantSet ? util.getColorant(selectItem1.save.colorantSet, gameData).na[lang] : ''} ${selectItem1.save.modifier[lang]} ${selectItem1.game.na[lang]}`}}></span></li>
 											<li className="item_list item_eff">
-												<div className="item_title">{lang === 'ko' ? '아이템 효과' : 'Item effect'}</div>
+												<div className="item_title">{gameData.msg.itemInfo.itemEffect[lang]}</div>
 												{mItemEff && mItemEff.map((eff, idx) => {
 													return (
 														<div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
@@ -798,7 +799,7 @@ const ItemEnhancement = ({
 											<div style={{width:"100%"}}>
 												{selectItem1.save.baseEff.length > 0 && (
 													<li className="item_list item_eff">
-														<div className="item_title">{lang === 'ko' ? '기본 효과' : 'Base effect'}</div>
+														<div className="item_title">{gameData.msg.itemInfo.basicEffect[lang]}</div>
 														{selectItem1.save.baseEff.map((data, idx) => {
 															const grade = selectItem1.save.grade > 3 ? 3 : selectItem1.save.grade - 1;
 															return (
@@ -809,7 +810,7 @@ const ItemEnhancement = ({
 												)}
 												{selectItem1.save.addEff.length > 0 && (
 													<li className="item_list item_eff">
-														<div className="item_title">{lang === 'ko' ? '추가 효과' : 'Additional effect'}</div>
+														<div className="item_title">{gameData.msg.itemInfo.addEffect[lang]}</div>
 														{selectItem1.save.addEff.map((data, idx) => {
 															return (
 																<div key={`add${idx}`} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
@@ -819,7 +820,7 @@ const ItemEnhancement = ({
 												)}
 												{selectItem1.save.hole.length > 0 && (
 													<li className="item_list item_hole">
-														<div className="item_title">{lang === 'ko' ? '소켓 효과' : 'Socket effect'}</div>
+														<div className="item_title">{gameData.msg.itemInfo.socketEffect[lang]}</div>
 														{mItemEff && mItemEff.map((data, idx) => {
 															if (data.hole > 0) {
 																return (
@@ -905,7 +906,7 @@ const ItemEnhancement = ({
 				</div>
 			</ItemEnWrap>
 			<ModalContainer>
-				{modalOn && <Modal fn={modalData.fn} payment={modalData.payment} imgSet={imgSet} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {
+				{modalOn && <Modal fn={modalData.fn} payment={modalData.payment} imgSet={imgSet} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} lang={lang} onClose={() => {
 					setModalOn(false);
 				}} gameData={gameData}/>}
 			</ModalContainer>

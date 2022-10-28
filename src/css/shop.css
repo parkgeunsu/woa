@@ -1,14 +1,4 @@
 @charset "utf-8";
-.shop_wrap{display:flex;position:absolute;left:0;right:0;top:0;bottom:0;flex-direction:column;padding:50px 0 0 0;width:100%;height:100%;box-sizing:border-box;overflow:hidden;}
-
-.shop_menu{display:flex;padding:0 20px;flex-grow:0;}
-.shop_menu li{flex:1;}
-.shop_menu_button{display:block;padding:10px 0 5px 0;width:100%;background:rgba(255,255,255,.5);color:#000;border-radius:20px 20px 0 0;text-align:center;}
-.shop_menu li.on button{background-color:rgba(0,0,0,.5);color:#fff;font-weight:600;}
-.shop_menu_button .name{display:inline-block;vertical-align:middle;}
-.shop_menu_button .icon{display:inline-block;margin:0 0 0 10px;width:20px;height:20px;}
-.shop_menu_button .menu{padding:0 20px;}
-
 .shop_area{display:flex;height:100%;flex-direction:column;padding:0 20px 10px;flex-grow:1;overflow:hidden;}
 .shop_area .shop_top{flex-wrap:wrap;border-radius:0 0 20px 20px;background:rgba(0,0,0,.5);height:50%;}
 .shop_area .shop_bottom{display:flex;margin:10px 0 0 0;height:50%;}
@@ -19,7 +9,12 @@
 .shop_area .item_select1 .item_fix{padding:5px;border-bottom:5px double #ffac2f;}
 .shop_area .item_select2 .item_fix{padding:5px;border-bottom:5px double #e14040;}
 .shop_area .item_select .item{position:relative;width:50px;height:50px;}
-.shop_area .item_select .item:after{display:block;content:"";width:100%;height:100%;}
+.shop_area .item_select .item:after{position:absolute;left:50%;top:2px;transform:translate(-50%,0);color:#fff;text-shadow:-1px -1px 0 #fff,1px 1px 0 #000;}
+.shop_area .item_select .item.favorite1:after{content:'■';color:#ffff00;}
+.shop_area .item_select .item.favorite2:after{content:'♥';color:#ff0000;}
+.shop_area .item_select .item.favorite3:after{content:'●';color:#ff00ff;}
+.shop_area .item_select .item.favorite4:after{content:'♠';color:#00ffff;}
+.shop_area .item_select .item.favorite5:after{content:'♣';color:#00ff00;}
 .shop_area .item_select .item.sealed svg{filter:brightness(0.3) drop-shadow(0px 0px 1px #fff);}
 .shop_area .item_select .item.sealed:before{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);content:'?';z-index:1;font-size:40px;}
 .shop_area .item_select svg{width:100%;height:100%;}

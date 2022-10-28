@@ -12,6 +12,8 @@ import { skill } from 'gamedata/skill';
 import { scenario } from 'gamedata/scenario';
 import { effect } from 'gamedata/effect';
 import { guide } from 'gamedata/guide';
+import { recipe } from 'gamedata/recipe';
+import { msg } from 'gamedata/msg';
 
 export const version = "0.1";
 export const gameData = {
@@ -49,4 +51,6 @@ export const gameData = {
     colorSvg:colorSvg,
     prices:prices,
     guide:guide,
+    recipe:recipe,
+    msg:msg,
   }
