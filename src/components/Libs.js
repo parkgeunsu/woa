@@ -80,6 +80,10 @@ export const util = { //this.loadImage();
         ['bSt' + idx]: (idx !== 1 && idx !== 2 && idx !== 8 && idx !== 9) ? Math.round(bState * addGradePercent) : bState,
       }
     }
+    for (let i = 0; i < 12; ++i) {//아이템 능력치
+      const iSt = util.compileState(enemy[`el${i}`], itemEff[i+15]);
+      enemy['iSt' + (i+15)] = iSt;
+    }
     for (const idx of gameData.element.keys()) {
       enemy = {
         ...enemy,

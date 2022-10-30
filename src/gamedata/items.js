@@ -355,6 +355,18 @@ export const items = {
     material:[//재료
         {idx:0,grade:1,imgCate:'itemMaterial',display:0,na:{ko:'식량',en:''},kg:10,price:100,action:'',invenUse:false,txt:{ko:'항해 할때 먹는 식량.',en:''},eff:['?']},
         {idx:1,grade:1,imgCate:'itemMaterial',display:1,na:{ko:'물',en:''},kg:10,price:100,action:'',invenUse:false,txt:{ko:'항해 할때 마시는 물.',en:''},eff:['?']},
+        {idx:2,grade:1,imgCate:'itemMaterial',display:1,na:{ko:'쌀',en:''},kg:10,price:100,action:'',invenUse:false,txt:{ko:'항해 할때 마시는 물.',en:''},eff:['?']},
+        //밀, 쌀,보리,현미,수수,팥,콩,커피, 카카오
+        //사탕수수, 설탕, 소금, 후추,꿀,월계수,민트, 올리브,레몬
+        //코코넛,우유, 홍차
+        //산호, 
+        //와인,치즈,데킬라, 맥주
+        //대리석,
+        //융단, 미술품, 유리공예품,도자기공예품
+        //석탄,동,은,금,진주,청동,아연,호박석,주석,상아,공작석
+        //목재, 수은, 강철, 석재
+        //비단, 마섬유, 면화 ,피혁, 양모, 모피, 목화
+        //두리안, 바나나
     ],
     etc:[
         {idx:0,grade:1,imgCate:'itemEtc',display:2,na:{ko:'동전더미(동)',en:''},kg:10,price:1000,

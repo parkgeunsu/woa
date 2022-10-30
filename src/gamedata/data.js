@@ -14,6 +14,7 @@ import { effect } from 'gamedata/effect';
 import { guide } from 'gamedata/guide';
 import { recipe } from 'gamedata/recipe';
 import { msg } from 'gamedata/msg';
+import { city } from 'gamedata/city';
 
 export const version = "0.1";
 export const gameData = {
@@ -53,4 +54,5 @@ export const gameData = {
     guide:guide,
     recipe:recipe,
     msg:msg,
+    city:city,
   }

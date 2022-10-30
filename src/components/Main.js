@@ -42,7 +42,9 @@ const Main = ({
           <ul className="menu">
             <li><MenuButton to="/character" onClick={() => {changePage("character");}}>Character</MenuButton></li>
             <li><MenuButton to="/inven" onClick={() => {changePage("inven");}}>Inven</MenuButton></li>
-            <li><MenuButton to="/shop" onClick={() => {changePage("shop");}}>Shop</MenuButton></li>
+            <li><MenuButton to="/equipmentShop" onClick={() => {changePage("equipmentShop");}}>Equipment Shop</MenuButton></li>
+            <li><MenuButton to="/toolShop" onClick={() => {changePage("toolShop");}}>Tool Shop</MenuButton></li>
+            <li><MenuButton to="/tradingPost" onClick={() => {changePage("tradingPost");}}>Trading Post</MenuButton></li>
             <li><MenuButton to="/characterEnhancement" onClick={() => {changePage("characterEnhancement");}}>Character Enhancement</MenuButton></li>
             <li><MenuButton to="/itemEnhancement" onClick={() => {changePage("itemEnhancement");}}>Item Enhancement</MenuButton></li>
             <li><MenuButton to="/combinedItem" onClick={() => {changePage("combinedItem");}}>Combined Item</MenuButton></li>

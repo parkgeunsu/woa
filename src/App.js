@@ -9,7 +9,9 @@ import Character from 'components/Character';
 import Inven from 'components/Inven';
 import Gacha from 'components/Gacha';
 import Lineup from 'components/Lineup';
-import Shop from 'components/Shop';
+import ToolShop from 'components/ToolShop';
+import EquipmentShop from 'components/EquipmentShop';
+import TradingPost from 'components/TradingPost';
 import ItemEnhancement from 'components/ItemEnhancement';
 import CombinedItem from 'components/CombinedItem';
 import CharacterEnhancement from 'components/CharacterEnhancement';
@@ -328,7 +330,9 @@ const App = () => {
             <Route path="/characterEnhancement" element={<CharacterEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
             <Route path="/itemEnhancement" element={<ItemEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
             <Route path="/combinedItem" element={<CombinedItem saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
-            <Route path="/shop" element={<Shop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
+            <Route path="/equipmentShop" element={<EquipmentShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
+            <Route path="/toolShop" element={<ToolShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
+            <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
             <Route path="/map" element={<Map saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
           </Routes>
         </ContentContainer>
