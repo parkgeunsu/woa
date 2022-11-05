@@ -48,6 +48,10 @@ export const msg = {
 			ko:'장비',
 			en:'Equip',
 		},
+		accessory:{
+			ko:'악세사리',
+			en:'Accessory',
+		},
 		hole:{
 			ko:'소켓',
 			en:'Hole',
@@ -71,6 +75,14 @@ export const msg = {
 		class:{
 			ko:'등급진화',
 			en:'Class Evolution',
+		},
+		buy:{
+			ko:'사다',
+			en:'Buy',
+		},
+		sell:{
+			ko:'팔다',
+			en:'Sell',
 		}
 	},
 	state:{
@@ -261,6 +273,10 @@ export const msg = {
 		samePart:{
 			ko:'같은 부위에 이미 다른 아이템이 착용 중입니다.',
 			en:'Another item is already being worn in the same part.',
+		},
+		selectQuantity:{
+			ko:'수량을 선택하세요.',
+			en:'Please select a quantity.',
 		}
 	},
 	sentenceFn:{

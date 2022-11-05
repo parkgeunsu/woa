@@ -1564,25 +1564,53 @@ export const util = { //this.loadImage();
       dataObj.changeSaveData(sData);//데이터 저장
       dataObj.showPopup(false);
     } else if (dataObj.type === 'itemBuy') { //아이템 구입
-      if (dataObj.data.type === 'equip') {
-        sData.info.money -= (dataObj.data.gameItem.price < 1000 ? 1000 : dataObj.data.gameItem.price) * 2 * dataObj.data.gameItem.grade;
-      } else if (dataObj.data.type === 'hole') {
-        sData.info.money -= dataObj.data.gameItem.price * 2;
+      if (dataObj.data.type.indexOf('ship') >= 0) {//배 물품 구입
+        let overlapIdx = '';
+        sData.ship[dataObj.data.type.split('ship')[1]].loadedItem.filter((data, idx) => {
+          if (data.idx === dataObj.data.saveItemData.idx) {
+            overlapIdx = idx;
+          }
+        });
+        if (typeof overlapIdx === 'number') { //같은 상품이 있으면
+          sData.ship[dataObj.data.type.split('ship')[1]].loadedItem[overlapIdx].num += dataObj.data.num;
+        } else { //같은 상품이 없으면
+          sData.ship[dataObj.data.type.split('ship')[1]].loadedItem.push({
+            idx:dataObj.data.saveItemData.idx,
+            num:dataObj.data.num,
+          });
+        }
+        //배 저장소 측정
+        sData.info.money -= dataObj.data.gameItem.price * dataObj.data.num;//돈 계산
       } else {
-        sData.info.money -= dataObj.data.gameItem.price;//돈 계산
+        if (dataObj.data.type === 'equip') {
+          sData.info.money -= (dataObj.data.gameItem.price < 1000 ? 1000 : dataObj.data.gameItem.price) * 2 * dataObj.data.gameItem.grade;
+        } else if (dataObj.data.type === 'hole') {
+          sData.info.money -= dataObj.data.gameItem.price * 2;
+        } else {
+          sData.info.money -= dataObj.data.gameItem.price;//돈 계산
+        }
+        sData.items[dataObj.data.type].push(dataObj.data.saveItemData);//아이템 추가
       }
-      sData.items[dataObj.data.type].push(dataObj.data.saveItemData);//아이템 추가
       dataObj.changeSaveData(sData);//데이터 저장
       dataObj.showPopup(false);
     }else if (dataObj.type === 'itemSell') { //아이템 판매
-      console.log(dataObj.data.type);
-      if (dataObj.data.type === 'equip' || dataObj.data.type === 'hole') {
-        console.log(dataObj.data.gameItem.price, dataObj.data.gameItem.grade);
-        sData.info.money += dataObj.data.gameItem.price * dataObj.data.gameItem.grade;//돈 계산
+      if (dataObj.data.type.indexOf('ship') >= 0) {//배 물품 판매
+        const num = sData.ship[dataObj.data.type.split('ship')[1]].loadedItem[dataObj.data.itemSaveSlot].num;
+        if (dataObj.data.num < num) { //일부만 팔경우
+          sData.ship[dataObj.data.type.split('ship')[1]].loadedItem[dataObj.data.itemSaveSlot].num -= dataObj.data.num;
+        } else { //전체 팔경우
+          sData.ship[dataObj.data.type.split('ship')[1]].loadedItem.splice(dataObj.data.itemSaveSlot,1);
+        }
+        sData.info.money += dataObj.data.gameItem.price * dataObj.data.num;//돈 계산
       } else {
-        sData.info.money += dataObj.data.gameItem.price;//돈 계산
+        if (dataObj.data.type === 'equip' || dataObj.data.type === 'hole') {
+          //console.log(dataObj.data.gameItem.price, dataObj.data.gameItem.grade);
+          sData.info.money += dataObj.data.gameItem.price * dataObj.data.gameItem.grade;//돈 계산
+        } else {
+          sData.info.money += dataObj.data.gameItem.price;//돈 계산
+        }
+        sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
       }
-      sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
       dataObj.changeSaveData(sData);//데이터 저장
       dataObj.showPopup(false);
     } else if (dataObj.type === 'itemUnpack') { //아이템 확인

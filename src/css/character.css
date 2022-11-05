@@ -44,7 +44,7 @@
 .card_grid{padding:0 20px;height:100%;}
 .ch_list.list{position:relative;height:100%;}
 .ch_list.paging{position:absolute;bottom:4%;left:20px;right:20px;height:10.4vh;}
-.ch_list ul{padding:5px;width:100%;}
+.ch_list ul{padding:5px;width:100%;white-space:nowrap;}
 .ch_list.list ul{display:flex;flex-direction:row;flex-wrap:wrap;}
 .ch_list.list ul li{display:inline-block;position:relative;margin:0 4px 4px 0;width:calc(25% - 5px);padding-top:calc(32.5% - 5px);border-radius:10px;overflow:hidden;}
 .ch_list.list ul li:nth-of-type(5n){margin:0 0 4px 0;}

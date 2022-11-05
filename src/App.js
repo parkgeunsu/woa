@@ -110,6 +110,14 @@ const ContentContainer = styled.div`
 const FooterContainer = styled.div`
   ${'' /* min-height: 35px; */}
 `;
+const city = (data) => {
+  let cityD = {...data};
+  console.log(cityD);
+  cityD[0].tradingPost = [
+    {idx:3,num:''},{idx:13,num:1200},{idx:15,num:100},{idx:23,num:500},{idx:34,num:''},{idx:33,num:250},{idx:45,num:300},
+  ]
+  return cityD;
+}
 const App = () => {
   const data = {
     setting: {
@@ -151,6 +159,8 @@ const App = () => {
   const location = useLocation().pathname.split("/")[1];
   const [page, setPage] = useState(location);
   const slotIdx = 'all';
+  const [cityIdx, setCityIdx] = useState(0);
+  const [cityData, setCityData] = useState({});
   const changePage = (pagename) => {
     setPage(pagename);
   }
@@ -164,6 +174,7 @@ const App = () => {
   if (storageVer === version) { //데이터가 저장되어 있을때
     useSaveData = util.loadData('saveData'); //저장된 데이터
   } else {
+    save.city = cityData;
     useSaveData = save; //가상데이터
     util.saveData('saveData', save);
     util.saveData('version', version);
@@ -187,7 +198,11 @@ const App = () => {
       }
     }
   );
+  // useEffect(() => {
+  //   setCityData(city(gameData.city.port));
+  // }, [cityIdx]);
   useEffect(() => {
+    setCityData(city(gameData.city.port));
     util.getTimeGap(useSaveData, changeSaveData);//시간 저장
     //이미지 프리로드
     back.forEach((image) => {
@@ -321,19 +336,19 @@ const App = () => {
         )}
         <ContentContainer className="content">
           <Routes>
-            <Route path="/" element={<Main changePage={changePage} />} />
-            <Route path="/character" element={<Character saveData={saveData} changeSaveData={changeSaveData} />} />
-            <Route path="/inven" element={<Inven saveData={saveData} changeSaveData={changeSaveData} />} />
-            <Route path="/gacha" element={<Gacha saveData={saveData} changeSaveData={changeSaveData} />} />
-            <Route path="/lineup" element={<Lineup saveData={saveData} changeSaveData={changeSaveData} />} />
-            <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} scenario={scenario} />} />
-            <Route path="/characterEnhancement" element={<CharacterEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
-            <Route path="/itemEnhancement" element={<ItemEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
-            <Route path="/combinedItem" element={<CombinedItem saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
-            <Route path="/equipmentShop" element={<EquipmentShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
-            <Route path="/toolShop" element={<ToolShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
-            <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
-            <Route path="/map" element={<Map saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} />} />
+            <Route path="/" element={<Main changePage={changePage} cityIdx={cityIdx} />} />
+            <Route path="/character" element={<Character saveData={saveData} changeSaveData={changeSaveData} />} cityIdx={cityIdx} />
+            <Route path="/inven" element={<Inven saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+            <Route path="/gacha" element={<Gacha saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+            <Route path="/lineup" element={<Lineup saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+            <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} scenario={scenario} cityIdx={cityIdx} />} />
+            <Route path="/characterEnhancement" element={<CharacterEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
+            <Route path="/itemEnhancement" element={<ItemEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
+            <Route path="/combinedItem" element={<CombinedItem saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
+            <Route path="/equipmentShop" element={<EquipmentShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
+            <Route path="/toolShop" element={<ToolShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
+            <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
+            <Route path="/map" element={<Map saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
           </Routes>
         </ContentContainer>
         {/* <FooterContainer/> */}

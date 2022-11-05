@@ -44,6 +44,7 @@ import iconHelm from 'images/ico/helm.png';
 import iconArmor from 'images/ico/armor.png';
 import iconWeapon from 'images/ico/weapon.png';
 import iconBag from 'images/ico/bag.png';
+import iconAccessory from 'images/ico/accessory.png';
 import iconLock from 'images/ico/lock.png';
 import iconStateType0 from 'images/ico/state_type0.png';
 import iconStateType1 from 'images/ico/state_type1.png';
@@ -236,6 +237,63 @@ import itemUpgrade10 from 'images/item/hone4.png';
 import itemUpgrade11 from 'images/item/hone5.png';
 import itemMaterial0 from 'images/item/food.png';
 import itemMaterial1 from 'images/item/water.png';
+import itemMaterial2 from 'images/item/material0.png';
+import itemMaterial3 from 'images/item/material1.png';
+import itemMaterial4 from 'images/item/material2.png';
+import itemMaterial5 from 'images/item/material3.png';
+import itemMaterial6 from 'images/item/material4.png';
+import itemMaterial7 from 'images/item/material5.png';
+import itemMaterial8 from 'images/item/material6.png';
+import itemMaterial9 from 'images/item/material7.png';
+import itemMaterial10 from 'images/item/material8.png';
+import itemMaterial11 from 'images/item/material9.png';
+import itemMaterial12 from 'images/item/material10.png';
+import itemMaterial13 from 'images/item/material11.png';
+import itemMaterial14 from 'images/item/material12.png';
+import itemMaterial15 from 'images/item/material13.png';
+import itemMaterial16 from 'images/item/material14.png';
+import itemMaterial17 from 'images/item/material15.png';
+import itemMaterial18 from 'images/item/material16.png';
+import itemMaterial19 from 'images/item/material17.png';
+import itemMaterial20 from 'images/item/material18.png';
+import itemMaterial21 from 'images/item/material19.png';
+import itemMaterial22 from 'images/item/material20.png';
+import itemMaterial23 from 'images/item/material21.png';
+import itemMaterial24 from 'images/item/material22.png';
+import itemMaterial25 from 'images/item/material23.png';
+import itemMaterial26 from 'images/item/material24.png';
+import itemMaterial27 from 'images/item/material25.png';
+import itemMaterial28 from 'images/item/material26.png';
+import itemMaterial29 from 'images/item/material27.png';
+import itemMaterial30 from 'images/item/material28.png';
+import itemMaterial31 from 'images/item/material29.png';
+import itemMaterial32 from 'images/item/material30.png';
+import itemMaterial33 from 'images/item/material31.png';
+import itemMaterial34 from 'images/item/material32.png';
+import itemMaterial35 from 'images/item/material33.png';
+import itemMaterial36 from 'images/item/material34.png';
+import itemMaterial37 from 'images/item/material35.png';
+import itemMaterial38 from 'images/item/material36.png';
+import itemMaterial39 from 'images/item/material37.png';
+import itemMaterial40 from 'images/item/material38.png';
+import itemMaterial41 from 'images/item/material39.png';
+import itemMaterial42 from 'images/item/material40.png';
+import itemMaterial43 from 'images/item/material41.png';
+import itemMaterial44 from 'images/item/material42.png';
+import itemMaterial45 from 'images/item/material43.png';
+import itemMaterial46 from 'images/item/material44.png';
+import itemMaterial47 from 'images/item/material45.png';
+import itemMaterial48 from 'images/item/material46.png';
+import itemMaterial49 from 'images/item/material47.png';
+import itemMaterial50 from 'images/item/material48.png';
+import itemMaterial51 from 'images/item/material49.png';
+import itemMaterial52 from 'images/item/material50.png';
+import itemMaterial53 from 'images/item/material51.png';
+import itemMaterial54 from 'images/item/material52.png';
+import itemMaterial55 from 'images/item/material53.png';
+import itemMaterial56 from 'images/item/material54.png';
+// import itemMaterial57 from 'images/item/material55.png';
+// import itemMaterial58 from 'images/item/material56.png';
 import ring0 from 'images/ring/ring0.png';
 import ring1 from 'images/ring/ring1.png';
 import ring2 from 'images/ring/ring2.png';
@@ -371,7 +429,7 @@ export const etc = {
   imgRing:imgRing,imgCardBack:imgCardBack,frameChBack:frameChBack,stateBack:stateBack,imgCardFrame:imgCardFrame,imgCardLv:imgCardLv,iconCardName:iconCardName,imgRingBack:imgRingBack,frameRope:frameRope,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,questionBlack:questionBlack,questionWhite:questionWhite,wind:wind,
 };
 export const icon = {
-  iconBack:iconBack,iconChat:iconChat,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,iconHelm:iconHelm,iconArmor:iconArmor,iconWeapon:iconWeapon,iconBag:iconBag,iconSocket:itemHole1,iconEtc:itemEtc25,iconUpgrade:itemUpgrade0,iconMaterial:itemMaterial0,iconLock:iconLock,iconStateType0:iconStateType0,iconStateType1:iconStateType1,iconStateType2:iconStateType2,iconStateType3:iconStateType3,
+  iconBack:iconBack,iconChat:iconChat,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,iconHelm:iconHelm,iconArmor:iconArmor,iconWeapon:iconWeapon,iconBag:iconBag,iconAccessory:iconAccessory,iconSocket:itemHole1,iconEtc:itemEtc25,iconUpgrade:itemUpgrade0,iconMaterial:itemMaterial0,iconLock:iconLock,iconStateType0:iconStateType0,iconStateType1:iconStateType1,iconStateType2:iconStateType2,iconStateType3:iconStateType3,
 };
 export const iconStar = [
   iconStar1,iconStar2,iconStar3,iconStar4,iconStar5,iconStar6,iconStar7
@@ -417,7 +475,7 @@ export const itemUpgrade = [
   itemUpgrade0,itemUpgrade1,itemUpgrade2,itemUpgrade3,itemUpgrade4,itemUpgrade5,itemUpgrade6,itemUpgrade7,itemUpgrade8,itemUpgrade9,itemUpgrade10,itemUpgrade11,
 ];
 export const itemMaterial = [
-  itemMaterial0,itemMaterial1,
+  itemMaterial0,itemMaterial1,itemMaterial2,itemMaterial3,itemMaterial4,itemMaterial5,itemMaterial6,itemMaterial7,itemMaterial8,itemMaterial9,itemMaterial10,itemMaterial11,itemMaterial12,itemMaterial13,itemMaterial14,itemMaterial15,itemMaterial16,itemMaterial17,itemMaterial18,itemMaterial19,itemMaterial20,itemMaterial21,itemMaterial22,itemMaterial23,itemMaterial24,itemMaterial25,itemMaterial26,itemMaterial27,itemMaterial28,itemMaterial29,itemMaterial30,itemMaterial31,itemMaterial32,itemMaterial33,itemMaterial34,itemMaterial35,itemMaterial36,itemMaterial37,itemMaterial38,itemMaterial39,itemMaterial40,itemMaterial41,itemMaterial42,itemMaterial43,itemMaterial44,itemMaterial45,itemMaterial46,itemMaterial47,itemMaterial48,itemMaterial49,itemMaterial50,itemMaterial51,itemMaterial52,itemMaterial53,itemMaterial54,
 ];
 export const job = [
   job0,job1,job2,job3,job4,job5,job6,job7,job8,job9,job10,job11,job12,job13,job14,job15,job16,

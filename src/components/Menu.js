@@ -34,10 +34,10 @@ const Menu = ({
             <span className="txt number">{saveData.info.lv}</span></span><span className="txt">{saveData.info.id}</span>
           </li>
           <li className="diamond">
-            <span className="ico"></span><span className="txt won number_w">{saveData.info.diamond}</span>
+            <span className="ico"></span><span className="txt won number_w">{String(saveData.info.diamond).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
           </li>
           <li className="money">
-            <span className="ico"></span><span className="txt won number_w">{saveData.info.money}</span>
+            <span className="ico"></span><span className="txt won number_w">{String(saveData.info.money).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
           </li>
           <li className="setup">
             <span className="ico"></span>

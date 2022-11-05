@@ -4,8 +4,34 @@ export const save = {
     id:'OngbakKai',
     lv:34,
     diamond:50,
-    money:352000
+    money:352000,
+    stay:0,
   },
+  "ship":[
+    {
+      anchor:0,
+      storage:700,
+      resource:{
+
+      },
+      loadedItem:[
+        {idx:3,num:300},
+        {idx:23,num:20},
+        {idx:44,num:210},
+      ]
+    },{
+      anchor:0,
+      storage:1500,
+      resource:{
+
+      },
+      loadedItem:[
+        {idx:4,num:100},
+        {idx:25,num:170},
+        {idx:42,num:1000},
+      ]
+    },
+  ],
   "ch":[
     {"idx":1,"stateType":0,"element":[8],"actionType":1,"job":0,"newActionType":[1],"grade":6,"mark":2,"stateLuk":146,"lv":45,"exp":10,"hasExp":50000,"actionPoint":10,"actionMax":75,"pointTime":2000,"battleBeige":[0,0,0,0],"animalBeige":1,"items":[
       {"id":"d3a5xzncc","idx": 2,"grade": 2,"hole": [0],"color": ["hsla(63,97%,88%,1)","hsla(278,96%,21%,1)"],"baseEff": [{"type": 4,"num": ["82","98","121","140"]}],"addEff": [{"type": 13,"num": ["46"]},{"type": 4,"num": ["178"]},{"type": 8,"num": ["4"]},{"type": 11,"num": ["25"]}],"mark": 0,"markNum": 2,"modifier": {"ko":"사파이어의 고양이두마리","en":"Sappire's two Cats"},"part":1,"sealed":false,"slot":1,"weaponType":0,"favorite":0},

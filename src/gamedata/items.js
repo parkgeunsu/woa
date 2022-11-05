@@ -30,7 +30,7 @@ export const items = {
     //action 아이템 동작 아이디변경(1), 홀장착(9), 장비강화(10), 스킬제거(11), 골드변경(99), 랜덤뽑기(100)
     //display 이미지번호
     //grade 레어등급 (1일반normal, 2매직magic, 3레어rare, 4에픽epic, 5유니크unique, 6레전드legend, 7세트set)
-    //requiredSlot 필요슬롯
+    //requiredSlot 아이템착용시 필요슬롯
     //actionType 찌르기0, 할퀴기1, 물기2, 치기3, 누르기4, 던지기5
     //upgrade 증가된등급
     //set 셋트번호 0없음
@@ -244,6 +244,8 @@ export const items = {
         4:[//반지
             [
                 [//normal,magic,rare,epic
+                    {idx:0,part:4,grade:1,display:501,na:{ko:'반지',en:'Ring'},kg:0.1,price:1000,color:["#F9B919"],socket:1,txt:{ko:'손가락에 끼는 악세사리.',en:''},eff:[],actionType:"",requiredSlot:1,limit:[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true],set:0},
+                    {idx:1,part:4,grade:1,display:502,na:{ko:'진주반지',en:'Pearl Ring'},kg:0.1,price:1000,color:["#F9B919","#000000"],socket:1,txt:{ko:'손가락에 끼우는 악세사리. 진주로 장식되어 있음',en:''},eff:[],actionType:"",requiredSlot:1,limit:[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true],set:0},
                 ],
                 [//unique
                 ],
@@ -254,6 +256,8 @@ export const items = {
         5:[//목걸이
             [
                 [//normal,magic,rare,epic
+                    {idx:0,part:5,grade:1,display:551,na:{ko:'목걸이',en:'Necklace'},kg:0.1,price:1000,color:["#F9B919","#ffffff"],socket:1,txt:{ko:'목에 착용하는 악세사리.',en:''},eff:[],actionType:"",requiredSlot:1,limit:[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true],set:0},
+                    {idx:1,part:5,grade:1,display:552,na:{ko:'진주 목걸이',en:'Pearl Necklace'},kg:0.1,price:1000,color:["#ffffff","#F9B919"],socket:1,txt:{ko:'목에 착용하는 악세사리.',en:''},eff:[],actionType:"",requiredSlot:1,limit:[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true],set:0},
                 ],
                 [//unique
                 ],
@@ -353,20 +357,77 @@ export const items = {
         {idx:11,grade:5,imgCate:'itemUpgrade',display:11,na:{ko:'숫돌IIV',en:''},kg:0.1,price:10000,action:'',invenUse:false,txt:{ko:'무기 업그레이드에 쓰인다.',en:''},eff:['?']},
     ],
     material:[//재료
-        {idx:0,grade:1,imgCate:'itemMaterial',display:0,na:{ko:'식량',en:''},kg:10,price:100,action:'',invenUse:false,txt:{ko:'항해 할때 먹는 식량.',en:''},eff:['?']},
-        {idx:1,grade:1,imgCate:'itemMaterial',display:1,na:{ko:'물',en:''},kg:10,price:100,action:'',invenUse:false,txt:{ko:'항해 할때 마시는 물.',en:''},eff:['?']},
-        {idx:2,grade:1,imgCate:'itemMaterial',display:1,na:{ko:'쌀',en:''},kg:10,price:100,action:'',invenUse:false,txt:{ko:'항해 할때 마시는 물.',en:''},eff:['?']},
-        //밀, 쌀,보리,현미,수수,팥,콩,커피, 카카오
-        //사탕수수, 설탕, 소금, 후추,꿀,월계수,민트, 올리브,레몬
-        //코코넛,우유, 홍차
-        //산호, 
-        //와인,치즈,데킬라, 맥주
-        //대리석,
-        //융단, 미술품, 유리공예품,도자기공예품
-        //석탄,동,은,금,진주,청동,아연,호박석,주석,상아,공작석
-        //목재, 수은, 강철, 석재
-        //비단, 마섬유, 면화 ,피혁, 양모, 모피, 목화
-        //두리안, 바나나
+        {idx:0,grade:1,imgCate:'itemMaterial',display:0,na:{ko:'식량',en:'Food'},kg:10,price:100,action:'',invenUse:false,txt:{ko:'항해 할때 먹는 식량.',en:''},eff:['?']},
+        {idx:1,grade:1,imgCate:'itemMaterial',display:1,na:{ko:'물',en:'Water'},kg:10,price:100,action:'',invenUse:false,txt:{ko:'항해 할때 마시는 물.',en:''},eff:['?']},
+        {idx:2,grade:1,imgCate:'itemMaterial',display:2,na:{ko:'보리',en:'Barley'},kg:10,price:500,action:'',invenUse:false,txt:{ko:'리는 밀보다 값이 싸서 경제적이고 가축의 사료로 사용되기도 한다.',en:''},eff:['?']},
+        {idx:3,grade:1,imgCate:'itemMaterial',display:3,na:{ko:'쌀',en:'Rice'},kg:10,price:1000,action:'',invenUse:false,txt:{ko:'벼의 씨앗에서 껍질을 벗겨 낸 식량이다.',en:''},eff:['?']},
+        {idx:4,grade:1,imgCate:'itemMaterial',display:4,na:{ko:'밀가루',en:'Wheat Flour'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'밀의 배유부분을 가루로 만든 것이다. ',en:''},eff:['?']},
+        {idx:5,grade:1,imgCate:'itemMaterial',display:5,na:{ko:'커피',en:'Coffee Bean'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'커피나무의 씨앗이며 음용 커피의 재료이다.',en:''},eff:['?']},
+        {idx:6,grade:1,imgCate:'itemMaterial',display:6,na:{ko:'카카오',en:'Cacao'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'쌍떡잎식물 아욱목 벽오동나무과의 교목으로 코코아라고도 한다.',en:''},eff:['?']},
+        {idx:7,grade:1,imgCate:'itemMaterial',display:7,na:{ko:'레몬',en:'Lemon'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'비타민 C의 함량이 높은 신맛 나는 과일.',en:''},eff:['?']},
+        {idx:8,grade:1,imgCate:'itemMaterial',display:8,na:{ko:'오렌지',en:'Orange'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'감귤류에 속하는 열매의 하나로 모양이 둥글고 주황빛이며 껍질이 두껍고 즙이 많다.',en:''},eff:['?']},
+        {idx:9,grade:1,imgCate:'itemMaterial',display:9,na:{ko:'키위',en:'Kiwi'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'껍질이 솜털로 덮여있고 녹색을 띤 갈색의 새콤달콤한 맛이 나는 과일이다.',en:''},eff:['?']},
+        {idx:10,grade:1,imgCate:'itemMaterial',display:10,na:{ko:'석류',en:'Pomegranate'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'부처꽃과에 속하는 빨간색의 껍질 안에 과육이 꽉 차있는 과일이다.',en:''},eff:['?']},
+        {idx:11,grade:1,imgCate:'itemMaterial',display:11,na:{ko:'체리',en:'Cherry'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'장미과에 속하는 관목인 벚나무의 열매이다.',en:''},eff:['?']},
+        {idx:12,grade:1,imgCate:'itemMaterial',display:12,na:{ko:'파인애플',en:'Pineapple'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'잎이 모여난 칼 모양이고 비타민이 풍부한 열대과일이다.',en:''},eff:['?']},
+        {idx:13,grade:1,imgCate:'itemMaterial',display:13,na:{ko:'블루베리',en:'Blueberry'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'달고 신맛이 나는 짙은 하늘색, 붉은빛을 띤 갈색, 검은색이고 겉에 흰가루가 묻어있는 과일.',en:''},eff:['?']},
+        {idx:14,grade:1,imgCate:'itemMaterial',display:14,na:{ko:'포도',en:'Grape'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'송이 형태로 열리는 동그란 모양 또는 갸름한 알갱이 모양의 과일.',en:''},eff:['?']},
+        {idx:15,grade:1,imgCate:'itemMaterial',display:15,na:{ko:'바나나',en:'Banana'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'칼륨과 식이섬유소가 풍부하여 건강에 좋은 과일.',en:''},eff:['?']},
+        {idx:16,grade:1,imgCate:'itemMaterial',display:16,na:{ko:'아보카도',en:'Avocado'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'악어의 등처럼 울퉁불퉁한 껍질 때문에 악어배라 불리는 과일.',en:''},eff:['?']},
+        {idx:17,grade:1,imgCate:'itemMaterial',display:17,na:{ko:'코코넛',en:'Coconut'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'연한 녹색의 열대과일로서 즙이 많아 음료로는 과일.',en:''},eff:['?']},
+        {idx:18,grade:1,imgCate:'itemMaterial',display:18,na:{ko:'두리안',en:'Durian'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'천국의 맛과 지옥의 냄새를 모두 가지고 있는 과일.',en:''},eff:['?']},
+        {idx:19,grade:1,imgCate:'itemMaterial',display:19,na:{ko:'사탕수수',en:'Sugar Cane'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'설탕의 원료로 높이 2∼6m까지 열대지방에서 자란다.',en:''},eff:['?']},
+        {idx:20,grade:1,imgCate:'itemMaterial',display:20,na:{ko:'완두콩',en:'Garden Bean'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'초록 빛깔과 귀여운 모양으로 사랑받는 식이섬유소가 풍부한 콩 중의 왕이다.',en:''},eff:['?']},
+        {idx:21,grade:1,imgCate:'itemMaterial',display:21,na:{ko:'강낭콩',en:'Kidney Bean'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'단백질뿐 아니라 다양한 무기질과 비타민과 같은 영양분을 고루 함유한 붉은빛을 띠는 콩이다.',en:''},eff:['?']},
+        {idx:22,grade:1,imgCate:'itemMaterial',display:22,na:{ko:'팥',en:'Red Bean'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'붉은색을 띠고 사포닌이 풍부하고 곡류에 부족한 라이신과 트립토판이 함유되어 콩의 한종류이다.',en:''},eff:['?']},
+        {idx:23,grade:1,imgCate:'itemMaterial',display:23,na:{ko:'수수',en:'Sorghum'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'흰색·노란색·갈색·붉은 갈색등 다양한 색을 가지고 있는 작은 알갱이로 구성된 식용가능한 식물이다.',en:''},eff:['?']},
+        {idx:24,grade:1,imgCate:'itemMaterial',display:24,na:{ko:'치즈',en:'Cheese'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'우유 속에 있는 카세인(casein)을 뽑아 응고·발효시킨 식품이다.',en:''},eff:['?']},
+        {idx:25,grade:1,imgCate:'itemMaterial',display:25,na:{ko:'위스키',en:'Whisky'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'엿기름 또는 곡류 따위를 효모로 알코올 발효하여 증류하고 오크통에 저장하여 숙성한 술이다.',en:''},eff:['?']},
+        {idx:26,grade:1,imgCate:'itemMaterial',display:26,na:{ko:'데낄라',en:'Tequila'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'멕시코 특산의 다육식물인 용설란(龍舌蘭)의 수액을 채취해서 증류한 것이 테킬라이다.',en:''},eff:['?']},
+        {idx:27,grade:1,imgCate:'itemMaterial',display:27,na:{ko:'와인',en:'Wine'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'포도를 발효시켜 제조한 알코올 음료이다.',en:''},eff:['?']},
+        {idx:28,grade:1,imgCate:'itemMaterial',display:28,na:{ko:'럼',en:'Rum'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'당밀이나 사탕수수의 즙을 발효시켜서 증류한 술이며 화이트 럼과 다크 럼이 있다.',en:''},eff:['?']},
+        {idx:29,grade:1,imgCate:'itemMaterial',display:29,na:{ko:'산호',en:'Coral'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'겉은 무르고 속은 단단한 석회질로 된 나뭇가지 모양의 산호. 모양과 색깔이 아름다워 보석으로 취급했다.',en:''},eff:['?']},
+        {idx:30,grade:1,imgCate:'itemMaterial',display:30,na:{ko:'동광석',en:'Copper Ore'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'구리를 함유한 광석의 총칭으로서, 동광 혹은 동광석이라고도 부른다.',en:''},eff:['?']},
+        {idx:31,grade:1,imgCate:'itemMaterial',display:31,na:{ko:'석탄',en:'Coal'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'땅속에서 얻은 숯. 식물이 땅에 묻힌 다음, 열과 압력을 받으면서 만들어진 고체 상태의 물질이다.',en:''},eff:['?']},
+        {idx:32,grade:1,imgCate:'itemMaterial',display:32,na:{ko:'은광석',en:'Silver Ore'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'은을 함유한 광석을 총칭한다.',en:''},eff:['?']},
+        {idx:33,grade:1,imgCate:'itemMaterial',display:33,na:{ko:'금광석',en:'Gold Ore'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'금을 함유한 광석의 총칭이다.',en:''},eff:['?']},
+        {idx:34,grade:1,imgCate:'itemMaterial',display:34,na:{ko:'주석석',en:'Cassiterite'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'정방정계 결정형을 가지는 산화 주석 광물이다.',en:''},eff:['?']},
+        {idx:35,grade:1,imgCate:'itemMaterial',display:35,na:{ko:'월계수잎',en:'Bay Leaf'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'녹색을 띠며, 말린 잎의 경우에 강한 향과 쓴맛이 난다.',en:''},eff:['?']},
+        {idx:36,grade:1,imgCate:'itemMaterial',display:36,na:{ko:'벌꿀',en:'Honey'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'꿀벌이 꽃의 밀선에서 빨아내어 축적한 감미료(당분)이다.',en:''},eff:['?']},
+        {idx:37,grade:1,imgCate:'itemMaterial',display:37,na:{ko:'올리브',en:'Olive'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'열매를 생으로 혹은 절여 먹거나 압착해서 기름으로 만든다.',en:''},eff:['?']},
+        {idx:38,grade:1,imgCate:'itemMaterial',display:38,na:{ko:'고추',en:'Chili pepper'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'익어 가면서 점점 빨갛게 되며 껍질과 씨는 캡사이신을 함유하고 있어 매운 맛이 난다.',en:''},eff:['?']},
+        {idx:39,grade:1,imgCate:'itemMaterial',display:39,na:{ko:'맥주',en:'Beer'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'보리를 가공한 맥아(Malt)를 발효시키고 이를 주재료로 향신료인 홉(hop)을 첨가하여 맛을 낸 술이다.',en:''},eff:['?']},
+        {idx:40,grade:1,imgCate:'itemMaterial',display:40,na:{ko:'상아',en:'Ivory'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'조각 및 장식품 재료의 일종으로, 넓게는 예술적 용도로 쓰기에 충분할 정도로 크게 자란 포유류 치아의 총칭이다.',en:''},eff:['?']},
+        {idx:41,grade:1,imgCate:'itemMaterial',display:41,na:{ko:'진주',en:'Pearl'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'조개 내부로 이물질이 유입되면 격리시키고자 탄산칼슘으로 감싸면서 생기는 것으로 장신구 및 악세사리를 만들때 쓰인다.',en:''},eff:['?']},
+        {idx:42,grade:1,imgCate:'itemMaterial',display:42,na:{ko:'공작석',en:'Malachite'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'구리가 양이온으로 들어가고, 수화 상태인 탄산염 광물로 장신구 및 악세사리를 만들때 쓰인다.',en:''},eff:['?']},
+        {idx:43,grade:1,imgCate:'itemMaterial',display:43,na:{ko:'호박석',en:'Amber'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'보통 송진(수액이라고도 함)이 굳어서 100만 년 정도 지나면 호박이 되고 장신구 및 악세사리를 만들때 쓰인다.',en:''},eff:['?']},
+        {idx:44,grade:1,imgCate:'itemMaterial',display:44,na:{ko:'유리공예품',en:'Glass Crafts'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'유리를 가공해서 만든 물건이나 장식품이다.',en:''},eff:['?']},
+        {idx:45,grade:1,imgCate:'itemMaterial',display:45,na:{ko:'도자기공예품',en:'Pottery Crafts'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'토기, 도자기, 석기 등을 만드는 물건이나 장식품이다.',en:''},eff:['?']},
+        {idx:46,grade:1,imgCate:'itemMaterial',display:46,na:{ko:'미술품',en:'Work of Art'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'공간적 또는 시각적 아름다움을 표현하여 만들어진 작품이다.',en:''},eff:['?']},
+        {idx:47,grade:1,imgCate:'itemMaterial',display:47,na:{ko:'금주괴',en:'Gold Ingot'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'금을 가공하기 좋게 주물로 뜬 사각모양의 주괴이다.',en:''},eff:['?']},
+        {idx:48,grade:1,imgCate:'itemMaterial',display:48,na:{ko:'은주괴',en:'Silver Ingot'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'은을 가공하기 좋게 주물로 뜬 사각모양의 주괴이다.',en:''},eff:['?']},
+        {idx:49,grade:1,imgCate:'itemMaterial',display:49,na:{ko:'동주괴',en:'Copper Ingot'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'동을 가공하기 좋게 주물로 뜬 사각모양의 주괴이다.',en:''},eff:['?']},
+        {idx:50,grade:1,imgCate:'itemMaterial',display:50,na:{ko:'청동주괴',en:'Bronze Ingot'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'청동을 가공하기 좋게 주물로 뜬 사각모양의 주괴이다.',en:''},eff:['?']},
+        {idx:51,grade:1,imgCate:'itemMaterial',display:51,na:{ko:'주석주괴',en:'Tin Ingot'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'주석을 가공하기 좋게 주물로 뜬 사각모양의 주괴이다.',en:''},eff:['?']},
+        {idx:52,grade:1,imgCate:'itemMaterial',display:52,na:{ko:'대리석',en:'Marble'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'탄산염 광물로 이루어진 변성암으로 주로 저각상이나 건축재료로 쓰인다.',en:''},eff:['?']},
+        {idx:53,grade:1,imgCate:'itemMaterial',display:53,na:{ko:'목재',en:'Timber'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'나무를 이용한 건축재료이다.',en:''},eff:['?']},
+        {idx:54,grade:1,imgCate:'itemMaterial',display:54,na:{ko:'석재',en:'Stone'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'돌을 이용한 건축재료이다.',en:''},eff:['?']},
+        {idx:55,grade:1,imgCate:'itemMaterial',display:55,na:{ko:'융단',en:'Carpet'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'양털, 목화 혹은 비단 등으로 만든 직물로 바닥에 깔거나 벽에 거는 용도로 사용하는 천을 말한다.',en:''},eff:['?']},
+        {idx:56,grade:1,imgCate:'itemMaterial',display:56,na:{ko:'민트',en:'Mint'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'박하과 식물이고 식용, 화장품등에 쓰인다.',en:''},eff:['?']},
+        //밀,쌀,보리,현미,수수,팥,콩,커피,카카오,꿀
+        //사탕수수,코코넛,치즈,레몬,올리브,월계수,민트
+        //와인,데킬라,양주,맥주
+        //두리안,바나나
+        //산호,상아,진주,공작석,호박석
+        //목재,대리석,석재
+        //석탄,동,은,금,주석,수은,
+        //유리공예품,도자기공예품,미술품,융단
+
+        //설탕,소금,후추
+        //우유,홍차
+        //거울
+        //강철
+        //비단,마섬유,면화,피혁,양모,모피,목화
     ],
     etc:[
         {idx:0,grade:1,imgCate:'itemEtc',display:2,na:{ko:'동전더미(동)',en:''},kg:10,price:1000,
