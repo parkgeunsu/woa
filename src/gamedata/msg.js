@@ -250,6 +250,10 @@ export const msg = {
 			ko:'아이템 강화서가 부족합니다.',
 			en:'There are not enough item enhancements.',
 		},
+		lackMoney:{
+			ko:'보유한 돈이부족합니다.',
+			en:'You don\'t have enough money.',
+		},
 		selectItem:{
 			ko:'아이템을 선택해 주세요.',
 			en:'Please select an item.',

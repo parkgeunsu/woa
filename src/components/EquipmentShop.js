@@ -52,6 +52,7 @@ const makeMark = (markNum, img) => {
   return markTag;
 }
 const EquipmentShop = ({
+	cityIdx,
 	saveData,
 	changeSaveData,
 }) => {
@@ -74,27 +75,18 @@ const EquipmentShop = ({
 	const [selectItem1, setSelectItem1] = useState({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 	const [selectItem2, setSelectItem2] = useState({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 	useEffect(() => {
-		let items = [[],[],[],[]];
-		for (let i = 0; i < 20; i ++) {
-			for (let j = 1; j < 4; j ++) {
-					items[j - 1][i] = {...util.getItem(saveData, gameData, changeSaveData, {
-					type:'equip',
-					items:j,//장비만 해당
-					//아이템종류, 세부종류(검,단검), 매직등급
-					lv:Math.round(Math.random()*100),
-					sealed:false,
-					}, false, lang),
-				};
-			}
-		}
-		items[3] = [...saveData.items.equip];
-		itemRef.current = items;
 	}, []);
 	useEffect(() => {
-		let copyItem = [...itemRef.current];
-		copyItem[3] = [...saveData.items.equip];
-		itemRef.current  = copyItem;
-		setItem(itemRef.current);
+		if (Object.keys(saveData).length !== 0) {
+			const cityData = saveData.city[cityIdx];
+			const items = [
+				[...cityData.equipmentShop.helm],
+				[...cityData.equipmentShop.armor],
+				[...cityData.equipmentShop.weapon],
+				[...saveData.items.equip],
+			]
+			setItem(items);
+		}
 	}, [saveData]);
   return (
 		<>
@@ -257,9 +249,8 @@ const EquipmentShop = ({
 														<div className="item_price"><span>{gameData.msg.itemInfo.buyPrice[lang]}</span><em>{`₩${(selectItem1.game.price < 1000 ? 1000 : selectItem1.game.price) * 2 * selectItem1.save.grade}`}</em></div>
 														<div className="item_button" flex="true">
 															<button text="true" className="button_small" onClick={(e) => {
-																let item_ = [...item];
-																item_[selectItem1.selectTab].splice(selectItem1.select, 1);
-																setItem(item_);
+																let saveD = {...saveData};
+																saveD.city[cityIdx].equipmentShop[shopList[selectItem1.selectTab].na].splice(selectItem1.select, 1);
 																util.buttonEvent({
 																	event: e,
 																	type: 'itemBuy',
@@ -269,7 +260,7 @@ const EquipmentShop = ({
 																		saveItemData: selectItem1.save,
 																		type: 'equip',
 																	},
-																	saveData: saveData,
+																	saveData: saveD,
 																	changeSaveData: changeSaveData,
 																	gameData: gameData,
 																	msgText: setMsg,
@@ -399,9 +390,8 @@ const EquipmentShop = ({
 														<div className="item_price"><span>{gameData.msg.itemInfo.buyPrice[lang]}</span><em>{`₩${(selectItem2.game.price < 1000 ? 1000 : selectItem2.game.price) * 2 * selectItem2.save.grade}`}</em></div>
 														<div className="item_button" flex="true">
 															<button text="true" className="button_small" onClick={(e) => {
-																let item_ = [...item];
-																item_[selectItem2.selectTab].splice(selectItem2.select, 1);
-																setItem(item_);
+																let saveD = {...saveData};
+																saveD.city[cityIdx].equipmentShop[shopList[selectItem2.selectTab].na].splice(selectItem1.select, 1);
 																util.buttonEvent({
 																	event: e,
 																	type: 'itemBuy',
@@ -411,7 +401,7 @@ const EquipmentShop = ({
 																		saveItemData: selectItem2.save,
 																		type: 'equip',
 																	},
-																	saveData: saveData,
+																	saveData: saveD,
 																	changeSaveData: changeSaveData,
 																	gameData: gameData,
 																	msgText: setMsg,

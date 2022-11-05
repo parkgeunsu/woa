@@ -110,12 +110,38 @@ const ContentContainer = styled.div`
 const FooterContainer = styled.div`
   ${'' /* min-height: 35px; */}
 `;
-const city = (data) => {
+const setCity = (data, lang) => {
   let cityD = {...data};
-  console.log(cityD);
-  cityD[0].tradingPost = [
+  cityD[0].tradingPost = [//교역소 상품생성
     {idx:3,num:''},{idx:13,num:1200},{idx:15,num:100},{idx:23,num:500},{idx:34,num:''},{idx:33,num:250},{idx:45,num:300},
-  ]
+  ];
+  let accessory = [];//도구상 악세사리 생성
+  for (let i = 0; i < 20; i ++) {
+    accessory[i] = {...util.getItem(false, gameData, false, {
+      type:'equip',
+      items:Math.round(Math.random())+4,//악세사리만 해당
+      lv:Math.round(Math.random()*100),
+      sealed:false,
+      }, false, lang),
+    }
+  }
+  cityD[0].toolShop.accessory = accessory;
+  let items = [[],[],[],[]];//장비상 아이템 생성
+  for (let i = 0; i < 20; i ++) {
+    for (let j = 1; j < 4; j ++) {
+        items[j - 1][i] = {...util.getItem(false, gameData, false, {
+        type:'equip',
+        items:j,//장비만 해당
+        //아이템종류, 세부종류(검,단검), 매직등급
+        lv:Math.round(Math.random()*100),
+        sealed:false,
+        }, false, lang),
+      };
+    }
+  }
+  cityD[0].equipmentShop.helm = items[0];
+  cityD[0].equipmentShop.armor = items[1];
+  cityD[0].equipmentShop.weapon = items[2];
   return cityD;
 }
 const App = () => {
@@ -160,7 +186,6 @@ const App = () => {
   const [page, setPage] = useState(location);
   const slotIdx = 'all';
   const [cityIdx, setCityIdx] = useState(0);
-  const [cityData, setCityData] = useState({});
   const changePage = (pagename) => {
     setPage(pagename);
   }
@@ -168,22 +193,25 @@ const App = () => {
     setSaveData(objData);
     util.saveData('saveData', objData);
   }
-  
-  const storageVer = util.loadData("version");
-  let useSaveData = {}
-  if (storageVer === version) { //데이터가 저장되어 있을때
-    useSaveData = util.loadData('saveData'); //저장된 데이터
-  } else {
-    save.city = cityData;
-    useSaveData = save; //가상데이터
-    util.saveData('saveData', save);
-    util.saveData('version', version);
-  }
-  if (useSaveData.newGame) { //신규 게임인지 판단
-    // console.log('new game');
-  }
-  const [saveData, setSaveData] = useState(
-    () => {
+  const [saveData, setSaveData] = useState({});
+  // useEffect(() => {
+  //   setCityData(city(gameData.city.port));
+  // }, [cityIdx]);
+  useEffect(() => {
+    const storageVer = util.loadData("version");
+    let useSaveData = {}
+    if (storageVer === version) { //데이터가 저장되어 있을때
+      useSaveData = util.loadData('saveData'); //저장된 데이터
+    } else {
+      save.city = setCity(gameData.city.port, data.setting.lang);
+      useSaveData = save; //가상데이터
+      util.saveData('saveData', save);
+      util.saveData('version', version);
+    }
+    if (useSaveData.newGame) { //신규 게임인지 판단
+      // console.log('new game');
+    }
+    setSaveData(() => {
       if (useSaveData.ch[0].bSt0) { //캐릭 전투능력치 설정이 안되어 있을 경우
         util.saveData('saveData', useSaveData);
         return useSaveData;
@@ -196,13 +224,7 @@ const App = () => {
         util.saveData('saveData', sData);
         return sData;
       }
-    }
-  );
-  // useEffect(() => {
-  //   setCityData(city(gameData.city.port));
-  // }, [cityIdx]);
-  useEffect(() => {
-    setCityData(city(gameData.city.port));
+    });
     util.getTimeGap(useSaveData, changeSaveData);//시간 저장
     //이미지 프리로드
     back.forEach((image) => {

@@ -74,36 +74,21 @@ const ToolShop = ({
 	const [selectArea, setSelectArea] = useState('area1');
 	const [selectItem1, setSelectItem1] = useState({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 	const [selectItem2, setSelectItem2] = useState({save:{},game:{},select:'',selectTab:'',buttonType:[]});
-	const [cityData, setCityData] = useState(saveData.city[cityIdx]);
 	useEffect(() => {
-		let items = [[],[],[],[]];
-			for (let i = 0; i < 20; i ++) {
-				items[0][i] = {...util.getItem(saveData, gameData, changeSaveData, {
-				type:'equip',
-				items:Math.round(Math.random())+4,//장비만 해당
-				//아이템종류, 세부종류(검,단검), 매직등급
-				lv:Math.round(Math.random()*100),
-				sealed:false,
-				}, false, lang),
-			};
-		}
-		items[1] = [...cityData.toolShop.upgrade];
-		items[2] = [...cityData.toolShop.etc];
-		items[3] = [[...saveData.items.equip],[...saveData.items.upgrade],[...saveData.items.etc]];
-		itemRef.current = items;
-		setItem(itemRef.current);
-		console.log(items);
 	}, []);
 	useEffect(() => {
-		let copyItem = [...itemRef.current];
-		copyItem[1] = [...cityData.toolShop.upgrade];
-		copyItem[2] = [...cityData.toolShop.etc];
-		copyItem[3] = [[...saveData.items.equip],[...saveData.items.upgrade],[...saveData.items.etc]];
-		itemRef.current  = copyItem;
-		setItem(itemRef.current);
+		if (Object.keys(saveData).length !== 0) {
+			const cityData = saveData.city[cityIdx];
+			const items = [
+				[...cityData.toolShop.accessory],
+				[...cityData.toolShop.upgrade],
+				[...cityData.toolShop.etc],
+				[[...saveData.items.equip],[...saveData.items.upgrade],[...saveData.items.etc]],
+			];
+			setItem(items);
+		}
 	}, [saveData]);
 	useEffect(() => {
-		setCityData(saveData.city[cityIdx]);
 	}, [cityIdx])
   return (
 		<>
@@ -240,6 +225,9 @@ const ToolShop = ({
 													const itemsGrade = itemSelect.grade < 5 ? 0 : itemSelect.grade - 5;
 													const items = gameItem.equip[itemSelect.part][0][itemsGrade][itemSelect.idx];
 													if (selectArea === 'area2') {
+														if (selectItem1.save && (Object.entries(invenData).toString() === Object.entries(selectItem1.save).toString())) {
+															setSelectItem1({save:[],game:[],buttonType:[],selectTab:'',select:''});
+														}
 														let button = ['sell'];
 														if (selectItem1.select !== '' && selectItem1.selectTab === selectTab && selectItem1.select === idx) {
 															setSelectItem1({save:{},game:{},select:'',selectTab:'',buttonType:[]});
@@ -252,6 +240,9 @@ const ToolShop = ({
 															buttonType:button,
 														});
 													} else {
+														if (selectItem2.save && (Object.entries(invenData).toString() === Object.entries(selectItem2.save).toString())) {
+															setSelectItem2({save:[],game:[],buttonType:[],selectTab:'',select:''});
+														}
 														let button = ['sell'];
 														if (selectItem2.select !== '' && selectItem2.selectTab === selectTab && selectItem2.select === idx) {
 															setSelectItem2({save:{},game:{},select:'',selectTab:'',buttonType:[]});
@@ -413,9 +404,8 @@ const ToolShop = ({
 																<div className="item_price"><span>{gameData.msg.itemInfo.buyPrice[lang]}</span><em>{`₩${(selectItem1.game.price < 1000 ? 1000 : selectItem1.game.price) * 2 * selectItem1.save.grade}`}</em></div>
 																<div className="item_button" flex="true">
 																	<button text="true" className="button_small" onClick={(e) => {
-																		let item_ = [...item];
-																		item_[0].splice(selectItem1.select, 1);
-																		setItem(item_);
+																		let saveD = {...saveData};
+																		saveD.city[cityIdx].toolShop.accessory.splice(selectItem1.select, 1);
 																		util.buttonEvent({
 																			event: e,
 																			type: 'itemBuy',
@@ -425,7 +415,7 @@ const ToolShop = ({
 																				saveItemData: selectItem1.save,
 																				type: 'equip',
 																			},
-																			saveData: saveData,
+																			saveData: saveD,
 																			changeSaveData: changeSaveData,
 																			gameData: gameData,
 																			msgText: setMsg,

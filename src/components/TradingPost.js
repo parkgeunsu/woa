@@ -87,33 +87,22 @@ const TradingPost = ({
 	const [item, setItem] = useState([]);
 	const itemRef = useRef();
 	const [selectItem, setSelectItem] = useState({save:{},game:{},select:'',selectTab:'',selectShip:'',buttonType:[]});
-	const cityData = saveData.city[cityIdx];
 	useEffect(() => {
 		let items = [[],[]];
-		for (const [idx, item] of cityData.tradingPost.entries()) {
-			items[0][idx] = item;
+		if (Object.keys(saveData).length !== 0) {
+			const cityData = saveData.city[cityIdx];
+			for (const [idx, item] of cityData.tradingPost.entries()) {
+				items[0][idx] = item;
+			}
+			for (const [idx, item] of saveData.ship.entries()) {
+				items[1][idx] = item;
+			}
+			itemRef.current = items;
+			// let copyItem = [...itemRef.current];
+			// itemRef.current  = copyItem;
+			setItem(itemRef.current);
 		}
-		for (const [idx, item] of saveData.ship.entries()) {
-			items[1][idx] = item;
-		}
-		itemRef.current = items;
-	}, []);
-	useEffect(() => {
-		let items = [[],[]];
-		for (const [idx, item] of cityData.tradingPost.entries()) {
-			items[0][idx] = item;
-		}
-		for (const [idx, item] of saveData.ship.entries()) {
-			items[1][idx] = item;
-		}
-		itemRef.current = items;
-		// let copyItem = [...itemRef.current];
-		// itemRef.current  = copyItem;
-		setItem(itemRef.current);
-	}, [saveData, cityData]);
-	useEffect(() => {
-
-	}, [cityData])
+	}, [saveData]);
   return (
 		<>
 			<ShopWrap className="wrap" backImg={imgSet.back[2]} >
@@ -238,33 +227,34 @@ const TradingPost = ({
 																// if (rangeValue[0] < cityD[selectItem.select].num) {
 
 																// } else {
-																if (typeof saveD.city[cityIdx].tradingPost[selectItem.select].num === 'number') {
-																	saveD.city[cityIdx].tradingPost[selectItem.select].num -= rangeValue[0];
-																	changeSaveData(saveD);
+																if (saveD.info.money >= rangeValue[0] * selectItem.game.price) {//소유금이 더 많을경우
+																	if (typeof saveD.city[cityIdx].tradingPost[selectItem.select].num === 'number') { //수량이 정해져 있을경우
+																		saveD.city[cityIdx].tradingPost[selectItem.select].num -= rangeValue[0];
+																		changeSaveData(saveD);
+																	}
+																	util.buttonEvent({
+																		event: e,
+																		type: 'itemBuy',
+																		data: {
+																			slotIdx: 0,
+																			gameItem: selectItem.game,
+																			saveItemData: selectItem.save,
+																			type:'ship'+selectShip,
+																			num:rangeValue[0],
+																		},
+																		saveData: saveData,
+																		changeSaveData: changeSaveData,
+																		gameData: gameData,
+																		msgText: setMsg,
+																		showMsg: setMsgOn,
+																		showPopup: setPopupOn,
+																		lang: lang,
+																	});
+																	setRangeValue(0);
+																} else {
+																	setMsgOn(true);
+																	setMsg(gameData.msg.sentence.lackMoney[lang]);
 																}
-																//}
-																// item_[selectItem.selectTab].splice(selectItem.select, 1);
-																// setItem(item_);
-																util.buttonEvent({
-																	event: e,
-																	type: 'itemBuy',
-																	data: {
-																		slotIdx: 0,
-																		gameItem: selectItem.game,
-																		saveItemData: selectItem.save,
-																		type:'ship'+selectShip,
-																		num:rangeValue[0],
-																	},
-																	saveData: saveData,
-																	changeSaveData: changeSaveData,
-																	gameData: gameData,
-																	msgText: setMsg,
-																	showMsg: setMsgOn,
-																	showPopup: setPopupOn,
-																	lang: lang,
-																});
-																// setSelectItem({save:{},game:{},select:'',selectTab:'',buttonType:[]});
-																setRangeValue(0);
 															}} data-buttontype="itemBuy">{gameData.msg.button.buy[lang]}</button>
 														</div>
 													</div>
