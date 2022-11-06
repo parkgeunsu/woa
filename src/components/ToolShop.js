@@ -70,7 +70,6 @@ const ToolShop = ({
   const [msg, setMsg] = useState("");
 	const [selectTab, setSelectTab] = useState(0);
 	const [item, setItem] = useState([[],[],[],[]]);
-	const itemRef = useRef();
 	const [selectArea, setSelectArea] = useState('area1');
 	const [selectItem1, setSelectItem1] = useState({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 	const [selectItem2, setSelectItem2] = useState({save:{},game:{},select:'',selectTab:'',buttonType:[]});

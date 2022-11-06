@@ -83,6 +83,18 @@ export const msg = {
 		sell:{
 			ko:'팔다',
 			en:'Sell',
+		},
+		produce:{
+			ko:'제작',
+			en:'Produce',
+		},
+		used:{
+			ko:'중고',
+			en:'Used',
+		},
+		possessed:{
+			ko:'보유',
+			en:'Possessed',
 		}
 	},
 	state:{

@@ -85,7 +85,6 @@ const TradingPost = ({
 	const [rangeValue, setRangeValue] = useState(0);
 	const [showCal, setShowCal] = useState(false);
 	const [item, setItem] = useState([]);
-	const itemRef = useRef();
 	const [selectItem, setSelectItem] = useState({save:{},game:{},select:'',selectTab:'',selectShip:'',buttonType:[]});
 	useEffect(() => {
 		let items = [[],[]];
@@ -97,10 +96,7 @@ const TradingPost = ({
 			for (const [idx, item] of saveData.ship.entries()) {
 				items[1][idx] = item;
 			}
-			itemRef.current = items;
-			// let copyItem = [...itemRef.current];
-			// itemRef.current  = copyItem;
-			setItem(itemRef.current);
+			setItem(items);
 		}
 	}, [saveData]);
   return (

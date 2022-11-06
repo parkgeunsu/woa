@@ -10,6 +10,7 @@ import Inven from 'components/Inven';
 import Gacha from 'components/Gacha';
 import Lineup from 'components/Lineup';
 import ToolShop from 'components/ToolShop';
+import Shipyard from 'components/Shipyard';
 import EquipmentShop from 'components/EquipmentShop';
 import TradingPost from 'components/TradingPost';
 import ItemEnhancement from 'components/ItemEnhancement';
@@ -369,6 +370,7 @@ const App = () => {
             <Route path="/combinedItem" element={<CombinedItem saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
             <Route path="/equipmentShop" element={<EquipmentShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
             <Route path="/toolShop" element={<ToolShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
+            <Route path="/shipyard" element={<Shipyard saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
             <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
             <Route path="/map" element={<Map saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
           </Routes>
