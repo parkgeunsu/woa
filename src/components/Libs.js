@@ -1005,6 +1005,23 @@ export const util = { //this.loadImage();
     }
     return svg;
   },
+  setShipColor: (svgData, wood, colorSet, id, sail, sailColor) => {
+    let svg = svgData;
+    const idPattern = new RegExp("==id==","g"),
+      woodPattern = new RegExp("==wood==","g");
+    svg = svg.replace(idPattern, id);
+    svg = svg.replace(woodPattern, wood);
+    for (const [idx, data] of sail.entries()) {
+      const pattern = new RegExp("==sail"+idx+"==","g");
+      svg = svg.replace(pattern, data);
+    }
+    for (const [idx, data] of colorSet.entries()) {
+      const pattern = new RegExp("==w"+idx+"==","g");
+      svg = svg.replace(pattern, data);
+    }
+    svg = svg.replace(/==sColor==/g, sailColor);
+    return svg;
+  },
   getRgbColor: () => {
     const r = Math.round(Math.random() * 255);
     const g = Math.round(Math.random() * 255);

@@ -1,7 +1,8 @@
 @charset "utf-8";
 .ship_area{display:flex;height:100%;flex-direction:column;padding:0 20px 10px;flex-grow:1;overflow:hidden;}
-.ship_area .ship_top{flex-wrap:wrap;border-radius:0 0 20px 20px;background:rgba(0,0,0,.5);height:50%;}
-.ship_area .ship_bottom{display:flex;margin:10px 0 0 0;height:50%;}
+.ship_area .ship_top{position:relative;flex-wrap:wrap;border-radius:0 0 20px 20px;background:rgba(0,0,0,.5);height:70%;}
+.ship_area .ship_top svg{margin:5% 0;width:100%;height:90%;}
+.ship_area .ship_bottom{display:flex;margin:10px 0 0 0;height:30%;}
 .ship_area .item_select{display:flex;flex-direction:column;width:50%;background:rgba(0,0,0,.7);}
 .ship_area .item_select1{border:5px double #ffac2f;}
 .ship_area .item_select2{margin:0 0 0 5px;border:5px double #e14040;}
@@ -65,3 +66,34 @@
 .ship_area .item_select .item_footer .item_price span{display:inline-block;margin:0 5px 0 0;font-size:14px;color:#c80;}
 .ship_area .item_select .item_footer .item_price em{font-size:14px;color:#fff;vertical-align:middle;}
 .item_footer .item_button{justify-content:flex-end;}
+
+.ship0_sail{transform-origin:50% 320px;transition:all 1s;}
+.ship1_sail{transform-origin:50% 337px;transition:all 1s;}
+.ship2_sail{transform-origin:50% 338px;transition:all 1s;}
+.ship3_sail0{transform-origin:50% 274px;transition:all 1s;}
+.ship3_sail1{transform-origin:50% 395px;transition:all 1s;}
+.ship4_sail0{transform-origin:50% 267px;transition:all 1s;}
+.ship4_sail1{transform-origin:50% 379px;transition:all 1s;}
+.ship5_sail0{transform-origin:50% 265px;transition:all 1s;}
+.ship5_sail1{transform-origin:50% 405px;transition:all 1s;}
+.ship6_sail0{transform-origin:50% 275px;transition:all 1s;}
+.ship6_sail1{transform-origin:50% 447px;transition:all 1s;}
+.ship7_sail0{transform-origin:50% 219px;transition:all 1s;}
+.ship7_sail1{transform-origin:50% 370px;transition:all 1s;}
+.ship8_sail0{transform-origin:50% 218px;transition:all 1s;}
+.ship8_sail1{transform-origin:50% 351px;transition:all 1s;}
+.ship8_sail2{transform-origin:50% 440px;transition:all 1s;}
+.ship9_sail0{transform-origin:50% 232px;transition:all 1s;}
+.ship9_sail1{transform-origin:50% 374px;transition:all 1s;}
+.ship9_sail2{transform-origin:50% 495px;transition:all 1s;}
+.ship10_sail0{transform-origin:50% 201px;transition:all 1s;}
+.ship10_sail1{transform-origin:50% 348px;transition:all 1s;}
+.ship10_sail2{transform-origin:50% 459px;transition:all 1s;}
+.ship11_sail0{transform-origin:50% 215px;transition:all 1s;}
+.ship11_sail1{transform-origin:50% 351px;transition:all 1s;}
+.ship11_sail2{transform-origin:50% 495px;transition:all 1s;}
+.ship12_sail0{transform-origin:50% 196px;transition:all 1s;}
+.ship12_sail1{transform-origin:50% 407px;transition:all 1s;}
+
+.ship_option_container{position:absolute;left:10px;top:10px;bottom:10px;justify-content:space-around;}
+.ship_option{}

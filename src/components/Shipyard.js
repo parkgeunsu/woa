@@ -38,6 +38,9 @@ const ItemPic = styled.div`
 const ItemName = styled.div`
   .item_grade{color:${({ color }) => color};}
 `;
+const ShipOption = styled.div`
+	width:50px;height:50px;border:2px solid #f00;
+`;
 const shipList = [
 	{na:'produce',icon:"iconAccessory"},
 	{na:'used',icon:"iconUpgrade"},
@@ -70,6 +73,7 @@ const Shipyard = ({
 	const [selectTab, setSelectTab] = useState(0);
 	const [item, setItem] = useState([[],[],[],[]]);
 	const [selectArea, setSelectArea] = useState('area1');
+	const [selectShip, setSelectShip] = useState({shipIdx:9,wood:1});
 	const [selectItem1, setSelectItem1] = useState({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 	const [selectItem2, setSelectItem2] = useState({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 	useEffect(() => {
@@ -78,9 +82,10 @@ const Shipyard = ({
 		if (Object.keys(saveData).length !== 0) {
 			const cityData = saveData.city[cityIdx];
 			const items = [
-				[...cityData.toolShop.accessory],
-				[...cityData.toolShop.upgrade],
-				[...cityData.toolShop.etc],
+				[...cityData.shipyard.ship],
+				[...cityData.shipyard.wood],
+				[...cityData.shipyard.sail],
+				[...cityData.shipyard.figure],
 				[[...saveData.items.equip],[...saveData.items.upgrade],[...saveData.items.etc]],
 			];
 			setItem(items);
@@ -106,7 +111,20 @@ const Shipyard = ({
 					})}
 				</div>
 				<div className="ship_area">
-					<div className="shop_top scroll-y">
+					<div className="ship_top">
+						{shipList[selectTab].na === 'produce' && (
+							<>
+								<svg xmlns="http://www.w3.org/2000/svg" width="320px" height="600px" viewBox="0 0 320 600" dangerouslySetInnerHTML={{__html: util.setShipColor(gameData.shipSvg[selectShip.shipIdx], imgSet.wood[selectShip.wood], gameData.ships.woodColor[gameData.ships.wood[selectShip.wood].woodColor], Math.random().toString(36).substring(2, 11), [gameData.sailSvg[`${selectShip.shipIdx}_5_1`], gameData.sailSvg[`${selectShip.shipIdx}_5_2`], gameData.sailSvg[`${selectShip.shipIdx}_5_3`]], '#fff')}}></svg>
+								<div className="ship_option_container" flex-h-center="true">
+									<ShipOption className="ship_option ship_size"></ShipOption>
+									<ShipOption className="ship_option ship_sail"></ShipOption>
+									<ShipOption className="ship_option ship_wood"></ShipOption>
+									<ShipOption className="ship_option ship_figure"></ShipOption>
+									<ShipOption className="ship_option ship_canon"></ShipOption>
+									<ShipOption className="ship_option ship_anchor"></ShipOption>
+								</div>
+							</>
+						)}
 						{item[selectTab].map((data, idx) => {
 							const cate = shipList[selectTab].na;
 							if (cate === 'accessory') {
@@ -321,7 +339,7 @@ const Shipyard = ({
 							}
 						})}
 					</div>
-					<div className="shop_bottom">
+					<div className="ship_bottom">
 						{Object.keys(selectItem1.save).length !== 0 ? (
 							<ItemContainer className={`item_select item_select1 items ${selectArea === "area1" ? "on" : ""}`} color={gameData.itemGrade.color[selectItem1.save.grade]} onClick={() => {
 								setSelectArea('area1');

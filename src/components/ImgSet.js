@@ -374,7 +374,37 @@ import job13 from 'images/job/job13.png';
 import job14 from 'images/job/job14.png';
 import job15 from 'images/job/job15.png';
 import job16 from 'images/job/job16.png';
-
+//목재
+import wood0 from 'images/pattern/wood0.png';
+import wood1 from 'images/pattern/wood1.png';
+import wood2 from 'images/pattern/wood2.png';
+import wood3 from 'images/pattern/wood3.png';
+import wood4 from 'images/pattern/wood4.png';
+import wood5 from 'images/pattern/wood5.png';
+import wood6 from 'images/pattern/wood6.png';
+import wood7 from 'images/pattern/wood7.png';
+import wood8 from 'images/pattern/wood8.png';
+import wood9 from 'images/pattern/wood9.png';
+//선수상
+import figure0 from 'images/figure/figureface0.png';
+import figure1 from 'images/figure/figureface1.png';
+import figure2 from 'images/figure/figureface2.png';
+import figure3 from 'images/figure/figureface3.png';
+import figure4 from 'images/figure/figureface4.png';
+import figure5 from 'images/figure/figureface5.png';
+import figure6 from 'images/figure/figureface6.png';
+import figure7 from 'images/figure/figureface7.png';
+import figure8 from 'images/figure/figureface8.png';
+import figure9 from 'images/figure/figureface9.png';
+import figure10 from 'images/figure/figureface10.png';
+import figure11 from 'images/figure/figureface11.png';
+import figure12 from 'images/figure/figureface12.png';
+import figure13 from 'images/figure/figureface13.png';
+import figure14 from 'images/figure/figureface14.png';
+import figure15 from 'images/figure/figureface15.png';
+import figure16 from 'images/figure/figureface16.png';
+import figure17 from 'images/figure/figureface17.png';
+import figure18 from 'images/figure/figureface18.png';
 //날씨
 import sun from 'images/weather/sun.png';
 import moon from 'images/weather/moon.png';
@@ -502,3 +532,9 @@ export const eff = [
   blank,attack0,bite1,claw2,saliva3,death,Water_4,Water_1,ACCK019_Corrupt,'',
   '','',buff11,buff12
 ];
+export const wood = [
+  wood0,wood1,wood2,wood3,wood4,wood5,wood6,wood7,wood8,wood9
+]
+export const figure = [
+  figure0,figure1,figure2,figure3,figure4,figure5,figure6,figure7,figure8,figure9,figure10,figure11,figure12,figure13,figure14,figure15,figure16,figure17,figure18
+]

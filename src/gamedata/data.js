@@ -4,6 +4,8 @@ import { prices } from 'gamedata/prices';
 import { ch } from 'gamedata/heros';
 import { items } from 'gamedata/items';
 import { itemsSvg } from 'gamedata/itemsSvg';
+import { ships } from 'gamedata/ships';
+import { shipSvg, sailSvg } from 'gamedata/shipSvg';
 import { colorSvg } from 'gamedata/colorSvg';
 import { job } from 'gamedata/job';
 import { lineup } from 'gamedata/lineup';
@@ -25,6 +27,7 @@ export const gameData = {
     ch:ch,//face_d 얼굴방향, stateType 성장타입, awaken 각성속성
     job:job,//직업
     items:items,
+    ships:ships,
     //grade (0하급poor, 1일반normal, 2매직magic, 3레어rare, 4에픽epic, 5유니크unique, 6레전드legend)
     itemGrade:{//'#999'
       txt_e:['Poor','Normal','Magic','Rare','Epic','Unique','Legend'],
@@ -50,6 +53,8 @@ export const gameData = {
     effect:effect,
     itemsSvg:itemsSvg,
     colorSvg:colorSvg,
+    shipSvg:shipSvg,
+    sailSvg:sailSvg,
     prices:prices,
     guide:guide,
     recipe:recipe,
