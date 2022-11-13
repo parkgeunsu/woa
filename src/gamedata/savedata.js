@@ -170,6 +170,12 @@ export const save = {
       {"idx":21},
       {"idx":10},
       {"idx":2},
+      {"idx":30},
+      {"idx":31},
+      {"idx":32},
+      {"idx":35},
+      {"idx":36},
+      {"idx":37},
     ]
   },
   "lineup":{

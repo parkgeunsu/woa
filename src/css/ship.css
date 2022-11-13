@@ -6,10 +6,10 @@
 .ship_area .ship_top .ship_display.select_size svg{filter:brightness(0.3);}
 .ship_area .ship_top .ship_display.select_size:after{content:'?';position:absolute;left:50%;top:50%;font-size:40px;transform:translate(-50%,-50%);}
 .ship_area .ship_bottom{display:flex;margin:10px 0 0 0;height:30%;}
-.ship_area .item_select{display:flex;flex-direction:column;width:50%;background:rgba(0,0,0,.7);}
+.ship_area .item_select{width:50%;background:rgba(0,0,0,.7);box-sizing:border-box;}
 .ship_area .item_select1{border:5px double #ffac2f;}
 .ship_area .item_select2{margin:0 0 0 5px;border:5px double #e14040;}
-.ship_area .item_select > div{padding:5px;width:100%;box-sizing:border-box;}
+.ship_area .item_select2 > div{padding:5px;width:100%;box-sizing:border-box;}
 .ship_area .item_select1 .item_fix{padding:5px;border-bottom:5px double #ffac2f;}
 .ship_area .item_select2 .item_fix{padding:5px;border-bottom:5px double #e14040;}
 .ship_area .item_select .item{position:relative;width:50px;height:50px;}
@@ -99,4 +99,14 @@
 .ship12_sail1{transform-origin:50% 407px;transition:all 1s;}
 
 .ship_option_container{position:absolute;left:10px;top:10px;bottom:10px;justify-content:space-around;}
-.ship_option{}
+.ship_option{width:50px;height:50px;border-radius:10px;overflow:hidden;background:rgba(0,0,0,.5);}
+.ship_option .pic{position:relative;}
+
+.ship_option.normal{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-normal) 100%);}
+.ship_option.magic{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-magic) 100%);}
+.ship_option.rare{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-rare) 100%);}
+.ship_option.epic{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-epic) 100%);}
+.ship_option.set{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-set) 100%);}
+.ship_option.unique{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-unique) 100%);}
+.ship_option.legend{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-legend) 100%);}
+.ship_option .display_text{display:block;position:absolute;left:5px;bottom:5px;width:20px;height:20px;line-height:20px;font-size:14px;color:#fff;font-weight:600;background:rgba(0,0,0,.5);border-radius:10px;text-align:center;}

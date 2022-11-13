@@ -317,9 +317,9 @@ const ItemEnhancement = ({
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
 	const [selectTab, setSelectTab] = useState(0);
-	const [item, setItem] = useState(saveData.items);
-	const [selectItem1, setSelectItem1] = useState(saveData.items.equip[0] ? {
-		save:saveData.items.equip[0],
+	const [item, setItem] = useState({...saveData.items});
+	const [selectItem1, setSelectItem1] = useState(saveData?.items?.equip[0] ? {
+		save:{...saveData.items.equip[0]},
 		select:0,
 		game:gameItem.equip[saveData.items.equip[0].part][saveData.items.equip[0].weaponType][saveData.items.equip[0].grade < 5 ? 0 : saveData.items.equip[0].grade - 5][saveData.items.equip[0].idx],
 	} : {
@@ -331,7 +331,7 @@ const ItemEnhancement = ({
 	const [selectItem2, setSelectItem2] = useState({save:[],select:[],game:[]});//탭1 우측 홀 save, game
 	const [selectItem3, setSelectItem3] = useState({save:{},select:'',game:{}});//탭2 우측 홀 save, game
 	const [colorantIdx, setColorantIdx] = useState(0);
-	const [mainColor, setMainColor] = useState(saveData.items.equip[0] ? saveData.items.equip[0].color : '');//합성된 장비 색상
+	const [mainColor, setMainColor] = useState(saveData?.items?.equip[0] ? saveData.items.equip[0].color : '');//합성된 장비 색상
 	const [itemEffShow, setItemEffShow] = useState(false);//아이템 효과 보기
 	const [mItemEff, setMItemEff] = useState();//아이템 효과 문구
 	const [upgradeOn, setUpgradeOn] = useState('');//업그레이드 애니메이션 동작
@@ -382,11 +382,11 @@ const ItemEnhancement = ({
 	}, []);
 	useEffect(() => {
 		//equip, hole, upgrade, merterial, etc
-		setItem(saveData.items);
+		setItem({...saveData.items});
 		let baseSelectItem = {save:[],select:[],game:[]},
 		possibleColorantIdx = '';
 		let pHole = [];
-		if (saveData.items.equip[selectItem1.select]) {
+		if (saveData?.items?.equip[selectItem1.select]) {
 			saveData.items.equip[selectItem1.select].hole.forEach((data,idx) => {
 				if (data) {
 					baseSelectItem.save[idx] = data;
@@ -618,8 +618,8 @@ const ItemEnhancement = ({
 									})}
 								</ColorArea>
 							</ItemEnBack>
-							<div className="itemEn_bottom scroll-y">
-								<div className="item_select item_select1 num4">
+							<div className="itemEn_bottom">
+								<div className="item_select scroll-y item_select1 num4">
 									{item.equip && item.equip.map((data, idx) => {
 										const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
 										const items = gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx];
@@ -678,7 +678,7 @@ const ItemEnhancement = ({
 										)
 									})}
 								</div>
-								<div className="item_select item_select2 num4">
+								<div className="item_select scroll-y item_select2 num4">
 									{item.hole && item.hole.map((data, idx) => {
 										const items = gameItem.hole[data.idx];
 										const grade = data.grade || items.grade;

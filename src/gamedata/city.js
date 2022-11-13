@@ -6,7 +6,7 @@ export const city = {
 			equipmentShop:{helm:[],armor:[],weapon:[]},
 			tradingPost:[],
 			shipyard:{
-				ship:[0,1,2,3,4,5],
+				blueprint:[30],
 				wood:[0,3,4,5,7],
 				sail:[],
 				figure:[],

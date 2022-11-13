@@ -66,14 +66,14 @@ const Inven = ({
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
 	const [selectTab, setSelectTab] = useState(0);
-	const [item, setItem] = useState(saveData.items);
+	const [item, setItem] = useState({...saveData.items});
 	const [selectArea, setSelectArea] = useState('area1');
 	const [selectItem1, setSelectItem1] = useState({save:[],game:[],buttonType:[],selectTab:'',select:''});
 	const [selectItem2, setSelectItem2] = useState({save:[],game:[],buttonType:[],selectTab:'',select:''});
 	useEffect(() => {
 		//equip, hole, upgrade, merterial, etc
 		//console.log(saveData.items);
-		setItem(saveData.items);
+		setItem({...saveData.items});
 	}, [saveData]);
   return (
 		<>
@@ -85,7 +85,6 @@ const Inven = ({
 								setSelectTab(idx);
 							}}>
 								<button className="tab_menu_button">
-									
 									<span className="name">{gameData.msg.menu[data.na][lang]}</span>
 									<ShopIcon className="icon" icoType={imgSet.icon[data.icon]} />
 								</button>
