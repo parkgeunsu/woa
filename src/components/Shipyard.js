@@ -114,7 +114,9 @@ const Shipyard = ({
 					<div className="ship_top">
 						{shipList[selectTab].na === 'produce' && (
 							<>
-								<svg xmlns="http://www.w3.org/2000/svg" width="320px" height="600px" viewBox="0 0 320 600" dangerouslySetInnerHTML={{__html: util.setShipColor(gameData.shipSvg[selectShip.shipIdx], imgSet.wood[selectShip.wood], gameData.ships.woodColor[gameData.ships.wood[selectShip.wood].woodColor], Math.random().toString(36).substring(2, 11), [gameData.sailSvg[`${selectShip.shipIdx}_5_1`], gameData.sailSvg[`${selectShip.shipIdx}_5_2`], gameData.sailSvg[`${selectShip.shipIdx}_5_3`]], '#fff')}}></svg>
+								<div className="ship_display select_size">
+									<svg xmlns="http://www.w3.org/2000/svg" width="320px" height="600px" viewBox="0 0 320 600" dangerouslySetInnerHTML={{__html: util.setShipColor(gameData.shipSvg[selectShip.shipIdx], imgSet.wood[selectShip.wood], gameData.ships.woodColor[gameData.ships.wood[selectShip.wood].woodColor], Math.random().toString(36).substring(2, 11), [gameData.sailSvg[`${selectShip.shipIdx}_5_1`], gameData.sailSvg[`${selectShip.shipIdx}_5_2`], gameData.sailSvg[`${selectShip.shipIdx}_5_3`]], '#fff')}}></svg>
+								</div>
 								<div className="ship_option_container" flex-h-center="true">
 									<ShipOption className="ship_option ship_size"></ShipOption>
 									<ShipOption className="ship_option ship_sail"></ShipOption>

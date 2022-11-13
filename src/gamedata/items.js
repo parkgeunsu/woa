@@ -458,5 +458,12 @@ export const items = {
         {idx:21,grade:1,imgCate:'itemEtc',display:20,na:{ko:'스킬제거권',en:''},price:100,action:11,invenUse:false,txt:{ko:'캐릭터의 스킬을 제거할수 있다.',en:''},kg:0.1,eff:['?']},
         {idx:22,grade:1,imgCate:'itemEtc',display:28,na:{ko:'보석제거 집게',en:''},price:100,action:0,invenUse:false,txt:{ko:'아이템에 박힌 보석을 제거 할 수 있다.',en:''},kg:0.3,eff:['?']},
         '','','','','','','',
+        {idx:30,grade:1,imgCate:'itemEtc',display:24,na:{ko:'소형 선박 설계도',en:''},price:100,action:0,invenUse:false,txt:{ko:'소형 선박을 제조 할 수 있는 설계도.',en:''},kg:0.1,eff:['?']},
+        {idx:31,grade:1,imgCate:'itemEtc',display:24,na:{ko:'중형 선박 설계도',en:''},price:100,action:0,invenUse:false,txt:{ko:'소형 선박을 제조 할 수 있는 설계도.',en:''},kg:0.1,eff:['?']},
+        {idx:32,grade:1,imgCate:'itemEtc',display:24,na:{ko:'대형 선박 설계도',en:''},price:100,action:0,invenUse:false,txt:{ko:'소형 선박을 제조 할 수 있는 설계도.',en:''},kg:0.1,eff:['?']},
+        '','',
+        {idx:35,grade:1,imgCate:'itemEtc',display:25,na:{ko:'동물 선수상 설계도',en:''},price:100,action:0,invenUse:false,txt:{ko:'동물 선수상을 제조 할 수 있는 설계도.',en:''},kg:0.1,eff:['?']},
+        {idx:36,grade:1,imgCate:'itemEtc',display:25,na:{ko:'위인 선수상 설계도',en:''},price:100,action:0,invenUse:false,txt:{ko:'위인 선수상을 제조 할 수 있는 설계도.',en:''},kg:0.1,eff:['?']},
+        {idx:37,grade:1,imgCate:'itemEtc',display:25,na:{ko:'용 선수상 설계도',en:''},price:100,action:0,invenUse:false,txt:{ko:'용 선수상을 제조 할 수 있는 설계도.',en:''},kg:0.1,eff:['?']},
     ]
 }
