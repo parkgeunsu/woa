@@ -8,8 +8,10 @@ export const city = {
 			shipyard:{
 				blueprint:[30],
 				wood:[0,3,4,5,7],
-				sail:[],
-				figure:[],
+				sail:[0,1,2,5],
+				figure:[0,5,6,7,20,22,35,40],
+				anchor:[0,1,2,6],
+				cannon:[0,1,2,3,4,5,6]
 			}
 		}, 
 		{idx:1,cityName:'Ulsan',price:1,toolShop:{},equipmentShop:{},tradingPost:[]},

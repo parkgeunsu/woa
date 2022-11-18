@@ -4,6 +4,7 @@ import back2 from 'images/back/back2.jpg';
 import back3 from 'images/back/back5.jpg';
 import itemEn0 from 'images/back/itemEn0.png';
 import itemEn1 from 'images/back/itemEn1.png';
+import color from 'images/colorpicker.jpg';
 
 import imgCardBack from 'images/card/card_back.png';
 import imgRing from 'images/ring/ring_.png';
@@ -386,25 +387,85 @@ import wood7 from 'images/pattern/wood7.png';
 import wood8 from 'images/pattern/wood8.png';
 import wood9 from 'images/pattern/wood9.png';
 //선수상
-import figure0 from 'images/figure/figureface0.png';
-import figure1 from 'images/figure/figureface1.png';
-import figure2 from 'images/figure/figureface2.png';
-import figure3 from 'images/figure/figureface3.png';
-import figure4 from 'images/figure/figureface4.png';
-import figure5 from 'images/figure/figureface5.png';
-import figure6 from 'images/figure/figureface6.png';
-import figure7 from 'images/figure/figureface7.png';
-import figure8 from 'images/figure/figureface8.png';
-import figure9 from 'images/figure/figureface9.png';
-import figure10 from 'images/figure/figureface10.png';
-import figure11 from 'images/figure/figureface11.png';
-import figure12 from 'images/figure/figureface12.png';
-import figure13 from 'images/figure/figureface13.png';
-import figure14 from 'images/figure/figureface14.png';
-import figure15 from 'images/figure/figureface15.png';
-import figure16 from 'images/figure/figureface16.png';
-import figure17 from 'images/figure/figureface17.png';
-import figure18 from 'images/figure/figureface18.png';
+import figure0_0 from 'images/figure/figure0_0.png';
+import figure0_1 from 'images/figure/figure0_1.png';
+import figure0_2 from 'images/figure/figure0_2.png';
+import figure1_0 from 'images/figure/figure1_0.png';
+import figure1_1 from 'images/figure/figure1_1.png';
+import figure1_2 from 'images/figure/figure1_2.png';
+import figure2_0 from 'images/figure/figure2_0.png';
+import figure2_1 from 'images/figure/figure2_1.png';
+import figure2_2 from 'images/figure/figure2_2.png';
+import figure3_0 from 'images/figure/figure3_0.png';
+import figure3_1 from 'images/figure/figure3_1.png';
+import figure3_2 from 'images/figure/figure3_2.png';
+import figure4_0 from 'images/figure/figure4_0.png';
+import figure4_1 from 'images/figure/figure4_1.png';
+import figure4_2 from 'images/figure/figure4_2.png';
+import figure5_0 from 'images/figure/figure5_0.png';
+import figure5_1 from 'images/figure/figure5_1.png';
+import figure5_2 from 'images/figure/figure5_2.png';
+import figure6_0 from 'images/figure/figure6_0.png';
+import figure6_1 from 'images/figure/figure6_1.png';
+import figure6_2 from 'images/figure/figure6_2.png';
+import figure7_0 from 'images/figure/figure7_0.png';
+import figure7_1 from 'images/figure/figure7_1.png';
+import figure7_2 from 'images/figure/figure7_2.png';
+import figure8_0 from 'images/figure/figure8_0.png';
+import figure8_1 from 'images/figure/figure8_1.png';
+import figure8_2 from 'images/figure/figure8_2.png';
+import figure9_0 from 'images/figure/figure9_0.png';
+import figure9_1 from 'images/figure/figure9_1.png';
+import figure9_2 from 'images/figure/figure9_2.png';
+import figure10_0 from 'images/figure/figure10_0.png';
+import figure10_1 from 'images/figure/figure10_1.png';
+import figure10_2 from 'images/figure/figure10_2.png';
+import figure11_0 from 'images/figure/figure11_0.png';
+import figure11_1 from 'images/figure/figure11_1.png';
+import figure11_2 from 'images/figure/figure11_2.png';
+import figure12_0 from 'images/figure/figure12_0.png';
+import figure12_1 from 'images/figure/figure12_1.png';
+import figure12_2 from 'images/figure/figure12_2.png';
+import figure13_0 from 'images/figure/figure13_0.png';
+import figure13_1 from 'images/figure/figure13_1.png';
+import figure13_2 from 'images/figure/figure13_2.png';
+import figure14_0 from 'images/figure/figure14_0.png';
+import figure14_1 from 'images/figure/figure14_1.png';
+import figure14_2 from 'images/figure/figure14_2.png';
+import figure15_0 from 'images/figure/figure15_0.png';
+import figure15_1 from 'images/figure/figure15_1.png';
+import figure15_2 from 'images/figure/figure15_2.png';
+import figure16_0 from 'images/figure/figure16_0.png';
+import figure16_1 from 'images/figure/figure16_1.png';
+import figure16_2 from 'images/figure/figure16_2.png';
+//닻
+import anchor0 from 'images/anchor/anchor0.png';
+import anchor1 from 'images/anchor/anchor1.png';
+import anchor2 from 'images/anchor/anchor2.png';
+import anchor3 from 'images/anchor/anchor3.png';
+import anchor4 from 'images/anchor/anchor4.png';
+import anchor5 from 'images/anchor/anchor5.png';
+import anchor6 from 'images/anchor/anchor6.png';
+import anchor7 from 'images/anchor/anchor7.png';
+import anchor8 from 'images/anchor/anchor8.png';
+import anchor9 from 'images/anchor/anchor9.png';
+//돛
+import sail0 from 'images/sail/sail0.png';
+import sail1 from 'images/sail/sail1.png';
+import sail2 from 'images/sail/sail2.png';
+import sail3 from 'images/sail/sail3.png';
+import sail4 from 'images/sail/sail4.png';
+import sail5 from 'images/sail/sail5.png';
+//대포
+import cannon0 from 'images/cannon/cannon0.png';
+import cannon1 from 'images/cannon/cannon1.png';
+import cannon2 from 'images/cannon/cannon2.png';
+import cannon3 from 'images/cannon/cannon3.png';
+import cannon4 from 'images/cannon/cannon4.png';
+import cannon5 from 'images/cannon/cannon5.png';
+import cannon6 from 'images/cannon/cannon6.png';
+import cannon7 from 'images/cannon/cannon7.png';
+import cannon8 from 'images/cannon/cannon8.png';
 //날씨
 import sun from 'images/weather/sun.png';
 import moon from 'images/weather/moon.png';
@@ -456,7 +517,7 @@ export const menu = [
   menu0,menu1,menu2,menu3,menu4,menu5,menu6,menu7
 ]
 export const etc = {
-  imgRing:imgRing,imgCardBack:imgCardBack,frameChBack:frameChBack,stateBack:stateBack,imgCardFrame:imgCardFrame,imgCardLv:imgCardLv,iconCardName:iconCardName,imgRingBack:imgRingBack,frameRope:frameRope,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,questionBlack:questionBlack,questionWhite:questionWhite,wind:wind,
+  imgRing:imgRing,imgCardBack:imgCardBack,frameChBack:frameChBack,stateBack:stateBack,imgCardFrame:imgCardFrame,imgCardLv:imgCardLv,iconCardName:iconCardName,imgRingBack:imgRingBack,frameRope:frameRope,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,questionBlack:questionBlack,questionWhite:questionWhite,wind:wind,color:color,
 };
 export const icon = {
   iconBack:iconBack,iconChat:iconChat,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,iconHelm:iconHelm,iconArmor:iconArmor,iconWeapon:iconWeapon,iconBag:iconBag,iconAccessory:iconAccessory,iconSocket:itemHole1,iconEtc:itemEtc25,iconUpgrade:itemUpgrade0,iconMaterial:itemMaterial0,iconLock:iconLock,iconStateType0:iconStateType0,iconStateType1:iconStateType1,iconStateType2:iconStateType2,iconStateType3:iconStateType3,
@@ -534,7 +595,16 @@ export const eff = [
 ];
 export const wood = [
   wood0,wood1,wood2,wood3,wood4,wood5,wood6,wood7,wood8,wood9
+];
+export const sail = [
+  sail0,sail1,sail2,sail3,sail4,sail5
+]
+export const anchor = [
+  anchor0,anchor1,anchor2,anchor3,anchor4,anchor5,anchor6,anchor7,anchor8,anchor9
 ]
 export const figure = [
-  figure0,figure1,figure2,figure3,figure4,figure5,figure6,figure7,figure8,figure9,figure10,figure11,figure12,figure13,figure14,figure15,figure16,figure17,figure18
+  figure0_0,figure0_1,figure0_2,figure1_0,figure1_1,figure1_2,figure2_0,figure2_1,figure2_2,figure3_0,figure3_1,figure3_2,figure4_0,figure4_1,figure4_2,figure5_0,figure5_1,figure5_2,figure6_0,figure6_1,figure6_2,figure7_0,figure7_1,figure7_2,figure8_0,figure8_1,figure8_2,figure9_0,figure9_1,figure9_2,figure10_0,figure10_1,figure10_2,figure11_0,figure11_1,figure11_2,figure12_0,figure12_1,figure12_2,figure13_0,figure13_1,figure13_2,figure14_0,figure14_1,figure14_2,figure15_0,figure15_1,figure15_2,figure16_0,figure16_1,figure16_2,
+];
+export const cannon = [
+  cannon0,cannon1,cannon2,cannon3,cannon4,cannon5,cannon6,cannon7,cannon8
 ]

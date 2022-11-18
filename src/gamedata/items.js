@@ -428,6 +428,7 @@ export const items = {
         //거울
         //강철
         //비단,마섬유,면화,피혁,양모,모피,목화
+        //무궁화, 튤립, 장미
     ],
     etc:[
         {idx:0,grade:1,imgCate:'itemEtc',display:2,na:{ko:'동전더미(동)',en:''},kg:10,price:1000,

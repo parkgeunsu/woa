@@ -5,7 +5,7 @@ import { ch } from 'gamedata/heros';
 import { items } from 'gamedata/items';
 import { itemsSvg } from 'gamedata/itemsSvg';
 import { ships } from 'gamedata/ships';
-import { shipSvg, sailSvg } from 'gamedata/shipSvg';
+import { shipSvg, sailSvg, cannonSvg, figureSvg } from 'gamedata/shipSvg';
 import { colorSvg } from 'gamedata/colorSvg';
 import { job } from 'gamedata/job';
 import { lineup } from 'gamedata/lineup';
@@ -55,6 +55,8 @@ export const gameData = {
     colorSvg:colorSvg,
     shipSvg:shipSvg,
     sailSvg:sailSvg,
+    cannonSvg:cannonSvg,
+    figureSvg:figureSvg,
     prices:prices,
     guide:guide,
     recipe:recipe,

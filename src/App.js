@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState, useRef } from 'react';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
-import { back, animalType, icon, etc, iconStar, element, chImg, iconState, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, passive, eff, menu, weather, job, wood, figure } from 'components/ImgSet';
+import { back, animalType, icon, etc, iconStar, element, chImg, iconState, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, passive, eff, menu, weather, job, wood, anchor, sail, cannon, figure } from 'components/ImgSet';
 import { util } from 'components/Libs';
 import Main from 'components/Main';
 import Menu from 'components/Menu';
@@ -178,7 +178,11 @@ const App = () => {
       weather:weather,
       job:job,
       wood:wood,
+      anchor:anchor,
+      sail:sail,
+      cannon:cannon,
       figure:figure,
+      transparent:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAAtJREFUGFdjYAACAAAFAAGq1chRAAAAAElFTkSuQmCC',
     },
     gameData: {
       ...gameData,
@@ -315,6 +319,18 @@ const App = () => {
       img.src = image;
     });
     wood.forEach((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    anchor.forEach((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    cannon.forEach((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+    sail.forEach((image) => {
       const img = new Image();
       img.src = image;
     });

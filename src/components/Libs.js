@@ -1005,21 +1005,43 @@ export const util = { //this.loadImage();
     }
     return svg;
   },
-  setShipColor: (svgData, wood, colorSet, id, sail, sailColor) => {
+  setShipColor: (svgData, wood, colorSet, id, sail, sailColor, cannon) => {
     let svg = svgData;
     const idPattern = new RegExp("==id==","g"),
       woodPattern = new RegExp("==wood==","g");
-    svg = svg.replace(idPattern, id);
     svg = svg.replace(woodPattern, wood);
     for (const [idx, data] of sail.entries()) {
       const pattern = new RegExp("==sail"+idx+"==","g");
+      svg = svg.replace(pattern, data);
+    }
+    for (const [idx, data] of cannon.entries()) {
+      const pattern = new RegExp("==cannon"+idx+"==","g");
       svg = svg.replace(pattern, data);
     }
     for (const [idx, data] of colorSet.entries()) {
       const pattern = new RegExp("==w"+idx+"==","g");
       svg = svg.replace(pattern, data);
     }
-    svg = svg.replace(/==sColor==/g, sailColor);
+    for (const [idx, data] of sailColor.entries()) {
+      const pattern = new RegExp("==sColor"+idx+"==","g");
+      svg = svg.replace(pattern, data);
+    }
+    svg = svg.replace(idPattern, id);
+    return svg;
+  },
+  setFigureColor: (svgData, colorSet, color) => {
+    let svg = svgData;
+    if (typeof color === 'number') {
+      for (const [idx, data] of colorSet[color].entries()) {
+        const pattern = new RegExp("=="+idx+"==","g");
+        svg = svg.replace(pattern, data);
+      }
+    } else {
+      for (const [idx, data] of color.entries()) {
+        const pattern = new RegExp("=="+idx+"==","g");
+        svg = svg.replace(pattern, data);
+      }
+    }
     return svg;
   },
   getRgbColor: () => {
