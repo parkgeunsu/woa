@@ -67,7 +67,7 @@ export const ships = {
         {idx:6,grade:1,display:6,na:{ko:'이중 삼각돛',en:'Double Triangular Sail'},kg:1,price:100,color:["#F57E20"],socket:2,txt:{ko:'사각돛',en:''},eff:[{type:4,num:['5','50']},{type:6,num:['50','100']},{type:8,num:['1','5']}],actionType:"",requiredSlot:1,set:0},
     ],
     figurehead:[//조각상
-        {idx:0,grade:1,display:0,na:{ko:'나무 비둘기 조각상',en:'Wodden Dove Statue'},kg:0.5,price:400,color:1,txt:{ko:'나무로 만든 비둘기 조각상',en:''},eff:[{type:3,num:['50','100']},{type:5,num:['100','200']},{type:8,num:['1','5']}],set:0},
+        {idx:0,grade:1,display:0,na:{ko:'나무 비둘기 조각상',en:'Wodden Dove Statue'},kg:0.5,price:400,color:0,txt:{ko:'나무로 만든 비둘기 조각상',en:''},eff:[{type:3,num:['50','100']},{type:5,num:['100','200']},{type:8,num:['1','5']}],set:0},
         {idx:1,grade:2,display:0,na:{ko:'은 비둘기 조각상',en:'Silver Dove Statue'},kg:0.5,price:400,color:1,txt:{ko:'은으로 만든 비둘기 조각상',en:''},eff:[{type:3,num:['50','100']},{type:5,num:['100','200']},{type:8,num:['1','5']}],set:0},
         {idx:2,grade:3,display:0,na:{ko:'금 비둘기 조각상',en:'Gold Dove Statue'},kg:0.5,price:400,color:2,txt:{ko:'금으로 만든 비둘기 조각상',en:''},eff:[{type:3,num:['50','100']},{type:5,num:['100','200']},{type:8,num:['1','5']}],set:0},
         {idx:3,grade:1,display:1,na:{ko:'나무 매 조각상',en:'Wodden Hawk Statue'},kg:0.5,price:400,color:0,txt:{ko:'나무로 만든 매 조각상',en:''},eff:[{type:3,num:['50','100']},{type:5,num:['100','200']},{type:8,num:['1','5']}],set:0},

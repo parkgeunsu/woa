@@ -10,16 +10,16 @@
 .ship_area.ship0 .ship_top .ship_display .ship_face{transform:translate(-50%,-75%);}
 .ship_area.ship1 .ship_top .ship_display .ship_face{transform:translate(-50%,-79%);}
 .ship_area.ship2 .ship_top .ship_display .ship_face{transform:translate(-50%,-78%);}
-.ship_area.ship3 .ship_top .ship_display .ship_face{transform:translate(-50%,-98%);}
-.ship_area.ship4 .ship_top .ship_display .ship_face{transform:translate(-50%,-105%);}
-.ship_area.ship5 .ship_top .ship_display .ship_face{transform:translate(-50%,-107%);}
-.ship_area.ship6 .ship_top .ship_display .ship_face{transform:translate(-50%,-107%);}
-.ship_area.ship7 .ship_top .ship_display .ship_face{transform:translate(-50%,-107%);}
-.ship_area.ship8 .ship_top .ship_display .ship_face{transform:translate(-50%,-107%);}
-.ship_area.ship9 .ship_top .ship_display .ship_face{transform:translate(-50%,-125%);}
-.ship_area.ship10 .ship_top .ship_display .ship_face{transform:translate(-50%,-127%);}
-.ship_area.ship11 .ship_top .ship_display .ship_face{transform:translate(-50%,-132%);}
-.ship_area.ship12 .ship_top .ship_display .ship_face{transform:translate(-50%,-127%);}
+.ship_area.ship3 .ship_top .ship_display .ship_face{transform:translate(-50%,-90%);}
+.ship_area.ship4 .ship_top .ship_display .ship_face{transform:translate(-50%,-90%);}
+.ship_area.ship5 .ship_top .ship_display .ship_face{transform:translate(-50%,-93%);}
+.ship_area.ship6 .ship_top .ship_display .ship_face{transform:translate(-50%,-93%);}
+.ship_area.ship7 .ship_top .ship_display .ship_face{transform:translate(-50%,-97%);}
+.ship_area.ship8 .ship_top .ship_display .ship_face{transform:translate(-50%,-106%);}
+.ship_area.ship9 .ship_top .ship_display .ship_face{transform:translate(-50%,-105%);}
+.ship_area.ship10 .ship_top .ship_display .ship_face{transform:translate(-50%,-107%);}
+.ship_area.ship11 .ship_top .ship_display .ship_face{transform:translate(-50%,-110%);}
+.ship_area.ship12 .ship_top .ship_display .ship_face{transform:translate(-50%,-110%);}
 .ship_area .ship_top .ship_display.select_size svg{filter:brightness(0.3);}
 .ship_area .ship_top .ship_display.select_size:after{content:'?';position:absolute;left:50%;top:50%;font-size:40px;transform:translate(-50%,-50%);}
 .ship_area .ship_bottom{display:flex;margin:10px 0 0 0;height:30%;}
@@ -119,6 +119,7 @@
 .ship_option_container{position:absolute;left:10px;top:10px;right:10px;bottom:10px;justify-content:space-around;}
 .ship_option{position:absolute;width:50px;height:50px;transform:translate(0,-50%);z-index:10;}
 .ship_option_box{width:100%;height:100%;border-radius:10px;overflow:hidden;background:rgba(0,0,0,.3);}
+.ship_option_box .pic svg{width:100%;height:100%;}
 .ship_option.on .ship_option_box{outline:2px solid #0090ff;box-shadow:0 0 20px #0090ff;}
 .ship_option .sail_color{position:absolute;left:calc(100% + 10px);top:10px;width:30px;height:30px;border-radius:10px;overflow:hidden;background:rgba(0,0,0,.5);}
 .ship_blueprint{left:0;top:25px;}

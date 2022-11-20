@@ -74,7 +74,7 @@ const cateList = [
 const shipSize = (shipIdx) => {
 	if (shipIdx < 3) { //소형
 		return 0;
-	} else if (shipIdx < 9) { //중형
+	} else if (shipIdx < 8) { //중형
 		return 1;
 	} else { //대형
 		return 2;
@@ -175,7 +175,7 @@ const Shipyard = ({
 									{selectShip.shipIdx !== '' && (
 										<>
 											<svg className="ship_body" xmlns="http://www.w3.org/2000/svg" width="320px" height="600px" viewBox="0 0 320 600" dangerouslySetInnerHTML={{__html: util.setShipColor(gameData.shipSvg[selectShip.shipIdx], imgSet.wood[selectShip.wood] || imgSet.transparent, gameData.ships.woodColor[gameData.ships.wood[selectShip.wood]?.woodColor ?? 4], Math.random().toString(36).substring(2, 11), [gameData.sailSvg[`${selectShip.shipIdx}_${selectShip.sail0}_1`], gameData.sailSvg[`${selectShip.shipIdx}_${selectShip.sail1}_2`], gameData.sailSvg[`${selectShip.shipIdx}_${selectShip.sail2}_3`]], [selectShip.sail0Color, selectShip.sail1Color, selectShip.sail2Color], [gameData.cannonSvg[`${selectShip.shipIdx}_${selectShip.cannon0}_1`], gameData.cannonSvg[`${selectShip.shipIdx}_${selectShip.cannon1}_2`], gameData.cannonSvg[`${selectShip.shipIdx}_${selectShip.cannon2}_3`]])}}></svg>
-											{selectShip.figure !== '' && <svg className="ship_face" xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg[gameData.ships.figurehead[selectShip.figure].display], gameData.ships.figureColor, gameData.ships.figurehead[selectShip.figure].color)}}></svg>}
+											{selectShip.figure !== '' && <svg className="ship_face" style={{filter:`drop-shadow(0 0 7px ${gameData.ships.figureColor[gameData.ships.figurehead[selectShip.figure].color][2]})`}} xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg[gameData.ships.figurehead[selectShip.figure].display], gameData.ships.figureColor, gameData.ships.figurehead[selectShip.figure].color)}}></svg>}
 										</>
 									)}
 								</div>
@@ -189,9 +189,15 @@ const Shipyard = ({
 														setSelectCate(idx);
 													}}>
 														<div className="ship_option_box">
-															<ItemPic className="pic" itemPic={imgSet[cateList[selectItem1.selectCate[idx]].imgName][items.display]}>
-																{items.displayText && <span className="display_text">{items.displayText}</span>}
-															</ItemPic>
+															{idx === 2 ? (
+																<ItemPic className="pic" style={{transform:'scale(1.5)'}}>
+																	<svg className="ship_face" xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg[items.display], gameData.ships.figureColor, gameData.ships.figurehead[items.idx].color)}}></svg>
+																</ItemPic>
+															) : (
+																<ItemPic className="pic" itemPic={imgSet[cateList[selectItem1.selectCate[idx]].imgName][items.display]}>
+																	{items.displayText && <span className="display_text">{items.displayText}</span>}
+																</ItemPic>
+															)}
 														</div>
 														{(idx === 4 || idx === 5 || idx === 6) && (
 															<SailColor className="sail_color" color={selectShip[`${cateList[idx].classNa}Color`]} onClick={() => {
@@ -279,7 +285,7 @@ const Shipyard = ({
 														cloneShip.shipIdx = Math.floor(Math.random()*5) + 3;
 														break;
 													case 32://대형배
-														cloneShip.shipIdx = Math.floor(Math.random()*4) + 9;
+														cloneShip.shipIdx = Math.floor(Math.random()*5) + 8;
 														break;
 													default:
 														break;
@@ -369,7 +375,7 @@ const Shipyard = ({
 														cloneShip.shipIdx = Math.floor(Math.random()*5) + 3;
 														break;
 													case 32://대형배
-														cloneShip.shipIdx = Math.floor(Math.random()*4) + 9;
+														cloneShip.shipIdx = Math.floor(Math.random()*5) + 8;
 														break;
 													default:
 														break;
@@ -400,7 +406,13 @@ const Shipyard = ({
 								<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.game.na[lang]}`}}></span></li>
 								<li className="item_fix" flex="true">
 									<div className={`item ${gameData.itemGrade.txt_e[selectItem2.save.grade || selectItem2.game.grade || 1].toLowerCase()}`}>
-										<ItemPic className="pic" itemPic={imgSet[cateList[selectCate].imgName][selectItem2.game.display]} />
+										{selectCate === 2 ? (
+											<ItemPic className="pic" style={{transform:'scale(1.5)'}}>
+												<svg className="ship_face" xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg[selectItem2.game.display], gameData.ships.figureColor, gameData.ships.figurehead[selectItem2.game.idx].color)}}></svg>
+											</ItemPic>
+										) : (
+											<ItemPic className="pic" itemPic={imgSet[cateList[selectCate].imgName][selectItem2.game.display]} />
+										)}
 									</div>
 									<div flex-h="true" style={{flex: 1,}}>
 										<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem2.save.grade]}>
