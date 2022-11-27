@@ -4,6 +4,8 @@ import back2 from 'images/back/back2.jpg';
 import back3 from 'images/back/back5.jpg';
 import itemEn0 from 'images/back/itemEn0.png';
 import itemEn1 from 'images/back/itemEn1.png';
+import scroll from 'images/back/scroll.png';
+import stamp from 'images/back/stamp.png';
 import color from 'images/colorpicker.jpg';
 
 import imgCardBack from 'images/card/card_back.png';
@@ -162,6 +164,10 @@ import itemEtc25 from 'images/item/book3.png';
 import itemEtc26 from 'images/item/book4.png';
 import itemEtc27 from 'images/item/book5.png';
 import itemEtc28 from 'images/item/tongs.png';
+import itemEtc29 from 'images/item/map.png';
+import itemEtc30 from 'images/item/map_piece.png';
+import itemEtc31 from 'images/item/Blueprint.png';
+import itemEtc32 from 'images/item/Blueprint_piece.png';
 import itemHole0 from 'images/item/jewel0.png';
 import itemHole1 from 'images/item/jewel1.png';
 import itemHole2 from 'images/item/jewel2.png';
@@ -511,7 +517,7 @@ import buff11 from 'images/effect/buff11.png';
 import buff12 from 'images/effect/buff12.png';
 
 export const back = [
-  back0,back1,back2,back3,itemEn0,itemEn1
+  back0,back1,back2,back3,itemEn0,itemEn1,scroll,stamp
 ];
 export const menu = [
   menu0,menu1,menu2,menu3,menu4,menu5,menu6,menu7
@@ -546,7 +552,7 @@ export const iconState = [
   iconState0,iconState1,iconState2,iconState3,iconState4,iconState5,iconState6
 ];
 export const itemEtc = [
-  itemEtc0,itemEtc1,itemEtc2,'','','','','','','',itemEtc10,itemEtc11,'','','','','','','','',itemEtc20,itemEtc21,itemEtc22,itemEtc23,itemEtc24,itemEtc25,itemEtc26,itemEtc27,itemEtc28,'',
+  itemEtc0,itemEtc1,itemEtc2,'','','','','','','',itemEtc10,itemEtc11,'','','','','','','','',itemEtc20,itemEtc21,itemEtc22,itemEtc23,itemEtc24,itemEtc25,itemEtc26,itemEtc27,itemEtc28,itemEtc29,itemEtc30,itemEtc31,itemEtc32
 ];
 export const itemHole = [
   itemHole0,itemHole1,itemHole2,itemHole3,itemHole4,itemHole5,itemHole6,itemHole7,itemHole8,itemHole9,itemHole10,itemHole11,itemHole12,itemHole13,itemHole14,itemHole15,'','','','','',

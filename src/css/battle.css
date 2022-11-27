@@ -227,7 +227,7 @@
 .battle_end .battle_end_ch:nth-of-type{margin:0;}
 .battle_end_contribution{}
 .battle_end_hpexp{position:relative;width:100%;}
-.battle_end_hp{margin:0 10px 0 0;} */
+.battle_end_hp{margin:0 10px 0 0;}
 .battle_end_hpexp > div{display:flex;align-items:center;}
 .battle_end_hpexp .num{display:inline-block;margin:0 0 0 10px;font-size:16px;font-weight:600;}
 .battle_end_grade{position:absolute;width:16px;height:16px;opacity:0;font-size:14px;font-weight:600;color:var(--color-red);animation:grade_animation 1s ease-in forwards;z-index:1;}

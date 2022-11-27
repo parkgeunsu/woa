@@ -2,7 +2,7 @@ import { AppContext } from 'App';
 import { util } from 'components/Libs';
 import Modal from 'components/Modal';
 import ModalContainer from 'components/ModalContainer';
-import React, { useCallback, useContext, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import 'css/gacha.css';
 import { Prices } from 'components/Components';
@@ -280,7 +280,7 @@ const Gacha = ({
 	const setting = useContext(AppContext).setting,
     lang = setting.lang;
 	const iconStar = [imgSet.iconStar[0], imgSet.iconStar[1], imgSet.iconStar[2], imgSet.iconStar[3], imgSet.iconStar[4], imgSet.iconStar[5], imgSet.iconStar[6]];
-	const [gachaMode, setGachaMode] = useState('init');
+	const [gachaMode, setGachaMode] = useState('');
 	const [cardStateType, setCardStateType] = useState(''); //카드 성장타입
 	const [cardStar, setCardStar] = useState(0); //카드 성장타입
 	const setTime = useRef(null); //타임아웃 ref
@@ -315,7 +315,12 @@ const Gacha = ({
 		}
 		setGachaMode(mode);
 	}
-	useLayoutEffect(() => {
+	useEffect(() => {
+		if (Object.keys(saveData).length !== 0 && gachaMode === '') {
+			setGachaMode('init');
+		}
+	}, [saveData]);
+	useEffect(() => {
 		if (gachaMode === 'start') { // 뽑기모드
 			const gachaLength = cardRef.current.length;
 			const gachaIntervalTime = gachaLength *200;
@@ -522,7 +527,7 @@ const Gacha = ({
 						return (
 							<li key={idx} onClick={() => {handleModal('confirm', idx);}}>
 								<GachaMenuButton className="gacha_menu_button">{`${data.na[lang]}`}
-									<Prices style={{marginLeft:'10px'}} payment={gameData.prices.gacha.draw[idx]} imgSet={imgSet} saveData={saveData} gameData={gameData}/>
+									{gachaMode === 'init' && <Prices style={{marginLeft:'10px'}} payment={gameData.prices.gacha.draw[idx]} imgSet={imgSet} saveData={saveData} gameData={gameData}/>}
 								</GachaMenuButton>
 							</li>
 						);
@@ -582,79 +587,81 @@ const Gacha = ({
 						}
 					}}></div>
 				</div>
-				<GachaInfo ref={infoRef} onClick={() => {
-					infoRef.current.classList.remove('on');
-				}} className="gacha_info" borderImg={imgSet.etc.frameChBack}>
-					<div className="gacha_ch_card">
-						<Img imgurl={imgSet.etc.imgRing} />
-						<ul className="ch_detail">
-							<CardLvName className="gacha_name_lv" cardLv={imgSet.etc.imgCardLv}>
-								<Img className="img" imgurl={imgSet.etc.iconCardName} />
-								<span className="lv">1</span><span className="name_">{gameData.ch[infoIdx].na}</span><span className="name">{gameData.ch[infoIdx].na1}</span>
-							</CardLvName>
-							<CardDisplay className="gacha_ch" chDisplay={imgSet.chImg[`ch${gameData.ch[infoIdx].display}`]} />
-							<CardRing className="gacha_ring" ringBack={imgSet.etc.imgRingBack}></CardRing>
-							<CardElement className="gacha_element" ringDisplay={imgSet.ringImg[gameData.ch[infoIdx].element]} />
-							<CardStar type={'open'} className="gacha_star" starIcon={iconStar}>
-								{cardStar && makeStar(cardStar)}
-							</CardStar>
-							<div className="gacha_job_actiontype">
-								<CardJob jobIcon={imgSet.job[saveData.ch[slotIdx].job]} className="gacha_job"/>
-								{saveData.ch[slotIdx].newActionType.map((data, idx) => {
-									return (
-										<CardActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="gacha_action_type"/>
-									)
-								})}
-							</div>
-							<CardFrame className="gacha_frame" cardFrame={imgSet.etc.imgCardFrame} />
-						</ul>
-					</div>
-					<div className="gacha_ch_graph">
-						<canvas ref={graphRef}></canvas>
-					</div>
-					<div className="ch_state scroll-y">
-						<ul>
-							<li>
-								<dl>
-									<dt>State (능력치)</dt>
-									<dd>
-											<span className="st st0">{`${gameData.ch[infoIdx].st0} (${gameData.stateName[0]})`} </span>
-											<span className="st st1">{`${gameData.ch[infoIdx].st1} (${gameData.stateName[1]})`} </span>
-											<span className="st st2">{`${gameData.ch[infoIdx].st2} (${gameData.stateName[2]})`} </span>
-											<span className="st st3">{`${gameData.ch[infoIdx].st3} (${gameData.stateName[3]})`} </span>
-											<span className="st st4">{`${gameData.ch[infoIdx].st4} (${gameData.stateName[4]})`} </span>
-											<span className="st st5">{`${gameData.ch[infoIdx].st5} (${gameData.stateName[5]})`} </span>
-											<span className="st st6">{`${gameData.ch[infoIdx].st6} (${gameData.stateName[6]})`} </span>
-									</dd>
-								</dl>
-							</li>
-							<li>
-								<dl>
-									<dt>Growth (성장)</dt>
-									<dd><span>{cardStateType}</span></dd>
-								</dl>
-							</li>
-							<li>
-								<dl>
-									<dt>Relation (인연)</dt>
-									<dd>
-										{gameData.ch[infoIdx].relation && gameData.ch[infoIdx].relation.map((data, idx) => {
-											return (
-												<span key={idx}>{gameData.relation[data].na[lang]}</span>
-											);
-										})}
-									</dd>
-								</dl>
-							</li>
-							<li>
-								<dl>
-									<dt>Skill (스킬)</dt>
-									<dd><span>스킬1</span></dd>
-								</dl>
-							</li>
-						</ul>
-					</div>
-				</GachaInfo>
+				{gachaMode === 'start' && (
+					<GachaInfo ref={infoRef} onClick={() => {
+						infoRef.current.classList.remove('on');
+					}} className="gacha_info" borderImg={imgSet.etc.frameChBack}>
+						<div className="gacha_ch_card">
+							<Img imgurl={imgSet.etc.imgRing} />
+							<ul className="ch_detail">
+								<CardLvName className="gacha_name_lv" cardLv={imgSet.etc.imgCardLv}>
+									<Img className="img" imgurl={imgSet.etc.iconCardName} />
+									<span className="lv">1</span><span className="name_">{gameData.ch[infoIdx].na}</span><span className="name">{gameData.ch[infoIdx].na1}</span>
+								</CardLvName>
+								<CardDisplay className="gacha_ch" chDisplay={imgSet.chImg[`ch${gameData.ch[infoIdx].display}`]} />
+								<CardRing className="gacha_ring" ringBack={imgSet.etc.imgRingBack}></CardRing>
+								<CardElement className="gacha_element" ringDisplay={imgSet.ringImg[gameData.ch[infoIdx].element]} />
+								<CardStar type={'open'} className="gacha_star" starIcon={iconStar}>
+									{cardStar && makeStar(cardStar)}
+								</CardStar>
+								<div className="gacha_job_actiontype">
+									<CardJob jobIcon={imgSet.job[saveData.ch[slotIdx].job]} className="gacha_job"/>
+									{saveData.ch[slotIdx].newActionType.map((data, idx) => {
+										return (
+											<CardActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="gacha_action_type"/>
+										)
+									})}
+								</div>
+								<CardFrame className="gacha_frame" cardFrame={imgSet.etc.imgCardFrame} />
+							</ul>
+						</div>
+						<div className="gacha_ch_graph">
+							<canvas ref={graphRef}></canvas>
+						</div>
+						<div className="ch_state scroll-y">
+							<ul>
+								<li>
+									<dl>
+										<dt>State (능력치)</dt>
+										<dd>
+												<span className="st st0">{`${gameData.ch[infoIdx].st0} (${gameData.stateName[0]})`} </span>
+												<span className="st st1">{`${gameData.ch[infoIdx].st1} (${gameData.stateName[1]})`} </span>
+												<span className="st st2">{`${gameData.ch[infoIdx].st2} (${gameData.stateName[2]})`} </span>
+												<span className="st st3">{`${gameData.ch[infoIdx].st3} (${gameData.stateName[3]})`} </span>
+												<span className="st st4">{`${gameData.ch[infoIdx].st4} (${gameData.stateName[4]})`} </span>
+												<span className="st st5">{`${gameData.ch[infoIdx].st5} (${gameData.stateName[5]})`} </span>
+												<span className="st st6">{`${gameData.ch[infoIdx].st6} (${gameData.stateName[6]})`} </span>
+										</dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+										<dt>Growth (성장)</dt>
+										<dd><span>{cardStateType}</span></dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+										<dt>Relation (인연)</dt>
+										<dd>
+											{gameData.ch[infoIdx].relation && gameData.ch[infoIdx].relation.map((data, idx) => {
+												return (
+													<span key={idx}>{gameData.relation[data].na[lang]}</span>
+												);
+											})}
+										</dd>
+									</dl>
+								</li>
+								<li>
+									<dl>
+										<dt>Skill (스킬)</dt>
+										<dd><span>스킬1</span></dd>
+									</dl>
+								</li>
+							</ul>
+						</div>
+					</GachaInfo>
+				)}
 			</GachaWrap>
 			<ModalContainer>
 				{modalOn && <Modal fn={changeGachaMode} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} lang={lang} onClose={() => {

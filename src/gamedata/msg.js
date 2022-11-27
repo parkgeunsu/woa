@@ -88,6 +88,10 @@ export const msg = {
 			ko:'제작',
 			en:'Produce',
 		},
+		remodeling:{
+			ko:'개조',
+			en:'Remodeling',
+		},
 		used:{
 			ko:'중고',
 			en:'Used',
@@ -195,6 +199,32 @@ export const msg = {
 			en:'Reset'
 		}
 	},
+	ship:{
+		durability:{
+			ko:'내구도',
+			en:'Durability'
+		},
+		loadage:{
+			ko:'적재량',
+			en:'Loadage'
+		},
+		knot:{
+			ko:'속도',
+			en:'Knot'
+		},
+		space:{
+			ko:'공간',
+			en:'Space'
+		},
+		cannon:{
+			ko:'대포',
+			en:'Cannon'
+		},
+		sign:{
+			ko:'싸인',
+			en:'Sign'
+		}
+	},
 	itemInfo:{
 		itemEffect:{
 			ko:'아이템 효과',
@@ -258,6 +288,10 @@ export const msg = {
 			ko:'스킬이 최대 레벨입니다.',
 			en:'The skill maximum level.',
 		},
+		lackSkillPoint:{
+			ko:'스킬 포인트가 부족합니다.',
+			en:'Insufficient skill points.',
+		},
 		lackUpgrade:{
 			ko:'아이템 강화서가 부족합니다.',
 			en:'There are not enough item enhancements.',
@@ -293,6 +327,26 @@ export const msg = {
 		selectQuantity:{
 			ko:'수량을 선택하세요.',
 			en:'Please select a quantity.',
+		},
+		selectBlueprint:{
+			ko:'선박 설계도를 먼저 선택하세요.',
+			en:'Please select the ship\'s blueprint first.',
+		},
+		selectWood:{
+			ko:'목재를 선택해 주세요.',
+			en:'Please select wood.',
+		},
+		selectSail:{
+			ko:'돛을 선택해 주세요.',
+			en:'Please select a sail.',
+		},
+		selectAnchor:{
+			ko:'닻을 선택해 주세요.',
+			en:'Please select an anchor.',
+		},
+		selectShipName:{
+			ko:'선박의 이름을 정해주세요.',
+			en:'Please name the ship.',
 		}
 	},
 	sentenceFn:{

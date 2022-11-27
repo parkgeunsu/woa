@@ -80,6 +80,12 @@ em{font-style:normal;}
 .header li.diamond .txt{width:60px;text-align:right;}
 .header li.money{flex-grow:0;}
 .header li.money .txt{width:80px;text-align:right;}
+.header li .num{position:absolute;right:10px;top:50%;transform:translate(0,-50%);transition:all 1s;font-weight:600;font-size:14px;white-space:nowrap;color:transparent;}
+.header li .num.minus{color:#ff2a00;}
+.header li .num.plus{color:#0090ff;}
+.header li .num.minus:before{content:'- ';}
+.header li .num.plus:before{content:'+ ';}
+.header li.on .num{top:20%;}
 .header li.menu{float:right;overflow:hidden;}
 .header li.menu li{position:relative;float:left;visibility:hidden;height:100%;text-align:center;}
 .header li.menu li.used{visibility:visible;}

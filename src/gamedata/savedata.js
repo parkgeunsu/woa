@@ -9,26 +9,53 @@ export const save = {
   },
   "ship":[
     {
-      anchor:0,
-      storage:700,
+      stay:0,
+      shipIdx:1,
+      wood:3,
+      figure:22,
+      anchor:2,
+      sail:[{type: 1, color: "rgba(67,254,116,1)"},{type: 2, color: "rgba(1,32,182,1)"}],
+      cannon:[1,2],
       resource:{
-
+        name:"보잉메리호",durability:17500,knot: 16,loadage:1500,price:185500,space:[0,0,0],cannon:0,
       },
       loadedItem:[
         {idx:3,num:300},
         {idx:23,num:20},
         {idx:44,num:210},
       ]
-    },{
-      anchor:0,
-      storage:1500,
+    },
+    {
+      stay:0,
+      shipIdx:11,
+      wood:5,
+      figure:46,
+      anchor:5,
+      sail:[{type: 1, color: "rgba(255,254,116,1)"},{type: 2, color: "rgba(1,32,182,1)"},{type: 2, color: "rgba(1,255,182,1)"}],
+      cannon:[1,2,7],
       resource:{
-
+        name:"우루루쾅쾅",durability:17500,knot: 16,loadage:1200,price:185500,space:[0,0,0],cannon:0,
       },
       loadedItem:[
-        {idx:4,num:100},
-        {idx:25,num:170},
-        {idx:42,num:1000},
+        {idx:5,num:100},
+        {idx:10,num:100},
+        {idx:32,num:150},
+      ]
+    },
+    {
+      stay:0,
+      shipIdx:8,
+      wood:4,
+      figure:42,
+      anchor:3,
+      sail:[{type: 2, color: "rgba(255,0,0,1)"},{type: 2, color: "rgba(255,200,0,1)"}],
+      cannon:[6,3],
+      resource:{
+        name:"문규빈짱호",durability:17500,knot: 16,loadage:2500,price:185500,space:[0,0,0,0],cannon:0,
+      },
+      loadedItem:[
+        {idx:3,num:300},
+        {idx:2,num:40},
       ]
     },
   ],
@@ -141,6 +168,22 @@ export const save = {
       {"idx":1},
     ],
     "etc":[
+      {"idx":26},
+      {"idx":26},
+      {"idx":26},
+      {"idx":26},
+      {"idx":26},
+      {"idx":26},
+      {"idx":26},
+      {"idx":26},
+      {"idx":26},
+      {"idx":26},
+      {"idx":26},
+      {"idx":26},
+      {"idx":26},
+      {"idx":26},
+      {"idx":26},
+      {"idx":25},
       {"idx":9},
       {"idx":9},
       {"idx":10},
@@ -176,6 +219,7 @@ export const save = {
       {"idx":35},
       {"idx":36},
       {"idx":37},
+      {"idx":38},
     ]
   },
   "lineup":{

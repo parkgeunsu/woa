@@ -2684,7 +2684,7 @@ const Battle = ({
 			} else { //스킬 실행
 				if (battleAlly.current[orderIdx].sp - skill.sp < 0) {
 					setMsgOn(true);
-					setMsg("스킬 포인트가 부족합니다.");
+					setMsg(gameData.msg.sentence.lackSkillPoint[lang]);
 					return;
 				}
 				const skType = skill.cate[0];

@@ -1,6 +1,6 @@
 export const recipe = {
 	1:[
-		{}
+		{entry:[{cate:'etc',idx:25}],get:[{cate:'etc',idx:[27,28,29,30,31,32,33,34,35,36,37,38]}]}
 	],
 	2:[
     //보석
@@ -114,8 +114,23 @@ export const recipe = {
 		{entry:[{cate:'equip',idx:'g1'},{cate:'equip',idx:'g1'},{cate:'equip',idx:'g1'},{cate:'equip',idx:'g1'},{cate:'equip',idx:'g1'}],get:[{cate:'equip',idx:'g2'}]},
 		{entry:[{cate:'equip',idx:'g2'},{cate:'equip',idx:'g2'},{cate:'equip',idx:'g2'},{cate:'equip',idx:'g2'},{cate:'equip',idx:'g2'}],get:[{cate:'equip',idx:'g3'}]},
 		{entry:[{cate:'equip',idx:'g3'},{cate:'equip',idx:'g3'},{cate:'equip',idx:'g3'},{cate:'equip',idx:'g3'},{cate:'equip',idx:'g3'}],get:[{cate:'equip',idx:'g4'}]},
+		{entry:[{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26}],get:[{cate:'etc',idx:[27,28,29]}]},
 	],
 	6:[
 		{}
+	],
+	7:[],
+	8:[],
+	9:[],
+	10:[
+		{entry:[{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26}],get:[{cate:'etc',idx:[30,31,32,33]}]},
+		{entry:[{cate:'etc',idx:24},{cate:'etc',idx:24},{cate:'etc',idx:24},{cate:'etc',idx:24},{cate:'etc',idx:24},{cate:'etc',idx:24},{cate:'etc',idx:24},{cate:'etc',idx:24},{cate:'etc',idx:24},{cate:'etc',idx:24}],get:[{cate:'etc',idx:23}]},
+	],
+	11:[],
+	12:[],
+	13:[],
+	14:[],
+	15:[
+		{entry:[{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26}],get:[{cate:'etc',idx:[34,35,36,37,38]}]},
 	],
 }

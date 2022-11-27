@@ -9,7 +9,7 @@ export const city = {
 				blueprint:[30],
 				wood:[0,3,4,5,7],
 				sail:[0,1,2,5],
-				figure:[0,5,6,7,20,22,35,40],
+				figure:[0,5,6,7,20,22,35,40,47],
 				anchor:[0,1,2,6],
 				cannon:[0,1,2,3,4,5,6]
 			}

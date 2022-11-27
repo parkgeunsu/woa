@@ -400,7 +400,7 @@ const ToolShop = ({
 													case 'buy':
 														return (
 															<div key={`button${idx}`}>
-																<div className="item_price"><span>{gameData.msg.itemInfo.buyPrice[lang]}</span><em>{`₩${(selectItem1.game.price < 1000 ? 1000 : selectItem1.game.price) * 2 * selectItem1.save.grade}`}</em></div>
+																<div className="item_price"><span>{gameData.msg.itemInfo.buyPrice[lang]}</span><em>{`₩${util.comma((selectItem1.game.price < 1000 ? 1000 : selectItem1.game.price) * 2 * selectItem1.save.grade)}`}</em></div>
 																<div className="item_button" flex="true">
 																	<button text="true" className="button_small" onClick={(e) => {
 																		let saveD = {...saveData};
@@ -430,7 +430,7 @@ const ToolShop = ({
 													case 'sell':
 														return (
 															<div key={`button${idx}`}>
-																<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${selectItem1.game.price * (selectItem1.game.grade || selectItem1.save.grade)}`}</em></div>
+																<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${util.comma(selectItem1.game.price * (selectItem1.game.grade || selectItem1.save.grade))}`}</em></div>
 																<div className="item_button" flex="true">
 																	<button text="true" className="button_small" onClick={(e) => {
 																		util.buttonEvent({
@@ -492,7 +492,7 @@ const ToolShop = ({
 													case 'buy':
 														return (
 															<div key={`button${idx}`}>
-																<div className="item_price"><span>{gameData.msg.itemInfo.buyPrice[lang]}</span><em>{`₩${(selectItem1.game.price < 1000 ? 1000 : selectItem1.game.price) * 2}`}</em></div>
+																<div className="item_price"><span>{gameData.msg.itemInfo.buyPrice[lang]}</span><em>{`₩${util.comma((selectItem1.game.price < 1000 ? 1000 : selectItem1.game.price) * 2)}`}</em></div>
 																<div className="item_button" flex="true">
 																	<button text="true" className="button_small" onClick={(e) => {
 																		util.buttonEvent({
@@ -520,7 +520,7 @@ const ToolShop = ({
 													case 'sell':
 														return (
 															<div key={`button${idx}`}>
-																<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${selectItem1.game.price * (selectItem1.game.grade || selectItem1.save.grade)}`}</em></div>
+																<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${util.comma(selectItem1.game.price * (selectItem1.game.grade || selectItem1.save.grade))}`}</em></div>
 																<div className="item_button" flex="true">
 																	<button text="true" className="button_small" onClick={(e) => {
 																		util.buttonEvent({
@@ -635,7 +635,7 @@ const ToolShop = ({
 													case 'buy':
 														return (
 															<div key={`button${idx}`}>
-																<div className="item_price"><span>{gameData.msg.itemInfo.buyPrice[lang]}</span><em>{`₩${(selectItem2.game.price < 1000 ? 1000 : selectItem2.game.price) * 2 * selectItem2.save.grade}`}</em></div>
+																<div className="item_price"><span>{gameData.msg.itemInfo.buyPrice[lang]}</span><em>{`₩${util.comma((selectItem2.game.price < 1000 ? 1000 : selectItem2.game.price) * 2 * selectItem2.save.grade)}`}</em></div>
 																<div className="item_button" flex="true">
 																	<button text="true" className="button_small" onClick={(e) => {
 																		let item_ = [...item];
@@ -666,7 +666,7 @@ const ToolShop = ({
 													case 'sell':
 														return (
 															<div key={`button${idx}`}>
-																<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${selectItem2.game.price * (selectItem2.game.grade || selectItem2.save.grade)}`}</em></div>
+																<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${util.comma(selectItem2.game.price * (selectItem2.game.grade || selectItem2.save.grade))}`}</em></div>
 																<div className="item_button" flex="true">
 																	<button text="true" className="button_small" onClick={(e) => {
 																		util.buttonEvent({
@@ -728,7 +728,7 @@ const ToolShop = ({
 													case 'buy':
 														return (
 															<div key={`button${idx}`}>
-																<div className="item_price"><span>{gameData.msg.itemInfo.buyPrice[lang]}</span><em>{`₩${(selectItem2.game.price < 1000 ? 1000 : selectItem2.game.price) * 2}`}</em></div>
+																<div className="item_price"><span>{gameData.msg.itemInfo.buyPrice[lang]}</span><em>{`₩${util.comma((selectItem2.game.price < 1000 ? 1000 : selectItem2.game.price) * 2)}`}</em></div>
 																<div className="item_button" flex="true">
 																	<button text="true" className="button_small" onClick={(e) => {
 																		util.buttonEvent({
@@ -756,7 +756,7 @@ const ToolShop = ({
 													case 'sell':
 														return (
 															<div key={`button${idx}`}>
-																<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${selectItem2.game.price * (selectItem2.game.grade || selectItem2.save.grade)}`}</em></div>
+																<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${util.comma(selectItem2.game.price * (selectItem2.game.grade || selectItem2.save.grade))}`}</em></div>
 																<div className="item_button" flex="true">
 																	<button text="true" className="button_small" onClick={(e) => {
 																		util.buttonEvent({

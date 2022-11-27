@@ -22,7 +22,6 @@ import { gameData, version } from 'gamedata/data';
 import { save } from 'gamedata/savedata';
 import styled from 'styled-components';
 
-
 export const AppContext = createContext();
 
 const RootContainer = styled(AppContext.Provider)`

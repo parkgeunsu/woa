@@ -38,19 +38,7 @@ const ItemPic = styled.div`
 const ItemName = styled.div`
   .item_grade{color:${({ color }) => color};}
 `;
-const ShipContainer = styled.div`
-	border:5px solid transparent;
-	border-image:url(${({frameBack}) => frameBack}) 5 round;
-	&.on{
-		outline:5px solid #000;
-	}
-  .item_header{border:5px solid transparent;
-  border-image:url(${({frameBack}) => frameBack}) 5 round;
-  }
-`;
-const ShipPic = styled.div`
-	display:inline-block;width:100%;height:100%;background-image:url(${({shipPic}) => shipPic});background-size:100%;background-repeat:no-repeat;
-`;
+const ShipContainer = styled.div``;
 const tradingList = [
 	{na:'buy',icon:"iconHelm"},
 	{na:'sell',icon:"iconArmor"},
@@ -62,7 +50,15 @@ const storageCheck = (items) => {
 	}
 	return total;
 }
-
+const shipSize = (shipIdx) => {
+	if (shipIdx < 3) { //소형
+		return 0;
+	} else if (shipIdx < 8) { //중형
+		return 1;
+	} else { //대형
+		return 2;
+	}
+}
 const TradingPost = ({
 	cityIdx,
 	saveData,
@@ -131,13 +127,14 @@ const TradingPost = ({
 											game:items,
 											select:idx,
 											selectTab:selectTab,
+											selectShip:selectShip,
 											buttonType:button,
 										});
 										setRangeValue(0);
 									}}>
 										<ItemPic className="pic" itemPic={imgSet.itemMaterial[items.display]}>
 											{typeof data.num === 'number' ? (
-												<span className="has_num">{data.num}</span>
+												<span className="has_num">{util.comma(data.num)}</span>
 											) : (
 												<span className="has_num infinite">∞</span>
 											)}
@@ -145,18 +142,20 @@ const TradingPost = ({
 									</div>
 								)
 							} else {
-								if (data.anchor === saveData.info.stay && idx === selectShip) {
+								if (data.stay === saveData.info.stay && idx === selectShip) {
 									return data.loadedItem.map((itemData, itemIdx) => {
 										const items = gameItem.material[itemData.idx];
 										const grade = items.grade;
+										console.log(selectItem);
 										return (
-											<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${selectItem.selectTab === selectTab && selectItem.selectShip === idx && selectItem.select === itemIdx ? 'select2' : ''}`} key={`shipitems${itemIdx}`} onClick={() => {
+											<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${selectItem.selectTab === selectTab && selectItem.selectShip === selectShip && selectItem.select === itemIdx ? 'select2' : ''}`} key={`shipitems${itemIdx}`} onClick={() => {
 												let button = ['sell','bargaining'];
 												setSelectItem({
 													save:itemData,
 													game:items,
 													select:itemIdx,
 													selectTab:selectTab,
+													selectShip:selectShip,
 													buttonType:button,
 												});
 												setRangeValue(0);
@@ -176,14 +175,37 @@ const TradingPost = ({
 						})}
 					</div>
 					<div className="trading_middle scroll-x">
-						{item[1] && item[1].map((shipData, shipIdx) => {
-							if (shipData.anchor === saveData.info.stay) {
+						{item[1] && item[1].map((shipD, shipIdx) => {
+							if (shipD.stay === saveData.info.stay) {
+								let shipSail = [],
+									shipSailColor = [],
+									shipCannon = [];
+								shipD.sail.forEach((data, idx) => {
+									if (data) {
+										shipSail[idx] = `${shipD.shipIdx}_${data.type}_${idx + 1}`;
+										shipSailColor[idx] = data.color;
+									} else {
+										shipSail[idx] = '';
+										shipSailColor[idx] = '';
+									}
+								});
+								shipD.cannon.forEach((data, idx) => {
+									if (data) {
+										shipCannon[idx] = `${shipD.shipIdx}_${data}_${idx + 1}`
+									} else {
+										shipCannon[idx] = '';
+									}
+								})
 								return (
 									<ShipContainer className={`ship ${selectShip === shipIdx ? 'select' : ''}`} key={`ship${shipIdx}`} onClick={() => {
 										setSelectShip(shipIdx);
+										setSelectItem({save:{},game:{},select:'',selectTab:'',selectShip:'',buttonType:[]});
 									}}>
-										<ShipPic className="pic"/>
-										<div className="ship_storage">{storageCheck(shipData.loadedItem)} / {shipData.storage}</div>
+										<div className={`ship_display size${shipSize(shipD.shipIdx)} ship${shipD.shipIdx}`}>
+											<svg className="ship_body" xmlns="http://www.w3.org/2000/svg" width="320px" height="600px" viewBox="0 0 320 600" dangerouslySetInnerHTML={{__html: util.setShipColor(gameData.shipSvg[shipD.shipIdx], imgSet.wood[shipD.wood] || imgSet.transparent, gameData.ships.woodColor[gameData.ships.wood[shipD.wood]?.woodColor ?? 4], Math.random().toString(36).substring(2, 11), [gameData.sailSvg[shipSail[0]], gameData.sailSvg[shipSail[1]], gameData.sailSvg[shipSail[2]]], [shipSailColor[0], shipSailColor[1], shipSailColor[2]], [gameData.cannonSvg[shipCannon[0]], gameData.cannonSvg[shipCannon[1]], gameData.cannonSvg[shipCannon[2]]])}}></svg>
+											{shipD.figure !== '' && <svg className="ship_face" style={{filter:`drop-shadow(0 0 7px ${gameData.ships.figureColor[gameData.ships.figurehead[shipD.figure].color][2]})`}} xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg[gameData.ships.figurehead[shipD.figure].display], gameData.ships.figureColor, gameData.ships.figurehead[shipD.figure].color)}}></svg>}
+										</div>
+										<div className="ship_storage">{storageCheck(shipD.loadedItem)} / <br/>{shipD.resource.loadage}</div>
 									</ShipContainer>
 								)
 							}
@@ -204,7 +226,7 @@ const TradingPost = ({
 											</div>
 											<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectItem.game.txt[lang]}"`}}></div>
 											<div flex="true" style={{justifyContent:'space-between'}}>
-												<div className="item_price"><span>{gameData.msg.itemInfo.buyPrice[lang]}</span><em>{`₩${(selectItem.game.price < 1000 ? 1000 : selectItem.game.price)}`}</em></div>
+												<div className="item_price"><span>{gameData.msg.itemInfo.buyPrice[lang]}</span><em>{`₩${util.comma(selectItem.game.price < 1000 ? 1000 : selectItem.game.price)}`}</em></div>
 												<div className="item_kg">{selectItem.game.kg}kg</div>
 											</div>
 										</ItemName>
@@ -279,7 +301,7 @@ const TradingPost = ({
 																		showPopup: setPopupOn,
 																		lang: lang,
 																	});
-																	setSelectItem({save:{},game:{},select:'',selectTab:'',buttonType:[]});
+																	setSelectItem({save:{},game:{},select:'',selectTab:'',selectShip:'',buttonType:[]});
 																} else {
 																	setMsgOn(true);
 																	setMsg(gameData.msg.sentence.selectQuantity[lang]);

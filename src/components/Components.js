@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { util } from 'components/Libs';
 import styled from 'styled-components';
 import { Range, getTrackBackground } from 'react-range';
 
@@ -56,7 +57,7 @@ export const Prices = ({
 }) => {
   return (
     payment.map((data, idx) => {
-      return <StyledPrices icoType={icon(data, imgSet, gameData)} {...props} key={`payment${idx}`} dangerouslySetInnerHTML={{__html:`-${data.price} <em>(${remainingItem(data, saveData)})</em>`}}></StyledPrices>
+      return <StyledPrices icoType={icon(data, imgSet, gameData)} {...props} key={`payment${idx}`} dangerouslySetInnerHTML={{__html:`-${util.comma(data.price)} <em>(${util.comma(remainingItem(data, saveData))})</em>`}}></StyledPrices>
     })
   );
 }
@@ -114,7 +115,7 @@ export const RangeSlider = ({
   const max_ = typeof max === 'number' ? max : 999999;
   return (
     <div style={{padding:'5px 20px'}}>
-      <TextMinMax><span>{min}</span><span>{max_}</span></TextMinMax>
+      <TextMinMax><span>{min}</span><span>{util.comma(max_)}</span></TextMinMax>
       <Range
         draggableTrack
         step={step}
@@ -136,8 +137,8 @@ export const RangeSlider = ({
       <div flex="true" style={{margin:'10px 0 0 0'}}>
         <TextValue onClick={() => {
           showCal(true);
-        }}>{String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</TextValue>
-        <TextValue>{String(pirce * value).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</TextValue>
+        }}>{util.comma(String(value))}</TextValue>
+        <TextValue>{util.comma(String(pirce * value))}</TextValue>
       </div>
     </div>
 	)
@@ -184,7 +185,7 @@ export const Calculator = ({
     <CalContainer>
       <div className="cal_layout">
         <div className="cal_value">
-          {result.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          {util.comma(result)}
         </div>
         <button className="result" onClick={() => {
           setValue(result);

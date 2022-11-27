@@ -87,7 +87,7 @@ const CombinedItem = ({
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
 	const [selectTab, setSelectTab] = useState(0);
-	const [item, setItem] = useState(saveData.items);
+	const [item, setItem] = useState([]);
 	const [selectIdx, setSelectIdx] = useState(0);
 	const [selectItem, setSelectItem] = useState({save:[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],game:[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],select:['','','','','','','','','','','','','','','',''],selectTab:['','','','','','','','','','','','','','','','']});//합성 선택 아이템 save, game
 	// const handleModal = (socketIdx) => {
@@ -116,25 +116,27 @@ const CombinedItem = ({
   // }
 	useEffect(() => {
 		//equip, hole, upgrade, merterial, etc
-		setItem(saveData.items);
-		let baseSelectItem = {save:[],select:[],game:[]},
-		possibleColorantIdx = '';
-		let pHole = [];
-		if (saveData.items.equip[selectItem.select]) {
-			for (const [idx, data] of saveData.items.equip[selectItem.select].hole.entreis()) {
-				if (data) {
-					baseSelectItem.save[idx] = data;
-					baseSelectItem.game[idx] = gameItem.hole[data.idx];
-					pHole[idx] = false;
-				} else {
-					pHole[idx] = true;
-					if (typeof possibleColorantIdx !== 'number') {
-						possibleColorantIdx = idx;
+		if (Object.keys(saveData).length !== 0) {
+			setItem(saveData.items);
+			let baseSelectItem = {save:[],select:[],game:[]},
+			possibleColorantIdx = '';
+			let pHole = [];
+			if (saveData.items.equip[selectItem.select]) {
+				for (const [idx, data] of saveData.items.equip[selectItem.select].hole.entreis()) {
+					if (data) {
+						baseSelectItem.save[idx] = data;
+						baseSelectItem.game[idx] = gameItem.hole[data.idx];
+						pHole[idx] = false;
+					} else {
+						pHole[idx] = true;
+						if (typeof possibleColorantIdx !== 'number') {
+							possibleColorantIdx = idx;
+						}
 					}
 				}
+				setSelectItem(baseSelectItem);
+				//setMItemEff(getTotalEff(selectItem.save, gameData, baseSelectItem));
 			}
-			setSelectItem(baseSelectItem);
-			//setMItemEff(getTotalEff(selectItem.save, gameData, baseSelectItem));
 		}
 	}, [saveData]);
   return (
@@ -235,7 +237,7 @@ const CombinedItem = ({
 															itemArr.remove.push({cate:cData.cate, idx:selectItem.select[idx]});
 															break;
 														}
-													}
+													} 
 												}
 											}
 										}
@@ -254,6 +256,9 @@ const CombinedItem = ({
 											for (const getItem of itemArr.get) {
 												if (typeof getItem.idx === 'number') {
 													sData.items[getItem.cate].unshift(gameData.items[getItem.cate][getItem.idx]);
+												} else if (typeof getItem.idx === 'object') {
+														const ranCount = Math.floor(Math.random() * getItem.idx.length);
+														sData.items[getItem.cate].unshift(gameData.items[getItem.cate][getItem.idx[ranCount]]);
 												} else if (getItem.idx.indexOf('g') >= 0) {
 													const option = {
 														type:'equip',

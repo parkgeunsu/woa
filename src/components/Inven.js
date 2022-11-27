@@ -462,9 +462,9 @@ const Inven = ({
 								)}
 								<li className="item_footer" flex-v="true">
 									{(selectItem1.selectTab === 'equip' || selectItem1.selectTab === 'hole') ? (
-										<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${selectItem1.game.price * (selectItem1.game.grade || selectItem1.save.grade)}`}</em></div>
+										<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${util.comma(selectItem1.game.price * (selectItem1.game.grade || selectItem1.save.grade))}`}</em></div>
 									) : (
-										<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${selectItem1.game.price}`}</em></div>
+										<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${util.comma(selectItem1.game.price)}`}</em></div>
 									)}
 									<div flex-end="true">
 									{selectItem1.buttonType && selectItem1.buttonType.map((buttonData, idx) => {
@@ -700,9 +700,9 @@ const Inven = ({
 								)}
 								<li className="item_footer" flex-v="true">
 									{selectItem2.selectTab === 'equip' ? (
-										<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${(selectItem2.game.price < 1000 ? 1000 : selectItem2.game.price) * 2 * selectItem2.save.grade}`}</em></div>
+										<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${util.comma((selectItem2.game.price < 1000 ? 1000 : selectItem2.game.price) * 2 * selectItem2.save.grade)}`}</em></div>
 									) : (
-										<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${selectItem2.game.price}`}</em></div>
+										<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${util.comma(selectItem2.game.price)}`}</em></div>
 									)}
 									<div flex-end="true">
 									{selectItem2.buttonType && selectItem2.buttonType.map((buttonData, idx) => {
