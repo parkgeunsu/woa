@@ -8,10 +8,11 @@
 // active8(적군), 버프 추가
 // active9(적군), 상태이상 추가
 // weather10(날씨), 날씨 변환
+// job11(직업)
 //element_type 무속성(0),찌르기(1),할퀴기(2),물기(3),치기(4),누르기(5),던지기(6),빛(7),어둠(8),물(9),불(10),바람(11),땅(12)
 //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 행운LUK(9), 출혈(50), 중독(51), 석화(52), 혼란(53), 기절(54), 변이(55), 패시브(100)
 //ta_ 아군0, 적군1
-//ta getEffectArea 효과범위, passive일 경우 1:단일, 10:전체
+//ta getEffectArea 효과범위, passive일 경우 1:단일, 10:전체, 100:직업
 //num 효과
 //sp 행동력
 //atkCount 공격횟수
@@ -91,15 +92,15 @@ export const skill = [
 	{idx:17,
 		na:{ko:'반격',en:'Counter Attack'},element_type:0,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 공격',en:'<u>Single</u>, <b dmg>$(0)</b> attack'}
 		,ta_:1,ta:1,effAnimation:1
-		,eff:[{type:3,num:['100%','110%','125%','135%','150%']}],atkCount:[1],turn:1,sp:0},{},{},{},
-	{},{},{},{},{},{},{},{},{},{},
-	{},{},{},{},{},{},{},{},{},{},
-	{},{},{},{},{},{},{},{},{},{},
-	{},{},{},{},{},{},{},{},{},{},
-	{},{},{},{},{},{},{},{},{},{},
-	{},{},{},{},{},{},{},{},{},{},
-	{},{},{},{},{},{},{},{},{},{},
-	{},{},{},{},{},{},{},{},{},{},
+		,eff:[{type:3,num:['100%','110%','125%','135%','150%']}],atkCount:[1],turn:1,sp:0},{},{},{},//20
+	{},{},{},{},{},{},{},{},{},{},//30
+	{},{},{},{},{},{},{},{},{},{},//40
+	{},{},{},{},{},{},{},{},{},{},//50
+	{},{},{},{},{},{},{},{},{},{},//60
+	{},{},{},{},{},{},{},{},{},{},//70
+	{},{},{},{},{},{},{},{},{},{},//80
+	{},{},{},{},{},{},{},{},{},{},//90
+	{},{},{},{},{},{},{},{},{},{},//100
 	{idx:101,
 		na:{ko:'재빠른 움직임',en:'Quick Movement'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 속도(SPD) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Speed(SPD) <b buff>$(0)</b> <i icon up></i> increase'}
 		,ta_:1,ta:1,effAnimation:2,skillClass:0
@@ -163,7 +164,7 @@ export const skill = [
 //------------------
 	{idx:116,
 		na:{ko:'고양이의 예민한 직감',en:'Cat\'s keen Intuition'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 공격(ATK), 방어력(DEF) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Attack(ATK), Defence(DEF) <b buff>$(0)</b> <i icon up></i> increase'}
-		,ta_:1,ta:1,effAnimation:2,skillClass:2
+		,ta_:1,ta:1,effAnimation:3,skillClass:2
 		,eff:[{type:3,num:['5%','10%','15%','20%','25%']}, {type:4,num:['5%','10%','15%','20%','25%']}],atkCount:[1],turn:1,sp:0},
 	{idx:117,
 		na:{ko:'야행성',en:'Roar'},element_type:0,cate:[2],txt:{ko:'<u>자신</u>, <span night>밤</span>, 속도(SPD) <b buff>$<0></b> <i icon up></i> 증가',en:'<u>Self</u>, <span night>Night</span>, Speed(SPD) <b buff>$<0></b> <i icon up></i> increase'}
@@ -189,55 +190,80 @@ export const skill = [
 		na:{ko:'양손타격2',en:'Double-handed Blow2'},element_type:4,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 2회 공격',en:'<u>Single</u>, <b dmg>$(0)</b> a two-time attacks'}
 		,ta_:1,ta:1,effAnimation:1
 		,eff:[{type:3,num:['100%','120%','130%','140%','150%']}],atkCount:[2],turn:1,sp:15},
-	{idx:122,
+	{idx:123,
 		na:{ko:'뒷발차기1',en:'Back Kick1'},element_type:4,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 공격',en:'<u>Single</u>, <b dmg>$(0)</b> attack'}
 		,ta_:1,ta:2,effAnimation:1
 		,eff:[{type:3,num:['120%','130%','140%','150%','160%']}],atkCount:[1],turn:1,sp:13},
-	{idx:123,
+	{idx:124,
 		na:{ko:'뒷발차기2',en:'Back Kick2'},element_type:4,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 공격',en:'<u>Single</u>, <b dmg>$(0)</b> attack'}
 		,ta_:1,ta:2,effAnimation:1
 		,eff:[{type:3,num:['130%','140%','150%','160%','170%']}],atkCount:[1],turn:1,sp:15},
-	{idx:124,
+	{idx:125,
 		na:{ko:'뒷발차기3',en:'Back Kick3'},element_type:4,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 공격',en:'<u>Single</u>, <b dmg>$(0)</b> attack'}
 		,ta_:1,ta:3,effAnimation:1
 		,eff:[{type:3,num:['130%','140%','150%','160%','170%']}],atkCount:[1],turn:1,sp:15},
 //---------------------------------------------------
-	{idx:123,
+	{idx:126,
 		na:{ko:'후려치기',en:'Scratching'},element_type:2,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:''}
 		,ta_:1,ta:1,effAnimation:2,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[1],turn:1,sp:5},
-	{idx:124,
+	{idx:127,
 		na:{ko:'광견병',en:'Scratching'},element_type:0,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:''}
 		,ta_:1,ta:1,effAnimation:2,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[1],turn:1,sp:5},
-	{idx:125,
+	{idx:128,
 		na:{ko:'화염 발톱',en:'Scratching'},element_type:2,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:''}
 		,ta_:1,ta:1,effAnimation:1,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[2],turn:1,sp:5},
-	{idx:126,
+	{idx:129,
 		na:{ko:'굶주림',en:'Scratching'},element_type:2,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:''}
 		,ta_:1,ta:1,effAnimation:1,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[2],turn:1,sp:5},
-	{idx:127,
+	{idx:130,
 		na:{ko:'충격파',en:'Scratching'},element_type:2,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:''}
 		,ta_:1,ta:1,effAnimation:1,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[2],turn:1,sp:5},
-	{idx:128,
+	{idx:131,
 		na:{ko:'테스트',en:'Test'},element_type:2,cate:[7],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 중독 공격, 3턴 <b dmg>$<0></b>',en:'<u>Single</u>, <b dmg>$(0)</b> poison attack 2turns <b dmg>$<0></b>'}
 		,ta_:1,ta:20,effAnimation:5,buffAnimation:5,skillClass:1
 		,eff:[{type:3,num:['70%','100%','150%','170%','200%']}],buff:[{type:51,num:['-50','-100','-300','-400','-500']}],buffCount:[2,2,2,2,2],buffChance:['70%','75%','80%','85%','90%'],atkCount:[1],turn:2,sp:5},
-	{idx:129,
+	{idx:132,
 		na:{ko:'테스트2',en:'Test2'},element_type:2,cate:[7],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 석화 공격, 3턴 <b dmg>$<0></b>',en:'<u>Single</u>, <b dmg>$(0)</b> petrification attack 4turns <b dmg>$<0></b>'}
 		,ta_:1,ta:20,effAnimation:7,buffAnimation:0,skillClass:1
 		,eff:[{type:3,num:['10%','100%','150%','170%','200%']}],buff:[{type:52,num:['-50','-100','-300','-400','-500']}],buffCount:[4,4,4,4,4],buffChance:['70%','75%','80%','85%','90%'],atkCount:[1],turn:2,sp:5},
-	{idx:130,
+	{idx:133,
 		na:{ko:'개구리 기우제',en:'Test2'},element_type:0,cate:[10],txt:{ko:'<u>날씨</u>, 비오는 날씨로 밤으로 변환',en:'<u>Weather</u>, Convert to rainy weather'}
 		,ta_:1,ta:20,effAnimation:7,buffAnimation:0,skillClass:1
 		,buff:[{type:2.0,num:['70%','75%','80%','85%','90%']}],buffCount:[4,4,4,4,4],buffChance:['70%','75%','80%','85%','90%'],atkCount:[1],turn:2,sp:5},
-	{idx:131,
+	{idx:134,
 		na:{ko:'호랑이&여우 결혼식',en:'Test2'},element_type:0,cate:[10],txt:{ko:'<u>날씨</u>, 비오는 날씨로 낮으로 변환',en:'<u>Weather</u>, Convert to rainy weather'}
 		,ta_:1,ta:20,effAnimation:7,buffAnimation:0,skillClass:1
 		,buff:[{type:2.1,num:['70%','75%','80%','85%','90%']}],buffCount:[4,4,4,4,4],buffChance:['70%','75%','80%','85%','90%'],atkCount:[1],turn:2,sp:5},
+	'','','','','','',//140
+	'','','','','','','','','','',//150
+	'','','','','','','','','','',//160
+	'','','','','','','','','','',//170
+	'','','','','','','','','','',//180
+	'','','','','','','','','','',//190
+	'','','','','','','','','','',//200
+	{idx:201,
+		na:{ko:'언변',en:'Speech'},element_type:0,cate:[11],txt:{ko:'상점에서 가격흥정이 가능하다.',en:'It is possible to negotiate the price in the store.'},ta_:0,ta:100,effAnimation:29,skillClass:2,eff:[{type:'grade',num:['10','20','30','40','50']}],sp:3},
+	{idx:202,
+		na:{ko:'선박 전문',en:'Ship Specialty'},element_type:0,cate:[11],txt:{ko:'선박을 제작/분해 할 수 있다.',en:'Ships can be built/disassembled.'},ta_:0,ta:100,effAnimation:30,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
+	{idx:203,
+		na:{ko:'장비 전문',en:'Equipment Specialty'},element_type:0,cate:[11],txt:{ko:'장비를 제작/분해 할 수 있다.',en:'Equipment can be crafted/dismantled.'},ta_:0,ta:100,effAnimation:31,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
+	{idx:204,
+		na:{ko:'조각',en:'Sculpture'},element_type:0,cate:[11],txt:{ko:'조각상을 만들 수 있다.',en:'You can make statues.'},ta_:0,ta:100,effAnimation:32,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
+	{idx:205,
+		na:{ko:'식물 재배',en:'Plant Cultivation'},element_type:0,cate:[11],txt:{ko:'식물을 재배 할 수 있다.',en:'You can grow plants.'},ta_:0,ta:100,effAnimation:33,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
+	{idx:206,
+		na:{ko:'연금술',en:'Alchemy'},element_type:0,cate:[11],txt:{ko:'아이템 합성을 할 수 있다.',en:'Items can be synthesized.'},ta_:0,ta:100,effAnimation:34,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
+	{idx:207,
+		na:{ko:'보석 세공',en:'Jewelry'},element_type:0,cate:[11],txt:{ko:'목거리, 반지를 제작/분해 할 수 있다.',en:'You can make/disassemble a necklace, a ring.'},ta_:0,ta:100,effAnimation:35,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
+	{idx:208,
+		na:{ko:'관찰력',en:'Observation'},element_type:0,cate:[11],txt:{ko:'모집시 고급 등급을 찾을 확률이 높아집니다.',en:'Increases the chance of finding advanced ranks when recruiting.'},ta_:0,ta:100,effAnimation:36,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
+	{idx:209,
+		na:{ko:'예술',en:'Art'},element_type:0,cate:[11],txt:{ko:'예술품을 만들 수 있다.',en:'You can make art objects.'},ta_:0,ta:100,effAnimation:37,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
 ];
 // 모아치기
 // 빙결, 석화, 스킬 캔슬기

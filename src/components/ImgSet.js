@@ -363,6 +363,11 @@ import defenceIcon1 from 'images/ico/shield1.png';
 import defenceIcon2 from 'images/ico/shield2.png';
 import tombstone from 'images/ico/tombstone.png';
 
+//wheel
+import controlWheel0 from 'images/control/wheel0.png';
+//sail
+import controlSail0 from 'images/control/sail0.png';
+
 //직업
 import job0 from 'images/job/job0.png';
 import job1 from 'images/job/job1.png';
@@ -489,15 +494,41 @@ import wind from 'images/weather/wind2.png';
 import passive0 from 'images/passive/passive0.png';
 import passive1 from 'images/passive/passive1.png';
 import passive2 from 'images/passive/passive2.png';
-import passive3 from 'images/passive/passive3.png';
-import passive4 from 'images/passive/passive4.png';
-import passive5 from 'images/passive/passive5.png';
-import passive6 from 'images/passive/passive6.png';
-import passive7 from 'images/passive/passive7.png';
-import passive8 from 'images/passive/passive8.png';
-import passive9 from 'images/passive/passive9.png';
-import passive10 from 'images/passive/passive10.png';
-import passive11 from 'images/passive/passive11.png';
+import passive3 from 'images/passive/animal0.png';
+import passive4 from 'images/passive/animal1.png';
+import passive5 from 'images/passive/animal2.png';
+import passive6 from 'images/passive/animal3.png';
+import passive7 from 'images/passive/animal4.png';
+import passive8 from 'images/passive/animal5.png';
+import passive9 from 'images/passive/animal6.png';
+import passive10 from 'images/passive/animal7.png';
+import passive11 from 'images/passive/animal8.png';
+import passive12 from 'images/passive/animal9.png';
+import passive13 from 'images/passive/animal10.png';
+import passive14 from 'images/passive/animal11.png';
+import passive15 from 'images/passive/animal12.png';
+import passive16 from 'images/passive/animal13.png';
+import passive17 from 'images/passive/animal14.png';
+import passive18 from 'images/passive/animal15.png';
+import passive19 from 'images/passive/animal16.png';
+import passive20 from 'images/passive/animal17.png';
+import passive21 from 'images/passive/animal18.png';
+import passive22 from 'images/passive/animal19.png';
+import passive23 from 'images/passive/animal20.png';
+import passive24 from 'images/passive/animal21.png';
+import passive25 from 'images/passive/animal22.png';
+import passive26 from 'images/passive/animal23.png';
+import passive27 from 'images/passive/animal24.png';
+import passive28 from 'images/passive/animal25.png';
+import passive29 from 'images/passive/job0.png';
+import passive30 from 'images/passive/job1.png';
+import passive31 from 'images/passive/job2.png';
+import passive32 from 'images/passive/job3.png';
+import passive33 from 'images/passive/job4.png';
+import passive34 from 'images/passive/job5.png';
+import passive35 from 'images/passive/job6.png';
+import passive36 from 'images/passive/job7.png';
+import passive37 from 'images/passive/job8.png';
 
 //이펙트 애니메이션
 import blank from 'images/effect/blank.png';
@@ -574,6 +605,9 @@ export const itemUpgrade = [
 export const itemMaterial = [
   itemMaterial0,itemMaterial1,itemMaterial2,itemMaterial3,itemMaterial4,itemMaterial5,itemMaterial6,itemMaterial7,itemMaterial8,itemMaterial9,itemMaterial10,itemMaterial11,itemMaterial12,itemMaterial13,itemMaterial14,itemMaterial15,itemMaterial16,itemMaterial17,itemMaterial18,itemMaterial19,itemMaterial20,itemMaterial21,itemMaterial22,itemMaterial23,itemMaterial24,itemMaterial25,itemMaterial26,itemMaterial27,itemMaterial28,itemMaterial29,itemMaterial30,itemMaterial31,itemMaterial32,itemMaterial33,itemMaterial34,itemMaterial35,itemMaterial36,itemMaterial37,itemMaterial38,itemMaterial39,itemMaterial40,itemMaterial41,itemMaterial42,itemMaterial43,itemMaterial44,itemMaterial45,itemMaterial46,itemMaterial47,itemMaterial48,itemMaterial49,itemMaterial50,itemMaterial51,itemMaterial52,itemMaterial53,itemMaterial54,
 ];
+export const control = {
+  wheel0:controlWheel0,sail0:controlSail0
+};
 export const job = [
   job0,job1,job2,job3,job4,job5,job6,job7,job8,job9,job10,job11,job12,job13,job14,job15,job16,
 ];
@@ -593,7 +627,7 @@ export const actionIcon = [
   defenceIcon0,defenceIcon1,defenceIcon2,tombstone,
 ];
 export const passive = [
-  passive0,passive1,passive2,passive3,passive4,passive5,passive6,passive7,passive8,passive9,passive10,passive11,
+  passive0,passive1,passive2,passive3,passive4,passive5,passive6,passive7,passive8,passive9,passive10,passive11,passive12,passive13,passive14,passive15,passive16,passive17,passive18,passive19,passive20,passive21,passive22,passive23,passive24,passive25,passive26,passive27,passive28,passive29,passive30,passive31,passive32,passive33,passive34,passive35,passive36,passive37
 ];
 export const eff = [
   blank,attack0,bite1,claw2,saliva3,death,Water_4,Water_1,ACCK019_Corrupt,'',

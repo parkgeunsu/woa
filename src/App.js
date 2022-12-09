@@ -1,13 +1,13 @@
 import React, { createContext, useEffect, useState, useRef } from 'react';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
-import { back, animalType, icon, etc, iconStar, element, chImg, iconState, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, passive, eff, menu, weather, job, wood, anchor, sail, cannon, figure } from 'components/ImgSet';
+import { back, animalType, icon, etc, iconStar, element, chImg, iconState, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, passive, eff, menu, weather, job, wood, anchor, sail, cannon, figure, control } from 'components/ImgSet';
 import { util } from 'components/Libs';
 import Main from 'components/Main';
 import Menu from 'components/Menu';
 import Battle from 'components/Battle';
 import Character from 'components/Character';
 import Inven from 'components/Inven';
-import Gacha from 'components/Gacha';
+import Recruitment from 'components/Gacha';
 import Lineup from 'components/Lineup';
 import ToolShop from 'components/ToolShop';
 import Shipyard from 'components/Shipyard';
@@ -40,7 +40,7 @@ const ContentContainer = styled.div`
   .skillEffect {
     position:absolute;left:0;top:0;right:0;bottom:0;z-index:10;pointer-events:none;
     .skillName{
-      position:absolute;font-size:30px;transform:translate(-50%,-50%);white-space:nowrap;transition:all 1s ease-in-out;
+      position:absolute;font-size:1.875rem;transform:translate(-50%,-50%);white-space:nowrap;transition:all 1s ease-in-out;
     }
     .oldName{
       left:50%;top:50%;opacity:0;text-align:center;
@@ -181,6 +181,7 @@ const App = () => {
       sail:sail,
       cannon:cannon,
       figure:figure,
+      control:control,
       transparent:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAAtJREFUGFdjYAACAAAFAAGq1chRAAAAAElFTkSuQmCC',
     },
     gameData: {
@@ -337,6 +338,10 @@ const App = () => {
       const img = new Image();
       img.src = image;
     });
+    for (let v in control) {
+      const img = new Image();
+      img.src = etc[v];
+    }
     return () => {
       localStorage.setItem('closeTime', new Date());
     }
@@ -385,15 +390,15 @@ const App = () => {
         <ContentContainer className="content">
           <Routes>
             <Route path="/" element={<Main changePage={changePage} cityIdx={cityIdx} />} />
-            <Route path="/character" element={<Character saveData={saveData} changeSaveData={changeSaveData} />} cityIdx={cityIdx} />
-            <Route path="/inven" element={<Inven saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
-            <Route path="/gacha" element={<Gacha saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+            <Route path="/character" element={<Character saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} />} />
+            <Route path="/inven" element={<Inven saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} />} />
+            <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
             <Route path="/lineup" element={<Lineup saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
             <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} scenario={scenario} cityIdx={cityIdx} />} />
             <Route path="/characterEnhancement" element={<CharacterEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
             <Route path="/itemEnhancement" element={<ItemEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
             <Route path="/combinedItem" element={<CombinedItem saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
-            <Route path="/equipmentShop" element={<EquipmentShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
+            <Route path="/equipmentShop" element={<EquipmentShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} cityIdx={cityIdx} />} />
             <Route path="/toolShop" element={<ToolShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
             <Route path="/shipyard" element={<Shipyard saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
             <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />

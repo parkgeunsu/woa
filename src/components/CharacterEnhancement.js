@@ -80,7 +80,7 @@ const ItemTotalEff = styled.div`
 	.item_name{
 		line-height:1.2;
 		color:${({color}) => color};
-		font-size:14px;
+		font-size:0.875rem;
 		font-weight:600;
 	}
 `;

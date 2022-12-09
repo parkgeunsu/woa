@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useContext } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { AppContext } from 'App';
 import styled from 'styled-components';
 
@@ -49,8 +49,8 @@ const ChracterHeader = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-  const chLength = saveData.ch.length;
   const scrolluseRef = useRef(null);
+  const [chLength, setChLength] = useState(0);
   const cardWidth = window.innerWidth * 0.1;
 
   //const timerRef = useRef(null); //시간계산
@@ -61,8 +61,12 @@ const ChracterHeader = ({
   //     timer(currentTime, setCurrentTime, saveData, changeSaveData);
   //   }, 1000);
   // }, [currentTime]);
-
-  useLayoutEffect(() => {
+  useEffect(() => {
+    if (Object.keys(saveData).length !== 0) {
+      setChLength(saveData.ch.length);
+    }
+  }, [saveData]);
+  useEffect(() => {
     if (scrolluseRef.current) { //카드리스트 스크롤 잡기
       const listHalfSize = scrolluseRef.current.getBoundingClientRect().width * .5;
       const cardHalfNum = Math.floor(listHalfSize / cardWidth);

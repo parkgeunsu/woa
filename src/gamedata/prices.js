@@ -20,3 +20,9 @@ export const prices = {
 		upgrade3:[{type:'g',price:10000},{type:'etc',imgGroup:'itemEtc',idx:10,price:1}],
 	}
 }
+
+export const actionPoint = {
+	itemBuy:3,
+	itemSell:3,
+	itemEnhancement:5,
+}

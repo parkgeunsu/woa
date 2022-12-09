@@ -19,6 +19,7 @@ const ItemPic = styled.span`
   svg{width:100%;height:100%;}
 `;
 const CharacterItems = ({
+  navigate,
   saveData,
   changeSaveData,
   slotIdx,
@@ -226,7 +227,7 @@ const CharacterItems = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn}/>}
+        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} navigate={navigate} />}
       </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}

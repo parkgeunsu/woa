@@ -59,7 +59,7 @@ export const util = { //this.loadImage();
     let enemy = {};
     const itemEff = util.getItemEff('', enemyData, gameData.items, true);
     for (const idx of stateArr.keys()) {
-      const st = gameData.ch[enemyData.idx]['st' + idx],
+      const st = gameData.ch[enemyData.idx]['st' + idx] || 0,
         per_current = gameData.stateType[2].arr[enemyData.lv-1]*0.01,
         stateCurrent = Math.round(st*per_current);
       battleState_[idx] = stateCurrent;
@@ -139,7 +139,7 @@ export const util = { //this.loadImage();
     let battleState_ = [];
     let saveChSlot = saveData.ch[saveSlot] || obj.newState;
     for (const idx of stateArr.keys()) {
-      const st = gameData.ch[saveChSlot.idx]['st' + idx],//실제 능력치
+      const st = gameData.ch[saveChSlot.idx]['st' + idx] || 0,//실제 능력치
         per_current = gameData.stateType[saveChSlot.stateType].arr[saveChSlot.lv-1]*0.01,//성장타입에 따른 LV당 %
         stateCurrent = Math.round(st*per_current),//성장타입에 따른 LV당 능력치
         stateMax = Math.round(gameData.stateType[saveChSlot.stateType].arr[49]*0.01*st);//성장타입에 따른 최대 능력치
@@ -1419,8 +1419,8 @@ export const util = { //this.loadImage();
       favorite:option.favorite || 0,
     }
     if (Save) {
-      if (typeof option.unpackSlot === 'number') {
-        save.items[type].splice(option.unpackSlot,1,itemObj);
+      if (typeof option.evaluateSlot === 'number') {
+        save.items[type].splice(option.evaluateSlot,1,itemObj);
       } else {
         save.items[type].unshift(itemObj);
       }
@@ -1480,7 +1480,7 @@ export const util = { //this.loadImage();
       const chType = gameData.ch[saveCh.idx].animal_type;
       if (dataObj.data.saveItemData.sealed) { //개봉된 아이템인지 확인
         dataObj.showMsg(true);
-        dataObj.msgText(`<span caution>${gameData.msg.sentence.unpackItem[dataObj.lang]}</span>`);
+        dataObj.msgText(`<span caution>${gameData.msg.sentence.evaluateItem[dataObj.lang]}</span>`);
         return;
       }
       if (!dataObj.data.gameItem.limit[saveCh.job]) { //직업 착용가능 확인
@@ -1652,7 +1652,7 @@ export const util = { //this.loadImage();
       }
       dataObj.changeSaveData(sData);//데이터 저장
       dataObj.showPopup(false);
-    } else if (dataObj.type === 'itemUnpack') { //아이템 확인
+    } else if (dataObj.type === 'itemEvaluate') { //아이템 확인
       //sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
       const itemInfo = dataObj.data.saveItemData.part === 3 ? `${dataObj.data.saveItemData.part}-${dataObj.data.saveItemData.weaponType}-${dataObj.data.saveItemData.idx}` : `${dataObj.data.saveItemData.part}-${dataObj.data.saveItemData.idx}`;
       const option = {
@@ -1662,7 +1662,7 @@ export const util = { //this.loadImage();
         grade:dataObj.data.saveItemData.grade,
         lv:dataObj.data.saveItemData.itemLv,
         sealed:false,
-        unpackSlot:dataObj.data.itemSaveSlot,
+        evaluateSlot:dataObj.data.itemSaveSlot,
         favorite:dataObj.data.saveItemData.favorite
       }
       util.getItem(sData, gameData, dataObj.changeSaveData, option, true, dataObj.lang);

@@ -1,12 +1,15 @@
 import { AppContext } from 'App';
 import { util } from 'components/Libs';
-import Modal from 'components/Modal';
 import ModalContainer from 'components/ModalContainer';
-import React, { useEffect, useContext, useRef, useState } from 'react';
-import styled from 'styled-components';
+import Modal from 'components/Modal';
+import PopupContainer from 'components/PopupContainer';
+import Popup from 'components/Popup';
 import MsgContainer from 'components/MsgContainer';
 import Msg from 'components/Msg';
+import React, { useEffect, useContext, useRef, useState } from 'react';
+import styled from 'styled-components';
 import 'css/itemEnhancement.css';
+import { ActionChDisplay } from 'components/Components';
 
 const Img = styled.img.attrs(
   ({imgurl}) => ({
@@ -80,7 +83,7 @@ const ItemTotalEff = styled.div`
 	.item_name{
 		line-height:1.2;
 		color:${({color}) => color};
-		font-size:14px;
+		font-size:0.875rem;
 		font-weight:600;
 	}
 `;
@@ -311,6 +314,8 @@ const ItemEnhancement = ({
 		gameSpd = setting.speed,
 		lang = setting.lang;
 	const gameItem = gameData.items;
+  const [popupOn, setPopupOn] = useState(false);
+  const [popupInfo, setPopupInfo] = useState({});
   const [modalOn, setModalOn] = useState(false);
 	const [modalInfo, setModalInfo] = useState({});
   const [modalType] = useState('confirm');
@@ -318,15 +323,7 @@ const ItemEnhancement = ({
   const [msg, setMsg] = useState("");
 	const [selectTab, setSelectTab] = useState(0);
 	const [item, setItem] = useState({...saveData.items});
-	const [selectItem1, setSelectItem1] = useState(saveData?.items?.equip[0] ? {
-		save:{...saveData.items.equip[0]},
-		select:0,
-		game:gameItem.equip[saveData.items.equip[0].part][saveData.items.equip[0].weaponType][saveData.items.equip[0].grade < 5 ? 0 : saveData.items.equip[0].grade - 5][saveData.items.equip[0].idx],
-	} : {
-		save:{},
-		select:'',
-		game:{},
-	});//좌측 장비 save, game
+	const [selectItem1, setSelectItem1] = useState({save:{},select:'',game:{}});//좌측 장비 save, game
 	const [possibleHole, setPossibleHole] = useState([]);
 	const [selectItem2, setSelectItem2] = useState({save:[],select:[],game:[]});//탭1 우측 홀 save, game
 	const [selectItem3, setSelectItem3] = useState({save:{},select:'',game:{}});//탭2 우측 홀 save, game
@@ -337,6 +334,8 @@ const ItemEnhancement = ({
 	const [upgradeOn, setUpgradeOn] = useState('');//업그레이드 애니메이션 동작
 	const [upgradePercent, setUpgradePercent] = useState(setPercent(selectItem1?.save, selectItem3?.game));
 	const timeoutRef = useRef(null);
+	const [actionCh, setActionCh] = useState({});//행동할 캐릭터 데이터
+	const actionRef = useRef();//행동할 캐릭터 선택자
 	const [modalData, setModalData] = useState({
 		fn:() => {},
 		payment:'',
@@ -376,18 +375,20 @@ const ItemEnhancement = ({
     setModalOn(true);
   }
 	useEffect(() => {
-		return () => {
-			clearTimeout(timeoutRef.current);
-		}
-	}, []);
-	useEffect(() => {
 		//equip, hole, upgrade, merterial, etc
-		setItem({...saveData.items});
-		let baseSelectItem = {save:[],select:[],game:[]},
-		possibleColorantIdx = '';
-		let pHole = [];
-		if (saveData?.items?.equip[selectItem1.select]) {
-			saveData.items.equip[selectItem1.select].hole.forEach((data,idx) => {
+		if (Object.keys(saveData).length !== 0) {
+			const itemIdx = selectItem1.select ? selectItem1.select : 0,
+				itemSave = {...saveData.items.equip[itemIdx]};
+			setSelectItem1({
+				save:itemSave,
+				select:itemIdx,
+				game:gameItem.equip[saveData.items.equip[itemIdx].part][saveData.items.equip[itemIdx].weaponType][saveData.items.equip[itemIdx].grade < 5 ? 0 : saveData.items.equip[itemIdx].grade - 5][saveData.items.equip[itemIdx].idx],
+			});
+			setItem({...saveData.items});
+			let baseSelectItem = {save:[],select:[],game:[]},
+			possibleColorantIdx = '';
+			let pHole = [];
+			saveData.items.equip[itemIdx].hole.forEach((data,idx) => {
 				if (data) {
 					baseSelectItem.save[idx] = data;
 					baseSelectItem.game[idx] = gameItem.hole[data.idx];
@@ -402,7 +403,17 @@ const ItemEnhancement = ({
 			setPossibleHole(pHole);
 			setSelectItem2(baseSelectItem);
 			setColorantIdx(possibleColorantIdx);
-			setMItemEff(util.getTotalEff(selectItem1.save, gameData, baseSelectItem));
+			setMItemEff(util.getTotalEff(itemSave, gameData, baseSelectItem));
+			
+			setActionCh(saveData.actionCh.itemEnhancement1);
+			setPopupInfo({
+				ch:saveData.ch,
+				actionCh:saveData.actionCh.itemEnhancement1.idx,
+				type:'itemEnhancement1'
+			})
+		}
+		return () => {
+			clearTimeout(timeoutRef.current);
 		}
 	}, [saveData]);
   return (
@@ -417,6 +428,23 @@ const ItemEnhancement = ({
 										setUpgradeOn(false);
 										setSelectItem3({save:{},select:'',game:{}});
 										clearTimeout(timeoutRef.current);
+										setActionCh(saveData.actionCh.itemEnhancement2);
+										setPopupInfo((prev) => {
+											return {
+												ch:prev.ch,
+												actionCh:saveData.actionCh.itemEnhancement2.idx,
+												type:'itemEnhancement2'
+											}
+										});
+									} else {
+										setActionCh(saveData.actionCh.itemEnhancement1);
+										setPopupInfo((prev) => {
+											return {
+												ch:prev.ch,
+												actionCh:saveData.actionCh.itemEnhancement1.idx,
+												type:'itemEnhancement1'
+											}
+										});
 									}
 								}}>
 									<button className="tab_menu_button">
@@ -441,8 +469,13 @@ const ItemEnhancement = ({
 										e.stopPropagation();
 										let pHole = [],
 											possibleColorantIdx = '';
-										let sData = {...saveData};
 										console.log('확정');
+										if (actionCh.idx === '') {
+											setMsgOn(true);
+											setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[203].na));
+											return;
+										}
+										let sData = {...saveData};
 										let holeArr = [];
 										gameData.items.colorant[selectItem1.save.slot].forEach((colorant, setIdx) => {
 											let colorantSet = '';
@@ -619,7 +652,15 @@ const ItemEnhancement = ({
 								</ColorArea>
 							</ItemEnBack>
 							<div className="itemEn_bottom">
-								<div className="item_select scroll-y item_select1 num4">
+								<div className="action_select">
+									{Object.keys(actionCh).length !== 0 && (<div ref={actionRef} className={`ch_select_area ${actionCh.idx ? 'g' + saveData.ch[actionCh.idx].grade : ''}`} onClick={() => {
+											setPopupOn(true);
+										}}>
+											<ActionChDisplay type="itemEnhancement" saveData={saveData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
+										</div>
+									)}
+								</div>
+								<div className="item_select scroll-y item_select1 num2">
 									{item.equip && item.equip.map((data, idx) => {
 										const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
 										const items = gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx];
@@ -678,7 +719,7 @@ const ItemEnhancement = ({
 										)
 									})}
 								</div>
-								<div className="item_select scroll-y item_select2 num4">
+								<div className="item_select scroll-y item_select2 num3">
 									{item.hole && item.hole.map((data, idx) => {
 										const items = gameItem.hole[data.idx];
 										const grade = data.grade || items.grade;
@@ -732,6 +773,11 @@ const ItemEnhancement = ({
 									<button className="button_big" text="true" onClick={(e) => {
 										e.stopPropagation();
 										console.log('업그레이드');
+										if (actionCh.idx === '') {
+											setMsgOn(true);
+											setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[207].na));
+											return;
+										}
 										if (typeof selectItem3.select === 'number') {
 											if (selectItem1.save.grade > 3) {
 												setMsgOn(true);
@@ -841,8 +887,16 @@ const ItemEnhancement = ({
 									<div className="upgrade_percent">{upgradePercent}</div>
 								</UpgradeArea>
 							</ItemEnBack>
-							<div className={`itemEn_bottom scroll-y ${upgradeOn}`}>
-								<div className="item_select item_select1 num4">
+							<div className={`itemEn_bottom ${upgradeOn}`}>
+								<div className="action_select">
+									{Object.keys(actionCh).length !== 0 && (<div ref={actionRef} className={`ch_select_area ${actionCh.idx ? 'g' + saveData.ch[actionCh.idx].grade : ''}`} onClick={() => {
+											setPopupOn(true);
+										}}>
+											<ActionChDisplay type="itemEnhancement" saveData={saveData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
+										</div>
+									)}
+								</div>
+								<div className="item_select scroll-y item_select1 num2">
 									{item.equip && item.equip.map((data, idx) => {
 										const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
 										const items = gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx];
@@ -882,7 +936,7 @@ const ItemEnhancement = ({
 										)
 									})}
 								</div>
-								<div className="item_select item_select2 num4">
+								<div className="item_select scroll-y item_select2 num3">
 									{item.upgrade && item.upgrade.map((data, idx) => {
 										const items = gameItem.upgrade[data.idx];
 										const grade = data.grade || items.grade;
@@ -905,6 +959,9 @@ const ItemEnhancement = ({
 					)}
 				</div>
 			</ItemEnWrap>
+			<PopupContainer>
+        {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn}/>}
+      </PopupContainer>
 			<ModalContainer>
 				{modalOn && <Modal fn={modalData.fn} payment={modalData.payment} imgSet={imgSet} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} lang={lang} onClose={() => {
 					setModalOn(false);

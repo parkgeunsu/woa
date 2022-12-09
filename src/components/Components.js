@@ -9,9 +9,9 @@ const StyledPrices = styled.div`
   margin:0 15px 0 0;
   padding-left:25px;
   line-height:20px;
-  font-size:16px;
+  font-size:1rem;
   color:#ff2a00;
-  &:after{content:',';margin:0 0 0 2px;font-size:20px;color:#fff;}
+  &:after{content:',';margin:0 0 0 2px;font-size:1.25rem;color:#fff;}
   &:last-of-type:after{content:'';margin:0;}
   &:last-of-type{margin:0;}
   &:before{
@@ -88,7 +88,7 @@ const StyledRangeThumb = styled.div`
 const TextMinMax = styled.div`
   display:flex;
   margin:0 0 5px 0;
-  font-size:12px;
+  font-size:0.75rem;
   color:#ddd;
   justify-content:space-between;
 `;
@@ -97,7 +97,7 @@ const TextValue = styled.div`
   padding:5px;
   background:rgba(0,0,0,.3);
   border-radius:5px;
-  font-size:16px;
+  font-size:1rem;
   font-weight:600;
   text-align:right;
   &:first-of-type{width:40%;}
@@ -114,7 +114,7 @@ export const RangeSlider = ({
 }) => {
   const max_ = typeof max === 'number' ? max : 999999;
   return (
-    <div style={{padding:'5px 20px'}}>
+    <>
       <TextMinMax><span>{min}</span><span>{util.comma(max_)}</span></TextMinMax>
       <Range
         draggableTrack
@@ -140,7 +140,7 @@ export const RangeSlider = ({
         }}>{util.comma(String(value))}</TextValue>
         <TextValue>{util.comma(String(pirce * value))}</TextValue>
       </div>
-    </div>
+    </>
 	)
 }
 const CalContainer = styled.div`
@@ -148,7 +148,7 @@ const CalContainer = styled.div`
   left:0;right:0;top:0;bottom:0;z-index:2;
   .cal_value{
     display:inline-block;margin:5px;width:200px;height:60px;line-height:60px;text-align:center;
-    font-size:24px;font-weight:600;
+    font-size:1.5rem;font-weight:600;
   }
   .cal_layout{
     position:absolute;
@@ -161,7 +161,7 @@ const CalContainer = styled.div`
     margin:5px;padding:0;
     width:60px;height:60px;
     background:#f50;border-radius:10px;box-shadow:0 0 10px #f50;
-    line-height:60px;font-size:20px;font-weight:600;color:#fff;
+    line-height:60px;font-size:1.25rem;font-weight:600;color:#fff;
   }
   button.result{
     background:#0090ff;box-shadow:0 0 10px #0090ff;
@@ -225,3 +225,87 @@ export const Calculator = ({
     </CalContainer>
   );
 }
+const ListCh = styled.span`
+  background-image:url(${({chDisplay}) => chDisplay});background-size:100%;
+`;
+const ListJob = styled.span`
+  background-image:url(${({jobIcon}) => jobIcon});background-size:100%;
+`;
+const ListActionType = styled.span`
+  background-image:url(${({actionType}) => actionType});background-size:100%;
+`;
+const ListRing = styled.span`
+  background-image:url(${({ringBack}) => ringBack});
+  background-size:85%;
+`;
+const ListElement = styled.span`
+  background-image:url(${({ringDisplay}) => ringDisplay});
+  background-size:100%;
+`;
+const ListFrame = styled.span`
+  background: url(${({ cardFrame }) => cardFrame});background-size:100% 100%;
+`;
+export const ActionChDisplay = ({
+  type,
+  saveData,
+  gameData,
+  actionCh,
+  imgSet,
+}) => {
+  let skillIdx = '',
+    hasSkill = false;
+  switch(type) {
+    case 'tradingPost':
+    case 'equipmentShop':
+    case 'toolShop':
+      skillIdx = 201;
+      break;
+    case 'shipyard':
+      skillIdx = 202;
+      break;
+    case 'combinedItem':
+      skillIdx = 205;
+      break;
+    case 'itemEnhancement':
+      skillIdx = 203;
+      break;
+    case 'recruitment':
+      skillIdx = 208;
+      break;
+    default:
+      break;
+  }
+  if (actionCh.idx !== '') {
+    for (const [idx, skillData] of saveData.ch[actionCh.idx].hasSkill.entries()) {
+      if (skillData.idx === skillIdx) {
+        hasSkill = true;
+        break;
+      };
+    };
+  } else {
+    hasSkill = '';
+  }
+  if (hasSkill) {
+    return (
+      <div className={`action_ch g${saveData.ch[actionCh.idx].grade}`}>
+        <ListRing className="list_ring" ringBack={imgSet.etc.imgRingBack} />
+        <ListElement className="list_element" ringDisplay={imgSet.ringImg[gameData.ch[saveData.ch[actionCh.idx].idx].element]} />
+        <ListCh className="list_ch" chDisplay={imgSet.chImg[`ch${gameData.ch[saveData.ch[actionCh.idx].idx].display}`]} />
+        <div className="list_job_actiontype">
+          <ListJob jobIcon={imgSet.job[saveData.ch[actionCh.idx].job]} className="list_job"/>
+          {saveData.ch[actionCh.idx].newActionType.map((data, idx) => {
+            return (
+              <ListActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="list_action_type"/>
+            )
+          })}
+        </div>
+        <ListFrame className="list_frame" cardFrame={imgSet.etc.imgCardFrame} />
+        <div className="list_actionPoint">{`${saveData.ch[actionCh.idx].actionPoint} / ${saveData.ch[actionCh.idx].actionMax}`}</div>
+      </div>
+    )
+  } else {
+    return (
+      <div className="action_ch none"></div>
+    )
+  }
+};

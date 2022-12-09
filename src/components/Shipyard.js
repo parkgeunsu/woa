@@ -1,13 +1,14 @@
 import { AppContext } from 'App';
 import { util } from 'components/Libs';
-import ModalContainer from 'components/ModalContainer';
-import Modal from 'components/Modal';
+import PopupContainer from 'components/PopupContainer';
+import Popup from 'components/Popup';
 import MsgContainer from 'components/MsgContainer';
 import Msg from 'components/Msg';
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import 'css/ship.css';
 import iconCardName from 'images/card/card_name.png';
+import { ActionChDisplay } from 'components/Components';
 
 const Img = styled.img.attrs(
   ({imgurl}) => ({
@@ -22,6 +23,8 @@ const ShipIcon = styled.span`
 	background:url(${({ icoType }) => icoType}) no-repeat left center;background-size:100%;
 `;
 const ItemContainer = styled.ul`
+	display:flex;
+	flex-direction:column;
   border:5px solid transparent;
   border-image:url(${({frameBack}) => frameBack}) 5 round;
 	&.on{
@@ -165,9 +168,7 @@ const Shipyard = ({
 		lang = setting.lang;
 	const gameItem = gameData.items,
 		shipItem = gameData.ships;
-  const [modalOn, setModalOn] = useState(false);
-	const [modalInfo, setModalInfo] = useState({});
-  const [modalType, setModalType] = useState();
+  const [popupInfo, setPopupInfo] = useState({});
   const [popupOn, setPopupOn] = useState(false);
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
@@ -186,6 +187,8 @@ const Shipyard = ({
 	const [selectItem1, setSelectItem1] = useState({save:[],game:[],select:[],selectCate:[],userHave:[]});//배 재료 선택
 	const [selectItem2, setSelectItem2] = useState({save:{},game:{},select:'',selectCate:'',userHave:''});//재료 설명 선택
 	const possessedShip = useRef([]);//보유한 배 갯수 데이터
+	const [actionCh, setActionCh] = useState({});//행동할 캐릭터 데이터
+	const actionRef = useRef();//행동할 캐릭터 선택자
 	useEffect(() => {
 			colorPicker(canvasRef.current, imgSet.etc.color, setCtx);
 	}, []);
@@ -206,6 +209,12 @@ const Shipyard = ({
 				['',...cityData.shipyard.cannon],
 			];
 			setItem(items);
+			setActionCh(saveData.actionCh.shipyard);
+			setPopupInfo({
+				ch:saveData.ch,
+				actionCh:saveData.actionCh.shipyard.idx,
+				type:'shipyard'
+			});
 			let itemL = [[],[],[],[],[],[],[],[],[],[]];
 			for (let key in saveData.items) {
 				for (const [idx, data] of saveData.items[key].entries()) {
@@ -222,7 +231,7 @@ const Shipyard = ({
   return (
 		<>
 			<ShipWrap className="wrap" backImg={imgSet.back[2]} >
-				<div className="tab_menu transition">
+				<div className="tab_menu shipyard transition">
 					{shipList && shipList.map((data, idx) => {
 						return (
 							<li key={idx} className={idx === selectTab ? "on" : ""} onClick={() => {
@@ -403,7 +412,15 @@ const Shipyard = ({
 						)}
 					</div>
 					<div className="ship_bottom">
-						<div className={`item_select scroll-y item_select1 num4`}>
+						<div className="action_select">
+							{Object.keys(actionCh).length !== 0 && (<div ref={actionRef} className={`ch_select_area ${actionCh.idx ? 'g' + saveData.ch[actionCh.idx].grade : ''}`} onClick={() => {
+									setPopupOn(true);
+								}}>
+									<ActionChDisplay type="shipyard" saveData={saveData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
+								</div>
+							)}
+						</div>
+						<div className={`item_select scroll-y item_select1 num2`}>
 							{typeof selectCate === 'number' && item[selectCate].map((data, idx) => {
 								if (data === '') {
 									return (
@@ -628,6 +645,7 @@ const Shipyard = ({
 								{selectShip.cannon0 !== '' && <li>{`${gameData.msg.ship.cannon[lang]}1: ${shipInfo.cannon[0]}`}</li>}
 								{selectShip.cannon1 !== '' && <li>{`${gameData.msg.ship.cannon[lang]}2: ${shipInfo.cannon[1]}`}</li>}
 								{selectShip.cannon2 !== '' && <li>{`${gameData.msg.ship.cannon[lang]}3: ${shipInfo.cannon[2]}`}</li>}
+								<li className="ship_buildCh">{`${gameData.msg.info.shipBuilder[lang]}: ${actionCh.idx !== '' ? gameData.ch[saveData.ch[actionCh.idx].idx].na1 : gameData.msg.info.undefined[lang]}`}</li>
 								<li className="ship_buildPrice">{`₩ ${util.comma(shipInfo.price)}`}</li>
 							</ul>
 							<button text="true" className="button_sign" onClick={(e) => {
@@ -651,6 +669,11 @@ const Shipyard = ({
 									setMsgOn(true);
 									setMsg(gameData.msg.sentence.selectShipName[lang]);
 									document.querySelector('.ship_buildName input').focus();
+									return;
+								}
+								if (actionCh.idx === '') {
+									setMsgOn(true);
+									setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[202].na));
 									return;
 								}
 								if (saveData.info.money < shipInfo.price) {
@@ -704,12 +727,12 @@ const Shipyard = ({
 					</ShipContract>
 				</div>}
 			</ShipWrap>
+			<PopupContainer>
+        {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn}/>}
+      </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
       </MsgContainer>
-			{/* <ModalContainer>
-				{modalOn && <Modal fn={} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} lang={lang} onClose={() => {handleModal()}} gameData={gameData}/>}
-			</ModalContainer> */}
 		</>
   );
 }

@@ -49,6 +49,7 @@ const ChInfo = styled.div`
   border-image:url(${({frameBack}) => frameBack}) 5 round;z-index:3;
 `;
 const Character = ({
+  navigate,
   saveData,
   changeSaveData,
   currentTime,
@@ -57,13 +58,18 @@ const Character = ({
   const gameData = useContext(AppContext).gameData;
 	const setting = useContext(AppContext).setting,
     lang = setting.lang;
-  const chLength = saveData.ch.length;
   const [slotIdx, setSlotIdx] = useState(0);
   const [chPage, setChPage] = useState(0);
   // const chShow = useRef(false);
   const [chShow, setChShow] = useState(false);
   const chRef = useRef(null);
+  const chLengthRef = useRef();
   const iconState = [imgSet.iconState[0], imgSet.iconState[1], imgSet.iconState[2], imgSet.iconState[3], imgSet.iconState[4], imgSet.iconState[5], imgSet.iconState[6]];
+  useEffect(() => {
+    if (Object.keys(saveData).length !== 0) {
+      chLengthRef.current = saveData.ch.length;
+    }
+  }, [saveData]);
   const cardShow = () => {
     setChShow(true);
   }
@@ -95,14 +101,14 @@ const Character = ({
             setSlotIdx((prevSlot) => {
               chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
               prevSlot--;
-              return prevSlot < 0 ? chLength - 1 : prevSlot;
+              return prevSlot < 0 ? chLengthRef.current - 1 : prevSlot;
             });
           }
           if (diffX < -5) { //왼쪽
             setSlotIdx((prevSlot) => {
               chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
               prevSlot++;
-              return prevSlot > chLength - 1 ? 0 : prevSlot;
+              return prevSlot > chLengthRef.current - 1 ? 0 : prevSlot;
             });
           }
         } else {
@@ -121,14 +127,14 @@ const Character = ({
             setSlotIdx((prevSlot) => {
               chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
               prevSlot--;
-              return prevSlot < 0 ? chLength - 1 : prevSlot;
+              return prevSlot < 0 ? chLengthRef.current - 1 : prevSlot;
             });
           }
           if (diffX < -5) { //왼쪽
             setSlotIdx((prevSlot) => {
               chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
               prevSlot++;
-              return prevSlot > chLength - 1 ? 0 : prevSlot;
+              return prevSlot > chLengthRef.current - 1 ? 0 : prevSlot;
             });
           }
         }
@@ -181,7 +187,7 @@ const Character = ({
             <CharacterAnimalSkill saveData={saveData} slotIdx={slotIdx} changeSaveData={changeSaveData} />
             <CharacterSkill saveData={saveData} slotIdx={slotIdx} />
             <CharacterRelation saveData={saveData} slotIdx={slotIdx} />
-            <CharacterItems saveData={saveData} slotIdx={slotIdx} changeSaveData={changeSaveData} />
+            <CharacterItems navigate={navigate} saveData={saveData} slotIdx={slotIdx} changeSaveData={changeSaveData} />
             <CharacterApplyState saveData={saveData} slotIdx={slotIdx}/>
           </ChInfo>
           <CharacterItemEnhance saveData={saveData} slotIdx={slotIdx} />

@@ -6,7 +6,7 @@ import PopupContainer from 'components/PopupContainer';
 import Popup from 'components/Popup';
 
 const SkillIcon = styled.span`
-  background:url(${({ frameImg }) => frameImg}), radial-gradient(closest-side at 40% 40%, #ddd, #333);background-size:100%;
+  background:url(${({ frameImg }) => frameImg});background-size:100%;
   ${'' /* &.el1{background-image:url(${({ elementIcon }) => elementIcon[1]});background-size:100%;}
   &.el2{background-image:url(${({ elementIcon }) => elementIcon[2]});background-size:100%;}
   &.el3{background-image:url(${({ elementIcon }) => elementIcon[3]});background-size:100%;}
@@ -27,12 +27,12 @@ const SkillIcon = styled.span`
   }}};
 `;
 const SkillIcon2 = styled.span`
-  background:url(${({ frameImg }) => frameImg}), radial-gradient(closest-side at 40% 40%, #ddd, #333);background-size:100%;
+  background:url(${({ frameImg }) => frameImg});background-size:100%;
   &:before{background:url(${({skillIcon}) => skillIcon});background-size:contain;};
   &:after{background:url(${({skillIcon}) => skillIcon});background-size:contain;};
 `;
 const SkillIcon3 = styled.span`
-  background:url(${({ frameImg }) => frameImg}), radial-gradient(closest-side at 40% 40%, #ddd, #333);background-size:100%;
+  background:url(${({ frameImg }) => frameImg});background-size:100%;
   &:before{background:url(${({skillIcon}) => skillIcon});background-size:contain;};
   &:after{background:url(${({skillIcon}) => skillIcon});background-size:contain;};
 `;
@@ -92,13 +92,13 @@ const CharacterSkill = ({
               return (
                 <div key={idx} className={`sk cate${cate} ${actionPossibleSkill ? "possible" : ""}`} flex-h="true">
                   <div className="sk_info" flex="true">
-                    {cate === 2 && ( //passive
+                    {(cate === 2 || cate === 11) && ( //passive
                       <SkillIcon3 className="sk_icon3" skillIcon={imgSet.passive[skData_.effAnimation]} frameImg={imgSet.etc.skillFrame}/>
                     )}
                     {cate === 4 && ( //defence
                       <SkillIcon2 className="sk_icon2" skillIcon={imgSet.actionIcon[skData_.effAnimation]} frameImg={imgSet.etc.skillFrame}/>
                     )}
-                    {cate !== 2 && cate !== 4 && (
+                    {cate !== 2 && cate !== 4 && cate !== 11 && (
                       <SkillIcon className="sk_icon" skillIcon={imgSet.eff[skData_.effAnimation]} skillScene={gameData.effect[skData_.effAnimation].imgScene} skillFrame={gameData.effect[skData_.effAnimation].frame} frameImg={imgSet.etc.skillFrame}/>
                     )}
                     <div style={{padding:"0 0 5px 10px",width:"100%", flex:1}} flex-h-center="true">

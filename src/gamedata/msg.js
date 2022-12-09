@@ -152,6 +152,48 @@ export const msg = {
 			ko:'누적 경험치',
 			en:'Cumulative Exp',
 		},
+		shipBuilder:{
+			ko:'선박 제조가',
+			en:'Ship Builder'
+		},
+		percent:{
+			ko:'확률',
+			en:'Percent'
+		},
+		success:{
+			ko:'성공',
+			en:'Success'
+		},
+		grade:{
+			ko:'등급',
+			en:'Grade'
+		},
+		undefined:{
+			ko:'미정',
+			en:'Undefined'
+		}
+	},
+	title:{
+		socketJewelry:{
+			ko:'소켓보석',
+			en:'Socket Jewelry'
+		},
+		reinforcedMaterial:{
+			ko:'강화재료',
+			en:'Reinforced material'
+		},
+		material:{
+			ko:'재료',
+			en:'Material'
+		},
+		etc:{
+			ko:'기타',
+			en:'Etc'
+		},
+		actionCharacter:{
+			ko:'행동 캐릭',
+			en:'Action Character'
+		}
 	},
 	button:{
 		use:{
@@ -170,6 +212,10 @@ export const msg = {
 			ko:'업그레이드',
 			en:'Upgrade',
 		},
+		enhance:{
+			ko:'강화',
+			en:'Enhancement'
+		},
 		buy:{
 			ko:'구입',
 			en:'Buy',
@@ -178,9 +224,9 @@ export const msg = {
 			ko:'판매',
 			en:'Sell',
 		},
-		unpack:{
-			ko:'확인',
-			en:'Unpack',
+		evaluate:{
+			ko:'감정',
+			en:'Evaluate',
 		},
 		synthetic:{
 			ko:'합성',
@@ -197,6 +243,14 @@ export const msg = {
 		reset:{
 			ko:'초기화',
 			en:'Reset'
+		},
+		release:{
+			ko:'해제',
+			en:'Release'
+		},
+		equip:{
+			ko:'장착',
+			en:'Equip'
 		}
 	},
 	ship:{
@@ -308,9 +362,9 @@ export const msg = {
 			ko:'아무런 변화가 없습니다.',
 			en:'There\'s no change.',
 		},
-		unpackItem:{
+		evaluateItem:{
 			ko:'미개봉 아이템입니다.',
-			en:'This is an unpacked item.',
+			en:'It\'s an item before the evaluation.',
 		},
 		unpossibleJob:{
 			ko:'착용이 불가능한 직업입니다.',
@@ -361,12 +415,41 @@ export const msg = {
 			}
 		},
 		lackItem:(lang, item) => {
-			console.log(item);
 			switch(lang) {
 				case 'ko':
-					return `${item[lang]} 이/가 부족합니다.`;
+					return `<${item[lang]}> 이/가 부족합니다.`;
 				case 'en':
-					return `There's not enough ${item[lang]}.`;
+					return `There's not enough <${item[lang]}>.`;
+				default:
+					break;
+			}
+		},
+		lackActionPoint:(lang, ch) => {
+			switch(lang) {
+				case 'ko':
+					return `<${ch}>의 행동력이 부족합니다.`;
+				case 'en':
+					return `<${ch}>'s lack of action.`;
+				default:
+					break;
+			}
+		},
+		noneHaveSkill:(lang, skill) => {
+			switch(lang) {
+				case 'ko':
+					return `<${skill[lang]}> 스킬을 보유한 캐릭이 없습니다.`;
+				case 'en':
+					return `There is no character with <${skill[lang]}> skills.`;
+				default:
+					break;
+			}
+		},
+		selectSkillCh:(lang, skill) => {
+			switch(lang) {
+				case 'ko':
+					return `<${skill[lang]}> 스킬을 보유한 캐릭터를 선택십시오.`;
+				case 'en':
+					return `Choose a character with <${skill[lang]}> skills.`;
 				default:
 					break;
 			}

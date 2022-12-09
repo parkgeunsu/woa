@@ -52,9 +52,9 @@ const ListNameLv = styled.li`
   &:after{content:'';display:block;position:absolute;left:3%;top:-17%;padding-top:30%;width:30%;background:url(${({cardLv}) => cardLv});background-repeat:no-repeat;background-position:center center;background-size:contain;}
   & {
     img{width:100%;}
-    .name_{position:absolute;display:inline-block;left:33%;top:17%;width:67%;line-height:1;font-size:14px;text-align:left;z-index:1;box-sizing:border-box;}
-    .name{position:absolute;display:inline-block;right:2%;bottom:17%;width:67%;line-height:1;font-size:20px;z-index:1;box-sizing:border-box;letter-spacing:-2px;white-space:nowrap;overflow:hidden;}
-    .lv{position:absolute;display:inline-block;left:3%;top:15%;width:30%;line-height:1;font-size:25px;text-align:center;z-index:1;}
+    .name_{position:absolute;display:inline-block;left:33%;top:17%;width:67%;line-height:1;font-size:0.875rem;text-align:left;z-index:1;box-sizing:border-box;}
+    .name{position:absolute;display:inline-block;right:2%;bottom:17%;width:67%;line-height:1;font-size:1.25rem;z-index:1;box-sizing:border-box;letter-spacing:-2px;white-space:nowrap;overflow:hidden;}
+    .lv{position:absolute;display:inline-block;left:3%;top:15%;width:30%;line-height:1;font-size:2.1rem;text-align:center;z-index:1;}
   }
 `;
 const ListCh = styled.li`
@@ -120,10 +120,10 @@ const ChracterDetail = ({
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
   const iconStar = [iconStar1, iconStar2, iconStar3, iconStar4, iconStar5, iconStar6, iconStar7]
-  const saveCh = saveData.ch[slotIdx];
-  const chData = gameData.ch[saveCh.idx];
-  return (
-    <>
+  if (slotIdx !== '') {
+    const saveCh = saveData.ch[slotIdx];
+    const chData = gameData.ch[saveCh.idx];
+    return (
       <ChCard className="ch_detail transition">
         <ListNameLv cardLv={imgCardLv} className="name_lv">
           <Img className="img" imgurl={iconCardName} />
@@ -149,8 +149,10 @@ const ChracterDetail = ({
         </ListChStar>
         <ListChFrame cardFrame={imgCardFrame} className="frame" />
       </ChCard>
-    </>
-  );
+    );
+  } else {
+    return <ChCard className="ch_detail transition"></ChCard>
+  }
 }
 
 export default ChracterDetail;

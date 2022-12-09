@@ -6,7 +6,9 @@ export const save = {
     diamond:50,
     money:352000,
     stay:0,
+    shipIdx:0,
   },
+  "actionCh":{equipmentShop:{idx:''},toolShop:{idx:''},shipyard:{idx:''},tradingPost:{idx:''},characterEnhancement:{idx:''},itemEnhancement1:{idx:''},itemEnhancement2:{idx:''},combinedItem:{idx:''},recruitment:{idx:''}},
   "ship":[
     {
       stay:0,
@@ -71,12 +73,12 @@ export const save = {
       {},
       {},
     ],
-    "hasSkill":[{"idx":1,"lv":1,"exp":0},{"idx":2,"lv":1,"exp":0},{"idx":6,"lv":1,"exp":0},{"idx":7,"lv":1,"exp":0},{idx:115,lv:1},{idx:111,lv:1},{idx:112,lv:1},{idx:121,lv:1},{idx:122,lv:1},{idx:123,lv:1},{idx:124,lv:1}],
+    "hasSkill":[{"idx":1,"lv":1,"exp":0},{"idx":2,"lv":1,"exp":0},{"idx":6,"lv":1,"exp":0},{"idx":7,"lv":1,"exp":0},{idx:115,lv:1},{idx:111,lv:1},{idx:112,lv:1},{idx:121,lv:1},{idx:101,lv:1},{idx:116,lv:1},{idx:124,lv:1},{idx:201,lv:1},{idx:203,lv:1},{idx:204,lv:1}],
     "sk":[{"idx":1,"lv":1,"exp":0},{"idx":2,"lv":1,"exp":0},{"idx":6,"lv":1,"exp":0},{"idx":7,"lv":1,"exp":0}],
     "animalSkill":[
-      [{idx:115,lv:1},{idx:111,lv:1},{idx:112,lv:1},{idx:103,lv:0}],
-      [{idx:121,lv:1},{idx:122,lv:1},{idx:123,lv:1},{}],
-      [{idx:124,lv:1},{},{},{idx:103,lv:0}],
+      [{idx:115,lv:1},{idx:111,lv:1},{idx:201,lv:1},{idx:103,lv:0}],
+      [{idx:121,lv:1},{idx:101,lv:1},{idx:203,lv:1},{}],
+      [{idx:124,lv:1},{idx:116,lv:1},{idx:204,lv:1},{}],
       [{},{},{},{}],
     ]},
     {"idx":0,"stateType":0,"element":[11],"actionType":3,"job":12,"newActionType":[3],"grade":5,"mark":0,"stateLuk":200,"lv":40,"exp":0,"hasExp":1000,"actionPoint":26,"actionMax":55,"pointTime":1200,"battleBeige":[0,0,0,0],"animalBeige":0,"items":[
@@ -89,10 +91,10 @@ export const save = {
       {},
       {},
     ],
-    "hasSkill":[{"idx":1,"lv":1,"exp":0},{"idx":2,"lv":1,"exp":0},{idx:121,lv:1}],
+    "hasSkill":[{"idx":1,"lv":1,"exp":0},{"idx":2,"lv":1,"exp":0},{idx:121,lv:1},{idx:202,lv:1}],
     "sk":[{"idx":1,"lv":1,"exp":0},{"idx":2,"lv":1,"exp":0}],
     "animalSkill":[
-      [{idx:121,lv:1},{idx:102,lv:0},{idx:103,lv:0},{}],
+      [{idx:121,lv:1},{idx:102,lv:0},{idx:202,lv:1},{}],
       [{idx:104,lv:0},{idx:105,lv:0},{idx:106,lv:0},{}],
       [{idx:107,lv:0},{},{},{}],
       [{},{},{},{}],
@@ -121,7 +123,8 @@ export const save = {
     "equip":[
       {addEff:[],baseEff:[{type: 4, num: ["578", "763", "1024", "1213"]}, {type: 6, num: ["174", "332", "471", "606"]}],color:["hsla(223,99%,75%,1)"],grade: 2,hole:[0,0,0,0,0],id:"355goma5g",idx:11,mark:5,markNum:2,modifier:{ko:"다이아몬드의 물개두마리", en:"Diamond's two Seals"},part:2,sealed:false,slot:5,weaponType:0,"favorite":0},
       {addEff:[],baseEff:[{type: 4, num: ["578", "763", "1024", "1213"]}, {type: 6, num: ["174", "332", "471", "606"]}],color:["hsla(223,99%,75%,1)"],grade: 2,hole:[{idx:101}, {idx:4,eff:[{type:6,num: ["76"]}]},0,0,0],id:"355goma5g",idx:11,mark:5,markNum:2,modifier:{ko:"다이아몬드의 물개두마리", en:"Diamond's two Seals"},part:2,sealed:false,slot:5,weaponType:0,"favorite":0},
-      {addEff:[],baseEff:[{type: 4, num: ["72", "74", "76", "77"]}, {type: 6, num: ["76", "89", "109", "131"]},{type: 8, num: ["14", "14", "14", "14"]}],color:["hsla(289,100%,34%,1)"],grade:2,hole:[0,0,0],id:"j0mu47it2",idx:0,mark:22,markNum:1,modifier:{ko: "사파이어의 도마뱀", en: "Sapphire's a Lizard"},part:1,sealed:false,slot:3,weaponType:0,"favorite":0}
+      {addEff:[],baseEff:[{type: 4, num: ["72", "74", "76", "77"]}, {type: 6, num: ["76", "89", "109", "131"]},{type: 8, num: ["14", "14", "14", "14"]}],color:["hsla(289,100%,34%,1)"],grade:2,hole:[0,0,0],id:"j0mu47it2",idx:0,mark:22,markNum:1,modifier:{ko: "사파이어의 도마뱀", en: "Sapphire's a Lizard"},part:1,sealed:false,slot:3,weaponType:0,"favorite":0},
+      {addEff:[],baseEff:[],color:["hsla(165,85%,26%,1)","hsla(165,82%,58%,1)"],favorite:0,grade:1,hole:[0],id:"ik0n0vh1p",idx:1,mark:"",markNum:0,modifier:{ko: "사파이어의 ", en: "Sapphire's "},part:5,sealed:false,slot:1,weaponType:"0"}
     ],
     "hole":[
       {"idx":1,"grade":3,"baseEff":[{type:4,num:['802']}],"addEff":[]},

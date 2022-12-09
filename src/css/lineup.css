@@ -48,7 +48,7 @@
 .lineup_save .save_slot{padding:0;width:100%;height:100%;background:#000;color:#fff;box-sizing:border-box;}
 .lineup_save ul li.on .save_slot{border:1px solid #f00;background:#fff;color:#f00;}
 .lineup_save ul li.save .save_slot{outline:1px solid #00f;background:#00f;color:#fff;}
-.lineup_save .save_submit{margin:0 0 0 5px;width:45px;background:#00f;color:#fff;font-weight:600;font-size:12px;}
+.lineup_save .save_submit{margin:0 0 0 5px;width:45px;background:#00f;color:#fff;font-weight:600;font-size:0.75rem;}
 
 .lineup_middle{display:flex;margin:10px 0;height:60%;overflow:hidden;}
 
@@ -196,7 +196,7 @@
 .lineup_map.lineup_pos > .mapCh.has{border:none;}
 .lineup_map.lineup_pos > .mapCh.on{border:none;}
 .lineup_map.lineup_pos > .mapCh.on .mapCh_{animation:lineup_mapCh .7s alternate infinite;z-index:1;}
-.lineup_map .mapCh span{position:absolute;font-size:10px;}
+.lineup_map .mapCh span{position:absolute;font-size:0.625rem;}
 .lineup_map .mapCh .mapEff{z-index:2;left:0;right:0;top:0;bottom:0;}
 
 .lineup_chInfo{padding:10px;width:100%;background:#ddd;box-sizing:border-box;flex-grow:1;}
@@ -204,9 +204,9 @@
 .lineup_chInfo ul li{position:relative;margin:0 0 2px 0;width:100%;color:#000;box-sizing:border-box;}
 .lineup_chInfo ul li:nth-of-type(2){width:50%;}
 .lineup_chInfo ul li:nth-of-type(3){width:50%;}
-.lineup_chInfo ul li .na{margin:0 5px 0 0;font-size:12px;}
-.lineup_chInfo ul li .txt{font-size:12px;font-weight:600;}
-.lineup_chInfo ul li .add_txt{position:relative;margin:0 0 0 5px;padding:0 0 0 12px;font-size:12px;font-weight:600;}
+.lineup_chInfo ul li .na{margin:0 5px 0 0;font-size:0.75rem;}
+.lineup_chInfo ul li .txt{font-size:0.75rem;font-weight:600;}
+.lineup_chInfo ul li .add_txt{position:relative;margin:0 0 0 5px;padding:0 0 0 12px;font-size:0.75rem;font-weight:600;}
 .lineup_chInfo ul li.none .add_txt{display:none;}
 .lineup_chInfo ul li.up .add_txt{color:var(--color-point4);}
 .lineup_chInfo ul li.up .add_txt:before{content:'';position:absolute;left:0;top:0;width:12px;height:100%;}
@@ -217,15 +217,15 @@
 .lineup_ch ul{display:flex;flex-flow:wrap;width:100%;}
 .lineup_ch ul li{position:relative;margin:0 6.5px 6.5px 0;width:calc(25% - 5px);padding-top:calc(25% - 5px);font-size:0;overflow:hidden;border-radius:10px;}
 .lineup_ch ul li:nth-of-type(4n){margin:0 0 6.5px 0;}
-.lineup_ch ul li > span{position:absolute;font-size:10px;}
+.lineup_ch ul li > span{position:absolute;font-size:0.625rem;}
 .lineup_ch ul li.selected{opacity:.3;}
 
 .lineup_info{display:flex;padding:5px;background:#ddd;justify-content:space-between;}
 .lineup_info .lineup_na{color:#000;font-weight:600;}
 .lineup_info .lineup_cost{color:#000;}
 .lineup_info .lineup_cost.error{color:#f00;}
-.lineup_info .lineup_cost span{font-size:12px;font-weight:600;}
-.lineup_info .lineup_cost .bar{color:#000;font-size:12px;}
+.lineup_info .lineup_cost span{font-size:0.75rem;font-weight:600;}
+.lineup_info .lineup_cost .bar{color:#000;font-size:0.75rem;}
 .lineup_info .lineup_cost .bar:before{content:' / ';}
 
 @keyframes lineup_mapCh{

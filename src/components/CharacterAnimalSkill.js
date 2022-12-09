@@ -30,9 +30,9 @@ const makeMark = (markNum, img) => {
   //imgSet.animalType[animalIdx]
 }
 const SkillButton = styled.div`
-  background:url(${({ frameImg }) => frameImg}), radial-gradient(closest-side at 40% 40%, #ddd, #333);background-size:100%;
+  background:url(${({ frameImg }) => frameImg});background-size:100%;
   ${({skillCate, skillIcon, skillScene, skillFrame}) => {
-    if (skillCate === 2) {
+    if (skillCate === 2 || skillCate === 11) {
       return `
         &:before{background:url(${skillIcon});background-size:100%;}
         &:after{background:url(${skillIcon});background-size:100%;}
@@ -141,7 +141,7 @@ const CharacterAnimalSkill = ({
                         const sk = gameData.skill[skData.idx];
                         const skCate = sk.cate[0];
                         const skillIcon = (() => {
-                          if (skCate === 2) {//passive
+                          if (skCate === 2 || skCate === 11) {//passive, job
                             return imgSet.passive[sk.effAnimation];
                           } else if (skCate === 4) {//defence
                             return imgSet.actionIcon[sk.effAnimation];
@@ -151,7 +151,7 @@ const CharacterAnimalSkill = ({
                         })();
                         return (
                           <div key={skIdx} className={`skill_list pos${skIdx % 4}`}>
-                            <SkillButton skillCate={skCate} skillIcon={skillIcon} skillScene={gameData.effect[sk.effAnimation].imgScene} skillFrame={gameData.effect[sk.effAnimation].frame} frameImg={imgSet.etc.skillFrame} className={`skill_button cate${skCate} ${skData.lv > 0 ? "used" : ""}`} flex-h-center="true" onClick={() => {
+                            <SkillButton skillCate={skCate} skillIcon={skillIcon} skillScene={gameData.effect[sk.effAnimation]?.imgScene} skillFrame={gameData.effect[sk.effAnimation]?.frame} frameImg={imgSet.etc.skillFrame} className={`skill_button cate${skCate} ${skData.lv > 0 ? "used" : ""}`} flex-h-center="true" onClick={() => {
                               let sData = {...saveData};
                               if (sData.ch[slotIdx].animalBeige <= 0) {
                                 setMsgOn(true);
@@ -226,8 +226,8 @@ const CharacterAnimalSkill = ({
                                 skData:skData,
                                 skillCate:skCate,
                                 skillIcon:skillIcon,
-                                skillScene:gameData.effect[sk.effAnimation].imgScene,
-                                skillFrame:gameData.effect[sk.effAnimation].frame,
+                                skillScene:gameData.effect[sk.effAnimation]?.imgScene,
+                                skillFrame:gameData.effect[sk.effAnimation]?.frame,
                                 frameImg:imgSet.etc.skillFrame,
                               });
                             }}>{gameData.msg.button.skill[lang]}</button>

@@ -111,7 +111,7 @@
 .battle_effect.ready .land{outline-width:2px;}
 
 .effect_land{position:absolute;width:20%;padding-top:20%;box-sizing:border-box;border-radius:0;overflow:hidden;}
-.effect_land .dmgNum{position:absolute;left:50%;top:50%;color:var(--color-red);font-size:15px;font-weight:600;opacity:1;transform:translate(-50%,-50%) scale(1);text-shadow:0 0 1px #fff,0 0 1px #fff,0 0 2px #fff,0 0 2px #fff,0 0 3px #fff;z-index:10;}
+.effect_land .dmgNum{position:absolute;left:50%;top:50%;color:var(--color-red);font-size:0.938rem;font-weight:600;opacity:1;transform:translate(-50%,-50%) scale(1);text-shadow:0 0 1px #fff,0 0 1px #fff,0 0 2px #fff,0 0 2px #fff,0 0 3px #fff;z-index:10;}
 .effect_land.dmg .dmgNum{opacity:0;transform:translate(-50%,-180%) scale(2);}
 .effect_land .effect_eff{position:absolute;left:0;top:0;width:500%;z-index:11;transition:unset;}
 
@@ -127,7 +127,7 @@
 .battle_order.left:after{left:30%;}
 .battle_order.center:after{left:50%;}
 .battle_order.right:after{right:30%;}
-.battle_order .battle_msg{margin:0 auto;padding:10px;width:50%;height:100%;border-radius:10px;background:#333;box-sizing:border-box;text-align:center;line-height:1.2;font-size:15px;font-weight:600;color:#fff;}
+.battle_order .battle_msg{margin:0 auto;padding:10px;width:50%;height:100%;border-radius:10px;background:#333;box-sizing:border-box;text-align:center;line-height:1.2;font-size:0.938rem;font-weight:600;color:#fff;}
 
 .battle_weather{position:absolute;right:5px;bottom:0;width:50px;height:115px;transition:all 0.5s;border-radius:10px 0 0 0;z-index:51;}
 .battle_weather .weather_icon{position:relative;margin:0 0 5px 0;width:50px;height:50px;border-radius:25px;box-shadow:0 0 10px #000;border:2px solid #ddd;box-sizing:border-box;background:radial-gradient(at 30% 30%, rgba(200,200,200,1) 0%, rgba(0,0,0,1) 60%);overflow:hidden;}
@@ -139,7 +139,7 @@
 .battle_menu{display:flex;position:relative;background:var(--color-b);background:var(--color-b);overflow:hidden;z-index:50;}
 .battle_menu .chInfo{display:flex;flex-basis:60px;align-items:center;justify-content:center;}
 .battle_menu .chInfo span{display:inline-block;}
-.battle_menu .chInfo .sp{font-size:20px;}
+.battle_menu .chInfo .sp{font-size:1.25rem;}
 .battle_menu .chInfo .spR{margin:0 0 0 5px;}
 .battle_menu .chInfo .spR:before{content:'('}
 .battle_menu .chInfo .spR:after{content:')'}
@@ -149,8 +149,8 @@
 .battle_menu ul li{height:100%;}
 .battle_menu ul li button{display:flex;margin:5px;height:40px;border-radius:10px;background:#fff;box-sizing:border-box;align-items:center;}
 .battle_menu ul li button span{flex:1;white-space:nowrap;}
-.battle_menu .skSp{font-size:15px;}
-.battle_menu .skName{font-size:13px;white-space:nowrap;}
+.battle_menu .skSp{font-size:0.938rem;}
+.battle_menu .skName{font-size:0.813rem;white-space:nowrap;}
 
 .battle_wrap .ring_back,.battle_end .ring_back{position:absolute;width:100%;height:100%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;backface-visibility:hidden;background-color:transparent;border-radius:30%;overflow:hidden;}
 .battle_wrap .ring_style,.battle_end .ring_style{position:absolute;width:100%;height:100%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;backface-visibility:hidden;background-color:transparent;background-position:center 100%,center center;background-size:100%;/* transform:translateZ(4px); */}
@@ -160,7 +160,7 @@
 .battle_wrap .relation_area{display:flex;position:absolute;left:0;right:0;top:0;bottom:0;flex-direction:column;z-index:50;align-items:center;justify-content:center;pointer-events:none;}
 .battle_wrap .relation_area:after{content:'';position:absolute;width:100%;height:0;box-shadow:0 0 20px 10px rgba(0,0,0,0);background:rgba(0,0,0,.7);}
 .battle_wrap .relation_area .relationTitle{margin:0 0 10px 0;z-index:1;}
-.battle_wrap .relation_area .relationTitle span{display:inline-block;margin:0 2px;font-size:25px;font-weight:600;opacity:0;color:#fff;}
+.battle_wrap .relation_area .relationTitle span{display:inline-block;margin:0 2px;font-size:2.1rem;font-weight:600;opacity:0;color:#fff;}
 .battle_wrap .relation_area.on .relationTitle span{opacity:1;}
 .battle_wrap .relation_area.on .relationName{filter:blur(0);}
 .battle_wrap .bgEffect{position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;}
@@ -195,10 +195,10 @@
 .battle_scenario{position:absolute;left:0;right:0;top:0;bottom:0;padding:20px;box-sizing:border-box;z-index:10;background-color:rgba(0,0,0,.85);}
 .scenario_box{margin:15px 0;align-items:center;}
 .scenario_ch{position:relative;width:100px;height:100px;}
-.scenario_ch .ch_name{position:absolute;bottom:0;width:100%;text-align:center;word-break:keep-all;line-height:1.3;font-weight:600;font-size:14px;}
+.scenario_ch .ch_name{position:absolute;bottom:0;width:100%;text-align:center;word-break:keep-all;line-height:1.3;font-weight:600;font-size:0.875rem;}
 .scenario_ch .ring_back{display:block;position:absolute;left:10%;top:10%;width:80%;height:80%;border-radius:40px;overflow:hidden;box-shadow:0 0 10px #fff;}
 .scenario_ch .ch_style{display:block;position:absolute;left:-10%;top:-20%;width:120%;height:120%;background-repeat:no-repeat;}
-.scenario_talk{position:relative;padding:10px;border:4px solid #fff;background:rgba(255,255,255,.7);box-sizing:border-box;border-radius:10px;color:#000;flex:1;line-height:1.5;font-size:14px;}
+.scenario_talk{position:relative;padding:10px;border:4px solid #fff;background:rgba(255,255,255,.7);box-sizing:border-box;border-radius:10px;color:#000;flex:1;line-height:1.5;font-size:0.875rem;}
 .scenario_box.left .scenario_talk:after{
   content:"";position:absolute;top:50%;left:-14px;
   transform:translate(0,-50%);
@@ -221,7 +221,7 @@
 .battle_end{position:absolute;left:0;right:0;top:0;bottom:0;z-index:10;background-color:rgba(0,0,0,.85);justify-content:center;}
 .battle_end .end_ch{position:relative;margin:0 10px 0 0;width:15%;padding-top:15%;}
 .battle_end .end_ch .ring_back, .battle_end .end_ch .ring_style{top:0;}
-.battle_end .battle_title{margin:0 0 30px 0;font-size:20px;}
+.battle_end .battle_title{margin:0 0 30px 0;font-size:1.25rem;}
 .battle_end .battle_result_ch{padding:0 20px;width:100%;box-sizing:border-box;}
 .battle_end .battle_end_ch{margin:0 0 20px 0;width:100%;align-items:center;}
 .battle_end .battle_end_ch:nth-of-type{margin:0;}
@@ -229,8 +229,8 @@
 .battle_end_hpexp{position:relative;width:100%;}
 .battle_end_hp{margin:0 10px 0 0;}
 .battle_end_hpexp > div{display:flex;align-items:center;}
-.battle_end_hpexp .num{display:inline-block;margin:0 0 0 10px;font-size:16px;font-weight:600;}
-.battle_end_grade{position:absolute;width:16px;height:16px;opacity:0;font-size:14px;font-weight:600;color:var(--color-red);animation:grade_animation 1s ease-in forwards;z-index:1;}
+.battle_end_hpexp .num{display:inline-block;margin:0 0 0 10px;font-size:1rem;font-weight:600;}
+.battle_end_grade{position:absolute;width:16px;height:16px;opacity:0;font-size:0.875rem;font-weight:600;color:var(--color-red);animation:grade_animation 1s ease-in forwards;z-index:1;}
 .battle_end_grade:after{content:"";position:absolute;left:-4px;top:0;width:16px;height:16px;border-radius:20px;border:2px solid var(--color-red);box-sizing:border-box;}
 .battle_end_expBar{position:relative;margin:5px 0 0 0;min-width:200px;width:60%;height:14px;}
 .battle_end_expBar .bar{position:relative;width:100%;height:100%;border-radius:10px;background:#fff;overflow:hidden;}

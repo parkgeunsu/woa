@@ -1,6 +1,6 @@
 import { animals } from 'gamedata/animals';
 import { exp } from 'gamedata/exp';
-import { prices } from 'gamedata/prices';
+import { prices, actionPoint } from 'gamedata/prices';
 import { ch } from 'gamedata/heros';
 import { items } from 'gamedata/items';
 import { itemsSvg } from 'gamedata/itemsSvg';
@@ -58,6 +58,7 @@ export const gameData = {
     cannonSvg:cannonSvg,
     figureSvg:figureSvg,
     prices:prices,
+    actionPoint:actionPoint,
     guide:guide,
     recipe:recipe,
     msg:msg,
