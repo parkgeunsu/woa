@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState, useRef } from 'react';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
-import { back, animalType, icon, etc, iconStar, element, chImg, iconState, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, passive, eff, menu, weather, job, wood, anchor, sail, cannon, figure, control } from 'components/ImgSet';
+import { back, animalType, icon, etc, iconStar, element, chImg, iconState, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, passive, eff, menu, weather, job, wood, anchor, sail, cannon, figure, control, map } from 'components/ImgSet';
 import { util } from 'components/Libs';
 import Main from 'components/Main';
 import Menu from 'components/Menu';
@@ -182,6 +182,7 @@ const App = () => {
       cannon:cannon,
       figure:figure,
       control:control,
+      map:map,
       transparent:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAAtJREFUGFdjYAACAAAFAAGq1chRAAAAAElFTkSuQmCC',
     },
     gameData: {
@@ -342,6 +343,10 @@ const App = () => {
       const img = new Image();
       img.src = etc[v];
     }
+    map.forEach((image) => {
+      const img = new Image();
+      img.src = image;
+    });
     return () => {
       localStorage.setItem('closeTime', new Date());
     }

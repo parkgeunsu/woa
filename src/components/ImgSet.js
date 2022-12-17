@@ -547,6 +547,10 @@ import ACCK019_Corrupt from 'images/effect/ACCK019_Corrupt.png';
 import buff11 from 'images/effect/buff11.png';
 import buff12 from 'images/effect/buff12.png';
 
+//Map
+import map0 from 'images/map/map0.png';
+import map1 from 'images/map/map1.png';
+
 export const back = [
   back0,back1,back2,back3,itemEn0,itemEn1,scroll,stamp
 ];
@@ -647,4 +651,7 @@ export const figure = [
 ];
 export const cannon = [
   cannon0,cannon1,cannon2,cannon3,cannon4,cannon5,cannon6,cannon7,cannon8
+]
+export const map = [
+  map0,map1
 ]

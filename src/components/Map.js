@@ -50,6 +50,94 @@ const shipSize = (shipIdx) => {
 		return 2;
 	}
 }
+const MapLand = styled.div`
+	background-image:url(${({map}) => map});background-size:100%;background-position:center center;background-repeat:no-repeat;
+`;
+const WeatherIcon = styled.div`
+	position:absolute;left:${({idx}) => 50 * idx}px;background-image:url(${({src}) => src});background-size:80%;background-position:center center;background-repeat:no-repeat;width:46px;height:46px;
+`;
+const WeatherWind = styled.div`
+	.weather_arrow{background-image:url(${({src}) => src});background-size:100%;background-repeat:no-repeat;background-position:center center;transform:rotate(${({weatherInfo}) => weatherInfo.wind}deg);
+	}
+`;
+const BgEffect = styled.div`
+	.cloud{transition:all ${({gameSpd}) => 2 / gameSpd}s;}
+	.cloud1{top:0;animation:cloudAnimation ${({gameSpd}) => 210 / gameSpd}s linear infinite;background-image:url(${({img1}) => img1});background-size:100%;}
+	.cloud2{top:30%;animation:cloudAnimationReverse ${({gameSpd}) => 130 / gameSpd}s linear infinite;background-image:url(${({img2}) => img2});background-size:100%;opacity:1;}
+`;
+const BgLight = styled.div`
+	&:after{
+		content:'';position:absolute;left:0;top:0;height:100%;width:100%;
+		background:${({type, day}) => {
+			if (type === 'w0' && day) {
+				return `conic-gradient(at 5% -10%, rgba(255,255,255,0.4) 25%, 25%,
+			rgba(255,255,255,0.6) 26%, rgba(255,255,255,0) 27%,
+			rgba(255,255,255,0) 29%, rgba(255,255,255,0.5) 30.5%, rgba(255,255,255,0) 32%,
+			rgba(255,255,255,0) 37.3%, rgba(255,255,255,0.6) 37.5%, rgba(255,255,255,0) 37.8%,
+			rgba(255,255,255,0) 39%, rgba(255,255,255,0.5) 39.5%, rgba(255,255,255,0) 40%,
+			rgba(255,255,255,0) 44%, rgba(255,255,255,0.6) 45.5%, rgba(255,255,255,0) 47%,
+			rgba(255,255,255,0) 50%);`;
+			} else if ((type === 'w3' && day) || (type === 'w4' && day)) {
+				return `conic-gradient(at 5% -10%, rgba(0,0,0,.5) 25%, rgba(0,0,0,0.2) 37.5%,rgba(0,0,0,0.5) 50%);`;
+			}
+			if (!day) {
+				return `conic-gradient(at 5% -10%, rgba(0,0,0,.9) 25%, rgba(0,0,0,0.3) 37.5%,rgba(0,0,0,0.9) 50%);`;
+			}
+		}
+	}}
+	&:before{
+		content:'';position:absolute;left:0;top:0;padding-top:100%;width:100%;background:${({type, day}) => {
+			if (type === 'w0' && day) {
+				return `radial-gradient(at 10% 0%, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 50%),
+				radial-gradient(at 10% 0%, rgba(255,220,255,0) 10%, rgba(255,255,255,0.6) 12.5%, rgba(255,255,255,0) 25%),
+				radial-gradient(at 10% 0%, rgba(255,220,0,0) 18%, rgba(255,245,0,0.6) 20%, rgba(255,220,0,0) 34%),
+				radial-gradient(at 10% 0%, rgba(255,255,255,0) 35%, rgba(255,255,255,0.4) 38%, rgba(255,255,255,0) 60%)`;
+			}
+		}};
+	}
+`;
+const getWeather = (weather) => {
+	return weather.type.split('w')[1]*2 + (weather.day ? 0 : 1);
+}
+const changeWeather = (weather) => {
+	let type = weather.type.split('w')[1]*1,
+		type_ = type,
+		wind = weather.wind,
+		delay = weather.delay;
+	const typePercent = Math.random(),
+		windPercent = Math.random();
+	if (typePercent < .1) {
+		type = 4;
+	} else if (typePercent < .3) {
+		type = type - 1 < 0 ? 0 : type - 1;
+	} else if (typePercent < .5) {
+		type = type + 1 > 4 ? 4 : type + 1;
+	}
+	if (windPercent < .1) {
+		wind = wind - 20 < 0 ? 0 : wind - 20;
+	} else if (windPercent < .2) {
+		wind = wind + 20 < 360 ? 360 : wind + 20;
+	} else if (windPercent < .4) {
+		wind = wind - 10 < 0 ? 0 : wind - 10;
+	} else if (windPercent < .6) {
+		wind = wind + 10 < 360 ? 360 : wind + 10;
+	}
+	if (delay <= 0) {
+		return {
+			type:'w' + type,
+			wind:wind,
+			day:weather.day === 0 ? 1 : 0,
+			delay:delay,
+		}
+	} else {
+		return {
+			type:'w' + type_,
+			wind:wind,
+			day:weather.day,
+			delay:delay - 1,
+		}
+	}
+}
 const Map = ({
 	saveData,
 	changeSaveData,
@@ -73,36 +161,89 @@ const Map = ({
 	const sailShipDegree = useRef(0);//sail 목표각도
 	const touchDistance1 = useRef();//wheel 터치시작점
 	const touchDistance2 = useRef();//sail 터치시작점
+	const [map, setMap] = useState(1);//map 번호
+	const mapInfo = useRef({w:0,h:0});//맵 크기
+	const mapRef = useRef();//map canvas
+	const mapCtx = useRef();//map canvas ctx
 	const timeoutRef = useRef();
+	const timeSec = useRef(0);//시간 체크
 	const wheelContainerRef = useRef(null);//wheel 선택자
 	const sailContainerRef = useRef(null);//sail 선택자
 	const shipContainerRef = useRef(null);//ship 선택자
 	const shipRef = useRef(null);
 	const shipSpeed = useRef(1);
 	const shipX = useRef(100);
-	const shipY = useRef(100);
+	const shipY = useRef(300);
 	const [selectShip, setSelectShip] = useState({shipIdx:'',wood:'',figure:'',anchor:'',sail0:'',sail1:'',sail2:'',sail0Color:'#fff',sail1Color:'#fff',sail2Color:'#fff',cannon0:'',cannon1:'',cannon2:''});
+	const containerRef = useRef(null);
+	const bgCanvasRef = useRef();//날씨 캔버스
+	const containerWH = useRef([0,0]);
+	const [weather, setWeather] = useState({
+		type:'w0',//w0:맑음, w1:흐림, w2:비, w3:천둥, w4:눈
+		day:true,//낮 밤
+		wind:0,//바람
+		delay:0//턴 유지
+	});//날씨
 	const animation = () => {
+		timeSec.current ++;
+		if (timeSec.current % 1000 === 0) {
+			//setWeather(changeWeather(weather));
+			if (weather.delay <= 0) {
+				setWeather({
+					...weather,
+					type:'w' + Math.floor(Math.random() * 5),
+					wind:Math.floor(Math.random() * 36) * 10,
+					day:true,
+				});
+			} else {
+				setWeather({
+					...weather,
+					delay:weather.delay - 1,
+				})
+			}
+		}
 		//wheel
 		rotateSpeed1.current *= frictionCount.current;
-		if (Math.abs(rotateSpeed1.current) < 0.01) {
+		if (Math.abs(rotateSpeed1.current) < 0.1) {
 			frictionCount.current = 1;
 			rotateSpeed1.current = 0;
 		}
-		shipSpeed.current = 3;
+		shipSpeed.current = 2;
 		wheelDegree.current += rotateSpeed1.current;
 		wheelContainerRef.current.style.transform = `translate(-50%,-50%) rotate(${wheelDegree.current}deg)`;
-		// shipContainerRef.current.style.left = Math.cos(wheelDegree.current * 0.1 * Math.PI / 180) * shipSpeed.current + 'px';
-		// shipContainerRef.current.style.top = Math.sin(wheelDegree.current * 0.1 * Math.PI / 180) * shipSpeed.current + shipY.current + 'px';
-		console.log(wheelDegree.current);
-		//wheelDegree.current 
-		//x:/ 90, y: 1 - x;
-		const moveY = wheelDegree.current / 90;
-		shipContainerRef.current.style.left = shipX.current + (1 - moveY) + 'px';
-		shipContainerRef.current.style.top = (shipY.current + moveY) + 'px';
-		// shipContainerRef.current.style.left = Math.cos(wheelDegree.current * 0.1 * (Math.PI / 180)) * shipSpeed.current + shipX.current + 'px';
-		// shipContainerRef.current.style.top = Math.sin(wheelDegree.current * 0.1 * (Math.PI / 180)) * shipSpeed.current + shipY.current + 'px';
-		shipContainerRef.current.style.transform = `translate(-50%,-50%) rotate(${90 + wheelDegree.current * 0.1}deg)`;
+
+		//console.log(wheelDegree.current);
+		const x = Math.cos(wheelDegree.current * (Math.PI / 180)) * shipSpeed.current + shipX.current,
+			y = Math.sin(wheelDegree.current * (Math.PI / 180)) * shipSpeed.current + shipY.current;
+		const mapColor = mapCtx.current.getImageData(x, y, 1, 1).data;
+		if (x < 0) { //맵 좌측
+			console.log('left map');
+			shipContainerRef.current.style.left = shipX.current + 'px';
+			shipContainerRef.current.style.top = shipY.current + 'px';
+		} else if (x > mapInfo.current.w) { //맵 우측
+			console.log('right map');
+			shipContainerRef.current.style.left = shipX.current + 'px';
+			shipContainerRef.current.style.top = shipY.current + 'px';
+		} else if (y < 0) { //맵 상단
+			console.log('up map');
+			shipContainerRef.current.style.left = shipX.current + 'px';
+			shipContainerRef.current.style.top = shipY.current + 'px';
+		} else if (y > mapInfo.current.h) { //맵 하단
+			console.log('down map');
+			shipContainerRef.current.style.left = shipX.current + 'px';
+			shipContainerRef.current.style.top = shipY.current + 'px';
+		} else {//맵 안쪽일 경우
+			if (mapColor[0] === 195 && mapColor[1] === 128 && mapColor[2] === 0) {
+				console.log('land');
+				shipContainerRef.current.style.left = shipX.current + 'px';
+				shipContainerRef.current.style.top = shipY.current + 'px';
+			} else {
+				console.log('water');
+				shipContainerRef.current.style.left = x + 'px';
+				shipContainerRef.current.style.top = y + 'px';
+			}
+		}
+		shipContainerRef.current.style.transform = `translate(-50%,-50%) rotate(${90 + wheelDegree.current}deg)`;
 		shipX.current = parseInt(shipContainerRef.current.style.left);
 		shipY.current = parseInt(shipContainerRef.current.style.top);
 
@@ -152,10 +293,133 @@ const Map = ({
 			timeoutRef.current = setTimeout(animation, TIMEOUT_SPEED);
 		}
 	}, [wheelContainerRef.current, sailCenterRef.current]);
+	useEffect(() => {
+		const area = containerRef.current.getBoundingClientRect();
+		mapInfo.current = {
+			w:area.width,
+			h:area.height,
+		}
+		containerWH.current = [area.width, area.height];
+		//canvas
+		mapRef.current.setAttribute('width', area.width + 'px');
+		mapRef.current.setAttribute('height', area.height + 'px');
+		mapCtx.current = mapRef.current.getContext('2d');
+		const mapImg = new Image();
+		mapImg.src = imgSet.map[map];
+		mapImg.addEventListener('load', () => {
+			mapCtx.current.drawImage(mapImg, 0, 0);
+		});
+	}, [containerRef.current]);
+	useEffect(() => {
+		if (weather.type === 'w2' || weather.type === 'w3') {
+			const can = bgCanvasRef.current;
+			can.setAttribute('width', containerWH.current[1]);
+			can.setAttribute('height', containerWH.current[1]);
+			can.style.left = (containerWH.current[0] - containerWH.current[1]) / 2 + 'px';
+			can.style.transform = `rotate(${180 + weather.wind}deg)`; 
+			const ctx = can.getContext('2d');
+			const drops = [];
+			class Drop {
+        constructor(index, x, y, speed, length) {
+          this.index = index;
+          this.x = x;
+          this.y = y;
+          this.speed = speed;
+          this.length = length;
+          this.draw();
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.strokeStyle = '#dfdfdf';
+          ctx.moveTo(this.x, this.y);
+          ctx.lineTo(this.x, this.y + this.length);
+          ctx.stroke();
+          ctx.closePath();
+        }
+      }
+			const render = () => {
+				ctx.clearRect(0, 0, can.width, can.height);
+				drops.forEach((drop) => {
+          drop.y += drop.speed;
+          if (drop.y > can.height) {
+            drop.y = Math.random() * -30;
+            drop.x = Math.random() * can.width;
+            drop.speed = Math.random() * 3 + 1;
+            drop.length = Math.random() * 7 + 2;
+          }
+          drop.draw();
+        });
+        requestAnimationFrame(render); //반복
+			}
+			let tempX, tempY, tempSpeed, tempLength;
+			for (let i = 0; i < 250; i++) {
+        tempY = Math.random() * -150;
+        tempX = Math.random() * can.width;
+        tempSpeed = Math.random() * 3 + 1;
+        tempLength = Math.random() * 7 + 2;
+
+        drops.push(new Drop(i, tempX, tempY, tempSpeed, tempLength));
+      }
+      render();
+		} else if (weather.type === 'w4') {
+			const can = bgCanvasRef.current;
+			can.setAttribute('width', containerWH.current[1]);
+			can.setAttribute('height', containerWH.current[1]);
+			can.style.left = (containerWH.current[0] - containerWH.current[1]) / 2 + 'px';
+			can.style.transform = `rotate(${180 + weather.wind}deg)`; 
+			const ctx = can.getContext('2d');
+			const drops = [];
+			class Drop {
+        constructor(index, x, y, speed, size, opacity) {
+          this.index = index;
+          this.x = x;
+          this.y = y;
+          this.speed = speed;
+          this.size = size;
+					this.opacity = opacity;
+          this.draw();
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.moveTo(this.x, this.y);
+          ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+          ctx.fillStyle = `rgba(255,255,255,${this.opacity})`;
+          ctx.fill();
+          ctx.closePath();
+        }
+      }
+			const render = () => {
+				ctx.clearRect(0, 0, can.width, can.height);
+				drops.forEach((drop) => {
+          drop.y += drop.speed;
+          if (drop.y > can.height) {
+            drop.y = Math.random() * -30;
+            drop.x = Math.random() * can.width;
+            drop.speed = Math.random() * 1.5 + 0.2;
+            drop.size = Math.random() * 4 + 1;
+						drop.opacity = Math.random()* 0.7 + 0.3;
+          }
+          drop.draw();
+        });
+        requestAnimationFrame(render); //반복
+			}
+			let tempX, tempY, tempSpeed, tempSize, tempOpacity;
+			for (let i = 0; i < 250; i++) {
+        tempY = Math.random() * -150;
+        tempX = Math.random() * can.width;
+        tempSpeed = Math.random() * 1.5 + 0.2;
+        tempSize = Math.random() * 4 + 1;
+				tempOpacity = Math.random()* 0.7 + 0.3;
+
+        drops.push(new Drop(i, tempX, tempY, tempSpeed, tempSize, tempOpacity));
+      }
+      render();
+		}
+	}, [weather]);
   return (
 		<>
 			<MapWrap className="map_wrap" backImg={imgSet.back[2]}>
-				<div className="water">
+				<div className="water" ref={containerRef}>
 					<svg id="svg" className="path" style={{backgroundColor: "rgb(132, 235, 228)"}}>
 						<path fill="#79dfdd" stroke="#79dfdd" d="M -200 1091 L -200 0 C -169.72222222222223 0, -121.27777777777777 -18, -91 -18 C -68.22222222222223 -18, -31.77777777777778 -12, -9 -12 C 18.5 -12, 62.5 -15, 90 -15 C 116.94444444444444 -15, 160.05555555555554 -13, 187 -13 C 208.94444444444446 -13, 244.05555555555554 -10, 266 -10 C 288.5 -10, 324.5 18, 347 18 C 386.44444444444446 18, 449.55555555555554 -15, 489 -15 C 529.2777777777778 -15, 593.7222222222222 14, 634 14 L 710 0 L 710 1091 Z"></path>
 						<path fill="#6ed3d5" stroke="#6ed3d5" d="M -200 1091 L -190 44 C -158.33333333333334 44, -107.66666666666666 34, -76 34 C -55.16666666666667 34, -21.833333333333332 33, -1 33 C 23.166666666666664 33, 61.833333333333336 56, 86 56 C 116.83333333333333 56, 166.16666666666666 56, 197 56 C 222.55555555555554 56, 263.44444444444446 31, 289 31 C 329.8333333333333 31, 395.1666666666667 55, 436 55 C 466.55555555555554 55, 515.4444444444445 30, 546 30 L 710 44 L 710 1091 Z"></path>
@@ -179,6 +443,7 @@ const Map = ({
 						<path fill="#090f23" stroke="#090f23" d="M -200 1091 L -10 846 C 20 846, 68 856, 98 856 C 136.05555555555554 856, 196.94444444444446 863, 235 863 C 269.44444444444446 863, 324.55555555555554 857, 359 857 C 387.3333333333333 857, 432.6666666666667 835, 461 835 C 487.6666666666667 835, 530.3333333333334 828, 557 828 L 710 846 L 710 1091 Z"></path>
 						<path fill="#00001a" stroke="#00001a" d="M -200 1091 L 0 891 C 40.27777777777778 891, 104.72222222222223 880, 145 880 C 179.44444444444446 880, 234.55555555555554 905, 269 905 C 299 905, 347 873, 377 873 C 411.1666666666667 873, 465.8333333333333 906, 500 906 C 525 906, 565 881, 590 881 L 710 891 L 710 1091 Z"></path>
 					</svg>
+					<canvas className="map_land" ref={mapRef}></canvas>
 					<Ship ref={shipContainerRef}>
 						<div className="ship" ref={shipRef}>
 						{selectShip.shipIdx !== '' && <div className={`ship_display size${shipSize(selectShip.shipIdx)} ship${selectShip.shipIdx}`}>
@@ -187,6 +452,60 @@ const Map = ({
 							</div>}
 						</div>
 					</Ship>
+					<BgEffect className="bgEffect" img1={imgSet.bgEffect[0]} img2={imgSet.bgEffect[1]} gameSpd={gameSpd}>
+						{weather.type === "w0" && (
+							<>
+								<BgLight className="bg_light" type={weather.type} day={weather.day}>
+									{weather.day && (
+										<div>
+											<span className="circle"></span>
+											<span className="circle"></span>
+											<span className="circle"></span>
+											<span className="circle"></span>
+											<span className="circle"></span>
+										</div>
+									)}
+								</BgLight>
+							</>
+						)}
+						{weather.type === "w1" && (
+							<>
+								<BgLight className="bg_light" type={weather.type} day={weather.day}/>
+								<div className="cloud cloud1" style={{filter:`brightness(${weather.day ? 1 : 0.3})`}}></div>
+								<div className="cloud cloud2" style={{filter:`brightness(${weather.day ? 1 : 0.3})`}}></div>
+							</>
+						)}
+						{weather.type === "w2" && (
+							<>
+								<BgLight className="bg_light" type={weather.type} day={weather.day}/>
+								<canvas className="bg_rain" ref={bgCanvasRef}></canvas>
+							</>
+						)}
+						{weather.type === "w3" && (
+							<>
+								<BgLight className="bg_light lightning" type={weather.type} day={weather.day}/>
+								<canvas className="bg_rain" ref={bgCanvasRef}></canvas>
+							</>
+						)}
+						{weather.type === "w4" && (
+							<>
+								<BgLight className="bg_light" type={weather.type} day={weather.day}/>
+								<canvas className="bg_snow" ref={bgCanvasRef}></canvas>
+							</>
+						)}
+					</BgEffect>
+				</div>
+				<div className="weather" src={[imgSet.weather]} >
+					<div className={`weather_icon weather_type ${weather.day ? "day" : "night"}`}>
+						<div className="weather_typeIcon" style={{left:`${getWeather(weather) * -50}px`}}>
+							{imgSet.weather.map((data, idx) => {
+								return <WeatherIcon src={data} idx={idx} key={idx}></WeatherIcon>;
+							})}
+						</div>
+					</div>
+					<WeatherWind className="weather_icon weather_wind" src={imgSet.etc.wind} weatherInfo={weather}>
+						<div className="weather_arrow"></div>
+					</WeatherWind>
 				</div>
 				<div className="control">
 					<div className="wheel_control">
@@ -197,7 +516,7 @@ const Map = ({
 							const distance = e.changedTouches[0].clientX - touchDistance1.current;
 							rotateSpeed1.current = (distance / wheelCenterRef.current) * 5;
 						}} onTouchEnd={() => {
-							frictionCount.current = 0.99;
+							frictionCount.current = 0.95;
 						}}></Wheel>
 					</div>
 					<div className="sail_control">
