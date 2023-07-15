@@ -1,18 +1,12 @@
 import { AppContext } from 'App';
-import imgCardFrame from 'images/card/card_frame.png';
-import imgCardLv from 'images/card/card_lv.png';
-import iconCardName from 'images/card/card_name.png';
-import imgRingBack from 'images/ring/back.png';
-import iconStar1 from 'images/star/star1.png';
-import iconStar2 from 'images/star/star2.png';
-import iconStar3 from 'images/star/star3.png';
-import iconStar4 from 'images/star/star4.png';
-import iconStar5 from 'images/star/star5.png';
-import iconStar6 from 'images/star/star6.png';
-import iconStar7 from 'images/star/star7.png';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import styled from 'styled-components';
 
+const CardContainer = styled.div`
+  position: relative;
+  width: ${({size}) => size}px;
+  height: ${({sizeH}) => sizeH}px;
+`;
 const Img = styled.img.attrs(
   ({imgurl}) => ({
     src: imgurl 
@@ -28,7 +22,7 @@ const ChCard = styled.ul`
   z-index:2;
   pointer-events:none;
   box-shadow:0 0 1px #ff0,0 0 2px #fff,0 0 10px #000;box-shadow:0 0 1px #ff0,0 0 2px #fff,0 0 10px #000;
-  border-radius:20px;
+  border-radius: ${({size}) => size / 10}px;
   overflow:hidden;
   transform:rotateY(0deg);
   & > li{
@@ -114,45 +108,88 @@ const ListChFrame = styled.li`
 `;
 
 const ChracterDetail = ({
+  size,
+  equalSize,
   saveData,
   slotIdx,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-  const iconStar = [iconStar1, iconStar2, iconStar3, iconStar4, iconStar5, iconStar6, iconStar7]
-  if (slotIdx !== '') {
-    const saveCh = saveData.ch[slotIdx];
-    const chData = gameData.ch[saveCh.idx];
-    return (
-      <ChCard className="ch_detail transition">
-        <ListNameLv cardLv={imgCardLv} className="name_lv">
-          <Img className="img" imgurl={iconCardName} />
-          <span className="lv">{saveCh.lv}</span>
-          <span className="name_">{chData.na3}</span>
-          <span className="name">{`${chData.na1} ${chData.na2}`}</span>
-        </ListNameLv>
-        <ListCh chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
-        <ListChRing ringBack={imgRingBack} className="ring" />
-        <div className="job_actiontype">
-          <ListChJob jobIcon={imgSet.job[saveCh.job]} className="job"/>
-          {saveCh.newActionType.map((data, idx) => {
-            return (
-              <ListChActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="action_type"/>
-            )
-          })}
-        </div>
-        <ListChElement ringDisplay={imgSet.ringImg[chData.element]} className="element" />
-        <ListChElement1 chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
-        <ListChElement2 chLv={saveCh.lv} ringDisplay={imgSet.ssringImg[chData.element]} className="element_2" />
-        <ListChStar starIcon={iconStar} className="star">
-          {saveCh.grade && makeStar(saveCh.grade)}
-        </ListChStar>
-        <ListChFrame cardFrame={imgCardFrame} className="frame" />
-      </ChCard>
-    );
+  const iconStar = [imgSet.iconStar.iconStar1, imgSet.iconStar.iconStar2, imgSet.iconStar.iconStar3, imgSet.iconStar.iconStar4, imgSet.iconStar.iconStar5, imgSet.iconStar.iconStar6, imgSet.iconStar.iconStar7];
+  const sizeH = equalSize ? size : size * 1.48;
+  if (!saveData) { // 새로운 게임
+    if (typeof slotIdx === 'number') { // 카드 선택을 한 경우
+      const chData = gameData.ch[slotIdx];
+      return (
+        <CardContainer size={size} sizeH={sizeH}>
+          <ChCard size={size} className="ch_detail">
+            <ListNameLv cardLv={imgSet.etc.imgCardLv} className="name_lv">
+              <span className="name_">{chData.na3}</span>
+              <span className="name">{`${chData.na1} ${chData.na2}`}</span>
+            </ListNameLv>
+            <ListCh chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
+            <ListChRing ringBack={imgSet.etc.imgRingBack} className="ring" />
+            <div className="job_actiontype">
+              <ListChJob jobIcon={imgSet.job[chData.job[0]]} className="job"/>
+            </div>
+            <ListChElement ringDisplay={imgSet.ringImg[chData.element]} className="element" />
+            <ListChElement1 chLv={1} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
+            <ListChElement2 chLv={1} ringDisplay={imgSet.ssringImg[chData.element]} className="element_2" />
+            <ListChStar starIcon={iconStar} className="star">
+              {makeStar(chData.grade)}
+            </ListChStar>
+            <ListChFrame cardFrame={imgSet.etc.imgCardFrame} className="frame" />
+          </ChCard>
+        </CardContainer> 
+      );
+    } else { // 카드 선택이 없을 경우
+      return (
+        <CardContainer size={size} sizeH={sizeH}>
+          <ChCard size={size} className="ch_detail">
+            <ListChFrame cardFrame={imgSet.etc.imgCardBack} className="frame" />
+          </ChCard>
+        </CardContainer>
+      )
+    }
   } else {
-    return <ChCard className="ch_detail transition"></ChCard>
+    if (slotIdx !== '') {
+      const saveCh = saveData.ch[slotIdx];
+      const chData = gameData.ch[saveCh.idx];
+      return (
+        <ChCard size={size} className="ch_detail transition">
+          <ListNameLv cardLv={imgSet.etc.imgCardLv} className="name_lv">
+            <Img className="img" imgurl={imgSet.etc.iconCardName} />
+            <span className="lv">{saveCh.lv}</span>
+            <span className="name_">{chData.na3}</span>
+            <span className="name">{`${chData.na1} ${chData.na2}`}</span>
+          </ListNameLv>
+          <ListCh chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
+          <ListChRing ringBack={imgSet.etc.imgRingBack} className="ring" />
+          <div className="job_actiontype">
+            <ListChJob jobIcon={imgSet.job[saveCh.job]} className="job"/>
+            {saveCh.newActionType.map((data, idx) => {
+              return (
+                <ListChActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="action_type"/>
+              )
+            })}
+          </div>
+          <ListChElement ringDisplay={imgSet.ringImg[chData.element]} className="element" />
+          <ListChElement1 chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
+          <ListChElement2 chLv={saveCh.lv} ringDisplay={imgSet.ssringImg[chData.element]} className="element_2" />
+          <ListChStar starIcon={iconStar} className="star">
+            {saveCh.grade && makeStar(saveCh.grade)}
+          </ListChStar>
+          <ListChFrame cardFrame={imgSet.etc.imgCardFrame} className="frame" />
+        </ChCard>
+      );
+    } else {
+      return <ChCard size={size} className="ch_detail transition"></ChCard>
+    }
   }
 }
 
+ChracterDetail.defaultProps = {
+  equalSize: false,
+  size: 100,
+}
 export default ChracterDetail;
