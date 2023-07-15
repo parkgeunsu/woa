@@ -1,21 +1,21 @@
-import React, { useState, useRef, useContext, useEffect, useLayoutEffect } from 'react';
-import styled from 'styled-components';
 import { AppContext } from 'App';
 import 'css/character.css';
+import { useContext, useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
 import { util } from 'components/Libs';
-import CharacterState from 'components/CharacterState';
-import CharacterElement from 'components/CharacterElement';
-import CharacterSkill from 'components/CharacterSkill';
-import CharacterAnimalSkill from 'components/CharacterAnimalSkill';
-import CharacterRelation from 'components/CharacterRelation';
-import CharacterItems from 'components/CharacterItems';
-import CharacterApplyState from 'components/CharacterApplyState';
-import CharacterItemEnhance from 'components/CharacterItemEnhance';
-import CharacterChEnhance from 'components/CharacterChEnhance';
-import CharacterList from 'components/CharacterList';
-import CharacterHeader from 'components/CharacterHeader';
-import CharacterCard from 'components/CharacterCard';
+import CharacterAnimalSkill from 'pages/CharacterAnimalSkill';
+import CharacterApplyState from 'pages/CharacterApplyState';
+import CharacterCard from 'pages/CharacterCard';
+import CharacterChEnhance from 'pages/CharacterChEnhance';
+import CharacterElement from 'pages/CharacterElement';
+import CharacterHeader from 'pages/CharacterHeader';
+import CharacterItemEnhance from 'pages/CharacterItemEnhance';
+import CharacterItems from 'pages/CharacterItems';
+import CharacterList from 'pages/CharacterList';
+import CharacterRelation from 'pages/CharacterRelation';
+import CharacterSkill from 'pages/CharacterSkill';
+import CharacterState from 'pages/CharacterState';
 
 const Img = styled.img.attrs(
   ({imgurl}) => ({

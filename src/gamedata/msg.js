@@ -1,5 +1,73 @@
 export const msg = {
 	menu:{
+		redraw:{
+			ko:'다시 뽑기',
+			en:'Redraw'
+		},
+		confirmed:{
+			ko:'확정',
+			en:'Confirmed'
+		},
+		startingGame:{
+			ko:'게임 시작',
+			en:'Starting Game'
+		},
+		setting:{
+			ko:'설정',
+			en:'Setting'
+		},
+		character:{
+			ko:'영웅',
+			en:'Character'
+		},
+		inven:{
+			ko:'보관함',
+			en:'Inven'
+		},
+		equipmentShop:{
+			ko:'장비 상점',
+			en:'Equipment Shop'
+		},
+		toolShop:{
+			ko:'도구 상점',
+			en:'Tool Shop'
+		},
+		shipyard:{
+			ko:'조선소',
+			en:'Shipyard'
+		},
+		tradingPost:{
+			ko:'교역소',
+			en:'Trading Post'
+		},
+		characterEnhancement:{
+			ko:'영웅 강화',
+			en:'Character Enhancement'
+		},
+		itemEnhancement:{
+			ko:'장비 강화',
+			en:'Item Enhancement'
+		},
+		combinedItem:{
+			ko:'장비 합성',
+			en:'Combined Item'
+		},
+		recruitment:{
+			ko:'영웅 모집',
+			en:'Recruitment'
+		},
+		lineup:{
+			ko:'진형',
+			en:'Lineup'
+		},
+		battle:{
+			ko:'전투',
+			en:'Battle'
+		},
+		sail:{
+			ko:'항해',
+			en:'Sail'
+		},
 		state:{
 			ko:'능력치',
 			en:'State',
@@ -174,6 +242,22 @@ export const msg = {
 		}
 	},
 	title:{
+		createLegion:{
+			ko:'군단 만들기',
+			en:'Create Legion'
+		},
+		selectRegion:{
+			ko:'지역 선택',
+			en:'Select Region'
+		},
+		corpsName:{
+			ko:'군단명',
+			en:'Corps Name'
+		},
+		selectedHero:{
+			ko:'선택된 영웅',
+			en:'Selected Hero'
+		},
 		socketJewelry:{
 			ko:'소켓보석',
 			en:'Socket Jewelry'
@@ -401,7 +485,15 @@ export const msg = {
 		selectShipName:{
 			ko:'선박의 이름을 정해주세요.',
 			en:'Please name the ship.',
-		}
+		},
+		enterID:{
+			ko:'아이디를 입력하세요.',
+			en:'Please enter your ID',
+		},
+		areaRaise:{
+			ko:'거병할 지역을 선택하세요.',
+			en:'Choose an area to raise',
+		},
 	},
 	sentenceFn:{
 		beforeSkill:(lang, txt, lv) => {

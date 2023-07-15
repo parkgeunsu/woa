@@ -1,10 +1,10 @@
-import { chImg, itemHole, ringImg } from 'components/ImgSet';
 import { AppContext } from 'App';
+import { chImg, ringImg } from 'components/ImgSet';
 import { util } from 'components/Libs';
 import PopupContainer from 'components/PopupContainer';
 import imgRing from 'images/ring/ring_.png';
-import React, {useContext, useEffect, useState} from 'react';
-import CharacterCard from 'components/CharacterCard';
+import CharacterCard from 'pages/CharacterCard';
+import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const ListCh = styled.span`

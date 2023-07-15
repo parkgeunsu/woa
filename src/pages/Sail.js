@@ -1,10 +1,8 @@
 import { AppContext } from 'App';
 import { util } from 'components/Libs';
-import Modal from 'components/Modal';
-import ModalContainer from 'components/ModalContainer';
-import React, { useContext, useCallback, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
 import 'css/map.css';
+import { useContext, useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 const TIMEOUT_SPEED = 50;
 const Img = styled.img.attrs(
   ({imgurl}) => ({
@@ -37,7 +35,7 @@ const Wheel = styled.div`
 	background:url(${({wheelImg}) => wheelImg}) no-repeat center center;
 	background-size:100%;
 `;
-const Sail = styled.div`
+const Sails = styled.div`
 	background:url(${({sailImg}) => sailImg}) no-repeat center center;
 	background-size:100%;
 `;
@@ -138,7 +136,7 @@ const changeWeather = (weather) => {
 		}
 	}
 }
-const Map = ({
+const Sail = ({
 	saveData,
 	changeSaveData,
 }) => {
@@ -520,7 +518,7 @@ const Map = ({
 						}}></Wheel>
 					</div>
 					<div className="sail_control">
-						<Sail className="sail_" ref={sailContainerRef} sailImg={imgSet.control['sail0']} onTouchStart={(e) => {
+						<Sails className="sail_" ref={sailContainerRef} sailImg={imgSet.control['sail0']} onTouchStart={(e) => {
 							touchDistance2.current = e.changedTouches[0].clientX;
 						}} onTouchMove={(e) => {
 							const distance = e.changedTouches[0].clientX - touchDistance2.current;
@@ -528,7 +526,7 @@ const Map = ({
 						}} onTouchEnd={() => {
 							rotateSpeed2.current = 0;
 							sailTargetDegree.current = sailDegree.current;
-						}}></Sail>
+						}}></Sails>
 					</div>
 				</div>
 			</MapWrap>
@@ -536,4 +534,4 @@ const Map = ({
   );
 }
 
-export default Map;
+export default Sail;

@@ -1,9 +1,9 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
-import styled from 'styled-components';
-import { util } from 'components/Libs';
 import { AppContext } from 'App';
+import { util } from 'components/Libs';
+import { useContext, useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
-const Header = styled.div`
+const Wrapper = styled.div`
   li .txt{background:url(${({ bar}) => bar}) repeat-x 0 center;background-size:100% 22px;border-image:url(${({ frameMain}) => frameMain}) 6 stretch;}
   li.back .ico{background-image:url(${({ iconBack }) => iconBack});}
   li.chat{float:right;}
@@ -17,7 +17,7 @@ const Header = styled.div`
   li.menu li.view_type.on{background-image:url(${({ iconLargeview }) => iconLargeview});background-size:50px;}
 `;
 
-const Menu = ({
+const Header = ({
   navigate,
   saveData,
   changePage,
@@ -67,7 +67,7 @@ const Menu = ({
   }, [saveData]);
   return (
     <>
-      <Header className="header" iconBack={imgSet.icon.iconBack} iconChat={imgSet.icon.iconChat} iconSetup={imgSet.icon.iconSetup} iconLv={imgSet.icon.iconLv} iconDia={imgSet.icon.iconDia} iconGold={imgSet.icon.iconGold} iconAllview={imgSet.icon.iconAllview} iconLargeview={imgSet.icon.iconLargeview} bar={imgSet.etc.bar0} frameMain={imgSet.etc.frameMain}>
+      <Wrapper className="header" iconBack={imgSet.icon.iconBack} iconChat={imgSet.icon.iconChat} iconSetup={imgSet.icon.iconSetup} iconLv={imgSet.icon.iconLv} iconDia={imgSet.icon.iconDia} iconGold={imgSet.icon.iconGold} iconAllview={imgSet.icon.iconAllview} iconLargeview={imgSet.icon.iconLargeview} bar={imgSet.etc.bar0} frameMain={imgSet.etc.frameMain}>
         <ul className="default">
           <li className="back"><span className="ico" onClick={() => {
             navigate('/');
@@ -92,9 +92,9 @@ const Menu = ({
           </li>
           {/* <span class="frame_bar"><span class="bar"></span><span class="txt number_w">80</span></span> */}
         </ul>
-      </Header>
+      </Wrapper>
     </>
   );
 }
 
-export default Menu;
+export default Header;

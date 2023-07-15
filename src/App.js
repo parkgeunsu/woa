@@ -1,26 +1,29 @@
-import React, { createContext, useEffect, useState, useRef } from 'react';
-import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
-import { back, animalType, icon, etc, iconStar, element, chImg, iconState, itemEtc, itemHole, itemMaterial, itemUpgrade, ringImg, sringImg, ssringImg, land, bgEffect, actionIcon, passive, eff, menu, weather, job, wood, anchor, sail, cannon, figure, control, map } from 'components/ImgSet';
+import { ColorSet } from 'components/ColorSet';
 import { util } from 'components/Libs';
-import Main from 'components/Main';
-import Menu from 'components/Menu';
-import Battle from 'components/Battle';
-import Character from 'components/Character';
-import Inven from 'components/Inven';
-import Recruitment from 'components/Gacha';
-import Lineup from 'components/Lineup';
-import ToolShop from 'components/ToolShop';
-import Shipyard from 'components/Shipyard';
-import EquipmentShop from 'components/EquipmentShop';
-import TradingPost from 'components/TradingPost';
-import ItemEnhancement from 'components/ItemEnhancement';
-import CombinedItem from 'components/CombinedItem';
-import CharacterEnhancement from 'components/CharacterEnhancement';
-import Map from 'components/Map';
+import { LoadImage } from 'components/LoadImage';
 import 'css/root.css';
 import { gameData, version } from 'gamedata/data';
-import { save } from 'gamedata/savedata';
-import styled from 'styled-components';
+import { saveNew } from 'gamedata/savedata';
+import Battle from 'pages/Battle';
+import Character from 'pages/Character';
+import CharacterEnhancement from 'pages/CharacterEnhancement';
+import CombinedItem from 'pages/CombinedItem';
+import EquipmentShop from 'pages/EquipmentShop';
+import Recruitment from 'pages/Gacha';
+import Header from 'pages/Header';
+import Inven from 'pages/Inven';
+import ItemEnhancement from 'pages/ItemEnhancement';
+import Lineup from 'pages/Lineup';
+import Menu from 'pages/Menu';
+import Sail from 'pages/Sail';
+import Setting from 'pages/Setting';
+import Shipyard from 'pages/Shipyard';
+import StartGame from 'pages/StartGame';
+import ToolShop from 'pages/ToolShop';
+import TradingPost from 'pages/TradingPost';
+import { createContext, useEffect, useState } from 'react';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import styled, { ThemeProvider } from 'styled-components';
 
 export const AppContext = createContext();
 
@@ -29,13 +32,35 @@ const RootContainer = styled(AppContext.Provider)`
   overflow-y: overlay;
   overflow-x: hidden;
 `;
-
+const Wrapper = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  background: url(${({page, imgSet}) => {
+    switch(page) {
+      case 'main':
+        return imgSet[2];
+        break;
+      case 'start':
+        return imgSet[1];
+        break;
+      case 'setting':
+        return imgSet[2];
+        break;
+      case 'recruitment':
+        return imgSet[3];
+        break;
+      default:
+        return ``;
+    }
+  }}) no-repeat center center;
+  background-size: cover;
+`;
 const ContentContainer = styled.div`
   display: flex;
   position: relative;
   flex: 1;
   height: 100%;
-  background: #fec;
   overflow: hidden;
   .skillEffect {
     position:absolute;left:0;top:0;right:0;bottom:0;z-index:10;pointer-events:none;
@@ -107,9 +132,6 @@ const ContentContainer = styled.div`
     }
   }
 `;
-const FooterContainer = styled.div`
-  ${'' /* min-height: 35px; */}
-`;
 const setCity = (data, lang) => {
   let cityD = {...data};
   cityD[0].tradingPost = [//교역소 상품생성
@@ -152,49 +174,23 @@ const App = () => {
       bgSound: false,
       effSound: false,
     },
-    images: {
-      back: back,
-      menu: menu,
-      etc: etc,
-      icon: icon,
-      iconStar: iconStar,
-      chImg: chImg,
-      ringImg: ringImg,
-      sringImg: sringImg,
-      ssringImg: ssringImg,
-      animalType: animalType,
-      element: element,
-      iconState: iconState,
-      itemEtc: itemEtc,
-      itemHole: itemHole,
-      itemUpgrade: itemUpgrade,
-      itemMaterial: itemMaterial,
-      land: land,
-      bgEffect: bgEffect,
-      passive:passive,
-      eff:eff,
-      actionIcon:actionIcon,
-      weather:weather,
-      job:job,
-      wood:wood,
-      anchor:anchor,
-      sail:sail,
-      cannon:cannon,
-      figure:figure,
-      control:control,
-      map:map,
-      transparent:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAAtJREFUGFdjYAACAAAFAAGq1chRAAAAAElFTkSuQmCC',
-    },
+    images: LoadImage(),
     gameData: {
       ...gameData,
     },
   }
+  const theme = {
+    color: ColorSet,
+  }
   const navigate = useNavigate();
   const location = useLocation().pathname.split("/")[1];
-  const [page, setPage] = useState(location);
+  const [page, setPage] = useState(location || 'main');
+  const [pageData, setPageData] = useState({});
   const slotIdx = 'all';
   const [cityIdx, setCityIdx] = useState(0);
-  const changePage = (pagename) => {
+  const changePage = (pagename, pageData) => {
+    console.log(pagename);
+    pageData && setPageData(pageData);
     setPage(pagename);
   }
   const changeSaveData = (objData) => {
@@ -206,147 +202,42 @@ const App = () => {
   //   setCityData(city(gameData.city.port));
   // }, [cityIdx]);
   useEffect(() => {
-    const storageVer = util.loadData("version");
+    const storageVer = util.loadData("version"),
+      continueGame = util.loadData("continueGame");
     let useSaveData = {}
-    if (storageVer === version) { //데이터가 저장되어 있을때
-      useSaveData = util.loadData('saveData'); //저장된 데이터
-    } else {
-      save.city = setCity(gameData.city.port, data.setting.lang);
-      useSaveData = save; //가상데이터
-      util.saveData('saveData', save);
+    if (!continueGame) { //신규 게임
+      //save 는 가상데이터
+      saveNew.city = setCity(gameData.city.port, data.setting.lang);
+      useSaveData = saveNew;
+      util.saveData('saveData', saveNew);
       util.saveData('version', version);
-    }
-    if (useSaveData.newGame) { //신규 게임인지 판단
-      // console.log('new game');
-    }
-    setSaveData(() => {
-      if (useSaveData.ch[0].bSt0) { //캐릭 전투능력치 설정이 안되어 있을 경우
-        util.saveData('saveData', useSaveData);
-        return useSaveData;
+      setSaveData(saveNew);
+    } else {
+      util.saveData('continueGame', true);
+      if (storageVer !== version) { //데이터 버전이 다를 경우
+        //버전 업데이트 통신
+        useSaveData = util.loadData("saveData");
+        util.saveData('version', version);
       } else {
-        const sData = util.saveCharacter({
-          saveData: useSaveData, 
-          slotIdx: slotIdx,
-          gameData: gameData,
-        });
-        util.saveData('saveData', sData);
-        return sData;
+        useSaveData = util.loadData("saveData");
       }
-    });
+      setSaveData(() => {
+        if (useSaveData.ch[0].bSt0) { //캐릭 전투능력치 설정이 안되어 있을 경우
+          util.saveData('saveData', useSaveData);
+          return useSaveData;
+        } else {
+          const sData = util.saveCharacter({
+            saveData: useSaveData, 
+            slotIdx: slotIdx,
+            gameData: gameData,
+          });
+          util.saveData('saveData', sData);
+          return sData;
+        }
+      });
+    }
     util.getTimeGap(useSaveData, changeSaveData);//시간 저장
-    //이미지 프리로드
-    back.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    for (let v in icon) {
-      const img = new Image();
-      img.src = icon[v];
-    }
-    for (let v in etc) {
-      const img = new Image();
-      img.src = etc[v];
-    }
-    animalType.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    element.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    for (let v in chImg) {
-      const img = new Image();
-      img.src = chImg[v];
-    }
-    iconState.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    itemEtc.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    itemHole.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    itemMaterial.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    itemUpgrade.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    ringImg.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    sringImg.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    ssringImg.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    land.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    bgEffect.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    actionIcon.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    passive.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    eff.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    weather.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    job.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    wood.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    anchor.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    cannon.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    sail.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    figure.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    for (let v in control) {
-      const img = new Image();
-      img.src = etc[v];
-    }
-    map.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
+    
     return () => {
       localStorage.setItem('closeTime', new Date());
     }
@@ -358,61 +249,64 @@ const App = () => {
     stage: 0
   }
   return (
-    <RootContainer value={data}>
-      <svg style={{position:"absolute",width:0,height:0,visibility:"hidden"}}xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100">
-				<radialGradient id="radial_rainbow" cx="43.5693" cy="42.9141" r="43.8667" gradientUnits="userSpaceOnUse">
-					<stop offset="0" style={{"stopColor":"#FF0000"}}/>
-					<stop offset="0.25" style={{"stopColor":"#FF8800"}}/>
-					<stop offset="0.5" style={{"stopColor":"#FFFF00"}}/>
-					<stop offset="0.7" style={{"stopColor":"#008800"}}/>
-					<stop offset="0.8" style={{"stopColor":"#0000FF"}}/>
-					<stop offset="0.95" style={{"stopColor":"#000088"}}/>
-					<stop offset="1" style={{"stopColor":"#880088"}}/>
-				</radialGradient>
-				<linearGradient id="linear_rainbow" gradientUnits="userSpaceOnUse" x1="6.1328" y1="50.0005" x2="93.8662" y2="50.0005">
-					<stop offset="0" style={{"stopColor":"#FF0000"}}/>
-					<stop offset="0.17" style={{"stopColor":"#FF8800"}}/>
-					<stop offset="0.33" style={{"stopColor":"#FFFF00"}}/>
-					<stop offset="0.50" style={{"stopColor":"#008800"}}/>
-					<stop offset="0.66" style={{"stopColor":"#0000FF"}}/>
-					<stop offset="0.83" style={{"stopColor":"#000088"}}/>
-					<stop offset="1" style={{"stopColor":"#880088"}}/>
-				</linearGradient>
-				<linearGradient id="Mottled" gradientUnits="userSpaceOnUse" x1="6.1328" y1="50.0005" x2="93.8662" y2="50.0005">
-					<stop offset="0" style={{"stopColor":"#000000"}}/>
-					<stop offset="0.17" style={{"stopColor":"#ffffff"}}/>
-					<stop offset="0.33" style={{"stopColor":"#000000"}}/>
-					<stop offset="0.50" style={{"stopColor":"#ffffff"}}/>
-					<stop offset="0.66" style={{"stopColor":"#000000"}}/>
-					<stop offset="0.83" style={{"stopColor":"#ffffff"}}/>
-					<stop offset="1" style={{"stopColor":"#000000"}}/>
-				</linearGradient>
-			</svg>
-      <div style={{height: "100%",overflowY:"overlay",overflowX:"hidden"}} className={`root ${page}`}>
-        {location !== "battle" && (
-          <Menu saveData={saveData} changePage={changePage} navigate={navigate} />
-        )}
-        <ContentContainer className="content">
-          <Routes>
-            <Route path="/" element={<Main changePage={changePage} cityIdx={cityIdx} />} />
-            <Route path="/character" element={<Character saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} />} />
-            <Route path="/inven" element={<Inven saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} />} />
-            <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
-            <Route path="/lineup" element={<Lineup saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
-            <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} scenario={scenario} cityIdx={cityIdx} />} />
-            <Route path="/characterEnhancement" element={<CharacterEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
-            <Route path="/itemEnhancement" element={<ItemEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
-            <Route path="/combinedItem" element={<CombinedItem saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
-            <Route path="/equipmentShop" element={<EquipmentShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} cityIdx={cityIdx} />} />
-            <Route path="/toolShop" element={<ToolShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
-            <Route path="/shipyard" element={<Shipyard saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
-            <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
-            <Route path="/map" element={<Map saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} />} />
-          </Routes>
-        </ContentContainer>
-        {/* <FooterContainer/> */}
-      </div>
-    </RootContainer>
+    <ThemeProvider theme={theme}>
+      <RootContainer value={data}>
+        <svg style={{position:"absolute",width:0,height:0,visibility:"hidden"}}xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100">
+          <radialGradient id="radial_rainbow" cx="43.5693" cy="42.9141" r="43.8667" gradientUnits="userSpaceOnUse">
+            <stop offset="0" style={{"stopColor":"#FF0000"}}/>
+            <stop offset="0.25" style={{"stopColor":"#FF8800"}}/>
+            <stop offset="0.5" style={{"stopColor":"#FFFF00"}}/>
+            <stop offset="0.7" style={{"stopColor":"#008800"}}/>
+            <stop offset="0.8" style={{"stopColor":"#0000FF"}}/>
+            <stop offset="0.95" style={{"stopColor":"#000088"}}/>
+            <stop offset="1" style={{"stopColor":"#880088"}}/>
+          </radialGradient>
+          <linearGradient id="linear_rainbow" gradientUnits="userSpaceOnUse" x1="6.1328" y1="50.0005" x2="93.8662" y2="50.0005">
+            <stop offset="0" style={{"stopColor":"#FF0000"}}/>
+            <stop offset="0.17" style={{"stopColor":"#FF8800"}}/>
+            <stop offset="0.33" style={{"stopColor":"#FFFF00"}}/>
+            <stop offset="0.50" style={{"stopColor":"#008800"}}/>
+            <stop offset="0.66" style={{"stopColor":"#0000FF"}}/>
+            <stop offset="0.83" style={{"stopColor":"#000088"}}/>
+            <stop offset="1" style={{"stopColor":"#880088"}}/>
+          </linearGradient>
+          <linearGradient id="Mottled" gradientUnits="userSpaceOnUse" x1="6.1328" y1="50.0005" x2="93.8662" y2="50.0005">
+            <stop offset="0" style={{"stopColor":"#000000"}}/>
+            <stop offset="0.17" style={{"stopColor":"#ffffff"}}/>
+            <stop offset="0.33" style={{"stopColor":"#000000"}}/>
+            <stop offset="0.50" style={{"stopColor":"#ffffff"}}/>
+            <stop offset="0.66" style={{"stopColor":"#000000"}}/>
+            <stop offset="0.83" style={{"stopColor":"#ffffff"}}/>
+            <stop offset="1" style={{"stopColor":"#000000"}}/>
+          </linearGradient>
+        </svg>
+        <Wrapper page={page} imgSet={data.images.back} className={`root ${page}`}>
+          {location !== "battle" && location !== "" && location !== "main" && location !== "start" && (location !== "recruitment" && pageData?.begin) && (
+            <Header saveData={saveData} changePage={changePage} navigate={navigate} />
+          )}
+          <ContentContainer className="content">
+            <Routes>
+              <Route path="/" element={<Menu type="new" changePage={changePage} />} />
+              <Route path="/start" element={<StartGame saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} pageData={pageData} />} />
+              <Route path="/setting" element={<Setting changePage={changePage} />} />
+              <Route path="/character" element={<Character saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} />} pageData={pageData} />
+              <Route path="/inven" element={<Inven saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} pageData={pageData} />} />
+              <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} />} />
+              <Route path="/lineup" element={<Lineup saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} pageData={pageData} />} />
+              <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} scenario={scenario} cityIdx={cityIdx} pageData={pageData} />} />
+              <Route path="/characterEnhancement" element={<CharacterEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} />} />
+              <Route path="/itemEnhancement" element={<ItemEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} />} />
+              <Route path="/combinedItem" element={<CombinedItem saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} />} />
+              <Route path="/equipmentShop" element={<EquipmentShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} cityIdx={cityIdx} pageData={pageData} />} />
+              <Route path="/toolShop" element={<ToolShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} />} />
+              <Route path="/shipyard" element={<Shipyard saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} />} />
+              <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} />} />
+              <Route path="/map" element={<Sail saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} />} />
+            </Routes>
+          </ContentContainer>
+        </Wrapper>
+      </RootContainer>
+    </ThemeProvider>
   );
 }
 
