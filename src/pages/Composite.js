@@ -1,15 +1,15 @@
 import { AppContext } from 'App';
-import { util } from 'components/Libs';
-import PopupContainer from 'components/PopupContainer';
-import Popup from 'components/Popup';
-import ModalContainer from 'components/ModalContainer';
-import Modal from 'components/Modal';
-import React, { useEffect, useContext, useRef, useState } from 'react';
-import styled from 'styled-components';
-import MsgContainer from 'components/MsgContainer';
-import Msg from 'components/Msg';
-import 'css/combineItem.css';
 import { ActionChDisplay } from 'components/Components';
+import { util } from 'components/Libs';
+import Modal from 'components/Modal';
+import ModalContainer from 'components/ModalContainer';
+import Msg from 'components/Msg';
+import MsgContainer from 'components/MsgContainer';
+import Popup from 'components/Popup';
+import PopupContainer from 'components/PopupContainer';
+import 'css/combineItem.css';
+import { useContext, useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
 const Img = styled.img.attrs(
   ({imgurl}) => ({
@@ -72,15 +72,14 @@ const getTotalEff = (saveItems, gameData, socketEff) => {
 	}
 	return totalEff;
 }
-const CombinedItem = ({
+const Composite = ({
 	saveData,
 	changeSaveData,
+	speed,
+	lang,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const setting = useContext(AppContext).setting,
-		gameSpd = setting.speed,
-		lang = setting.lang;
 	const gameItem = gameData.items;
   const [modalOn, setModalOn] = useState(false);
 	const [modalInfo, setModalInfo] = useState({});
@@ -118,11 +117,11 @@ const CombinedItem = ({
 				setSelectItem(baseSelectItem);
 				//setMItemEff(getTotalEff(selectItem.save, gameData, baseSelectItem));
 			}
-			setActionCh(saveData.actionCh.combinedItem);
+			setActionCh(saveData.actionCh.composite);
 			setPopupInfo({
 				ch:saveData.ch,
-				actionCh:saveData.actionCh.combinedItem.idx,
-				type:'combinedItem'
+				actionCh:saveData.actionCh.composite.idx,
+				type:'composite'
 			})
 		}
 	}, [saveData]);
@@ -134,7 +133,7 @@ const CombinedItem = ({
 						{Object.keys(actionCh).length !== 0 && (<div ref={actionRef} className={`ch_select_area ${actionCh.idx ? 'g' + saveData.ch[actionCh.idx].grade : ''}`} onClick={() => {
 								setPopupOn(true);
 							}}>
-								<ActionChDisplay type="combinedItem" saveData={saveData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
+								<ActionChDisplay type="composite" saveData={saveData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
 							</div>
 						)}
 						<div className="button_group">
@@ -218,7 +217,7 @@ const CombinedItem = ({
 										}
 									}
 								}
-							}}>{gameData.msg.button.synthetic[lang]}</button>
+							}}>{gameData.msg.button.composite[lang]}</button>
 							<button className="button_big" text="true" onClick={(e) => {
 								e.stopPropagation();
 								setSelectItem({save:[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],game:[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}],select:['','','','','','','','','','','','','','','',''],selectTab:['','','','','','','','','','','','','','','','']});
@@ -456,7 +455,7 @@ const CombinedItem = ({
 				</div>
 			</CombineWrap>
 			<PopupContainer>
-        {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn}/>}
+        {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} lang={lang} />}
       </PopupContainer>
 			<ModalContainer>
 				{modalOn && <Modal fn={() => {}} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} lang={lang} onClose={() => {
@@ -470,4 +469,4 @@ const CombinedItem = ({
   );
 }
 
-export default CombinedItem;
+export default Composite;

@@ -1,7 +1,7 @@
-import React, { useContext, useLayoutEffect } from 'react';
 import { AppContext } from 'App';
-import styled from 'styled-components';
 import { util } from 'components/Libs';
+import { useContext } from 'react';
+import styled from 'styled-components';
 
 const ChHeader = styled.div`
   border-image:url(${({frameBack}) => frameBack}) 5 round;
@@ -25,12 +25,10 @@ const ChracterHeader = ({
   chPage,
   changeChPage,
   changeSaveData,
+  lang,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const setting = useContext(AppContext).setting,
-		gameSpd = setting.speed,
-		lang = setting.lang;
   const currentTime = useContext(AppContext).currentTime;
   const saveExp = {
     current: saveData.ch[slotIdx].exp,

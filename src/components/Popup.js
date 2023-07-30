@@ -338,9 +338,9 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   //   showPopup: showPopup,
                   //   lang: lang,
                   // })
-                }} data-buttontype="itemEvaluate">{gameData.msg.button.evaluate[lang]}</button>
+                }} data-buttontype="itemEvaluate">{gameData.msg.button.emotions[lang]}</button>
                 <button text="true" onClick={(e) => {
-                  navigate('/equipmentShop');
+                  navigate('/stickerShop');
                   // 판매
                   // util.buttonEvent({
                   //   event: e,
@@ -360,11 +360,11 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             {!sealed && (
               <div className="item_button" flex="true">
                 <button text="true" onClick={(e) => {
-                  navigate('/itemEnhancement');
+                  navigate('/enhancingStickers');
                   // 강화
                   // util.buttonEvent({
                   //   event: e,
-                  //   type: 'itemEnhancement',
+                  //   type: 'enhancingStickers',
                   //   data: dataObj,
                   //   saveData: saveData,
                   //   changeSaveData: changeSaveData,
@@ -374,7 +374,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   //   showPopup: showPopup,
                   //   lang: lang,
                   // })
-                }} data-buttontype="itemEnhancement">{gameData.msg.button.enhance[lang]}</button>
+                }} data-buttontype="enhancingStickers">{gameData.msg.button.enhance[lang]}</button>
                 <button text="true" onClick={(e) => {
                   util.buttonEvent({
                     event: e,
@@ -390,7 +390,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   })
                 }} data-buttontype="itemEquip">{gameData.msg.button.equip[lang]}</button>
                 <button text="true" onClick={(e) => {
-                  navigate('/equipmentShop');
+                  navigate('/stickerShop');
                   // util.buttonEvent({
                   //   event: e,
                   //   type: 'itemSell',
@@ -463,7 +463,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               })
             }} data-buttontype="holeEquip">{gameData.msg.button.equip[lang]}</button>
             <button text="true" onClick={(e) => {
-              navigate('/equipmentShop');
+              navigate('/stickerShop');
               // util.buttonEvent({
               //   event: e,
               //   type: 'itemSell',
@@ -714,20 +714,20 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
       possibleCh = 0;
     switch(dataObj.type) {
       case 'tradingPost':
-      case 'equipmentShop':
+      case 'stickerShop':
       case 'toolShop':
         skillIdx = 201;
         break;
       case 'shipyard':
         skillIdx = 202;
         break;
-      case 'combinedItem':
+      case 'composite':
         skillIdx = 206;
         break;
-      case 'itemEnhancement1':
+      case 'enhancingStickers1':
         skillIdx = 203;
         break;
-      case 'itemEnhancement2':
+      case 'enhancingStickers2':
         skillIdx = 207;
         break;
       case 'recruitment':
@@ -829,11 +829,10 @@ const Popup = ({
   msgText,
   showMsg,
   navigate,
+  lang,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const setting = useContext(AppContext).setting,
-    lang = setting.lang;
   const [selectIdx, setSelectIdx] = useState(0);
   const [content, setContent] = useState();
   useEffect(() => {

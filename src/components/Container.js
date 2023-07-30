@@ -38,7 +38,7 @@ const TitleContainer = styled.div`
   align-items: center;
   justify-content: center;
   color: ${({theme}) => theme.color.point5};
-  font-size: 20px;
+  font-size: ${({theme}) => theme.font.t5};
   font-weight: 600;
   &:before{
     content: '';

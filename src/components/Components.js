@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
 import { util } from 'components/Libs';
-import styled from 'styled-components';
+import { useState } from 'react';
 import { Range, getTrackBackground } from 'react-range';
+import styled from 'styled-components';
 
 const StyledPrices = styled.div`
   display:inline-block;
@@ -256,17 +256,17 @@ export const ActionChDisplay = ({
     hasSkill = false;
   switch(type) {
     case 'tradingPost':
-    case 'equipmentShop':
+    case 'stickerShop':
     case 'toolShop':
       skillIdx = 201;
       break;
     case 'shipyard':
       skillIdx = 202;
       break;
-    case 'combinedItem':
+    case 'composite':
       skillIdx = 205;
       break;
-    case 'itemEnhancement':
+    case 'enhancingStickers':
       skillIdx = 203;
       break;
     case 'recruitment':

@@ -1,9 +1,5 @@
-import { chImg, itemHole, ringImg } from 'components/ImgSet';
-import { util } from 'components/Libs';
 import MsgContinaer from 'components/MsgContainer';
-import imgRing from 'images/ring/ring_.png';
-import React, { useLayoutEffect, useRef } from 'react';
-import styled from 'styled-components';
+import { useLayoutEffect, useRef } from 'react';
 
 const Msg = ({
   text,

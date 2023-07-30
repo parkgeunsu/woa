@@ -40,11 +40,9 @@ const MenuButton = styled(Link)`
 const Menu = ({
   type,
   changePage,
+  lang,
 }) => {
   const gameData = useContext(AppContext).gameData;
-	const setting = useContext(AppContext).setting,
-		gameSpd = setting.speed,
-		lang = setting.lang;
   const imgSet = useContext(AppContext).images;
   return (
     <>
@@ -53,23 +51,22 @@ const Menu = ({
           <ul className="menu">
             {type === 'new' ?
               <>
-                <li><Button type="menu" to="/start" onClick={() => {changePage("start");}}>{gameData.msg.menu['startingGame'][lang]}</Button></li>
-                <li><Button type="menu" to="/setting" onClick={() => {changePage("setting");}}>{gameData.msg.menu['setting'][lang]}</Button></li>
-                <li><Button type="menu" to="/character" onClick={() => {changePage("character");}}>{gameData.msg.menu['character'][lang]}</Button></li>
+                <li><Button type="menu" to="/start" onClick={() => {changePage("start");}}>{gameData.msg.button['startingGame'][lang]}</Button></li>
+                <li><Button type="menu" to="/setup" onClick={() => {changePage("setup");}}>{gameData.msg.button['setup'][lang]}</Button></li>
               </>
             :
               <>
-                <li><Button type="menu" to="/character" onClick={() => {changePage("character");}}>{gameData.msg.menu['character'][lang]}</Button></li>
+                <li><Button type="menu" to="/cards" onClick={() => {changePage("card");}}>{gameData.msg.menu['card'][lang]}</Button></li>
                 <li><Button type="menu" to="/inven" onClick={() => {changePage("inven");}}>{gameData.msg.menu['inven'][lang]}</Button></li>
-                <li><Button type="menu" to="/equipmentShop" onClick={() => {changePage("equipmentShop");}}>{gameData.msg.menu['equipmentShop'][lang]}</Button></li>
+                <li><Button type="menu" to="/stickerShop" onClick={() => {changePage("stickerShop");}}>{gameData.msg.menu['stickerShop'][lang]}</Button></li>
                 <li><Button type="menu" to="/toolShop" onClick={() => {changePage("toolShop");}}>{gameData.msg.menu['toolShop'][lang]}</Button></li>
                 <li><Button type="menu" to="/shipyard" onClick={() => {changePage("shipyard");}}>{gameData.msg.menu['shipyard'][lang]}</Button></li>
                 <li><Button type="menu" to="/tradingPost" onClick={() => {changePage("tradingPost");}}>{gameData.msg.menu['tradingPost'][lang]}</Button></li>
-                <li><Button type="menu" to="/characterEnhancement" onClick={() => {changePage("characterEnhancement");}}>{gameData.msg.menu['characterEnhancement'][lang]}</Button></li>
-                <li><Button type="menu" to="/itemEnhancement" onClick={() => {changePage("itemEnhancement");}}>{gameData.msg.menu['itemEnhancement'][lang]}</Button></li>
-                <li><Button type="menu" to="/combinedItem" onClick={() => {changePage("combinedItem");}}>{gameData.msg.menu['combinedItem'][lang]}</Button></li>
+                <li><Button type="menu" to="/enhancingCards" onClick={() => {changePage("enhancingCards");}}>{gameData.msg.menu['enhancingCards'][lang]}</Button></li>
+                <li><Button type="menu" to="/enhancingStickers" onClick={() => {changePage("enhancingStickers");}}>{gameData.msg.menu['enhancingStickers'][lang]}</Button></li>
+                <li><Button type="menu" to="/composite" onClick={() => {changePage("composite");}}>{gameData.msg.menu['composite'][lang]}</Button></li>
                 <li><Button type="menu" to="/recruitment" onClick={() => {changePage("gacha");}}>{gameData.msg.menu['recruitment'][lang]}</Button></li>
-                <li><Button type="menu" to="/lineup" onClick={() => {changePage("lineup");}}>{gameData.msg.menu['lineup'][lang]}</Button></li>
+                <li><Button type="menu" to="/cardPlacement" onClick={() => {changePage("cardPlacement");}}>{gameData.msg.menu['cardPlacement'][lang]}</Button></li>
                 <li><Button type="menu" to="/battle" onClick={() => {changePage("battle");}}>{gameData.msg.menu['battle'][lang]}</Button></li>
                 <li><Button type="menu" to="/map" onClick={() => {changePage("map");}}>{gameData.msg.menu['sail'][lang]}</Button></li>
               </>

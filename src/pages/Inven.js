@@ -1,6 +1,6 @@
 import { AppContext } from 'App';
 import { util } from 'components/Libs';
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const Img = styled.img.attrs(
@@ -50,12 +50,11 @@ const Inven = ({
 	navigate,
 	saveData,
 	changeSaveData,
+	speed,
+	lang,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const setting = useContext(AppContext).setting,
-		gameSpd = setting.speed,
-		lang = setting.lang;
 	const gameItem = gameData.items;
   const [modalOn, setModalOn] = useState(false);
 	const [modalInfo, setModalInfo] = useState({});
@@ -477,7 +476,7 @@ const Inven = ({
 												<div key={`button${idx}`} className="item_button" flex="true">
 													<button text="true" className="button_small" onClick={(e) => {
 														if (selectItem1.selectTab === 'equip' && selectItem1.game.part !== 4 && selectItem1.game.part !== 5) {
-															navigate('/equipmentShop');
+															navigate('/stickerShop');
 														} else {
 															navigate('/toolShop');
 														}
@@ -528,7 +527,7 @@ const Inven = ({
 															...selectItem1,
 															save:{...item[invenList[selectTab].na][selectItem1.select]},
 														});
-													}} data-buttontype="itemSell">{gameData.msg.button.evaluate[lang]}</button>
+													}} data-buttontype="itemSell">{gameData.msg.button.emotions[lang]}</button>
 												</div>
 											);
 										case 'use':
@@ -720,7 +719,7 @@ const Inven = ({
 												<div key={`button${idx}`} className="item_button" flex="true">
 													<button text="true" className="button_small" onClick={(e) => {
 														if (selectItem2.selectTab === 'equip' && selectItem2.game.part !== 4 && selectItem2.game.part !== 5) {
-															navigate('/equipmentShop');
+															navigate('/stickerShop');
 														} else {
 															navigate('/toolShop');
 														}
@@ -771,7 +770,7 @@ const Inven = ({
 															...selectItem2,
 															save:{...item[invenList[selectTab].na][selectItem2.select]},
 														});
-													}} data-buttontype="itemSell">{gameData.msg.button.evaluate[lang]}</button>
+													}} data-buttontype="itemSell">{gameData.msg.button.emotions[lang]}</button>
 												</div>
 											);
 										case 'use':

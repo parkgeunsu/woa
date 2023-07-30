@@ -1,4 +1,3 @@
-import { items } from "gamedata/items"
 
 export const fn = { //this.el = {};this.set_element();this.prototype();
   canvas: () => {
@@ -52,6 +51,26 @@ export const util = { //this.loadImage();
   },
   loadData: (key) => {
     return JSON.parse(localStorage.getItem(key));
+  },
+  saveHistory: (callback) => {
+    const history = util.loadData('history') || [];
+    setTimeout(() => {
+      history.unshift(window.location.pathname.split('/')[1]);
+      util.saveData('history', history);
+      callback && callback();
+    }, 100);
+  },
+  historyBack: (navigate, changePage) => {
+    const history = util.loadData('history');
+    if (history === undefined || history.length === 0 || history[0] === '') {
+      navigate('/');
+      changePage("main");
+    } else {
+      navigate(history[0]);
+      changePage(history[0]);
+    }
+    history.shift();//첫 history 삭제
+    util.saveData('history', history);
   },
   getEnemyState: (enemyData, gameData) => {
     const stateArr = gameData.stateName;
@@ -1461,7 +1480,7 @@ export const util = { //this.loadImage();
     console.log(dataObj);
     const gameData = dataObj.gameData;
     let sData = {...dataObj.saveData};
-    if (dataObj.type === 'itemEnhancement') {
+    if (dataObj.type === 'enhancingStickers') {
 
     } else if (dataObj.type === 'itemEquip') { //아이템 착용
       const invenPart = dataObj.data.saveItemData.part;

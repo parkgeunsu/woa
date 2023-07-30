@@ -290,11 +290,10 @@ const Gacha = ({
 	changePage,
 	navigate,
 	pageData,
+	lang,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const setting = useContext(AppContext).setting,
-    lang = setting.lang;
 	const iconStar = [imgSet.iconStar[0], imgSet.iconStar[1], imgSet.iconStar[2], imgSet.iconStar[3], imgSet.iconStar[4], imgSet.iconStar[5], imgSet.iconStar[6]];
 	const [gachaMode, setGachaMode] = useState('');
 	const [cardStateType, setCardStateType] = useState(''); //카드 성장타입
@@ -351,8 +350,8 @@ const Gacha = ({
 				effectRef.current.classList.add('grade' + maxCardGrade.current);
 			}, gachaIntervalTime + 1500);
 			setTime.current = setTimeout(() => {
-				const beginCheck = pageData.begin ? 'begin' : 'pos';
-				cardGroupRef.current.classList.add(gachaLength > 1 ? beginCheck : 'posOne');
+				const beginCheck = pageData.begin ? `begin${gachaLength}` : 'pos';
+				cardGroupRef.current.classList.add(beginCheck);
 				eventRef.current.classList.add('on'); //터치 활성화
 				cardRef.current.forEach((el, idx) => {
 					el.classList.remove('on');
@@ -364,7 +363,7 @@ const Gacha = ({
 		if (Object.keys(saveData).length > 0) {
 			if (pageData.begin) {
 				const sData = {...saveData};
-				const startingGrade = [5,3,2,2]; //최초 시작 영웅들 등급
+				const startingGrade = pageData.cardArr; //최초 시작 영웅들 등급
 				const cardList = makeCard(startingGrade, 'p', gameData, saveData, changeSaveData);
 				cardList.chDataArr.forEach((data, idx) => {
 					sData.ch.push(data);
@@ -621,7 +620,7 @@ const Gacha = ({
 						<Button size="large" style={{margin: '0 0 20px 0'}} onClick={() => {
               const sData = {...saveData}
               sData.ch = [];
-							const startingGrade = [5,3,2,2]; //최초 시작 영웅들 등급
+							const startingGrade = pageData.cardArr; //최초 시작 영웅들 등급
 							const cardList = makeCard(startingGrade, 'p', gameData, saveData, changeSaveData);
 							cardList.chDataArr.forEach((data, idx) => {
 								sData.ch.push(data);
@@ -631,14 +630,16 @@ const Gacha = ({
 							setGachaCard(cardList.chArr);
 							setGachaMode('start');
 
+							setShowButton(false);
 							eventRef.current.classList.add('on');
 							cardGroupRef.current.classList.remove('cardMode');
 							openCardIdx.current = 0;
-						}}>{gameData.msg.menu['redraw'][lang]}</Button>
+						}}>{gameData.msg.button['redraw'][lang]}</Button>
 						<Button size="large" onClick={() => {
+							const startingGrade = pageData.cardArr; //최초 시작 영웅들 등급
 							navigate('start');
-							changePage('start', gachaCard);
-						}}>{gameData.msg.menu['confirmed'][lang]}</Button>
+							changePage('start', {card: gachaCard, chArr: startingGrade,  selectType: pageData.selectType, language: pageData.language, country: pageData.country});
+						}}>{gameData.msg.button['finalize'][lang]}</Button>
 					</GachaSubmitGroup>}
 					<div className="gacha_event_area" ref={eventRef} onClick={() => {
 						openCard(cardRef.current, openCardIdx.current);

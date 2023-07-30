@@ -1,9 +1,9 @@
-import React, { useContext, useState, useRef } from 'react';
 import { AppContext } from 'App';
-import styled from 'styled-components';
 import GuideQuestion from 'components/GuideQuestion';
-import PopupContainer from 'components/PopupContainer';
 import Popup from 'components/Popup';
+import PopupContainer from 'components/PopupContainer';
+import { useContext, useRef, useState } from 'react';
+import styled from 'styled-components';
 
 const CardChRing = styled.span`
 	${({lv, ringBack, ringDisplay, ringDisplay1}) => {
@@ -25,11 +25,10 @@ const CardCh = styled.span`
 const CharacterRelation = ({
   saveData,
   slotIdx,
+  lang,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const setting = useContext(AppContext).setting,
-    lang = setting.lang;
   const [popupOn, setPopupOn] = useState(false);
   const popupType = useRef('');
   const [popupInfo, setPopupInfo] = useState({});
@@ -99,7 +98,7 @@ const CharacterRelation = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} imgSet={imgSet}/>}
+        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} imgSet={imgSet} lang={lang} />}
       </PopupContainer>
     </>
   );

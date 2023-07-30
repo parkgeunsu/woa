@@ -6,11 +6,14 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
   li .txt{background:url(${({ bar}) => bar}) repeat-x 0 center;background-size:100% 22px;border-image:url(${({ frameMain}) => frameMain}) 6 stretch;}
   li.back .ico{background-image:url(${({ iconBack }) => iconBack});}
-  li.chat{float:right;}
-  li.chat .ico{background-image:url(${({ iconChat }) => iconChat});}
-  li.setup{float:right;margin:0;}
-  li.setup .ico{background-image:url(${({ iconSetup }) => iconSetup});}
-  li.lv .ico{position:absolute;background-image:url(${({ iconLv }) => iconLv});text-align:center;line-height:32px;z-index:2;}
+  li.lv .ico{
+    display: flex;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    background-image: url(${({ iconLv }) => iconLv});
+    z-index: 2;
+  }
   li.diamond .ico{position:absolute;background-image:url(${({ iconDia }) => iconDia});}
   li.money .ico{position:absolute;background-image:url(${({ iconGold }) => iconGold});}
   li.menu li.view_type{margin:0 5px 0 0;width:20px;height:33px;background:url(${({ iconAllview }) => iconAllview}) no-repeat center center;background-size:50px;}
@@ -21,6 +24,7 @@ const Header = ({
   navigate,
   saveData,
   changePage,
+  page,
 }) => {
   const [minusMoney, setMinusMoney] = useState('');
   const [minusDia, setMinusDia] = useState('');
@@ -67,12 +71,13 @@ const Header = ({
   }, [saveData]);
   return (
     <>
-      <Wrapper className="header" iconBack={imgSet.icon.iconBack} iconChat={imgSet.icon.iconChat} iconSetup={imgSet.icon.iconSetup} iconLv={imgSet.icon.iconLv} iconDia={imgSet.icon.iconDia} iconGold={imgSet.icon.iconGold} iconAllview={imgSet.icon.iconAllview} iconLargeview={imgSet.icon.iconLargeview} bar={imgSet.etc.bar0} frameMain={imgSet.etc.frameMain}>
+      <Wrapper className="header" iconBack={imgSet.icon.iconBack} iconLv={imgSet.icon.iconLv} iconDia={imgSet.icon.iconDia} iconGold={imgSet.icon.iconGold} iconAllview={imgSet.icon.iconAllview} iconLargeview={imgSet.icon.iconLargeview} bar={imgSet.etc.bar0} frameMain={imgSet.etc.frameMain}>
         <ul className="default">
-          <li className="back"><span className="ico" onClick={() => {
-            navigate('/');
-            changePage("main");
-          }}></span></li>
+          {page !== 'gameMain' && 
+            <li className="back"><span className="ico" onClick={() => {
+              util.historyBack(navigate, changePage);
+            }}></span></li>
+          }
           <li className="lv"><span className="ico">
             <span className="txt number">{saveData?.info?.lv}</span></span><span className="txt">{saveData?.info?.id}</span>
           </li>
@@ -83,12 +88,6 @@ const Header = ({
           <li className={`money ${minusMoney === '' ? '' : 'on'}`}>
             <span className="ico"></span><span className="txt won number_w">{String(saveData?.info?.money).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
             <span className={`num ${moneyColor}`}>{minusMoney}</span>
-          </li>
-          <li className="setup">
-            <span className="ico"></span>
-          </li>
-          <li className="chat">
-            <span className="ico"></span>
           </li>
           {/* <span class="frame_bar"><span class="bar"></span><span class="txt number_w">80</span></span> */}
         </ul>

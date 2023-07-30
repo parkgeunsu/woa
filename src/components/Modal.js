@@ -1,7 +1,5 @@
-import React from 'react';
-import ModalContainer from 'components/ModalContainer';
-import styled from 'styled-components';
 import { Prices } from 'components/Components';
+import ModalContainer from 'components/ModalContainer';
 
 const buttonEvent = (dataInfo, btInfo, fn, saveData, gameData, changeSaveData, lang) => {
 	switch(btInfo.action) {
@@ -72,7 +70,7 @@ const Modal = ({
 						{payment && (
 							<>
 								<div className="price_group">
-									<Prices payment={gameData.prices.itemEnhancement[payment]} imgSet={imgSet} saveData={saveData} gameData={gameData}/>
+									<Prices payment={gameData.prices.enhancingStickers[payment]} imgSet={imgSet} saveData={saveData} gameData={gameData}/>
 								</div>
 							</>
 						)}

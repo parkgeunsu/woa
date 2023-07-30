@@ -1,12 +1,12 @@
-import React, { useState, useContext, useLayoutEffect, useRef } from 'react';
 import { AppContext } from 'App';
-import { util } from 'components/Libs';
-import styled from 'styled-components';
 import GuideQuestion from 'components/GuideQuestion';
-import PopupContainer from 'components/PopupContainer';
-import Popup from 'components/Popup';
-import MsgContainer from 'components/MsgContainer';
+import { util } from 'components/Libs';
 import Msg from 'components/Msg';
+import MsgContainer from 'components/MsgContainer';
+import Popup from 'components/Popup';
+import PopupContainer from 'components/PopupContainer';
+import { useContext, useLayoutEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
 const makeMark = (markNum, img) => {
   let markTag = '',
@@ -70,12 +70,10 @@ const CharacterAnimalSkill = ({
   saveData,
   slotIdx,
   changeSaveData,
+  lang,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const setting = useContext(AppContext).setting,
-    gameSpd = setting.speed,
-    lang = setting.lang;
   const saveCh = saveData.ch[slotIdx];
   const [animalPoint, setAnimalPoint] = useState(saveCh.animalBeige);
   const [animalSkill, setAnimalSkill] = useState(saveCh.animalSkill);
@@ -260,7 +258,7 @@ const CharacterAnimalSkill = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn}/>}
+        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} lang={lang} />}
       </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}

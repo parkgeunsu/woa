@@ -2,32 +2,37 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const LinkButton = styled(Link)`
-  display: block;
+  display: inline-block;
   padding: 10px 0;
-  width: 100%;
+  width: ${({width}) =>  width ? `${width}px` : '100%'};
   background: rgba(0,0,0,.7);
   border-radius: 20px;
   color: #fff;
-  font-size: ${({size}) => {
-    return size === 'large' ? '20px' : '';
+  font-size: ${({size, theme}) => {
+    return size === 'large' ? theme.font.t5 : '';
   }};
   text-align: center;
 `;
 const ActiveButton = styled.button`
-  display: block;
-  padding: 10px 0;
-  width: 100%;
+  display: inline-block;
+  width: ${({width}) =>  width ? `${width}px` : '100%'};
+  ${({size}) => {
+    return size === 'small' ? 
+    `height: 25px;` : 
+    `padding: 10px 0`;
+  }};
   background: rgba(0,0,0,.7);
   border-radius: 20px;
   color: #fff;
-  font-size: ${({size}) => {
-    return size === 'large' ? '20px' : '';
+  font-size: ${({size, theme}) => {
+    return size === 'large' ? theme.font.t5 : '';
   }};
   text-align: center;
 `;
 
 const Button = ({
   type,
+  width,
   size,
   children,
   ...rest
@@ -35,11 +40,11 @@ const Button = ({
   return (
     <>
       {type === 'menu' ? (
-        <LinkButton size={size} {...rest}>
+        <LinkButton width={width} size={size} {...rest}>
           {children}
         </LinkButton>
       ) : (
-        <ActiveButton size={size} {...rest}>
+        <ActiveButton width={width} size={size} {...rest}>
           {children}
         </ActiveButton>
       )}
@@ -47,5 +52,28 @@ const Button = ({
   )
 }
 
-export { Button };
+const IconBtn = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  width: ${({size}) => size}px;
+  height: ${({size}) => size}px;
+  background: url(${({icon}) => icon}) no-repeat center center;
+  background-size: 100%;
+  text-align: center;
+`;
+
+const IconButton = ({
+  size,
+  icon,
+  onClick,
+  children,
+}) => {
+  return (
+    <IconBtn size={size} icon={icon} onClick={() => {
+      onClick && onClick();
+    }}>{children}</IconBtn>
+  )
+}
+export { Button, IconButton };
 

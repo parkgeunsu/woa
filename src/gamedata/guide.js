@@ -173,16 +173,16 @@ export const guide = {
   gacha:{
 
   },
-  characterEnhancement:{
+  enhancingCards:{
 
   },
   shop:{
 
   },
-  itemEnhancement:{//Combination
+  enhancingStickers:{//Combination
 
   },
-  lineup:{
+  cardPlacement:{
 
   },
   battle:{

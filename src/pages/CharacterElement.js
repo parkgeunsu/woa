@@ -1,10 +1,9 @@
-import React, { useContext, useLayoutEffect, useState, useRef } from 'react';
 import { AppContext } from 'App';
-import { util } from 'components/Libs';
-import styled from 'styled-components';
 import GuideQuestion from 'components/GuideQuestion';
-import PopupContainer from 'components/PopupContainer';
 import Popup from 'components/Popup';
+import PopupContainer from 'components/PopupContainer';
+import { useContext, useLayoutEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
 const Element = styled.div`
   .element_bar{overflow:${({ percent }) => percent > 100 ? 'unset' : 'hidden'};}
@@ -22,11 +21,10 @@ const stateColor = () => {
 const CharacterElement = ({
   saveData,
   slotIdx,
+  lang,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const setting = useContext(AppContext).setting,
-    lang = setting.lang;
   const [popupOn, setPopupOn] = useState(false);
   const popupType = useRef('');
   const [popupInfo, setPopupInfo] = useState({});
@@ -98,7 +96,7 @@ const CharacterElement = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn}/>}
+        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} lang={lang} />}
       </PopupContainer>
     </>
   );

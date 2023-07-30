@@ -1,10 +1,10 @@
 import { AppContext } from 'App';
-import iconArrowDown from 'images/ico/arrow_down.png';
-import iconArrowUp from 'images/ico/arrow_up.png';
-import React, { useContext, useLayoutEffect, useState, useRef } from 'react';
-import styled from 'styled-components';
 import { util } from 'components/Libs';
 import 'css/lineup.css';
+import iconArrowDown from 'images/ico/arrow_down.png';
+import iconArrowUp from 'images/ico/arrow_up.png';
+import { useContext, useLayoutEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
 const LineupWrap = styled.div`
 	background:url(${({backImg}) => backImg});background-size:cover;
@@ -82,9 +82,10 @@ const checkUseList = (useList, chIdx) => {
 	return used;
 }
 
-const Lineup = ({
+const CardPlacement = ({
   saveData,
   changeSaveData,
+	lang,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
@@ -338,4 +339,4 @@ const Lineup = ({
   );
 }
 
-export default Lineup;
+export default CardPlacement;

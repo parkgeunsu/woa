@@ -1,10 +1,10 @@
 import { AppContext } from 'App';
-import { util } from 'components/Libs';
-import React, { useContext, useLayoutEffect, useState, useRef } from 'react';
-import styled from 'styled-components';
 import GuideQuestion from 'components/GuideQuestion';
-import PopupContainer from 'components/PopupContainer';
+import { util } from 'components/Libs';
 import Popup from 'components/Popup';
+import PopupContainer from 'components/PopupContainer';
+import { useContext, useLayoutEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
 const FrameBar = styled.span`
   width: ${({chMaxSt, maxSt}) => {
@@ -33,11 +33,10 @@ const TextTotal = styled.span`
 const CharacterState = ({
   saveData,
   slotIdx,
+  lang,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const setting = useContext(AppContext).setting,
-    lang = setting.lang;
   const [popupOn, setPopupOn] = useState(false);
   const popupType = useRef('');
   const [popupInfo, setPopupInfo] = useState({});
@@ -105,7 +104,7 @@ const CharacterState = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn}/>}
+        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} lang={lang} />}
       </PopupContainer>
     </>
   );

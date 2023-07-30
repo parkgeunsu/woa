@@ -23,7 +23,6 @@ const Img = styled.img.attrs(
   })
 )``;
 const ChWrap = styled.div`
-  background:url(${({backImg}) => backImg});background-size:cover;
   .st0 .ico{background:url(${({stateIcon}) => stateIcon[0]}) no-repeat center center;background-size:100%;}
   .st1 .ico{background:url(${({stateIcon}) => stateIcon[1]}) no-repeat center center;background-size:100%;}
   .st2 .ico{background:url(${({stateIcon}) => stateIcon[2]}) no-repeat center center;background-size:100%;}
@@ -32,14 +31,6 @@ const ChWrap = styled.div`
   .st5 .ico{background:url(${({stateIcon}) => stateIcon[5]}) no-repeat center center;background-size:100%;}
   .st6 .ico{background:url(${({stateIcon}) => stateIcon[6]}) no-repeat center center;background-size:100%;}
 `;
-// const AnimatedCard = styled(animated.div)`
-//   touch-action:none;
-//   transform-origin:0 0;
-//   position:absolute;
-//   left:7.5%;
-//   padding-top:120%;
-//   width:85%;
-// `;
 
 const ChBack = styled.div`
   background:url(${({cardBack}) => cardBack}) no-repeat center center;
@@ -48,16 +39,15 @@ const ChBack = styled.div`
 const ChInfo = styled.div`
   border-image:url(${({frameBack}) => frameBack}) 5 round;z-index:3;
 `;
-const Character = ({
+const Cards = ({
   navigate,
   saveData,
   changeSaveData,
   currentTime,
+  lang,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const setting = useContext(AppContext).setting,
-    lang = setting.lang;
   const [slotIdx, setSlotIdx] = useState(0);
   const [chPage, setChPage] = useState(0);
   // const chShow = useRef(false);
@@ -182,20 +172,20 @@ const Character = ({
           <CharacterList saveData={saveData} changeChSlot={changeChSlot} slotIdx={slotIdx} type="paging"/>
           <CharacterHeader saveData={saveData} chPage={chPage} changeChPage={changeChPage} slotIdx={slotIdx} changeSaveData={changeSaveData} currentTime={currentTime} />
           <ChInfo frameBack={imgSet.etc.frameChBack} className="ch_info transition">
-            <CharacterState saveData={saveData} slotIdx={slotIdx} />
-            <CharacterElement saveData={saveData} slotIdx={slotIdx} />
-            <CharacterAnimalSkill saveData={saveData} slotIdx={slotIdx} changeSaveData={changeSaveData} />
-            <CharacterSkill saveData={saveData} slotIdx={slotIdx} />
-            <CharacterRelation saveData={saveData} slotIdx={slotIdx} />
-            <CharacterItems navigate={navigate} saveData={saveData} slotIdx={slotIdx} changeSaveData={changeSaveData} />
-            <CharacterApplyState saveData={saveData} slotIdx={slotIdx}/>
+            <CharacterState saveData={saveData} slotIdx={slotIdx} lang={lang} />
+            <CharacterElement saveData={saveData} slotIdx={slotIdx} lang={lang} />
+            <CharacterAnimalSkill saveData={saveData} slotIdx={slotIdx} changeSaveData={changeSaveData} lang={lang} />
+            <CharacterSkill saveData={saveData} slotIdx={slotIdx} lang={lang} />
+            <CharacterRelation saveData={saveData} slotIdx={slotIdx} lang={lang} />
+            <CharacterItems navigate={navigate} saveData={saveData} slotIdx={slotIdx} changeSaveData={changeSaveData} lang={lang} />
+            <CharacterApplyState saveData={saveData} slotIdx={slotIdx} lang={lang} />
           </ChInfo>
-          <CharacterItemEnhance saveData={saveData} slotIdx={slotIdx} />
-          <CharacterChEnhance saveData={saveData} slotIdx={slotIdx} />
+          <CharacterItemEnhance saveData={saveData} slotIdx={slotIdx} lang={lang} />
+          <CharacterChEnhance saveData={saveData} slotIdx={slotIdx} lang={lang} />
         </>
       )}
     </ChWrap>
   );
 }
 
-export default Character;
+export default Cards;

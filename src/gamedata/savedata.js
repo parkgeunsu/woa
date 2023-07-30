@@ -8,14 +8,14 @@ const save = {
     shipIdx:0,
   },
   "actionCh":{
-    equipmentShop:{idx:''},
+    stickerShop:{idx:''},
     toolShop:{idx:''},
     shipyard:{idx:''},
     tradingPost:{idx:''},
-    characterEnhancement:{idx:''},
-    itemEnhancement1:{idx:''},
-    itemEnhancement2:{idx:''},
-    combinedItem:{idx:''},
+    enhancingCards:{idx:''},
+    enhancingStickers1:{idx:''},
+    enhancingStickers2:{idx:''},
+    composite:{idx:''},
     recruitment:{idx:''}
   },
   "ship":[
@@ -317,14 +317,14 @@ const saveNew = {
     shipIdx:0,
   },
   "actionCh":{
-    equipmentShop:{idx:''},
+    stickerShop:{idx:''},
     toolShop:{idx:''},
     shipyard:{idx:''},
     tradingPost:{idx:''},
-    characterEnhancement:{idx:''},
-    itemEnhancement1:{idx:''},
-    itemEnhancement2:{idx:''},
-    combinedItem:{idx:''},
+    enhancingCards:{idx:''},
+    enhancingStickers1:{idx:''},
+    enhancingStickers2:{idx:''},
+    composite:{idx:''},
     recruitment:{idx:''}
   },
   "ship":[],
@@ -409,3 +409,4 @@ const saveNew = {
   },
 }
 export { save, saveNew };
+

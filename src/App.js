@@ -1,24 +1,25 @@
-import { ColorSet } from 'components/ColorSet';
 import { util } from 'components/Libs';
 import { LoadImage } from 'components/LoadImage';
+import { ColorSet, FontSet } from 'components/Theme';
 import 'css/root.css';
 import { gameData, version } from 'gamedata/data';
 import { saveNew } from 'gamedata/savedata';
 import Battle from 'pages/Battle';
-import Character from 'pages/Character';
-import CharacterEnhancement from 'pages/CharacterEnhancement';
-import CombinedItem from 'pages/CombinedItem';
-import EquipmentShop from 'pages/EquipmentShop';
+import CardPlacement from 'pages/CardPlacement';
+import Cards from 'pages/Cards';
+import Composite from 'pages/Composite';
+import EnhancingCards from 'pages/EnhancingCards';
+import EnhancingStickers from 'pages/EnhancingStickers';
 import Recruitment from 'pages/Gacha';
+import GameMain from 'pages/GameMain';
 import Header from 'pages/Header';
 import Inven from 'pages/Inven';
-import ItemEnhancement from 'pages/ItemEnhancement';
-import Lineup from 'pages/Lineup';
 import Menu from 'pages/Menu';
 import Sail from 'pages/Sail';
-import Setting from 'pages/Setting';
+import Setup from 'pages/Setup';
 import Shipyard from 'pages/Shipyard';
 import StartGame from 'pages/StartGame';
+import StickerShop from 'pages/StickerShop';
 import ToolShop from 'pages/ToolShop';
 import TradingPost from 'pages/TradingPost';
 import { createContext, useEffect, useState } from 'react';
@@ -40,16 +41,18 @@ const Wrapper = styled.div`
     switch(page) {
       case 'main':
         return imgSet[2];
-        break;
       case 'start':
         return imgSet[1];
-        break;
-      case 'setting':
+      case 'setup':
         return imgSet[2];
-        break;
       case 'recruitment':
         return imgSet[3];
-        break;
+      case 'gameMain':
+        return imgSet[0];
+      case 'cards':
+        return imgSet[0];
+      case 'inven':
+        return imgSet[2];
       default:
         return ``;
     }
@@ -161,33 +164,33 @@ const setCity = (data, lang) => {
       };
     }
   }
-  cityD[0].equipmentShop.helm = items[0];
-  cityD[0].equipmentShop.armor = items[1];
-  cityD[0].equipmentShop.weapon = items[2];
+  cityD[0].stickerShop.helm = items[0];
+  cityD[0].stickerShop.armor = items[1];
+  cityD[0].stickerShop.weapon = items[2];
   return cityD;
 }
 const App = () => {
+  const navigate = useNavigate();
+  const location = useLocation().pathname.split("/")[1];
+  const [page, setPage] = useState(location || 'main');
+  const [pageData, setPageData] = useState({});
+  const [language, setLanguage] = useState('ko');
+  const [speed, setSpeed] = useState(0);
+  const [bgm, setBgm] = useState(1);
+  const [efm, setEfm] = useState(1);
+  const [resolution, setResolution] = useState(0);
+  const slotIdx = 'all';
+  const [cityIdx, setCityIdx] = useState(0);
+  const theme = {
+    color: ColorSet,
+    font: FontSet,
+  }
   const data = {
-    setting: {
-      speed: 2,
-      lang:'ko',//ko & en
-      bgSound: false,
-      effSound: false,
-    },
     images: LoadImage(),
     gameData: {
       ...gameData,
     },
   }
-  const theme = {
-    color: ColorSet,
-  }
-  const navigate = useNavigate();
-  const location = useLocation().pathname.split("/")[1];
-  const [page, setPage] = useState(location || 'main');
-  const [pageData, setPageData] = useState({});
-  const slotIdx = 'all';
-  const [cityIdx, setCityIdx] = useState(0);
   const changePage = (pagename, pageData) => {
     console.log(pagename);
     pageData && setPageData(pageData);
@@ -202,18 +205,29 @@ const App = () => {
   //   setCityData(city(gameData.city.port));
   // }, [cityIdx]);
   useEffect(() => {
-    const storageVer = util.loadData("version"),
-      continueGame = util.loadData("continueGame");
+    const storageVer = util.loadData('version'),
+      continueGame = util.loadData('continueGame');
     let useSaveData = {}
     if (!continueGame) { //신규 게임
       //save 는 가상데이터
-      saveNew.city = setCity(gameData.city.port, data.setting.lang);
+      saveNew.city = setCity(gameData.city.port, language);
       useSaveData = saveNew;
       util.saveData('saveData', saveNew);
       util.saveData('version', version);
+      util.saveData('speed', 1);
+      util.saveData('language', 'ko');
+      util.saveData('bgm', true);
+      util.saveData('efm', true);
+      util.saveData('resolution', 1);
+      util.saveData('history',[]);
       setSaveData(saveNew);
     } else {
-      util.saveData('continueGame', true);
+      //setting값 스토리지값에서 가져오기
+      setLanguage(util.loadData('language'));
+      setSpeed(util.loadData('speed'));
+      setBgm(util.loadData('bgm'));
+      setEfm(util.loadData('efm'));
+      setResolution(util.loadData('resolution'));
       if (storageVer !== version) { //데이터 버전이 다를 경우
         //버전 업데이트 통신
         useSaveData = util.loadData("saveData");
@@ -235,6 +249,8 @@ const App = () => {
           return sData;
         }
       });
+      navigate('gameMain');
+      changePage('gameMain', {aa: 1, bb: 2});
     }
     util.getTimeGap(useSaveData, changeSaveData);//시간 저장
     
@@ -281,27 +297,28 @@ const App = () => {
           </linearGradient>
         </svg>
         <Wrapper page={page} imgSet={data.images.back} className={`root ${page}`}>
-          {location !== "battle" && location !== "" && location !== "main" && location !== "start" && (location !== "recruitment" && pageData?.begin) && (
-            <Header saveData={saveData} changePage={changePage} navigate={navigate} />
+          {location !== "battle" && location !== "" && location !== "main" && location !== "start" && (location !== "recruitment" && !pageData?.begin) && (
+            <Header saveData={saveData} changePage={changePage} navigate={navigate} page={page} />
           )}
           <ContentContainer className="content">
             <Routes>
-              <Route path="/" element={<Menu type="new" changePage={changePage} />} />
-              <Route path="/start" element={<StartGame saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} pageData={pageData} />} />
-              <Route path="/setting" element={<Setting changePage={changePage} />} />
-              <Route path="/character" element={<Character saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} />} pageData={pageData} />
-              <Route path="/inven" element={<Inven saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} pageData={pageData} />} />
-              <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} />} />
-              <Route path="/lineup" element={<Lineup saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} pageData={pageData} />} />
-              <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} scenario={scenario} cityIdx={cityIdx} pageData={pageData} />} />
-              <Route path="/characterEnhancement" element={<CharacterEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} />} />
-              <Route path="/itemEnhancement" element={<ItemEnhancement saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} />} />
-              <Route path="/combinedItem" element={<CombinedItem saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} />} />
-              <Route path="/equipmentShop" element={<EquipmentShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} cityIdx={cityIdx} pageData={pageData} />} />
-              <Route path="/toolShop" element={<ToolShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} />} />
-              <Route path="/shipyard" element={<Shipyard saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} />} />
-              <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} />} />
-              <Route path="/map" element={<Sail saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} />} />
+              <Route path="/" element={<Menu type="new" changePage={changePage} lang={language} />} />
+              <Route path="/start" element={<StartGame saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} pageData={pageData} lang={language} setLang={setLanguage} />} />
+              <Route path="/setup" element={<Setup changePage={changePage} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} setLang={setLanguage} setSpeed={setSpeed} setBgm={setBgm} setEfm={setEfm} setRes={setResolution} />} />
+              <Route path="/gameMain" element={<GameMain changePage={changePage} saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/cards" element={<Cards saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/inven" element={<Inven saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/cardPlacement" element={<CardPlacement saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} pageData={pageData} />} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />
+              <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} scenario={scenario} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/enhancingCards" element={<EnhancingCards saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/enhancingStickers" element={<EnhancingStickers saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/composite" element={<Composite saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/stickerShop" element={<StickerShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/toolShop" element={<ToolShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/shipyard" element={<Shipyard saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/map" element={<Sail saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
             </Routes>
           </ContentContainer>
         </Wrapper>

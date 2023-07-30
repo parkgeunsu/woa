@@ -1,13 +1,13 @@
-import React, { useState, useLayoutEffect, useContext, useRef } from 'react';
 import { AppContext } from 'App';
-import styled from 'styled-components';
-import { util } from 'components/Libs';
 import GuideQuestion from 'components/GuideQuestion';
-import PopupContainer from 'components/PopupContainer';
-import Popup from 'components/Popup';
-import MsgContainer from 'components/MsgContainer';
+import { util } from 'components/Libs';
 import Msg from 'components/Msg';
+import MsgContainer from 'components/MsgContainer';
+import Popup from 'components/Popup';
+import PopupContainer from 'components/PopupContainer';
 import 'css/ch.css';
+import { useContext, useLayoutEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
 const AnimalItemPic = styled.div`
   &:before{content:'';position:absolute;left:0;top:0;width:100%;height:100%;background: url(${({animalType}) => animalType}) no-repeat center center;background-size:100%;filter:brightness(0.3);z-index:1;}
@@ -23,11 +23,10 @@ const CharacterItems = ({
   saveData,
   changeSaveData,
   slotIdx,
+  lang,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const setting = useContext(AppContext).setting,
-    lang = setting.lang;
   const [animalIdx, setAnimalIdx] = useState(gameData.ch[saveData.ch[slotIdx].idx].animal_type);
 
   // const [saveItems, setSaveItems] = useState(saveData.ch[slotIdx].items);
@@ -227,7 +226,7 @@ const CharacterItems = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} navigate={navigate} />}
+        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} navigate={navigate} lang={lang} />}
       </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}

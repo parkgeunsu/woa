@@ -10,10 +10,10 @@ export const prices = {
 	shop:{
 
 	},
-	characterEnhancement:{
+	enhancingCards:{
 
 	},
-	itemEnhancement:{
+	enhancingStickers:{
 		socketRemove:[{type:'g',price:500},{type:'etc',imgGroup:'itemEtc',idx:22,price:1}],
 		upgrade1:[{type:'g',price:1000},{type:'etc',imgGroup:'itemEtc',idx:8,price:1}],
 		upgrade2:[{type:'g',price:5000},{type:'etc',imgGroup:'itemEtc',idx:9,price:1}],
@@ -24,5 +24,5 @@ export const prices = {
 export const actionPoint = {
 	itemBuy:3,
 	itemSell:3,
-	itemEnhancement:5,
+	enhancingStickers:5,
 }

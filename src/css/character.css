@@ -1,7 +1,7 @@
 @charset "utf-8";
 
-.ch_wrap{position:absolute;left:0;right:0;top:0;bottom:0;padding: 50px 0 0 0;width: 100%;height: 100%;box-sizing: border-box;overflow:hidden;touch-action:none;}
-.ch_wrap.page0 .ch_card{left:50%;top:50%;transform:translate(-50%,-50%) scale(1);}
+.ch_wrap{position:absolute;left:0;right:0;top:0;bottom:0;width: 100%;height: 100%;box-sizing: border-box;overflow:hidden;touch-action:none;}
+.ch_wrap.page0 .ch_card{left:50%;top:calc(50% - 50px);transform:translate(-50%,-50%) scale(1);}
 .ch_wrap.page0 .ch_card.rotate .ch_detail{z-index:1;transform:rotateY(360deg);}
 .ch_wrap.page0 .ch_card.rotate .ch_back{z-index:2;transform:rotateY(180deg);}
 .ch_wrap.page0 .ch_menu{opacity:0;}

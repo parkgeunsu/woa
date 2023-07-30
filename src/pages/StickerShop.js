@@ -1,13 +1,13 @@
 import { AppContext } from 'App';
-import { util } from 'components/Libs';
-import PopupContainer from 'components/PopupContainer';
-import Popup from 'components/Popup';
-import MsgContainer from 'components/MsgContainer';
-import Msg from 'components/Msg';
-import React, { useContext, useEffect, useState, useRef } from 'react';
-import styled from 'styled-components';
-import 'css/shop.css';
 import { ActionChDisplay } from 'components/Components';
+import { util } from 'components/Libs';
+import Msg from 'components/Msg';
+import MsgContainer from 'components/MsgContainer';
+import Popup from 'components/Popup';
+import PopupContainer from 'components/PopupContainer';
+import 'css/shop.css';
+import { useContext, useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
 const Img = styled.img.attrs(
   ({imgurl}) => ({
@@ -55,7 +55,7 @@ const makeMark = (markNum, img) => {
   }
   return markTag;
 }
-const EquipmentShop = ({
+const StickerShop = ({
 	cityIdx,
 	saveData,
 	changeSaveData,
@@ -83,17 +83,17 @@ const EquipmentShop = ({
 		if (Object.keys(saveData).length !== 0) {
 			const cityData = saveData.city[cityIdx];
 			const items = [
-				[...cityData.equipmentShop.helm],
-				[...cityData.equipmentShop.armor],
-				[...cityData.equipmentShop.weapon],
+				[...cityData.stickerShop.helm],
+				[...cityData.stickerShop.armor],
+				[...cityData.stickerShop.weapon],
 				[...saveData.items.equip],
 			]
 			setItem(items);
-			setActionCh(saveData.actionCh.equipmentShop);
+			setActionCh(saveData.actionCh.stickerShop);
 			setPopupInfo({
 				ch:saveData.ch,
-				actionCh:saveData.actionCh.equipmentShop.idx,
-				type:'equipmentShop'
+				actionCh:saveData.actionCh.stickerShop.idx,
+				type:'stickerShop'
 			});
 		}
 	}, [saveData]);
@@ -119,7 +119,7 @@ const EquipmentShop = ({
 						{Object.keys(actionCh).length !== 0 && (<div ref={actionRef} className={`ch_select_area ${actionCh.idx ? 'g' + saveData.ch[actionCh.idx].grade : ''}`} onClick={() => {
 								setPopupOn(true);
 							}}>
-								<ActionChDisplay type="equipmentShop" saveData={saveData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
+								<ActionChDisplay type="stickerShop" saveData={saveData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
 							</div>
 						)}
 					</div>
@@ -275,7 +275,7 @@ const EquipmentShop = ({
 															let saveD = {...saveData};
 															if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemBuy) {//행동력 지불
 																saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemBuy;
-																saveD.city[cityIdx].equipmentShop[shopList[selectItem1.selectTab].na].splice(selectItem1.select, 1);
+																saveD.city[cityIdx].stickerShop[shopList[selectItem1.selectTab].na].splice(selectItem1.select, 1);
 																util.buttonEvent({
 																	event: e,
 																	type: 'itemBuy',
@@ -429,7 +429,7 @@ const EquipmentShop = ({
 															let saveD = {...saveData};
 															if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemBuy) {//행동력 지불
 																saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemBuy;
-																saveD.city[cityIdx].equipmentShop[shopList[selectItem2.selectTab].na].splice(selectItem1.select, 1);
+																saveD.city[cityIdx].stickerShop[shopList[selectItem2.selectTab].na].splice(selectItem1.select, 1);
 																util.buttonEvent({
 																	event: e,
 																	type: 'itemBuy',
@@ -505,7 +505,7 @@ const EquipmentShop = ({
 				</div>
 			</ShopWrap>
 			<PopupContainer>
-        {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn}/>}
+        {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} lang={lang} />}
       </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
@@ -514,4 +514,4 @@ const EquipmentShop = ({
   );
 }
 
-export default EquipmentShop;
+export default StickerShop;

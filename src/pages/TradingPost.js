@@ -1,12 +1,12 @@
 import { AppContext } from 'App';
+import { ActionChDisplay, Calculator, RangeSlider } from 'components/Components';
 import { util } from 'components/Libs';
-import PopupContainer from 'components/PopupContainer';
-import Popup from 'components/Popup';
-import MsgContainer from 'components/MsgContainer';
 import Msg from 'components/Msg';
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import MsgContainer from 'components/MsgContainer';
+import Popup from 'components/Popup';
+import PopupContainer from 'components/PopupContainer';
+import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { RangeSlider, Calculator, ActionChDisplay } from 'components/Components';
 
 const Img = styled.img.attrs(
   ({imgurl}) => ({
@@ -350,7 +350,7 @@ const TradingPost = ({
 				{showCal && <Calculator value={rangeValue} max={item[0][selectItem.select].num} setValue={setRangeValue} showCal={setShowCal}/>}
 			</ShopWrap>
 			<PopupContainer>
-        {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn}/>}
+        {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} lang={lang} />}
       </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}

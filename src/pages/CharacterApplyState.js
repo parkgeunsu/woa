@@ -1,18 +1,16 @@
-import React, { useContext, useState, useRef } from 'react';
 import { AppContext } from 'App';
-import styled from 'styled-components';
 import GuideQuestion from 'components/GuideQuestion';
-import PopupContainer from 'components/PopupContainer';
 import Popup from 'components/Popup';
+import PopupContainer from 'components/PopupContainer';
+import { useContext, useRef, useState } from 'react';
 
 const CharacterApplyState = ({
   saveData,
   slotIdx,
+  lang,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const setting = useContext(AppContext).setting,
-    lang = setting.lang;
   const [popupOn, setPopupOn] = useState(false);
   const popupType = useRef('');
   const [popupInfo, setPopupInfo] = useState({});
@@ -51,7 +49,7 @@ const CharacterApplyState = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn}/>}
+        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} lang={lang} />}
       </PopupContainer>
     </>
   );
