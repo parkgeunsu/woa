@@ -79,7 +79,7 @@ const ListNameLv = styled.li`
       bottom:17%;
       width:67%;
       line-height:1;
-      font-size: ${({theme}) => theme.font.t6};
+      font-size: ${({theme}) => theme.font.t5};
       z-index:1;
       box-sizing:border-box;
       letter-spacing:-2px;
