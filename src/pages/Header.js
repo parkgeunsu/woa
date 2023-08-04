@@ -4,7 +4,10 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  li .txt{background:url(${({ bar}) => bar}) repeat-x 0 center;background-size:100% 22px;border-image:url(${({ frameMain}) => frameMain}) 6 stretch;}
+  li .txt{
+    background: url(${({bar}) => bar}) repeat-x 0 center;
+    background-size: 100% 22px;
+    border-image: url(${({frameMain}) => frameMain}) 6 stretch;}
   li.back .ico{background-image:url(${({ iconBack }) => iconBack});}
   li.lv .ico{
     display: flex;

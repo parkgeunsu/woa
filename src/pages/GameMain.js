@@ -2,6 +2,7 @@ import { AppContext } from 'App';
 import { IconButton } from 'components/Button';
 import { util } from 'components/Libs';
 import CharacterCard from 'pages/CharacterCard';
+import Roulette from 'pages/Roulette';
 import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -15,7 +16,7 @@ const QuickMenuBox = styled.div`
   z-index: 100;
   & > * {
     ${({showMenu}) => {
-      return showMenu ? `box-shadow: 3px 3px 10px #000` : '';
+      return showMenu ? `box-shadow: 3px 3px 5px #000` : '';
     }};
   }
 `;
@@ -48,6 +49,7 @@ const CardGroup = styled.div`
   transform-style: preserve-3d;
   backface-visibility: hidden;
 `;
+
 const Cards = styled.div`
   position: absolute;
   left: 50%;
@@ -74,6 +76,7 @@ const GameMain = ({
   navigate,
   cityIdx,
   pageData,
+  gameMode,
   lang,
 }) => {
   const imgSet = useContext(AppContext).images;
@@ -143,6 +146,7 @@ const GameMain = ({
           }}>{gameData.msg.button['setup'][lang]}</IconButton></li>
         </QuickMenuBody>
       </QuickMenuBox>
+      <Roulette gameMode={gameMode} navigate={navigate} lang={lang} />
       <CardGroup>
         {cardDeck?.map((cardData, idx) => {
           const shadowColor = gameData.chGradeColor[cardData.grade];

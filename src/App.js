@@ -10,6 +10,7 @@ import Cards from 'pages/Cards';
 import Composite from 'pages/Composite';
 import EnhancingCards from 'pages/EnhancingCards';
 import EnhancingStickers from 'pages/EnhancingStickers';
+import Footer from 'pages/Footer';
 import Recruitment from 'pages/Gacha';
 import GameMain from 'pages/GameMain';
 import Header from 'pages/Header';
@@ -179,6 +180,7 @@ const App = () => {
   const [bgm, setBgm] = useState(1);
   const [efm, setEfm] = useState(1);
   const [resolution, setResolution] = useState(0);
+  const [gameMode, setGameMode] = useState('');
   const slotIdx = 'all';
   const [cityIdx, setCityIdx] = useState(0);
   const theme = {
@@ -305,7 +307,7 @@ const App = () => {
               <Route path="/" element={<Menu type="new" changePage={changePage} lang={language} />} />
               <Route path="/start" element={<StartGame saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} pageData={pageData} lang={language} setLang={setLanguage} />} />
               <Route path="/setup" element={<Setup changePage={changePage} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} setLang={setLanguage} setSpeed={setSpeed} setBgm={setBgm} setEfm={setEfm} setRes={setResolution} />} />
-              <Route path="/gameMain" element={<GameMain changePage={changePage} saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/gameMain" element={<GameMain changePage={changePage} saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} gameMode={gameMode} />} />
               <Route path="/cards" element={<Cards saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
               <Route path="/inven" element={<Inven saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
               <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
@@ -321,6 +323,9 @@ const App = () => {
               <Route path="/map" element={<Sail saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
             </Routes>
           </ContentContainer>
+          {location === "gameMain" && (
+            <Footer saveData={saveData} changePage={changePage} navigate={navigate} page={page} setGameMode={setGameMode} lang={language} />
+          )}
         </Wrapper>
       </RootContainer>
     </ThemeProvider>

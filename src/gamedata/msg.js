@@ -518,11 +518,6 @@ export const msg = {
 			en:'Emotions',
 			jp:'鑑定',
 		},
-		composite:{
-			ko:'합성',
-			en:'Composite',
-			jp:'合成',
-		},
 		skillReset:{
 			ko:'스킬리셋',
 			en:'Skill Resets',
@@ -563,6 +558,21 @@ export const msg = {
 			en:'Chat',
 			jp:'チャット',
 		},
+		exploreRegions:{
+			ko:'지역탐색',
+			en:'Explore Regions',
+			jp:'エリア探索',
+		},
+		scenarios:{
+			ko:'시나리오',
+			en:'Scenarios',
+			jp:'シナリオ',
+		},
+		moveRegion:{
+			ko:'지역이동',
+			en:'Move Region',
+			jp:'エリア移動',
+		}
 	},
 	ship:{
 		durability:{
