@@ -54,6 +54,12 @@ import iconLargeview from 'images/ico/ico_largeview.png';
 import iconLv from 'images/ico/ico_lv.png';
 import iconRoulette0 from 'images/ico/ico_roulette0.png';
 import iconRoulette1 from 'images/ico/ico_roulette1.png';
+import iconRoulette10 from 'images/ico/ico_roulette10.png';
+import iconRoulette11 from 'images/ico/ico_roulette11.png';
+import iconRoulette12 from 'images/ico/ico_roulette12.png';
+import iconRoulette13 from 'images/ico/ico_roulette13.png';
+import iconRoulette14 from 'images/ico/ico_roulette14.png';
+import iconRoulette15 from 'images/ico/ico_roulette15.png';
 import iconRoulette2 from 'images/ico/ico_roulette2.png';
 import iconRoulette3 from 'images/ico/ico_roulette3.png';
 import iconRoulette4 from 'images/ico/ico_roulette4.png';
@@ -61,6 +67,7 @@ import iconRoulette5 from 'images/ico/ico_roulette5.png';
 import iconRoulette6 from 'images/ico/ico_roulette6.png';
 import iconRoulette7 from 'images/ico/ico_roulette7.png';
 import iconRoulette8 from 'images/ico/ico_roulette8.png';
+import iconRoulette9 from 'images/ico/ico_roulette9.png';
 import iconSetup from 'images/ico/ico_setup.png';
 import iconLock from 'images/ico/lock.png';
 import iconStateType0 from 'images/ico/state_type0.png';
@@ -574,7 +581,7 @@ export const etc = {
   imgRing:imgRing,imgCardBack:imgCardBack,frameChBack:frameChBack,stateBack:stateBack,imgCardFrame:imgCardFrame,imgCardLv:imgCardLv,iconCardName:iconCardName,imgRingBack:imgRingBack,frameRope:frameRope,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,questionBlack:questionBlack,questionWhite:questionWhite,wind:wind,color:color,
 };
 export const icon = {
-  iconBack:iconBack,iconChat:iconChat,iconCardPlacement:iconCardPlacement,iconEnhancingCards:iconEnhancingCards,iconEnhancingStickers:iconEnhancingStickers,iconComposite:iconComposite,iconCard:iconCard,iconInven:iconInven,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,iconHelm:iconHelm,iconArmor:iconArmor,iconWeapon:iconWeapon,iconBag:iconBag,iconAccessory:iconAccessory,iconSocket:itemHole1,iconEtc:itemEtc25,iconUpgrade:itemUpgrade0,iconMaterial:itemMaterial0,iconLock:iconLock,iconStateType0:iconStateType0,iconStateType1:iconStateType1,iconStateType2:iconStateType2,iconStateType3:iconStateType3,iconRoulette0:iconRoulette0,iconRoulette1:iconRoulette1,iconRoulette2:iconRoulette2,iconRoulette3:iconRoulette3,iconRoulette4:iconRoulette4,iconRoulette5:iconRoulette5,iconRoulette6:iconRoulette6,iconRoulette7:iconRoulette7,iconRoulette8:iconRoulette8,
+  iconBack:iconBack,iconChat:iconChat,iconCardPlacement:iconCardPlacement,iconEnhancingCards:iconEnhancingCards,iconEnhancingStickers:iconEnhancingStickers,iconComposite:iconComposite,iconCard:iconCard,iconInven:iconInven,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,iconHelm:iconHelm,iconArmor:iconArmor,iconWeapon:iconWeapon,iconBag:iconBag,iconAccessory:iconAccessory,iconSocket:itemHole1,iconEtc:itemEtc25,iconUpgrade:itemUpgrade0,iconMaterial:itemMaterial0,iconLock:iconLock,iconStateType0:iconStateType0,iconStateType1:iconStateType1,iconStateType2:iconStateType2,iconStateType3:iconStateType3,iconRoulette0:iconRoulette0,iconRoulette1:iconRoulette1,iconRoulette2:iconRoulette2,iconRoulette3:iconRoulette3,iconRoulette4:iconRoulette4,iconRoulette5:iconRoulette5,iconRoulette6:iconRoulette6,iconRoulette7:iconRoulette7,iconRoulette8:iconRoulette8,iconRoulette9:iconRoulette9,iconRoulette10:iconRoulette10,iconRoulette11:iconRoulette11,iconRoulette12:iconRoulette12,iconRoulette13:iconRoulette13,iconRoulette14:iconRoulette14,iconRoulette15:iconRoulette15,
 };
 export const iconStar = [
   iconStar1,iconStar2,iconStar3,iconStar4,iconStar5,iconStar6,iconStar7

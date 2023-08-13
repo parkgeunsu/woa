@@ -160,12 +160,11 @@ const Shipyard = ({
 	cityIdx,
 	saveData,
 	changeSaveData,
+	gameSpd,
+	lang,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const setting = useContext(AppContext).setting,
-		gameSpd = setting.speed,
-		lang = setting.lang;
 	const gameItem = gameData.items,
 		shipItem = gameData.ships;
   const [popupInfo, setPopupInfo] = useState({});

@@ -212,6 +212,26 @@ export const msg = {
 			en:'LUK',
 			jp:'幸運',
 		},
+		land:{
+			ko:'땅',
+			en:'Land',
+			jp:'地',
+		},
+		water:{
+			ko:'물',
+			en:'Water',
+			jp:'水',
+		},
+		fire:{
+			ko:'불',
+			en:'Fire',
+			jp:'火',
+		},
+		city:{
+			ko:'도시',
+			en:'City',
+			jp:'都市',
+		}
 	},
 	info:{
 		exp:{
@@ -428,6 +448,31 @@ export const msg = {
 		// },
 	},
 	button:{
+		drawingCardLevels:{
+			ko:'카드 레벨 뽑기',
+			en:'Drawing a Card Levels',
+			jp:'カードレベルを引く',
+		},
+		drawingEnemy:{
+			ko:'적군 마릿수 뽑기',
+			en:'Drawing Enemy Army Size',
+			jp:'敵軍規模を引く',
+		},
+		pickMapType:{
+			ko:'지도 유형 뽑기',
+			en:'Pick a map type',
+			jp:'地図の種類を選ぶ',
+		},
+		stop:{
+			ko:'멈춰!',
+			en:'Stop!',
+			jp:'探索開始',
+		},
+		startExploring:{
+			ko:'탐색시작',
+			en:'Start exploring',
+			jp:'止まって!',
+		},
 		cards:{
 			ko:'카드',
 			en:'Cards',

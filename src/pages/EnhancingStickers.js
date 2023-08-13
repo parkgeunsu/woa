@@ -307,7 +307,7 @@ const setPercent = (item, tool) => {
 const EnhancingStickers = ({
 	saveData,
 	changeSaveData,
-	speed,
+	gameSpd,
 	lang,
 }) => {
   const imgSet = useContext(AppContext).images;

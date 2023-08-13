@@ -11,7 +11,7 @@ const QuickMenuBox = styled.div`
   flex-direction: row-reverse;
   align-items: start;
   position: absolute;
-  left: ${({showMenu}) => showMenu ? 0 : -50}px;
+  left: ${({showMenu, gameMode}) => gameMode !== '' ? -90 : showMenu ? 0 : -50}px;
   top: 0;
   z-index: 100;
   & > * {
@@ -19,6 +19,15 @@ const QuickMenuBox = styled.div`
       return showMenu ? `box-shadow: 3px 3px 5px #000` : '';
     }};
   }
+  ${({gameMode}) => {
+    return gameMode !== '' ? `
+      opacity: 0.5;
+      pointer-events: none;
+    ` : `
+      opacity: 1;
+      pointer-events: unset;
+    `;
+  }}
 `;
 const QuickMenuTitle = styled.div`
   display: flex;
@@ -77,6 +86,7 @@ const GameMain = ({
   cityIdx,
   pageData,
   gameMode,
+  setGameMode,
   lang,
 }) => {
   const imgSet = useContext(AppContext).images;
@@ -88,7 +98,7 @@ const GameMain = ({
   }, [saveData]);
   return (
     <>
-      <QuickMenuBox showMenu={showMenu} className="transition">
+      <QuickMenuBox showMenu={showMenu} gameMode={gameMode} className="transition">
         <QuickMenuTitle onClick={() => {
           setShowMenu(prev => !prev);
         }}>{gameData.msg.button['menu'][lang]}</QuickMenuTitle>
@@ -146,7 +156,7 @@ const GameMain = ({
           }}>{gameData.msg.button['setup'][lang]}</IconButton></li>
         </QuickMenuBody>
       </QuickMenuBox>
-      <Roulette gameMode={gameMode} navigate={navigate} lang={lang} />
+      <Roulette gameMode={gameMode} setGameMode={setGameMode} navigate={navigate} changePage={changePage} lang={lang} />
       <CardGroup>
         {cardDeck?.map((cardData, idx) => {
           const shadowColor = gameData.chGradeColor[cardData.grade];

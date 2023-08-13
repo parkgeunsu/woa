@@ -38,7 +38,7 @@ const langToIndex = (lang) => {
 const Setup = ({
   lang,
   setLang,
-  speed,
+  gameSpd,
   setSpeed,
   bgm,
   setBgm,
@@ -53,7 +53,7 @@ const Setup = ({
   const [soundValue, setSoundValue] = useState(bgm ? 0 : 1);
   const [effectValue, setEffectValue] = useState(efm ? 0 : 1);
   const [resolutionValue, setResolutionValue] = useState(res);
-  const [speedValue, setSpeedValue] = useState(speed);
+  const [speedValue, setSpeedValue] = useState(gameSpd);
   const [selectOnOff, setSelectOnOff] = useState([]); //onoff형태 글자
   const [selectQuality, setSelectQuality] = useState([]); //해상도형태 글자
   const [selectLanguage, setSelectLanguage] = useState([]); //언어형태 글자

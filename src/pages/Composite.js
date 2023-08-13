@@ -75,7 +75,7 @@ const getTotalEff = (saveItems, gameData, socketEff) => {
 const Composite = ({
 	saveData,
 	changeSaveData,
-	speed,
+	gameSpd,
 	lang,
 }) => {
   const imgSet = useContext(AppContext).images;

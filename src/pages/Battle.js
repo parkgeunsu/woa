@@ -1,11 +1,11 @@
-import React, { useRef, useState, useContext, useLayoutEffect, useCallback } from 'react';
 import { AppContext } from 'App';
-import styled from 'styled-components';
 import { util } from 'components/Libs';
-import MsgContainer from 'components/MsgContainer';
 import Msg from 'components/Msg';
+import MsgContainer from 'components/MsgContainer';
 import 'css/battle.css';
 import 'css/battleAnimation.css';
+import { useCallback, useContext, useLayoutEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
 const TeamIcon = styled.div`
 	background-image:url(${({ iconImg }) => iconImg});background-size:100%;
@@ -363,7 +363,7 @@ const activeSk = (timeLineData) => { //타임라인에 처리되는 방어등.. 
 		return 'none die';
 	}
 }
-const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, atkOption) => {
+const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, gameSound, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, atkOption) => {
 	if (modeRef.indexOf('battle') >= 0){ //battleLose, battleWin시 
 		return;
 	}
@@ -389,8 +389,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 			resetOrder('battleWin');
 		}
 	}
-	const gameSpd = setting.speed,
-		gameEffSound = setting.effSound;
+	console.log(gameSound);
 	if (turnIdx <= timeLine.length - 1) {
 		let counterAtk = false; //카운터 어택인지
 		const skillIdx = timeLine[turnIdx].order.skIdx;
@@ -416,7 +415,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 		}
 		if (skillCate === 1 || skillCate === 4){ //대기, 방어, 철벽방어
 			setTurnIdx(turnIdx + 1);
-			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, {
+			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, gameSound, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, {
 				atkCount: atkC,
 				atkStay: atkS,
 			});
@@ -1288,7 +1287,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 									}
 								}
 								setTurnIdx(turnIdx_);
-								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, {
+								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, gameSound, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, {
 									atkCount: atkC,
 									atkStay: atkS,
 								});
@@ -2072,12 +2071,12 @@ const Battle = ({
   changeSaveData,
 	changePage,
 	scenario,
+	lang,
+	gameSpd,
+	gameSound,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const setting = useContext(AppContext).setting,
-		gameSpd = setting.speed,
-		lang = setting.lang;
 	const scenarioDetail = gameData.scenario[scenario.country][scenario.period][scenario.title][scenario.stage] || gameData.scenario.korea.joseon2.LSS.stage[0];
 	const viewScenario = saveData.scenario[scenario.country][scenario.period][scenario.title][scenario.stage];
 	const [mapLand] = useState(scenarioDetail.map);
@@ -2826,7 +2825,7 @@ const Battle = ({
 				setEnemyEffect([]);
 				timeLineSet();//타임라인 구성
 				setTurnIdx(0);
-				actionAnimation(setTurnIdx, setSkillMsg, 0, timeLine.current, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly.current, battleEnemy.current, setting, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos.current, enemyPos.current, modeRef.current, setMode, setWeather, allyEnemyPassive, allyPassive.current, enemyPassive.current, setAllyEnemyPassive, allyEnemyBuff, allyBuff.current, enemyBuff.current, setAllyEnemyBuff);
+				actionAnimation(setTurnIdx, setSkillMsg, 0, timeLine.current, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly.current, battleEnemy.current, gameSpd, gameSound, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos.current, enemyPos.current, modeRef.current, setMode, setWeather, allyEnemyPassive, allyPassive.current, enemyPassive.current, setAllyEnemyPassive, allyEnemyBuff, allyBuff.current, enemyBuff.current, setAllyEnemyBuff);
 			}, pB.timeDelay);
 		} else if (mode === 'battleWin') {
 			console.log('pgs', '격!퇴!성!공!');
@@ -2968,7 +2967,7 @@ const Battle = ({
 					conversationTimeout.current = setInterval(conversationInterval, 50);
 				}}>
 					{conversationList.current.map((data, idx) => {
-						const chData = gameData.ch[data.idx];
+						const chData = gameData.ch[data.idx || 0];
 						return idx <= conversationStepRef.current && (
 						<div key={idx} className={`scenario_box ${data.pos} ${data.team}`} flex-center="true">
 								<div className="scenario_ch">

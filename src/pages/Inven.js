@@ -50,7 +50,7 @@ const Inven = ({
 	navigate,
 	saveData,
 	changeSaveData,
-	speed,
+	gameSpd,
 	lang,
 }) => {
   const imgSet = useContext(AppContext).images;

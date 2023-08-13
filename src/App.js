@@ -264,7 +264,7 @@ const App = () => {
     country: "korea",
     period: "joseon2",
     title: "LSS",
-    stage: 0
+    stage: 1
   }
   return (
     <ThemeProvider theme={theme}>
@@ -306,25 +306,25 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Menu type="new" changePage={changePage} lang={language} />} />
               <Route path="/start" element={<StartGame saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} pageData={pageData} lang={language} setLang={setLanguage} />} />
-              <Route path="/setup" element={<Setup changePage={changePage} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} setLang={setLanguage} setSpeed={setSpeed} setBgm={setBgm} setEfm={setEfm} setRes={setResolution} />} />
-              <Route path="/gameMain" element={<GameMain changePage={changePage} saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} gameMode={gameMode} />} />
-              <Route path="/cards" element={<Cards saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
-              <Route path="/inven" element={<Inven saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
-              <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
-              <Route path="/cardPlacement" element={<CardPlacement saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} pageData={pageData} />} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />
-              <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} scenario={scenario} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
-              <Route path="/enhancingCards" element={<EnhancingCards saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
-              <Route path="/enhancingStickers" element={<EnhancingStickers saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
-              <Route path="/composite" element={<Composite saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
-              <Route path="/stickerShop" element={<StickerShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
-              <Route path="/toolShop" element={<ToolShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
-              <Route path="/shipyard" element={<Shipyard saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
-              <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
-              <Route path="/map" element={<Sail saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} speed={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/setup" element={<Setup changePage={changePage} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} setLang={setLanguage} setSpeed={setSpeed} setBgm={setBgm} setEfm={setEfm} setRes={setResolution} />} />
+              <Route path="/gameMain" element={<GameMain changePage={changePage} saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} gameMode={gameMode} setGameMode={setGameMode} />} />
+              <Route path="/cards" element={<Cards saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/inven" element={<Inven saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/cardPlacement" element={<CardPlacement saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} pageData={pageData} />} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />
+              <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} scenario={scenario} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/enhancingCards" element={<EnhancingCards saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/enhancingStickers" element={<EnhancingStickers saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/composite" element={<Composite saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/stickerShop" element={<StickerShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/toolShop" element={<ToolShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/shipyard" element={<Shipyard saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/map" element={<Sail saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
             </Routes>
           </ContentContainer>
           {location === "gameMain" && (
-            <Footer saveData={saveData} changePage={changePage} navigate={navigate} page={page} setGameMode={setGameMode} lang={language} />
+            <Footer saveData={saveData} changePage={changePage} navigate={navigate} page={page} gameMode={gameMode} setGameMode={setGameMode} lang={language} />
           )}
         </Wrapper>
       </RootContainer>

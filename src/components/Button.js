@@ -15,17 +15,27 @@ const LinkButton = styled(Link)`
 `;
 const ActiveButton = styled.button`
   display: inline-block;
+  margin: 0 5px 0 0;
+  &:last-of-type{
+    margin: 0;
+  }
   width: ${({width}) =>  width ? `${width}px` : '100%'};
   ${({size}) => {
     return size === 'small' ? 
     `height: 25px;` : 
-    `padding: 10px 0`;
+    `padding: 10px 15px`;
   }};
   background: rgba(0,0,0,.7);
   border-radius: 20px;
   color: #fff;
   font-size: ${({size, theme}) => {
-    return size === 'large' ? theme.font.t5 : '';
+    if (size === 'small') {
+      return '';
+    } else if (size === 'large') {
+      return theme.font.t5;
+    } else {
+      return theme.font.t3;
+    }
   }};
   text-align: center;
 `;

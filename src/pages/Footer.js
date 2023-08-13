@@ -5,6 +5,9 @@ import { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
+  opacity: ${({gameMode}) => gameMode !== '' ? 0 : 1};
+  transition: all 0.5s;
+  pointer-events: ${({gameMode}) => gameMode !== '' ? 'none' : 'unset'};
 `;
 
 const Footer = ({
@@ -12,6 +15,7 @@ const Footer = ({
   saveData,
   changePage,
   page,
+  gameMode,
   setGameMode,
   lang,
 }) => {
@@ -22,7 +26,7 @@ const Footer = ({
   }, []);
   return (
     <>
-      <Wrapper className="footer">
+      <Wrapper gameMode={gameMode} className="footer">
         <FlexBox>
           <Button onClick={() => {
             setGameMode('roulette');
