@@ -1206,6 +1206,38 @@ export const util = { //this.loadImage();
       return 1;
     }
   },
+  getIdxToCountry: (idx) => {
+    switch(idx) {
+      case 0:
+        return 'korea';
+      case 1:
+        return 'japan';
+      case 2:
+        return 'china';
+      case 3:
+        return 'mongolia';
+      case 4:
+        return 'unitedKingdom';
+      case 5:
+        return 'france';
+      case 6:
+        return 'greece';
+      case 7:
+        return 'macedonia';
+      case 8:
+        return 'italy';
+      case 9:
+        return 'spain';
+      case 10:
+        return 'portugal';
+      case 11:
+        return 'theMiddleEast';
+      case 12:
+        return 'egypt';
+      default:
+        return '';
+    }
+  },
   getItem: (saveData, gameData, changeSaveData, option, Save, lang) => {
     let save = {...saveData};//장비 아이템 복사
     let itemLv = option.lv;

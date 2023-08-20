@@ -23,6 +23,8 @@ const ColorSet = {
 	legend: "#ff2a00",
 	menu: "#471919",
   shadow: "rgba(0,0,0,.7)",
+	stageBar: "#a88b6a",
+	stageBack: "#a96347",
 }
 const FontSet = {
   t1: "0.75rem", //12

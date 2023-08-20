@@ -11,6 +11,7 @@ const TeamIcon = styled.div`
 	background-image:url(${({ iconImg }) => iconImg});background-size:100%;
 `;
 const BattleHeader = styled.div`
+	width: 100%;
   li.back .ico{background-image:url(${({ iconBack }) => iconBack});}
 `;
 const BattleWarp = styled.div`
@@ -389,7 +390,6 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 			resetOrder('battleWin');
 		}
 	}
-	console.log(gameSound);
 	if (turnIdx <= timeLine.length - 1) {
 		let counterAtk = false; //카운터 어택인지
 		const skillIdx = timeLine[turnIdx].order.skIdx;
@@ -2070,15 +2070,16 @@ const Battle = ({
 	saveData,
   changeSaveData,
 	changePage,
-	scenario,
 	lang,
 	gameSpd,
 	gameSound,
+	pageData,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const scenarioDetail = gameData.scenario[scenario.country][scenario.period][scenario.title][scenario.stage] || gameData.scenario.korea.joseon2.LSS.stage[0];
-	const viewScenario = saveData.scenario[scenario.country][scenario.period][scenario.title][scenario.stage];
+	const countryText = useRef(util.getIdxToCountry(pageData?.scenario?.country));
+	const scenarioDetail = gameData.scenario[countryText.current][pageData.scenario.period].scenarioList[pageData.scenario.scenario].stage[pageData.scenario.stage];
+	const viewScenario = saveData.scenario[countryText.current][pageData.scenario.period].scenarioList[pageData.scenario.scenario].stage[pageData.scenario.stage];
 	const [mapLand] = useState(scenarioDetail.map);
 	const allyDeck = saveData.lineup.save_slot[saveData.lineup.select].entry;//캐릭터 저장된 카드index
 	const enemyDeck = scenarioDetail.entry;
@@ -2220,7 +2221,7 @@ const Battle = ({
 		//-----시나리오 시청 판단
 		if (!viewScenario) {//시나리오 시청
 			scenarioRepeat.current = true;
-			conversationData.current = gameData.scenario[scenario.country][scenario.period][scenario.title].stage[scenario.stage].conversation;
+			conversationData.current = gameData.scenario[countryText.current][pageData.scenario.period].scenarioList[pageData.scenario.scenario].stage[pageData.scenario.stage].conversation;
 			conversationList.current.push(conversationData.current[0]);
 			setMode('scenario');
 			conversationCount.current = 0;
@@ -2449,7 +2450,7 @@ const Battle = ({
 		return () => {//언마운트 리셋
 			clearInterval(conversationTimeout.current);
 			let saveD = {...saveData};
-			saveD.scenario[scenario.country][scenario.period][scenario.title][scenario.stage] = scenarioRepeat;
+			saveD.scenario[countryText.current][pageData.scenario.period].scenarioList[pageData.scenario.scenario][pageData.scenario.stage] = scenarioRepeat;
 			changeSaveData(saveD);
 		}
 	}, []);
@@ -2568,7 +2569,7 @@ const Battle = ({
 		setMode(mode);
 	};
 	const areaAllySelect = (e, pos) => {
-		if (currentSkill.current.sk.cate[0] !== 5) {
+		if (currentSkill.current?.sk?.cate[0] !== 5) {
 			return;
 		}
 		if (mode === 'area') {
@@ -2610,7 +2611,7 @@ const Battle = ({
 		}
 	}
 	const areaEnemySelect = (e, pos) => {
-		if (currentSkill.current.sk.cate[0] === 5) {
+		if (currentSkill.current?.sk?.cate[0] === 5) {
 			return;
 		}
 		if (mode === 'area') {
@@ -2770,6 +2771,12 @@ const Battle = ({
 						}, 2000 / gameSpd);
 					}, 1300 / gameSpd);
 				}, (2000 + allyRelationArr.current.length * 300) / gameSpd);
+			} else {
+				setMode('passive');
+				setTimeout(() => {
+					allyRelationArr.current = '';
+					relationCh.current = {};
+				}, 2000 / gameSpd);
 			}
 		} else if (mode === 'passive') {
 			setTimeout(() => {
@@ -2830,7 +2837,7 @@ const Battle = ({
 		} else if (mode === 'battleWin') {
 			console.log('pgs', '격!퇴!성!공!');
 			let saveD = {...saveData};
-			saveD.scenario[scenario.country][scenario.period][scenario.title][scenario.stage] = scenarioRepeat;
+			saveD.scenario[countryText.current][pageData.scenario.period].scenarioList[pageData.scenario.scenario][pageData.scenario.stage] = scenarioRepeat;
 			allySlot.current.forEach((slotIdx, idx) => {
 				const hasMaxExp = gameData.hasMaxExp[saveD.ch[slotIdx].grade];
 				saveD.ch[slotIdx].hasExp += resultExp.current[idx];
@@ -2936,7 +2943,7 @@ const Battle = ({
 				<div className="battle_title" flex-h-center="true">
 					<div className="scenario_title">{scenarioDetail.title[lang]}</div>
 					<div className="team_summary">
-						<div style={{width: teamPower.current.allyPercent+"%"}}className="ally_team gradient_dark"></div>
+						<div style={{width: teamPower.current.allyPercent+"%"}} className="ally_team gradient_dark"></div>
 						<div style={{width: teamPower.current.enemyPercent+"%"}} className="enemy_team gradient_dark"></div>
 						<TeamIcon style={{left: teamPower.current.allyPercent+"%"}} className="team_bullet" iconImg={imgSet.element[13]}></TeamIcon>
 						<div className="ally_power">{teamPower.current.allyHp}</div>

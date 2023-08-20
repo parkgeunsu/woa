@@ -1,4 +1,4 @@
-import { actionIcon, anchor, animalType, back, bgEffect, cannon, chImg, control, eff, element, etc, figure, icon, iconStar, iconState, itemEtc, itemHole, itemMaterial, itemUpgrade, job, land, map, menu, passive, ringImg, sail, sringImg, ssringImg, weather, wood } from 'components/ImgSet';
+import { actionIcon, anchor, animalType, back, bgEffect, button, cannon, chImg, control, eff, element, etc, figure, icon, iconStar, iconState, itemEtc, itemHole, itemMaterial, itemUpgrade, job, land, map, menu, passive, ringImg, sail, sringImg, ssringImg, weather, wood } from 'components/ImgSet';
 
 export const LoadImage = () => {
   //이미지 프리로드
@@ -9,6 +9,10 @@ export const LoadImage = () => {
   for (let v in icon) {
     const img = new Image();
     img.src = icon[v];
+  }
+  for (let v in button) {
+    const img = new Image();
+    img.src = button[v];
   }
   for (let v in etc) {
     const img = new Image();
@@ -119,6 +123,7 @@ export const LoadImage = () => {
     menu: menu,
     etc: etc,
     icon: icon,
+    button: button,
     iconStar: iconStar,
     chImg: chImg,
     ringImg: ringImg,

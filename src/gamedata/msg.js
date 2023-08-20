@@ -268,7 +268,7 @@ export const msg = {
 			ko:'미정',
 			en:'Undefined',
 			jp:'未定',
-		}
+		},
 	},
 	title:{
 		startingCardType:{
@@ -345,7 +345,32 @@ export const msg = {
 			ko:'행동 카드',
 			en:'Action Card',
 			jp:'行動カード'
-		}
+		},
+		region:{
+			ko:'지역',
+			en:'Region',
+			jp:'地域',
+		},
+		wildlife:{
+			ko:'동물수',
+			en:'Number of animals',
+			jp:'動物数',
+		},
+		animals:{
+			ko:'동물',
+			en:'Animals',
+			jp:'動物',
+		},
+		mapType:{
+			ko:'맵종류',
+			en:'Map Type',
+			jp:'マップの種類',
+		},
+		addOption:{
+			ko:'부가사항',
+			en:'Addenda',
+			jp:'追加情報',
+		},
 	},
 	ocean:{
 		pacific:{
@@ -366,20 +391,110 @@ export const msg = {
 	},
 	regions:{
 		//아시아
+		asia:{
+			ko:'아시아',
+			en:'Asia',
+			jp:'アジア',
+		},
 		korea:{
 			ko:'한국',
 			en:'Korea',
 			jp:'韓国',
+		},
+		gojoseon:{
+			ko:'고조선',
+			en:'Gojoseon',
+			jp:'古朝鮮',
+		},
+		threeBefore:{
+			ko:'삼한시대',
+			en:'Samhan period',
+			jp:'三韓時代',
+		},
+		three:{
+			ko:'삼국시대',
+			en:'Three Kingdoms',
+			jp:'三国志時代',
+		},
+		ns:{
+			ko:'남국북시대',
+			en:'North and South Korea period',
+			jp:'南北国時代',
+		},
+		threeAfter:{
+			ko:'후삼국시대',
+			en:'Later Three Kingdoms',
+			jp:'後三国時代',
+		},
+		joseon1:{
+			ko:'조선시대초기',
+			en:'Early Joseon Dynasty',
+			jp:'朝鮮時代初期',
+		},
+		joseon2:{
+			ko:'조선시대중기',
+			en:'Joseon DynastyMiddle Ages',
+			jp:'朝鮮時代中期',
+		},
+		joseon3:{
+			ko:'조선말기',
+			en:'Late Joseon Dynasty',
+			jp:'朝鮮時代末期',
 		},
 		japan:{
 			ko:'일본',
 			en:'Japan',
 			jp:'日本',
 		},
+		junkuk:{
+			ko:'전국시대',
+			en:'Warring States period',
+			jp:'戦国時代',
+		},
 		china:{
 			ko:'중국',
 			en:'China',
 			jp:'中国',
+		},
+		yin:{
+			ko:'은나라',
+			en:'Silver Dynasty',
+			jp:'銀の国',
+		},
+		ju:{
+			ko:'주나라',
+			en:'Zhu Dynasty',
+			jp:'国',
+		},
+		chunchu:{
+			ko:'춘추전국시대',
+			en:'Spring and Autumn Warring States Period',
+			jp:'春秋戦国時代',
+		},
+		jin:{
+			ko:'진나라',
+			en:'Qin Dynasty',
+			jp:'秦王朝',
+		},
+		han:{
+			ko:'한나라',
+			en:'Han Dynasty',
+			jp:'漢王朝',
+		},
+		dang:{
+			ko:'당나라',
+			en:'Tang Dynasty',
+			jp:'唐の時代',
+		},
+		song:{
+			ko:'송나라',
+			en:'Song Dynasty',
+			jp:'宋時代',
+		},
+		ming:{
+			ko:'명나라',
+			en:'Ming Dynasty',
+			jp:'明代',
 		},
 		mongolia:{
 			ko:'몽골',
@@ -392,6 +507,11 @@ export const msg = {
 			jp:'中東',
 		},
 		//유럽
+		europe:{
+			ko:'유럽',
+			en:'Europe',
+			jp:'ヨーロッパ',
+		},
 		greece:{
 			ko:'그리스',
 			en:'Greece',
@@ -412,7 +532,7 @@ export const msg = {
 			en:'Spain',
 			jp:'スペイン',
 		},
-		Portugal:{
+		portugal:{
 			ko:'포루투갈',
 			en:'Portugal',
 			jp:'ポルトガル',
@@ -422,30 +542,22 @@ export const msg = {
 			en:'United Kingdom',
 			jp:'イギリス',
 		},
-		// greece1:{
-		// 	ko:'그리스',
-		// 	en:'Greece'
-		// },
-		// france1:{
-		// 	ko:'프랑스',
-		// 	en:'France',
-		// },
-		// macedonia1:{
-		// 	ko:'마케도니아',
-		// 	en:'Macedonia',
-		// },
-		// spain1:{
-		// 	ko:'스페인',
-		// 	en:'Spain',
-		// },
-		// Portugal1:{
-		// 	ko:'포루투갈',
-		// 	en:'Portugal',
-		// },
-		// unitedKingdom1:{
-		// 	ko:'영국',
-		// 	en:'United Kingdom',
-		// },
+		italy:{
+			ko:'이탈리아',
+			en:'Italy',
+			jp:'イタリア',
+		},
+		//아프리카
+		africa:{
+			ko:'아프리카',
+			en:'Africa',
+			jp:'アフリカ',
+		},
+		egypt:{
+			ko:'이집트',
+			en:'Egypt',
+			jp:'エジプト',
+		},
 	},
 	button:{
 		drawingCardLevels:{

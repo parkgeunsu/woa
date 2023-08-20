@@ -1,11 +1,16 @@
 import { AppContext } from 'App';
 import { IconButton } from 'components/Button';
+import { FlexBox } from 'components/Container';
 import { util } from 'components/Libs';
 import CharacterCard from 'pages/CharacterCard';
+import GameMainFooter from 'pages/GameMainFooter';
+import MoveRegion from 'pages/MoveRegion';
 import Roulette from 'pages/Roulette';
-import { useContext, useEffect, useState } from 'react';
+import Scenario from 'pages/Scenario';
+import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
+const Wrap = styled(FlexBox)``;
 const QuickMenuBox = styled.div`
   display: flex;
   flex-direction: row-reverse;
@@ -93,11 +98,38 @@ const GameMain = ({
   const gameData = useContext(AppContext).gameData;
   const [showMenu, setShowMenu] = useState(false);
   const [cardDeck, setCardDeck] = useState([]);
+  //roulette
+  const [rouletteState, setRouletteState] = useState([]);
+  const [selectRoulettePos, setSelectRoulettePos] = useState([]);
+  const [enemy, setEnemy] = useState({base: [],add: [], lv: '', map: ''});
+  const rouletteArr = useRef([
+    {cards:[
+      gameData.roulette[0],
+      gameData.roulette[1],
+      gameData.roulette[2],
+      gameData.roulette[3],
+    ]},
+    {cards:[
+      gameData.roulette[4],
+      gameData.roulette[6],
+      gameData.roulette[7],
+      gameData.roulette[5],
+      gameData.roulette[8],
+      gameData.roulette[5],
+      gameData.roulette[10],
+    ]},
+    {cards:[
+      gameData.roulette[12],
+      gameData.roulette[13],
+      gameData.roulette[14],
+      gameData.roulette[15],
+    ]},
+  ]);
   useEffect(() => {
     setCardDeck(saveData.ch);
   }, [saveData]);
   return (
-    <>
+    <Wrap direction="column">
       <QuickMenuBox showMenu={showMenu} gameMode={gameMode} className="transition">
         <QuickMenuTitle onClick={() => {
           setShowMenu(prev => !prev);
@@ -156,7 +188,9 @@ const GameMain = ({
           }}>{gameData.msg.button['setup'][lang]}</IconButton></li>
         </QuickMenuBody>
       </QuickMenuBox>
-      <Roulette gameMode={gameMode} setGameMode={setGameMode} navigate={navigate} changePage={changePage} lang={lang} />
+      <Roulette gameMode={gameMode} saveData={saveData} navigate={navigate} changePage={changePage} lang={lang} rouletteState={rouletteState} setRouletteState={setRouletteState} selectRoulettePos={selectRoulettePos} setSelectRoulettePos={setSelectRoulettePos} rouletteArr={rouletteArr.current} enemy={enemy} setEnemy={setEnemy} btnSize={40} />
+      <Scenario gameMode={gameMode} saveData={saveData} navigate={navigate} changePage={changePage} lang={lang} btnSize={40} />
+      <MoveRegion gameMode={gameMode} saveData={saveData} navigate={navigate} changePage={changePage} lang={lang} btnSize={40} />
       <CardGroup>
         {cardDeck?.map((cardData, idx) => {
           const shadowColor = gameData.chGradeColor[cardData.grade];
@@ -174,7 +208,8 @@ const GameMain = ({
           );
         })}
       </CardGroup>
-    </>
+      <GameMainFooter saveData={saveData} changePage={changePage} navigate={navigate} gameMode={gameMode} setGameMode={setGameMode} lang={lang} rouletteState={rouletteState} setRouletteState={setRouletteState} selectRoulettePos={selectRoulettePos} setSelectRoulettePos={setSelectRoulettePos} rouletteArr={rouletteArr.current} setEnemy={setEnemy}/>
+    </Wrap>
   );
 };
 

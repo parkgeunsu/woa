@@ -324,7 +324,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             {sealed && (
               <div className="item_button" flex="true">
                 <button text="true" onClick={(e) => {
-                  navigate('/inven');
+                  navigate('inven');
                   // 확인
                   // util.buttonEvent({
                   //   event: e,
@@ -340,7 +340,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   // })
                 }} data-buttontype="itemEvaluate">{gameData.msg.button.emotions[lang]}</button>
                 <button text="true" onClick={(e) => {
-                  navigate('/stickerShop');
+                  navigate('stickerShop');
                   // 판매
                   // util.buttonEvent({
                   //   event: e,
@@ -360,7 +360,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             {!sealed && (
               <div className="item_button" flex="true">
                 <button text="true" onClick={(e) => {
-                  navigate('/enhancingStickers');
+                  navigate('enhancingStickers');
                   // 강화
                   // util.buttonEvent({
                   //   event: e,
@@ -390,7 +390,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   })
                 }} data-buttontype="itemEquip">{gameData.msg.button.equip[lang]}</button>
                 <button text="true" onClick={(e) => {
-                  navigate('/stickerShop');
+                  navigate('stickerShop');
                   // util.buttonEvent({
                   //   event: e,
                   //   type: 'itemSell',
@@ -463,7 +463,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               })
             }} data-buttontype="holeEquip">{gameData.msg.button.equip[lang]}</button>
             <button text="true" onClick={(e) => {
-              navigate('/stickerShop');
+              navigate('stickerShop');
               // util.buttonEvent({
               //   event: e,
               //   type: 'itemSell',

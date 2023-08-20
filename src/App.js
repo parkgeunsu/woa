@@ -10,7 +10,6 @@ import Cards from 'pages/Cards';
 import Composite from 'pages/Composite';
 import EnhancingCards from 'pages/EnhancingCards';
 import EnhancingStickers from 'pages/EnhancingStickers';
-import Footer from 'pages/Footer';
 import Recruitment from 'pages/Gacha';
 import GameMain from 'pages/GameMain';
 import Header from 'pages/Header';
@@ -54,6 +53,8 @@ const Wrapper = styled.div`
         return imgSet[0];
       case 'inven':
         return imgSet[2];
+      case 'cardPlacement':
+        return imgSet[1];
       default:
         return ``;
     }
@@ -260,12 +261,6 @@ const App = () => {
       localStorage.setItem('closeTime', new Date());
     }
   }, []);
-  const scenario = {
-    country: "korea",
-    period: "joseon2",
-    title: "LSS",
-    stage: 1
-  }
   return (
     <ThemeProvider theme={theme}>
       <RootContainer value={data}>
@@ -312,7 +307,7 @@ const App = () => {
               <Route path="/inven" element={<Inven saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
               <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
               <Route path="/cardPlacement" element={<CardPlacement saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} pageData={pageData} />} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />
-              <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} scenario={scenario} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
               <Route path="/enhancingCards" element={<EnhancingCards saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
               <Route path="/enhancingStickers" element={<EnhancingStickers saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
               <Route path="/composite" element={<Composite saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
@@ -323,9 +318,6 @@ const App = () => {
               <Route path="/map" element={<Sail saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} pageData={pageData} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
             </Routes>
           </ContentContainer>
-          {location === "gameMain" && (
-            <Footer saveData={saveData} changePage={changePage} navigate={navigate} page={page} gameMode={gameMode} setGameMode={setGameMode} lang={language} />
-          )}
         </Wrapper>
       </RootContainer>
     </ThemeProvider>

@@ -84,6 +84,14 @@ import iconStar5 from 'images/star/star5.png';
 import iconStar6 from 'images/star/star6.png';
 import iconStar7 from 'images/star/star7.png';
 
+import btnArrow from 'images/button/button_arrow.png';
+import btnCircle from 'images/button/button_circle.png';
+import btnL from 'images/button/button_l.png';
+import btnLD from 'images/button/button_l_d.png';
+import btnLL from 'images/button/button_l_l.png';
+import btnM from 'images/button/button_m.png';
+import btnS from 'images/button/button_s.png';
+import btnSix from 'images/button/button_six.png';
 import ch0 from 'images/ch/ch0.png';
 import ch1 from 'images/ch/ch1.png';
 import ch10 from 'images/ch/ch10.png';
@@ -139,6 +147,9 @@ import ch6 from 'images/ch/ch6.png';
 import ch7 from 'images/ch/ch7.png';
 import ch8 from 'images/ch/ch8.png';
 import ch9 from 'images/ch/ch9.png';
+import chinaSoldier from 'images/ch/china.png';
+import japanSoldier from 'images/ch/japan.png';
+import koreaSoldier from 'images/ch/korea.png';
 import iconState0 from 'images/ico/st0.png';
 import iconState1 from 'images/ico/st1.png';
 import iconState2 from 'images/ico/st2.png';
@@ -583,10 +594,14 @@ export const etc = {
 export const icon = {
   iconBack:iconBack,iconChat:iconChat,iconCardPlacement:iconCardPlacement,iconEnhancingCards:iconEnhancingCards,iconEnhancingStickers:iconEnhancingStickers,iconComposite:iconComposite,iconCard:iconCard,iconInven:iconInven,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,iconHelm:iconHelm,iconArmor:iconArmor,iconWeapon:iconWeapon,iconBag:iconBag,iconAccessory:iconAccessory,iconSocket:itemHole1,iconEtc:itemEtc25,iconUpgrade:itemUpgrade0,iconMaterial:itemMaterial0,iconLock:iconLock,iconStateType0:iconStateType0,iconStateType1:iconStateType1,iconStateType2:iconStateType2,iconStateType3:iconStateType3,iconRoulette0:iconRoulette0,iconRoulette1:iconRoulette1,iconRoulette2:iconRoulette2,iconRoulette3:iconRoulette3,iconRoulette4:iconRoulette4,iconRoulette5:iconRoulette5,iconRoulette6:iconRoulette6,iconRoulette7:iconRoulette7,iconRoulette8:iconRoulette8,iconRoulette9:iconRoulette9,iconRoulette10:iconRoulette10,iconRoulette11:iconRoulette11,iconRoulette12:iconRoulette12,iconRoulette13:iconRoulette13,iconRoulette14:iconRoulette14,iconRoulette15:iconRoulette15,
 };
+export const button = {
+  btnL:btnL,btnLL:btnLL,btnLD:btnLD,btnM:btnM,btnS:btnS,btnCircle:btnCircle,btnArrow:btnArrow,btnSix:btnSix
+}
 export const iconStar = [
   iconStar1,iconStar2,iconStar3,iconStar4,iconStar5,iconStar6,iconStar7
 ];
 export const chImg = {
+  korea:koreaSoldier, china:chinaSoldier, japan: japanSoldier,
   ch0:ch0, ch1:ch1, ch2:ch2, ch3:ch3, ch4:ch4, ch5:ch5, ch6:ch6, ch7:ch7, ch8:ch8, ch9:ch9, ch10:ch10,
   ch11:ch11, ch12:ch12, ch13:ch13, ch14:ch14, ch15:ch15, ch16:ch16, ch17:ch17, ch18:ch18, ch19:ch19, ch20:ch20,
   ch21:ch21, ch22:ch22, ch23:ch23, ch24:ch24, ch25:ch25, ch26:ch26, ch27:ch27, ch28:ch28, ch29:ch29, ch30:ch30, ch31:ch31, ch32:ch32, ch33:ch33, ch34:ch34, ch35:ch35, ch36:ch36, ch37:ch37, ch38:ch38, ch39:ch39, ch40:ch40, ch41:ch41, ch42:ch42, ch43:ch43, ch44:ch44, ch45:ch45, ch46:ch46, ch47:ch47, ch48:ch48, ch49:ch49, ch50:ch50, ch51:ch51, ch52:ch52, ch53:ch53, ch54:ch54, 

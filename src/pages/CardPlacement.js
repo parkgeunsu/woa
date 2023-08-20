@@ -3,74 +3,18 @@ import { util } from 'components/Libs';
 import 'css/lineup.css';
 import iconArrowDown from 'images/ico/arrow_down.png';
 import iconArrowUp from 'images/ico/arrow_up.png';
-import { useContext, useLayoutEffect, useRef, useState } from 'react';
+import ChLineup from 'pages/ChLineup';
+import CharacterCard from 'pages/CharacterCard';
+import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-const LineupWrap = styled.div`
-	background:url(${({backImg}) => backImg});background-size:cover;
+const Wrap = styled.div`
 `;
 const LineupChInfo = styled.div`
 	ul li.up .add_txt:before{background:url(${({arrowUpImg}) => arrowUpImg}) no-repeat center center;background-size:10px;}
 	ul li.down .add_txt:before{background:url(${({arrowDownImg}) => arrowDownImg}) no-repeat center center;background-size:10px;}
 `;
-const ListNameLv = styled.span`
-  left:50%;bottom:5%;width:14px;height:14px;transform:translate(-50%,0) scale(1);text-align:center;z-index:6;font-size:0.625rem;line-height:1;font-weight:600;border-radius:50%;background-color:${({backColor}) => backColor};
-`;
-const ListCh = styled.span`
-  top:0;width:100%;height:100%;background-repeat:no-repeat;background-size:100%;background-image:url(${({chDisplay}) => chDisplay});background-position:center 10%;z-index:4;pointer-events:none;
-`;
-const ListChRing = styled.span`
-  top:0;width:100%;height:100%;background:url(${({ringBack}) => ringBack});background-repeat:no-repeat;background-position:center 10%;background-size:85%;pointer-events:none;z-index:3;
-`;
-const ListChElement = styled.span`
-  top:0;width:100%;height:100%;background-repeat:no-repeat;background-position:center 10%;background-size:100%;z-index:1;pointer-events:none;
-  background-image:url(${({ringDisplay}) => ringDisplay});
-`;
-const ListChElement1 = styled.span`
-  top:0;width:100%;height:100%;background-repeat:no-repeat;background-position:center 10%;background-size:cover;z-index:2;pointer-events:none;
-  background-image:url(${({chLv, ringDisplay}) => {
-    if ( chLv > 29) {
-      return ringDisplay;
-    }
-  }});
-`;
-const ListChElement2 = styled.span`
-  top:0;width:100%;padding-top:100%;background-repeat:no-repeat;background-position:center 35%;background-size:100%;z-index:2;pointer-events:none;transform:scale(1.35,1.35);animation:rotate_ring 50s linear infinite;
-  background-image:url(${({chLv, ringDisplay}) => {
-    if ( chLv > 49) {
-      return ringDisplay;
-    }
-  }});
-`;
-const ListActionType = styled.span`
-  top:4px;left:4px;width:20%;padding-top:20%;background:url(${({actionType}) => actionType});background-repeat:no-repeat;background-position:center center;background-size:100% 100%;z-index:5;pointer-events:none;
-`;
-const ListChFrame = styled.span`
-  top:0;width:100%;height:100%;background:url(${({cardFrame}) => cardFrame});background-repeat:no-repeat;background-position:center center;background-size:100% 100%;z-index:5;pointer-events:none;
-`;
-const CharacterList = ({
-	imgSet,
-	gameData,
-	saveCh,
-	chData,
-}) => {
-	return (
-		<>
-			<ListNameLv cardLv={imgSet.etc.imgCardLv} backColor={gameData.chGradeColor[saveCh.grade]}>{saveCh.lv}</ListNameLv>
-			<ListCh chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
-			<ListChRing ringBack={imgSet.etc.imgRingBack} className="ring" />
-			<ListChElement ringDisplay={imgSet.ringImg[chData.element]} className="element" />
-			<ListChElement1 chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
-			<ListChElement2 chLv={saveCh.lv} ringDisplay={imgSet.ssringImg[chData.element]} className="element_2" />
-			{saveCh.newActionType.map((data, idx) => {
-				return (
-					<ListActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="list_action_type"/>
-				)
-			})}
-			<ListChFrame cardFrame={imgSet.etc.imgCardFrame} className="frame" />
-		</>
-	)
-}
+
 const checkUseList = (useList, chIdx) => {
 	let used = false;
 	useList.forEach((dataIdx, idx) => {
@@ -89,12 +33,12 @@ const CardPlacement = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const [saveSlot, setSaveSlot] = useState(saveData.lineup.select); // 저장된 슬롯
-	const [selectSave, setSelectSave] = useState(saveData.lineup.select); // 선택된 진형슬롯
-	const [selectLineup, setSelectLineup] = useState(saveData.lineup.save_slot[selectSave].no); // 저장된 슬롯에 선택된 진형
+	const [saveSlot, setSaveSlot] = useState(saveData?.lineup?.select); // 저장된 슬롯
+	const [selectSave, setSelectSave] = useState(saveData?.lineup?.select); // 선택된 진형슬롯
+	const [selectLineup, setSelectLineup] = useState(saveData?.lineup?.save_slot[selectSave].no); // 저장된 슬롯에 선택된 진형
 	const [selectLineupList, setSelectLineupList] = useState(0); //선택된 라인업 리스트 순번
-	const [useList, setUseList] = useState(saveData.lineup.save_slot[selectSave].entry); // 라인업 맵 캐릭
-	const [noneUseList, setNoneUseList] = useState(saveData.ch);
+	const [useList, setUseList] = useState(saveData?.lineup?.save_slot[selectSave].entry); // 라인업 맵 캐릭
+	const [noneUseList, setNoneUseList] = useState(saveData?.ch);
 	
 	const mapRef = useRef([]);
 	const lineupInfo = ["HP","SP","RSP","ATK","DEF","MAK","MDF","RCV","SPD","LUK"];
@@ -126,20 +70,6 @@ const CardPlacement = ({
 			useList: useList,
 		}, gameData, saveData, changeSaveData);
 	}
-	const clickListupMap = (idx) => {//맵 캐릭터 클릭
-		//console.log('mapidx', idx);
-		setSelectLineupList(idx);
-		let saveUseList = useList;
-		if (mapRef.current[idx].classList.contains('on')) {
-			saveUseList[idx] = '';
-		}
-		setUseList(saveUseList);
-		util.setLineupSt({
-			saveSlot: selectSave, 
-			lineupType: selectLineup,
-			useList: useList,
-		}, gameData, saveData, changeSaveData);
-	}
 	const clickLineupCh = (chIdx, idx) => {//캐릭 리스트 클릭
 		console.log('선택된 map순번', selectLineupList);//선택되어 있는 map칸
 		let saveUseList = [...useList];
@@ -151,17 +81,20 @@ const CardPlacement = ({
 			useList: saveUseList,
 		}, gameData, saveData, changeSaveData);
 	}
-	useLayoutEffect(() => {
-		setUseList(saveData.lineup.save_slot[selectSave].entry);
-		util.setLineupSt({
-			saveSlot: selectSave, 
-			lineupType: selectLineup,
-			useList: useList,
-		}, gameData, saveData, changeSaveData);
+	useEffect(() => {
+		if (Object.keys(saveData).length !== 0) {
+			const listUsed = saveData.lineup.save_slot[selectSave].entry;
+			setUseList(listUsed);
+			util.setLineupSt({
+				saveSlot: selectSave, 
+				lineupType: selectLineup,
+				useList: listUsed,
+			}, gameData, saveData, changeSaveData);
+		}
 	}, []);
   return (
     <>
-      <LineupWrap className="lineup_wrap" backImg={imgSet.back[1]}>
+      <Wrap className="lineup_wrap">
 				<div className="lineup_save">
 					<dl flex-center="true">
 						<dt>저장슬롯</dt>
@@ -264,7 +197,7 @@ const CardPlacement = ({
 							</li>
 						</ul>
 					</div>
-					<div className="lineup_area">
+					{Object.keys(saveData).length !== 0 && <div className="lineup_area">
 						<div className="lineup_info">
 							<div className="lineup_na">{gameData.lineup[selectLineup].na}</div>
 							<div className="lineup_cost">
@@ -273,33 +206,7 @@ const CardPlacement = ({
 								<span className="cost_total">0</span>
 							</div>
 						</div>
-						<div className={`lineup_map lineup_pos lineup${selectLineup}`}>
-							{useList && useList.map((slotIdx, idx) => {
-								if (slotIdx === "") {
-									return (
-										<span ref={(element) => {mapRef.current[idx] = element}} key={idx} className={`mapCh l${idx + 1} ${selectLineupList === idx ? 'on' : ''}`} data-mapnum={idx} onClick={() => {
-											clickListupMap(idx);
-										}}>
-											<span className="mapEff"></span>
-											<span className="mapCh_"></span>
-										</span>
-									);
-								} else {
-									const saveCh = saveData.ch[slotIdx];
-									const chData = gameData.ch[saveCh.idx];
-									return (
-										<span ref={(element) => {mapRef.current[idx] = element}} key={idx} className={`mapCh has l${idx + 1} ${selectLineupList === idx ? 'on' : ''}`} data-mapnum={idx} onClick={() => {
-											clickListupMap(idx);
-										}}>
-											<span className="mapEff"></span>
-											<span className="mapCh_">
-												<CharacterList imgSet={imgSet} gameData={gameData} saveCh={saveCh} chData={chData}/>
-											</span>
-										</span>
-									);
-								}
-							})}
-						</div>
+						<ChLineup saveData={saveData} changeSaveData={changeSaveData} selectSave={selectSave} selectLineup={selectLineup} useList={useList} setUseList={setUseList} mapRef={mapRef.current} selectLineupList={selectLineupList} setSelectLineupList={setSelectLineupList} />
 						<LineupChInfo className="lineup_chInfo scroll-y" arrowUpImg={iconArrowUp} arrowDownImg={iconArrowDown}>
 							<ul>
 								{lineupInfo && saveData.ch[useList[selectLineupList]] && lineupInfo.map((stateName, idx) => {
@@ -315,12 +222,11 @@ const CardPlacement = ({
 								})}
 							</ul>
 						</LineupChInfo>
-					</div>
+					</div>}
 				</div>
 				<div className="lineup_ch scroll-y">
 					<ul>
 						{noneUseList && noneUseList.map((saveCh, idx) => {
-							const chData = gameData.ch[saveCh.idx];
 							const used = checkUseList(useList, idx);
 							return (
 								<li className={used ? 'selected': ''} onClick={() => {
@@ -328,13 +234,13 @@ const CardPlacement = ({
 										clickLineupCh(saveCh.idx, idx);
 									}
 								}} key={idx} data-idx={idx}>
-									<CharacterList imgSet={imgSet} gameData={gameData} saveCh={saveCh} chData={chData}/>
+									<CharacterCard isThumb={true} saveData={saveData} gameData={gameData} slotIdx={idx} />
 								</li>
 							);
 						})}
 					</ul>
 				</div>
-			</LineupWrap>
+			</Wrap>
     </>
   );
 }

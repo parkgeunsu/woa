@@ -1,9 +1,9 @@
 import { AppContext } from 'App';
 import { Text } from 'components/Atom';
-import { Button } from 'components/Button';
 import { FlexBox } from 'components/Container';
 import { util } from 'components/Libs';
-import { useContext, useEffect, useRef, useState } from 'react';
+import ChLineup from 'pages/ChLineup';
+import { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 const BASE_ENEMY_NUM = 3;
 const makeAnimalIcon = (color) => {
@@ -53,12 +53,13 @@ const Wrap = styled(FlexBox)`
   left: 0;
   top: ${({roulette}) => roulette ? '0%' : '-100%'};
   width: 100%;
-  height: 100%;
+  height: ${({btnSize}) => `calc(100% - ${btnSize}px)`};
   transition: top 1s;
   z-index: 10;
+  background: linear-gradient(transparent 0%, rgba(0,0,0,.8) 20%, rgba(0,0,0,.8) 80%, transparent 100%);
 `;
 const SpinContainer = styled(FlexBox)`
-  flex: 1;
+  flex: 0;
   width: 80%;
   z-index: 1;
 `;
@@ -113,69 +114,41 @@ const SpinCards = styled.div`
   background: url(${({url}) => url}) no-repeat center center;
   background-size: 100%;
 `;
-const ResultContainer = styled(FlexBox)`
-  padding: 0 30px;
-  flex-direction: column;
-  flex: 1;
-  box-sizing: border-box;
+const LineupContainer = styled(FlexBox)`
+  margin: 40px 0 0 0;
+  flex: 0;
+`;
+const LineupGroup = styled.div`
+  position: relative;
+  margin: 0 10px 0 0;
+  width: 45%;
 `;
 const ExploringInfo = styled(FlexBox)`
+  padding: 10px;
+  width: 45%;
   background: ${({theme}) => theme.color.shadow};
   border: 5px solid transparent;
   border-image: url(${({frameMain}) => frameMain}) 5 round;
   box-sizing: border-box;
 `;
-const ButtonGroup = styled(FlexBox)`
-  width: 100%;
-  button {
-    width: unset;
-  }
-  & > button:last-of-type{
-    flex: 1;
-  }
-`;
-const pickMsgArr = ['drawingEnemy', 'drawingCardLevels', 'pickMapType'];
 const Roulette = ({
   gameMode,
-  setGameMode,
+  saveData,
   navigate,
   changePage,
   lang,
+  btnSize,
+  rouletteState,
+  setRouletteState,
+  selectRoulettePos,
+  setSelectRoulettePos,
+  rouletteArr,
+  enemy,
+  setEnemy,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
   const sData = util.loadData('saveData');
-  const [rouletteState, setRouletteState] = useState([]);
-  const [selectRoulettePos, setSelectRoulettePos] = useState([]);
-  const [isRouletteSpin, setRouletteSpin] = useState(false);
-  const [pickMsg, setPickMsg] = useState(gameData.msg.button[pickMsgArr[0]][lang]);
-  const [enemy, setEnemy] = useState({base: [],add: [], lv: '', map: ''});
-  const sec = useRef(0);
-  const interval = useRef(0);
-  const rouletteIdx = useRef(0);
-  const [rouletteArr, setRouletteArr] = useState([
-    {cards:[
-      gameData.roulette[0],
-      gameData.roulette[1],
-      gameData.roulette[2],
-      gameData.roulette[3],
-    ]},
-    {cards:[
-      gameData.roulette[4],
-      gameData.roulette[6],
-      gameData.roulette[7],
-      gameData.roulette[5],
-      gameData.roulette[8],
-      gameData.roulette[5],
-      gameData.roulette[10],
-    ]},
-    {cards:[
-      gameData.roulette[12],
-      gameData.roulette[13],
-      gameData.roulette[14],
-      gameData.roulette[15],
-    ]},
-  ]);
   useEffect(() => {
     if (gameMode === 'roulette') {
       setRouletteState(Array.from({length:rouletteArr.length}, () => false));
@@ -196,7 +169,7 @@ const Roulette = ({
     }
   }, [gameMode]);
   return (
-    <Wrap roulette={gameMode === 'roulette'} direction="column">
+    <Wrap roulette={gameMode === 'roulette'} btnSize={btnSize} direction="column">
       <SpinContainer>
         {rouletteArr.map((data, idx) => {
           return (
@@ -209,71 +182,21 @@ const Roulette = ({
           )
         })}
       </SpinContainer>
-      <ResultContainer>
+      <LineupContainer>
+        <LineupGroup>
+          <ChLineup showMode={true} saveData={saveData} changePage={changePage} navigate={navigate} useList={saveData?.lineup?.save_slot[saveData?.lineup?.select].entry} selectLineup={saveData?.lineup?.save_slot[saveData?.lineup?.select].no} />
+        </LineupGroup>
         <ExploringInfo direction="column" frameMain={imgSet.etc.frameMain}>
-          <Text code="t3" color="main">지역 : {sData.info.stay}</Text>
-          <Text code="t3" color="main">탐색 동물 : 
+          <Text code="t3" color="main">{gameData.msg.title['region'][lang]} : {gameData.msg.regions[sData.info.stay][lang]}</Text>
+          <Text code="t3" color="main">{gameData.msg.title['wildlife'][lang]} : 
           {enemy.base.map((colorData, idx) => <AnimalIcon key={`color${idx}`} color={colorData}/>)}
           {enemy.add.length > 0 && ' + '} 
           {enemy.add.map((colorData, idx) => <AnimalIcon key={`color${idx}`} color={colorData}/>)} ({enemy.base.length + enemy.add.length})</Text>
-          <Text code="t3" color="main">동물 LV : {enemy.lv !== '' ? sData.info.lv + (enemy.lv < 0 ? 0 : enemy.lv) : sData.info.lv} Lv</Text>
-          <Text code="t3" color="main">맵 종류 : {enemy.map && gameData.msg.state[enemy.map][lang]}</Text>
-          <Text code="t3" color="main">옵션 : </Text>
+          <Text code="t3" color="main">{gameData.msg.title['animals'][lang]} LV : {enemy.lv !== '' ? sData.info.lv + (enemy.lv < 0 ? 0 : enemy.lv) : sData.info.lv} Lv</Text>
+          <Text code="t3" color="main">{gameData.msg.title['mapType'][lang]} : {enemy.map && gameData.msg.state[enemy.map][lang]}</Text>
+          <Text code="t3" color="main">{gameData.msg.title['addOption'][lang]} : </Text>
         </ExploringInfo>
-        <ButtonGroup>
-          {rouletteIdx.current === 0 && <Button onClick={() => {
-            rouletteIdx.current = 0;
-            setGameMode('');
-          }}>{gameData.msg.button['cancel'][lang]}</Button>}
-          <Button onClick={() => {
-            if (!isRouletteSpin) {
-              console.log(rouletteIdx.current);
-              if (rouletteIdx.current === 3) {//탐색시작
-                navigate('battle');
-                changePage('battle');
-                return;
-              }
-              interval.current = setInterval(() => {
-                sec.current += 0.1;
-              }, 10);
-              const cloneState = [...rouletteState];
-              cloneState[rouletteIdx.current] = true;
-              setRouletteState(cloneState);
-              setRouletteSpin(true);
-              setPickMsg(gameData.msg.button['stop'][lang]);
-            } else {
-              clearInterval(interval.current);
-              interval.current = null;
-              setRouletteSpin(false);
-              const clonePos = [...selectRoulettePos];
-              clonePos[rouletteIdx.current] = Math.round(sec.current) % rouletteArr[rouletteIdx.current].cards.length;
-              setSelectRoulettePos(clonePos);
-              if (rouletteIdx.current >= rouletteArr.length - 1) {
-                setPickMsg(gameData.msg.button['startExploring'][lang]);
-                //추가 동물
-                let addEnemyNum = 0,
-                  addEnemyArray = [];
-                while(addEnemyNum <  + rouletteArr[0].cards[clonePos[0]].amount) {
-                  addEnemyArray.push(util.getRgbColor());
-                  addEnemyNum ++;
-                }
-                setEnemy(prev => {
-                  return {
-                    ...prev,
-                    add: addEnemyArray,
-                    lv: rouletteArr[1].cards[clonePos[1]].amount,
-                    map: rouletteArr[2].cards[clonePos[2]].amount
-                  }
-                });
-              } else {
-                setPickMsg(gameData.msg.button[pickMsgArr[rouletteIdx.current]][lang]);
-              }
-              rouletteIdx.current ++;
-              sec.current = 0;
-            }
-          }}>{pickMsg}</Button>
-        </ButtonGroup>
-      </ResultContainer>
+      </LineupContainer>
     </Wrap>
   );
 }

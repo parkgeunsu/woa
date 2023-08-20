@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
 import { AppContext } from 'App';
+import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const ChListUl = styled.ul`
@@ -40,7 +40,7 @@ const ListFrame = styled.span`
 //     setCurrentTime(currentTime + 1);
 //   };
 // };
-const ChracterHeader = ({
+const ChracterList = ({
   saveData,
   slotIdx,
   changeChSlot,
@@ -136,4 +136,4 @@ const ChracterHeader = ({
   );
 }
 
-export default ChracterHeader;
+export default ChracterList;

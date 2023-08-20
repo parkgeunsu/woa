@@ -12,7 +12,7 @@ const Img = styled.img.attrs(
     src: imgurl 
   })
 )``;
-const ChCard = styled.ul`
+const ChCard = styled.div`
   position:absolute;
   top:0;
   left:0;
@@ -20,6 +20,10 @@ const ChCard = styled.ul`
   height:100%;
   z-index:2;
   pointer-events:none;
+  & > span {
+    display: block;
+    position: absolute;
+  }
   ${({size}) => {
     if (size) {
       return `
@@ -36,10 +40,6 @@ const ChCard = styled.ul`
   }}
   overflow:hidden;
   transform:rotateY(0deg);
-  & > li{
-    position:absolute;
-    color:#fff;
-  }
   &.page {
     position:relative;width:100%;height:85%;padding:0 3% 3% 3%;
   }
@@ -48,6 +48,9 @@ const ChCard = styled.ul`
     top: 5%;
     left: 5%;
     width: 15%;
+    & > span {
+      display: block;
+    }
   }
 `;
 
@@ -55,71 +58,89 @@ const ChCard = styled.ul`
 // .ch_wrap .page0 .name_lv{bottom:40px;left:50%;transform:translate(-50%,0) scale(1);}
 // .ch_wrap .page0 .star{left:auto;bottom:110px;transform:scale(1);text-align:center;}
 
-const ListNameLv = styled.li`
-  left:50%;bottom:7%;width:85%;transform:translate(-50%,0) scale(1);text-shadow:0 0 1px #fff;text-align:center;z-index:3;font-size:0;
-  &:after{content:'';display:block;position:absolute;left:3%;top:-17%;padding-top:30%;width:30%;background:url(${({cardLv}) => cardLv});background-repeat:no-repeat;background-position:center center;background-size:contain;}
-  & {
-    img{width:100%;}
-    .name_{
-      position:absolute;
-      display:inline-block;
-      left:33%;
-      top:17%;
-      width:67%;
-      line-height:1;
-      font-size: ${({theme}) => theme.font.t2};
-      text-align:left;
-      z-index:1;
-      box-sizing:border-box;
-    }
-    .name{
-      position:absolute;
-      display:inline-block;
-      right:2%;
-      bottom:17%;
-      width:67%;
-      line-height:1;
-      font-size: ${({theme}) => theme.font.t5};
-      z-index:1;
-      box-sizing:border-box;
-      letter-spacing:-2px;
-      white-space:nowrap;
-      overflow:hidden;
-    }
-    .lv{position:absolute;display:inline-block;left:3%;top:15%;width:30%;line-height:1;font-size:2.1rem;text-align:center;z-index:1;}
-  }
+const ListNameLv = styled.span`
+  left:50%;
+  transform:translate(-50%,0) scale(1);
+  text-align:center;
+  ${({isThumb, theme, backColor, cardLv}) => {
+    return isThumb ?
+      `bottom:5%;width:14px;height:14px;z-index:6;font-size:0.625rem;line-height:1;font-weight:600;border-radius:50%;background-color:${backColor};` : 
+      `
+        bottom:7%;width:85%;text-shadow:0 0 1px #fff;z-index:3;font-size:0;
+        &:after{content:'';display:block;position:absolute;left:3%;top:-17%;padding-top:30%;width:30%;background:url(${cardLv});background-repeat:no-repeat;background-position:center center;background-size:contain;}
+        & {
+          img{width:100%;}
+          .name_{
+            position:absolute;
+            display:inline-block;
+            left:33%;
+            top:17%;
+            width:67%;
+            line-height:1;
+            font-size: ${theme.font.t2};
+            text-align:left;
+            z-index:1;
+            box-sizing:border-box;
+          }
+          .name{
+            position:absolute;
+            display:inline-block;
+            right:2%;
+            bottom:17%;
+            width:67%;
+            line-height:1;
+            font-size: ${theme.font.t5};
+            z-index:1;
+            box-sizing:border-box;
+            letter-spacing:-2px;
+            white-space:nowrap;
+            overflow:hidden;
+          }
+          .lv{position:absolute;display:inline-block;left:3%;top:15%;width:30%;line-height:1;font-size:2.1rem;text-align:center;z-index:1;}
+        }
+      `
+  }}
 `;
-const ListCh = styled.li`
-  top:0;width:100%;height:100%;background-repeat:no-repeat;background-image:url(${({chDisplay}) => chDisplay});background-size:100%;background-position:center center;z-index:4;
+const ListCh = styled.span`
+  top:0;width:100%;height:100%;background-repeat:no-repeat;background-image:url(${({chDisplay}) => chDisplay});background-size:100%;background-position:${({isThumb}) => isThumb ? 'center 10%' : 'center center'};z-index:4;
 `;
 
-const ListChRing = styled.li`
-  top:0;width:100%;height:100%;background-repeat:no-repeat;background:url(${({ringBack}) => ringBack});background-position:center center;background-size:85%;z-index:3;
+const ListChRing = styled.span`
+  top:0;width:100%;height:100%;background-repeat:no-repeat;background:url(${({ringBack}) => ringBack});background-position:${({isThumb}) => isThumb ? 'center 10%' : 'center center'};background-size:85%;z-index:3;
 `;
-const ListChJob = styled.li`
+const ListChJob = styled.span`
   position:relative;width:100%;padding-top:100%;background-repeat:no-repeat;background:url(${({jobIcon}) => jobIcon});background-position:center center;background-size:100%;z-index:5;
 `;
-const ListChActionType = styled.li`
-  position:relative;width:100%;padding-top:100%;background-repeat:no-repeat;background:url(${({actionType}) => actionType});background-position:center center;background-size:100%;z-index:5;
+const ListChActionType = styled.span`
+  ${({isThumb}) => {
+    return isThumb ?
+      `top:4px;left:4px;width:20%;padding-top:20%;pointer-events:none;` : 
+      `position:relative;width:100%;padding-top:100%;`
+  }}
+  background:url(${({actionType}) => actionType});
+  background-size:100% 100%;
+  background-repeat:no-repeat;
+  background-position:center center;
+  z-index:5;
 `;
-const ListChElement = styled.li`
-  top:0;width:100%;height:100%;background-repeat:no-repeat;background-image:url(${({ringDisplay}) => ringDisplay});background-position:center center;background-size:100%;z-index:1;
+const ListChElement = styled.span`
+  top:0;width:100%;height:100%;background-repeat:no-repeat;background-image:url(${({ringDisplay}) => ringDisplay});background-position:${({isThumb}) => isThumb ? 'center 10%' : 'center center'};background-size:100%;z-index:1;
 `;
-const ListChElement1 = styled.li`
+const ListChElement1 = styled.span`
   top:0;width:100%;height:100%;background-repeat:no-repeat;background-image:url(${({chLv, ringDisplay}) => {
     if ( chLv > 29) {
       return ringDisplay;
     }
-  }});background-position:center center;background-size:cover;z-index:2;
+  }});background-position:${({isThumb}) => isThumb ? 'center 10%' : 'center center'};background-size:cover;z-index:2;
 `;
-const ListChElement2 = styled.li`
+const ListChElement2 = styled.span`
   top:13%;width:100%;padding-top:100%;background-repeat:no-repeat;background-image:url(${({chLv, ringDisplay}) => {
     if ( chLv > 49) {
       return ringDisplay;
     }
-  }});background-position:center center;background-size:100%;z-index:2;transform:scale(1.35,1.35);animation:rotate_ring 50s linear infinite;
+  }});background-position:${({isThumb}) => isThumb ? 'center 35%' : 'center center'};background-size:100%;z-index:2;transform:scale(1.35,1.35);animation:rotate_ring 50s linear infinite;
 `;
-const ListChStar = styled.li`
+const ListChStar = styled.span`
   left:0;bottom:22%;width:100%;height:25px;z-index:5;text-align:center;
   & {
     span {
@@ -141,7 +162,7 @@ const makeStar = (n) => {//별 처리
   }
   return tag
 }
-const ListChFrame = styled.li`
+const ListChFrame = styled.span`
   top:0;width:100%;height:100%;background:url(${({cardFrame}) => cardFrame});background-repeat:no-repeat;background-position:center center;background-size:100% 100%;z-index:5;
 `;
 
@@ -150,6 +171,7 @@ const ChracterDetail = ({
   equalSize,
   saveData,
   slotIdx,
+  isThumb,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
@@ -164,9 +186,27 @@ const ChracterDetail = ({
       </CardContainer>
     )
   } else {
+    const saveCh = saveData.ch[slotIdx];
+    const chData = gameData.ch[saveCh.idx];
+    if (isThumb) { //thumb사용일 경우
+      return (
+        <>
+          <ListNameLv isThumb={isThumb} cardLv={imgSet.etc.imgCardLv} backColor={gameData.chGradeColor[saveCh.grade]}>{saveCh.lv}</ListNameLv>
+          <ListCh isThumb={isThumb} chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
+          <ListChRing isThumb={isThumb} ringBack={imgSet.etc.imgRingBack} className="ring" />
+          <ListChElement isThumb={isThumb} ringDisplay={imgSet.ringImg[chData.element]} className="element" />
+          <ListChElement1 isThumb={isThumb} chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
+          <ListChElement2 isThumb={isThumb} chLv={saveCh.lv} ringDisplay={imgSet.ssringImg[chData.element]} className="element_2" />
+          {saveCh.newActionType.map((data, idx) => {
+            return (
+              <ListChActionType isThumb={isThumb} key={'action'+idx} actionType={imgSet.element[data + 1]} className="list_action_type"/>
+            )
+          })}
+          <ListChFrame cardFrame={imgSet.etc.imgCardFrame} className="frame" />
+        </>
+      )
+    }
     if (slotIdx !== '') {
-      const saveCh = saveData.ch[slotIdx];
-      const chData = gameData.ch[saveCh.idx];
       return (
         size ? (
           <CardContainer size={size} sizeH={sizeH.current}>
@@ -232,5 +272,6 @@ const ChracterDetail = ({
 
 ChracterDetail.defaultProps = {
   equalSize: false,
+  isThumb: false,
 }
 export default ChracterDetail;

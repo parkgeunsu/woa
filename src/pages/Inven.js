@@ -476,9 +476,9 @@ const Inven = ({
 												<div key={`button${idx}`} className="item_button" flex="true">
 													<button text="true" className="button_small" onClick={(e) => {
 														if (selectItem1.selectTab === 'equip' && selectItem1.game.part !== 4 && selectItem1.game.part !== 5) {
-															navigate('/stickerShop');
+															navigate('stickerShop');
 														} else {
-															navigate('/toolShop');
+															navigate('toolShop');
 														}
 														// util.buttonEvent({
 														// 	event: e,
@@ -719,9 +719,9 @@ const Inven = ({
 												<div key={`button${idx}`} className="item_button" flex="true">
 													<button text="true" className="button_small" onClick={(e) => {
 														if (selectItem2.selectTab === 'equip' && selectItem2.game.part !== 4 && selectItem2.game.part !== 5) {
-															navigate('/stickerShop');
+															navigate('stickerShop');
 														} else {
-															navigate('/toolShop');
+															navigate('toolShop');
 														}
 														// util.buttonEvent({
 														// 	event: e,

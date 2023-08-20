@@ -101,8 +101,8 @@ const Setup = ({
   }
   const changeSpeed = (v) => {
     setSpeedValue(v);
-    setSpeed(v);
-    util.saveData('speed', v);
+    setSpeed(v + 1);
+    util.saveData('speed', v + 1);
   }
   return (
     <Wrap>

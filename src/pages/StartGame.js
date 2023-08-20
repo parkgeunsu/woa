@@ -7,7 +7,7 @@ import { ListItem, ListWrap } from 'components/List';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import CharacterCard from 'pages/CharacterCard';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
@@ -57,7 +57,6 @@ const StartGame = ({
   setLang,
 }) => {
   const imgSet = useContext(AppContext).images,
-    color = useContext(AppContext).color,
     gameData = useContext(AppContext).gameData;
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
@@ -67,6 +66,7 @@ const StartGame = ({
   const [selectList, setSelectList] = useState([]); //시작 카드 유형 글자
   const [countryList, setCountryList] = useState([]); //국가 선택 글자
   const [languageList, setLanguageList] = useState([]); //언어 선택 글자
+  const countryEn = useRef(['korea', 'japan', 'china', 'mongolia', 'unitedKingdom', 'france', 'greece', 'macedonia', 'spain', 'portugal', 'theMiddleEast', 'egypt']); //데이터 저장시 영문 저장 글자
   const [selectCardTypeIdx, setSelectCardTypeIdx] = useState(pageData.selectType || ''); //시작 카드 유형 index
   const [selectCountryIdx, setSelectCountryIdx] = useState(pageData.country || ''); //시작 국가 선택 index
   const [selectLanguageIdx, setSelectLanguageIdx] = useState(pageData.language || 0); //게임 언어 선택 index
@@ -77,8 +77,8 @@ const StartGame = ({
       gameData.msg.sentence['card3'][lang],
     ]);
     setCountryList(
-      Object.entries(gameData.msg.regions).map((data) => {
-        return data[1][lang];
+      countryEn.current.map((data) => {
+        return gameData.msg.regions[data][lang];
       })
     );
     setLanguageList([
@@ -144,7 +144,7 @@ const StartGame = ({
               <Select selectIdx={selectCountryIdx} onClick={(idx) => {
                 setSelectCountryIdx(idx);
                 const sData = {...saveData};
-                sData.info.stay = countryList[idx];
+                sData.info.stay = countryEn.current[idx];
                 changeSaveData(sData);
               }} selectOption={countryList} title={gameData.msg.title['selectRegion'][lang]}></Select>
               {/* <TextField transparent={true} placeholder={gameData.msg.sentence['selectCountry'][lang]} text="" /> */}
@@ -174,6 +174,19 @@ const StartGame = ({
           </ListWrap>
           <ConFirmArea>
             <Button size="large" width={100} onClick={() => {
+              //시나리오 개방
+              const sData = {...saveData};
+              sData.ch.forEach((chData) => {
+                const chPeriod = gameData.ch[chData.idx].period,
+                  chScenario = gameData.ch[chData.idx].scenario
+                if (chScenario !== '') { //인물 전기가 있다면
+                  const chCountry = util.getIdxToCountry(gameData.ch[chData.idx].country);
+                  sData.scenario[chCountry][chPeriod].scenarioList[chScenario].open += 1;
+                }
+              });
+              changeSaveData(sData);
+
+              //필드 유효성 검사
               if (!saveData.info.id) {
 								setMsgOn(true);
                 setMsg(gameData.msg.sentence['enterIDSubmit'][lang]);
