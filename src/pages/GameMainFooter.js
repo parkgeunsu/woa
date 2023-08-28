@@ -2,18 +2,22 @@ import { AppContext } from 'App';
 import { Button } from 'components/Button';
 import { FlexBox } from 'components/Container';
 import { util } from 'components/Libs';
+import Msg from 'components/Msg';
+import MsgContainer from 'components/MsgContainer';
 import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
   position: relative;
   width: 100%;
-  height: 40px;
+  min-height: 36px;
 `;
 const ButtonWrap = styled(FlexBox)`
   position: absolute;
   left: 0;
   top: 0;
+  bottom: 0;
+  right: 0;
   ${({gameMode}) => {
     return gameMode ? `
       opacity: 1;
@@ -37,7 +41,12 @@ const ButtonWrap = styled(FlexBox)`
     }
   ` : ''}
 `;
+const StyledButton = styled(Button)`
+  background: url(${({btnImg}) => btnImg}) no-repeat center center !important;
+  background-size: 100% 100% !important;
+`;
 const pickMsgArr = ['drawingEnemy', 'drawingCardLevels', 'pickMapType'];
+
 const GameMainFooter = ({
   navigate,
   saveData,
@@ -51,9 +60,12 @@ const GameMainFooter = ({
   setSelectRoulettePos,
   rouletteArr,
   setEnemy,
+  selectScenario,
 }) => {
-  const gameData = useContext(AppContext).gameData;
   const imgSet = useContext(AppContext).images;
+  const gameData = useContext(AppContext).gameData;
+  const [msgOn, setMsgOn] = useState(false);
+  const [msg, setMsg] = useState("");
   const [rouletteIdx, setRouletteIdx] = useState(0);
   const [isRouletteSpin, setRouletteSpin] = useState(false);
   const sec = useRef(0);
@@ -66,32 +78,45 @@ const GameMainFooter = ({
     <>
       <Wrapper className="footer">
         <ButtonWrap gameMode={gameMode === ''} isRoot={true}>
-          <Button onClick={() => {
+          <StyledButton btnImg={imgSet.button.btnMD} onClick={() => {
             setGameMode('roulette');
-          }}>{gameData.msg.button['exploreRegions'][lang]}</Button>
-          <Button onClick={() => {
+          }}>{gameData.msg.button['exploreRegions'][lang]}</StyledButton>
+          <StyledButton btnImg={imgSet.button.btnMD} onClick={() => {
             setGameMode('scenario');
-          }}>{gameData.msg.button['scenarios'][lang]}</Button>
-          <Button onClick={() => {
+          }}>{gameData.msg.button['scenarios'][lang]}</StyledButton>
+          <StyledButton btnImg={imgSet.button.btnMD} onClick={() => {
             setGameMode('moveRegion');
-          }}>{gameData.msg.button['moveRegion'][lang]}</Button>
+          }}>{gameData.msg.button['moveRegion'][lang]}</StyledButton>
         </ButtonWrap>
-        <ButtonWrap gameMode={gameMode === 'roulette'}>
-          {rouletteIdx === 0 && <Button className="backBtn" onClick={() => {
+        <ButtonWrap alignItems="self-end" gameMode={gameMode === 'roulette'}>
+          {rouletteIdx === 0 && <StyledButton className="backBtn" btnImg={imgSet.button.btnSD} onClick={() => {
             setRouletteIdx(0);
             setGameMode('');
-          }}>{gameData.msg.button['cancel'][lang]}</Button>}
-          <Button onClick={() => {
+          }}>{gameData.msg.button['cancel'][lang]}</StyledButton>}
+          <StyledButton btnImg={imgSet.button.btnMD} onClick={() => {
             if (!isRouletteSpin) {
               if (rouletteIdx === 3) {//탐색시작
-                navigate('battle');
-                changePage('battle', {
-                  scenario:{
-                    country: 0,
-                    period: 6,
-                    scenario: 0,
-                    stage: 0
+                let isEmptyEntry = true;
+                saveData.lineup.save_slot[saveData.lineup.select].entry.forEach((entryData) => {
+                  if (entryData !== '') {
+                    isEmptyEntry = false;
                   }
+                });
+                if (isEmptyEntry) {
+                  setMsgOn(true);
+                  setMsg(gameData.msg.sentence['organizeCard'][lang]);
+                  return;
+                }
+                util.saveHistory(() => {
+                  navigate('battle');
+                  changePage('battle', {
+                    scenario:{
+                      stay: 0,
+                      dynastyIdx: 6,
+                      dynastyScenarioIdx: 0,
+                      stageIdx: 0
+                    }
+                  });
                 });
                 return;
               }
@@ -133,23 +158,43 @@ const GameMainFooter = ({
               setRouletteIdx(prev => ++prev);
               sec.current = 0;
             }
-          }}>{pickMsg}</Button>
+          }}>{pickMsg}</StyledButton>
         </ButtonWrap>
-        <ButtonWrap gameMode={gameMode === 'scenario'}>
-          <Button onClick={() => {
+        <ButtonWrap alignItems="self-end" gameMode={gameMode === 'scenario'}>
+          <StyledButton btnImg={imgSet.button.btnSD} className="backBtn"  onClick={() => {
             setGameMode('');
-          }}>{gameData.msg.button['cancel'][lang]}</Button>
-          <Button onClick={() => {
-          }}>{'pickMsg'}</Button>
+          }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
+          {Object.keys(selectScenario).length === 0 ? 
+            <StyledButton btnImg={imgSet.button.btnMD}>{gameData.msg.sentence['selectScenario'][lang]}</StyledButton> :
+            <StyledButton btnImg={imgSet.button.btnMD} type="icon" icon={imgSet.icon[`iconDifficult${selectScenario.stageDifficult}`]} onClick={() => {
+              console.log('전투개시');
+              util.saveHistory(() => {
+                util.saveData('historyParam', {scenario: selectScenario});
+                navigate('battle');
+                changePage('battle', {
+                  scenario:{
+                    stay: selectScenario.stay,
+                    dynastyIdx: selectScenario.dynastyIdx,
+                    dynastyScenarioIdx: selectScenario.dynastyScenarioIdx,
+                    stageIdx: selectScenario.stageIdx,
+                    stageDifficult: selectScenario.stageDifficult,
+                  }
+                });
+              });
+            }}>{gameData.scenario[selectScenario.stay][selectScenario.dynastyIdx].scenarioList[selectScenario.dynastyScenarioIdx].stage[selectScenario.stageIdx].title[lang]} {gameData.msg.button['startBattle'][lang]}</StyledButton>
+          }
         </ButtonWrap>
-        <ButtonWrap gameMode={gameMode === 'moveRegion'}>
-          <Button onClick={() => {
+        <ButtonWrap alignItems="self-end" gameMode={gameMode === 'moveRegion'}>
+          <StyledButton btnImg={imgSet.button.btnSD} className="backBtn"  onClick={() => {
             setGameMode('');
-          }}>{gameData.msg.button['cancel'][lang]}</Button>
-          <Button onClick={() => {
-          }}>{'pickMsg'}</Button>
+          }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
+          <StyledButton btnImg={imgSet.button.btnMD} onClick={() => {
+          }}>{'pickMsg'}</StyledButton>
         </ButtonWrap>
       </Wrapper>
+      <MsgContainer>
+        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+      </MsgContainer>
     </>
   );
 }

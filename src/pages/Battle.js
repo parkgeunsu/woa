@@ -4,7 +4,7 @@ import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import 'css/battle.css';
 import 'css/battleAnimation.css';
-import { useCallback, useContext, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const TeamIcon = styled.div`
@@ -2075,11 +2075,15 @@ const Battle = ({
 	gameSound,
 	pageData,
 }) => {
+	console.log('난이도', pageData.scenario.stageDifficult)
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const countryText = useRef(util.getIdxToCountry(pageData?.scenario?.country));
-	const scenarioDetail = gameData.scenario[countryText.current][pageData.scenario.period].scenarioList[pageData.scenario.scenario].stage[pageData.scenario.stage];
-	const viewScenario = saveData.scenario[countryText.current][pageData.scenario.period].scenarioList[pageData.scenario.scenario].stage[pageData.scenario.stage];
+	const scenarioDetail = React.useMemo(() => {
+		return gameData.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx];
+	}, [gameData, pageData]);
+	const viewScenario = React.useMemo(() => {
+		return saveData.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx];
+	}, [saveData, pageData]);
 	const [mapLand] = useState(scenarioDetail.map);
 	const allyDeck = saveData.lineup.save_slot[saveData.lineup.select].entry;//캐릭터 저장된 카드index
 	const enemyDeck = scenarioDetail.entry;
@@ -2115,7 +2119,7 @@ const Battle = ({
 	const allySlot = useRef([]);//아군 저장 슬롯배열
 	const resultExp = useRef([]);//결과 획득 경험치
 	const resultBeige = useRef([]);//결과 전투벳지
-	const scenarioRepeat = useRef(false);//시나리오 처음 입장인지 확인(대화집 pass 여부)
+	const scenarioRepeat = useRef(true);//시나리오 처음 입장인지 확인(대화집 pass 여부)
 	const teamPower = useRef({
 		allyPercent: 50,
 		enemyPercent: 50,
@@ -2220,8 +2224,8 @@ const Battle = ({
 		};
 		//-----시나리오 시청 판단
 		if (!viewScenario) {//시나리오 시청
-			scenarioRepeat.current = true;
-			conversationData.current = gameData.scenario[countryText.current][pageData.scenario.period].scenarioList[pageData.scenario.scenario].stage[pageData.scenario.stage].conversation;
+			scenarioRepeat.current = false;
+			conversationData.current = gameData.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx].conversation;
 			conversationList.current.push(conversationData.current[0]);
 			setMode('scenario');
 			conversationCount.current = 0;
@@ -2450,7 +2454,7 @@ const Battle = ({
 		return () => {//언마운트 리셋
 			clearInterval(conversationTimeout.current);
 			let saveD = {...saveData};
-			saveD.scenario[countryText.current][pageData.scenario.period].scenarioList[pageData.scenario.scenario][pageData.scenario.stage] = scenarioRepeat;
+			saveD.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx].first = scenarioRepeat;
 			changeSaveData(saveD);
 		}
 	}, []);
@@ -2837,7 +2841,7 @@ const Battle = ({
 		} else if (mode === 'battleWin') {
 			console.log('pgs', '격!퇴!성!공!');
 			let saveD = {...saveData};
-			saveD.scenario[countryText.current][pageData.scenario.period].scenarioList[pageData.scenario.scenario][pageData.scenario.stage] = scenarioRepeat;
+			saveD.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx].first = scenarioRepeat;
 			allySlot.current.forEach((slotIdx, idx) => {
 				const hasMaxExp = gameData.hasMaxExp[saveD.ch[slotIdx].grade];
 				saveD.ch[slotIdx].hasExp += resultExp.current[idx];
@@ -2936,8 +2940,7 @@ const Battle = ({
 			<BattleHeader className="header battle_header" iconBack={imgSet.icon.iconBack}>
 				<ul>
           <li className="back"><span className="ico" onClick={() => {
-            navigate('/');
-            changePage("main");
+						util.historyBack(navigate, changePage);
           }}></span></li>
 				</ul>
 				<div className="battle_title" flex-h-center="true">
@@ -2995,8 +2998,7 @@ const Battle = ({
 			)}
 			{mode === "battleWin" && (
 				<div className="battle_end" onClick={() => {
-					navigate('/');
-					changePage("main");
+					util.historyBack(navigate, changePage);
 				}} flex-h-center="true">
 					<div className="battle_title">격!퇴!성!공!</div>
 					<div className="battle_result_ch" flex-h-center="true">
@@ -3043,8 +3045,7 @@ const Battle = ({
 			)}
 			{mode === "battleLose" && (
 				<div className="battle_end" onClick={() => {
-					navigate('/');
-					changePage("main");
+					util.historyBack(navigate, changePage);
 				}} flex-h-center="true">
 					<div className="battle_title">격퇴실패</div>
 				</div>

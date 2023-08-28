@@ -1,6 +1,6 @@
 @charset "utf-8";
 .battle_wrap{
-  display:flex;position:absolute;left:0;right:0;top:0;bottom:0;flex-direction:column;width:100%;height:100%;box-sizing:border-box;overflow:hidden;
+  display:flex;left:0;right:0;top:0;bottom:0;flex-direction:column;width:100%;height:100%;box-sizing:border-box;overflow:hidden;
 }
 .battle_area{
   position:relative;background:#3e2c00;transition:height 1s;
@@ -136,7 +136,7 @@
 .battle_weather .weather_typeIcon{position:absolute;left:0;top:0;transition:all .5s;}
 .battle_weather .weather_arrow{position:absolute;width:46px;height:46px;transition:all .5s;}
 
-.battle_menu{display:flex;position:relative;background:var(--color-b);background:var(--color-b);overflow:hidden;z-index:50;}
+.battle_menu{display:flex;position:relative;background:var(--color-b);overflow:hidden;z-index:50;}
 .battle_menu .chInfo{display:flex;flex-basis:60px;align-items:center;justify-content:center;}
 .battle_menu .chInfo span{display:inline-block;}
 .battle_menu .chInfo .sp{font-size:1.25rem;}

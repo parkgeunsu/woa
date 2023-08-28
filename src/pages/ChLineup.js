@@ -47,8 +47,10 @@ const ChLineup = ({
   // const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
   return showMode ? <div className={`lineup_map lineup_pos lineup${selectLineup}`} onClick={() => {
-    changePage('cardPlacement');
-    navigate('cardPlacement');
+    util.saveHistory(() => {
+      changePage('cardPlacement');
+      navigate('cardPlacement');
+    });//히스토리 저장
   }} >
     {useList && useList.map((slotIdx, idx) => {
       if (slotIdx === "") {
@@ -92,7 +94,7 @@ const ChLineup = ({
           </span>
         );
       } else {
-        const saveCh = saveData.ch[slotIdx];
+        //const saveCh = saveData.ch[slotIdx];
         //const chData = gameData.ch[saveCh.idx];
         return (
           <span ref={(element) => {mapRef[idx] = element}} key={idx} className={`mapCh has l${idx + 1} ${selectLineupList === idx ? 'on' : ''}`} data-mapnum={idx} onClick={() => {

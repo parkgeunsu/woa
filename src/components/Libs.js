@@ -52,11 +52,18 @@ export const util = { //this.loadImage();
   loadData: (key) => {
     return JSON.parse(localStorage.getItem(key));
   },
+  removeData: (key) => {
+    localStorage.removeItem(key);
+  },
   saveHistory: (callback) => {
     const history = util.loadData('history') || [];
     setTimeout(() => {
-      history.unshift(window.location.pathname.split('/')[1]);
-      util.saveData('history', history);
+      const currentLocation = window.location.pathname.split('/')[1],
+        prevLocation = util.loadData('history', history)[0];
+      if (currentLocation !== prevLocation) {
+        history.unshift(currentLocation);
+        util.saveData('history', history);
+      }
       callback && callback();
     }, 100);
   },

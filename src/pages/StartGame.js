@@ -181,7 +181,7 @@ const StartGame = ({
                   chScenario = gameData.ch[chData.idx].scenario
                 if (chScenario !== '') { //인물 전기가 있다면
                   const chCountry = util.getIdxToCountry(gameData.ch[chData.idx].country);
-                  sData.scenario[chCountry][chPeriod].scenarioList[chScenario].open += 1;
+                  sData.scenario[chCountry][chPeriod].scenarioList[chScenario].open += 7;
                 }
               });
               changeSaveData(sData);

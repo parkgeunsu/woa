@@ -1,9 +1,12 @@
 import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
+import GuideQuestion from 'components/GuideQuestion';
 import { util } from 'components/Libs';
+import Popup from 'components/Popup';
+import PopupContainer from 'components/PopupContainer';
 import ChLineup from 'pages/ChLineup';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 const BASE_ENEMY_NUM = 3;
 const makeAnimalIcon = (color) => {
@@ -143,12 +146,14 @@ const Roulette = ({
   selectRoulettePos,
   setSelectRoulettePos,
   rouletteArr,
-  enemy,
-  setEnemy,
+  rouletteEnemy,
+  setRouletteEnemy,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
   const sData = util.loadData('saveData');
+  const [popupOn, setPopupOn] = useState(false);
+  const [popupInfo, setPopupInfo] = useState({});
   useEffect(() => {
     if (gameMode === 'roulette') {
       setRouletteState(Array.from({length:rouletteArr.length}, () => false));
@@ -160,7 +165,7 @@ const Roulette = ({
         enemyArray.push(util.getRgbColor());
         enemyNum ++;
       }
-      setEnemy(prev => {
+      setRouletteEnemy(prev => {
         return {
           ...prev,
           base: enemyArray,
@@ -169,35 +174,46 @@ const Roulette = ({
     }
   }, [gameMode]);
   return (
-    <Wrap roulette={gameMode === 'roulette'} btnSize={btnSize} direction="column">
-      <SpinContainer>
-        {rouletteArr.map((data, idx) => {
-          return (
-            <SpinArea key={`data${idx}`} frameMain={imgSet.etc.frameMain}>
-              <SpinGroup state={rouletteState[idx]} stopPos={selectRoulettePos[idx]} size={data.cards.length} direction="column">
-                {data.cards.map((cardsData, cardsIdx) => <SpinCards idx={cardsIdx} key={`cardsIdx${cardsIdx}`} url={imgSet.icon[`iconRoulette${cardsData.idx}`]} />)}
-                <SpinCards idx={data.cards.length} url={data.cards[0].url} />
-              </SpinGroup>
-            </SpinArea>
-          )
-        })}
-      </SpinContainer>
-      <LineupContainer>
-        <LineupGroup>
-          <ChLineup showMode={true} saveData={saveData} changePage={changePage} navigate={navigate} useList={saveData?.lineup?.save_slot[saveData?.lineup?.select].entry} selectLineup={saveData?.lineup?.save_slot[saveData?.lineup?.select].no} />
-        </LineupGroup>
-        <ExploringInfo direction="column" frameMain={imgSet.etc.frameMain}>
-          <Text code="t3" color="main">{gameData.msg.title['region'][lang]} : {gameData.msg.regions[sData.info.stay][lang]}</Text>
-          <Text code="t3" color="main">{gameData.msg.title['wildlife'][lang]} : 
-          {enemy.base.map((colorData, idx) => <AnimalIcon key={`color${idx}`} color={colorData}/>)}
-          {enemy.add.length > 0 && ' + '} 
-          {enemy.add.map((colorData, idx) => <AnimalIcon key={`color${idx}`} color={colorData}/>)} ({enemy.base.length + enemy.add.length})</Text>
-          <Text code="t3" color="main">{gameData.msg.title['animals'][lang]} LV : {enemy.lv !== '' ? sData.info.lv + (enemy.lv < 0 ? 0 : enemy.lv) : sData.info.lv} Lv</Text>
-          <Text code="t3" color="main">{gameData.msg.title['mapType'][lang]} : {enemy.map && gameData.msg.state[enemy.map][lang]}</Text>
-          <Text code="t3" color="main">{gameData.msg.title['addOption'][lang]} : </Text>
-        </ExploringInfo>
-      </LineupContainer>
-    </Wrap>
+    <>
+      <Wrap roulette={gameMode === 'roulette'} btnSize={btnSize} direction="column">
+        <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
+          setPopupOn(true);
+          setPopupInfo({
+            data:gameData.guide['exploreRegions'],
+          });
+        }} />
+        <SpinContainer>
+          {rouletteArr.map((data, idx) => {
+            return (
+              <SpinArea key={`data${idx}`} frameMain={imgSet.etc.frameMain}>
+                <SpinGroup state={rouletteState[idx]} stopPos={selectRoulettePos[idx]} size={data.cards.length} direction="column">
+                  {data.cards.map((cardsData, cardsIdx) => <SpinCards idx={cardsIdx} key={`cardsIdx${cardsIdx}`} url={imgSet.icon[`iconRoulette${cardsData.idx}`]} />)}
+                  <SpinCards idx={data.cards.length} url={data.cards[0].url} />
+                </SpinGroup>
+              </SpinArea>
+            )
+          })}
+        </SpinContainer>
+        <LineupContainer>
+          <LineupGroup>
+            <ChLineup showMode={true} saveData={saveData} changePage={changePage} navigate={navigate} useList={saveData?.lineup?.save_slot[saveData?.lineup?.select].entry} selectLineup={saveData?.lineup?.save_slot[saveData?.lineup?.select].no} />
+          </LineupGroup>
+          <ExploringInfo direction="column" frameMain={imgSet.etc.frameMain}>
+            <Text code="t3" color="main">{gameData.msg.title['region'][lang]} : {gameData.msg.regions[sData.info.stay][lang]}</Text>
+            <Text code="t3" color="main">{gameData.msg.title['wildlife'][lang]} : 
+            {rouletteEnemy.base.map((colorData, idx) => <AnimalIcon key={`color${idx}`} color={colorData}/>)}
+            {rouletteEnemy.add.length > 0 && ' + '} 
+            {rouletteEnemy.add.map((colorData, idx) => <AnimalIcon key={`color${idx}`} color={colorData}/>)} ({rouletteEnemy.base.length + rouletteEnemy.add.length})</Text>
+            <Text code="t3" color="main">{gameData.msg.title['animals'][lang]} LV : {rouletteEnemy.lv !== '' ? sData.info.lv + (rouletteEnemy.lv < 0 ? 0 : rouletteEnemy.lv) : sData.info.lv} Lv</Text>
+            <Text code="t3" color="main">{gameData.msg.title['mapType'][lang]} : {rouletteEnemy.map && gameData.msg.state[rouletteEnemy.map][lang]}</Text>
+            <Text code="t3" color="main">{gameData.msg.title['addOption'][lang]} : </Text>
+          </ExploringInfo>
+        </LineupContainer>
+      </Wrap>
+      <PopupContainer>
+        {popupOn && <Popup type={'guide'} dataObj={popupInfo} showPopup={setPopupOn} lang={lang} />}
+      </PopupContainer>
+    </>
   );
 }
 

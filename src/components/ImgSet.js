@@ -45,13 +45,20 @@ import iconCard from 'images/ico/ico_card.png';
 import iconCardPlacement from 'images/ico/ico_cardPlacement.png';
 import iconChat from 'images/ico/ico_chat.png';
 import iconComposite from 'images/ico/ico_composite.png';
+import iconCrown from 'images/ico/ico_crown.png';
 import iconDia from 'images/ico/ico_dia.png';
+import iconDifficult0 from 'images/ico/ico_difficult0.png';
+import iconDifficult1 from 'images/ico/ico_difficult1.png';
+import iconDifficult2 from 'images/ico/ico_difficult2.png';
+import iconDifficult3 from 'images/ico/ico_difficult3.png';
 import iconEnhancingCards from 'images/ico/ico_enhancingCards.png';
 import iconEnhancingStickers from 'images/ico/ico_enhancingStickers.png';
 import iconGold from 'images/ico/ico_gold.png';
 import iconInven from 'images/ico/ico_inven.png';
 import iconLargeview from 'images/ico/ico_largeview.png';
 import iconLv from 'images/ico/ico_lv.png';
+import iconNew from 'images/ico/ico_new.png';
+import iconNewR from 'images/ico/ico_new2.png';
 import iconRoulette0 from 'images/ico/ico_roulette0.png';
 import iconRoulette1 from 'images/ico/ico_roulette1.png';
 import iconRoulette10 from 'images/ico/ico_roulette10.png';
@@ -85,13 +92,23 @@ import iconStar6 from 'images/star/star6.png';
 import iconStar7 from 'images/star/star7.png';
 
 import btnArrow from 'images/button/button_arrow.png';
+import btnArrowD from 'images/button/button_arrow_d.png';
+import btnArrowL from 'images/button/button_arrow_l.png';
 import btnCircle from 'images/button/button_circle.png';
+import btnCircleD from 'images/button/button_circle_d.png';
+import btnCircleL from 'images/button/button_circle_l.png';
 import btnL from 'images/button/button_l.png';
 import btnLD from 'images/button/button_l_d.png';
 import btnLL from 'images/button/button_l_l.png';
 import btnM from 'images/button/button_m.png';
+import btnMD from 'images/button/button_m_d.png';
+import btnML from 'images/button/button_m_l.png';
 import btnS from 'images/button/button_s.png';
+import btnSD from 'images/button/button_s_d.png';
+import btnSL from 'images/button/button_s_l.png';
 import btnSix from 'images/button/button_six.png';
+import btnSixD from 'images/button/button_six_d.png';
+import btnSixL from 'images/button/button_six_l.png';
 import ch0 from 'images/ch/ch0.png';
 import ch1 from 'images/ch/ch1.png';
 import ch10 from 'images/ch/ch10.png';
@@ -592,10 +609,10 @@ export const etc = {
   imgRing:imgRing,imgCardBack:imgCardBack,frameChBack:frameChBack,stateBack:stateBack,imgCardFrame:imgCardFrame,imgCardLv:imgCardLv,iconCardName:iconCardName,imgRingBack:imgRingBack,frameRope:frameRope,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,questionBlack:questionBlack,questionWhite:questionWhite,wind:wind,color:color,
 };
 export const icon = {
-  iconBack:iconBack,iconChat:iconChat,iconCardPlacement:iconCardPlacement,iconEnhancingCards:iconEnhancingCards,iconEnhancingStickers:iconEnhancingStickers,iconComposite:iconComposite,iconCard:iconCard,iconInven:iconInven,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,iconHelm:iconHelm,iconArmor:iconArmor,iconWeapon:iconWeapon,iconBag:iconBag,iconAccessory:iconAccessory,iconSocket:itemHole1,iconEtc:itemEtc25,iconUpgrade:itemUpgrade0,iconMaterial:itemMaterial0,iconLock:iconLock,iconStateType0:iconStateType0,iconStateType1:iconStateType1,iconStateType2:iconStateType2,iconStateType3:iconStateType3,iconRoulette0:iconRoulette0,iconRoulette1:iconRoulette1,iconRoulette2:iconRoulette2,iconRoulette3:iconRoulette3,iconRoulette4:iconRoulette4,iconRoulette5:iconRoulette5,iconRoulette6:iconRoulette6,iconRoulette7:iconRoulette7,iconRoulette8:iconRoulette8,iconRoulette9:iconRoulette9,iconRoulette10:iconRoulette10,iconRoulette11:iconRoulette11,iconRoulette12:iconRoulette12,iconRoulette13:iconRoulette13,iconRoulette14:iconRoulette14,iconRoulette15:iconRoulette15,
+  iconBack:iconBack,iconChat:iconChat,iconCardPlacement:iconCardPlacement,iconEnhancingCards:iconEnhancingCards,iconEnhancingStickers:iconEnhancingStickers,iconComposite:iconComposite,iconCard:iconCard,iconInven:iconInven,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,iconHelm:iconHelm,iconArmor:iconArmor,iconWeapon:iconWeapon,iconBag:iconBag,iconAccessory:iconAccessory,iconSocket:itemHole1,iconEtc:itemEtc25,iconUpgrade:itemUpgrade0,iconMaterial:itemMaterial0,iconLock:iconLock,iconStateType0:iconStateType0,iconStateType1:iconStateType1,iconStateType2:iconStateType2,iconStateType3:iconStateType3,iconRoulette0:iconRoulette0,iconRoulette1:iconRoulette1,iconRoulette2:iconRoulette2,iconRoulette3:iconRoulette3,iconRoulette4:iconRoulette4,iconRoulette5:iconRoulette5,iconRoulette6:iconRoulette6,iconRoulette7:iconRoulette7,iconRoulette8:iconRoulette8,iconRoulette9:iconRoulette9,iconRoulette10:iconRoulette10,iconRoulette11:iconRoulette11,iconRoulette12:iconRoulette12,iconRoulette13:iconRoulette13,iconRoulette14:iconRoulette14,iconRoulette15:iconRoulette15,iconNew:iconNew,iconNewR:iconNewR,iconDifficult0:iconDifficult0,iconDifficult1:iconDifficult1,iconDifficult2:iconDifficult2,iconDifficult3:iconDifficult3,iconCrown:iconCrown
 };
 export const button = {
-  btnL:btnL,btnLL:btnLL,btnLD:btnLD,btnM:btnM,btnS:btnS,btnCircle:btnCircle,btnArrow:btnArrow,btnSix:btnSix
+  btnL:btnL,btnLL:btnLL,btnLD:btnLD,btnM:btnM,btnML:btnML,btnMD:btnMD,btnS:btnS,btnSL:btnSL,btnSD:btnSD,btnCircle:btnCircle,btnCircleL:btnCircleL,btnCircleD:btnCircleD,btnArrow:btnArrow,btnArrowL:btnArrowL,btnArrowD:btnArrowD,btnSix:btnSix,btnSixL:btnSixL,btnSixD:btnSixD
 }
 export const iconStar = [
   iconStar1,iconStar2,iconStar3,iconStar4,iconStar5,iconStar6,iconStar7

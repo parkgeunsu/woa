@@ -1,3 +1,4 @@
+import { FlexBox } from 'components/Container';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -15,10 +16,6 @@ const LinkButton = styled(Link)`
 `;
 const ActiveButton = styled.button`
   display: inline-block;
-  margin: 0 5px 0 0;
-  &:last-of-type{
-    margin: 0;
-  }
   width: ${({width}) =>  width ? `${width}px` : '100%'};
   ${({size}) => {
     return size === 'small' ? 
@@ -26,7 +23,6 @@ const ActiveButton = styled.button`
     `padding: 10px 15px`;
   }};
   background: rgba(0,0,0,.7);
-  border-radius: 20px;
   color: #fff;
   font-size: ${({size, theme}) => {
     if (size === 'small') {
@@ -37,23 +33,52 @@ const ActiveButton = styled.button`
       return theme.font.t3;
     }
   }};
+  ${({btnImg}) => {
+    return !btnImg ? `
+      border-radius: 20px;
+    ` : '';
+  }}
   text-align: center;
 `;
 
+const ButtonText = styled.span`
+  flex-shrink: 1;
+  line-height: inherit;
+  font-size: inherit;
+`;
+const ButtonIcon = styled.span`
+  display: inline-block;
+  margin: 0 5px 0 0;
+  width: 16px;
+  height: 16px;
+  background: url(${({icon}) => icon}) no-repeat center center !important;
+  background-size: 100% 100% !important;
+  flex-shrink: 0;
+`;
 const Button = ({
   type,
   width,
   size,
   children,
+  icon,
   ...rest
 }) => {
   return (
     <>
-      {type === 'menu' ? (
+      {type === 'menu' && (
         <LinkButton width={width} size={size} {...rest}>
           {children}
         </LinkButton>
-      ) : (
+      )}
+      {type === 'icon' && (
+        <ActiveButton style={{paddingLeft: "20px"}} width={width} size={size} {...rest}>
+          <FlexBox>
+            <ButtonIcon icon={icon} />
+            <ButtonText>{children}</ButtonText>
+          </FlexBox>
+        </ActiveButton>
+      )}
+      {!type && (
         <ActiveButton width={width} size={size} {...rest}>
           {children}
         </ActiveButton>

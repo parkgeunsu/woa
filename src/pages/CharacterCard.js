@@ -172,6 +172,7 @@ const ChracterDetail = ({
   saveData,
   slotIdx,
   isThumb,
+  noInfo,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
@@ -191,18 +192,29 @@ const ChracterDetail = ({
     if (isThumb) { //thumb사용일 경우
       return (
         <>
-          <ListNameLv isThumb={isThumb} cardLv={imgSet.etc.imgCardLv} backColor={gameData.chGradeColor[saveCh.grade]}>{saveCh.lv}</ListNameLv>
-          <ListCh isThumb={isThumb} chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
-          <ListChRing isThumb={isThumb} ringBack={imgSet.etc.imgRingBack} className="ring" />
-          <ListChElement isThumb={isThumb} ringDisplay={imgSet.ringImg[chData.element]} className="element" />
-          <ListChElement1 isThumb={isThumb} chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
-          <ListChElement2 isThumb={isThumb} chLv={saveCh.lv} ringDisplay={imgSet.ssringImg[chData.element]} className="element_2" />
-          {saveCh.newActionType.map((data, idx) => {
-            return (
-              <ListChActionType isThumb={isThumb} key={'action'+idx} actionType={imgSet.element[data + 1]} className="list_action_type"/>
-            )
-          })}
-          <ListChFrame cardFrame={imgSet.etc.imgCardFrame} className="frame" />
+          {noInfo ? (
+            <>
+              <ListCh isThumb={isThumb} chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
+              <ListChRing isThumb={isThumb} ringBack={imgSet.etc.imgRingBack} className="ring" />
+              <ListChElement isThumb={isThumb} ringDisplay={imgSet.ringImg[chData.element]} className="element" />
+              <ListChFrame cardFrame={imgSet.etc.imgCardFrame} className="frame" />
+            </>
+          ) : (
+            <>
+              <ListNameLv isThumb={isThumb} cardLv={imgSet.etc.imgCardLv} backColor={gameData.chGradeColor[saveCh.grade]}>{saveCh.lv}</ListNameLv>
+              <ListCh isThumb={isThumb} chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
+              <ListChRing isThumb={isThumb} ringBack={imgSet.etc.imgRingBack} className="ring" />
+              <ListChElement isThumb={isThumb} ringDisplay={imgSet.ringImg[chData.element]} className="element" />
+              <ListChElement1 isThumb={isThumb} chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
+              <ListChElement2 isThumb={isThumb} chLv={saveCh.lv} ringDisplay={imgSet.ssringImg[chData.element]} className="element_2" />
+              {saveCh.newActionType.map((data, idx) => {
+                return (
+                  <ListChActionType isThumb={isThumb} key={'action'+idx} actionType={imgSet.element[data + 1]} className="list_action_type"/>
+                )
+              })}
+              <ListChFrame cardFrame={imgSet.etc.imgCardFrame} className="frame" />
+            </>
+          )}
         </>
       )
     }
@@ -273,5 +285,6 @@ const ChracterDetail = ({
 ChracterDetail.defaultProps = {
   equalSize: false,
   isThumb: false,
+  noInfo: false,
 }
 export default ChracterDetail;

@@ -371,6 +371,31 @@ export const msg = {
 			en:'Addenda',
 			jp:'追加情報',
 		},
+		dropItem:{
+			ko:'획득 가능한 아이템',
+			en:'Earnable Items',
+			jp:'獲得可能なアイテム',
+		},
+		dropFirst:{
+			ko:'첫클리어',
+			en:'First Clear',
+			jp:'初クリア',
+		},
+		gold:{
+			ko:'골드',
+			en:'Gold',
+			jp:'ゴールド',
+		},
+		firstGet:{
+			ko:'첫클리어 획득',
+			en:'Earn your first clear',
+			jp:'初クリア獲得',
+		},
+		dropPercent:{
+			ko:'획득확률',
+			en:'Probability of getting',
+			jp:'獲得確率',
+		}
 	},
 	ocean:{
 		pacific:{
@@ -729,6 +754,11 @@ export const msg = {
 			ko:'지역이동',
 			en:'Move Region',
 			jp:'エリア移動',
+		},
+		startBattle:{
+			ko:'전투개시',
+			en:'Starting a Battle',
+			jp:'戦闘開始',
 		}
 	},
 	ship:{
@@ -954,6 +984,16 @@ export const msg = {
 			en:'The username has been saved.',
 			jp:'IDが保存されました。',
 		},
+		organizeCard:{
+			ko:'진형이 비어있습니다.\n카드 진형을 구성하세요.',
+			en:'The formation is empty.\nOrganize your card formation.',
+			jp:'陣形が空白です。\nカード陣形を構成してください。',
+		},
+		selectScenario:{
+			ko:'시나리오를 선택하세요.',
+			en:'Choose a scenario.',
+			jp:'シナリオを選択してください。'
+		}
 	},
 	grammar:{
 		conjunction:{

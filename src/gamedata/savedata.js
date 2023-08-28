@@ -251,27 +251,27 @@ const save = {
     "korea":[
       {
         name:"gojoseon",
-        scenarioList:{}//단군(BC2333) period:0
+        scenarioList:[]//단군(BC2333) period:0
       },
       {
         name:"threeBefore",
-        scenarioList:{}//부여,옥저&동예,삼한 period:1
+        scenarioList:[]//부여,옥저&동예,삼한 period:1
       },
       {
         name:"three",
-        scenarioList:{}//신라(BC57)박혁거세, 고구려(BC37)주몽, 백제(BC18)온조 period:2
+        scenarioList:[]//신라(BC57)박혁거세, 고구려(BC37)주몽, 백제(BC18)온조 period:2
       },
       {
         name:"ns",
-        scenarioList:{}//남북국시대 통일신라,발해 대조영(698) period:3
+        scenarioList:[]//남북국시대 통일신라,발해 대조영(698) period:3
       },
       {
         name:"threeAfter",
-        scenarioList:{}//신라, 후백제(892)견훤, 후고구려(901)궁예, 왕건 period:4
+        scenarioList:[]//신라, 후백제(892)견훤, 후고구려(901)궁예, 왕건 period:4
       },
       {
         name:"joseon1",
-        scenarioList:{}
+        scenarioList:[]
       },
       {
         name:"joseon2",
@@ -279,132 +279,132 @@ const save = {
           {//이순신(1592) period:6
             open:0,
             stage:[
-              false, //옥포해전
-              false, //사천해전
-              false, //당포해전
-              false, //당항포해전
-              false, //한산도대첩
-              false, //안골포해전
-              false, //부산포해전
-              false, //웅포해전
-              false, //제2차 당항포해전
-              false, //장문포해전
-              false, //칠천량해전
-              false, //명량해전
-              false, //절이도해전
-              false, //왜교성전투
-              false, //노량해전
+              [false,false,false,false], //옥포해전
+              [false,false,false,false], //사천해전
+              [false,false,false,false], //당포해전
+              [false,false,false,false], //당항포해전
+              [false,false,false,false], //한산도대첩
+              [false,false,false,false], //안골포해전
+              [false,false,false,false], //부산포해전
+              [false,false,false,false], //웅포해전
+              [false,false,false,false], //제2차 당항포해전
+              [false,false,false,false], //장문포해전
+              [false,false,false,false], //칠천량해전
+              [false,false,false,false], //명량해전
+              [false,false,false,false], //절이도해전
+              [false,false,false,false], //왜교성전투
+              [false,false,false,false], //노량해전
             ],
           },
         ],
       },
       {
         name:"joseon3",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "japan":[
       {
         name:"junkuk",// peroid 0
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "china":[
       {
         name:"yin",//(BC1600) period:0
-        scenarioList:{}
+        scenarioList:[]
       },
       {
         name:"ju",//(BC10세기) period:1
-        scenarioList:{}
+        scenarioList:[]
       },
       {
         name:"chunchu",//공자 period:2
-        scenarioList:{}
+        scenarioList:[]
       },
       {
         name:"jin",//(BC221) period:3
-        scenarioList:{}
+        scenarioList:[]
       },
       {
         name:"han",//초한지(BC206) period:4
-        scenarioList:{}
+        scenarioList:[]
       },
       {
         name:"three",//삼국지(BC220) period:5
-        scenarioList:{}
+        scenarioList:[]
       },
       {
         name:"dang",//서유기(618) period:6
-        scenarioList:{}
+        scenarioList:[]
       },
       {
         name:"song",//수호지 period:7
-        scenarioList:{}
+        scenarioList:[]
       },
       {
         name:"ming",//금병매(1368) period:8
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "mongolia":[
       {
         name:"mongolia",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "unitedKingdom":[
       {
         name:"unitedKingdom",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "france":[
       {
         name:"france",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "greece":[
       {
         name:"greece",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "macedonia":[
       {
         name:"macedonia",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "italy":[
       {
         name:"italy",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "spain":[
       {
         name:"spain",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "portugal":[
       {
         name:"portugal",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "theMiddleEast":[
       {
         name:"theMiddleEast",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "egypt":[
       {
         name:"egypt",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
   }
@@ -456,27 +456,27 @@ const saveNew = {
     "korea":[
       {
         name:"gojoseon",
-        scenarioList:{}//단군(BC2333) period:0
+        scenarioList:[]//단군(BC2333) period:0
       },
       {
         name:"threeBefore",
-        scenarioList:{}//부여,옥저&동예,삼한 period:1
+        scenarioList:[]//부여,옥저&동예,삼한 period:1
       },
       {
         name:"three",
-        scenarioList:{}//신라(BC57)박혁거세, 고구려(BC37)주몽, 백제(BC18)온조 period:2
+        scenarioList:[]//신라(BC57)박혁거세, 고구려(BC37)주몽, 백제(BC18)온조 period:2
       },
       {
         name:"ns",
-        scenarioList:{}//남북국시대 통일신라,발해 대조영(698) period:3
+        scenarioList:[]//남북국시대 통일신라,발해 대조영(698) period:3
       },
       {
         name:"threeAfter",
-        scenarioList:{}//신라, 후백제(892)견훤, 후고구려(901)궁예, 왕건 period:4
+        scenarioList:[]//신라, 후백제(892)견훤, 후고구려(901)궁예, 왕건 period:4
       },
       {
         name:"joseon1",
-        scenarioList:{}
+        scenarioList:[]
       },
       {
         name:"joseon2",
@@ -484,132 +484,132 @@ const saveNew = {
           {//이순신(1592) period:6
             open:0,
             stage:[
-              false, //옥포해전
-              false, //사천해전
-              false, //당포해전
-              false, //당항포해전
-              false, //한산도대첩
-              false, //안골포해전
-              false, //부산포해전
-              false, //웅포해전
-              false, //제2차 당항포해전
-              false, //장문포해전
-              false, //칠천량해전
-              false, //명량해전
-              false, //절이도해전
-              false, //왜교성전투
-              false, //노량해전
+              {first:true,clear:[false,true,false,false],select:0}, //옥포해전
+              {first:true,clear:[false,false,true,false],select:0}, //사천해전
+              {first:true,clear:[false,false,false,false],select:0}, //당포해전
+              {first:true,clear:[false,false,false,false],select:0}, //당항포해전
+              {first:true,clear:[false,false,false,false],select:0}, //한산도대첩
+              {first:true,clear:[false,false,false,false],select:0}, //안골포해전
+              {first:true,clear:[false,false,false,false],select:0}, //부산포해전
+              {first:true,clear:[false,false,false,false],select:0}, //웅포해전
+              {first:true,clear:[false,false,false,false],select:0}, //제2차 당항포해전
+              {first:true,clear:[false,false,false,false],select:0}, //장문포해전
+              {first:true,clear:[false,false,false,false],select:0}, //칠천량해전
+              {first:true,clear:[false,false,false,false],select:0}, //명량해전
+              {first:true,clear:[false,false,false,false],select:0}, //절이도해전
+              {first:true,clear:[false,false,false,false],select:0}, //왜교성전투
+              {first:true,clear:[false,false,false,false],select:0}, //노량해전
             ],
           },
         ]
       },
       {
         name:"joseon3",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "japan":[
       {
         name:"junkuk",// peroid 0
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "china":[
       {
         name:"yin",//(BC1600) period:0
-        scenarioList:{}
+        scenarioList:[]
       },
       {
         name:"ju",//(BC10세기) period:1
-        scenarioList:{}
+        scenarioList:[]
       },
       {
         name:"chunchu",//공자 period:2
-        scenarioList:{}
+        scenarioList:[]
       },
       {
         name:"jin",//(BC221) period:3
-        scenarioList:{}
+        scenarioList:[]
       },
       {
         name:"han",//초한지(BC206) period:4
-        scenarioList:{}
+        scenarioList:[]
       },
       {
         name:"three",//삼국지(BC220) period:5
-        scenarioList:{}
+        scenarioList:[]
       },
       {
         name:"dang",//서유기(618) period:6
-        scenarioList:{}
+        scenarioList:[]
       },
       {
         name:"song",//수호지 period:7
-        scenarioList:{}
+        scenarioList:[]
       },
       {
         name:"ming",//금병매(1368) period:8
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "mongolia":[
       {
         name:"mongolia",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "unitedKingdom":[
       {
         name:"unitedKingdom",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "france":[
       {
         name:"france",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "greece":[
       {
         name:"greece",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "macedonia":[
       {
         name:"macedonia",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "italy":[
       {
         name:"italy",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "spain":[
       {
         name:"spain",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "portugal":[
       {
         name:"portugal",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "theMiddleEast":[
       {
         name:"theMiddleEast",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
     "egypt":[
       {
         name:"egypt",
-        scenarioList:{}
+        scenarioList:[]
       },
     ],
   }

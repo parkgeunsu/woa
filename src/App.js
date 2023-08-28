@@ -1,3 +1,4 @@
+import { FlexBox } from 'components/Container';
 import { util } from 'components/Libs';
 import { LoadImage } from 'components/LoadImage';
 import { ColorSet, FontSet } from 'components/Theme';
@@ -61,8 +62,7 @@ const Wrapper = styled.div`
   }}) no-repeat center center;
   background-size: cover;
 `;
-const ContentContainer = styled.div`
-  display: flex;
+const ContentContainer = styled(FlexBox)`
   position: relative;
   flex: 1;
   height: 100%;
@@ -297,7 +297,7 @@ const App = () => {
           {location !== "battle" && location !== "" && location !== "main" && location !== "start" && (location !== "recruitment" && !pageData?.begin) && (
             <Header saveData={saveData} changePage={changePage} navigate={navigate} page={page} />
           )}
-          <ContentContainer className="content">
+          <ContentContainer direction="column" className="content">
             <Routes>
               <Route path="/" element={<Menu type="new" changePage={changePage} lang={language} />} />
               <Route path="/start" element={<StartGame saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} pageData={pageData} lang={language} setLang={setLanguage} />} />

@@ -7,6 +7,9 @@ const FlexContainer = styled.div`
   flex-direction: ${({direction}) => direction};
   align-items: ${({alignItems}) => alignItems};
   justify-content: ${({justifyContent}) => justifyContent};
+  line-height: inherit;
+  font-size: inherit;
+  color: inherit;
 `;
 
 const FlexBox = ({
@@ -66,4 +69,5 @@ const TitleBox = ({
   return <TitleContainer {...rest}>{children}</TitleContainer>
 }
 
-export { TitleBox, FlexBox };
+export { FlexBox, TitleBox };
+
