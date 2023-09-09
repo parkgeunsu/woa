@@ -2,6 +2,7 @@ import back0 from 'images/back/back0.jpg';
 import back1 from 'images/back/back1.jpg';
 import back2 from 'images/back/back2.jpg';
 import back3 from 'images/back/back5.jpg';
+import countryTitle from 'images/back/countryTitle.png';
 import itemEn0 from 'images/back/itemEn0.png';
 import itemEn1 from 'images/back/itemEn1.png';
 import scroll from 'images/back/scroll.png';
@@ -19,6 +20,7 @@ import frameRight from 'images/frame/frame_battle2.png';
 import frameChBack from 'images/frame/frame_chback.png';
 import frameMain from 'images/frame/frame_main.png';
 import frameRope from 'images/frame/frame_rope.png';
+import frameWood from 'images/frame/frame_wood.png';
 import skillFrame from 'images/frame/skill_frame.png';
 import questionBlack from 'images/ico/question_black.png';
 import questionWhite from 'images/ico/question_white.png';
@@ -282,7 +284,16 @@ import itemHole12 from 'images/item/jewel12.png';
 import itemHole13 from 'images/item/jewel13.png';
 import itemHole14 from 'images/item/jewel14.png';
 import itemHole15 from 'images/item/jewel15.png';
+import itemHole16 from 'images/item/jewel16.png';
+import itemHole17 from 'images/item/jewel17.png';
+import itemHole18 from 'images/item/jewel18.png';
+import itemHole19 from 'images/item/jewel19.png';
 import itemHole2 from 'images/item/jewel2.png';
+import itemHole20 from 'images/item/jewel20.png';
+import itemHole21 from 'images/item/jewel21.png';
+import itemHole22 from 'images/item/jewel22.png';
+import itemHole23 from 'images/item/jewel23.png';
+import itemHole24 from 'images/item/jewel24.png';
 import itemHole3 from 'images/item/jewel3.png';
 import itemHole4 from 'images/item/jewel4.png';
 import itemHole5 from 'images/item/jewel5.png';
@@ -596,17 +607,43 @@ import buff11 from 'images/effect/buff11.png';
 import buff12 from 'images/effect/buff12.png';
 
 //Map
+import mapAnchor from 'images/map/anchor.png';
+import flag0 from 'images/map/flag0.png';
+import flag1 from 'images/map/flag1.png';
+import flag10 from 'images/map/flag10.png';
+import flag11 from 'images/map/flag11.png';
+import flag2 from 'images/map/flag2.png';
+import flag3 from 'images/map/flag3.png';
+import flag4 from 'images/map/flag4.png';
+import flag5 from 'images/map/flag5.png';
+import flag6 from 'images/map/flag6.png';
+import flag7 from 'images/map/flag7.png';
+import flag8 from 'images/map/flag8.png';
+import flag9 from 'images/map/flag9.png';
 import map0 from 'images/map/map0.png';
 import map1 from 'images/map/map1.png';
+import map10 from 'images/map/map10.png';
+import map11 from 'images/map/map11.png';
+import map2 from 'images/map/map2.png';
+import map3 from 'images/map/map3.png';
+import map4 from 'images/map/map4.png';
+import map5 from 'images/map/map5.png';
+import map6 from 'images/map/map6.png';
+import map7 from 'images/map/map7.png';
+import map8 from 'images/map/map8.png';
+import map9 from 'images/map/map9.png';
+import worldMap from 'images/map/worldmap.png';
+// import map0 from 'images/map/map0.png';
+// import map1 from 'images/map/map1.png';
 
 export const back = [
-  back0,back1,back2,back3,itemEn0,itemEn1,scroll,stamp
+  back0,back1,back2,back3,itemEn0,itemEn1,scroll,stamp,countryTitle
 ];
 export const menu = [
   menu0,menu1,menu2,menu3,menu4,menu5,menu6,menu7
 ]
 export const etc = {
-  imgRing:imgRing,imgCardBack:imgCardBack,frameChBack:frameChBack,stateBack:stateBack,imgCardFrame:imgCardFrame,imgCardLv:imgCardLv,iconCardName:iconCardName,imgRingBack:imgRingBack,frameRope:frameRope,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,questionBlack:questionBlack,questionWhite:questionWhite,wind:wind,color:color,
+  imgRing:imgRing,imgCardBack:imgCardBack,frameChBack:frameChBack,stateBack:stateBack,imgCardFrame:imgCardFrame,imgCardLv:imgCardLv,iconCardName:iconCardName,imgRingBack:imgRingBack,frameRope:frameRope,frameWood:frameWood,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,questionBlack:questionBlack,questionWhite:questionWhite,wind:wind,color:color,
 };
 export const icon = {
   iconBack:iconBack,iconChat:iconChat,iconCardPlacement:iconCardPlacement,iconEnhancingCards:iconEnhancingCards,iconEnhancingStickers:iconEnhancingStickers,iconComposite:iconComposite,iconCard:iconCard,iconInven:iconInven,iconSetup:iconSetup,iconLv:iconLv,iconDia:iconDia,iconGold:iconGold,iconAllview:iconAllview,iconLargeview:iconLargeview,iconHelm:iconHelm,iconArmor:iconArmor,iconWeapon:iconWeapon,iconBag:iconBag,iconAccessory:iconAccessory,iconSocket:itemHole1,iconEtc:itemEtc25,iconUpgrade:itemUpgrade0,iconMaterial:itemMaterial0,iconLock:iconLock,iconStateType0:iconStateType0,iconStateType1:iconStateType1,iconStateType2:iconStateType2,iconStateType3:iconStateType3,iconRoulette0:iconRoulette0,iconRoulette1:iconRoulette1,iconRoulette2:iconRoulette2,iconRoulette3:iconRoulette3,iconRoulette4:iconRoulette4,iconRoulette5:iconRoulette5,iconRoulette6:iconRoulette6,iconRoulette7:iconRoulette7,iconRoulette8:iconRoulette8,iconRoulette9:iconRoulette9,iconRoulette10:iconRoulette10,iconRoulette11:iconRoulette11,iconRoulette12:iconRoulette12,iconRoulette13:iconRoulette13,iconRoulette14:iconRoulette14,iconRoulette15:iconRoulette15,iconNew:iconNew,iconNewR:iconNewR,iconDifficult0:iconDifficult0,iconDifficult1:iconDifficult1,iconDifficult2:iconDifficult2,iconDifficult3:iconDifficult3,iconCrown:iconCrown
@@ -642,8 +679,8 @@ export const itemEtc = [
   itemEtc0,itemEtc1,itemEtc2,'','','','','','','',itemEtc10,itemEtc11,'','','','','','','','',itemEtc20,itemEtc21,itemEtc22,itemEtc23,itemEtc24,itemEtc25,itemEtc26,itemEtc27,itemEtc28,itemEtc29,itemEtc30,itemEtc31,itemEtc32
 ];
 export const itemHole = [
-  itemHole0,itemHole1,itemHole2,itemHole3,itemHole4,itemHole5,itemHole6,itemHole7,itemHole8,itemHole9,itemHole10,itemHole11,itemHole12,itemHole13,itemHole14,itemHole15,'','','','','',
-  '','','','','','','','','','',
+  itemHole0,itemHole1,itemHole2,itemHole3,itemHole4,itemHole5,itemHole6,itemHole7,itemHole8,itemHole9,itemHole10,itemHole11,itemHole12,itemHole13,itemHole14,itemHole15,itemHole16,itemHole17,itemHole18,itemHole19,itemHole20,
+  itemHole21,itemHole22,itemHole23,itemHole24,'','','','','','',
   '','','','','','','','','','',
   '','','','','','','','','','',
   '','','','','','','','','','',
@@ -704,6 +741,6 @@ export const figure = [
 export const cannon = [
   cannon0,cannon1,cannon2,cannon3,cannon4,cannon5,cannon6,cannon7,cannon8
 ]
-export const map = [
-  map0,map1
-]
+export const map = {
+  mapAnchor:mapAnchor,worldMap:worldMap,map0:map0,map1:map1,map2:map2,map3:map3,map4:map4,map5:map5,map6:map6,map7:map7,map8:map8,map9:map9,map10:map10,map11:map11,flag0:flag0,flag1:flag1,flag2:flag2,flag3:flag3,flag4:flag4,flag5:flag5,flag6:flag6,flag7:flag7,flag8:flag8,flag9:flag9,flag10:flag10,flag11:flag11,
+};

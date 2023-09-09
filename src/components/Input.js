@@ -218,13 +218,14 @@ const CloseButton = styled.div`
 const Select = ({
   title,
   selectIdx,
+  setSelectIdx,
   selectOption,
   onClick,
+  ...rest
 }) => {
   const timeoutRef = useRef(null);
   const [showOption, setShowOption] = useState(false);
   const [animation, setAnimation] = useState(false);
-  const [selectValue, setSelectValue] = useState(selectIdx);
   const selectHide = useCallback(() => {
     setAnimation(false);
     timeoutRef.current = setTimeout(() => {
@@ -245,9 +246,9 @@ const Select = ({
   }, []);
   return (
     <>
-      <SelectText onClick={() => {
+      <SelectText {...rest} onClick={() => {
         selectShow();
-      }}>{selectValue !== "" ? selectOption[selectValue] : title}</SelectText>
+      }}>{selectIdx !== "" ? selectOption[selectIdx] : title}</SelectText>
       {showOption && 
         <SelectOptionArea>
           <SelectOptionGroupBox className={animation ? 'on' : ''}>
@@ -256,8 +257,8 @@ const Select = ({
               <ul>
                 {selectOption.map((data, idx) => {
                   return (
-                    <SelectOption className={selectValue === idx ? 'select' : ''} key={`option${idx}`} onClick={() => {
-                      setSelectValue(idx);
+                    <SelectOption className={selectIdx === idx ? 'select' : ''} key={`option${idx}`} onClick={() => {
+                      setSelectIdx(idx);
                       onClick && onClick(idx);
                       selectHide();
                     }}>{data}</SelectOption>
@@ -278,4 +279,5 @@ const Select = ({
   );
 }
 
-export { CheckBox, RadioBox, TextField, Select };
+export { CheckBox, RadioBox, Select, TextField };
+

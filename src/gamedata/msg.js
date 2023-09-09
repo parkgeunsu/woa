@@ -415,6 +415,11 @@ export const msg = {
 		},
 	},
 	regions:{
+		'':{
+			ko:'이동 할 국가',
+			en:'Countries to move to',
+			jp:'移動する国',
+		},
 		//아시아
 		asia:{
 			ko:'아시아',
@@ -526,10 +531,10 @@ export const msg = {
 			en:'Mongolia',
 			jp:'モンゴル',
 		},
-		theMiddleEast:{
-			ko:'중동',
-			en:'The Middle East',
-			jp:'中東',
+		SaudiArabia:{
+			ko:'사우디 아라비아',
+			en:'Saudi Arabia',
+			jp:'サウジアラビア',
 		},
 		//유럽
 		europe:{
@@ -993,6 +998,11 @@ export const msg = {
 			ko:'시나리오를 선택하세요.',
 			en:'Choose a scenario.',
 			jp:'シナリオを選択してください。'
+		},
+		sameCountry:{
+			ko:'같은 나라는 이동할 수 없습니다.',
+			en:'You can\'t move to the same country.',
+			jp:'同じ国は移動できません。'
 		}
 	},
 	grammar:{

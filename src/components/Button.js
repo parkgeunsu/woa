@@ -103,9 +103,10 @@ const IconButton = ({
   icon,
   onClick,
   children,
+  ...rest
 }) => {
   return (
-    <IconBtn size={size} icon={icon} onClick={() => {
+    <IconBtn size={size} icon={icon} {...rest} onClick={() => {
       onClick && onClick();
     }}>{children}</IconBtn>
   )

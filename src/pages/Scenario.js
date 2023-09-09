@@ -355,7 +355,6 @@ const ScenarioList = ({
     sData.scenario[stay][dynastyIdx].scenarioList[dynastyScenarioIdx].stage[stageIdx].select = idx;
     changeSaveData(sData);
     setSelectScenario({
-      stay: stay,
       dynastyIdx: dynastyIdx,
       dynastyScenarioIdx: dynastyScenarioIdx,
       stageIdx: stageIdxRef.current,
@@ -399,7 +398,6 @@ const ScenarioList = ({
           } else {
             stageIdxRef.current = stageIdx;
             setSelectScenario({
-              stay: stay,
               dynastyIdx: dynastyIdx,
               dynastyScenarioIdx: dynastyScenarioIdx,
               stageIdx: stageIdx,
@@ -431,7 +429,10 @@ const ScenarioList = ({
             <StageInfo justifyContent="flex-start" alignItems="flex-start">
               <StageMap onClick={() => {
                 util.saveHistory(() => {
-                  util.saveData('historyParam', {scenario: selectScenario});
+                  util.saveData('historyParam', {
+                    ...util.loadData('historyParam'),
+                    scenario: selectScenario
+                  });
                   changePage('cardPlacement');
                   navigate('cardPlacement');
                 });//히스토리 저장
@@ -609,6 +610,7 @@ const Scenario = ({
   navigate,
   changePage,
   lang,
+  stay,
   selectScenario,
   setSelectScenario,
   btnSize,
@@ -621,11 +623,9 @@ const Scenario = ({
   const [popupOn, setPopupOn] = useState(false);
   const [popupInfo, setPopupInfo] = useState({});
   const [scenarioData, setScenarioData] = useState([]);
-  const stayRef = useRef(util.loadData('saveData').info.stay);
   useEffect(() => {
-    stayRef.current = util.loadData('saveData').info.stay;
     if (gameMode === 'scenario') {
-      setScenarioData(gameData.scenario[stayRef.current]);
+      setScenarioData(gameData.scenario[stay]);
     }
   }, [gameMode]);
   return (
@@ -640,16 +640,16 @@ const Scenario = ({
         <ScrollWrap className="scroll-y">
           <CountryContainer>
             <CountryName>
-              {gameData.msg.regions[stayRef.current][lang]}
+              {gameData.msg.regions[stay][lang]}
             </CountryName>
             {scenarioData.map((dynastyData, dynastyIdx) => {
               return <CountryScenario key={`countryData${dynastyIdx}`}>
                 {dynastyData.scenarioList?.length > 0 && 
                   <CountryPeriod btnBack={imgSet.button.btnLD}>{gameData.msg.regions[dynastyData.name][lang]}</CountryPeriod>}
                   {dynastyData.scenarioList?.map((dynastyScenario, dynastyScenarioIdx) => {
-                    const saveStage = saveData.scenario[stayRef.current][dynastyIdx].scenarioList[dynastyScenarioIdx],
+                    const saveStage = saveData.scenario[stay][dynastyIdx].scenarioList[dynastyScenarioIdx],
                       stageDifficult = saveStage?.open;
-                    return (stageDifficult > 0 && <ScenarioList key={`scenarios${dynastyScenarioIdx}`} changePage={changePage} navigate={navigate} gameData={gameData} saveData={saveData} changeSaveData={changeSaveData} stay={stayRef.current} dynastyIdx={dynastyIdx} dynastyScenarioIdx={dynastyScenarioIdx} dynastyScenario={dynastyScenario} imgSet={imgSet} selectScenario={selectScenario} setSelectScenario={setSelectScenario} setTooltip={setTooltip} setTooltipOn={setTooltipOn} setTooltipPos={setTooltipPos} lang={lang} />)
+                    return (stageDifficult > 0 && <ScenarioList key={`scenarios${dynastyScenarioIdx}`} changePage={changePage} navigate={navigate} gameData={gameData} saveData={saveData} changeSaveData={changeSaveData} stay={stay} dynastyIdx={dynastyIdx} dynastyScenarioIdx={dynastyScenarioIdx} dynastyScenario={dynastyScenario} imgSet={imgSet} selectScenario={selectScenario} setSelectScenario={setSelectScenario} setTooltip={setTooltip} setTooltipOn={setTooltipOn} setTooltipPos={setTooltipPos} lang={lang} />)
                   })}
               </CountryScenario>
             })}

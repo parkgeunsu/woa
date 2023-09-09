@@ -817,6 +817,11 @@ export const util = { //this.loadImage();
       return nowNum + plusNum;
     }
   },
+  getDistanceToEvent: (arr1, arr2, baseNum) => {//지도 거리 대비 이벤트 갯수
+    if (!arr1 || !arr2) return '';
+    baseNum = baseNum ?? 0;
+    return Math.round(Math.sqrt(Math.pow(arr1[0] - arr2[0], 2) + Math.pow(arr1[1] - arr2[1], 2))) + baseNum;
+  },
   getEffectArea: (type, n) => {//type: 효과타입, n: 사용위치(0~24)
     let num = [];
     switch(type){
@@ -1224,23 +1229,51 @@ export const util = { //this.loadImage();
       case 3:
         return 'mongolia';
       case 4:
-        return 'unitedKingdom';
+        return 'SaudiArabia';
       case 5:
-        return 'france';
+        return 'egypt';
       case 6:
         return 'greece';
       case 7:
-        return 'macedonia';
-      case 8:
         return 'italy';
+      case 8:
+        return 'unitedKingdom';
       case 9:
-        return 'spain';
+        return 'france';
       case 10:
-        return 'portugal';
+        return 'spain';
       case 11:
-        return 'theMiddleEast';
-      case 12:
-        return 'egypt';
+        return 'portugal';
+      default:
+        return '';
+    }
+  },
+  getCountryToIdx: (country) => {
+    switch(country) {
+      case 'korea':
+        return 0;
+      case 'japan':
+        return 1;
+      case 'china':
+        return 2;
+      case 'mongolia':
+        return 3;
+      case 'saudiArabia':
+        return 4;
+      case 'egypt':
+        return 5;
+      case 'greece':
+        return 6;
+      case 'italy':
+        return 7;
+      case 'unitedKingdom':
+        return 8;
+      case 'france':
+        return 9;
+      case 'spain':
+        return 10;
+      case 'portugal':
+        return 11;
       default:
         return '';
     }

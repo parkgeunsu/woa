@@ -7,7 +7,7 @@ import { ListItem, ListWrap } from 'components/List';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import CharacterCard from 'pages/CharacterCard';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
@@ -66,7 +66,6 @@ const StartGame = ({
   const [selectList, setSelectList] = useState([]); //시작 카드 유형 글자
   const [countryList, setCountryList] = useState([]); //국가 선택 글자
   const [languageList, setLanguageList] = useState([]); //언어 선택 글자
-  const countryEn = useRef(['korea', 'japan', 'china', 'mongolia', 'unitedKingdom', 'france', 'greece', 'macedonia', 'spain', 'portugal', 'theMiddleEast', 'egypt']); //데이터 저장시 영문 저장 글자
   const [selectCardTypeIdx, setSelectCardTypeIdx] = useState(pageData.selectType || ''); //시작 카드 유형 index
   const [selectCountryIdx, setSelectCountryIdx] = useState(pageData.country || ''); //시작 국가 선택 index
   const [selectLanguageIdx, setSelectLanguageIdx] = useState(pageData.language || 0); //게임 언어 선택 index
@@ -77,8 +76,8 @@ const StartGame = ({
       gameData.msg.sentence['card3'][lang],
     ]);
     setCountryList(
-      countryEn.current.map((data) => {
-        return gameData.msg.regions[data][lang];
+      gameData.country.map((data) => {
+        return gameData.msg.regions[data.name][lang];
       })
     );
     setLanguageList([
@@ -114,7 +113,7 @@ const StartGame = ({
               }} width={60} size="small">{gameData.msg.button['confirm'][lang]}</Button>
             </StyledListItem>
             <StyledListItem title={gameData.msg.title['startingCard'][lang]}>
-              <Select selectIdx={selectCardTypeIdx} onClick={(idx) => {
+              <Select selectIdx={selectCardTypeIdx} setSelectIdx={setSelectCardTypeIdx} onClick={(idx) => {
                 setSelectCardTypeIdx(idx);
                 setSelectGradeArr(startCardArr[idx]);
               }} selectOption={selectList} title={gameData.msg.title['startingCardType'][lang]}></Select>
@@ -141,16 +140,16 @@ const StartGame = ({
               </CardBox>
             </StyledListItem>
             <StyledListItem title={gameData.msg.title['startingArea'][lang]}>
-              <Select selectIdx={selectCountryIdx} onClick={(idx) => {
+              <Select selectIdx={selectCountryIdx} setSelectIdx={setSelectCountryIdx} onClick={(idx) => {
                 setSelectCountryIdx(idx);
                 const sData = {...saveData};
-                sData.info.stay = countryEn.current[idx];
+                sData.info.stay = gameData.country[idx];
                 changeSaveData(sData);
               }} selectOption={countryList} title={gameData.msg.title['selectRegion'][lang]}></Select>
               {/* <TextField transparent={true} placeholder={gameData.msg.sentence['selectCountry'][lang]} text="" /> */}
             </StyledListItem>
             <StyledListItem title={gameData.msg.title['gameLanguage'][lang]}>
-              <Select selectIdx={selectLanguageIdx} onClick={(idx) => {
+              <Select selectIdx={selectLanguageIdx} setSelectIdx={setSelectLanguageIdx} onClick={(idx) => {
                 setSelectLanguageIdx(idx);
                 const countryCode = (() => {
                   switch(idx) {
@@ -174,6 +173,7 @@ const StartGame = ({
           </ListWrap>
           <ConFirmArea>
             <Button size="large" width={100} onClick={() => {
+              localStorage.removeItem('historyParam');//게임기록 삭제
               //시나리오 개방
               const sData = {...saveData};
               sData.ch.forEach((chData) => {
@@ -181,7 +181,7 @@ const StartGame = ({
                   chScenario = gameData.ch[chData.idx].scenario
                 if (chScenario !== '') { //인물 전기가 있다면
                   const chCountry = util.getIdxToCountry(gameData.ch[chData.idx].country);
-                  sData.scenario[chCountry][chPeriod].scenarioList[chScenario].open += 7;
+                  sData.scenario[chCountry][chPeriod].scenarioList[chScenario].open += 1;
                 }
               });
               changeSaveData(sData);

@@ -96,15 +96,19 @@ const SpinGroup = styled.div`
   width: 100%;
   height: 100%;
   transition: top 1s ease-in-out;
-  ${({stopPos, size, state}) => {
-    if(typeof stopPos === 'number') {
-      return `top: ${stopPos * -100}%`;
+  ${({saveIdx, selectRoulettePos, size, rouletteState}) => {
+    if (typeof saveIdx === 'number') {
+      return `top: ${saveIdx * -100}%`;
     } else {
-      return `
-        top: 0;
-        ${state ? `animation: upDown${size} 0.${size}s infinite linear;` : ''};
-      `;
-    }}
+      if(typeof selectRoulettePos === 'number') {
+        return `top: ${selectRoulettePos * -100}%`;
+      } else {
+        return `
+          top: 0;
+          ${rouletteState ? `animation: upDown${size} 0.${size}s infinite linear;` : ''};
+        `;
+      }}
+    }
   };
   ${({size}) => makeKeyframes(size)};
 `;
@@ -134,6 +138,18 @@ const ExploringInfo = styled(FlexBox)`
   border-image: url(${({frameMain}) => frameMain}) 5 round;
   box-sizing: border-box;
 `;
+const idxToText = (idx) => {
+  switch(idx) {
+    case 0:
+      return 'add';
+    case 1:
+      return 'lv';
+    case 2:
+      return 'map';
+    default:
+      break;
+  }
+}
 const Roulette = ({
   gameMode,
   saveData,
@@ -168,7 +184,7 @@ const Roulette = ({
       setRouletteEnemy(prev => {
         return {
           ...prev,
-          base: enemyArray,
+          base: {idx: BASE_ENEMY_NUM, color: enemyArray},
         }
       });
     }
@@ -186,7 +202,7 @@ const Roulette = ({
           {rouletteArr.map((data, idx) => {
             return (
               <SpinArea key={`data${idx}`} frameMain={imgSet.etc.frameMain}>
-                <SpinGroup state={rouletteState[idx]} stopPos={selectRoulettePos[idx]} size={data.cards.length} direction="column">
+                <SpinGroup saveIdx={rouletteEnemy[idxToText(idx)].idx} rouletteState={rouletteState[idx]} selectRoulettePos={selectRoulettePos[idx]} size={data.cards.length} direction="column">
                   {data.cards.map((cardsData, cardsIdx) => <SpinCards idx={cardsIdx} key={`cardsIdx${cardsIdx}`} url={imgSet.icon[`iconRoulette${cardsData.idx}`]} />)}
                   <SpinCards idx={data.cards.length} url={data.cards[0].url} />
                 </SpinGroup>
@@ -196,16 +212,21 @@ const Roulette = ({
         </SpinContainer>
         <LineupContainer>
           <LineupGroup>
-            <ChLineup showMode={true} saveData={saveData} changePage={changePage} navigate={navigate} useList={saveData?.lineup?.save_slot[saveData?.lineup?.select].entry} selectLineup={saveData?.lineup?.save_slot[saveData?.lineup?.select].no} />
+            <ChLineup showMode={true} saveData={saveData} changePage={changePage} navigate={navigate} useList={saveData?.lineup?.save_slot[saveData?.lineup?.select].entry} selectLineup={saveData?.lineup?.save_slot[saveData?.lineup?.select].no} onClick={() => {
+              util.saveHistory(() => {
+                changePage('cardPlacement');
+                navigate('cardPlacement');
+              });//히스토리 저장
+            }} />
           </LineupGroup>
           <ExploringInfo direction="column" frameMain={imgSet.etc.frameMain}>
             <Text code="t3" color="main">{gameData.msg.title['region'][lang]} : {gameData.msg.regions[sData.info.stay][lang]}</Text>
             <Text code="t3" color="main">{gameData.msg.title['wildlife'][lang]} : 
-            {rouletteEnemy.base.map((colorData, idx) => <AnimalIcon key={`color${idx}`} color={colorData}/>)}
-            {rouletteEnemy.add.length > 0 && ' + '} 
-            {rouletteEnemy.add.map((colorData, idx) => <AnimalIcon key={`color${idx}`} color={colorData}/>)} ({rouletteEnemy.base.length + rouletteEnemy.add.length})</Text>
-            <Text code="t3" color="main">{gameData.msg.title['animals'][lang]} LV : {rouletteEnemy.lv !== '' ? sData.info.lv + (rouletteEnemy.lv < 0 ? 0 : rouletteEnemy.lv) : sData.info.lv} Lv</Text>
-            <Text code="t3" color="main">{gameData.msg.title['mapType'][lang]} : {rouletteEnemy.map && gameData.msg.state[rouletteEnemy.map][lang]}</Text>
+            {rouletteEnemy.base.color?.map((colorData, idx) => <AnimalIcon key={`color${idx}`} color={colorData}/>)}
+            {rouletteEnemy.add.color?.length > 0 && ' + '} 
+            {rouletteEnemy.add.color?.map((colorData, idx) => <AnimalIcon key={`color${idx}`} color={colorData}/>)} ({rouletteEnemy.base.color?.length + (rouletteEnemy.add.color?.length || 0)})</Text>
+            <Text code="t3" color="main">{gameData.msg.title['animals'][lang]} LV : {rouletteEnemy.lv.num !== '' ? sData.info.lv + (rouletteEnemy.lv.num < 0 ? 0 : (rouletteEnemy.lv.num || 0)) : sData.info.lv} Lv</Text>
+            <Text code="t3" color="main">{gameData.msg.title['mapType'][lang]} : {rouletteEnemy.map.num && gameData.msg.state[rouletteEnemy.map.num][lang]}</Text>
             <Text code="t3" color="main">{gameData.msg.title['addOption'][lang]} : </Text>
           </ExploringInfo>
         </LineupContainer>

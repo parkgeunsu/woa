@@ -47,8 +47,9 @@ const Img = styled.img.attrs(
 const PopupItemContainer = styled.ul`
   border:5px solid transparent;
   border-image:url(${({frameBack}) => frameBack}) 5 round;
-  .item_header{border:5px solid transparent;
-  border-image:url(${({frameBack}) => frameBack}) 5 round;
+  .item_header{
+    border:5px solid transparent;
+    border-image:url(${({frameBack}) => frameBack}) 5 round;
   }
   .item_name{color:${({ color }) => color};text-shadow:-1px -1px 1px rgba(255,255,255,.5), 1px 1px 1px #000;}
   .item_footer{border:5px solid transparent;

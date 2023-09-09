@@ -51,7 +51,7 @@ const BattleUnit = styled.div`
 const TimeLineCh = styled.div`
 	width:${({size}) => size}px;padding-top:${({size}) => size}px;
 	${({team}) => team === 'ally' ? 'margin:15px 0 0 0;' : 'margin:-15px 0 0 0;'}
-	&.on{z-index:20;animation:turnEffect ${({ gameSpd }) => 2 / gameSpd}s linear infinite;}
+	&.on{z-index:20;animation:turnEffect ${({ gameSpd }) => 1.5 / gameSpd}s linear infinite;}
 	&.defence0:after{background:url(${({defenceIcon0}) => defenceIcon0}) no-repeat right center;background-size:70%;}
 	&.defence1:after{background:url(${({defenceIcon1}) => defenceIcon1}) no-repeat right center;background-size:70%;}
 	&.defence2:after{background:url(${({defenceIcon2}) => defenceIcon2}) no-repeat right center;background-size:70%;}
@@ -62,52 +62,52 @@ const BattleCh = styled.div`
 	width:${({size}) => size}%;padding-top:${({size}) => size}%;
 	left:${({left}) => left}%;
 	top:${({top}) => top}%;
-	transition:all ${({ gameSpd }) => 1/ gameSpd}s;
-	&.relation:after{box-shadow:0 0 15px 5px ${({rtColor}) => rtColor};background:${({rtColor}) => rtColor};animation:rtAnimation ${({ gameSpd }) => 4 / gameSpd}s linear;}
-	.ch_box{transition:all ${({ gameSpd }) => 0.3/ gameSpd}s;}
+	transition:all ${({ gameSpd }) => 0.75 / gameSpd}s;
+	&.relation:after{box-shadow:0 0 15px 5px ${({rtColor}) => rtColor};background:${({rtColor}) => rtColor};animation:rtAnimation ${({ gameSpd }) => 3 / gameSpd}s linear;}
+	.ch_box{transition:all ${({ gameSpd }) => 0.225/ gameSpd}s;}
 	.ch_box .hpsp{
 		span {
 			&.hp{
-				em{transition:all ${({ gameSpd }) => 0.5/ gameSpd}s;}
+				em{transition:all ${({ gameSpd }) => 0.375/ gameSpd}s;}
 			}
 			&.sp{
-				em{transition:all ${({ gameSpd }) => 0.5/ gameSpd}s;}
+				em{transition:all ${({ gameSpd }) => 0.375/ gameSpd}s;}
 			}
 		}
 	}
 	&.defence0:after{
 		background:url(${({defenceIcon0}) => defenceIcon0}) no-repeat center center;background-size:60%;
-		animation:defence ${({ gameSpd }) => 1/ gameSpd}s;opacity:0;
+		animation:defence ${({ gameSpd }) => 0.75 / gameSpd}s;opacity:0;
 	}
 	&.defence1:after{
 		background:url(${({defenceIcon1}) => defenceIcon1}) no-repeat center center;background-size:60%;
-		animation:defence ${({ gameSpd }) => 1/ gameSpd}s;opacity:0;
+		animation:defence ${({ gameSpd }) => 0.75 / gameSpd}s;opacity:0;
 	}
 	&.defence2:after{
 		background:url(${({defenceIcon2}) => defenceIcon2}) no-repeat center center;background-size:60%;
-		animation:defence ${({ gameSpd }) => 1/ gameSpd}s;opacity:0;
+		animation:defence ${({ gameSpd }) => 0.75 / gameSpd}s;opacity:0;
 	}
 	&.avoid0{
-		animation:avoid0 ${({ gameSpd }) => 1/ gameSpd}s ease-out;
+		animation:avoid0 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
 	}
 	&.avoid1{
-		animation:avoid1 ${({ gameSpd }) => 1/ gameSpd}s ease-out;
+		animation:avoid1 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
 	}
 	&.avoid2{
-		animation:avoid2 ${({ gameSpd }) => 1/ gameSpd}s ease-out;
+		animation:avoid2 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
 	}
 	&.avoid3{
-		animation:avoid3 ${({ gameSpd }) => 1/ gameSpd}s ease-out;
+		animation:avoid3 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
 	}
 	${'' /* &.dmg .dmg{
-		animation:dmgAnimation ${({gameSpd}) => 0.5 / gameSpd}s steps(1) infinite;
+		animation:dmgAnimation ${({gameSpd}) => 0.375 / gameSpd}s steps(1) infinite;
 	} */}
 	&.dmgCri .dmg{
-		animation:dmgCriticalAnimation ${({gameSpd}) => 0.5 / gameSpd}s steps(4) infinite;
+		animation:dmgCriticalAnimation ${({gameSpd}) => 0.375 / gameSpd}s steps(4) infinite;
 	}
 	&.die:after{
 		background:url(${({tombstone}) => tombstone}) no-repeat center center;background-size:80%;
-		animation:tombstone ${({ gameSpd }) => 1.5/ gameSpd}s;opacity:0;animation-fill-mode:forwards;transform-origin:50% 100%;
+		animation:tombstone ${({ gameSpd }) => 1.125 / gameSpd}s;opacity:0;animation-fill-mode:forwards;transform-origin:50% 100%;
 	}
 `;
 const Buff = styled.div`
@@ -116,7 +116,7 @@ const Buff = styled.div`
 			return Math.ceil(frame / 5) * 100;
 		}}%;
 		background:url(${({effImg}) => effImg}) no-repeat center center;background-size:100%;z-index:1;
-		animation:frame${({frame}) => frame} ${({gameSpd}) => 1.5 / gameSpd}s steps(1);
+		animation:frame${({frame}) => frame} ${({gameSpd}) => 1.125 / gameSpd}s steps(1);
 		animation-iteration-count: infinite;
 	}
 `;
@@ -125,23 +125,23 @@ const Passive = styled.div`
 	top:${({idx}) => idx*20 - 25}%;background:url(${({effImg}) => effImg}) no-repeat center center;background-size:100%;
 `;
 const BattleLand = styled.div`
-	& > div {width:${({containerW}) => containerW}px;transition:all ${({ gameSpd }) => 1.5/ gameSpd}s;}
+	& > div {width:${({containerW}) => containerW}px;transition:all ${({ gameSpd }) => 1.125 / gameSpd}s;}
 `;
 const BattleEffect = styled.div`
-	& > div {width:${({containerW}) => containerW}px;transition:all ${({ gameSpd }) => 1.5/ gameSpd}s;}
+	& > div {width:${({containerW}) => containerW}px;transition:all ${({ gameSpd }) => 1.125 / gameSpd}s;}
 `;
 const EffLand = styled.div`
 	left:${({left}) => left}%;
 	top:${({top}) => top}%;
 	.dmgNum{
-		transition:all ${({gameSpd}) => 1.5 / gameSpd}s ease-in;
+		transition:all ${({gameSpd}) => 1.125 / gameSpd}s ease-in;
 	}
 `;
 const Eff = styled.img`
 	height:${({frame}) => {
 		return Math.ceil(frame / 5) * 100;
 	}}%;
-	animation:frame${({frame}) => frame} ${({gameSpd}) => 1.5 / gameSpd}s steps(1);
+	animation:frame${({frame}) => frame} ${({gameSpd}) => 1.125 / gameSpd}s steps(1);
 	animation-iteration-count: ${({repeat}) => repeat || "infinite"};
 `;
 const Land = styled.div`
@@ -150,7 +150,7 @@ const Land = styled.div`
 	background-image:url(${({landImg}) => landImg});
 `;
 const BattleOrder = styled.div`
-	transition:all ${({gameSpd}) => 0.5 / gameSpd}s;opacity:0;
+	transition:all ${({gameSpd}) => 0.375 / gameSpd}s;opacity:0;
 `;
 const WeatherIcon = styled.div`
 	position:absolute;left:${({idx}) => 50 * idx}px;background-image:url(${({src}) => src});background-size:80%;background-position:center center;background-repeat:no-repeat;width:46px;height:46px;
@@ -166,7 +166,7 @@ const BattleMenu = styled.div`
 		} else {
 			return "0px";
 		}
-	}};transition:height ${({gameSpd}) => 1 / gameSpd}s;
+	}};transition:height ${({gameSpd}) => 0.75 / gameSpd}s;
 `;
 const CardChRing = styled.span`
 	${({lv, ringBack, ringDisplay, ringDisplay1}) => {
@@ -180,7 +180,7 @@ const CardChRing = styled.span`
 `;
 const CardRingStyle = styled.span`
 	span{
-		animation:ring_ro linear ${({gameSpd}) => 15 / gameSpd}s infinite;
+		animation:ring_ro linear ${({gameSpd}) => 11.25 / gameSpd}s infinite;
 		background-image:url(
 			${({ringDisplay, lv}) => {
 				if (lv > 49) {
@@ -200,21 +200,21 @@ const CardCh = styled.span`
 	background-size:75%;
 `;
 const RelationArea = styled.div`
-	&:after{transition:all ${({gameSpd}) => 0.5 / gameSpd}s ${({gameSpd}) => 0.5 / gameSpd}s ease-in-out;}
+	&:after{transition:all ${({gameSpd}) => 0.375 / gameSpd}s ${({gameSpd}) => 0.5 / gameSpd}s ease-in-out;}
 	&.on:after{height:${({rtHeight}) => rtHeight}px;box-shadow:0 0 20px 10px rgba(0,0,0,.7);}
-	.relationTitle span:first-of-type{transition:opacity ${({gameSpd}) => 0.5 / gameSpd}s 0s;text-shadow:0 0 10px #ff0,0 0 10px #ff0;}
-	.relationTitle span:nth-of-type(2){transition:opacity ${({gameSpd}) => 0.5 / gameSpd}s .2s;text-shadow:0 0 10px #fb0,0 0 10px #fb0;}
-	.relationTitle span:nth-of-type(3){transition:opacity ${({gameSpd}) => 0.5 / gameSpd}s .4s;text-shadow:0 0 10px #f60,0 0 10px #f60;}
-	.relationTitle span:last-of-type{transition:opacity ${({gameSpd}) => 0.5 / gameSpd}s .6s;text-shadow:0 0 10px #f00,0 0 10px #f00;}
+	.relationTitle span:first-of-type{transition:opacity ${({gameSpd}) => 0.375 / gameSpd}s 0s;text-shadow:0 0 10px #ff0,0 0 10px #ff0;}
+	.relationTitle span:nth-of-type(2){transition:opacity ${({gameSpd}) => 0.375 / gameSpd}s .2s;text-shadow:0 0 10px #fb0,0 0 10px #fb0;}
+	.relationTitle span:nth-of-type(3){transition:opacity ${({gameSpd}) => 0.375 / gameSpd}s .4s;text-shadow:0 0 10px #f60,0 0 10px #f60;}
+	.relationTitle span:last-of-type{transition:opacity ${({gameSpd}) => 0.375 / gameSpd}s .6s;text-shadow:0 0 10px #f00,0 0 10px #f00;}
 `;
 const RelationName = styled.div`
-	position:relative;margin:5px 0;padding:0 0 0 13px;color:#fff;z-index:1;filter:blur(5px);transition:all ${({gameSpd}) => 0.5 / gameSpd}s ${({idx}) => 0.5 + idx * 0.3}s;
+	position:relative;margin:5px 0;padding:0 0 0 13px;color:#fff;z-index:1;filter:blur(5px);transition:all ${({gameSpd}) => 0.375 / gameSpd}s ${({idx}) => 0.5 + idx * 0.3}s;
 	&:after{content:'';position:absolute;left:0;top:50%;transform:translate(0, -50%);width:5px;height:5px;background:${({color}) => color};box-shadow:0 0 8px 5px ${({color}) => color};}
 `;
 const BgEffect = styled.div`
-	.cloud{transition:all ${({gameSpd}) => 2 / gameSpd}s;}
-	.cloud1{top:0;animation:cloudAnimation ${({gameSpd}) => 210 / gameSpd}s linear infinite;background-image:url(${({img1}) => img1});background-size:100%;}
-	.cloud2{top:30%;animation:cloudAnimationReverse ${({gameSpd}) => 130 / gameSpd}s linear infinite;background-image:url(${({img2}) => img2});background-size:100%;opacity:1;}
+	.cloud{transition:all ${({gameSpd}) => 1.5 / gameSpd}s;}
+	.cloud1{top:0;animation:cloudAnimation ${({gameSpd}) => 157 / gameSpd}s linear infinite;background-image:url(${({img1}) => img1});background-size:100%;}
+	.cloud2{top:30%;animation:cloudAnimationReverse ${({gameSpd}) => 97 / gameSpd}s linear infinite;background-image:url(${({img2}) => img2});background-size:100%;opacity:1;}
 `;
 const BgLight = styled.div`
 	&:after{
@@ -1291,11 +1291,11 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 									atkCount: atkC,
 									atkStay: atkS,
 								});
-							}, 1000 / gameSpd);//공격 이펙트 효과시간
-						}, 200 / gameSpd);
-					}, 800 / gameSpd);//메시지창 사라짐
-				}, 200 / gameSpd);//메시지 오픈
-			}, 800 / gameSpd);
+							}, 750 / gameSpd);//공격 이펙트 효과시간
+						}, 150 / gameSpd);
+					}, 600 / gameSpd);//메시지창 사라짐
+				}, 150 / gameSpd);//메시지 오픈
+			}, 600 / gameSpd);
 		}
 	} else {
 		resetOrder('order');
@@ -2075,22 +2075,41 @@ const Battle = ({
 	gameSound,
 	pageData,
 }) => {
-	console.log('난이도', pageData.scenario.stageDifficult)
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
+	const isScenario = React.useMemo(() => typeof pageData.scenario.stageIdx === 'number', [pageData]);
 	const scenarioDetail = React.useMemo(() => {
-		return gameData.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx];
-	}, [gameData, pageData]);
+		return isScenario ? gameData.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx] : {
+			title: gameData.msg.button['startExploring'][lang],
+			lineup: 0,
+			map: Array.from({length:50}, () => Math.round(Math.random() * 11)),
+			entry:[
+				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+				{idx:'', lv:1, },{idx:'', lv:1, },{pos:0,idx:27, lv:1, grade:4, items: [
+					{idx:0, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
+					{idx:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
+					{idx:2, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
+					{idx:4, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
+					{},
+					{},
+					{},
+					{},
+				]},{idx:'', lv:1, },{idx:'', lv:1, },
+				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+			],
+		};
+	}, [gameData, isScenario, pageData]);
 	const viewScenario = React.useMemo(() => {
-		return saveData.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx];
-	}, [saveData, pageData]);
-	const [mapLand] = useState(scenarioDetail.map);
-	const allyDeck = saveData.lineup.save_slot[saveData.lineup.select].entry;//캐릭터 저장된 카드index
-	const enemyDeck = scenarioDetail.entry;
-	const containerRef = useRef(null);
+		return isScenario ? saveData.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx].first : false;
+	}, [saveData, isScenario, pageData]);
+	const mapLand = React.useMemo(() => scenarioDetail.map, [scenarioDetail]);
+	const allyDeck = useRef(saveData.lineup.save_slot[saveData.lineup.select].entry);//캐릭터 저장된 카드index
+	const enemyDeck = React.useMemo(() => scenarioDetail.entry, [scenarioDetail]);
 	const [containerW, setContainerW] = useState();
 	const containerWH = useRef([0,0]);
-	const mapSize = 20;
+	const mapSize = React.useMemo(() => 20, []);
 	const [weather, setWeather] = useState({
 		type:'w0',//w0:맑음, w1:흐림, w2:비, w3:천둥, w4:눈
 		day:true,//낮 밤
@@ -2103,8 +2122,8 @@ const Battle = ({
 	const timeLine = useRef([]);//공격 순번배열
 	const enemyAi = useRef([]);//적군 지능저장배열
 	const currentSkill = useRef();//현재 선택된 스킬
-	const currentAllyIdx = useRef(); //아군 순번 증가 index
-	const currentEnemyIdx = useRef(); //적군 순번 증가 index
+	const currentAllyIdx = useRef(0); //아군 순번 증가 index
+	const currentEnemyIdx = useRef(0); //적군 순번 증가 index
 	currentAllyIdx.current = 0;
 	currentEnemyIdx.current = 0;
 	const enemyPos = useRef();//적군 위치값
@@ -2155,8 +2174,8 @@ const Battle = ({
 	const [turnIdx, setTurnIdx] = useState(); //공격캐릭터 활성화 순번
 	const conversationTimeout = useRef();
 	const [conversationMsg, setConversationMsg] = useState();//대화 내용
-  	const [msgOn, setMsgOn] = useState(false);
-  	const [msg, setMsg] = useState("");
+	const [msgOn, setMsgOn] = useState(false);
+	const [msg, setMsg] = useState("");
 	const conversationInterval = useCallback(() => {
 		conversationCount.current ++;
 		if (conversationList.current[conversationStepRef.current - 1].txt[lang].substr(conversationCount.current,1).indexOf("<") !== -1) {
@@ -2171,7 +2190,7 @@ const Battle = ({
 		let ally = [];
 		let pos = [];
 		let count = 0;
-		allyDeck.filter((data, idx) => {
+		allyDeck.current.filter((data, idx) => {
 			if (typeof data === 'number') {
 				ally.push(data);
 				pos.push({
@@ -2223,7 +2242,7 @@ const Battle = ({
 			enemy:[...enemyRt],
 		};
 		//-----시나리오 시청 판단
-		if (!viewScenario) {//시나리오 시청
+		if (viewScenario) {//시나리오 시청
 			scenarioRepeat.current = false;
 			conversationData.current = gameData.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx].conversation;
 			conversationList.current.push(conversationData.current[0]);
@@ -2233,7 +2252,7 @@ const Battle = ({
 		} else {//시나리오 패스
 			setTimeout(() => {
 				setMode('relation');
-			}, 100 / gameSpd);
+			}, 75 / gameSpd);
 		}
 		ally.forEach((data, idx) => {//능력치 셋팅
 			const saveCh = saveData.ch[data];
@@ -2453,9 +2472,11 @@ const Battle = ({
 		}
 		return () => {//언마운트 리셋
 			clearInterval(conversationTimeout.current);
-			let saveD = {...saveData};
-			saveD.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx].first = scenarioRepeat;
-			changeSaveData(saveD);
+			if (isScenario) {
+				let saveD = {...saveData};
+				saveD.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx].first = scenarioRepeat.current;
+				changeSaveData(saveD);
+			}
 		}
 	}, []);
 	useLayoutEffect(() => {
@@ -2772,15 +2793,15 @@ const Battle = ({
 						setTimeout(() => {
 							allyRelationArr.current = '';
 							relationCh.current = {};
-						}, 2000 / gameSpd);
-					}, 1300 / gameSpd);
-				}, (2000 + allyRelationArr.current.length * 300) / gameSpd);
+						}, 1500 / gameSpd);
+					}, 975 / gameSpd);
+				}, (1500 + allyRelationArr.current.length * 225) / gameSpd);
 			} else {
 				setMode('passive');
 				setTimeout(() => {
 					allyRelationArr.current = '';
 					relationCh.current = {};
-				}, 2000 / gameSpd);
+				}, 1500 / gameSpd);
 			}
 		} else if (mode === 'passive') {
 			setTimeout(() => {
@@ -2789,8 +2810,8 @@ const Battle = ({
 				setTimeout(() => {
 					setMode('order');
 					setOrderIdx(0);
-				}, 1000 + allyPassive.current.length * 500 / gameSpd);
-			}, 2000 / gameSpd);
+				}, 750 + allyPassive.current.length * 375 / gameSpd);
+			}, 1500 / gameSpd);
 		} else if (mode === 'action') {
 			setWeather(changeWeather(weather));//날씨 변경
 			const turnPass = true;
@@ -2804,7 +2825,7 @@ const Battle = ({
 				}
 			});
 			if (pB.enemyDmgArr['bleeding'] || pB.allyDmgArr['bleeding']) {
-				pB.timeDelay += 1000 / gameSpd;
+				pB.timeDelay += 750 / gameSpd;
 				if (pB.allyDmgArr['bleeding']) {
 					setAllyEffect(pB.allyDmgArr['bleeding']);
 				}
@@ -2812,7 +2833,7 @@ const Battle = ({
 					setEnemyEffect(pB.enemyDmgArr['bleeding']);
 				}
 				if (pB.enemyDmgArr['addicted'] || pB.allyDmgArr['addicted']) {
-					pB.timeDelay += 1000 / gameSpd;
+					pB.timeDelay += 750 / gameSpd;
 					setTimeout(() => {
 						if (pB.allyDmgArr['addicted']) {
 							setAllyEffect(pB.allyDmgArr['addicted']);
@@ -2820,10 +2841,10 @@ const Battle = ({
 						if (pB.enemyDmgArr['addicted']) {
 							setEnemyEffect(pB.enemyDmgArr['addicted']);
 						}
-					}, 1000 / gameSpd);
+					}, 750 / gameSpd);
 				}
 			} else if (pB.enemyDmgArr['addicted'] || pB.allyDmgArr['addicted']) {
-				pB.timeDelay += 1000 / gameSpd;
+				pB.timeDelay += 750 / gameSpd;
 				if (pB.allyDmgArr['addicted']) {
 					setAllyEffect(pB.allyDmgArr['addicted']);
 				}
@@ -2840,8 +2861,14 @@ const Battle = ({
 			}, pB.timeDelay);
 		} else if (mode === 'battleWin') {
 			console.log('pgs', '격!퇴!성!공!');
+			if (!isScenario) { //탐색 모드시 룰렛 데이터 제거
+				util.saveData('historyParam', {
+					...util.loadData('historyParam'),
+					roulette: {},
+				});
+			}
 			let saveD = {...saveData};
-			saveD.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx].first = scenarioRepeat;
+			saveD.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx].first = scenarioRepeat.current;
 			allySlot.current.forEach((slotIdx, idx) => {
 				const hasMaxExp = gameData.hasMaxExp[saveD.ch[slotIdx].grade];
 				saveD.ch[slotIdx].hasExp += resultExp.current[idx];
@@ -2862,6 +2889,12 @@ const Battle = ({
 						break;
 				}
 				if (saveD.ch[slotIdx].hasExp > hasMaxExp) {
+					if (!isScenario) { //탐색 모드시 룰렛 데이터 제거
+						util.saveData('historyParam', {
+							...util.loadData('historyParam'),
+							roulette: {},
+						});
+					}
 					saveD.ch[slotIdx].hasExp = hasMaxExp;
 				}
 			});
@@ -2927,11 +2960,6 @@ const Battle = ({
 			}
 		});
 	}, [battleAlly.current, battleEnemy.current]);
-	useLayoutEffect(() => {
-		const area = containerRef.current.getBoundingClientRect();
-		setContainerW(area.height * 0.5 - 25);
-		containerWH.current = [area.width, area.height];
-	}, [containerRef.current]);
 	const map = Array.from({length: 25}, (undefined, i) => {
 		return {idx: i}
 	});
@@ -2940,11 +2968,15 @@ const Battle = ({
 			<BattleHeader className="header battle_header" iconBack={imgSet.icon.iconBack}>
 				<ul>
           <li className="back"><span className="ico" onClick={() => {
+						util.saveData('historyParam', {
+							...util.loadData('historyParam'),
+							roulette: {base: {},add: {}, lv: {}, map: {}},
+						});
 						util.historyBack(navigate, changePage);
           }}></span></li>
 				</ul>
 				<div className="battle_title" flex-h-center="true">
-					<div className="scenario_title">{scenarioDetail.title[lang]}</div>
+					<div className="scenario_title">{isScenario ? scenarioDetail.title[lang] : scenarioDetail.title}</div>
 					<div className="team_summary">
 						<div style={{width: teamPower.current.allyPercent+"%"}} className="ally_team gradient_dark"></div>
 						<div style={{width: teamPower.current.enemyPercent+"%"}} className="enemy_team gradient_dark"></div>
@@ -3104,7 +3136,13 @@ const Battle = ({
 						})}
 					</RelationArea>
 				)}
-				<BattleArea ref={containerRef} className={`battle_area ${mode === "action" ? "action" : ""}`} mode={mode} frameLeft={imgSet.etc.frameLeft} frameRight={imgSet.etc.frameRight}>
+				<BattleArea ref={(conatiner) => {
+					if (conatiner) {
+						const area = conatiner.getBoundingClientRect();
+						setContainerW(area.height * 0.5 - 25);
+						containerWH.current = [area.width, area.height];
+					}
+				}} className={`battle_area ${mode === "action" ? "action" : ""}`} mode={mode} frameLeft={imgSet.etc.frameLeft} frameRight={imgSet.etc.frameRight}>
 					<BattleEffect containerW={containerW} className="battle_effect">
 						<div className={`land_enemy ${enemyEffect.length === 25 ? "allEff" : ""}`}>
 						{map.map((data, idx) => {
@@ -3241,7 +3279,7 @@ const Battle = ({
 							})}
 						</div>
 						<div className="units_ally">
-							{battleAlly.current && allyDeck.map((allyData, idx)=> {
+							{battleAlly.current && allyDeck.current.map((allyData, idx)=> {
 								const left = idx % 5 * mapSize,
 									top = Math.floor(idx / 5) * mapSize,
 									area = chkString(effectAllyArea, idx);

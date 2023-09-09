@@ -113,11 +113,11 @@ export const LoadImage = () => {
   for (let v in control) {
     const img = new Image();
     img.src = etc[v];
-  }
-  map.forEach((image) => {
+  };
+  for (let v in map) {
     const img = new Image();
-    img.src = image;
-  });
+    img.src = map[v];
+  };
   return {
     back: back,
     menu: menu,

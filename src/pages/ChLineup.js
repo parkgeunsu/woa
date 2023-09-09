@@ -43,14 +43,12 @@ const ChLineup = ({
   mapRef,
   selectLineupList,
   setSelectLineupList,
+  onClick,
 }) => {
   // const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
   return showMode ? <div className={`lineup_map lineup_pos lineup${selectLineup}`} onClick={() => {
-    util.saveHistory(() => {
-      changePage('cardPlacement');
-      navigate('cardPlacement');
-    });//히스토리 저장
+    onClick && onClick();
   }} >
     {useList && useList.map((slotIdx, idx) => {
       if (slotIdx === "") {

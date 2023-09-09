@@ -12,9 +12,10 @@ const Text = ({
   color,
   align,
   children,
+  ...rest
 }) => {
   return (
-    <StyledText code={code} color={color} align={align}>{children}</StyledText>
+    <StyledText code={code} color={color} align={align} {...rest}>{children}</StyledText>
   )
 }
 
@@ -24,4 +25,28 @@ Text.defaultProps = {
   align: 'center',
 }
 
-export { Text };
+const StyledIcon = styled.div`
+  display: inline-block;
+  width: ${({size}) => size}px;
+  height: ${({size}) => size}px;
+  background: url(${({url}) => url}) no-repeat center center;
+  background-size: ${({backSize}) => backSize};
+`;
+const Icon = ({
+  size,
+  url,
+  backSize,
+  ...rest
+}) => {
+  return (
+    <StyledIcon url={url} size={size} {...rest} backSize={backSize}/>
+  )
+}
+
+Icon.defaultProps = {
+  size: 20,
+  backSize: '100% 100%',
+}
+
+export { Icon, Text };
+

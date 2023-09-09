@@ -24,6 +24,7 @@ const ColorSet = {
 	menu: "#471919",
   shadow: "rgba(0,0,0,.7)",
   shadowL: "rgba(0,0,0,.4)",
+	shadowR: "rgba(255,55,0,.7)",
 	stageBar: "#a88b6a",
 	stageBack: "#a96347",
 	land0: "rgb(173,236,148)",
