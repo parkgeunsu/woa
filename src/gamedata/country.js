@@ -72,3 +72,32 @@ export const country = [
     mapPos:[107,140],
   },
 ];
+
+export const events = {
+  block: [
+    {idx:0,name:'one'},
+    {idx:1,name:'two'},
+    {idx:2,name:'three'},
+    {idx:3,name:'four'},
+    {idx:4,name:'five'},
+  ],
+  blockHead: [
+    {idx:0,name:'grassland'},
+    {idx:1,name:'grass'},
+    {idx:2,name:'hay'},
+    {idx:3,name:'rock'},
+    {idx:4,name:'stone1'},
+    {idx:5,name:'stone2'},
+    {idx:6,name:'mud'},
+    {idx:7,name:'sea'},
+  ],
+  blockType: [
+    {idx:0,name:'battle'},
+    {idx:1,name:'traps'},
+    {idx:2,name:'treasure'},
+    {idx:3,name:'ruins'},
+    {idx:4,name:'talk'},
+    {idx:5,name:'town'},
+    {idx:6,name:'shop'},
+  ]
+};

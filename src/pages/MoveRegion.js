@@ -4,7 +4,6 @@ import { FlexBox } from 'components/Container';
 import { Select } from 'components/Input';
 import { util } from 'components/Libs';
 import ZoomPinch from 'components/ZoomPinch';
-// import { util } from 'components/Libs';
 import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -165,7 +164,9 @@ const MoveRegion = ({
         }}/>
       </ButtonArea>
       <RegionInfo>
-        거리 {util.getDistanceToEvent(gameData.country[stayIdx.current].distancePosition, gameData.country[selectMoveRegion]?.distancePosition)}
+        {selectMoveRegion !== '' && selectMoveRegion !== stayIdx.current && <>
+          거리 {util.getDistanceToEvent(gameData.country[stayIdx.current].distancePosition, gameData.country[selectMoveRegion]?.distancePosition) + gameData.countryEventsNum}
+        </>}
       </RegionInfo>
     </Wrap>
   )

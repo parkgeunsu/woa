@@ -76,7 +76,7 @@ const Header = ({
     <>
       <Wrapper className="header" iconBack={imgSet.icon.iconBack} iconLv={imgSet.icon.iconLv} iconDia={imgSet.icon.iconDia} iconGold={imgSet.icon.iconGold} iconAllview={imgSet.icon.iconAllview} iconLargeview={imgSet.icon.iconLargeview} bar={imgSet.etc.bar0} frameMain={imgSet.etc.frameMain}>
         <ul className="default">
-          {page !== 'gameMain' && 
+          {(page !== 'gameMain' && page !== 'moveEvent') && 
             <li className="back"><span className="ico" onClick={() => {
               util.historyBack(navigate, changePage);
             }}></span></li>

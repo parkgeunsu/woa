@@ -1,7 +1,7 @@
 import { animals } from 'gamedata/animals';
 import { city } from 'gamedata/city';
 import { colorSvg } from 'gamedata/colorSvg';
-import { country } from 'gamedata/country';
+import { country, events } from 'gamedata/country';
 import { effect } from 'gamedata/effect';
 import { exp } from 'gamedata/exp';
 import { guide } from 'gamedata/guide';
@@ -11,6 +11,7 @@ import { itemsSvg } from 'gamedata/itemsSvg';
 import { job } from 'gamedata/job';
 import { lineup } from 'gamedata/lineup';
 import { msg } from 'gamedata/msg';
+import { percent } from 'gamedata/percent';
 import { actionPoint, prices } from 'gamedata/prices';
 import { recipe } from 'gamedata/recipe';
 import { relation } from 'gamedata/relation';
@@ -24,6 +25,11 @@ export const gameData = {
     itemType: [{ko:'',en:''},{ko:'투구',en:'Helm'},{ko:'갑옷',en:'Armor'},{ko:'무기',en:'Weapon'},{ko:'반지',en:'Ring'},{ko:'목걸이',en:'Necklace'}],
     stateName: ["통솔", "체력", "완력", "민첩", "지력", "정신", "매력","행운"],
     country: country,
+    countryEventsNum : 4, //지역이동시 기본 이벤트 값 4
+    events: events,
+    eventsHead: [0,1,6,6,2,2,3,3,4,5,7,7], //이벤트 지형 타입
+    eventsCountryColor: ['#fff','#f0d','#d00','#d60','#0a0','#ffcc15','#66beff','#0a0','#0040ff','#a800ff','#ff2a00','#00a90c'],
+    percent: percent,
     addGradeArr: [1,1.2,1.3,1.4,1.5,1.6,1.8],//등급에 따른 추가 능력치
     possibleStageNum: [1,3,5,10],//시나리오 난이도 진행 가능한 카드영웅 갯수
     animal_type:animals,//'독0','빛1','암2','물3','불4','바람5','땅6'

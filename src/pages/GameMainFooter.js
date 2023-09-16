@@ -228,6 +228,27 @@ const GameMainFooter = ({
             setGameMode('');
           }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
           <StyledButton btnImg={imgSet.button.btnMD} onClick={() => {
+            if (selectMoveRegion === '') {
+              setMsgOn(true);
+              setMsg(gameData.msg.sentence['selectMoveCountry'][lang]);
+            } else if (stayIdx.current === selectMoveRegion) {
+              setMsgOn(true);
+              setMsg(gameData.msg.sentence['sameCountry'][lang]);
+            } else {
+              console.log('지역이동');
+              util.saveHistory(() => {
+                util.saveData('historyParam', {
+                  ...util.loadData('historyParam'),
+                  moveEvent: {
+                    stay: stay,
+                    moveTo: selectMoveRegion,
+                    distance: util.getDistanceToEvent(gameData.country[stayIdx.current].distancePosition, gameData.country[selectMoveRegion]?.distancePosition) + gameData.countryEventsNum,
+                  }
+                });
+                navigate('moveEvent');
+                changePage('moveEvent');
+              });
+            }
           }}>
             <FlexBox>
               {stayIdx.current === selectMoveRegion ? <>

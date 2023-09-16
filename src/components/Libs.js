@@ -1770,5 +1770,17 @@ export const util = { //this.loadImage();
   comma:(result) => {
     result = String(result);
     return result.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  },
+  fnPercent: (arr) => { //확률 연산
+    let blockPercent = [{idx:0, num:arr[0]}],
+      idx = 1;
+    const percent = Math.random() * 100;
+    arr.reduce((a, b) => {
+      const per = (a + b);
+      blockPercent.push({idx: idx, num:per});
+      ++idx;
+      return per;
+    });
+    return blockPercent.filter((block) => percent < block.num)[0].idx;
   }
 }

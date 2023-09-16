@@ -999,6 +999,11 @@ export const msg = {
 			en:'Choose a scenario.',
 			jp:'シナリオを選択してください。'
 		},
+		selectMoveCountry:{
+			ko:'이동 할 국가를 선택하세요.',
+			en:'Select the country you want to move to.',
+			jp:'移動する国を選択してください'
+		},
 		sameCountry:{
 			ko:'같은 나라는 이동할 수 없습니다.',
 			en:'You can\'t move to the same country.',

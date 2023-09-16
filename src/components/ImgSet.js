@@ -636,6 +636,9 @@ import worldMap from 'images/map/worldmap.png';
 // import map0 from 'images/map/map0.png';
 // import map1 from 'images/map/map1.png';
 
+import moveEvent from 'images/moveEvent.png';
+import moveEventCountry from 'images/moveEventCountry.png';
+
 export const back = [
   back0,back1,back2,back3,itemEn0,itemEn1,scroll,stamp,countryTitle
 ];
@@ -744,3 +747,7 @@ export const cannon = [
 export const map = {
   mapAnchor:mapAnchor,worldMap:worldMap,map0:map0,map1:map1,map2:map2,map3:map3,map4:map4,map5:map5,map6:map6,map7:map7,map8:map8,map9:map9,map10:map10,map11:map11,flag0:flag0,flag1:flag1,flag2:flag2,flag3:flag3,flag4:flag4,flag5:flag5,flag6:flag6,flag7:flag7,flag8:flag8,flag9:flag9,flag10:flag10,flag11:flag11,
 };
+
+export const images = {
+  moveEvent:moveEvent,moveEventCountry:moveEventCountry,
+}
