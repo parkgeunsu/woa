@@ -16,6 +16,15 @@ const EventAll = styled.div`
       windowHeight = window.screen.height - 50;
     return eventHeight < windowHeight ? windowHeight : eventHeight}}px;
 `;
+const lastPos = (idx) => {
+
+    //0,1,2,3,7,8,9,13,14,15
+  if (idx < 4 || (idx > 6 && idx < 10) || (idx > 12 && idx < 16) || (idx > 18 && idx < 22) || (idx > 24 && idx < 28)) {
+    return true;
+  } else {
+    return false;
+  }
+}
 const MapPiece = styled.div`
   position: absolute;
   ${({idx, size, last}) => {
@@ -63,9 +72,7 @@ const MapPiece = styled.div`
     }
   }}
   transform: ${({idx, last}) => {
-    //0,1,2,3,7,8,9,13,14,15
-    //4,5,6,10,11,12,16,17,18
-    if (last && idx % 4) {
+    if (last && lastPos(idx)) {
       return `translate(-50%, -50%) scaleX(-1);`
     } else {
       return `translate(-50%, -50%);`
