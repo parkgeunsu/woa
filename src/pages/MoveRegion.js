@@ -1,11 +1,14 @@
 import { AppContext } from 'App';
+import { Text } from 'components/Atom';
 import { IconButton } from 'components/Button';
 import { FlexBox } from 'components/Container';
 import { Select } from 'components/Input';
 import { util } from 'components/Libs';
 import ZoomPinch from 'components/ZoomPinch';
+import CharacterCard from 'pages/CharacterCard';
 import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+
 
 const Wrap = styled(FlexBox)`
   position: absolute;
@@ -91,6 +94,27 @@ const ButtonArrow = styled(IconButton)`
 const RegionInfo = styled(FlexBox)`
   flex: 0;
 `;
+const EntryCardsWrap = styled(FlexBox)`
+  margin: 15px 0 0 0;
+  width: 270px;
+  flex-wrap: wrap;
+`;
+const EntryCards = styled.div`
+  position: relative;
+  margin: 0 5px 5px 0;
+  width: 50px;
+  height: 50px;
+  border: 1px solid ${({theme}) => theme.color.main};
+  background: ${({theme}) => theme.color.shadow};
+  box-sizing: border-box;
+  &:nth-of-type(5n + 5){
+    margin: 0 0 5px 0;
+  }
+  span{
+    display: inline-block;
+    position: absolute;
+  }
+`;
 const MoveRegion = ({
   gameMode,
   saveData,
@@ -107,6 +131,7 @@ const MoveRegion = ({
   const stayIdx = useRef(util.getCountryToIdx(stay));
   const currentCountryIdx = useRef(0);
   const [countryList, setCountryList] = useState([]); //국가 선택 글자
+  const [entry, setEntry] = useState(['',0,'','','','','','','','']);
   useEffect(() => {
     setCountryList(
       gameData.country.map((data) => {
@@ -163,10 +188,25 @@ const MoveRegion = ({
           });
         }}/>
       </ButtonArea>
-      <RegionInfo>
-        {selectMoveRegion !== '' && selectMoveRegion !== stayIdx.current && <>
+      <RegionInfo direction="column">
+        {selectMoveRegion !== '' && selectMoveRegion !== stayIdx.current && <Text code="t3" color="main">
           거리 {util.getDistanceToEvent(gameData.country[stayIdx.current].distancePosition, gameData.country[selectMoveRegion]?.distancePosition) + gameData.countryEventsNum}
-        </>}
+        </Text>}
+        <EntryCardsWrap>
+          {entry.map((eCard, cardIdx) => {
+            if (eCard !== '') {
+              return <EntryCards key={`entry${cardIdx}`} onClick={() => {
+                  console.log(cardIdx);
+                }}>
+                <CharacterCard isThumb={true} saveData={saveData} gameData={gameData} slotIdx={0} />
+              </EntryCards>
+            } else {
+              return <EntryCards key={`entry${cardIdx}`} onClick={() => {
+                  console.log(cardIdx);
+                }} />
+            }
+          })}
+        </EntryCardsWrap>
       </RegionInfo>
     </Wrap>
   )

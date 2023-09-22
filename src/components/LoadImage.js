@@ -1,5 +1,5 @@
-import { actionIcon, anchor, animalType, back, bgEffect, button, cannon, chImg, control, eff, element, etc, figure, icon, iconStar, iconState, images, itemEtc, itemHole, itemMaterial, itemUpgrade, job, land, map, menu, passive, ringImg, sail, sringImg, ssringImg, weather, wood } from 'components/ImgSet';
-
+import { actionIcon, anchor, back, bgEffect, button, cannon, chImg, control, eff, element, etc, figure, icon, iconStar, iconState, images, job, land, map, menu, passive, ringImg, sail, sringImg, ssringImg, weather, wood } from 'components/ImgSet';
+//itemEtc, itemHole, itemMaterial, itemUpgrade,
 export const LoadImage = () => {
   //이미지 프리로드
   back.forEach((image) => {
@@ -18,10 +18,6 @@ export const LoadImage = () => {
     const img = new Image();
     img.src = etc[v];
   }
-  animalType.forEach((image) => {
-    const img = new Image();
-    img.src = image;
-  });
   element.forEach((image) => {
     const img = new Image();
     img.src = image;
@@ -34,22 +30,22 @@ export const LoadImage = () => {
     const img = new Image();
     img.src = image;
   });
-  itemEtc.forEach((image) => {
-    const img = new Image();
-    img.src = image;
-  });
-  itemHole.forEach((image) => {
-    const img = new Image();
-    img.src = image;
-  });
-  itemMaterial.forEach((image) => {
-    const img = new Image();
-    img.src = image;
-  });
-  itemUpgrade.forEach((image) => {
-    const img = new Image();
-    img.src = image;
-  });
+  // itemEtc.forEach((image) => {
+  //   const img = new Image();
+  //   img.src = image;
+  // });
+  // itemHole.forEach((image) => {
+  //   const img = new Image();
+  //   img.src = image;
+  // });
+  // itemMaterial.forEach((image) => {
+  //   const img = new Image();
+  //   img.src = image;
+  // });
+  // itemUpgrade.forEach((image) => {
+  //   const img = new Image();
+  //   img.src = image;
+  // });
   ringImg.forEach((image) => {
     const img = new Image();
     img.src = image;
@@ -133,13 +129,12 @@ export const LoadImage = () => {
     ringImg: ringImg,
     sringImg: sringImg,
     ssringImg: ssringImg,
-    animalType: animalType,
     element: element,
     iconState: iconState,
-    itemEtc: itemEtc,
-    itemHole: itemHole,
-    itemUpgrade: itemUpgrade,
-    itemMaterial: itemMaterial,
+    // itemEtc: itemEtc,
+    // itemHole: itemHole,
+    // itemUpgrade: itemUpgrade,
+    // itemMaterial: itemMaterial,
     land: land,
     bgEffect: bgEffect,
     passive: passive,

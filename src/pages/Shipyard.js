@@ -35,6 +35,7 @@ const ItemContainer = styled.ul`
   }
   .item_name{color:${({ color }) => color};text-shadow:-1px -1px 1px rgba(255,255,255,.5), 1px 1px 1px #000;}
 `;
+//etc 0, hole 100, colorance 200, upgrade 300, material 400
 const ItemPic2 = styled.div`
   &:after{background-image:url(${({itemPic}) => itemPic});background-size:100%;background-repeat:no-repeat;}
 `;

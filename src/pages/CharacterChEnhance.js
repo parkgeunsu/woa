@@ -1,11 +1,23 @@
-import React, { useState } from 'react';
+import frameChBack from 'images/frame/frame_chback.png';
 import styled from 'styled-components';
 
-import frameChBack from 'images/frame/frame_chback.png';
-
 const ChEnhance = styled.div`
-  display:block;position:absolute;left:0;right:0;top:100%;bottom:0;padding:10px 20px;background:rgba(0,0,0,.8);box-sizing:border-box;border:5px solid transparent;border-image:url(${({frameBack}) => frameBack}) 5 round;z-index:3;
-  dd{position:relative;padding:5px;}
+  display:block;
+  position:absolute;
+  left:0;
+  right:0;
+  top:100%;
+  bottom:0;
+  padding:10px 20px;
+  background:rgba(0,0,0,.8);
+  box-sizing:border-box;
+  border:5px solid transparent;
+  border-image:url(${({frameBack}) => frameBack}) 5 round;
+  z-index:3;
+  dd{
+    position:relative;
+    padding:5px;
+  }
 `;
 
 const CharacterItemEnhance = () => {

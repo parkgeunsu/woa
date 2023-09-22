@@ -1,5 +1,6 @@
 import { AppContext } from 'App';
 import { ActionChDisplay, Calculator, RangeSlider } from 'components/Components';
+import { ItemPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
@@ -30,9 +31,6 @@ const ItemContainer = styled.ul`
   border-image:url(${({frameBack}) => frameBack}) 5 round;
   }
   .item_name{color:${({ color }) => color};text-shadow:-1px -1px 1px rgba(255,255,255,.5), 1px 1px 1px #000;font-size:0.875rem;font-weight:600;}
-`;
-const ItemPic = styled.div`
-  display:inline-block;width:100%;height:100%;background-image:url(${({itemPic}) => itemPic});background-size:100%;background-repeat:no-repeat;
 `;
 const ItemName = styled.div`
   .item_grade{color:${({ color }) => color};}
@@ -147,7 +145,7 @@ const TradingPost = ({
 										});
 										setRangeValue(0);
 									}}>
-										<ItemPic className="pic" itemPic={imgSet.itemMaterial[items.display]}>
+										<ItemPic className="pic" pic={imgSet.images.itemEtc} type="material" idx={items.display}>
 											{typeof data.num === 'number' ? (
 												<span className="has_num">{util.comma(data.num)}</span>
 											) : (
@@ -174,7 +172,7 @@ const TradingPost = ({
 												});
 												setRangeValue(0);
 											}}>
-												<ItemPic className="pic" itemPic={imgSet.itemMaterial[items.display]}>
+												<ItemPic className="pic" pic={imgSet.images.itemEtc} type="material" idx={items.display}>
 													{typeof itemData.num === 'number' ? (
 														<span className="has_num">{itemData.num}</span>
 													) : (
@@ -232,7 +230,7 @@ const TradingPost = ({
 							<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem.game.na[lang]}`}}></span></li>
 							<li className="item_fix" flex="true">
 								<div className={`item ${gameData.itemGrade.txt_e[selectItem.save.grade || selectItem.game.grade].toLowerCase()}`}>
-									<ItemPic className="pic" itemPic={imgSet.itemMaterial[selectItem.game.display]} />
+									<ItemPic className="pic" pic={imgSet.images.itemEtc} type="material" idx={selectItem.game.display} />
 								</div>
 								<div flex-h="true" style={{flex: 1}}>
 									<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem.save.grade]}>

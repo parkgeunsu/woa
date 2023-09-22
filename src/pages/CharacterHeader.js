@@ -1,6 +1,6 @@
 import { AppContext } from 'App';
 import { util } from 'components/Libs';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 const ChHeader = styled.div`
@@ -30,24 +30,19 @@ const ChracterHeader = ({
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
   const currentTime = useContext(AppContext).currentTime;
-  const saveExp = {
-    current: saveData.ch[slotIdx].exp,
-    max: gameData.exp['grade'+saveData.ch[slotIdx].grade][saveData.ch[slotIdx].lv-1]
-  }
-  const saveHasExp = {
-    current: saveData.ch[slotIdx].hasExp,
-    max: gameData.hasMaxExp[saveData.ch[slotIdx].grade]
-  }
-  const chMenu = [
-    {idx:0},
-    {idx:1},
-    {idx:2},
-    {idx:3},
-    {idx:4},
-    {idx:5},
-    {idx:6},
-    {idx:7},
-  ];
+  const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
+  const saveExp = React.useMemo(() => {
+    return {
+      current: saveCh.exp,
+      max: gameData.exp['grade' + saveCh.grade][saveCh.lv-1]
+    }
+  }, [gameData, saveCh]);
+  const saveHasExp = React.useMemo(() => {
+    return {
+      current: saveCh.hasExp,
+      max: gameData.hasMaxExp[saveCh.grade]
+    }
+  }, [gameData, saveCh]);
   return (
     <>
       <ChHeader frameBack={imgSet.etc.frameChBack} className="ch_header transition">
@@ -83,7 +78,7 @@ const ChracterHeader = ({
           </li>
         </ul>
         <div className="ch_menu transition">
-        {chMenu && chMenu.map((data, idx) => {
+        {gameData.chMenu.map((data, idx) => {
           return (
             <ChMenuButton className={`ch_menu_bt ${idx === chPage ? "on" : ""}`} key={`chmenubutton${idx}`} onClick={() => {changeChPage(idx)}} backImg={imgSet.menu[idx]}/>
           )

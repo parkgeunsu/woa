@@ -1,5 +1,6 @@
 import { AppContext } from 'App';
 import { ActionChDisplay } from 'components/Components';
+import { ItemPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Modal from 'components/Modal';
 import ModalContainer from 'components/ModalContainer';
@@ -11,11 +12,6 @@ import 'css/combineItem.css';
 import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-const Img = styled.img.attrs(
-  ({imgurl}) => ({
-    src: imgurl 
-  })
-)``;
 const CombineWrap = styled.div`
 	background:url(${({backImg}) => backImg});background-size:cover;
 `;
@@ -30,9 +26,6 @@ const combineList = [
 
 const ShopIcon = styled.span`
 	background:url(${({ icoType }) => icoType}) no-repeat left center;background-size:100%;
-`;
-const ItemPic = styled.div`
-  display:inline-block;width:100%;height:100%;background-image:url(${({itemPic}) => itemPic});background-size:100%;background-repeat:no-repeat;
 `;
 const ItemTotalEff = styled.div`
 	border:5px solid transparent;
@@ -261,7 +254,7 @@ const Composite = ({
 												const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 												return (
 													<span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
-														<ItemPic className="pic" itemPic={imgSet.itemHole[holePic]} />
+														<ItemPic className="pic" pic={imgSet.images.itemEtc} type="hole" idx={holePic} />
 													</span>
 												);
 											})}
@@ -269,16 +262,16 @@ const Composite = ({
 									</>
 								)}
 								{cate === 'hole' && (
-									<ItemPic className="pic" itemPic={imgSet.itemHole[items.display]} />
+									<ItemPic className="pic" pic={imgSet.images.itemEtc} type="hole" idx={items.display} />
 								)}
 								{cate === 'upgrade' && (
-									<ItemPic className="pic" itemPic={imgSet.itemUpgrade[items.display]} />
+									<ItemPic className="pic" pic={imgSet.images.itemEtc} type="upgrade" idx={items.display} />
 								)}
 								{cate === 'material' && (
-									<ItemPic className="pic" itemPic={imgSet.itemMaterial[items.display]} />
+									<ItemPic className="pic" pic={imgSet.images.itemEtc} type="material" idx={items.display} />
 								)}
 								{cate === 'etc' && (
-									<ItemPic className="pic" itemPic={imgSet.itemEtc[items.display]}>
+									<ItemPic className="pic" pic={imgSet.images.itemEtc} type="etc" idx={items.display}>
 									{items.displayText && <span className="display_text">{items.displayText}</span>}</ItemPic>
 								)}
 							</div>
@@ -343,7 +336,7 @@ const Composite = ({
 													const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 													return (
 														<span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
-															<ItemPic className="pic" itemPic={imgSet.itemHole[holePic]} />
+															<ItemPic className="pic" pic={imgSet.images.itemEtc} type="hole" idx={holePic} />
 														</span>
 													);
 												})}
@@ -371,7 +364,7 @@ const Composite = ({
 											cloneSelectItem.selectTab[selectIdx] = combineList[selectTab].keyName;
 											setSelectItem(cloneSelectItem);
 										}}>
-											<ItemPic className="pic" itemPic={imgSet[`item${combineList[selectTab].keyName.replace(/^[a-z]/, char => char.toUpperCase())}`][items.display]} />
+											<ItemPic className="pic" pic={imgSet.images.itemEtc} type={combineList[selectTab].keyName} idx={items.display} />
 										</div>
 									);
 								} else if (cate === 'upgrade') {
@@ -396,7 +389,7 @@ const Composite = ({
 											cloneSelectItem.num += 1;
 											setSelectItem(cloneSelectItem);
 										}}>
-											<ItemPic className="pic" itemPic={imgSet[`item${combineList[selectTab].keyName.replace(/^[a-z]/, char => char.toUpperCase())}`][items.display]} />
+											<ItemPic className="pic" pic={imgSet.images.itemEtc} type={combineList[selectTab].keyName} idx={items.display} />
 										</div>
 									)
 								} else if (cate === 'material') {
@@ -420,7 +413,7 @@ const Composite = ({
 											cloneSelectItem.selectTab[selectIdx] = combineList[selectTab].keyName;
 											setSelectItem(cloneSelectItem);
 										}}>
-											<ItemPic className="pic" itemPic={imgSet[`item${combineList[selectTab].keyName.replace(/^[a-z]/, char => char.toUpperCase())}`][items.display]} />
+											<ItemPic className="pic" pic={imgSet.images.itemEtc} type={combineList[selectTab].keyName} idx={items.display} />
 										</div>
 									)
 								} else if (cate === 'etc') {
@@ -445,8 +438,9 @@ const Composite = ({
 											cloneSelectItem.num += 1;
 											setSelectItem(cloneSelectItem);
 										}}>
-											<ItemPic className="pic" itemPic={imgSet[`item${combineList[selectTab].keyName.replace(/^[a-z]/, char => char.toUpperCase())}`][items.display]}>
-											{items.displayText && <span className="display_text">{items.displayText}</span>}</ItemPic>
+											<ItemPic className="pic" pic={imgSet.images.itemEtc} type={combineList[selectTab].keyName} idx={items.display}>
+												{items.displayText && <span className="display_text">{items.displayText}</span>}
+											</ItemPic>
 										</div>
 									)
 								}

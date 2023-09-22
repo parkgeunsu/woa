@@ -1,4 +1,5 @@
 import { AppContext } from 'App';
+import { ItemPic, MarkPic } from 'components/ImagePic';
 import { chImg, ringImg } from 'components/ImgSet';
 import { util } from 'components/Libs';
 import PopupContainer from 'components/PopupContainer';
@@ -55,9 +56,6 @@ const PopupItemContainer = styled.ul`
   .item_footer{border:5px solid transparent;
   border-image:url(${({frameBack}) => frameBack}) 5 round;}
 `;
-const PopupItemPic = styled.div`
-  &:after{background-image:url(${({itemPic}) => itemPic});background-size:100%;background-repeat:no-repeat;}
-`;
 const PopupItemName = styled.div`
   .item_grade{color:${({ color }) => color};}
 `;
@@ -96,8 +94,7 @@ const makeMark = (markNum, img) => {
   for (let i = 0; i < markNum; ++i) {
     markTag += `<span><img src="${img}" class="light"/><img src="${img}" class="front"/><img src="${img}" class="shadow"/></span>`
   }
-  return markTag; 
-  //imgSet.animalType[animalIdx]
+  return markTag;
 }
 const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, showPopup, lang, navigate) => {
 	if (type === 'relation') {
@@ -128,10 +125,10 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[grade]}>
         <li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${saveItems.colorantSet ? util.getColorant(saveItems.colorantSet, gameData).na[lang] : ''} ${saveItems.modifier[lang]}<br/>${items.na[lang]}`}}></span></li>
         <li flex="true">
-          <PopupItemPic className={`item item${items.part} ${gameData.itemGrade.txt_e[saveItems.grade].toLowerCase()}`}>
+          <ItemPic type="equip" className={`item item${items.part} ${gameData.itemGrade.txt_e[saveItems.grade].toLowerCase()}`}>
             <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color, saveItems.svgColor || saveItems.id)}}>
             </svg>
-          </PopupItemPic>
+          </ItemPic>
           <div flex-h="true" style={{flex: 1,}}>
             <PopupItemName className="item_cont" color={gameData.itemGrade.color[grade]}>
               <div className="item_top">
@@ -144,13 +141,18 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           </div>
         </li>
         <li className="item_list item_typeSlot" flex="true">
-          <div className="item_type" dangerouslySetInnerHTML={{__html: makeMark(saveItems.markNum, imgSet.animalType[saveItems.mark])}}>
+          <div className="item_type">
+            <MarkPic length={saveItems.markNum} pic={imgSet.images.animalType} idx={saveItems.mark} />
           </div>
           <div className="item_slot">
             {saveItems.hole.map((holeData, idx) => {
               const holePic = holeData !== 0 ? gameData.items.hole[holeData.idx].display : 0;
               return (
-                <div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}><span className="item_holeback"><Img imgurl={imgSet.itemHole[holePic]} /></span></div>
+                <div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}>
+                  <span className="item_holeback">
+                    <ItemPic pic={imgSet.images.itemEtc} type="hole" idx={holePic} />
+                  </span>
+                </div>
               )
             })}
           </div>
@@ -241,10 +243,10 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
       <PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[grade]}>
         <li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${saveItems.colorantSet ? util.getColorant(saveItems.colorantSet, gameData).na[lang] : ''} ${saveItems.modifier[lang]}<br/>${items.na[lang]}`}}></span></li>
         <li flex="true">
-          <PopupItemPic className={`item item${items.part} ${gameData.itemGrade.txt_e[saveItems.grade].toLowerCase()} ${dataObj.saveItemData.sealed ? "sealed" : ""}`}>
+          <ItemPic type="equip" className={`item item${items.part} ${gameData.itemGrade.txt_e[saveItems.grade].toLowerCase()} ${dataObj.saveItemData.sealed ? "sealed" : ""}`}>
             <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color, saveItems.svgColor || saveItems.id)}}>
             </svg>
-          </PopupItemPic>
+          </ItemPic>
           <div flex-h="true" style={{flex: 1,}}>
             <PopupItemName className="item_cont" color={gameData.itemGrade.color[grade]}>
               <div className="item_top">
@@ -257,13 +259,18 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           </div>
         </li>
         <li className="item_list item_typeSlot" flex="true">
-          <div className="item_type" dangerouslySetInnerHTML={{__html: makeMark(saveItems.markNum, imgSet.animalType[saveItems.mark])}}>
+          <div className="item_type">
+            <MarkPic length={saveItems.markNum} pic={imgSet.images.animalType} idx={saveItems.mark} />
           </div>
           <div className="item_slot">
             {saveItems.hole.map((holeData, idx) => {
               const holePic = holeData !== 0 ? gameData.items.hole[holeData.idx].display : 0;
               return (
-                <div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}><span className="item_holeback"><Img imgurl={imgSet.itemHole[holePic]} /></span></div>
+                <div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}>
+                  <span className="item_holeback">
+                    <ItemPic pic={imgSet.images.itemEtc} type="hole" idx={holePic} />
+                  </span>
+                </div>
               )
             })}
           </div>
@@ -417,7 +424,9 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[items.grade]}>
         <li className="item_header" flex-center="true"><span className="item_name">{items.na[lang]}</span></li>
         <li flex="true">
-          <PopupItemPic  className="item item11" itemPic={imgSet.itemHole[items.display]} />
+          <div className="item item11">
+            <ItemPic pic={imgSet.images.itemEtc} type="hole" idx={items.display} />
+          </div>
           <div flex-h="true" style={{flex: 1,}}>
             <PopupItemName className="item_cont" color={gameData.itemGrade.color[items.grade]}>
               <div className="item_top">
@@ -488,7 +497,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[items.grade]}>
         <li className="item_header" flex-center="true"><span className="item_name">{items.na[lang]}</span></li>
         <li flex="true">
-          <PopupItemPic className="item item12" itemPic={imgSet.itemUpgrade[items.display]} />
+          <ItemPic className="item item12" pic={imgSet.images.itemEtc} type="upgrade" idx={items.display} />
           <div flex-h="true" style={{flex: 1,}}>
             <PopupItemName className="item_cont" color={gameData.itemGrade.color[items.grade]}>
               <div className="item_top">
@@ -540,7 +549,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[items.grade]}>
         <li className="item_header" flex-center="true"><span className="item_name">{items.na[lang]}</span></li>
         <li flex="true">
-          <PopupItemPic className="item item14" itemPic={imgSet.itemMaterial[items.display]} />
+          <ItemPic className="item item14" pic={imgSet.images.itemEtc} type="material" idx={items.display} />
           <div flex-h="true" style={{flex: 1,}}>
             <PopupItemName className="item_cont" color={gameData.itemGrade.color[items.grade]}>
               <div className="item_top">
@@ -578,7 +587,9 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[items.grade]}>
         <li className="item_header" flex-center="true"><span className="item_name">{items.na[lang]}</span></li>
         <li flex="true">
-          <PopupItemPic className="item item13" itemPic={imgSet.itemEtc[items.display]} />
+          <div className="item item13">
+            <ItemPic pic={imgSet.images.itemEtc} type="etc" idx={items.display} />
+          </div>
           <div flex-h="true" style={{flex: 1,}}>
             <PopupItemName className="item_cont" color={gameData.itemGrade.color[items.grade]}>
               <div className="item_top">

@@ -59,7 +59,7 @@ export const util = { //this.loadImage();
     const history = util.loadData('history') || [];
     setTimeout(() => {
       const currentLocation = window.location.pathname.split('/')[1],
-        prevLocation = util.loadData('history', history)[0];
+        prevLocation = history.length > 0 ? util.loadData('history')[0] : '';
       if (currentLocation !== prevLocation) {
         history.unshift(currentLocation);
         util.saveData('history', history);
@@ -1782,5 +1782,21 @@ export const util = { //this.loadImage();
       return per;
     });
     return blockPercent.filter((block) => percent < block.num)[0].idx;
+  },
+  typeTostartIdx: (type) => {
+    switch(type) {
+      case 'equip':
+        return '';
+      case 'etc':
+        return 0;
+      case 'hole':
+        return 10;
+      case 'upgrade':
+        return 30;
+      case 'material':
+        return 40;
+      default:
+        break;
+    }
   }
 }

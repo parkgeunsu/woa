@@ -1,23 +1,48 @@
 import { AppContext } from 'App';
 import GuideQuestion from 'components/GuideQuestion';
+import { ItemPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import 'css/ch.css';
-import { useContext, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
-
 const AnimalItemPic = styled.div`
-  &:before{content:'';position:absolute;left:0;top:0;width:100%;height:100%;background: url(${({animalType}) => animalType}) no-repeat center center;background-size:100%;filter:brightness(0.3);z-index:1;}
-  &:after{content:'';position:absolute;left:3px;top:3px;width:100%;height:100%;background: url(${({animalType}) => animalType}) no-repeat center center;background-size:100%;filter:brightness(.1);}
+  &:before{
+    content:'';
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    ${({pic, size, idx}) => {
+      return `
+        background: url(${pic}) no-repeat -${(idx % 10) * size}px -${Math.floor(idx / 10) * size}px;
+        background-size: ${size * 10}px;
+      `;
+    }}
+    filter:brightness(0.3);
+    z-index:1;
+  }
+  &:after{
+    content:'';
+    position:absolute;
+    left:3px;
+    top:3px;
+    width:100%;
+    height:100%;
+    ${({pic, size, idx}) => {
+      return `
+        background: url(${pic}) no-repeat -${(idx % 10) * size}px -${Math.floor(idx / 10) * size}px;
+        background-size: ${size * 10}px;
+      `;
+    }}
+    filter:brightness(.1);
+  }
 `;
-const ItemPic = styled.span`
-  background: url(${({itemPic}) => itemPic}) no-repeat center center;
-  background-size: 100%;
-  svg{width:100%;height:100%;}
-`;
+
 const CharacterItems = ({
   navigate,
   saveData,
@@ -27,30 +52,47 @@ const CharacterItems = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-  const [animalIdx, setAnimalIdx] = useState(gameData.ch[saveData.ch[slotIdx].idx].animal_type);
+  const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
+  const chData = React.useMemo(() => gameData.ch[saveCh.idx], [gameData, saveCh]);
+  const animalIdx = React.useMemo(() => chData.animal_type, [chData]);
 
-  // const [saveItems, setSaveItems] = useState(saveData.ch[slotIdx].items);
-  const saveItems = useRef(null);
-  saveItems.current = saveData.ch[slotIdx].items;
-  const gameItem = gameData.items;
-  const [invenItems, setInvenItems] = useState(saveData.items);
+  const saveItems = React.useMemo(() => {
+    return saveCh.items
+  }, [saveCh, saveData]);
+  const gameItem = React.useMemo(() => gameData.items, [gameData]);
+  const invenItems = React.useMemo(() => saveData.items, [saveData]);
+  const possibleKg = React.useMemo(() => {
+    let kg = 0;
+    saveItems.forEach((itemData) => {
+      if (Object.keys(itemData).length !== 0) {
+        const itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5;
+        kg += itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx].kg : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx].kg;
+      }
+    })
+    return [kg.toFixed(1), Math.floor(chData.st1 / 0.3)/10];
+  }, [saveCh, chData, gameItem, saveItems]);
+  const [animalSize, setAnimalSize] = useState(0);
+  const animalPic = useCallback((node) => {
+    if (node !== null) {
+      setAnimalSize(node.getBoundingClientRect().width);
+    }
+  }, []);
   const [popupOn, setPopupOn] = useState(false);
-  const popupType = useRef('');
+  const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
   const [msgOn, setMsgOn] = useState(false);
-  const [kg, setKg] = useState([0,0]);
   const [msg, setMsg] = useState("");
-  const handlePopup = (itemType, itemIdx, itemSaveSlot, itemPart, itemGrade, itemWeaponType) => {
+  const handlePopup = useCallback((itemType, itemIdx, itemSaveSlot, itemPart, itemGrade, itemWeaponType) => {
     if( itemType ){
       let saveItemData;
       if (itemType === 'equip') {
-        saveItemData = saveItems.current[itemSaveSlot];
+        saveItemData = saveItems[itemSaveSlot];
       } else if (itemType === 'hequip') {
         saveItemData = invenItems['equip'][itemSaveSlot];
       } else {
         saveItemData = invenItems[itemType][itemSaveSlot];
       }
-      popupType.current = itemType;
+      setPopupType(itemType);
       const itemsGrade = itemGrade < 5 ? 0 : itemGrade - 5;
       let gameItemData = '';
       if (itemType === 'hequip' || itemType === 'equip') {
@@ -66,41 +108,27 @@ const CharacterItems = ({
         type: itemType === 'hequip' ? 'equip' : itemType,
       });
     }
-    setPopupOn(!popupOn);
-  }
-  useLayoutEffect(() => {
-    setAnimalIdx(gameData.ch[saveData.ch[slotIdx].idx].animal_type);//슬롯이 바뀔때 동물종류 변경
-    // setSaveItems();
-    saveItems.current = saveData.ch[slotIdx].items;
-    let kg = 0;
-    saveItems.current.forEach((itemData) => {
-      if (Object.keys(itemData).length !== 0) {
-        const itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5;
-        kg += itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx].kg : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx].kg;
-      }
-    })
-    setKg([kg, Math.floor(gameData.ch[saveData.ch[slotIdx].idx].st1 / 0.3)/10]);
-    setInvenItems(saveData.items);
-  }, [slotIdx, saveData]);
+    setPopupOn(prev => !prev);
+  }, [slotIdx]);
   return (
     <>
       <div className="items">
         <dl className="info_group it_group">
           <dt flex="true">
-            <div><em>EQUIPMENT</em><span>({gameData.msg.menu.equipment[lang]})</span>
+            <div><em>{gameData.msg.menu.equipment[lang]}</em>
               <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
-                popupType.current = 'guide';
+                setPopupType('guide');
                 setPopupOn(true);
                 setPopupInfo({
                   data:gameData.guide["characterItem"],
                 });
               }} />
             </div>
-            <div className="kg">{`${kg[0]}kg / ${kg[1]}kg`}</div>
+            <div className="kg">{`${possibleKg[0]}kg / ${possibleKg[1]}kg`}</div>
           </dt>
           <dd className="item_area">
             <div className="equip_items">
-              <AnimalItemPic animalType={imgSet.animalType[animalIdx]} className={`animal_item_pic animal_type${animalIdx}`}>
+              <AnimalItemPic ref={animalPic} size={animalSize} pic={imgSet.images.animalType} idx={animalIdx} className={`animal_item_pic animal_type${animalIdx}`}>
                 <span className="line line1"><span className="l1"></span><span className="l2"></span><span className="dot"></span></span>
                 <span className="line line2"><span className="l1"></span><span className="l2"></span><span className="dot"></span></span>
                 <span className="line line3"><span className="l1"></span><span className="l2"></span><span className="dot"></span></span>
@@ -111,7 +139,7 @@ const CharacterItems = ({
                 <span className="line line8"><span className="l1"></span><span className="l2"></span><span className="dot"></span></span>
               </AnimalItemPic>
               <ul className="e_items">
-                { saveItems.current && saveItems.current.map((data, idx) => {
+                {saveItems && saveItems.map((data, idx) => {
                   const itemChk = Object.keys(data).length;
                   if (itemChk !== 0) {
                     const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
@@ -120,8 +148,7 @@ const CharacterItems = ({
                     return (
                       <li key={`equip${idx}`} onClick={() => {handlePopup('equip', data.idx, idx, data.part, data.grade, data.weaponType)}} className={`item item${gameData.animal_type[animalIdx].equip[idx]} ${gameData.itemGrade.txt_e[data.grade].toLowerCase()}`}>
                         <em>
-                          {/* <ItemPic className="pic" itemPic={imgSet.itemEquip[items.display]}></ItemPic> */}
-                          <ItemPic className="pic">
+                          <ItemPic type="equip" className="pic">
                             <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.svgColor || data.id)}}>
                             </svg>
                           </ItemPic>
@@ -130,7 +157,7 @@ const CharacterItems = ({
                               const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
                               return (
                                 <span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
-                                  <ItemPic className="pic" itemPic={imgSet.itemHole[holePic]} />
+                                  <ItemPic type="hole" className="pic" pic={imgSet.images.itemEtc} idx={holePic} />
                                 </span>
                               );
                             })}
@@ -162,7 +189,7 @@ const CharacterItems = ({
                   return (
                     <li key={`hequip${idx}`} onClick={() => {handlePopup('hequip', data.idx, idx, data.part, data.grade, data.weaponType)}} className={`item item${data.part} ${gameData.itemGrade.txt_e[data.grade].toLowerCase()}`} data-itemnum={`equip_${data.idx}`}>
                       <em>
-                        <ItemPic className={`pic ${data.sealed ? "sealed" : ""} ${equipPossible ? "impossible" : ""}`}>
+                        <ItemPic type="equip" className={`pic ${data.sealed ? "sealed" : ""} ${equipPossible ? "impossible" : ""}`}>
                           <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.svgColor || data.id)}}>
                           </svg>
                         </ItemPic>
@@ -171,7 +198,7 @@ const CharacterItems = ({
 														const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 														return (
 															<span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
-																<ItemPic className="pic" itemPic={imgSet.itemHole[holePic]} />
+																<ItemPic type="hole" className="pic" itemPic={imgSet.images.itemEtc} idx={holePic} />
 															</span>
 														);
 													})}
@@ -215,7 +242,7 @@ const CharacterItems = ({
                   return (
                     <li key={`etc${idx}`} onClick={() => {handlePopup('etc', data.idx, idx)}} className="item item13" data-itemnum={`etc_${data.idx}`}>
                       <em>
-                        <ItemPic className="pic" itemPic={imgSet.itemEtc[items.display]} />
+                        <ItemPic className="pic" itemPic={imgSet.images.itemEtc[items.display]} />
                       </em>
                     </li>
                   )
@@ -226,7 +253,7 @@ const CharacterItems = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} navigate={navigate} lang={lang} />}
+        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} navigate={navigate} lang={lang} />}
       </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}

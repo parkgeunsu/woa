@@ -2,7 +2,7 @@ import { AppContext } from 'App';
 import GuideQuestion from 'components/GuideQuestion';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
-import { useContext, useRef, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 const SkillIcon = styled.span`
@@ -46,19 +46,20 @@ const CharacterSkill = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
+  const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
   const [popupOn, setPopupOn] = useState(false);
-  const popupType = useRef('');
+  const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
-  const saveSkill = saveData.ch[slotIdx].hasSkill;
+  const saveSkill = React.useMemo(() => saveCh.hasSkill, [saveCh]);
   // const animalSkill = saveData.ch[slotIdx].animalSkill;
-  const elementIcon = [imgSet.element[0],imgSet.element[1],imgSet.element[2],imgSet.element[3],imgSet.element[4],imgSet.element[5],imgSet.element[6],imgSet.element[7],imgSet.element[8],imgSet.element[9],imgSet.element[10],imgSet.element[11],imgSet.element[12]];
+  // const elementIcon = [imgSet.element[0],imgSet.element[1],imgSet.element[2],imgSet.element[3],imgSet.element[4],imgSet.element[5],imgSet.element[6],imgSet.element[7],imgSet.element[8],imgSet.element[9],imgSet.element[10],imgSet.element[11],imgSet.element[12]];
   return (
     <>
       <div className="skill scroll-y">
         <dl className="info_group">
-          <dt>SKILL<span>({gameData.msg.menu.skill[lang]})</span>
+          <dt>{gameData.msg.menu.skill[lang]}
             <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
-              popupType.current = 'guide';
+              setPopupType('guide');
               setPopupOn(true);
               setPopupInfo({
                 data:gameData.guide["characterSkill"],
@@ -122,7 +123,7 @@ const CharacterSkill = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} lang={lang} />}
+        {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} lang={lang} />}
       </PopupContainer>
     </>
   );

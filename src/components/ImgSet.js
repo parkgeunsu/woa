@@ -176,188 +176,162 @@ import iconState3 from 'images/ico/st3.png';
 import iconState4 from 'images/ico/st4.png';
 import iconState5 from 'images/ico/st5.png';
 import iconState6 from 'images/ico/st6.png';
-import itemEtc31 from 'images/item/Blueprint.png';
-import itemEtc32 from 'images/item/Blueprint_piece.png';
-import animalType0 from 'images/item/animal_item0.png';
-import animalType1 from 'images/item/animal_item1.png';
-import animalType10 from 'images/item/animal_item10.png';
-import animalType11 from 'images/item/animal_item11.png';
-import animalType12 from 'images/item/animal_item12.png';
-import animalType13 from 'images/item/animal_item13.png';
-import animalType14 from 'images/item/animal_item14.png';
-import animalType15 from 'images/item/animal_item15.png';
-import animalType16 from 'images/item/animal_item16.png';
-import animalType17 from 'images/item/animal_item17.png';
-import animalType18 from 'images/item/animal_item18.png';
-import animalType19 from 'images/item/animal_item19.png';
-import animalType2 from 'images/item/animal_item2.png';
-import animalType20 from 'images/item/animal_item20.png';
-import animalType21 from 'images/item/animal_item21.png';
-import animalType22 from 'images/item/animal_item22.png';
-import animalType23 from 'images/item/animal_item23.png';
-import animalType24 from 'images/item/animal_item24.png';
-import animalType25 from 'images/item/animal_item25.png';
-import animalType3 from 'images/item/animal_item3.png';
-import animalType4 from 'images/item/animal_item4.png';
-import animalType5 from 'images/item/animal_item5.png';
-import animalType6 from 'images/item/animal_item6.png';
-import animalType7 from 'images/item/animal_item7.png';
-import animalType8 from 'images/item/animal_item8.png';
-import animalType9 from 'images/item/animal_item9.png';
-import itemEtc22 from 'images/item/book0.png';
-import itemEtc23 from 'images/item/book1.png';
-import itemEtc24 from 'images/item/book2.png';
+// import itemEtc31 from 'images/item/Blueprint.png';
+// import itemEtc32 from 'images/item/Blueprint_piece.png';
+// import itemEtc20 from 'images/item/book6.png';
+// import itemEtc21 from 'images/item/book7.png';
+// import itemEtc22 from 'images/item/book0.png';
+// import itemEtc23 from 'images/item/book1.png';
+// import itemEtc24 from 'images/item/book2.png';
 import itemEtc25 from 'images/item/book3.png';
-import itemEtc26 from 'images/item/book4.png';
-import itemEtc27 from 'images/item/book5.png';
-import itemEtc20 from 'images/item/book6.png';
-import itemEtc21 from 'images/item/book7.png';
-import itemEtc10 from 'images/item/box0.png';
-import itemEtc11 from 'images/item/box1.png';
-import colorant0 from 'images/item/colorant0.png';
-import colorant1 from 'images/item/colorant1.png';
-import colorant10 from 'images/item/colorant10.png';
-import colorant11 from 'images/item/colorant11.png';
-import colorant12 from 'images/item/colorant12.png';
-import colorant13 from 'images/item/colorant13.png';
-import colorant14 from 'images/item/colorant14.png';
-import colorant2 from 'images/item/colorant2.png';
-import colorant20 from 'images/item/colorant20.png';
-import colorant21 from 'images/item/colorant21.png';
-import colorant22 from 'images/item/colorant22.png';
-import colorant23 from 'images/item/colorant23.png';
-import colorant24 from 'images/item/colorant24.png';
-import colorant25 from 'images/item/colorant25.png';
-import colorant26 from 'images/item/colorant26.png';
-import colorant27 from 'images/item/colorant27.png';
-import colorant28 from 'images/item/colorant28.png';
-import colorant29 from 'images/item/colorant29.png';
-import colorant3 from 'images/item/colorant3.png';
-import colorant30 from 'images/item/colorant30.png';
-import colorant31 from 'images/item/colorant31.png';
-import colorant32 from 'images/item/colorant32.png';
-import colorant33 from 'images/item/colorant33.png';
-import colorant34 from 'images/item/colorant34.png';
-import colorant4 from 'images/item/colorant4.png';
-import colorant40 from 'images/item/colorant40.png';
-import colorant41 from 'images/item/colorant41.png';
-import colorant42 from 'images/item/colorant42.png';
-import colorant43 from 'images/item/colorant43.png';
-import colorant44 from 'images/item/colorant44.png';
-import colorant45 from 'images/item/colorant45.png';
-import colorant46 from 'images/item/colorant46.png';
-import colorant47 from 'images/item/colorant47.png';
-import colorant48 from 'images/item/colorant48.png';
-import colorant49 from 'images/item/colorant49.png';
-import colorant5 from 'images/item/colorant5.png';
-import colorant50 from 'images/item/colorant50.png';
-import colorant51 from 'images/item/colorant51.png';
-import colorant52 from 'images/item/colorant52.png';
-import colorant53 from 'images/item/colorant53.png';
-import colorant54 from 'images/item/colorant54.png';
-import colorant6 from 'images/item/colorant6.png';
-import colorant7 from 'images/item/colorant7.png';
-import colorant8 from 'images/item/colorant8.png';
-import colorant9 from 'images/item/colorant9.png';
-import colorantNone from 'images/item/colorantNone.png';
-import itemMaterial0 from 'images/item/food.png';
-import itemEtc0 from 'images/item/gold0.png';
-import itemEtc1 from 'images/item/gold1.png';
-import itemEtc2 from 'images/item/gold2.png';
+// import itemEtc26 from 'images/item/book4.png';
+// import itemEtc27 from 'images/item/book5.png';
+// import itemEtc10 from 'images/item/box0.png';
+// import itemEtc11 from 'images/item/box1.png';
+// import colorant0 from 'images/item/colorant0.png';
+// import colorant1 from 'images/item/colorant1.png';
+// import colorant10 from 'images/item/colorant10.png';
+// import colorant11 from 'images/item/colorant11.png';
+// import colorant12 from 'images/item/colorant12.png';
+// import colorant13 from 'images/item/colorant13.png';
+// import colorant14 from 'images/item/colorant14.png';
+// import colorant2 from 'images/item/colorant2.png';
+// import colorant20 from 'images/item/colorant20.png';
+// import colorant21 from 'images/item/colorant21.png';
+// import colorant22 from 'images/item/colorant22.png';
+// import colorant23 from 'images/item/colorant23.png';
+// import colorant24 from 'images/item/colorant24.png';
+// import colorant25 from 'images/item/colorant25.png';
+// import colorant26 from 'images/item/colorant26.png';
+// import colorant27 from 'images/item/colorant27.png';
+// import colorant28 from 'images/item/colorant28.png';
+// import colorant29 from 'images/item/colorant29.png';
+// import colorant3 from 'images/item/colorant3.png';
+// import colorant30 from 'images/item/colorant30.png';
+// import colorant31 from 'images/item/colorant31.png';
+// import colorant32 from 'images/item/colorant32.png';
+// import colorant33 from 'images/item/colorant33.png';
+// import colorant34 from 'images/item/colorant34.png';
+// import colorant4 from 'images/item/colorant4.png';
+// import colorant40 from 'images/item/colorant40.png';
+// import colorant41 from 'images/item/colorant41.png';
+// import colorant42 from 'images/item/colorant42.png';
+// import colorant43 from 'images/item/colorant43.png';
+// import colorant44 from 'images/item/colorant44.png';
+// import colorant45 from 'images/item/colorant45.png';
+// import colorant46 from 'images/item/colorant46.png';
+// import colorant47 from 'images/item/colorant47.png';
+// import colorant48 from 'images/item/colorant48.png';
+// import colorant49 from 'images/item/colorant49.png';
+// import colorant5 from 'images/item/colorant5.png';
+// import colorant50 from 'images/item/colorant50.png';
+// import colorant51 from 'images/item/colorant51.png';
+// import colorant52 from 'images/item/colorant52.png';
+// import colorant53 from 'images/item/colorant53.png';
+// import colorant54 from 'images/item/colorant54.png';
+// import colorant6 from 'images/item/colorant6.png';
+// import colorant7 from 'images/item/colorant7.png';
+// import colorant8 from 'images/item/colorant8.png';
+// import colorant9 from 'images/item/colorant9.png';
+// import colorantNone from 'images/item/colorantNone.png';
+// import itemEtc0 from 'images/item/gold0.png';
+// import itemEtc1 from 'images/item/gold1.png';
+// import itemEtc2 from 'images/item/gold2.png';
 import itemUpgrade0 from 'images/item/hammer0.png';
-import itemUpgrade1 from 'images/item/hammer1.png';
-import itemUpgrade2 from 'images/item/hammer2.png';
-import itemUpgrade3 from 'images/item/hammer3.png';
-import itemUpgrade4 from 'images/item/hammer4.png';
-import itemUpgrade5 from 'images/item/hammer5.png';
-import itemUpgrade6 from 'images/item/hone0.png';
-import itemUpgrade7 from 'images/item/hone1.png';
-import itemUpgrade8 from 'images/item/hone2.png';
-import itemUpgrade9 from 'images/item/hone3.png';
-import itemUpgrade10 from 'images/item/hone4.png';
-import itemUpgrade11 from 'images/item/hone5.png';
-import itemHole0 from 'images/item/jewel0.png';
+// import itemUpgrade1 from 'images/item/hammer1.png';
+// import itemUpgrade2 from 'images/item/hammer2.png';
+// import itemUpgrade3 from 'images/item/hammer3.png';
+// import itemUpgrade4 from 'images/item/hammer4.png';
+// import itemUpgrade5 from 'images/item/hammer5.png';
+// import itemUpgrade6 from 'images/item/hone0.png';
+// import itemUpgrade7 from 'images/item/hone1.png';
+// import itemUpgrade8 from 'images/item/hone2.png';
+// import itemUpgrade9 from 'images/item/hone3.png';
+// import itemUpgrade10 from 'images/item/hone4.png';
+// import itemUpgrade11 from 'images/item/hone5.png';
+// import itemHole0 from 'images/item/jewel0.png';
 import itemHole1 from 'images/item/jewel1.png';
-import itemHole10 from 'images/item/jewel10.png';
-import itemHole11 from 'images/item/jewel11.png';
-import itemHole12 from 'images/item/jewel12.png';
-import itemHole13 from 'images/item/jewel13.png';
-import itemHole14 from 'images/item/jewel14.png';
-import itemHole15 from 'images/item/jewel15.png';
-import itemHole16 from 'images/item/jewel16.png';
-import itemHole17 from 'images/item/jewel17.png';
-import itemHole18 from 'images/item/jewel18.png';
-import itemHole19 from 'images/item/jewel19.png';
-import itemHole2 from 'images/item/jewel2.png';
-import itemHole20 from 'images/item/jewel20.png';
-import itemHole21 from 'images/item/jewel21.png';
-import itemHole22 from 'images/item/jewel22.png';
-import itemHole23 from 'images/item/jewel23.png';
-import itemHole24 from 'images/item/jewel24.png';
-import itemHole3 from 'images/item/jewel3.png';
-import itemHole4 from 'images/item/jewel4.png';
-import itemHole5 from 'images/item/jewel5.png';
-import itemHole6 from 'images/item/jewel6.png';
-import itemHole7 from 'images/item/jewel7.png';
-import itemHole8 from 'images/item/jewel8.png';
-import itemHole9 from 'images/item/jewel9.png';
-import itemEtc29 from 'images/item/map.png';
-import itemEtc30 from 'images/item/map_piece.png';
-import itemMaterial2 from 'images/item/material0.png';
-import itemMaterial3 from 'images/item/material1.png';
-import itemMaterial12 from 'images/item/material10.png';
-import itemMaterial13 from 'images/item/material11.png';
-import itemMaterial14 from 'images/item/material12.png';
-import itemMaterial15 from 'images/item/material13.png';
-import itemMaterial16 from 'images/item/material14.png';
-import itemMaterial17 from 'images/item/material15.png';
-import itemMaterial18 from 'images/item/material16.png';
-import itemMaterial19 from 'images/item/material17.png';
-import itemMaterial20 from 'images/item/material18.png';
-import itemMaterial21 from 'images/item/material19.png';
-import itemMaterial4 from 'images/item/material2.png';
-import itemMaterial22 from 'images/item/material20.png';
-import itemMaterial23 from 'images/item/material21.png';
-import itemMaterial24 from 'images/item/material22.png';
-import itemMaterial25 from 'images/item/material23.png';
-import itemMaterial26 from 'images/item/material24.png';
-import itemMaterial27 from 'images/item/material25.png';
-import itemMaterial28 from 'images/item/material26.png';
-import itemMaterial29 from 'images/item/material27.png';
-import itemMaterial30 from 'images/item/material28.png';
-import itemMaterial31 from 'images/item/material29.png';
-import itemMaterial5 from 'images/item/material3.png';
-import itemMaterial32 from 'images/item/material30.png';
-import itemMaterial33 from 'images/item/material31.png';
-import itemMaterial34 from 'images/item/material32.png';
-import itemMaterial35 from 'images/item/material33.png';
-import itemMaterial36 from 'images/item/material34.png';
-import itemMaterial37 from 'images/item/material35.png';
-import itemMaterial38 from 'images/item/material36.png';
-import itemMaterial39 from 'images/item/material37.png';
-import itemMaterial40 from 'images/item/material38.png';
-import itemMaterial41 from 'images/item/material39.png';
-import itemMaterial6 from 'images/item/material4.png';
-import itemMaterial42 from 'images/item/material40.png';
-import itemMaterial43 from 'images/item/material41.png';
-import itemMaterial44 from 'images/item/material42.png';
-import itemMaterial45 from 'images/item/material43.png';
-import itemMaterial46 from 'images/item/material44.png';
-import itemMaterial47 from 'images/item/material45.png';
-import itemMaterial48 from 'images/item/material46.png';
-import itemMaterial49 from 'images/item/material47.png';
-import itemMaterial50 from 'images/item/material48.png';
-import itemMaterial51 from 'images/item/material49.png';
-import itemMaterial7 from 'images/item/material5.png';
-import itemMaterial52 from 'images/item/material50.png';
-import itemMaterial53 from 'images/item/material51.png';
-import itemMaterial54 from 'images/item/material52.png';
-import itemMaterial8 from 'images/item/material6.png';
-import itemMaterial9 from 'images/item/material7.png';
-import itemMaterial10 from 'images/item/material8.png';
-import itemMaterial11 from 'images/item/material9.png';
-import itemEtc28 from 'images/item/tongs.png';
-import itemMaterial1 from 'images/item/water.png';
+// import itemHole10 from 'images/item/jewel10.png';
+// import itemHole11 from 'images/item/jewel11.png';
+// import itemHole12 from 'images/item/jewel12.png';
+// import itemHole13 from 'images/item/jewel13.png';
+// import itemHole14 from 'images/item/jewel14.png';
+// import itemHole15 from 'images/item/jewel15.png';
+// import itemHole16 from 'images/item/jewel16.png';
+// import itemHole17 from 'images/item/jewel17.png';
+// import itemHole18 from 'images/item/jewel18.png';
+// import itemHole19 from 'images/item/jewel19.png';
+// import itemHole2 from 'images/item/jewel2.png';
+// import itemHole20 from 'images/item/jewel20.png';
+// import itemHole21 from 'images/item/jewel21.png';
+// import itemHole22 from 'images/item/jewel22.png';
+// import itemHole23 from 'images/item/jewel23.png';
+// import itemHole24 from 'images/item/jewel24.png';
+// import itemHole3 from 'images/item/jewel3.png';
+// import itemHole4 from 'images/item/jewel4.png';
+// import itemHole5 from 'images/item/jewel5.png';
+// import itemHole6 from 'images/item/jewel6.png';
+// import itemHole7 from 'images/item/jewel7.png';
+// import itemHole8 from 'images/item/jewel8.png';
+// import itemHole9 from 'images/item/jewel9.png';
+// import itemEtc29 from 'images/item/map.png';
+// import itemEtc30 from 'images/item/map_piece.png';
+import itemMaterial0 from 'images/item/food.png';
+// import itemMaterial1 from 'images/item/water.png';
+// import itemMaterial2 from 'images/item/material0.png';
+// import itemMaterial3 from 'images/item/material1.png';
+// import itemMaterial4 from 'images/item/material2.png';
+// import itemMaterial5 from 'images/item/material3.png';
+// import itemMaterial6 from 'images/item/material4.png';
+// import itemMaterial7 from 'images/item/material5.png';
+// import itemMaterial8 from 'images/item/material6.png';
+// import itemMaterial9 from 'images/item/material7.png';
+// import itemMaterial10 from 'images/item/material8.png';
+// import itemMaterial11 from 'images/item/material9.png';
+// import itemMaterial12 from 'images/item/material10.png';
+// import itemMaterial13 from 'images/item/material11.png';
+// import itemMaterial14 from 'images/item/material12.png';
+// import itemMaterial15 from 'images/item/material13.png';
+// import itemMaterial16 from 'images/item/material14.png';
+// import itemMaterial17 from 'images/item/material15.png';
+// import itemMaterial18 from 'images/item/material16.png';
+// import itemMaterial19 from 'images/item/material17.png';
+// import itemMaterial20 from 'images/item/material18.png';
+// import itemMaterial21 from 'images/item/material19.png';
+// import itemMaterial22 from 'images/item/material20.png';
+// import itemMaterial23 from 'images/item/material21.png';
+// import itemMaterial24 from 'images/item/material22.png';
+// import itemMaterial25 from 'images/item/material23.png';
+// import itemMaterial26 from 'images/item/material24.png';
+// import itemMaterial27 from 'images/item/material25.png';
+// import itemMaterial28 from 'images/item/material26.png';
+// import itemMaterial29 from 'images/item/material27.png';
+// import itemMaterial30 from 'images/item/material28.png';
+// import itemMaterial31 from 'images/item/material29.png';
+// import itemMaterial32 from 'images/item/material30.png';
+// import itemMaterial33 from 'images/item/material31.png';
+// import itemMaterial34 from 'images/item/material32.png';
+// import itemMaterial35 from 'images/item/material33.png';
+// import itemMaterial36 from 'images/item/material34.png';
+// import itemMaterial37 from 'images/item/material35.png';
+// import itemMaterial38 from 'images/item/material36.png';
+// import itemMaterial39 from 'images/item/material37.png';
+// import itemMaterial40 from 'images/item/material38.png';
+// import itemMaterial41 from 'images/item/material39.png';
+// import itemMaterial42 from 'images/item/material40.png';
+// import itemMaterial43 from 'images/item/material41.png';
+// import itemMaterial44 from 'images/item/material42.png';
+// import itemMaterial45 from 'images/item/material43.png';
+// import itemMaterial46 from 'images/item/material44.png';
+// import itemMaterial47 from 'images/item/material45.png';
+// import itemMaterial48 from 'images/item/material46.png';
+// import itemMaterial49 from 'images/item/material47.png';
+// import itemMaterial50 from 'images/item/material48.png';
+// import itemMaterial51 from 'images/item/material49.png';
+// import itemMaterial52 from 'images/item/material50.png';
+// import itemMaterial53 from 'images/item/material51.png';
+// import itemMaterial54 from 'images/item/material52.png';
+// import itemEtc28 from 'images/item/tongs.png';
 // import itemMaterial57 from 'images/item/material55.png';
 // import itemMaterial58 from 'images/item/material56.png';
 import cloud1 from 'images/bg/cloud1.png';
@@ -636,8 +610,11 @@ import worldMap from 'images/map/worldmap.png';
 // import map0 from 'images/map/map0.png';
 // import map1 from 'images/map/map1.png';
 
-import moveEvent from 'images/moveEvent.png';
-import moveEventCountry from 'images/moveEventCountry.png';
+import animalType from 'images/animalType.png'; //4000, 10
+import itemEtc from 'images/itemEtc.png'; //1000, 10
+import itemTicket from 'images/itemTicket.png'; //1200, 12
+import moveEvent from 'images/moveEvent.png'; //2400, 12
+import moveEventCountry from 'images/moveEventCountry.png'; //5600, 14
 
 export const back = [
   back0,back1,back2,back3,itemEn0,itemEn1,scroll,stamp,countryTitle
@@ -672,35 +649,33 @@ export const sringImg = [
 export const ssringImg = [
   "","","","","",ssring0,ssring1,ssring2,ssring3,ssring4,ssring5,ssring6,ssring7,ssring8,ssring9,ssring10
 ];
-export const animalType = [
-  animalType0,animalType1,animalType2,animalType3,animalType4,animalType5,animalType6,animalType7,animalType8,animalType9,animalType10,animalType11,animalType12,animalType13,animalType14,animalType15,animalType16,animalType17,animalType18,animalType19,animalType20,animalType21,animalType22,animalType23,animalType24,animalType25
-];
 export const iconState = [
   iconState0,iconState1,iconState2,iconState3,iconState4,iconState5,iconState6
 ];
-export const itemEtc = [
-  itemEtc0,itemEtc1,itemEtc2,'','','','','','','',itemEtc10,itemEtc11,'','','','','','','','',itemEtc20,itemEtc21,itemEtc22,itemEtc23,itemEtc24,itemEtc25,itemEtc26,itemEtc27,itemEtc28,itemEtc29,itemEtc30,itemEtc31,itemEtc32
-];
-export const itemHole = [
-  itemHole0,itemHole1,itemHole2,itemHole3,itemHole4,itemHole5,itemHole6,itemHole7,itemHole8,itemHole9,itemHole10,itemHole11,itemHole12,itemHole13,itemHole14,itemHole15,itemHole16,itemHole17,itemHole18,itemHole19,itemHole20,
-  itemHole21,itemHole22,itemHole23,itemHole24,'','','','','','',
-  '','','','','','','','','','',
-  '','','','','','','','','','',
-  '','','','','','','','','','',
-  '','','','','','','','','','',
-  '','','','','','','','','','',
-  '','','','','','','','','','',
-  '','','','','','','','','',colorantNone,
-  colorant0,colorant1,colorant2,colorant3,colorant4,colorant5,colorant6,colorant7,colorant8,colorant9,colorant10,colorant11,colorant12,colorant13,colorant14,'','','','','',
-  colorant20,colorant21,colorant22,colorant23,colorant24,colorant25,colorant26,colorant27,colorant28,colorant29,colorant30,colorant31,colorant32,colorant33,colorant34,'','','','','',
-  colorant40,colorant41,colorant42,colorant43,colorant44,colorant45,colorant46,colorant47,colorant48,colorant49,colorant50,colorant51,colorant52,colorant53,colorant54
-];
-export const itemUpgrade = [
-  itemUpgrade0,itemUpgrade1,itemUpgrade2,itemUpgrade3,itemUpgrade4,itemUpgrade5,itemUpgrade6,itemUpgrade7,itemUpgrade8,itemUpgrade9,itemUpgrade10,itemUpgrade11,
-];
-export const itemMaterial = [
-  itemMaterial0,itemMaterial1,itemMaterial2,itemMaterial3,itemMaterial4,itemMaterial5,itemMaterial6,itemMaterial7,itemMaterial8,itemMaterial9,itemMaterial10,itemMaterial11,itemMaterial12,itemMaterial13,itemMaterial14,itemMaterial15,itemMaterial16,itemMaterial17,itemMaterial18,itemMaterial19,itemMaterial20,itemMaterial21,itemMaterial22,itemMaterial23,itemMaterial24,itemMaterial25,itemMaterial26,itemMaterial27,itemMaterial28,itemMaterial29,itemMaterial30,itemMaterial31,itemMaterial32,itemMaterial33,itemMaterial34,itemMaterial35,itemMaterial36,itemMaterial37,itemMaterial38,itemMaterial39,itemMaterial40,itemMaterial41,itemMaterial42,itemMaterial43,itemMaterial44,itemMaterial45,itemMaterial46,itemMaterial47,itemMaterial48,itemMaterial49,itemMaterial50,itemMaterial51,itemMaterial52,itemMaterial53,itemMaterial54,
-];
+// export const itemEtc = [
+//   itemEtc0,itemEtc1,itemEtc2,'','','','','','','',itemEtc10,itemEtc11,'','','','','','','','',itemEtc20,itemEtc21,itemEtc22,itemEtc23,itemEtc24,itemEtc25,itemEtc26,itemEtc27,itemEtc28,itemEtc29,itemEtc30,itemEtc31,itemEtc32
+// ];
+// export const itemHole = [
+//   itemHole0,itemHole1,itemHole2,itemHole3,itemHole4,itemHole5,itemHole6,itemHole7,itemHole8,itemHole9,
+//   itemHole10,itemHole11,itemHole12,itemHole13,itemHole14,itemHole15,itemHole16,itemHole17,itemHole18,itemHole19,
+//   itemHole20,itemHole21,itemHole22,itemHole23,itemHole24,'','','','','',
+//   '','','','','','','','','','',
+//   '','','','','','','','','','',
+//   '','','','','','','','','','',
+//   '','','','','','','','','','',
+//   '','','','','','','','','','',
+//   '','','','','','','','','','',
+//   '','','','','','','','','','',
+//   colorantNone,colorant0,colorant1,colorant2,colorant3,colorant4,colorant5,colorant6,colorant7,colorant8,colorant9,colorant10,colorant11,colorant12,colorant13,colorant14,'','','','','',
+//   colorant20,colorant21,colorant22,colorant23,colorant24,colorant25,colorant26,colorant27,colorant28,colorant29,colorant30,colorant31,colorant32,colorant33,colorant34,'','','','','',
+//   colorant40,colorant41,colorant42,colorant43,colorant44,colorant45,colorant46,colorant47,colorant48,colorant49,colorant50,colorant51,colorant52,colorant53,colorant54
+// ];
+// export const itemUpgrade = [
+//   itemUpgrade0,itemUpgrade1,itemUpgrade2,itemUpgrade3,itemUpgrade4,itemUpgrade5,itemUpgrade6,itemUpgrade7,itemUpgrade8,itemUpgrade9,itemUpgrade10,itemUpgrade11,
+// ];
+// export const itemMaterial = [
+//   itemMaterial0,itemMaterial1,itemMaterial2,itemMaterial3,itemMaterial4,itemMaterial5,itemMaterial6,itemMaterial7,itemMaterial8,itemMaterial9,itemMaterial10,itemMaterial11,itemMaterial12,itemMaterial13,itemMaterial14,itemMaterial15,itemMaterial16,itemMaterial17,itemMaterial18,itemMaterial19,itemMaterial20,itemMaterial21,itemMaterial22,itemMaterial23,itemMaterial24,itemMaterial25,itemMaterial26,itemMaterial27,itemMaterial28,itemMaterial29,itemMaterial30,itemMaterial31,itemMaterial32,itemMaterial33,itemMaterial34,itemMaterial35,itemMaterial36,itemMaterial37,itemMaterial38,itemMaterial39,itemMaterial40,itemMaterial41,itemMaterial42,itemMaterial43,itemMaterial44,itemMaterial45,itemMaterial46,itemMaterial47,itemMaterial48,itemMaterial49,itemMaterial50,itemMaterial51,itemMaterial52,itemMaterial53,itemMaterial54,
+// ];
 export const control = {
   wheel0:controlWheel0,sail0:controlSail0
 };
@@ -749,5 +724,5 @@ export const map = {
 };
 
 export const images = {
-  moveEvent:moveEvent,moveEventCountry:moveEventCountry,
+  moveEvent:moveEvent,moveEventCountry:moveEventCountry,itemTicket:itemTicket,itemEtc:itemEtc,animalType:animalType,
 }

@@ -1,34 +1,14 @@
 import { AppContext } from 'App';
 import GuideQuestion from 'components/GuideQuestion';
+import { SkillMark } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
-import { useContext, useLayoutEffect, useRef, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
-const makeMark = (markNum, img) => {
-  let markTag = '',
-    idxCount = 0;
-  const mark10 = Math.floor(markNum / 10),
-    mark5 = Math.floor((markNum - mark10 * 10) / 5),
-    mark1 = markNum % 5;
-  for (let i = 0; i < mark10; ++i) {
-    markTag += `<span class="big_size" style="right:${idxCount*15}px"><img src="${img}" class="light"/><img src="${img}" class="front"/><img src="${img}" class="shadow"/></span>`;
-    idxCount ++;
-  }
-  for (let i = 0; i < mark5; ++i) {
-    markTag += `<span class="middle_size" style="right:${idxCount*15}px"><img src="${img}" class="light"/><img src="${img}" class="front"/><img src="${img}" class="shadow"/></span>`;
-    idxCount ++;
-  }
-  for (let i = 0; i < mark1; ++i) {
-    markTag += `<span style="right:${idxCount*15}px"><img src="${img}" class="light"/><img src="${img}" class="front"/><img src="${img}" class="shadow"/></span>`;
-    idxCount ++;
-  }
-  return markTag; 
-  //imgSet.animalType[animalIdx]
-}
 const SkillButton = styled.div`
   background:url(${({ frameImg }) => frameImg});background-size:100%;
   ${({skillCate, skillIcon, skillScene, skillFrame}) => {
@@ -66,6 +46,11 @@ const SkillElement = styled.span`
   &.el11{background-image:url(${({ elementIcon }) => elementIcon[11]});background-size:100%;}
   &.el12{background-image:url(${({ elementIcon }) => elementIcon[12]});background-size:100%;} */}
 `;
+const SkillPoint = styled.div`
+  position: relative;
+  height: 40px;
+  flex: 1;
+`;
 const CharacterAnimalSkill = ({
   saveData,
   slotIdx,
@@ -74,33 +59,27 @@ const CharacterAnimalSkill = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-  const saveCh = saveData.ch[slotIdx];
-  const [animalPoint, setAnimalPoint] = useState(saveCh.animalBeige);
-  const [animalSkill, setAnimalSkill] = useState(saveCh.animalSkill);
-  const animalTypeRef = useRef(gameData.ch[saveData.ch[slotIdx].idx].animal_type);
-  const itemRef = useRef(saveData.ch[slotIdx].items);
+  const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
+  const animalPoint = React.useMemo(() => {
+    const point = saveCh.animalBeige;
+    return saveCh.animalBeige;
+  }, [saveCh]);
+  const animalSkill = React.useMemo(() => saveCh.animalSkill, [saveCh]);
+  const itemPoint = React.useMemo(() => saveCh.items, [saveCh]);
+  const animalType = React.useMemo(() => gameData.ch[saveCh.idx].animal_type, [gameData, saveCh]);
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
   const [popupOn, setPopupOn] = useState(false);
-  const popupType = useRef('');
+  const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
-
-  useLayoutEffect(() => {
-    itemRef.current = saveData.ch[slotIdx].items;
-    animalTypeRef.current = gameData.ch[saveData.ch[slotIdx].idx].animal_type;
-    setAnimalSkill(saveCh.animalSkill);
-    setAnimalPoint(saveCh.animalBeige);
-    // animalSkill.current = saveCh.animalSkill;
-    // setAnimalPoint(getAnimalPoint(itemRef.current, animalTypeRef.current, saveData.ch[slotIdx].mark));
-  }, [saveData, slotIdx]);
   
   return (
     <>
       <div className="skillAnimal scroll-y">
         <dl className="info_group">
-          <dt>ANIMAL SKILL<span>({gameData.msg.menu.animalSkill[lang]})</span>
+          <dt>{gameData.msg.menu.animalSkill[lang]}
             <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
-              popupType.current = 'guide';
+              setPopupType('guide');
               setPopupOn(true);
               setPopupInfo({
                 data:gameData.guide["characterAnimalSkill"],
@@ -111,7 +90,7 @@ const CharacterAnimalSkill = ({
             <div flex="true" className="skill_header">
               <div className="skill_reset" onClick={() => {
                 let sData = {...saveData};
-                sData.ch[slotIdx].animalBeige = util.getAnimalPoint(itemRef.current, animalTypeRef.current, saveData.ch[slotIdx].mark);
+                sData.ch[slotIdx].animalBeige = util.getAnimalPoint(itemPoint, animalType, saveData.ch[slotIdx].mark);
                 sData.ch[slotIdx].animalSkill = saveCh.animalSkill.map((skGroup) => {
                   return skGroup.map((skData) => {
                     if (Object.keys(skData).length !== 0) {
@@ -127,8 +106,9 @@ const CharacterAnimalSkill = ({
                 saveCh.hasSkill = [...saveCh.sk];
                 changeSaveData(sData);
               }}>{gameData.msg.button.skillReset[lang]}</div>
-              <div className="skill_point" dangerouslySetInnerHTML={{__html: makeMark(animalPoint, imgSet.animalType[animalTypeRef.current])}}>
-              </div>
+              <SkillPoint className="skill_point">
+                <SkillMark point={animalPoint} pic={imgSet.images.animalType} idx={animalType}/>
+              </SkillPoint>
             </div>
             { animalSkill && animalSkill.map((skGroup, groupIdx) => {
               return (
@@ -217,7 +197,7 @@ const CharacterAnimalSkill = ({
                               <div className="lv">{skData.lv > 0 && `Lv.${skData.lv}`}</div>
                             </SkillButton>
                             <button className="skill_description" onClick={(e) => {
-                              popupType.current = 'skillDescription';
+                              setPopupType('skillDescription');
                               setPopupOn(true);
                               setPopupInfo({
                                 sk:sk,
@@ -258,7 +238,7 @@ const CharacterAnimalSkill = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} lang={lang} />}
+        {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} lang={lang} />}
       </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}

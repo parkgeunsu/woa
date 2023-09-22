@@ -2073,13 +2073,15 @@ const Battle = ({
 	lang,
 	gameSpd,
 	gameSound,
-	pageData,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-	const isScenario = React.useMemo(() => typeof pageData.scenario.stageIdx === 'number', [pageData]);
+  const paramData = React.useMemo(() => {
+    return util.loadData('historyParam');
+  }, []);
+	const isScenario = React.useMemo(() => typeof paramData.scenario.stageIdx === 'number', [paramData]);
 	const scenarioDetail = React.useMemo(() => {
-		return isScenario ? gameData.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx] : {
+		return isScenario ? gameData.scenario[paramData.scenario.stay][paramData.scenario.dynastyIdx].scenarioList[paramData.scenario.dynastyScenarioIdx].stage[paramData.scenario.stageIdx] : {
 			title: gameData.msg.button['startExploring'][lang],
 			lineup: 0,
 			map: Array.from({length:50}, () => Math.round(Math.random() * 11)),
@@ -2100,10 +2102,10 @@ const Battle = ({
 				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
 			],
 		};
-	}, [gameData, isScenario, pageData]);
+	}, [gameData, isScenario, paramData]);
 	const viewScenario = React.useMemo(() => {
-		return isScenario ? saveData.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx].first : false;
-	}, [saveData, isScenario, pageData]);
+		return isScenario ? saveData.scenario[paramData.scenario.stay][paramData.scenario.dynastyIdx].scenarioList[paramData.scenario.dynastyScenarioIdx].stage[paramData.scenario.stageIdx].first : false;
+	}, [saveData, isScenario, paramData]);
 	const mapLand = React.useMemo(() => scenarioDetail.map, [scenarioDetail]);
 	const allyDeck = useRef(saveData.lineup.save_slot[saveData.lineup.select].entry);//캐릭터 저장된 카드index
 	const enemyDeck = React.useMemo(() => scenarioDetail.entry, [scenarioDetail]);
@@ -2244,7 +2246,7 @@ const Battle = ({
 		//-----시나리오 시청 판단
 		if (viewScenario) {//시나리오 시청
 			scenarioRepeat.current = false;
-			conversationData.current = gameData.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx].conversation;
+			conversationData.current = gameData.scenario[paramData.scenario.stay][paramData.scenario.dynastyIdx].scenarioList[paramData.scenario.dynastyScenarioIdx].stage[paramData.scenario.stageIdx].conversation;
 			conversationList.current.push(conversationData.current[0]);
 			setMode('scenario');
 			conversationCount.current = 0;
@@ -2474,7 +2476,7 @@ const Battle = ({
 			clearInterval(conversationTimeout.current);
 			if (isScenario) {
 				let saveD = {...saveData};
-				saveD.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx].first = scenarioRepeat.current;
+				saveD.scenario[paramData.scenario.stay][paramData.scenario.dynastyIdx].scenarioList[paramData.scenario.dynastyScenarioIdx].stage[paramData.scenario.stageIdx].first = scenarioRepeat.current;
 				changeSaveData(saveD);
 			}
 		}
@@ -2868,7 +2870,7 @@ const Battle = ({
 				});
 			}
 			let saveD = {...saveData};
-			saveD.scenario[pageData.scenario.stay][pageData.scenario.dynastyIdx].scenarioList[pageData.scenario.dynastyScenarioIdx].stage[pageData.scenario.stageIdx].first = scenarioRepeat.current;
+			saveD.scenario[paramData.scenario.stay][paramData.scenario.dynastyIdx].scenarioList[paramData.scenario.dynastyScenarioIdx].stage[paramData.scenario.stageIdx].first = scenarioRepeat.current;
 			allySlot.current.forEach((slotIdx, idx) => {
 				const hasMaxExp = gameData.hasMaxExp[saveD.ch[slotIdx].grade];
 				saveD.ch[slotIdx].hasExp += resultExp.current[idx];

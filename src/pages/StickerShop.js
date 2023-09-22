@@ -1,5 +1,6 @@
 import { AppContext } from 'App';
 import { ActionChDisplay } from 'components/Components';
+import { ItemPic, MarkPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
@@ -31,12 +32,6 @@ const ItemContainer = styled.ul`
   border-image:url(${({frameBack}) => frameBack}) 5 round;
   }
   .item_name{color:${({ color }) => color};text-shadow:-1px -1px 1px rgba(255,255,255,.5), 1px 1px 1px #000;}
-`;
-const ItemPic2 = styled.div`
-  &:after{background-image:url(${({itemPic}) => itemPic});background-size:100%;background-repeat:no-repeat;}
-`;
-const ItemPic = styled.div`
-  display:inline-block;width:100%;height:100%;background-image:url(${({itemPic}) => itemPic});background-size:100%;background-repeat:no-repeat;
 `;
 const ItemName = styled.div`
   .item_grade{color:${({ color }) => color};}
@@ -177,7 +172,7 @@ const StickerShop = ({
 											const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 											return (
 												<span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
-													<ItemPic className="pic" itemPic={imgSet.itemHole[holePic]} />
+													<ItemPic className="pic" pic={imgSet.images.itemEtc} type="hole" idx={holePic} />
 												</span>
 											);
 										})}
@@ -194,9 +189,9 @@ const StickerShop = ({
 						}}>
 							<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.save.colorantSet ? util.getColorant(selectItem1.save.colorantSet, gameData).na[lang] : ''} ${selectItem1.save.modifier[lang]} ${selectItem1.game.na[lang]}`}}></span></li>
 							<li className="item_fix" flex="true">
-								<ItemPic2 className={`item item${selectItem1.game.part} ${gameData.itemGrade.txt_e[selectItem1.save.grade].toLowerCase()} ${selectItem1.save.sealed ? "sealed" : ""} favorite${selectItem1.save.favorite}`}>
+								<ItemPic type="equip" className={`item item${selectItem1.game.part} ${gameData.itemGrade.txt_e[selectItem1.save.grade].toLowerCase()} ${selectItem1.save.sealed ? "sealed" : ""} favorite${selectItem1.save.favorite}`}>
 									<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem1.game.display], selectItem1.save.color, selectItem1.save.svgColor || selectItem1.save.id)}}></svg>
-								</ItemPic2>
+								</ItemPic>
 								<div flex-h="true" style={{flex: 1,}}>
 									<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem1.save.grade]}>
 										<div className="item_top">
@@ -209,7 +204,8 @@ const StickerShop = ({
 							</li>
 							<div className="scroll-y">
 								<li className="item_list item_typeSlot">
-									<div className="item_type" dangerouslySetInnerHTML={{__html: makeMark(selectItem1.save.markNum, imgSet.animalType[selectItem1.save.mark])}}>
+									<div className="item_type">
+										<MarkPic length={selectItem1.save.markNum} pic={imgSet.images.animalType} idx={selectItem1.save.mark} />
 									</div>
 									<div className="item_slot">
 										{selectItem1.save.hole.map((holeData, idx) => {
@@ -353,9 +349,9 @@ const StickerShop = ({
 						}}>
 							<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.save.modifier[lang]} ${selectItem2.game.na[lang]}`}}></span></li>
 							<li className="item_fix" flex="true">
-								<ItemPic2 className={`item item${selectItem2.game.part} ${gameData.itemGrade.txt_e[selectItem2.save.grade].toLowerCase()} ${selectItem2.save.sealed ? "sealed" : ""} favorite${selectItem2.save.favorite}`}>
+								<ItemPic type="equip" className={`item item${selectItem2.game.part} ${gameData.itemGrade.txt_e[selectItem2.save.grade].toLowerCase()} ${selectItem2.save.sealed ? "sealed" : ""} favorite${selectItem2.save.favorite}`}>
 									<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem2.game.display], selectItem2.save.color, selectItem2.save.svgColor ||selectItem2.save.id)}}></svg>
-								</ItemPic2>
+								</ItemPic>
 								<div flex-h="true" style={{flex: 1,}}>
 									<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem2.save.grade]}>
 										<div className="item_top">
@@ -368,7 +364,8 @@ const StickerShop = ({
 							</li>
 							<div className="scroll-y">
 								<li className="item_list item_typeSlot">
-									<div className="item_type" dangerouslySetInnerHTML={{__html: makeMark(selectItem2.save.markNum, imgSet.animalType[selectItem2.save.mark])}}>
+									<div className="item_type">
+										<MarkPic length={selectItem2.save.markNum} pic={imgSet.images.animalType} idx={selectItem2.save.mark} />
 									</div>
 									<div className="item_slot">
 										{selectItem2.save.hole.map((holeData, idx) => {

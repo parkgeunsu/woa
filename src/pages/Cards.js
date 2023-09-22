@@ -1,6 +1,6 @@
 import { AppContext } from 'App';
 import 'css/character.css';
-import { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { util } from 'components/Libs';
@@ -12,7 +12,7 @@ import CharacterElement from 'pages/CharacterElement';
 import CharacterHeader from 'pages/CharacterHeader';
 import CharacterItemEnhance from 'pages/CharacterItemEnhance';
 import CharacterItems from 'pages/CharacterItems';
-import CharacterList from 'pages/CharacterList';
+import CharacterPaging from 'pages/CharacterPaging';
 import CharacterRelation from 'pages/CharacterRelation';
 import CharacterSkill from 'pages/CharacterSkill';
 import CharacterState from 'pages/CharacterState';
@@ -40,36 +40,31 @@ const ChInfo = styled.div`
   border-image:url(${({frameBack}) => frameBack}) 5 round;z-index:3;
 `;
 const Cards = ({
+  changePage,
   navigate,
   saveData,
   changeSaveData,
   currentTime,
   lang,
 }) => {
+  const sData = Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData;
+  const chLength = React.useMemo(() => sData.ch.length ,[sData]);
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-  const [slotIdx, setSlotIdx] = useState(0);
+  const paramData = React.useMemo(() => {
+    return util.loadData('historyParam');
+  }, []);
+  const [slotIdx, setSlotIdx] = useState(paramData.cards.selectIdx);
   const [chPage, setChPage] = useState(0);
-  // const chShow = useRef(false);
-  const [chShow, setChShow] = useState(false);
   const chRef = useRef(null);
-  const chLengthRef = useRef();
   const iconState = [imgSet.iconState[0], imgSet.iconState[1], imgSet.iconState[2], imgSet.iconState[3], imgSet.iconState[4], imgSet.iconState[5], imgSet.iconState[6]];
-  useEffect(() => {
-    if (Object.keys(saveData).length !== 0) {
-      chLengthRef.current = saveData.ch.length;
-    }
-  }, [saveData]);
-  const cardShow = () => {
-    setChShow(true);
-  }
   const changeChPage = (idx) => {
     setChPage(idx);
   }
   const changeChSlot = (idx) => {
     setSlotIdx(idx);
   }
-  const touchPosition = useState(null);
+  const touchPosition = useRef(null);
   const hasScrollElement = useRef(null);
   const handleTouchStart = (e) => {
     hasScrollElement.current = e.target.closest(".scroll-y");
@@ -84,49 +79,47 @@ const Cards = ({
     }
     const diffX = touchDown[0] - currentTouch[0],
       diffY = touchDown[1] - currentTouch[1];
-    if (chShow) {
-      if (hasScrollElement.current === null) {
-        if (Math.abs(diffX) > Math.abs(diffY)){
-          if (diffX > 5) { //오른쪽
-            setSlotIdx((prevSlot) => {
-              chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
-              prevSlot--;
-              return prevSlot < 0 ? chLengthRef.current - 1 : prevSlot;
-            });
-          }
-          if (diffX < -5) { //왼쪽
-            setSlotIdx((prevSlot) => {
-              chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
-              prevSlot++;
-              return prevSlot > chLengthRef.current - 1 ? 0 : prevSlot;
-            });
-          }
-        } else {
-          if (diffY > 5) { //위로
-            setChPage((prevPage) => {
-              return prevPage < 6 ? ++prevPage : 0;
-            });
-          }
-          if (diffY < -5) { //아래로
-            setChPage(0);
-          }
+    if (hasScrollElement.current === null) {
+      if (Math.abs(diffX) > Math.abs(diffY)){
+        if (diffX > 5) { //오른쪽
+          setSlotIdx((prevSlot) => {
+            chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
+            prevSlot--;
+            return prevSlot < 0 ? chLength - 1 : prevSlot;
+          });
+        }
+        if (diffX < -5) { //왼쪽
+          setSlotIdx((prevSlot) => {
+            chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
+            prevSlot++;
+            return prevSlot > chLength - 1 ? 0 : prevSlot;
+          });
         }
       } else {
-        if (Math.abs(diffX) > Math.abs(diffY)){
-          if (diffX > 5) { //오른쪽
-            setSlotIdx((prevSlot) => {
-              chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
-              prevSlot--;
-              return prevSlot < 0 ? chLengthRef.current - 1 : prevSlot;
-            });
-          }
-          if (diffX < -5) { //왼쪽
-            setSlotIdx((prevSlot) => {
-              chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
-              prevSlot++;
-              return prevSlot > chLengthRef.current - 1 ? 0 : prevSlot;
-            });
-          }
+        if (diffY > 5) { //위로
+          setChPage((prevPage) => {
+            return prevPage < 6 ? ++prevPage : 0;
+          });
+        }
+        if (diffY < -5) { //아래로
+          setChPage(0);
+        }
+      }
+    } else {
+      if (Math.abs(diffX) > Math.abs(diffY)){
+        if (diffX > 5) { //오른쪽
+          setSlotIdx((prevSlot) => {
+            chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
+            prevSlot--;
+            return prevSlot < 0 ? chLength - 1 : prevSlot;
+          });
+        }
+        if (diffX < -5) { //왼쪽
+          setSlotIdx((prevSlot) => {
+            chRef.current.classList.contains('rotate') ? chRef.current.classList.remove('rotate') : chRef.current.classList.add('rotate');
+            prevSlot++;
+            return prevSlot > chLength - 1 ? 0 : prevSlot;
+          });
         }
       }
     }
@@ -144,7 +137,7 @@ const Cards = ({
             lv:Math.round(Math.random()*100),
             sealed:true,
           }
-          util.getItem(saveData, gameData, changeSaveData, option, true, lang);
+          util.getItem(sData, gameData, changeSaveData, option, true, lang);
         }}>아이템 추가</button><br/>
         <button onClick={() => {
           const option = {
@@ -153,37 +146,28 @@ const Cards = ({
             lv:Math.round(Math.random()*100),
             sealed:true,
           }
-          util.getItem(saveData, gameData, changeSaveData, option, true, lang);
+          util.getItem(sData, gameData, changeSaveData, option, true, lang);
         }}>동물스킬 리셋</button>
         {currentTime}
       </div>
-      {!chShow && (
-        <div className="card_grid">
-          <CharacterList saveData={saveData} changeChSlot={changeChSlot} slotIdx={slotIdx} cardShow={cardShow} type="list"/>
+        <div ref={chRef} className="ch_card transition">
+          <Img imgurl={imgSet.etc.imgRing} />
+          <CharacterCard saveData={sData} slotIdx={slotIdx} />
+          <ChBack cardBack={imgSet.etc.imgCardBack} className="ch_back transition" />
         </div>
-      )}
-      {chShow && (
-        <>
-          <div ref={chRef} className="ch_card transition">
-            <Img imgurl={imgSet.etc.imgRing} />
-            <CharacterCard saveData={saveData} slotIdx={slotIdx} />
-            <ChBack cardBack={imgSet.etc.imgCardBack} className="ch_back transition" />
-          </div>
-          <CharacterList saveData={saveData} changeChSlot={changeChSlot} slotIdx={slotIdx} type="paging"/>
-          <CharacterHeader saveData={saveData} chPage={chPage} changeChPage={changeChPage} slotIdx={slotIdx} changeSaveData={changeSaveData} currentTime={currentTime} />
-          <ChInfo frameBack={imgSet.etc.frameChBack} className="ch_info transition">
-            <CharacterState saveData={saveData} slotIdx={slotIdx} lang={lang} />
-            <CharacterElement saveData={saveData} slotIdx={slotIdx} lang={lang} />
-            <CharacterAnimalSkill saveData={saveData} slotIdx={slotIdx} changeSaveData={changeSaveData} lang={lang} />
-            <CharacterSkill saveData={saveData} slotIdx={slotIdx} lang={lang} />
-            <CharacterRelation saveData={saveData} slotIdx={slotIdx} lang={lang} />
-            <CharacterItems navigate={navigate} saveData={saveData} slotIdx={slotIdx} changeSaveData={changeSaveData} lang={lang} />
-            <CharacterApplyState saveData={saveData} slotIdx={slotIdx} lang={lang} />
-          </ChInfo>
-          <CharacterItemEnhance saveData={saveData} slotIdx={slotIdx} lang={lang} />
-          <CharacterChEnhance saveData={saveData} slotIdx={slotIdx} lang={lang} />
-        </>
-      )}
+        <CharacterPaging chLength={chLength} saveData={sData} changeChSlot={changeChSlot} slotIdx={slotIdx} />
+        <CharacterHeader saveData={sData} chPage={chPage} changeChPage={changeChPage} slotIdx={slotIdx} changeSaveData={changeSaveData} currentTime={currentTime} />
+        <ChInfo frameBack={imgSet.etc.frameChBack} className="ch_info transition">
+          <CharacterState saveData={sData} slotIdx={slotIdx} lang={lang} />
+          <CharacterElement saveData={sData} slotIdx={slotIdx} lang={lang} />
+          <CharacterAnimalSkill saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} lang={lang} />
+          <CharacterSkill saveData={sData} slotIdx={slotIdx} lang={lang} />
+          <CharacterRelation saveData={sData} slotIdx={slotIdx} lang={lang} />
+          <CharacterItems navigate={navigate} saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} lang={lang} />
+          <CharacterApplyState saveData={sData} slotIdx={slotIdx} lang={lang} />
+        </ChInfo>
+        <CharacterItemEnhance saveData={sData} slotIdx={slotIdx} lang={lang} />
+        <CharacterChEnhance saveData={sData} slotIdx={slotIdx} lang={lang} />
     </ChWrap>
   );
 }

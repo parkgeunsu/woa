@@ -2,7 +2,7 @@ import { AppContext } from 'App';
 import GuideQuestion from 'components/GuideQuestion';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
-import { useContext, useRef, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 const CardChRing = styled.span`
@@ -29,20 +29,25 @@ const CharacterRelation = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
+  const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
+  const chData = React.useMemo(() => gameData.ch[saveCh.idx], [gameData, saveCh]);
   const [popupOn, setPopupOn] = useState(false);
-  const popupType = useRef('');
+  const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
-  const chRelation = gameData.ch[saveData.ch[slotIdx].idx].relation;
-  let relationAll = [];
-  chRelation.forEach((rtIdx, idx) => {
-    relationAll[idx] = Array.from({length: gameData.relation[rtIdx].member.length}, () => false);
-  });
+  const chRelation = React.useMemo(() => chData.relation, [chData]);
+  const relationAll = React.useMemo(() => {
+    return chRelation.map((rtIdx, idx) => {
+      return Array.from({length: gameData.relation[rtIdx].member.length}, () => false);
+    });
+  }, [chRelation, gameData]);
+  
   return (
     <>
       <div className="relation">
         <dl className="info_group rt_group">
-          <dt>RELATION<span>({gameData.msg.menu.relation[lang]})</span><GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
-              popupType.current = 'guide';
+          <dt>{gameData.msg.menu.relation[lang]}
+          <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
+              setPopupType('guide');
               setPopupOn(true);
               setPopupInfo({
                 data:gameData.guide["characterRelation"],
@@ -98,7 +103,7 @@ const CharacterRelation = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} imgSet={imgSet} lang={lang} />}
+        {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} imgSet={imgSet} lang={lang} />}
       </PopupContainer>
     </>
   );

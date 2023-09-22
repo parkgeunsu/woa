@@ -1,10 +1,18 @@
 import { AppContext } from 'App';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { util } from 'components/Libs';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 
-const ChListUl = styled.ul`
-  width: ${({chSize, chLength}) => Math.ceil(chSize) * chLength}px !important;
+const ChWrap = styled.div`
+  .st0 .ico{background:url(${({stateIcon}) => stateIcon[0]}) no-repeat center center;background-size:100%;}
+  .st1 .ico{background:url(${({stateIcon}) => stateIcon[1]}) no-repeat center center;background-size:100%;}
+  .st2 .ico{background:url(${({stateIcon}) => stateIcon[2]}) no-repeat center center;background-size:100%;}
+  .st3 .ico{background:url(${({stateIcon}) => stateIcon[3]}) no-repeat center center;background-size:100%;}
+  .st4 .ico{background:url(${({stateIcon}) => stateIcon[4]}) no-repeat center center;background-size:100%;}
+  .st5 .ico{background:url(${({stateIcon}) => stateIcon[5]}) no-repeat center center;background-size:100%;}
+  .st6 .ico{background:url(${({stateIcon}) => stateIcon[6]}) no-repeat center center;background-size:100%;}
 `;
+
 const ListCh = styled.span`
   background-image:url(${({chDisplay}) => chDisplay});background-size:100%;
 `;
@@ -43,16 +51,13 @@ const ListFrame = styled.span`
 const ChracterList = ({
   saveData,
   slotIdx,
-  changeChSlot,
-  cardShow,
-  type,
+  navigate,
+  changePage,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-  const scrolluseRef = useRef(null);
-  const [chLength, setChLength] = useState(0);
-  const cardWidth = window.innerWidth * 0.1;
 
+  const iconState = React.useMemo(() => [imgSet.iconState[0], imgSet.iconState[1], imgSet.iconState[2], imgSet.iconState[3], imgSet.iconState[4], imgSet.iconState[5], imgSet.iconState[6]], [imgSet]);
   //const timerRef = useRef(null); //시간계산
   //const [currentTime, setCurrentTime] = useState(1);
   // useEffect(() => {
@@ -61,57 +66,26 @@ const ChracterList = ({
   //     timer(currentTime, setCurrentTime, saveData, changeSaveData);
   //   }, 1000);
   // }, [currentTime]);
-  useEffect(() => {
-    if (Object.keys(saveData).length !== 0) {
-      setChLength(saveData.ch.length);
-    }
-  }, [saveData]);
-  useEffect(() => {
-    if (scrolluseRef.current) { //카드리스트 스크롤 잡기
-      const listHalfSize = scrolluseRef.current.getBoundingClientRect().width * .5;
-      const cardHalfNum = Math.floor(listHalfSize / cardWidth);
-      scrolluseRef.current.scrollTo(cardWidth * (slotIdx - cardHalfNum), 0);
-    }
-  }, [slotIdx, cardWidth]);
   return (
-    <>
-      {type === 'paging' && (
-        <div ref={scrolluseRef} className={`ch_list scroll-x ${type}`}>
-          <ChListUl chSize={cardWidth} chLength={chLength} type={type}>
-            { saveData.ch && saveData.ch.map((data, idx) => {
-              const saveCh = saveData.ch[idx];
-              const chData = gameData.ch[saveCh.idx];
-              return (
-                <li className={`g${saveCh.grade} ${slotIdx === idx ? 'on' : ''}`} key={idx} onClick={() => {
-                  changeChSlot(idx);
-                }}>
-                  <ListRing className="list_ring" ringBack={imgSet.etc.imgRingBack} />
-                  <ListCh className="list_ch" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
-                  <div className="list_job_actiontype">
-                    <ListJob jobIcon={imgSet.job[saveCh.job]} className="list_job"/>
-                    {saveCh.newActionType.map((data, idx) => {
-                      return (
-                        <ListActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="list_action_type"/>
-                      )
-                    })}
-                  </div>
-                  <ListFrame className="list_frame" cardFrame={imgSet.etc.imgCardFrame} />
-                </li>
-              )
-            })}
-          </ChListUl>
-        </div>
-      )}
-      {type === 'list' && (
-        <div ref={scrolluseRef} className={`ch_list scroll-y ${type}`}>
+    <ChWrap className={`ch_wrap page0`} stateIcon={iconState}>
+      <div className="card_grid">
+        <div className={`ch_list scroll-y list`}>
           <ul>
             { saveData.ch && saveData.ch.map((data, idx) => {
               const saveCh = saveData.ch[idx];
               const chData = gameData.ch[saveCh.idx];
               return (
                 <li className={`g${saveCh.grade}`} key={idx} onClick={() => {
-                  changeChSlot(idx);
-                  cardShow();
+                  util.saveHistory(() => {
+                    util.saveData('historyParam', {
+                      ...util.loadData('historyParam'),
+                      cards: {
+                        selectIdx: idx,
+                      }
+                    });
+                    navigate('cards');
+                    changePage('cards');
+                  });//히스토리 저장
                 }}>
                   <ListRing className="list_ring" ringBack={imgSet.etc.imgRingBack} />
                   <ListElement className="list_element" ringDisplay={imgSet.ringImg[chData.element]} />
@@ -131,8 +105,8 @@ const ChracterList = ({
             })}
           </ul>
         </div>
-      )}
-    </>
+      </div>
+    </ChWrap>
   );
 }
 

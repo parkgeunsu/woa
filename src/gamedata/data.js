@@ -1,4 +1,5 @@
 import { animals } from 'gamedata/animals';
+import { chArr } from 'gamedata/chArr';
 import { city } from 'gamedata/city';
 import { colorSvg } from 'gamedata/colorSvg';
 import { country, events } from 'gamedata/country';
@@ -19,21 +20,23 @@ import { scenario } from 'gamedata/scenario';
 import { cannonSvg, figureSvg, sailSvg, shipSvg } from 'gamedata/shipSvg';
 import { ships } from 'gamedata/ships';
 import { skill } from 'gamedata/skill';
-
+//etc 0, hole 100, colorance 200, upgrade 300, material 400
 export const version = "0.1";
 export const gameData = {
     itemType: [{ko:'',en:''},{ko:'투구',en:'Helm'},{ko:'갑옷',en:'Armor'},{ko:'무기',en:'Weapon'},{ko:'반지',en:'Ring'},{ko:'목걸이',en:'Necklace'}],
-    stateName: ["통솔", "체력", "완력", "민첩", "지력", "정신", "매력","행운"],
+    stateName: ['통솔', '체력', '완력', '민첩', '지력', '정신', '매력', '행운'],
+    chMenu: ['display', 'state', 'element', 'animalSkill', 'skill', 'relation', 'item', 'applyState'],
     country: country,
     countryEventsNum : 4, //지역이동시 기본 이벤트 값 4
     events: events,
     eventsHead: [0,1,6,6,2,2,3,3,4,5,7,7], //이벤트 지형 타입
-    eventsCountryColor: ['#fff','#f0d','#d00','#d60','#0a0','#ffcc15','#66beff','#0a0','#0040ff','#a800ff','#ff2a00','#00a90c'],
+    eventsCountryColor: ['#fff','#f0d','#d00','#d60','#0a0','#ffcc15','#66beff','#134077','#0040ff','#a800ff','#ff2a00','#00a90c'],
     percent: percent,
     addGradeArr: [1,1.2,1.3,1.4,1.5,1.6,1.8],//등급에 따른 추가 능력치
     possibleStageNum: [1,3,5,10],//시나리오 난이도 진행 가능한 카드영웅 갯수
     animal_type:animals,//'독0','빛1','암2','물3','불4','바람5','땅6'
     ch:ch,//face_d 얼굴방향, stateType 성장타입, awaken 각성속성
+    chArr:chArr,
     job:job,//직업
     items:items,
     ships:ships,

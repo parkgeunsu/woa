@@ -131,13 +131,15 @@ const GameMainFooter = ({
                   return;
                 }
                 util.saveHistory(() => {
-                  navigate('battle');
-                  changePage('battle', {
-                    scenario:{
+                  util.saveData('historyParam', {
+                    ...util.loadData('historyParam'),
+                    scenario: {
                       stay: stay,
                       stageDifficult: selectScenario.stageDifficult,
                     }
                   });
+                  navigate('battle');
+                  changePage('battle');
                 });
                 setRouletteIdx(0);
                 return;
@@ -161,7 +163,6 @@ const GameMainFooter = ({
               const cloneRouletteEnemy = {
                 ...rouletteEnemy,
               }
-              console.log(rouletteIdx);
               switch(rouletteIdx) {
                 case 0:
                   //추가 동물
@@ -202,16 +203,12 @@ const GameMainFooter = ({
           }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
           {Object.keys(selectScenario).length === 0 ? 
             <StyledButton btnImg={imgSet.button.btnMD}>{gameData.msg.sentence['selectScenario'][lang]}</StyledButton> :
-            <StyledButton btnImg={imgSet.button.btnMD} type="icon" icon={imgSet.icon[`iconDifficult${selectScenario.stageDifficult}`]} onClick={() => {
+            <StyledButton btnImg={imgSet.button.btnMD} type="icon" icon={imgSet.icon[`iconDifficult${selectScenario?.stageDifficult}`]} onClick={() => {
               console.log('전투개시');
               util.saveHistory(() => {
                 util.saveData('historyParam', {
                   ...util.loadData('historyParam'),
-                  scenario: selectScenario
-                });
-                navigate('battle');
-                changePage('battle', {
-                  scenario:{
+                  scenario: {
                     stay: stay,
                     dynastyIdx: selectScenario.dynastyIdx,
                     dynastyScenarioIdx: selectScenario.dynastyScenarioIdx,
@@ -219,8 +216,10 @@ const GameMainFooter = ({
                     stageDifficult: selectScenario.stageDifficult,
                   }
                 });
+                navigate('battle');
+                changePage('battle');
               });
-            }}>{gameData.scenario[stay][selectScenario.dynastyIdx].scenarioList[selectScenario.dynastyScenarioIdx].stage[selectScenario.stageIdx].title[lang]} {gameData.msg.button['startBattle'][lang]}</StyledButton>
+            }}>{gameData.scenario[stay][selectScenario.dynastyIdx]?.scenarioList[selectScenario.dynastyScenarioIdx].stage[selectScenario.stageIdx].title[lang]} {gameData.msg.button['startBattle'][lang]}</StyledButton>
           }
         </ButtonWrap>
         <ButtonWrap alignItems="self-end" gameMode={gameMode === 'moveRegion'}>
@@ -237,12 +236,19 @@ const GameMainFooter = ({
             } else {
               console.log('지역이동');
               util.saveHistory(() => {
+                const distance = util.getDistanceToEvent(gameData.country[stayIdx.current].distancePosition, gameData.country[selectMoveRegion]?.distancePosition) + gameData.countryEventsNum;
                 util.saveData('historyParam', {
                   ...util.loadData('historyParam'),
                   moveEvent: {
                     stay: stay,
                     moveTo: selectMoveRegion,
-                    distance: util.getDistanceToEvent(gameData.country[stayIdx.current].distancePosition, gameData.country[selectMoveRegion]?.distancePosition) + gameData.countryEventsNum,
+                    distance: distance,
+                    blockArr: {
+                      block: Array.from({length:distance}, () => Math.floor(Math.random() * gameData.events.block.length)),
+                      type: Array.from({length:distance}, () => util.fnPercent(gameData.percent.eventsPercent)),
+                    },
+                    spBlockArr: Array.from({length:Math.floor(distance / 4) + 1}, () => { return {type: util.fnPercent(gameData.percent.bigEventsPercent), get: false}}),
+                    currentStep: 0,
                   }
                 });
                 navigate('moveEvent');

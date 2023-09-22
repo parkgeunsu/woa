@@ -2,7 +2,7 @@ import { AppContext } from 'App';
 import GuideQuestion from 'components/GuideQuestion';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
-import { useContext, useLayoutEffect, useRef, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 const Element = styled.div`
@@ -26,20 +26,11 @@ const CharacterElement = ({
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
   const [popupOn, setPopupOn] = useState(false);
-  const popupType = useRef('');
+  const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
-  const [slotCh, setSlotCh] = useState(saveData.ch[slotIdx]);
-  const elArr = [];
-  gameData.element.forEach((elName, idx) => {
-    elArr[idx] = {
-      na: elName,
-    };
-  })
+  const slotCh = React.useMemo(() => saveData.ch[slotIdx], [slotIdx, saveData]);
   // const chIdx = saveCh.idx;
   // util.saveLvState(0);
-  useLayoutEffect(() => {
-    setSlotCh(saveData.ch[slotIdx]);
-  }, [slotIdx, saveData]);
   // const state_per = [125,200,200,100,200,100,100],
   //   st_t = ['통솔','체력','무력','민첩','지력','정치','매력','운'],
   //   st_c = ['#037ace','#f3004e','#ff5326','#77b516','#f9c215','#5f3dc4','#ce20c2'],
@@ -55,9 +46,9 @@ const CharacterElement = ({
     <>
       <div className="element">
         <dl className="info_group ch_group">
-          <dt>ELEMENT<span>({gameData.msg.menu.element[lang]})</span>
+          <dt>{gameData.msg.menu.element[lang]}
             <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
-              popupType.current = 'guide';
+              setPopupType('guide');
               setPopupOn(true);
               setPopupInfo({
                 data:gameData.guide["characterElement"],
@@ -65,7 +56,7 @@ const CharacterElement = ({
             }} />
           </dt>
           <dd className="scroll-y" flex-h="true">
-            {elArr && elArr.map((data, idx) => {
+            {gameData.element.map((data, idx) => {
               const num = slotCh['el' + idx] + slotCh['iSt' + (15 + idx)];
               const elementPercent = num * .5;
               return (
@@ -96,7 +87,7 @@ const CharacterElement = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} lang={lang} />}
+        {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} lang={lang} />}
       </PopupContainer>
     </>
   );

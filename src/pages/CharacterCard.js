@@ -1,5 +1,5 @@
 import { AppContext } from 'App';
-import { useContext, useRef } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 const CardContainer = styled.div`
@@ -166,7 +166,7 @@ const ListChFrame = styled.span`
   top:0;width:100%;height:100%;background:url(${({cardFrame}) => cardFrame});background-repeat:no-repeat;background-position:center center;background-size:100% 100%;z-index:5;
 `;
 
-const ChracterDetail = ({
+const ChracterCard = ({
   size,
   equalSize,
   saveData,
@@ -176,19 +176,23 @@ const ChracterDetail = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-  const iconStar = [imgSet.iconStar.iconStar1, imgSet.iconStar.iconStar2, imgSet.iconStar.iconStar3, imgSet.iconStar.iconStar4, imgSet.iconStar.iconStar5, imgSet.iconStar.iconStar6, imgSet.iconStar.iconStar7];
-  const sizeH = useRef(equalSize ? size : size * 1.48);
+  const saveCh = React.useMemo(() => {
+    return saveData ? saveData.ch[slotIdx] : '';
+  }, [saveData, slotIdx]);
+  const chData = React.useMemo(() => {
+    return saveData ? gameData.ch[saveCh.idx] : ''
+  }, [gameData, saveCh]);
+  const iconStar = React.useMemo(() => [imgSet.iconStar.iconStar1, imgSet.iconStar.iconStar2, imgSet.iconStar.iconStar3, imgSet.iconStar.iconStar4, imgSet.iconStar.iconStar5, imgSet.iconStar.iconStar6, imgSet.iconStar.iconStar7], [imgSet]);
+  const sizeH = React.useMemo(() => equalSize ? size : size * 1.48, [equalSize, size]);
   if (!saveData) { // 새로운 게임
     return (
-      <CardContainer size={size} sizeH={sizeH.current}>
+      <CardContainer size={size} sizeH={sizeH}>
         <ChCard size={size} className="ch_detail">
           <ListChFrame cardFrame={imgSet.etc.imgCardBack} className="frame" />
         </ChCard>
       </CardContainer>
     )
   } else {
-    const saveCh = saveData.ch[slotIdx];
-    const chData = gameData.ch[saveCh.idx];
     if (isThumb) { //thumb사용일 경우
       return (
         <>
@@ -221,7 +225,7 @@ const ChracterDetail = ({
     if (slotIdx !== '') {
       return (
         size ? (
-          <CardContainer size={size} sizeH={sizeH.current}>
+          <CardContainer size={size} sizeH={sizeH}>
             <ChCard size={size} className="ch_detail transition">
               <ListCh chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
               <ListChRing ringBack={imgSet.etc.imgRingBack} className="ring" />
@@ -272,7 +276,7 @@ const ChracterDetail = ({
       );
     } else {
       return (
-        <CardContainer size={size} sizeH={sizeH.current}>
+        <CardContainer size={size} sizeH={sizeH}>
           <ChCard size={size} className="ch_detail">
             <ListChFrame cardFrame={imgSet.etc.imgCardBack} className="frame" />
           </ChCard>
@@ -282,9 +286,9 @@ const ChracterDetail = ({
   }
 }
 
-ChracterDetail.defaultProps = {
+ChracterCard.defaultProps = {
   equalSize: false,
   isThumb: false,
   noInfo: false,
 }
-export default ChracterDetail;
+export default ChracterCard;

@@ -7,7 +7,7 @@ import { ListItem, ListWrap } from 'components/List';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import CharacterCard from 'pages/CharacterCard';
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
@@ -52,23 +52,34 @@ const StartGame = ({
   changeSaveData,
   changePage,
   navigate,
-  pageData,
   lang,
   setLang,
 }) => {
-  const imgSet = useContext(AppContext).images,
-    gameData = useContext(AppContext).gameData;
+  const imgSet = useContext(AppContext).images;
+  const gameData = useContext(AppContext).gameData;
+  const paramData = React.useMemo(() => {
+    return util.loadData('historyParam');
+  }, []);
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
-  const [selectCard, setSelectCard] = useState([]);
+  const selectCard = React.useMemo(() => {
+    return paramData?.start?.card;
+  }, [paramData]);
   const [selectGradeArr, setSelectGradeArr] = useState([]); //시작 카드 유형 배열
   const [nameID, setNameID] = useState(saveData.info?.id ? saveData.info.id : ''); //덱 이름
   const [selectList, setSelectList] = useState([]); //시작 카드 유형 글자
   const [countryList, setCountryList] = useState([]); //국가 선택 글자
   const [languageList, setLanguageList] = useState([]); //언어 선택 글자
-  const [selectCardTypeIdx, setSelectCardTypeIdx] = useState(pageData.selectType || ''); //시작 카드 유형 index
-  const [selectCountryIdx, setSelectCountryIdx] = useState(pageData.country || ''); //시작 국가 선택 index
-  const [selectLanguageIdx, setSelectLanguageIdx] = useState(pageData.language || 0); //게임 언어 선택 index
+  const [selectCardTypeIdx, setSelectCardTypeIdx] = useState(paramData?.start?.selectType || ''); //시작 카드 유형 index
+  const [selectCountryIdx, setSelectCountryIdx] = useState(paramData?.start?.country || ''); //시작 국가 선택 index
+  const [selectLanguageIdx, setSelectLanguageIdx] = useState(paramData?.recruitment?.language || 0); //게임 언어 선택 index
+  useEffect(() => {
+    if (paramData?.start && Object.keys(paramData.start).length !== 0) {
+      setSelectGradeArr(paramData.start.chArr);
+      setSelectLanguageIdx(paramData.start.language);
+      setSelectCountryIdx(paramData.start.country);
+    }
+  }, [paramData]);
   useEffect(() => {
     setSelectList([
       gameData.msg.sentence['card1'][lang],
@@ -86,14 +97,6 @@ const StartGame = ({
       gameData.msg.language['japanese'][lang],
     ]);
   }, [lang]);
-  useEffect(() => {
-    if (Object.keys(pageData).length !== 0) {
-      setSelectCard(pageData.card);
-      setSelectGradeArr(pageData.chArr);
-      setSelectLanguageIdx(pageData.language);
-      setSelectCountryIdx(pageData.country);
-    }
-  }, [pageData]);
   return (
     <>
       <Wrap direction="column">
@@ -118,13 +121,24 @@ const StartGame = ({
                 setSelectGradeArr(startCardArr[idx]);
               }} selectOption={selectList} title={gameData.msg.title['startingCardType'][lang]}></Select>
               <CardBox onClick={() => {
+                util.saveData('historyParam', {
+                  ...util.loadData('historyParam'),
+                  recruitment: {
+                    begin: true,
+                    cardArr: selectGradeArr,
+                    selectType: selectCardTypeIdx,
+                    language: selectLanguageIdx,
+                    country: selectCountryIdx,
+                  }
+                });
                 navigate('recruitment');
-                changePage('recruitment', {begin: true, cardArr: selectGradeArr, selectType: selectCardTypeIdx, language: selectLanguageIdx, country: selectCountryIdx});
+                changePage('recruitment');
+                // changePage('recruitment', {begin: true, cardArr: selectGradeArr, selectType: selectCardTypeIdx, language: selectLanguageIdx, country: selectCountryIdx});
                 const sData = {...saveData}
                 sData.ch = [];
                 changeSaveData(sData);
               }} justifyContent={'space-between'}>
-                {selectCard[0]?.idx ? selectCard.map((cardData, idx) => {
+                {selectCard && selectCard[0].idx ? selectCard.map((cardData, idx) => {
                   const name = gameData.ch[cardData.idx].na1;
                   return (
                     <ChCard key={`chCard${idx}`} direction="column">
@@ -143,7 +157,7 @@ const StartGame = ({
               <Select selectIdx={selectCountryIdx} setSelectIdx={setSelectCountryIdx} onClick={(idx) => {
                 setSelectCountryIdx(idx);
                 const sData = {...saveData};
-                sData.info.stay = gameData.country[idx];
+                sData.info.stay = gameData.country[idx].name;
                 changeSaveData(sData);
               }} selectOption={countryList} title={gameData.msg.title['selectRegion'][lang]}></Select>
               {/* <TextField transparent={true} placeholder={gameData.msg.sentence['selectCountry'][lang]} text="" /> */}

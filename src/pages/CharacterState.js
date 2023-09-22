@@ -3,7 +3,7 @@ import GuideQuestion from 'components/GuideQuestion';
 import { util } from 'components/Libs';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
-import { useContext, useLayoutEffect, useRef, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 const FrameBar = styled.span`
@@ -37,23 +37,20 @@ const CharacterState = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
+  const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
   const [popupOn, setPopupOn] = useState(false);
-  const popupType = useRef('');
+  const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
-  const stateArr = gameData.stateName;
-  const [slotCh, setSlotCh] = useState(saveData.ch[slotIdx]);
+  const stateArr = React.useMemo(() => gameData.stateName, [gameData]);
   // const chIdx = saveCh.idx;
   // util.saveLvState(0);
-  useLayoutEffect(() => {
-    setSlotCh(saveData.ch[slotIdx]);
-  }, [slotIdx, saveData]);
   return (
     <>
       <div className="state">
         <dl className="info_group ch_group">
-          <dt>STATE<span>({gameData.msg.menu.state[lang]})</span>
+          <dt>{gameData.msg.menu.state[lang]}
             <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
-              popupType.current = 'guide';
+              setPopupType('guide');
               setPopupOn(true);
               setPopupInfo({
                 data:gameData.guide["characterState"],
@@ -69,31 +66,31 @@ const CharacterState = ({
                       <span className="name">{data}</span>
                       <span className="total_bar">
                         <FrameBar chMaxSt={100} maxSt={100} className="frame_bar transition gradient_light">
-                          <Bar idx={idx} rSt={slotCh.stateLuk} chMaxSt={gameData.stateMax[idx]} stateType={imgSet.iconState[idx]} className="bar transition gradient_dark_y">
+                          <Bar idx={idx} rSt={saveCh.stateLuk} chMaxSt={gameData.stateMax[idx]} stateType={imgSet.iconState[idx]} className="bar transition gradient_dark_y">
                             <span className="ico"></span>
                             {/* <span className="txt_current">0</span> */}
                           </Bar>
                         </FrameBar>
-                        <BackBar stateBack={imgSet.etc.stateBack} chMaxSt={slotCh.stateLuk} maxSt={gameData.stateMax[idx]} className="back_bar transition" />
+                        <BackBar stateBack={imgSet.etc.stateBack} chMaxSt={saveCh.stateLuk} maxSt={gameData.stateMax[idx]} className="back_bar transition" />
                       </span>
-                      <TextTotal rSt={slotCh.stateLuk} maxSt={gameData.stateMax[idx]} className="txt_total" title={data.title}>
-                        {slotCh.stateLuk}
+                      <TextTotal rSt={saveCh.stateLuk} maxSt={gameData.stateMax[idx]} className="txt_total" title={data.title}>
+                        {saveCh.stateLuk}
                       </TextTotal>
                     </>
                   ) : (
                     <>
                       <span className="name">{data}</span>
                       <span className="total_bar">
-                        <FrameBar chMaxSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="frame_bar transition gradient_light">
-                          <Bar idx={idx} rSt={slotCh['rSt'+idx]} chMaxSt={slotCh['maxSt'+idx]} stateType={imgSet.iconState[idx]} className="bar transition gradient_dark_y">
+                        <FrameBar chMaxSt={saveCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="frame_bar transition gradient_light">
+                          <Bar idx={idx} rSt={saveCh['rSt'+idx]} chMaxSt={saveCh['maxSt'+idx]} stateType={imgSet.iconState[idx]} className="bar transition gradient_dark_y">
                             <span className="ico"></span>
                             {/* <span className="txt_current">0</span> */}
                           </Bar>
                         </FrameBar>
-                        <BackBar stateBack={imgSet.etc.stateBack} chMaxSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="back_bar transition" />
+                        <BackBar stateBack={imgSet.etc.stateBack} chMaxSt={saveCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="back_bar transition" />
                       </span>
-                      <TextTotal rSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="txt_total" title={data.title}>
-                        {slotCh['rSt'+idx]}
+                      <TextTotal rSt={saveCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="txt_total" title={data.title}>
+                        {saveCh['rSt'+idx]}
                       </TextTotal>
                     </>
                   )}
@@ -104,7 +101,7 @@ const CharacterState = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} lang={lang} />}
+        {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} lang={lang} />}
       </PopupContainer>
     </>
   );

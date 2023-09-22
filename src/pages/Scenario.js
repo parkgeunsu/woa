@@ -2,6 +2,7 @@ import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import GuideQuestion from 'components/GuideQuestion';
+import { ItemPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
@@ -290,9 +291,6 @@ const DropItems = styled(FlexBox)`
     border-radius: 5px;
   }
 `;
-const ItemPic = styled.div`
-  display:inline-block;width:100%;height:100%;background-image:url(${({itemPic}) => itemPic});background-size:100%;background-repeat:no-repeat;
-`;
 const StageHistory = styled.div`
   padding: 5px;
   height: 100%;
@@ -462,7 +460,7 @@ const ScenarioList = ({
                       setTooltip([gameData.msg.title['gold'][lang], util.comma(dropFirst.num), gameData.msg.title['firstGet'][lang]]);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" itemPic={imgSet['itemEtc'][0]}>
+                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type="etc" idx={0}>
                         {<span className="display_text">{dropFirst.num}</span>}
                       </ItemPic>
                     </span>
@@ -478,7 +476,7 @@ const ScenarioList = ({
                         <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], items.color, items.svgColor || items.id)}}>
                         </svg>
                       </span>
-                      <ItemPic className="pic" itemPic={imgSet[`item${dropFirst.type}`][items.display]} />
+                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type={dropFirst.type} idx={items.display} />
                     </span>
                   } else if (dropFirst.type === 'Etc') {
                     const items = gameData.items[dropFirst.type.toLowerCase()][dropFirst.idx];
@@ -487,7 +485,7 @@ const ScenarioList = ({
                       setTooltip([items.na[lang], '', gameData.msg.title['firstGet'][lang]]);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" itemPic={imgSet[`item${dropFirst.type}`][items.display]}>
+                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type={dropFirst.type} idx={items.display}>
                         {items.displayText && <span className="display_text">{items.displayText}</span>}
                       </ItemPic>
                     </span>
@@ -498,7 +496,7 @@ const ScenarioList = ({
                       setTooltip([items.na[lang], dropFirst.num, gameData.msg.title['firstGet'][lang]]);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" itemPic={imgSet[`item${dropFirst.type}`][items.display]}>
+                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type={dropFirst.type} idx={items.display}>
                         {<span className="display_text">{dropFirst.num}</span>}
                       </ItemPic>
                     </span>
@@ -509,7 +507,7 @@ const ScenarioList = ({
                       setTooltip([items.na[lang], '', gameData.msg.title['firstGet'][lang]]);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" itemPic={imgSet[`item${dropFirst.type}`][items.display]} />
+                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type={dropFirst.type} idx={items.display} />
                     </span>
                   } else if (dropFirst.type === 'Hole'){
                     const items = gameData.items[dropFirst.type.toLowerCase()][dropFirst.idx];
@@ -518,7 +516,7 @@ const ScenarioList = ({
                       setTooltip([items.na[lang], '', gameData.msg.title['firstGet'][lang]]);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" itemPic={imgSet[`item${dropFirst.type}`][items.display]} />
+                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type={dropFirst.type} idx={items.display} />
                     </span>
                   } else {
                     return '';
@@ -534,7 +532,8 @@ const ScenarioList = ({
                       setTooltip([gameData.msg.title['gold'][lang], util.comma(dropAlways.num), '100%']);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" itemPic={imgSet['itemEtc'][0]}>
+                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type="etc"
+                       idx={0}>
                         {<span className="display_text">{dropAlways.num}</span>}
                       </ItemPic>
                     </span>
@@ -558,7 +557,7 @@ const ScenarioList = ({
                       setTooltip([items.na[lang], '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" itemPic={imgSet[`item${dropAlways.type}`][items.display]}>
+                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type={dropAlways.type} idx={items.display}>
                         {items.displayText && <span className="display_text">{items.displayText}</span>}
                       </ItemPic>
                     </span>
@@ -569,7 +568,7 @@ const ScenarioList = ({
                       setTooltip([items.na[lang], dropAlways.num, dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" itemPic={imgSet[`item${dropAlways.type}`][items.display]}>
+                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type={dropAlways.type} idx={items.display}>
                         {<span className="display_text">{dropAlways.num}</span>}
                       </ItemPic>
                     </span>
@@ -580,7 +579,7 @@ const ScenarioList = ({
                       setTooltip([items.na[lang], '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" itemPic={imgSet[`item${dropAlways.type}`][items.display]} />
+                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type={dropAlways.type} idx={items.display} />
                     </span>
                   } else if (dropAlways.type === 'Hole'){
                     const items = gameData.items[dropAlways.type.toLowerCase()][dropAlways.idx];
@@ -589,7 +588,7 @@ const ScenarioList = ({
                       setTooltip([items.na[lang], '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" itemPic={imgSet[`item${dropAlways.type}`][items.display]} />
+                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type={dropAlways.type} idx={items.display} />
                     </span>
                   } else {
                     return '';

@@ -2,29 +2,29 @@ import { AppContext } from 'App';
 import GuideQuestion from 'components/GuideQuestion';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
-import { useContext, useRef, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 
 const CharacterApplyState = ({
   saveData,
   slotIdx,
   lang,
 }) => {
-  const imgSet = useContext(AppContext).images;
+  // const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
   const [popupOn, setPopupOn] = useState(false);
-  const popupType = useRef('');
+  const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
-  const BattleStateName = ['hp','sp','rsp','atk','def','mak','mdf','rcv','spd','luk'];
-  const scrollMove = (e) => {
+  const BattleStateName = React.useMemo(() => ['hp','sp','rsp','atk','def','mak','mdf','rcv','spd','luk'], []);
+  const scrollMove = useCallback((e) => {
     //e.stopPropagation();
-  }
+  }, []);
   return (
     <>
       <div className="apply_state scroll-y">
         <dl className="info_group ach_group">
-          <dt>TOTAL STATE<span>({gameData.msg.menu.totalState[lang]})</span>
+          <dt>{gameData.msg.menu.totalState[lang]}
             <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
-              popupType.current = 'guide';
+              setPopupType('guide');
               setPopupOn(true);
               setPopupInfo({
                 data:gameData.guide["characterTotalState"],
@@ -49,7 +49,7 @@ const CharacterApplyState = ({
         </dl>
       </div>
       <PopupContainer>
-        {popupOn && <Popup type={popupType.current} dataObj={popupInfo} showPopup={setPopupOn} lang={lang} />}
+        {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} lang={lang} />}
       </PopupContainer>
     </>
   );
