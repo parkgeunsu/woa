@@ -44,8 +44,6 @@
 .battle_units > div .effect11:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-lightblue),inset 0 0 5px 5px var(--color-lightblue);z-index:10;opacity:1;}
 .battle_units > div .effect12:before{content:'';position:absolute;left:10%;right:10%;top:10%;bottom:10%;background-color:transparent;box-shadow:0 0 5px 5px var(--color-green),inset 0 0 5px 5px var(--color-green);z-index:10;opacity:1;}
 
-.battle_ch{position:absolute;box-sizing:border-box;perspective:100px;transform-style:flat;z-index:1;}
-.battle_ch.action{left:50%;top:50%;transform:translate(-50%,-50%) scale(2);z-index:30;}
 .battle_ch.action .ch_box .ring_back{box-shadow:0 0 30px 10px #000;}
 .battle_ch.relation:after{content:'';position:absolute;left:50%;top:50%;width:100%;height:100%;transform:translate(-50%,-50%);z-index:1;filter:blur(5px);opacity:0;pointer-events:none;}
 .battle_ch .ch_box{position:absolute;left:5%;top:5%;width:90%;height:90%;transform-origin:50% 100%;transform-style:preserve-3d;pointer-events:none;}
@@ -85,11 +83,6 @@
   0%{opacity:0;}
   100%{opacity:1;}
 }
-
-.battle_ch.timeLine{position:relative;}
-.battle_ch.timeLine.none span{filter:grayscale(100%);}
-.battle_ch.timeLine.none:after{content:"";position:absolute;right:0;bottom:0;width:100%;height:100%;z-index:1;}
-.battle_ch.timeLine.wait:after{background:url() no-repeat right center;background-size:70%;}
 
 .battle_land{display:flex;flex-direction:column;position:absolute;left:0;right:0;bottom:0;top:0;}
 .battle_land > div{position:relative;margin:0 auto;box-sizing:border-box;}
@@ -152,11 +145,6 @@
 .battle_menu .skSp{font-size:0.938rem;}
 .battle_menu .skName{font-size:0.813rem;white-space:nowrap;}
 
-.battle_wrap .ring_back,.battle_end .ring_back{position:absolute;width:100%;height:100%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;backface-visibility:hidden;background-color:transparent;border-radius:30%;overflow:hidden;}
-.battle_wrap .ring_style,.battle_end .ring_style{position:absolute;width:100%;height:100%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;backface-visibility:hidden;background-color:transparent;background-position:center 100%,center center;background-size:100%;/* transform:translateZ(4px); */}
-.battle_wrap .ring_style span,.battle_end .ring_style span{position:absolute;left:-25%;width:150%;padding-top:150%;top:-30%;height:100%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;background-position:center center;border:none;pointer-events:none;}
-.battle_wrap .ch_style,.battle_end .ch_style{position:absolute;top:-27%;left:-15%;width:130%;height:130%;transform-origin:50% 50%;box-sizing:border-box;background-repeat:no-repeat;backface-visibility:hidden;background-color:transparent;z-index:1;}
-
 .battle_wrap .relation_area{display:flex;position:absolute;left:0;right:0;top:0;bottom:0;flex-direction:column;z-index:50;align-items:center;justify-content:center;pointer-events:none;}
 .battle_wrap .relation_area:after{content:'';position:absolute;width:100%;height:0;box-shadow:0 0 20px 10px rgba(0,0,0,0);background:rgba(0,0,0,.7);}
 .battle_wrap .relation_area .relationTitle{margin:0 0 10px 0;z-index:1;}
@@ -217,26 +205,3 @@
 .scenario_box.right .scenario_talk{order:1;}
 .scenario_box.ally .scenario_ch .ch_name{text-shadow:0 0 3px #00f,0 0 3px #00f,0 0 3px #00f;}
 .scenario_box.enemy .scenario_ch .ch_name{text-shadow:0 0 3px #f00,0 0 3px #f00,0 0 3px #f00;}
-
-.battle_end{position:absolute;left:0;right:0;top:0;bottom:0;z-index:10;background-color:rgba(0,0,0,.85);justify-content:center;}
-.battle_end .end_ch{position:relative;margin:0 10px 0 0;width:15%;padding-top:15%;}
-.battle_end .end_ch .ring_back, .battle_end .end_ch .ring_style{top:0;}
-.battle_end .battle_title{margin:0 0 30px 0;font-size:1.25rem;}
-.battle_end .battle_result_ch{padding:0 20px;width:100%;box-sizing:border-box;}
-.battle_end .battle_end_ch{margin:0 0 20px 0;width:100%;align-items:center;}
-.battle_end .battle_end_ch:nth-of-type{margin:0;}
-.battle_end_contribution{}
-.battle_end_hpexp{position:relative;width:100%;}
-.battle_end_hp{margin:0 10px 0 0;}
-.battle_end_hpexp > div{display:flex;align-items:center;}
-.battle_end_hpexp .num{display:inline-block;margin:0 0 0 10px;font-size:1rem;font-weight:600;}
-.battle_end_grade{position:absolute;width:16px;height:16px;opacity:0;font-size:0.875rem;font-weight:600;color:var(--color-red);animation:grade_animation 1s ease-in forwards;z-index:1;}
-.battle_end_grade:after{content:"";position:absolute;left:-4px;top:0;width:16px;height:16px;border-radius:20px;border:2px solid var(--color-red);box-sizing:border-box;}
-.battle_end_expBar{position:relative;margin:5px 0 0 0;min-width:200px;width:60%;height:14px;}
-.battle_end_expBar .bar{position:relative;width:100%;height:100%;border-radius:10px;background:#fff;overflow:hidden;}
-.battle_end_expBar .bar em{position:absolute;left:0;top:0;bottom:0;background-color:var(--color-red);}
-.battle_end_expBar .txt{position:absolute;left:0;right:0;top:1px;color:#000;text-align:center;}
-@keyframes grade_animation{
-  0%{opacity:0;left:-50px;top:-50px;transform:rotate(-35deg) scale(6);}
-  100%{opacity:0.8;left:-15px;top:-25px;transform:rotate(-35deg) scale(3);}
-}

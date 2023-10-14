@@ -583,8 +583,8 @@ const saveNew = {
           {//이순신(1592) period:6
             open:0,
             stage:[
-              {first:true,clear:[false,true,false,false],select:0}, //옥포해전
-              {first:true,clear:[false,false,true,false],select:0}, //사천해전
+              {first:true,clear:[false,false,false,false],select:0}, //옥포해전
+              {first:true,clear:[false,false,false,false],select:0}, //사천해전
               {first:true,clear:[false,false,false,false],select:0}, //당포해전
               {first:true,clear:[false,false,false,false],select:0}, //당항포해전
               {first:true,clear:[false,false,false,false],select:0}, //한산도대첩

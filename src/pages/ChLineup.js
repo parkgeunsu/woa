@@ -63,7 +63,7 @@ const ChLineup = ({
           <span key={idx} className={`mapCh has l${idx + 1}`} data-mapnum={idx} >
             <span className="mapEff"></span>
             <span className="mapCh_">
-              <CharacterCard isThumb={true} saveData={saveData} gameData={gameData} slotIdx={slotIdx} />
+              <CharacterCard usedType="thumb" saveData={saveData} gameData={gameData} slotIdx={slotIdx} />
             </span>
           </span>
         )
@@ -111,7 +111,7 @@ const ChLineup = ({
           }}>
             <span className="mapEff"></span>
             <span className="mapCh_">
-              <CharacterCard isThumb={true} saveData={saveData} gameData={gameData} slotIdx={slotIdx} />
+              <CharacterCard usedType="thumb" saveData={saveData} gameData={gameData} slotIdx={slotIdx} />
             </span>
           </span>
         );

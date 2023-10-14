@@ -277,11 +277,11 @@ const MoveEvent = ({
     const eventArr = Array.from({length:paramData.moveEvent.distance}, () => []);
     return eventArr;
   }, [paramData]);
-  const spEvents = React.useMemo(() => {
-    return Array.from({length:Math.ceil(paramData.moveEvent.distance / 4)}, () => {
-      return {type: util.fnPercent(gameData.percent.bigEventsPercent)};
-    });
-  }, [paramData]);
+  // const spEvents = React.useMemo(() => {
+  //   return Array.from({length:Math.ceil(paramData.moveEvent.distance / 4)}, () => {
+  //     return {type: util.fnPercent(gameData.percent.bigEventsPercent)};
+  //   });
+  // }, [paramData]);
   useEffect(() => {
     if (canvasRef.current) {
       canvasRef.current.setAttribute('width', 200);

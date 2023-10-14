@@ -1783,7 +1783,7 @@ export const util = { //this.loadImage();
     });
     return blockPercent.filter((block) => percent < block.num)[0].idx;
   },
-  typeTostartIdx: (type) => {
+  typeToStartIdx: (type) => {
     switch(type) {
       case 'equip':
         return '';
@@ -1795,6 +1795,59 @@ export const util = { //this.loadImage();
         return 30;
       case 'material':
         return 40;
+      default:
+        break;
+    }
+  },
+  iconToStartIdx: (type) => {
+    switch(type) {
+      case 'menu':
+      case 'enemies':
+      case 'elementBack':
+        return 0;
+      case 'element':
+      case 'lv':
+        return 1;
+      case 'map':
+      case 'elementBack2':
+        return 2;
+      case 'quickMenu':
+        return 3;
+      case 'commonBtn':
+      case 'cardBack':
+        return 4;
+      case 'scenario':
+        return 7;
+      case 'job':
+        return 9;
+      case 'star':
+        return 12;
+      default:
+        break;
+    }
+  },
+  iconHNum: (type) => {
+    switch(type) {
+      case 'animalType':
+        return [10, 3];
+      case 'card':
+        return [10, 6];
+      case 'cardRing':
+        return [5, 5];
+      case 'ch':
+        return [10, 6];
+      case 'icon100':
+        return [10, 20];
+      case 'icon200':
+        return [10, 10];
+      case 'itemEtc':
+        return [10, 50];
+      case 'itemTicket':
+        return [12, 1];
+      case 'moveEvent':
+        return [12, 5];
+      case 'moveEventCountry':
+        return [14, 1];
       default:
         break;
     }

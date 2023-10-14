@@ -1,14 +1,22 @@
 import { AppContext } from 'App';
+import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import 'css/battle.css';
 import 'css/battleAnimation.css';
+import CharacterCard from 'pages/CharacterCard';
 import React, { useCallback, useContext, useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const TeamIcon = styled.div`
-	background-image:url(${({ iconImg }) => iconImg});background-size:100%;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 25px;
+	height: 25px;
+	transform: translate(-50%, -50%);
+	transition: all 0.5s;
 `;
 const BattleHeader = styled.div`
 	width: 100%;
@@ -49,7 +57,39 @@ const BattleUnit = styled.div`
 	& > div {width:${({containerW}) => containerW}px;}
 `;
 const TimeLineCh = styled.div`
-	width:${({size}) => size}px;padding-top:${({size}) => size}px;
+	position: relative;
+	${({state}) => {
+		switch(state) {
+			case 'none':
+				return `
+					& > span {
+						filter: grayscale(100%);
+					}
+					&:after {
+						content: "";
+						position: absolute;
+						right: 0;
+						bottom: 0;
+						width: 100%;
+						height: 100%;
+						z-index: 1;
+					}
+				`;
+			case 'wait':
+				return `
+					&:after {
+						background-size:70%;
+					}
+				`;
+			default:
+				break;
+		}
+	}}
+	padding-top: ${({size}) => size}px;
+	width: ${({size}) => size}px;
+	height: 0;
+	border-radius: 50%;
+	overflow: hidden;
 	${({team}) => team === 'ally' ? 'margin:15px 0 0 0;' : 'margin:-15px 0 0 0;'}
 	&.on{z-index:20;animation:turnEffect ${({ gameSpd }) => 1.5 / gameSpd}s linear infinite;}
 	&.defence0:after{background:url(${({defenceIcon0}) => defenceIcon0}) no-repeat right center;background-size:70%;}
@@ -59,9 +99,15 @@ const TimeLineCh = styled.div`
 	&.die:after{background:url(${({tombstone}) => tombstone}) no-repeat center center;background-size:70%;}
 `;
 const BattleCh = styled.div`
-	width:${({size}) => size}%;padding-top:${({size}) => size}%;
-	left:${({left}) => left}%;
-	top:${({top}) => top}%;
+	position: absolute;
+	box-sizing: border-box;
+	perspective: 100px;
+	transform-style: flat;
+	z-index: 1;
+	width: ${({size}) => size}%;
+	padding-top: ${({size}) => size}%;
+	left: ${({left}) => left}%;
+	top: ${({top}) => top}%;
 	transition:all ${({ gameSpd }) => 0.75 / gameSpd}s;
 	&.relation:after{box-shadow:0 0 15px 5px ${({rtColor}) => rtColor};background:${({rtColor}) => rtColor};animation:rtAnimation ${({ gameSpd }) => 3 / gameSpd}s linear;}
 	.ch_box{transition:all ${({ gameSpd }) => 0.225/ gameSpd}s;}
@@ -74,6 +120,12 @@ const BattleCh = styled.div`
 				em{transition:all ${({ gameSpd }) => 0.375/ gameSpd}s;}
 			}
 		}
+	}
+	&.action {
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%,-50%) scale(2);
+		z-index: 30;
 	}
 	&.defence0:after{
 		background:url(${({defenceIcon0}) => defenceIcon0}) no-repeat center center;background-size:60%;
@@ -168,37 +220,6 @@ const BattleMenu = styled.div`
 		}
 	}};transition:height ${({gameSpd}) => 0.75 / gameSpd}s;
 `;
-const CardChRing = styled.span`
-	${({lv, ringBack, ringDisplay, ringDisplay1}) => {
-		if (lv > 29) {
-			return `background-image:url(${ringBack}), url(${ringDisplay}), url(${ringDisplay1});background-position:center 40%,center,center;`
-		} else {
-			return `background-image:url(${ringBack}), url(${ringDisplay});background-position:center 40%,center;`
-		}
-	}}
-	background-size:100%;
-`;
-const CardRingStyle = styled.span`
-	span{
-		animation:ring_ro linear ${({gameSpd}) => 11.25 / gameSpd}s infinite;
-		background-image:url(
-			${({ringDisplay, lv}) => {
-				if (lv > 49) {
-					return ringDisplay
-				} else {
-					return '';
-				}
-			}}
-		);
-		background-size:100%;
-	}
-`;
-const CardCh = styled.span`
-	background-image:${({chDisplay}) => {
-		return `url(${chDisplay})`;
-	}};background-position:center -70%;
-	background-size:75%;
-`;
 const RelationArea = styled.div`
 	&:after{transition:all ${({gameSpd}) => 0.375 / gameSpd}s ${({gameSpd}) => 0.5 / gameSpd}s ease-in-out;}
 	&.on:after{height:${({rtHeight}) => rtHeight}px;box-shadow:0 0 20px 10px rgba(0,0,0,.7);}
@@ -247,6 +268,33 @@ const BgLight = styled.div`
 		}};
 	}
 `;
+const BattleEnd = styled.div`
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 10;
+	background-color: rgba(0,0,0,.85);
+	justify-content: center;
+	.end_ch{position:relative;margin:0 10px 0 0;width:15%;padding-top:15%;}
+	.battle_title{margin:0 0 30px 0;font-size:1.25rem;}
+	.battle_result_ch{padding:0 20px;width:100%;box-sizing:border-box;}
+	.battle_end_ch{margin:0 0 20px 0;width:100%;align-items:center;}
+	.battle_end_ch:nth-of-type{margin:0;}
+	.battle_end_contribution{}
+	.battle_end_hpexp{position:relative;width:100%;}
+	.battle_end_hp{margin:0 10px 0 0;}
+	.battle_end_hpexp > div{display:flex;align-items:center;}
+	.battle_end_hpexp .num{display:inline-block;margin:0 0 0 10px;font-size:1rem;font-weight:600;}
+	.battle_end_grade{position:absolute;width:16px;height:16px;opacity:0;font-size:0.875rem;font-weight:600;color:var(--color-red);animation:grade_animation 1s ease-in forwards;z-index:5;}
+	.battle_end_grade:after{content:"";position:absolute;left:-4px;top:0;width:16px;height:16px;border-radius:20px;border:2px solid var(--color-red);box-sizing:border-box;}
+	.battle_end_expBar{position:relative;margin:5px 0 0 0;min-width:200px;width:60%;height:14px;}
+	.battle_end_expBar .bar{position:relative;width:100%;height:100%;border-radius:10px;background:#fff;overflow:hidden;}
+	.battle_end_expBar .bar em{position:absolute;left:0;top:0;bottom:0;background-color:var(--color-red);}
+	.battle_end_expBar .txt{position:absolute;left:0;right:0;top:1px;color:#000;text-align:center;}
+`;
+
 const chkString = (arr, index) => {
 	let chk = false;
 	arr.forEach((data, idx) => {
@@ -1326,11 +1374,11 @@ const relationEff = (ch, effObj) => {
 	});
 	return effObj_;
 }
-const relationCheck = (saveData, gameData, team, teamChk) => {
+const relationCheck = (sData, gameData, team, teamChk) => {
 	const relation = gameData.relation;
 	let rtMemberArr = [];
 	team.forEach((chData) => {
-		const team_ = teamChk === 'ally' ? saveData.ch[chData].idx : chData.idx;
+		const team_ = teamChk === 'ally' ? sData.ch[chData].idx : chData.idx;
 		gameData.ch[team_].relation.forEach((rtIdx) => {
 			const relationData = relation[rtIdx].member;
 			if (rtMemberArr[rtIdx]) {
@@ -1344,7 +1392,7 @@ const relationCheck = (saveData, gameData, team, teamChk) => {
 			rtMemberArr[rtIdx].member = Array.from({length: relationData.length}, () => false);
 			relationData.forEach((memberIdx, mIdx) => {
 				team.forEach((teamIdx, tIdx) => {
-					const ii = teamChk === 'ally' ? saveData.ch[teamIdx].idx : teamIdx.idx;
+					const ii = teamChk === 'ally' ? sData.ch[teamIdx].idx : teamIdx.idx;
 					if (memberIdx === ii) {
 						rtMemberArr[rtIdx].member[mIdx] = true;
 						return;
@@ -2076,6 +2124,7 @@ const Battle = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
+	const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
@@ -2104,10 +2153,10 @@ const Battle = ({
 		};
 	}, [gameData, isScenario, paramData]);
 	const viewScenario = React.useMemo(() => {
-		return isScenario ? saveData.scenario[paramData.scenario.stay][paramData.scenario.dynastyIdx].scenarioList[paramData.scenario.dynastyScenarioIdx].stage[paramData.scenario.stageIdx].first : false;
+		return isScenario ? sData.scenario[paramData.scenario.stay][paramData.scenario.dynastyIdx].scenarioList[paramData.scenario.dynastyScenarioIdx].stage[paramData.scenario.stageIdx].first : false;
 	}, [saveData, isScenario, paramData]);
 	const mapLand = React.useMemo(() => scenarioDetail.map, [scenarioDetail]);
-	const allyDeck = useRef(saveData.lineup.save_slot[saveData.lineup.select].entry);//캐릭터 저장된 카드index
+	const allyDeck = useRef(sData.lineup.save_slot[sData.lineup.select].entry);//캐릭터 저장된 카드index
 	const enemyDeck = React.useMemo(() => scenarioDetail.entry, [scenarioDetail]);
 	const [containerW, setContainerW] = useState();
 	const containerWH = useRef([0,0]);
@@ -2205,7 +2254,7 @@ const Battle = ({
 		});
 		allySlot.current = [...ally];
 		//인연 시작
-		const allyRelation = relationCheck(saveData, gameData, ally, 'ally');
+		const allyRelation = relationCheck(sData, gameData, ally, 'ally');
 		allyRelationArr.current = allyRelation;
 		let enemy = [],
 			enemy_ = [],
@@ -2216,7 +2265,7 @@ const Battle = ({
 				enemyP.push(idx);
 			}
 		});
-		const enemyRelation = relationCheck(saveData, gameData, enemy_, 'enemy');
+		const enemyRelation = relationCheck(sData, gameData, enemy_, 'enemy');
 		enemyRelationArr.current = enemyRelation;
 		//-----인연 적용캐릭 셋팅
 		let allyRt = [];
@@ -2257,7 +2306,7 @@ const Battle = ({
 			}, 75 / gameSpd);
 		}
 		ally.forEach((data, idx) => {//능력치 셋팅
-			const saveCh = saveData.ch[data];
+			const saveCh = sData.ch[data];
 			let effData;
 			//인연 체크
 			allyRelation.forEach((rtData) => {
@@ -2475,7 +2524,7 @@ const Battle = ({
 		return () => {//언마운트 리셋
 			clearInterval(conversationTimeout.current);
 			if (isScenario) {
-				let saveD = {...saveData};
+				let saveD = {...sData};
 				saveD.scenario[paramData.scenario.stay][paramData.scenario.dynastyIdx].scenarioList[paramData.scenario.dynastyScenarioIdx].stage[paramData.scenario.stageIdx].first = scenarioRepeat.current;
 				changeSaveData(saveD);
 			}
@@ -2866,11 +2915,19 @@ const Battle = ({
 			if (!isScenario) { //탐색 모드시 룰렛 데이터 제거
 				util.saveData('historyParam', {
 					...util.loadData('historyParam'),
-					roulette: {},
+					roulette: {base: {},add: {}, lv: {}, map: {}},
 				});
 			}
-			let saveD = {...saveData};
-			saveD.scenario[paramData.scenario.stay][paramData.scenario.dynastyIdx].scenarioList[paramData.scenario.dynastyScenarioIdx].stage[paramData.scenario.stageIdx].first = scenarioRepeat.current;
+			let saveD = {...sData};
+			if (isScenario) {
+				saveD.scenario[paramData.scenario.stay][paramData.scenario.dynastyIdx].scenarioList[paramData.scenario.dynastyScenarioIdx].stage[paramData.scenario.stageIdx].first = scenarioRepeat.current;
+			}
+			setWeather({
+				type:'',
+				day:true,
+				wind:0,
+				delay:0,
+			});
 			allySlot.current.forEach((slotIdx, idx) => {
 				const hasMaxExp = gameData.hasMaxExp[saveD.ch[slotIdx].grade];
 				saveD.ch[slotIdx].hasExp += resultExp.current[idx];
@@ -2894,7 +2951,7 @@ const Battle = ({
 					if (!isScenario) { //탐색 모드시 룰렛 데이터 제거
 						util.saveData('historyParam', {
 							...util.loadData('historyParam'),
-							roulette: {},
+							roulette: {base: {},add: {}, lv: {}, map: {}},
 						});
 					}
 					saveD.ch[slotIdx].hasExp = hasMaxExp;
@@ -2969,20 +3026,24 @@ const Battle = ({
     <>
 			<BattleHeader className="header battle_header" iconBack={imgSet.icon.iconBack}>
 				<ul>
-          <li className="back"><span className="ico" onClick={() => {
-						util.saveData('historyParam', {
-							...util.loadData('historyParam'),
-							roulette: {base: {},add: {}, lv: {}, map: {}},
-						});
-						util.historyBack(navigate, changePage);
-          }}></span></li>
+          <li className="back">
+						<IconPic className="ico" type="commonBtn" pic="icon100" idx={0} onClick={() => {
+							util.saveData('historyParam', {
+								...util.loadData('historyParam'),
+								roulette: {base: {},add: {}, lv: {}, map: {}},
+							});
+							util.historyBack(navigate, changePage);
+						}}></IconPic>
+					</li>
 				</ul>
 				<div className="battle_title" flex-h-center="true">
 					<div className="scenario_title">{isScenario ? scenarioDetail.title[lang] : scenarioDetail.title}</div>
 					<div className="team_summary">
 						<div style={{width: teamPower.current.allyPercent+"%"}} className="ally_team gradient_dark"></div>
 						<div style={{width: teamPower.current.enemyPercent+"%"}} className="enemy_team gradient_dark"></div>
-						<TeamIcon style={{left: teamPower.current.allyPercent+"%"}} className="team_bullet" iconImg={imgSet.element[13]}></TeamIcon>
+						<TeamIcon style={{left: teamPower.current.allyPercent+"%"}} className="team_bullet">
+							<IconPic type="element" pic="icon100" idx={13} />
+						</TeamIcon>
 						<div className="ally_power">{teamPower.current.allyHp}</div>
 						<div className="enemy_power">{teamPower.current.enemyHp}</div>
 					</div>
@@ -3015,8 +3076,11 @@ const Battle = ({
 						return idx <= conversationStepRef.current && (
 						<div key={idx} className={`scenario_box ${data.pos} ${data.team}`} flex-center="true">
 								<div className="scenario_ch">
-									<CardChRing className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} />
-									<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} />
+									{/* <CardChRing>
+                    <ChPic isThumb={true} type="cardBack" pic="card" idx={0} />
+									</CardChRing>
+									<CardCh isThumb={true} pic="ch" idx={chData?.display} /> */}
+									<CharacterCard usedType="conversation" saveData={saveData} gameData={gameData} saveCharacter={data} gameSpd={gameSpd} />
 									<div className="ch_name">{chData?.na1}</div>
 								</div>
 								{idx === conversationStepRef.current - 1 && (
@@ -3031,35 +3095,32 @@ const Battle = ({
 				</div>
 			)}
 			{mode === "battleWin" && (
-				<div className="battle_end" onClick={() => {
+				<BattleEnd className="battle_end" onClick={() => {
 					util.historyBack(navigate, changePage);
 				}} flex-h-center="true">
 					<div className="battle_title">격!퇴!성!공!</div>
 					<div className="battle_result_ch" flex-h-center="true">
 						{battleAlly.current && battleAlly.current.map((allyData, idx) => {
-							const chData = gameData.ch[allyData.idx];
 							const battleGrade = getExp(allyData, battleEnemy.current);
 							resultExp.current[idx] = battleGrade.exp;
 							resultBeige.current[idx] = battleGrade.grade;
-							const exp = [allyData.hasExp, gameData.hasMaxExp[allyData.grade]];
+							const exp = [allyData.hasExp , gameData.hasMaxExp[allyData.grade]];
 							return (
 								<div className="battle_end_ch" key={idx} flex-center="true">
 									<div className="end_ch">
-										<CardChRing className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={allyData.lv} gameSpd={gameSpd} />
-										<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} />
-										<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData?.element]} lv={allyData.lv} gameSpd={gameSpd}>
-											<span className="ch_ring transition" />
-										</CardRingStyle>
+										<CharacterCard usedType="battle" saveData={saveData} gameData={gameData} saveCharacter={allyData} gameSpd={gameSpd} />
 									</div>
 									<div className="battle_end_contribution" flex-h-center="true">
 										<div className="battle_end_hpexp" flex-center="true">
 												<div className="battle_end_hp"><span>기여도:</span><span className="num">{Math.round(allyData.totalDmg) || 0}</span></div>
-												<div className="battle_end_exp"><span>경험치:</span><span className="num">{battleGrade.exp}</span></div>
+												<div className="battle_end_exp"><span>경험치:</span><span className="num">{Math.round(battleGrade.exp)}</span></div>
 												<div className="battle_end_grade">{battleGrade.grade}</div>
 										</div>
 										<div className="battle_end_expBar">
-											<div className="bar"><em className="gradient_dark transition" style={{width:exp[1] / exp[0]}}></em></div>
-											<div className="txt">{exp[0]} / {exp[1]}</div>
+											<div className="bar"><em className="gradient_dark transition" style={{
+												width: exp[0] === 0 ? 0 : (exp[0] / exp[1]).toFixed(1),
+											}}></em></div>
+											<div className="txt">{Math.round(exp[0])} / {exp[1]}</div>
 										</div>
 									</div>
 								</div>
@@ -3075,7 +3136,7 @@ const Battle = ({
 							)
 						})}
 					</div>
-				</div>
+				</BattleEnd>
 			)}
 			{mode === "battleLose" && (
 				<div className="battle_end" onClick={() => {
@@ -3245,11 +3306,7 @@ const Battle = ({
 														<Passive key={idx} className={`ch_passive passive${idx}`} effImg={imgSet.passive[passiveData]} idx={idx} passive={passiveData}/>
 													);
 												})}
-												<CardChRing className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={enemyData.lv} gameSpd={gameSpd} />
-												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} />
-												<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData?.element]} lv={enemyData.lv} gameSpd={gameSpd}>
-													<span className="ch_ring transition" />
-												</CardRingStyle>
+												<CharacterCard usedType="battle" saveData={saveData} gameData={gameData} saveCharacter={enemyData} gameSpd={gameSpd} />
 												<div className="hpsp">
 													<span className="hp"><em className="gradient_light" style={{width: hasHp + '%'}}></em></span>
 												</div>
@@ -3270,12 +3327,11 @@ const Battle = ({
 						</div>
 						<div className={`turnLine ${mode === 'action' ? 'on' : ''}`}>
 							{timeLine.current && timeLine.current.map((data, idx) => {
-								const chData = data.order.team === 'ally' ? gameData.ch[battleAlly.current[data.order.idx]?.idx] : gameData.ch[battleEnemy.current[data.order.idx]?.idx];
+								const chData = data.order.team === 'ally' ? battleAlly.current[data.order.idx] : battleEnemy.current[data.order.idx];
 								const activeSkill = activeSk(data);// die 및 active스킬 판단 0대기,2방어,13철벽방어
 								return (
-									<TimeLineCh key={idx} className={`battle_ch timeLine ${turnIdx === idx ? 'on' : ''} ${activeSkill}`} team={data.order.team} size={30} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]} gameSpd={gameSpd}>
-										<CardChRing style={{top:0,borderRadius:'50%',}} className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} />
-										<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} />
+									<TimeLineCh key={idx} className={turnIdx === idx ? 'on' : ''} state={activeSkill} team={data.order.team} size={30} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]} gameSpd={gameSpd}>
+										<CharacterCard usedType="timeline" saveData={saveData} gameData={gameData} saveCharacter={chData} gameSpd={gameSpd} />
 									</TimeLineCh>
 								)
 							})}
@@ -3326,11 +3382,7 @@ const Battle = ({
 														<Passive key={idx} className={`ch_passive passive${idx}`} effImg={imgSet.passive[passiveData]} idx={idx} passive={passiveData}/>
 													);
 												})}
-												<CardChRing className="ring_back" ringBack={imgSet.etc.imgRingBack} ringDisplay={imgSet.ringImg[chData?.element]} ringDisplay1={imgSet.sringImg[chData?.element]} lv={saveCh?.lv} />
-												<CardCh className="ch_style" chDisplay={imgSet.chImg[`ch${chData?.display}`]} />
-												<CardRingStyle className="ring_style" ringDisplay={imgSet.ssringImg[chData?.element]} lv={saveCh?.lv} gameSpd={gameSpd}>
-													<span className="ch_ring transition" />
-												</CardRingStyle>
+              					<CharacterCard usedType="battle" saveData={saveData} gameData={gameData} saveCharacter={saveCh} gameSpd={gameSpd} />
 												<div className="hpsp">
 													<span className="hp"><em className="gradient_light" style={{width: hasHp + '%'}}></em></span>
 													<span className="sp"><em className="gradient_light" style={{width: hasSp + '%'}}></em></span>

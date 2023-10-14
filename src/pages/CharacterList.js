@@ -1,9 +1,11 @@
 import { AppContext } from 'App';
+import ChListCard from 'components/ChListCard';
 import { util } from 'components/Libs';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 const ChWrap = styled.div`
+  position:absolute;left:0;right:0;top:0;bottom:0;width: 100%;height: 100%;box-sizing: border-box;overflow:hidden;touch-action:none;
   .st0 .ico{background:url(${({stateIcon}) => stateIcon[0]}) no-repeat center center;background-size:100%;}
   .st1 .ico{background:url(${({stateIcon}) => stateIcon[1]}) no-repeat center center;background-size:100%;}
   .st2 .ico{background:url(${({stateIcon}) => stateIcon[2]}) no-repeat center center;background-size:100%;}
@@ -11,27 +13,6 @@ const ChWrap = styled.div`
   .st4 .ico{background:url(${({stateIcon}) => stateIcon[4]}) no-repeat center center;background-size:100%;}
   .st5 .ico{background:url(${({stateIcon}) => stateIcon[5]}) no-repeat center center;background-size:100%;}
   .st6 .ico{background:url(${({stateIcon}) => stateIcon[6]}) no-repeat center center;background-size:100%;}
-`;
-
-const ListCh = styled.span`
-  background-image:url(${({chDisplay}) => chDisplay});background-size:100%;
-`;
-const ListJob = styled.span`
-  background-image:url(${({jobIcon}) => jobIcon});background-size:100%;
-`;
-const ListActionType = styled.span`
-  background-image:url(${({actionType}) => actionType});background-size:100%;
-`;
-const ListRing = styled.span`
-  background-image:url(${({ringBack}) => ringBack});
-  background-size:85%;
-`;
-const ListElement = styled.span`
-  background-image:url(${({ringDisplay}) => ringDisplay});
-  background-size:100%;
-`;
-const ListFrame = styled.span`
-  background: url(${({ cardFrame }) => cardFrame});background-size:100% 100%;
 `;
 
 // const timer = (currentTime, setCurrentTime, saveData, changeSaveData) => {
@@ -56,7 +37,6 @@ const ChracterList = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-
   const iconState = React.useMemo(() => [imgSet.iconState[0], imgSet.iconState[1], imgSet.iconState[2], imgSet.iconState[3], imgSet.iconState[4], imgSet.iconState[5], imgSet.iconState[6]], [imgSet]);
   //const timerRef = useRef(null); //시간계산
   //const [currentTime, setCurrentTime] = useState(1);
@@ -87,19 +67,7 @@ const ChracterList = ({
                     changePage('cards');
                   });//히스토리 저장
                 }}>
-                  <ListRing className="list_ring" ringBack={imgSet.etc.imgRingBack} />
-                  <ListElement className="list_element" ringDisplay={imgSet.ringImg[chData.element]} />
-                  <ListCh className="list_ch" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
-                  <div className="list_job_actiontype">
-                    <ListJob jobIcon={imgSet.job[saveCh.job]} className="list_job"/>
-                    {saveCh.newActionType.map((data, idx) => {
-                      return (
-                        <ListActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="list_action_type"/>
-                      )
-                    })}
-                  </div>
-                  <ListFrame className="list_frame" cardFrame={imgSet.etc.imgCardFrame} />
-                  <div className="list_actionPoint">{`${saveCh.actionPoint} / ${saveCh.actionMax}`}</div>
+                  <ChListCard type="list" saveCh={saveCh} chData={chData} />
                 </li>
               )
             })}

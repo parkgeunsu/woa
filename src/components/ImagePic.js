@@ -1,5 +1,6 @@
+import { AppContext } from 'App';
 import { util } from 'components/Libs';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
 
 ////etc 0, hole 100, colorance 200, upgrade 300, material 400
@@ -27,7 +28,7 @@ const ItemPic = ({
   ...rest
 }) => {
   const startIdx = React.useMemo(() => {
-    return type ==='equip' || !type ? '' : util.typeTostartIdx(type);
+    return type ==='equip' || !type ? '' : util.typeToStartIdx(type);
   }, [type]);
   const picSize = useCallback((node) => {
     if (node !== null) {
@@ -41,6 +42,101 @@ const ItemPic = ({
       {children}
     </StyledItemPic>
   )
+}
+
+//menu0, element1-2, 
+const StyledIconPic = styled.span`
+  display: inline-block;
+  ${({itemPic, startIdx, idx, whNum}) => {
+    return `
+      background: url(${itemPic}) no-repeat ${(idx % whNum[0]) * (100 / (whNum[0] - 1))}% ${Math.floor(idx / whNum[0]) * (100 / (whNum[1] - 1)) + (100 / (whNum[1] - 1)) * startIdx}%;
+      background-size: ${whNum[0] * 100}%;
+    `;
+  }}
+  ${({isAbsolute}) => isAbsolute ? `
+    position: absolute;
+    left: 0;
+    top: 0;
+  `: ''}
+  width: 100%;
+  height: 100%;
+  ${({startIdx}) => {
+    if (startIdx === '') { //equip일 경우
+      return `
+        svg{
+          width: 100%;
+          height: 100%;
+        }
+      `;
+    }
+  }}
+`;
+const IconPic = ({
+  type,
+  idx,
+  pic,
+  isAbsolute,
+  children,
+  ...rest
+}) => {
+  const imgSet = useContext(AppContext).images;
+  const whNum = React.useMemo(() => {
+    return util.iconHNum(pic);
+  }, [pic]);
+  const startIdx = React.useMemo(() => {
+    return !type ? 0 : util.iconToStartIdx(type);
+  }, [type]);
+  return (
+    <StyledIconPic isAbsolute={isAbsolute} whNum={whNum} startIdx={startIdx} className="pic" itemPic={imgSet.images[pic]} idx={idx} {...rest}>
+      {children}
+    </StyledIconPic>
+  )
+}
+IconPic.defaultProps = {
+  isAbsolute: false,
+}
+
+const StyledPic = styled.span`
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  ${({chPic, type, startIdx, idx, whNum, isThumb}) => {
+    const posY = Math.floor(idx / whNum[0]) * (100 / (whNum[1] - 1)) + (100 / (whNum[1] - 1)) * startIdx - (isThumb ? 
+      type ? 0.6745 * startIdx : Math.floor(idx / whNum[0]) - 1.4825 : 
+    0);
+    return `
+      background: url(${chPic}) no-repeat ${(idx % whNum[0]) * (100 / (whNum[0] - 1))}% ${posY}%;
+      background-size: ${whNum[0] * 100}%;
+    `;
+    //0.6745, 1.4825
+  }}
+`;
+const ChPic = ({
+  idx,
+  pic,
+  type,
+  isThumb,
+  children,
+  ...rest
+}) => {
+  const imgSet = useContext(AppContext).images;
+  const whNum = React.useMemo(() => {
+    return util.iconHNum(pic);
+  }, [pic]);
+  const startIdx = React.useMemo(() => {
+    return !type ? 0 : util.iconToStartIdx(type);
+  }, [type]);
+  return (
+    <StyledPic startIdx={startIdx} type={type} whNum={whNum} isThumb={isThumb} chPic={imgSet.images[pic]} idx={idx} {...rest}>
+      {children}
+    </StyledPic>
+  )
+}
+ChPic.defaultProps = {
+  isThumb: false,
+  wNum: 10,
+  hNum: 6,
+  type: '',
 }
 
 const MarkWrap = styled.span`
@@ -205,4 +301,6 @@ const SkillMark = ({
     )
   )
 }
-export { ItemPic, MarkPic, SkillMark };
+
+export { ChPic, IconPic, ItemPic, MarkPic, SkillMark };
+

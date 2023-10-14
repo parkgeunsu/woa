@@ -2,10 +2,12 @@ import { AppContext } from 'App';
 import { Button } from 'components/Button';
 import { Prices } from 'components/Components';
 import { FlexBox } from 'components/Container';
+import { ChPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Modal from 'components/Modal';
 import ModalContainer from 'components/ModalContainer';
 import 'css/gacha.css';
+import CharacterCard from 'pages/CharacterCard';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -30,60 +32,28 @@ const GachaSubmitGroup = styled(FlexBox)`
 	transform: translate(-50%, -50%);
 `;
 const GachaCard = styled.div`
+	transform-origin: 50% 50%;
 	left: ${({posX}) => posX}%;
 	top: ${({posY}) => posY}%;
 	padding-top: ${30*1.481}%;
 	transform: translate(-50%,-50%) rotateX(45deg) rotateZ(${({rotate}) => rotate}deg);
-`;
-const CardLvName = styled.li`
-	&:after{background-image:url(${({cardLv}) => cardLv});background-size:contain;}
-`;
-const CardDisplay = styled.li`
-	background-image:url(${({chDisplay}) => chDisplay});
-	background-size:100%;
-`;
-const CardElement = styled.li`
-	background-image:url(${({ringDisplay}) => ringDisplay});
-	background-size:100%;
-`;
-const CardStar = styled.li`
-	height:${({type}) => {
-		return (
-			type === 'open' ? 'height:25px' : 'height:12px'
-		);
-	}};
-	span{
-		${({type}) => {
-			return (
-				type === 'open' ? 'width:25px;height:25px' : 'width:12px;height:12px'
-			);
-		}}
+	&.open {
+		transform: scale(1.3) translate(-50%,-50%) rotateX(0deg) rotateZ(0deg) !important;
 	}
-	span:first-of-type{background:url(${({starIcon}) => starIcon[0]}) no-repeat center center;background-size:100%}
-	span:nth-of-type(2){background:url(${({starIcon}) => starIcon[1]}) no-repeat center center;background-size:100%;}
-	span:nth-of-type(3){background:url(${({starIcon}) => starIcon[2]}) no-repeat center center;background-size:100%;}
-	span:nth-of-type(4){background:url(${({starIcon}) => starIcon[3]}) no-repeat center center;background-size:100%;}
-	span:nth-of-type(5){background:url(${({starIcon}) => starIcon[4]}) no-repeat center center;background-size:100%;}
-	span:nth-of-type(6){background:url(${({starIcon}) => starIcon[5]}) no-repeat center center;background-size:100%;}
-	span:nth-of-type(7){background:url(${({starIcon}) => starIcon[6]}) no-repeat center center;background-size:100%;}
-`;
-const CardRing = styled.li`
-	background-image:url(${({ringBack}) => ringBack});
-	background-size:85%;
-`;
-const CardJob = styled.li`
-	background-image:url(${({jobIcon}) => jobIcon});
-	background-size:100%;
-`;
-const CardActionType = styled.li`
-	background-image:url(${({actionType}) => actionType});
-	background-size:100%;
-`;
-const CardFrame = styled.li`
-	background:url(${({cardFrame}) => cardFrame});
-	background-size:100% 100%;
 `;
 const GachaFront = styled.div`
+	position:absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	border-radius: 5%;
+	overflow: hidden;
+	backface-visibility: hidden;
+	transition: all .7s;
+	z-index: 1;
+	background: #000;
+	transform: rotateY(180deg);
 	box-shadow:${({gameData, idx}) => {
 		const grade = gameData.ch[idx].grade;
 		const gradeColor = gameData.chGradeColor[grade*1];
@@ -104,8 +74,18 @@ const GachaFront = styled.div`
 		}
 	}};
 `;
-const GachaBack = styled.div`
-	background:url(${({cardBack}) => cardBack}) no-repeat center center;background-size:100%;
+const GachaBack = styled(ChPic)`
+	position:absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	border-radius: 5%;
+	overflow: hidden;
+	backface-visibility: hidden;
+	transition: all .7s;
+	transform: rotateY(0deg);
+	z-index: 2;
 `;
 const GachaInfo = styled.div`
 	.ch_state{border-image:url(${({ borderImg }) => borderImg}) 5 round;}
@@ -247,7 +227,7 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 				mark: Math.round(Math.random()*2),//동물뱃지 추가보유여부(상점에서 exp로 구입가능)
 				idx: newIdx,
 				items: [{}, {}, {}, {}, {}, {}, {}, {}],
-				lv: 1,
+				lv: 50,
 				sk: [{idx: 1, lv: 1, exp: 0,},{idx: 2, lv: 1, exp: 0,},],
 				animalSkill:[],
 				hasSkill: [{idx: 1, lv: 1, exp: 0,},{idx: 2, lv: 1, exp: 0,},],
@@ -289,7 +269,6 @@ const Gacha = ({
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
-	const iconStar = [imgSet.iconStar[0], imgSet.iconStar[1], imgSet.iconStar[2], imgSet.iconStar[3], imgSet.iconStar[4], imgSet.iconStar[5], imgSet.iconStar[6]];
 	const [gachaMode, setGachaMode] = useState('');
 	const [cardStateType, setCardStateType] = useState(''); //카드 성장타입
 	const [cardStar, setCardStar] = useState(0); //카드 성장타입
@@ -582,29 +561,38 @@ const Gacha = ({
 									setCardStar(data.grade);
 								}} ref={(element) => {cardRef.current[idx] = element}} key={`gachaCard${idx}`} posX={data.posX} posY={data.posY} rotate={data.rotate} className="gacha_card ready" data-grade={chData.grade}>
 									<GachaFront className="gacha_front" idx={data.idx} gameData={gameData}>
-										<ul>
+          					<CharacterCard usedType="gacha" saveData={saveData} slotIdx={idx} />
+										{/* <ul>
 											<CardLvName className="gacha_name_lv" cardLv={imgSet.etc.imgCardLv}>
 												<Img className="img" imgurl={imgSet.etc.iconCardName} />
 								 				<span className="lv">1</span><span className="name">{chData.na1}</span>
 								 			</CardLvName>
-											<CardDisplay className="gacha_ch" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
-								 			<CardRing className="gacha_ring" ringBack={imgSet.etc.imgRingBack}></CardRing>
+											<CardDisplay>
+												<ChPic pic="ch" idx={chData.display} />
+											</CardDisplay>
+								 			<CardRing className="gacha_ring">
+                				<ChPic type="cardBack" pic="card" idx={0} />
+											</CardRing>
 								 			<CardElement className="gacha_element" ringDisplay={imgSet.ringImg[chData.element]} />
 								 			<CardStar className="gacha_star" starIcon={iconStar}>
 											 	{star && makeStar(star)}
 											</CardStar>
 											<div className="gacha_job_actiontype">
-												<CardJob jobIcon={imgSet.job[saveData.ch[data.slotIdx]?.job]} className="gacha_job"/>
+												<CardJob className="gacha_job">
+													<IconPic type="job" isAbsolute={true} pic="icon100" idx={saveData.ch[data.slotIdx]?.job} />
+												</CardJob>
 												{saveData.ch[data.slotIdx]?.newActionType.map((data, idx) => {
 													return (
-														<CardActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="gacha_action_type"/>
+														<CardActionType key={'action'+idx} className="gacha_action_type">
+															<IconPic type="element" isAbsolute={true} pic="icon100} idx={idx + 1} />
+														</CardActionType>
 													)
 												})}
 											</div>
 								 			<CardFrame className="gacha_frame" cardFrame={imgSet.etc.imgCardFrame} />
-										</ul>
+										</ul> */}
 									</GachaFront>
-									<GachaBack className="gacha_back" cardBack={imgSet.etc.imgCardBack}/>
+									<GachaBack className="gacha_back" type="cardBack" pic="card" idx={2} />
 								</GachaCard>
 							);
 						})}
@@ -663,27 +651,36 @@ const Gacha = ({
 					}} className="gacha_info" borderImg={imgSet.etc.frameChBack}>
 						<div className="gacha_ch_card">
 							<Img imgurl={imgSet.etc.imgRing} />
-							<ul className="ch_detail">
+							<CharacterCard usedType="gacha" saveData={saveData} slotIdx={infoIdx} />
+							{/* <ul className="ch_detail">
 								<CardLvName className="gacha_name_lv" cardLv={imgSet.etc.imgCardLv}>
 									<Img className="img" imgurl={imgSet.etc.iconCardName} />
 									<span className="lv">1</span><span className="name_">{gameData.ch[infoIdx].na}</span><span className="name">{gameData.ch[infoIdx].na1}</span>
 								</CardLvName>
-								<CardDisplay className="gacha_ch" chDisplay={imgSet.chImg[`ch${gameData.ch[infoIdx].display}`]} />
-								<CardRing className="gacha_ring" ringBack={imgSet.etc.imgRingBack}></CardRing>
+								<CardDisplay>
+									<ChPic pic="ch" idx={gameData.ch[infoIdx].display} />
+								</CardDisplay>
+								<CardRing className="gacha_ring">
+                  <ChPic type="cardBack" pic="card" idx={0} />
+								</CardRing>
 								<CardElement className="gacha_element" ringDisplay={imgSet.ringImg[gameData.ch[infoIdx].element]} />
 								<CardStar type={'open'} className="gacha_star" starIcon={iconStar}>
 									{cardStar && makeStar(cardStar)}
 								</CardStar>
 								<div className="gacha_job_actiontype">
-									<CardJob jobIcon={imgSet.job[saveData.ch[slotIdx]?.job]} className="gacha_job"/>
+									<CardJob className="gacha_job">
+										<IconPic type="job" isAbsolute={true} pic="icon100" idx={saveData.ch[slotIdx]?.job} />
+									</CardJob>
 									{saveData.ch[slotIdx]?.newActionType.map((data, idx) => {
 										return (
-											<CardActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="gacha_action_type"/>
+											<CardActionType key={'action'+idx} className="gacha_action_type">
+												<IconPic type="element" isAbsolute={true} pic="icon100" idx={idx + 1} />
+											</CardActionType>
 										)
 									})}
 								</div>
 								<CardFrame className="gacha_frame" cardFrame={imgSet.etc.imgCardFrame} />
-							</ul>
+							</ul> */}
 						</div>
 						<div className="gacha_ch_graph">
 							<canvas ref={graphRef}></canvas>

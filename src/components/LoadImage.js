@@ -1,5 +1,5 @@
-import { actionIcon, anchor, back, bgEffect, button, cannon, chImg, control, eff, element, etc, figure, icon, iconStar, iconState, images, job, land, map, menu, passive, ringImg, sail, sringImg, ssringImg, weather, wood } from 'components/ImgSet';
-//itemEtc, itemHole, itemMaterial, itemUpgrade,
+import { actionIcon, anchor, back, bgEffect, button, cannon, control, eff, etc, figure, icon, iconState, images, land, map, passive, ringImg, sail, sringImg, ssringImg, weather, wood } from 'components/ImgSet';
+//icon100 menu0, element1~2
 export const LoadImage = () => {
   //이미지 프리로드
   back.forEach((image) => {
@@ -18,34 +18,10 @@ export const LoadImage = () => {
     const img = new Image();
     img.src = etc[v];
   }
-  element.forEach((image) => {
-    const img = new Image();
-    img.src = image;
-  });
-  for (let v in chImg) {
-    const img = new Image();
-    img.src = chImg[v];
-  }
   iconState.forEach((image) => {
     const img = new Image();
     img.src = image;
   });
-  // itemEtc.forEach((image) => {
-  //   const img = new Image();
-  //   img.src = image;
-  // });
-  // itemHole.forEach((image) => {
-  //   const img = new Image();
-  //   img.src = image;
-  // });
-  // itemMaterial.forEach((image) => {
-  //   const img = new Image();
-  //   img.src = image;
-  // });
-  // itemUpgrade.forEach((image) => {
-  //   const img = new Image();
-  //   img.src = image;
-  // });
   ringImg.forEach((image) => {
     const img = new Image();
     img.src = image;
@@ -79,10 +55,6 @@ export const LoadImage = () => {
     img.src = image;
   });
   weather.forEach((image) => {
-    const img = new Image();
-    img.src = image;
-  });
-  job.forEach((image) => {
     const img = new Image();
     img.src = image;
   });
@@ -120,28 +92,19 @@ export const LoadImage = () => {
   };
   return {
     back: back,
-    menu: menu,
     etc: etc,
     icon: icon,
     button: button,
-    iconStar: iconStar,
-    chImg: chImg,
     ringImg: ringImg,
     sringImg: sringImg,
     ssringImg: ssringImg,
-    element: element,
     iconState: iconState,
-    // itemEtc: itemEtc,
-    // itemHole: itemHole,
-    // itemUpgrade: itemUpgrade,
-    // itemMaterial: itemMaterial,
     land: land,
     bgEffect: bgEffect,
     passive: passive,
     eff: eff,
     actionIcon: actionIcon,
     weather: weather,
-    job: job,
     wood: wood,
     anchor: anchor,
     sail: sail,

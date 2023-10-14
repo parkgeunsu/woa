@@ -8,6 +8,7 @@ import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
+import TabMenu from 'components/TabMenu';
 import 'css/combineItem.css';
 import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -17,11 +18,11 @@ const CombineWrap = styled.div`
 `;
 
 const combineList = [
-	{na:{ko:"장비", en:"Equip"},icon:"iconArmor",keyName:"equip"},
-	{na:{ko:"소켓", en:"Hole"},icon:"iconSocket",keyName:"hole"},
-	{na:{ko:"강화", en:"Upgrade"},icon:"iconUpgrade",keyName:"upgrade"},
-	{na:{ko:"재료", en:"Material"},icon:"iconMaterial",keyName:"material"},
-	{na:{ko:"기타", en:"Etc"},icon:"iconEtc",keyName:"etc"},
+	{na:'equip',icon:11,keyName:"equip"},
+	{na:'hole',icon:14,keyName:"hole"},
+	{na:'upgrade',icon:15,keyName:"upgrade"},
+	{na:'material',icon:13,keyName:"material"},
+	{na:'etc',icon:16,keyName:"etc"},
 ];
 
 const ShopIcon = styled.span`
@@ -254,7 +255,7 @@ const Composite = ({
 												const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 												return (
 													<span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
-														<ItemPic className="pic" pic={imgSet.images.itemEtc} type="hole" idx={holePic} />
+														<ItemPic className="pic" pic="itemEtc" type="hole" idx={holePic} />
 													</span>
 												);
 											})}
@@ -262,16 +263,16 @@ const Composite = ({
 									</>
 								)}
 								{cate === 'hole' && (
-									<ItemPic className="pic" pic={imgSet.images.itemEtc} type="hole" idx={items.display} />
+									<ItemPic className="pic" pic="itemEtc" type="hole" idx={items.display} />
 								)}
 								{cate === 'upgrade' && (
-									<ItemPic className="pic" pic={imgSet.images.itemEtc} type="upgrade" idx={items.display} />
+									<ItemPic className="pic" pic="itemEtc" type="upgrade" idx={items.display} />
 								)}
 								{cate === 'material' && (
-									<ItemPic className="pic" pic={imgSet.images.itemEtc} type="material" idx={items.display} />
+									<ItemPic className="pic" pic="itemEtc" type="material" idx={items.display} />
 								)}
 								{cate === 'etc' && (
-									<ItemPic className="pic" pic={imgSet.images.itemEtc} type="etc" idx={items.display}>
+									<ItemPic className="pic" pic="itemEtc" type="etc" idx={items.display}>
 									{items.displayText && <span className="display_text">{items.displayText}</span>}</ItemPic>
 								)}
 							</div>
@@ -280,172 +281,159 @@ const Composite = ({
 					</div>
 				</div>
 				<div className="combineItem_bottom">
-					<div className="tab_menu transition">
-						{combineList && combineList.map((data, idx) => {
-							return (
-									<li key={`itemEn_${idx}`} className={idx === selectTab ? "on" : ""} onClick={() => {
-										setSelectTab(idx);
+					<TabMenu list={combineList} selectTab={selectTab} setSelectTab={setSelectTab} lang={lang} className="transition" />
+					<div className="combineItem_area num6 scroll-y">
+						{item[combineList[selectTab].keyName] && item[combineList[selectTab].keyName].map((data, idx) => {
+							const cate = combineList[selectTab].keyName;
+							let select = false;
+							for (const [selectIndex, selectData] of selectItem.selectTab.entries()) {
+								if (selectData === cate && selectItem.select[selectIndex] === idx) {
+									select = true;
+									return;//return 시 선택된 아이템이 인벤창에서 사라짐
+								}
+							};
+							if (cate === 'equip') {
+								const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
+								const items = data.part === 3 ? gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx] : gameItem.equip[data.part][0][itemsGrade][data.idx];
+								const itemsHole = data.hole;
+								return (
+									<div className={`item_layout ${gameData.itemGrade.txt_e[data.grade].toLowerCase()} ${select ? 'select' : ''}`} key={`items${idx}`} onClick={() => {
+										let cloneSelectItem = {...selectItem};
+										for (const [selectIndex, selectData] of cloneSelectItem.selectTab.entries()) {
+											if (selectData === cate && selectItem.select[selectIndex] === idx) {
+												cloneSelectItem.save[selectIndex] = {};
+												cloneSelectItem.game[selectIndex] = {};
+												cloneSelectItem.select[selectIndex] = '';
+												cloneSelectItem.selectTab[selectIndex] = '';
+												break;
+											}
+										}
+										cloneSelectItem.save[selectIdx] = data;
+										cloneSelectItem.game[selectIdx] = items;
+										cloneSelectItem.select[selectIdx] = idx;
+										cloneSelectItem.selectTab[selectIdx] = combineList[selectTab].keyName;
+										setSelectItem(cloneSelectItem);
+										console.log(cloneSelectItem);
 									}}>
-										<button className="tab_menu_button">
-											<span className="name">{`${lang === "ko" ? data.na.ko : data.na.en}`}</span>
-											<ShopIcon className="icon" icoType={imgSet.icon[data.icon]} />
-										</button>
-									</li>
+										<span className={`pic ${data.sealed ? "sealed" : ""}`}>
+											<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.svgColor || data.id)}}>
+											</svg>
+										</span>
+										<span className="hole" flex-center="true">
+											{itemsHole.map((holeData, holeidx) => {
+												const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
+												return (
+													<span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
+														<ItemPic className="pic" pic="itemEtc" type="hole" idx={holePic} />
+													</span>
+												);
+											})}
+										</span>
+									</div>
 								);
+							} else if (cate === 'hole') {
+								const items = gameItem.hole[data.idx];
+								const grade = data.grade || items.grade;
+								return (
+									<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${select ? 'select' : ''}`} key={`items${idx}`} onClick={() => {
+										let cloneSelectItem = {...selectItem};
+										for (const [selectIndex, selectData] of cloneSelectItem.selectTab.entries()) {
+											if (selectData === cate && selectItem.select[selectIndex] === idx) {
+												cloneSelectItem.save[selectIndex] = {};
+												cloneSelectItem.game[selectIndex] = {};
+												cloneSelectItem.select[selectIndex] = '';
+												cloneSelectItem.selectTab[selectIndex] = '';
+												break;
+											}
+										};
+										cloneSelectItem.save[selectIdx] = data;
+										cloneSelectItem.game[selectIdx] = items;
+										cloneSelectItem.select[selectIdx] = idx;
+										cloneSelectItem.selectTab[selectIdx] = combineList[selectTab].keyName;
+										setSelectItem(cloneSelectItem);
+									}}>
+										<ItemPic className="pic" pic="itemEtc" type={combineList[selectTab].keyName} idx={items.display} />
+									</div>
+								);
+							} else if (cate === 'upgrade') {
+								const items = gameItem.upgrade[data.idx];
+								const grade = data.grade || items.grade;
+								return (
+									<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${select ? 'select' : ''}`} key={`items${idx}`} onClick={() => {
+										let cloneSelectItem = {...selectItem};
+										for (const [selectIndex, selectData] of cloneSelectItem.selectTab.entries()) {
+											if (selectData === cate && selectItem.select[selectIndex] === idx) {
+												cloneSelectItem.save[selectIndex] = {};
+												cloneSelectItem.game[selectIndex] = {};
+												cloneSelectItem.select[selectIndex] = '';
+												cloneSelectItem.selectTab[selectIndex] = '';
+												break;
+											}
+										}
+										cloneSelectItem.save[selectIdx] = data;
+										cloneSelectItem.game[selectIdx] = items;
+										cloneSelectItem.select[selectIdx] = idx;
+										cloneSelectItem.selectTab[selectIdx] = combineList[selectTab].keyName;
+										cloneSelectItem.num += 1;
+										setSelectItem(cloneSelectItem);
+									}}>
+										<ItemPic className="pic" pic="itemEtc" type={combineList[selectTab].keyName} idx={items.display} />
+									</div>
+								)
+							} else if (cate === 'material') {
+								const items = gameItem.material[data.idx];
+								const grade = data.grade || items.grade;
+								return (
+									<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${select ? 'select' : ''}`} key={`items${idx}`} onClick={() => {
+										let cloneSelectItem = {...selectItem};
+										for (const [selectIndex, selectData] of cloneSelectItem.selectTab.entries()) {
+											if (selectData === cate && selectItem.select[selectIndex] === idx) {
+												cloneSelectItem.save[selectIndex] = {};
+												cloneSelectItem.game[selectIndex] = {};
+												cloneSelectItem.select[selectIndex] = '';
+												cloneSelectItem.selectTab[selectIndex] = '';
+												break;
+											}
+										}
+										cloneSelectItem.save[selectIdx] = data;
+										cloneSelectItem.game[selectIdx] = items;
+										cloneSelectItem.select[selectIdx] = idx;
+										cloneSelectItem.selectTab[selectIdx] = combineList[selectTab].keyName;
+										setSelectItem(cloneSelectItem);
+									}}>
+										<ItemPic className="pic" pic="itemEtc" type={combineList[selectTab].keyName} idx={items.display} />
+									</div>
+								)
+							} else if (cate === 'etc') {
+								const items = gameItem.etc[data.idx];
+								const grade = data.grade || items.grade;
+								return (
+									<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${select ? 'select' : ''}`} key={`items${idx}`} onClick={() => {
+										let cloneSelectItem = {...selectItem};
+										for (const [selectIndex, selectData] of cloneSelectItem.selectTab.entries()) {
+											if (selectData === cate && selectItem.select[selectIndex] === idx) {
+												cloneSelectItem.save[selectIndex] = {};
+												cloneSelectItem.game[selectIndex] = {};
+												cloneSelectItem.select[selectIndex] = '';
+												cloneSelectItem.selectTab[selectIndex] = '';
+												break;
+											}
+										}
+										cloneSelectItem.save[selectIdx] = data;
+										cloneSelectItem.game[selectIdx] = items;
+										cloneSelectItem.select[selectIdx] = idx;
+										cloneSelectItem.selectTab[selectIdx] = combineList[selectTab].keyName;
+										cloneSelectItem.num += 1;
+										setSelectItem(cloneSelectItem);
+									}}>
+										<ItemPic className="pic" pic="itemEtc" type={combineList[selectTab].keyName} idx={items.display}>
+											{items.displayText && <span className="display_text">{items.displayText}</span>}
+										</ItemPic>
+									</div>
+								)
+							}
 						})}
 					</div>
-						<div className="combineItem_area num6 scroll-y">
-							{item[combineList[selectTab].keyName] && item[combineList[selectTab].keyName].map((data, idx) => {
-								const cate = combineList[selectTab].keyName;
-								let select = false;
-								for (const [selectIndex, selectData] of selectItem.selectTab.entries()) {
-									if (selectData === cate && selectItem.select[selectIndex] === idx) {
-										select = true;
-										return;//return 시 선택된 아이템이 인벤창에서 사라짐
-									}
-								};
-								if (cate === 'equip') {
-									const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
-									const items = data.part === 3 ? gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx] : gameItem.equip[data.part][0][itemsGrade][data.idx];
-									const itemsHole = data.hole;
-									return (
-										<div className={`item_layout ${gameData.itemGrade.txt_e[data.grade].toLowerCase()} ${select ? 'select' : ''}`} key={`items${idx}`} onClick={() => {
-											let cloneSelectItem = {...selectItem};
-											for (const [selectIndex, selectData] of cloneSelectItem.selectTab.entries()) {
-												if (selectData === cate && selectItem.select[selectIndex] === idx) {
-													cloneSelectItem.save[selectIndex] = {};
-													cloneSelectItem.game[selectIndex] = {};
-													cloneSelectItem.select[selectIndex] = '';
-													cloneSelectItem.selectTab[selectIndex] = '';
-													break;
-												}
-											}
-											cloneSelectItem.save[selectIdx] = data;
-											cloneSelectItem.game[selectIdx] = items;
-											cloneSelectItem.select[selectIdx] = idx;
-											cloneSelectItem.selectTab[selectIdx] = combineList[selectTab].keyName;
-											setSelectItem(cloneSelectItem);
-											console.log(cloneSelectItem);
-										}}>
-											<span className={`pic ${data.sealed ? "sealed" : ""}`}>
-												<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.svgColor || data.id)}}>
-												</svg>
-											</span>
-											<span className="hole" flex-center="true">
-												{itemsHole.map((holeData, holeidx) => {
-													const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
-													return (
-														<span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
-															<ItemPic className="pic" pic={imgSet.images.itemEtc} type="hole" idx={holePic} />
-														</span>
-													);
-												})}
-											</span>
-										</div>
-									);
-								} else if (cate === 'hole') {
-									const items = gameItem.hole[data.idx];
-									const grade = data.grade || items.grade;
-									return (
-										<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${select ? 'select' : ''}`} key={`items${idx}`} onClick={() => {
-											let cloneSelectItem = {...selectItem};
-											for (const [selectIndex, selectData] of cloneSelectItem.selectTab.entries()) {
-												if (selectData === cate && selectItem.select[selectIndex] === idx) {
-													cloneSelectItem.save[selectIndex] = {};
-													cloneSelectItem.game[selectIndex] = {};
-													cloneSelectItem.select[selectIndex] = '';
-													cloneSelectItem.selectTab[selectIndex] = '';
-													break;
-												}
-											};
-											cloneSelectItem.save[selectIdx] = data;
-											cloneSelectItem.game[selectIdx] = items;
-											cloneSelectItem.select[selectIdx] = idx;
-											cloneSelectItem.selectTab[selectIdx] = combineList[selectTab].keyName;
-											setSelectItem(cloneSelectItem);
-										}}>
-											<ItemPic className="pic" pic={imgSet.images.itemEtc} type={combineList[selectTab].keyName} idx={items.display} />
-										</div>
-									);
-								} else if (cate === 'upgrade') {
-									const items = gameItem.upgrade[data.idx];
-									const grade = data.grade || items.grade;
-									return (
-										<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${select ? 'select' : ''}`} key={`items${idx}`} onClick={() => {
-											let cloneSelectItem = {...selectItem};
-											for (const [selectIndex, selectData] of cloneSelectItem.selectTab.entries()) {
-												if (selectData === cate && selectItem.select[selectIndex] === idx) {
-													cloneSelectItem.save[selectIndex] = {};
-													cloneSelectItem.game[selectIndex] = {};
-													cloneSelectItem.select[selectIndex] = '';
-													cloneSelectItem.selectTab[selectIndex] = '';
-													break;
-												}
-											}
-											cloneSelectItem.save[selectIdx] = data;
-											cloneSelectItem.game[selectIdx] = items;
-											cloneSelectItem.select[selectIdx] = idx;
-											cloneSelectItem.selectTab[selectIdx] = combineList[selectTab].keyName;
-											cloneSelectItem.num += 1;
-											setSelectItem(cloneSelectItem);
-										}}>
-											<ItemPic className="pic" pic={imgSet.images.itemEtc} type={combineList[selectTab].keyName} idx={items.display} />
-										</div>
-									)
-								} else if (cate === 'material') {
-									const items = gameItem.material[data.idx];
-									const grade = data.grade || items.grade;
-									return (
-										<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${select ? 'select' : ''}`} key={`items${idx}`} onClick={() => {
-											let cloneSelectItem = {...selectItem};
-											for (const [selectIndex, selectData] of cloneSelectItem.selectTab.entries()) {
-												if (selectData === cate && selectItem.select[selectIndex] === idx) {
-													cloneSelectItem.save[selectIndex] = {};
-													cloneSelectItem.game[selectIndex] = {};
-													cloneSelectItem.select[selectIndex] = '';
-													cloneSelectItem.selectTab[selectIndex] = '';
-													break;
-												}
-											}
-											cloneSelectItem.save[selectIdx] = data;
-											cloneSelectItem.game[selectIdx] = items;
-											cloneSelectItem.select[selectIdx] = idx;
-											cloneSelectItem.selectTab[selectIdx] = combineList[selectTab].keyName;
-											setSelectItem(cloneSelectItem);
-										}}>
-											<ItemPic className="pic" pic={imgSet.images.itemEtc} type={combineList[selectTab].keyName} idx={items.display} />
-										</div>
-									)
-								} else if (cate === 'etc') {
-									const items = gameItem.etc[data.idx];
-									const grade = data.grade || items.grade;
-									return (
-										<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${select ? 'select' : ''}`} key={`items${idx}`} onClick={() => {
-											let cloneSelectItem = {...selectItem};
-											for (const [selectIndex, selectData] of cloneSelectItem.selectTab.entries()) {
-												if (selectData === cate && selectItem.select[selectIndex] === idx) {
-													cloneSelectItem.save[selectIndex] = {};
-													cloneSelectItem.game[selectIndex] = {};
-													cloneSelectItem.select[selectIndex] = '';
-													cloneSelectItem.selectTab[selectIndex] = '';
-													break;
-												}
-											}
-											cloneSelectItem.save[selectIdx] = data;
-											cloneSelectItem.game[selectIdx] = items;
-											cloneSelectItem.select[selectIdx] = idx;
-											cloneSelectItem.selectTab[selectIdx] = combineList[selectTab].keyName;
-											cloneSelectItem.num += 1;
-											setSelectItem(cloneSelectItem);
-										}}>
-											<ItemPic className="pic" pic={imgSet.images.itemEtc} type={combineList[selectTab].keyName} idx={items.display}>
-												{items.displayText && <span className="display_text">{items.displayText}</span>}
-											</ItemPic>
-										</div>
-									)
-								}
-							})}
-						</div>
 				</div>
 			</CombineWrap>
 			<PopupContainer>

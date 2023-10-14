@@ -142,7 +142,7 @@ const StartGame = ({
                   const name = gameData.ch[cardData.idx].na1;
                   return (
                     <ChCard key={`chCard${idx}`} direction="column">
-                      <CharacterCard size="60" equalSize={false} saveData={saveData} slotIdx={idx}/>
+                      <CharacterCard size="60" equalSize={false} saveData={saveData} saveCharacter={cardData} slotIdx={idx}/>
                       <ChName>{name}</ChName>
                     </ChCard>
                   )

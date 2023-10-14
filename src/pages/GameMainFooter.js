@@ -178,7 +178,7 @@ const GameMainFooter = ({
                   cloneRouletteEnemy.lv = {idx: clonePos[1], num: rouletteArr[1].cards[clonePos[1]].amount};
                   break;
                 case 2:
-                  cloneRouletteEnemy.map = {idx: clonePos[1], num: rouletteArr[2].cards[clonePos[2]].amount};
+                  cloneRouletteEnemy.map = {idx: clonePos[2], num: rouletteArr[2].cards[clonePos[2]].amount};
                   break;
                 default:
                   break;

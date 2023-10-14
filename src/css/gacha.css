@@ -11,7 +11,6 @@
 
 .gacha_bg.start{position:absolute;transform:rotateX(45deg);content:'';left:-50%;bottom:-20%;width:200%;height:80%;background: radial-gradient(hsl(0, 100%, 27%) 4%, hsl(0, 100%, 18%) 9%, hsla(0, 100%, 20%, 0) 9%) 0 0, radial-gradient(hsl(0, 100%, 27%) 4%, hsl(0, 100%, 18%) 8%, hsla(0, 100%, 20%, 0) 10%) 50px 50px, radial-gradient(hsla(0, 100%, 30%, 0.8) 20%, hsla(0, 100%, 20%, 0)) 50px 0, radial-gradient(hsla(0, 100%, 30%, 0.8) 20%, hsla(0, 100%, 20%, 0)) 0 50px, radial-gradient(hsla(0, 100%, 20%, 1) 35%, hsla(0, 100%, 20%, 0) 60%) 50px 0, radial-gradient(hsla(0, 100%, 20%, 1) 35%, hsla(0, 100%, 20%, 0) 60%) 100px 50px, radial-gradient(hsla(0, 100%, 15%, 0.7), hsla(0, 100%, 20%, 0)) 0 0, radial-gradient(hsla(0, 100%, 15%, 0.7), hsla(0, 100%, 20%, 0)) 50px 50px, linear-gradient(45deg, hsla(0, 100%, 20%, 0) 49%, hsla(0, 100%, 0%, 1) 50%, hsla(0, 100%, 20%, 0) 70%) 0 0, linear-gradient(-45deg, hsla(0, 100%, 20%, 0) 49%, hsla(0, 100%, 0%, 1) 50%, hsla(0, 100%, 20%, 0) 70%) 0 0;background-color:#300;background-size:100px 100px;}
 
-.gacha_cards .gacha_card{transform-origin: 50% 50%;}
 .gacha_cards.pos .gacha_card{left:0 !important;top:0 !important;}
 .gacha_cards.pos .gacha_card:first-of-type{transform:translate(10%,10%) !important;}
 .gacha_cards.pos .gacha_card:nth-of-type(2){transform:translate(130%,10%) !important;}
@@ -38,38 +37,13 @@
 .gacha_card.ready{opacity:1;transition:all .5s;}
 .gacha_card.on{left:50% !important;top:20% !important;transform:translate(-50%,-50%) rotateX(0deg) rotateZ(0deg) !important;}
 .gacha_card.on .gacha_front{box-shadow:none !important;}
-.gacha_card.open{transform:scale(1.3) translate(-50%,-50%) rotateX(0deg) rotateZ(0deg) !important;}
 .gacha_card.open .gacha_front{z-index:2;transform:rotateY(1440deg);}
 .gacha_card.open .gacha_back{z-index:1;transform:rotateY(1270deg);}
-.gacha_card.open li{position:absolute;color:#fff;font-size:0.625rem;}
-.gacha_card.open .gacha_name_lv .lv {font-size:0.625rem;}
-.gacha_card.open .gacha_name_lv .name_ {font-size:0.625rem;}
-.gacha_card.open .gacha_name_lv .name {font-size:0.625rem;}
 .gacha_card.open.special div{transition:all 3s;}
 .gacha_card.open.special .gacha_front{z-index:2;transform:rotateY(14400deg);}
 .gacha_card.open.special .gacha_back{z-index:1;transform:rotateY(12700deg);}
 .gacha_card.open.special:before{content:'';position:absolute;left:50%;top:50%;padding-top:500%;width:500%;transform:translate(-50%,-50%) scale(0);background-image:radial-gradient(rgba(255,100,0,.7) 0%,rgba(255,210,0,.8) 40%,transparent 80%);background-size:100%;animation:sp_eff1 3s;transform-origin:center;}
 .gacha_card.open.special:after{content:'';position:absolute;left:50%;top:50%;padding-top:500%;width:500%;transform:translate(-50%,-50%) scale(0);background-image:radial-gradient(rgba(255,255,255,1) 0%, rgba(200,25,0,.4) 50%,transparent 80%);background-size:100%;animation:sp_eff2 3s;transform-origin:center;}
-
-.gacha_name_lv{left:50%;bottom:7%;width:85%;transform:translate(-50%,0) scale(1);text-shadow:0 0 1px #fff;text-align:center;z-index:3;font-size:0;}
-.gacha_name_lv img{width: 100%;}
-.gacha_name_lv:after{content:'';display:block;position:absolute;left:3%;top:-17%;padding-top:30%;width:30%;background-repeat:no-repeat;background-position:center center;}
-.gacha_name_lv .lv{position:absolute;display:inline-block;left:3%;top:15%;width:30%;line-height:1;font-size:2.1rem;text-align:center;z-index:1;}
-.gacha_name_lv .name_{position:absolute;display:inline-block;left:33%;top:17%;width:67%;line-height:1;font-size:0.875rem;text-align:left;z-index:1;box-sizing:border-box;}
-.gacha_name_lv .name{position:absolute;display:inline-block;right:2%;bottom:26%;width:67%;line-height:1;font-size:1.25rem;z-index:1;box-sizing:border-box;letter-spacing:-2px;white-space:nowrap;overflow:hidden;}
-
-.gacha_ch{top:0;width:100%;height:100%;background-repeat:no-repeat;background-position:center center;z-index:4;pointer-events:none;}
-.gacha_ch_style{top:0;width:100%;height:100%;background-repeat:no-repeat;background-position:center center;z-index:5;pointer-events:none;}
-.gacha_element{top:0;width:100%;height:100%;background-repeat:no-repeat;background-position:center center;z-index:1;pointer-events:none;}
-.gacha_star{left:0;bottom:22%;width:100%;z-index:5;text-align:center;}
-.gacha_star span{display:inline-block;}
-.gacha_ring{top:0;width:100%;height:100%;background-repeat:no-repeat;background-position:center center;pointer-events:none;z-index:3;}
-.gacha_job_actiontype{position:absolute;left:3px;top:3px;width:20%;font-size:0;}
-.gacha_job{display:inline-block;position:relative !important;width:100%;padding-top:100%;background-repeat:no-repeat;background-position:center center;z-index:5;pointer-events:none;}
-.gacha_action_type{display:inline-block;position:relative !important;width:100%;padding-top:100%;background-repeat:no-repeat;background-position:center center;z-index:5;pointer-events:none;}
-.gacha_frame{top:0;width:100%;height:100%;background-repeat:no-repeat;background-position:center center;z-index:5;pointer-events:none;}
-.gacha_front{position:absolute;left:0;right:0;top:0;bottom:0;border-radius:5%;overflow:hidden;backface-visibility:hidden;transition:all .7s;z-index:1;background:#000;transform:rotateY(180deg);}
-.gacha_back{position:absolute;left:0;right:0;top:0;bottom:0;border-radius:5%;overflow:hidden;backface-visibility:hidden;transition:all .7s;transform:rotateY(0deg);z-index:2;}
 
 .gacha_effect{position:absolute;left:0;top:-10%;width:100%;padding-top:100%;background-image:radial-gradient(rgba(255,255,255,1) 0%,rgba(255,255,255,0) 70%);background-size:cover;transform:scale(0);z-index:11;}
 .gacha_effect.grade6{animation:grade6 linear 3s;}

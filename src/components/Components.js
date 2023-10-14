@@ -1,3 +1,4 @@
+import { ChPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import { useState } from 'react';
 import { Range, getTrackBackground } from 'react-range';
@@ -225,8 +226,16 @@ export const Calculator = ({
     </CalContainer>
   );
 }
-const ListCh = styled.span`
-  background-image:url(${({chDisplay}) => chDisplay});background-size:100%;
+
+// .ch_select_area .list_job_actiontype{position:absolute;left:3px;top:3px;width:20%;font-size:0;z-index:2;}
+// .ch_select_area .list_job{display:inline-block;width:100%;padding-top:100%;background-repeat:no-repeat;background-position:center center;z-index:5;}
+// .ch_select_area .list_action_type{display:inline-block;width:100%;padding-top:100%;background-repeat:no-repeat;background-position:center center;z-index:5;}
+// .ch_select_area .list_actionPoint{position:absolute;left:50%;bottom:5px;transform:translate(-50%, 0);white-space:nowrap;text-shadow:1px 1px 1px #000;font-size:1rem;}
+
+const ListCh = styled(ChPic)`
+  position:absolute;
+  top:0;
+  z-index:1;
 `;
 const ListJob = styled.span`
   background-image:url(${({jobIcon}) => jobIcon});background-size:100%;
@@ -234,16 +243,20 @@ const ListJob = styled.span`
 const ListActionType = styled.span`
   background-image:url(${({actionType}) => actionType});background-size:100%;
 `;
-const ListRing = styled.span`
-  background-image:url(${({ringBack}) => ringBack});
-  background-size:85%;
+const ListRing = styled(ChPic)`
+  position:absolute;
+  top:0;
+  background-position:center 55%;
+  z-index:1;
+  ${'' /* background-size:85%; */}
 `;
-const ListElement = styled.span`
-  background-image:url(${({ringDisplay}) => ringDisplay});
-  background-size:100%;
+const ListElement = styled(ChPic)`
+  position: absolute;
+  bottom: 20%;
 `;
-const ListFrame = styled.span`
-  background: url(${({ cardFrame }) => cardFrame});background-size:100% 100%;
+const ListFrame = styled(ChPic)`
+  position: absolute;
+  top: 0;
 `;
 export const ActionChDisplay = ({
   type,
@@ -288,9 +301,9 @@ export const ActionChDisplay = ({
   if (hasSkill) {
     return (
       <div className={`action_ch g${saveData.ch[actionCh.idx].grade}`}>
-        <ListRing className="list_ring" ringBack={imgSet.etc.imgRingBack} />
-        <ListElement className="list_element" ringDisplay={imgSet.ringImg[gameData.ch[saveData.ch[actionCh.idx].idx].element]} />
-        <ListCh className="list_ch" chDisplay={imgSet.chImg[`ch${gameData.ch[saveData.ch[actionCh.idx].idx].display}`]} />
+        <ListRing type="cardBack" pic="card" idx={0} />
+        <ListElement type="elementBack" pic="card" idx={gameData.ch[saveData.ch[actionCh.idx].idx].element} />
+        <ListCh className="transition" pic="ch" idx={gameData.ch[saveData.ch[actionCh.idx].idx].display} />
         <div className="list_job_actiontype">
           <ListJob jobIcon={imgSet.job[saveData.ch[actionCh.idx].job]} className="list_job"/>
           {saveData.ch[actionCh.idx].newActionType.map((data, idx) => {
@@ -299,7 +312,7 @@ export const ActionChDisplay = ({
             )
           })}
         </div>
-        <ListFrame className="list_frame" cardFrame={imgSet.etc.imgCardFrame} />
+        <ListFrame type="cardBack" pic="card" idx={1} />
         <div className="list_actionPoint">{`${saveData.ch[actionCh.idx].actionPoint} / ${saveData.ch[actionCh.idx].actionMax}`}</div>
       </div>
     )

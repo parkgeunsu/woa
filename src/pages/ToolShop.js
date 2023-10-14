@@ -6,6 +6,7 @@ import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
+import TabMenu from 'components/TabMenu';
 import 'css/shop.css';
 import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -37,10 +38,10 @@ const ItemName = styled.div`
   .item_grade{color:${({ color }) => color};}
 `;
 const shopList = [
-	{na:'accessory',icon:"iconAccessory"},
-	{na:'upgrade',icon:"iconUpgrade"},
-	{na:'etc',icon:"iconEtc"},
-	{na:'inven',icon:"iconBag"},
+	{na:'accessory',icon:18},
+	{na:'upgrade',icon:15},
+	{na:'etc',icon:16},
+	{na:'inven',icon:13},
 ];
 const makeMark = (markNum, img) => {
   let markTag = '';
@@ -97,20 +98,7 @@ const ToolShop = ({
 			<ShopWrap className="wrap" backImg={imgSet.back[2]} >
 				<div className="shop_top">
 					<div className="shop_top_left">
-						<div className="tab_menu vertical transition">
-							{shopList && shopList.map((data, idx) => {
-								return (
-									<li key={idx} className={idx === selectTab ? "on" : ""} onClick={() => {
-										setSelectTab(idx);
-									}}>
-										<MenuButton className="tab_menu_button">
-											<span className="name">{gameData.msg.menu[data.na][lang]}</span>
-											<ShopIcon className="icon" icoType={imgSet.icon[data.icon]} />
-										</MenuButton>
-									</li>
-								);
-							})}
-						</div>
+						<TabMenu direction="vertical" list={shopList} selectTab={selectTab} setSelectTab={setSelectTab} lang={lang} className="transition" />
 						{Object.keys(actionCh).length !== 0 && (<div ref={actionRef} className={`ch_select_area ${actionCh.idx ? 'g' + saveData.ch[actionCh.idx].grade : ''}`} onClick={() => {
 								setPopupOn(true);
 							}}>
@@ -171,7 +159,7 @@ const ToolShop = ({
 												const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 												return (
 													<span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
-														<ItemPic className="pic" pic={imgSet.images.itemEtc} type="hole" idx={holePic} />
+														<ItemPic className="pic" pic="itemEtc" type="hole" idx={holePic} />
 													</span>
 												);
 											})}
@@ -215,7 +203,7 @@ const ToolShop = ({
 											});
 										}
 									}}>
-										<ItemPic className="pic" pic={imgSet.images.itemEtc} type={shopList[selectTab].na} idx={items.display}>
+										<ItemPic className="pic" pic="itemEtc" type={shopList[selectTab].na} idx={items.display}>
 											{cate === 'etc' ? items.displayText && <span className="display_text">{items.displayText}</span> : ''}
 										</ItemPic>
 									</div>
@@ -275,7 +263,7 @@ const ToolShop = ({
 															const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 															return (
 																<span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
-																	<ItemPic className="pic" pic={imgSet.images.itemEtc} type="hole" idx={holePic} />
+																	<ItemPic className="pic" pic="itemEtc" type="hole" idx={holePic} />
 																</span>
 															);
 														})}
@@ -323,7 +311,7 @@ const ToolShop = ({
 													});
 												}
 											}}>
-												<ItemPic className="pic" pic={imgSet.images.itemEtc} type={cate_} idx={items.display}>
+												<ItemPic className="pic" pic="itemEtc" type={cate_} idx={items.display}>
 													{cate_ === 'etc' ? items.displayText && <span className="display_text">{items.displayText}</span> : ''}
 												</ItemPic>
 											</div>
@@ -359,7 +347,7 @@ const ToolShop = ({
 									<div className="scroll-y">
 										<li className="item_list item_typeSlot">
 											<div className="item_type">
-												<MarkPic length={selectItem1.save.markNum} pic={imgSet.images.animalType} idx={selectItem1.save.mark}/>
+												<MarkPic length={selectItem1.save.markNum} pic="animalType" idx={selectItem1.save.mark}/>
 											</div>
 											<div className="item_slot">
 												{selectItem1.save.hole.map((holeData, idx) => {
@@ -497,7 +485,7 @@ const ToolShop = ({
 									<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.game.na[lang]}`}}></span></li>
 									<li className="item_fix" flex="true">
 										<div className={`item ${gameData.itemGrade.txt_e[selectItem1.save.grade || selectItem1.game.grade].toLowerCase()}`}>
-											<ItemPic className="pic" pic={imgSet.images.itemEtc} type={selectItem1.selectTab.split(' inven')[0]} idx={selectItem1.game.display} />
+											<ItemPic className="pic" pic="itemEtc" type={selectItem1.selectTab.split(' inven')[0]} idx={selectItem1.game.display} />
 										</div>
 										<div flex-h="true" style={{flex: 1,}}>
 											<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem1.save.grade]}>
@@ -625,7 +613,7 @@ const ToolShop = ({
 									<div className="scroll-y">
 										<li className="item_list item_typeSlot">
 											<div className="item_type">
-												<MarkPic length={selectItem2.save.markNum} pic={imgSet.images.animalType} idx={selectItem2.save.mark} />
+												<MarkPic length={selectItem2.save.markNum} pic="animalType" idx={selectItem2.save.mark} />
 											</div>
 											<div className="item_slot">
 												{selectItem2.save.hole.map((holeData, idx) => {
@@ -759,7 +747,7 @@ const ToolShop = ({
 									<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.game.na[lang]}`}}></span></li>
 									<li className="item_fix" flex="true">
 										<div className={`item ${gameData.itemGrade.txt_e[selectItem2.save.grade || selectItem2.game.grade].toLowerCase()}`}>
-											<ItemPic className="pic" pic={imgSet.images.itemEtc} type={selectItem2.selectTab.split(' inven')[0]} idx={selectItem2.game.display} />
+											<ItemPic className="pic" pic="itemEtc" type={selectItem2.selectTab.split(' inven')[0]} idx={selectItem2.game.display} />
 										</div>
 										<div flex-h="true" style={{flex: 1,}}>
 											<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem2.save.grade]}>

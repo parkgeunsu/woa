@@ -1,6 +1,7 @@
 import { AppContext } from 'App';
-import { ItemPic, MarkPic } from 'components/ImagePic';
-import { chImg, ringImg } from 'components/ImgSet';
+import ChListCard from 'components/ChListCard';
+import { ChPic, ItemPic, MarkPic } from 'components/ImagePic';
+import { ringImg } from 'components/ImgSet';
 import { util } from 'components/Libs';
 import PopupContainer from 'components/PopupContainer';
 import imgRing from 'images/ring/ring_.png';
@@ -8,26 +9,6 @@ import CharacterCard from 'pages/CharacterCard';
 import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-const ListCh = styled.span`
-  background-image:url(${({chDisplay}) => chDisplay});background-size:100%;
-`;
-const ListJob = styled.span`
-  background-image:url(${({jobIcon}) => jobIcon});background-size:100%;
-`;
-const ListActionType = styled.span`
-  background-image:url(${({actionType}) => actionType});background-size:100%;
-`;
-const ListRing = styled.span`
-  background-image:url(${({ringBack}) => ringBack});
-  background-size:85%;
-`;
-const ListElement = styled.span`
-  background-image:url(${({ringDisplay}) => ringDisplay});
-  background-size:100%;
-`;
-const ListFrame = styled.span`
-  background: url(${({ cardFrame }) => cardFrame});background-size:100% 100%;
-`;
 const PopupRelationList = styled.li`
   background-image:url(${({ringDisplay}) => ringDisplay});
   background-size:cover;
@@ -106,7 +87,9 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           return (
             <PopupRelationList className="people_list" key={idx} gameData={gameData} chData={chData} ringDisplay={ringImg[chData.element]}>
               <Img imgurl={imgRing} />
-              <PopupRelationListCh chDisplay={chImg[chData.display]} className="ch" />
+              <PopupRelationListCh>
+                <ChPic pic="ch" idx={chData.display} />
+              </PopupRelationListCh>
               <span className="name">{chData.na1}</span>
             </PopupRelationList>
           )
@@ -142,7 +125,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         </li>
         <li className="item_list item_typeSlot" flex="true">
           <div className="item_type">
-            <MarkPic length={saveItems.markNum} pic={imgSet.images.animalType} idx={saveItems.mark} />
+            <MarkPic length={saveItems.markNum} pic="animalType" idx={saveItems.mark} />
           </div>
           <div className="item_slot">
             {saveItems.hole.map((holeData, idx) => {
@@ -150,7 +133,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               return (
                 <div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}>
                   <span className="item_holeback">
-                    <ItemPic pic={imgSet.images.itemEtc} type="hole" idx={holePic} />
+                    <ItemPic pic="itemEtc" type="hole" idx={holePic} />
                   </span>
                 </div>
               )
@@ -260,7 +243,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         </li>
         <li className="item_list item_typeSlot" flex="true">
           <div className="item_type">
-            <MarkPic length={saveItems.markNum} pic={imgSet.images.animalType} idx={saveItems.mark} />
+            <MarkPic length={saveItems.markNum} pic="animalType" idx={saveItems.mark} />
           </div>
           <div className="item_slot">
             {saveItems.hole.map((holeData, idx) => {
@@ -268,7 +251,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               return (
                 <div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}>
                   <span className="item_holeback">
-                    <ItemPic pic={imgSet.images.itemEtc} type="hole" idx={holePic} />
+                    <ItemPic pic="itemEtc" type="hole" idx={holePic} />
                   </span>
                 </div>
               )
@@ -425,7 +408,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         <li className="item_header" flex-center="true"><span className="item_name">{items.na[lang]}</span></li>
         <li flex="true">
           <div className="item item11">
-            <ItemPic pic={imgSet.images.itemEtc} type="hole" idx={items.display} />
+            <ItemPic pic="itemEtc" type="hole" idx={items.display} />
           </div>
           <div flex-h="true" style={{flex: 1,}}>
             <PopupItemName className="item_cont" color={gameData.itemGrade.color[items.grade]}>
@@ -497,7 +480,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[items.grade]}>
         <li className="item_header" flex-center="true"><span className="item_name">{items.na[lang]}</span></li>
         <li flex="true">
-          <ItemPic className="item item12" pic={imgSet.images.itemEtc} type="upgrade" idx={items.display} />
+          <ItemPic className="item item12" pic="itemEtc" type="upgrade" idx={items.display} />
           <div flex-h="true" style={{flex: 1,}}>
             <PopupItemName className="item_cont" color={gameData.itemGrade.color[items.grade]}>
               <div className="item_top">
@@ -549,7 +532,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[items.grade]}>
         <li className="item_header" flex-center="true"><span className="item_name">{items.na[lang]}</span></li>
         <li flex="true">
-          <ItemPic className="item item14" pic={imgSet.images.itemEtc} type="material" idx={items.display} />
+          <ItemPic className="item item14" pic="itemEtc" type="material" idx={items.display} />
           <div flex-h="true" style={{flex: 1,}}>
             <PopupItemName className="item_cont" color={gameData.itemGrade.color[items.grade]}>
               <div className="item_top">
@@ -588,7 +571,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         <li className="item_header" flex-center="true"><span className="item_name">{items.na[lang]}</span></li>
         <li flex="true">
           <div className="item item13">
-            <ItemPic pic={imgSet.images.itemEtc} type="etc" idx={items.display} />
+            <ItemPic pic="itemEtc" type="etc" idx={items.display} />
           </div>
           <div flex-h="true" style={{flex: 1,}}>
             <PopupItemName className="item_cont" color={gameData.itemGrade.color[items.grade]}>
@@ -798,19 +781,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   e.stopPropagation();
                   dataObj.setSelectIdx(idx);
                 }}>
-                  <ListRing className="list_ring" ringBack={imgSet.etc.imgRingBack} />
-                  <ListElement className="list_element" ringDisplay={imgSet.ringImg[chData.element]} />
-                  <ListCh className="list_ch" chDisplay={imgSet.chImg[`ch${chData.display}`]} />
-                  <div className="list_job_actiontype">
-                    <ListJob jobIcon={imgSet.job[saveCh.job]} className="list_job"/>
-                    {saveCh.newActionType.map((data, idx) => {
-                      return (
-                        <ListActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="list_action_type"/>
-                      )
-                    })}
-                  </div>
-                  <ListFrame className="list_frame" cardFrame={imgSet.etc.imgCardFrame} />
-                  <div className="list_actionPoint">{`${saveCh.actionPoint} / ${saveCh.actionMax}`}</div>
+                  <ChListCard type="popup" saveCh={saveCh} chData={chData} />
                 </li>
               )
             }

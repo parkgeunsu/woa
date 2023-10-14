@@ -17,7 +17,6 @@
 .itemEn_colorArea .colorant{position:absolute;width:50px;height:50px;border-radius:25px;box-shadow:0 0 10px #fff;z-index:2;}
 .itemEn_colorArea .colorant.select{box-shadow:0 0 5px #e14040,0 0 10px #e14040, 0 0 20px #ffac2f,0 0 15px #ffac2f;}
 .itemEn_colorArea .colorant.on.select .item_colorant{box-shadow:0 0 5px #fff,0 0 10px #fff, 0 0 20px #fff,0 0 15px #fff;}
-.itemEn_colorArea .colorant .lock{display:none;position:absolute;right:-10px;top:-5px;width:24px;height:24px;z-index:1;background-color:#ffac2f;border-radius:20px;border:2px solid #000;box-sizing:border-box;}
 .itemEn_colorArea .colorant.fixed .lock{display:block;}
 .itemEn_colorArea .colorant:before{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:1.5rem;}
 .itemEn_colorArea .colorant:after{content:'';position:absolute;left:0;top:0;width:100%;height:100%;transition:all .5s ease-out;transform:scale(4);transform-origin:center center;border-radius:15px;background:

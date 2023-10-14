@@ -232,7 +232,3 @@
   0%{border-width:2px;border-color:#f00;background:#fff;}
   100%{border-width:2px;border-color:#fff;background:#333;border-radius:50%;}
 }
-@keyframes rotate_ring{
-  0%{transform:scale(1.35,1.35) rotate(0deg);}
-  100%{transform:scale(1.35,1.35) rotate(360deg);}
-}

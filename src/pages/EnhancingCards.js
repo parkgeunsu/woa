@@ -5,6 +5,7 @@ import Modal from 'components/Modal';
 import ModalContainer from 'components/ModalContainer';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
+import TabMenu from 'components/TabMenu';
 import 'css/itemEnhancement.css';
 import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -22,8 +23,8 @@ const ShopIcon = styled.span`
 `;
 
 const itemEnList = [
-	{na:'socket',icon:"iconSocket"},
-	{na:'class',icon:"iconUpgrade"},
+	{na:'socket',icon:14},
+	{na:'class',icon:15},
 ];
 const ColorArea = styled.div`
 	&:after{
@@ -406,25 +407,13 @@ const EnhancingCards = ({
   return (
 		<>
 			<ItemEnWrap className="wrap" backImg={imgSet.back[2]} >
-				<div className="tab_menu transition">
-					{itemEnList && itemEnList.map((data, idx) => {
-						return (
-								<li key={`itemEn_${idx}`} className={idx === selectTab ? "on" : ""} onClick={() => {
-									setSelectTab(idx);
-									if (idx === 1) {
-										setUpgradeOn(false);
-										setSelectItem3({save:{},select:'',game:{}});
-										clearTimeout(timeoutRef.current);
-									}
-								}}>
-									<button className="tab_menu_button">
-										<span className="name">{gameData.msg.menu[data.na][lang]}</span>
-										<ShopIcon className="icon" icoType={imgSet.icon[data.icon]} />
-									</button>
-								</li>
-							);
-					})}
-				</div>
+				<TabMenu list={itemEnList} selectTab={selectTab} setSelectTab={setSelectTab} lang={lang} className="transition" onClick={(idx) => {
+					if (idx === 1) {
+						setUpgradeOn(false);
+						setSelectItem3({save:{},select:'',game:{}});
+						clearTimeout(timeoutRef.current);
+					}
+				}}/>
 				<div className="itemEn_area">
 					{selectTab === 0 ? (
 						<>
@@ -587,7 +576,7 @@ const EnhancingCards = ({
 												{selectItem2.save && selectItem2.save[idx] && (
 													<>
 														<div className={`item_colorant ${gameData.itemGrade.txt_e[selectItem2.save[idx].grade || selectItem2.game[idx].grade].toLowerCase()}`}  key={`hole_${idx}`}>
-															<ItemPic className="pic" pic={imgSet.images.itemEtc} type="hole" idx={selectItem2.game[idx].display} />
+															<ItemPic className="pic" pic="itemEtc" type="hole" idx={selectItem2.game[idx].display} />
 														</div>
 														<div className={`item_colorantEff`}>
 															{selectItem2.game[idx].eff.map((eff,idx) => {
@@ -667,7 +656,7 @@ const EnhancingCards = ({
 														const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 														return (
 															<span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
-																<ItemPic className="pic" pic={imgSet.images.itemEtc} type="etc" idx={holePic} />
+																<ItemPic className="pic" pic="itemEtc" type="etc" idx={holePic} />
 															</span>
 														);
 													})}
@@ -711,7 +700,7 @@ const EnhancingCards = ({
 													colorArr[0] = mColor;
 												}
 											}}>
-												<ItemPic className="pic" pic={imgSet.images.itemEtc} type="hole" idx={items.display} />
+												<ItemPic className="pic" pic="itemEtc" type="hole" idx={items.display} />
 											</div>
 										)
 									})}
@@ -778,7 +767,7 @@ const EnhancingCards = ({
 									</div>
 									{selectItem3 && (
 										<div className={`upgrade_material`}>
-											<ItemPic className="pic" pic={imgSet.images.itemEtc} type="upgrade" idx={selectItem3.game.display} onClick={() => {
+											<ItemPic className="pic" pic="itemEtc" type="upgrade" idx={selectItem3.game.display} onClick={() => {
 												setSelectItem3({save:{},select:'',game:{}});
 											}} />
 										</div>
@@ -871,7 +860,7 @@ const EnhancingCards = ({
 														const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 														return (
 															<span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
-																<ItemPic className="pic" pic={imgSet.images.itemEtc} type="etc" idx={holePic} />
+																<ItemPic className="pic" pic="itemEtc" type="etc" idx={holePic} />
 															</span>
 														);
 													})}
@@ -893,7 +882,7 @@ const EnhancingCards = ({
 													game:items,
 												});
 											}}>
-												<ItemPic className="pic" pic={imgSet.images.itemEtc} type="upgrade" idx={items.display} />
+												<ItemPic className="pic" pic="itemEtc" type="upgrade" idx={items.display} />
 											</div>
 										)
 									})}

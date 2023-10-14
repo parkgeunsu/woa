@@ -11,13 +11,20 @@ export const relation = [
     {idx:0,na:{ko:'조(曹)씨가문',en:'the "Cho" family'},
     txt:{ko:'<b buff>30%</b> 체력(HP) <i icon up>증가</i>, <b buff>10</b> 속도(SPD) <i icon up>증가</i>',en:'<b buff>30%</b> Heath Point(HP) <i icon up>Increase</i>, <b buff>10</b> Speed(SPD) <i icon up>Increase</i>'},
     eff:[{ta:0,type:0,num:'30%'},{ta:0,type:8,num:'10'}],member:[1,2,3,4],limit:[0]},
+
     {idx:1,na:{ko:'삼국지 라이벌 I', en:'A rival in the Three Kingdoms I'},
     txt:{ko:'<b buff>10%</b> 공격(ATK) <i icon up>증가</i>, <b buff>10%</b> 술법공격(MAK) <i icon up>증가</i>',en:'<b buff>10%</b> Attack(ATK) <i icon up>Increase</i>, <b buff>10%</b> Magic Attack(MAK) <i icon up>increase</i>'},
     eff:[{ta:0,type:3,num:'10%'},{ta:0,type:5,num:'10%'}],member:[0,1],limit:[0]},
+
     {idx:2,na:{ko:'수어지교',en:''},
     txt:'HP <b buff>30%</b> <i icon up>증가</i>, SP <b buff>1</b> <i icon up>증가</i> 한다.',
     eff:[{ta:0,type:0,num:'30%'},{ta:0,type:26,num:'1'}],member:[0,"제갈량"],limit:[0]},
+
     {idx:3,na:'보디가드(촉)',
     txt:'HP <b buff>30%</b> <i icon up>증가</i>, SP <b buff>1</b> <i icon up>증가</i> 한다.',
     eff:[{ta:0,type:0,num:'30%'},{ta:0,type:26,num:'1'}],member:[0,"조운"],limit:[0]},
+
+    {idx:4,na:'test',
+    txt:'HP <b buff>30%</b> <i icon up>증가</i>, SP <b buff>1</b> <i icon up>증가</i> 한다.',
+    eff:[{ta:0,type:0,num:'30%'},{ta:0,type:26,num:'1'}],member:[0,48],limit:[0]},
 ];

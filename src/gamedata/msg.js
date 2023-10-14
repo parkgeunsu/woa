@@ -1,5 +1,10 @@
 export const msg = {
 	menu:{
+		inven:{
+			ko:'인벤',
+			en:'Inven',
+			jp:'インベントリ',
+		},
 		equipmentShop:{
 			ko:'장비 상점',
 			en:'Equipment Shop',
@@ -415,6 +420,11 @@ export const msg = {
 		},
 	},
 	regions:{
+		0:{
+			ko:'?',
+			en:'?',
+			jp:'?',
+		},
 		'':{
 			ko:'이동 할 국가',
 			en:'Countries to move to',

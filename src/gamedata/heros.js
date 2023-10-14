@@ -112,7 +112,7 @@ export const ch = [//face_d 얼굴방향, expType 성장타입, awaken 각성속
     "display":14,"style":14,"animal_type":0,"face_d":"center","element":[8],"grade":5,"job":[10,14],"cost":12,
     "st0":66,"st1":190,"st2":192,"st3":73,"st4":88,"st5":23,"st6":85,
     "sk":[{"idx":1}],
-    "relation":[],
+    "relation":[0,4],
     "txt": "허저(許褚, ? ~ ?)는 후한 ~ 위나라의 무장으로 자는 중강(仲康)이며 예주 초국(譙國) 초현(譙縣) 사람이다. 호치(虎癡)란 별명이 있다. 우월한 완력과 우직한 성품으로 조조의 신임을 받아 그 경호를 맡았으며 용맹을 떨쳤다.",
     "country":2,"period":5,"scenario":""},
   {"idx":16,"na1":"문빙","na2":"중업","na3":"",

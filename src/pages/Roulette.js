@@ -2,11 +2,12 @@ import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import GuideQuestion from 'components/GuideQuestion';
+import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import ChLineup from 'pages/ChLineup';
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 const BASE_ENEMY_NUM = 3;
 const makeAnimalIcon = (color) => {
@@ -118,8 +119,6 @@ const SpinCards = styled.div`
   top: ${({idx}) => 100 * idx}%;
   width: 100%;
   height: 100%;
-  background: url(${({url}) => url}) no-repeat center center;
-  background-size: 100%;
 `;
 const LineupContainer = styled(FlexBox)`
   margin: 40px 0 0 0;
@@ -167,7 +166,7 @@ const Roulette = ({
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
-  const sData = util.loadData('saveData');
+  const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupInfo, setPopupInfo] = useState({});
   useEffect(() => {
@@ -203,8 +202,12 @@ const Roulette = ({
             return (
               <SpinArea key={`data${idx}`} frameMain={imgSet.etc.frameMain}>
                 <SpinGroup saveIdx={rouletteEnemy[idxToText(idx)].idx} rouletteState={rouletteState[idx]} selectRoulettePos={selectRoulettePos[idx]} size={data.cards.length} direction="column">
-                  {data.cards.map((cardsData, cardsIdx) => <SpinCards idx={cardsIdx} key={`cardsIdx${cardsIdx}`} url={imgSet.icon[`iconRoulette${cardsData.idx}`]} />)}
-                  <SpinCards idx={data.cards.length} url={data.cards[0].url} />
+                  {data.cards.map((cardsData, cardsIdx) => <SpinCards idx={cardsIdx} key={`cardsIdx${cardsIdx}`}>
+                    <IconPic type={cardsData.type} pic="icon200" idx={cardsData.cardIdx} />
+                  </SpinCards>)}
+                  <SpinCards idx={data.cards.length}>
+                    <IconPic type={data.cards[0].type} pic="icon200" idx={data.cards[0].cardIdx} />
+                  </SpinCards>
                 </SpinGroup>
               </SpinArea>
             )

@@ -1,6 +1,6 @@
 import { AppContext } from 'App';
 import { ActionChDisplay } from 'components/Components';
-import { ItemPic } from 'components/ImagePic';
+import { IconPic, ItemPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Modal from 'components/Modal';
 import ModalContainer from 'components/ModalContainer';
@@ -8,6 +8,7 @@ import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
+import TabMenu from 'components/TabMenu';
 import 'css/itemEnhancement.css';
 import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -24,8 +25,8 @@ const ShopIcon = styled.span`
 	background:url(${({ icoType }) => icoType}) no-repeat left center;background-size:100%;
 `;
 const itemEnList = [
-	{na:'socket',icon:"iconSocket"},
-	{na:'class',icon:"iconUpgrade"},
+	{na:'socket',icon:14},
+	{na:'class',icon:15},
 ];
 const ColorArea = styled.div`
 	&:after{
@@ -86,6 +87,17 @@ const ItemTotalEff = styled.div`
 	}
 `;
 const LockIcon = styled.div`
+	display:none;
+	position:absolute;
+	right:-10px;
+	top:-5px;
+	width:24px;
+	height:24px;
+	z-index:1;
+	background-color:#ffac2f;
+	border-radius:20px;
+	border:2px solid #000;
+	box-sizing:border-box;
 	background-image:url(${({iconLock}) => iconLock});background-size:100%;background-repeat:no-repeat;background-position:center center;
 `;
 const ItemEnBack = styled.div`
@@ -416,42 +428,30 @@ const EnhancingStickers = ({
   return (
 		<>
 			<ItemEnWrap className="wrap" backImg={imgSet.back[2]} >
-				<div className="tab_menu transition">
-					{itemEnList && itemEnList.map((data, idx) => {
-						return (
-								<li key={`itemEn_${idx}`} className={idx === selectTab ? "on" : ""} onClick={() => {
-									setSelectTab(idx);
-									if (idx === 1) {
-										setUpgradeOn(false);
-										setSelectItem3({save:{},select:'',game:{}});
-										clearTimeout(timeoutRef.current);
-										setActionCh(saveData.actionCh.enhancingStickers2);
-										setPopupInfo((prev) => {
-											return {
-												ch:prev.ch,
-												actionCh:saveData.actionCh.enhancingStickers2.idx,
-												type:'enhancingStickers2'
-											}
-										});
-									} else {
-										setActionCh(saveData.actionCh.enhancingStickers1);
-										setPopupInfo((prev) => {
-											return {
-												ch:prev.ch,
-												actionCh:saveData.actionCh.enhancingStickers1.idx,
-												type:'enhancingStickers1'
-											}
-										});
-									}
-								}}>
-									<button className="tab_menu_button">
-										<span className="name">{gameData.msg.menu[data.na][lang]}</span>
-										<ShopIcon className="icon" icoType={imgSet.icon[data.icon]} />
-									</button>
-								</li>
-							);
-					})}
-				</div>
+				<TabMenu list={itemEnList} selectTab={selectTab} setSelectTab={setSelectTab} lang={lang} className="transition" onClick={(idx) => {
+					if (idx === 1) {
+						setUpgradeOn(false);
+						setSelectItem3({save:{},select:'',game:{}});
+						clearTimeout(timeoutRef.current);
+						setActionCh(saveData.actionCh.enhancingStickers2);
+						setPopupInfo((prev) => {
+							return {
+								ch:prev.ch,
+								actionCh:saveData.actionCh.enhancingStickers2.idx,
+								type:'enhancingStickers2'
+							}
+						});
+					} else {
+						setActionCh(saveData.actionCh.enhancingStickers1);
+						setPopupInfo((prev) => {
+							return {
+								ch:prev.ch,
+								actionCh:saveData.actionCh.enhancingStickers1.idx,
+								type:'enhancingStickers1'
+							}
+						});
+					}
+				}}/>
 				<div className="itemEn_area">
 					{selectTab === 0 ? (
 						<>
@@ -619,14 +619,14 @@ const EnhancingStickers = ({
 												{selectItem2.save && selectItem2.save[idx] && (
 													<>
 														<div className={`item_colorant ${gameData.itemGrade.txt_e[selectItem2.save[idx].grade || selectItem2.game[idx].grade].toLowerCase()}`}  key={`hole_${idx}`}>
-															<ItemPic className="pic" pic={imgSet.images.itemEtc} type="hole" idx={selectItem2.game[idx].display} />
+															<ItemPic className="pic" pic="itemEtc" type="hole" idx={selectItem2.game[idx].display} />
 														</div>
 														<div className={`item_colorantEff`}>
 															{selectItem2.game[idx].eff.map((eff,idx) => {
 																return <div className="eff" key={`colorant_eff${idx}`}>{util.getEffectType(eff.type, lang)}: <em>{eff.num[0]}</em></div>;
 															})}
 														</div>
-														<LockIcon iconLock={imgSet.icon.iconLock} className="lock" onClick={(e) => {
+														<LockIcon className="lock" onClick={(e) => {
 															e.stopPropagation();
 															setModalData({
 																fn:removeSocket,
@@ -636,7 +636,9 @@ const EnhancingStickers = ({
 															// setPayment('socketRemove');
 															handleModal('socket',idx);
 															console.log("슬롯 해제");
-														}}/>
+														}}>
+															<IconPic className="ico" type="commonBtn" pic="icon100" idx={4} />
+														</LockIcon>
 														{cColor && (
 															<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html:colorantSetColor(cColor)}}>				
 															</svg>
@@ -707,7 +709,7 @@ const EnhancingStickers = ({
 														const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 														return (
 															<span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
-																<ItemPic className="pic" pic={imgSet.images.itemEtc} type="hole" idx={holePic} />
+																<ItemPic className="pic" pic="itemEtc" type="hole" idx={holePic} />
 															</span>
 														);
 													})}
@@ -751,7 +753,7 @@ const EnhancingStickers = ({
 													colorArr[0] = mColor;
 												}
 											}}>
-												<ItemPic className="pic" pic={imgSet.images.itemEtc} type="hole" idx={items.display} />
+												<ItemPic className="pic" pic="itemEtc" type="hole" idx={items.display} />
 											</div>
 										)
 									})}
@@ -823,7 +825,7 @@ const EnhancingStickers = ({
 									</div>
 									{selectItem3 && (
 										<div className={`upgrade_material`}>
-											<ItemPic className="pic" pic={imgSet.images.itemEtc} type="upgrade" idx={selectItem3.game.display} onClick={() => {
+											<ItemPic className="pic" pic="itemEtc" type="upgrade" idx={selectItem3.game.display} onClick={() => {
 												setSelectItem3({save:{},select:'',game:{}});
 											}} />
 										</div>
@@ -924,7 +926,7 @@ const EnhancingStickers = ({
 														const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 														return (
 															<span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
-																<ItemPic className="pic" pic={imgSet.images.itemEtc} type="hole" idx={holePic} />
+																<ItemPic className="pic" pic="itemEtc" type="hole" idx={holePic} />
 															</span>
 														);
 													})}
@@ -946,7 +948,7 @@ const EnhancingStickers = ({
 													game:items,
 												});
 											}}>
-												<ItemPic className="pic" pic={imgSet.images.itemEtc} type="upgrade" idx={items.display} />
+												<ItemPic className="pic" pic="itemEtc" type="upgrade" idx={items.display} />
 											</div>
 										)
 									})}

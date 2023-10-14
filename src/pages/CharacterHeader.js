@@ -1,14 +1,27 @@
 import { AppContext } from 'App';
+import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 const ChHeader = styled.div`
   border-image:url(${({frameBack}) => frameBack}) 5 round;
 `;
-const ChMenuButton = styled.button`
-  background:url(${({backImg}) => backImg}) no-repeat center center;
-  background-size:100%;
+const ChMenu = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+const StyledIconPic = styled(IconPic)`
+  padding-top: 25%;
+  width: 25%;
+  font-size: 0;
+  ${({selected}) => selected ? `
+    opacity: 1;
+    filter: unset;
+  ` : `
+    opacity: .3;
+    filter: blur(1px);
+  `}
 `;
 const StateType = styled.div`
   height:20px;
@@ -30,6 +43,7 @@ const ChracterHeader = ({
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
   const currentTime = useContext(AppContext).currentTime;
+  const [size, setSize] = useState(0);
   const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
   const saveExp = React.useMemo(() => {
     return {
@@ -77,13 +91,15 @@ const ChracterHeader = ({
             </div>
           </li>
         </ul>
-        <div className="ch_menu transition">
+        <ChMenu className="transition">
         {gameData.chMenu.map((data, idx) => {
           return (
-            <ChMenuButton className={`ch_menu_bt ${idx === chPage ? "on" : ""}`} key={`chmenubutton${idx}`} onClick={() => {changeChPage(idx)}} backImg={imgSet.menu[idx]}/>
+            <StyledIconPic selected={idx === chPage} key={`chmenubutton${idx}`} pic="icon100" idx={idx} onClick={() => {
+              changeChPage(idx)
+            }} />
           )
         })}
-        </div>
+        </ChMenu>
       </ChHeader>
     </>
   );

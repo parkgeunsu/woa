@@ -1942,9 +1942,9 @@
   100%{opacity:0;}
 }
 /*image-rendering:pixelated;*/
-@keyframes ring_ro{
-  0%{transform:rotateZ(0deg);}
-  100%{transform:rotateZ(360deg);}
+@keyframes rotate_ring{
+  0%{transform:scale(1.35,1.35) rotate(0deg);}
+  100%{transform:scale(1.35,1.35) rotate(360deg);}
 }
 @keyframes dmgAnimation{
   0%{background:transparent;}
@@ -2145,6 +2145,10 @@
   100%{
     transform: rotate(82deg)
   }
+}
+@keyframes grade_animation{
+  0%{opacity:0;left:-50px;top:-50px;transform:rotate(-35deg) scale(6);}
+  100%{opacity:0.8;left:-15px;top:-25px;transform:rotate(-35deg) scale(3);}
 }
 .sakura {
   background:linear-gradient(120deg, rgba(255, 183, 197, 0.9), rgba(255, 197, 208, 0.9));

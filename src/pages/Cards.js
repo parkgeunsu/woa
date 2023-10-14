@@ -23,6 +23,7 @@ const Img = styled.img.attrs(
   })
 )``;
 const ChWrap = styled.div`
+  position:absolute;left:0;right:0;top:0;bottom:0;width: 100%;height: 100%;box-sizing: border-box;overflow:hidden;touch-action:none;
   .st0 .ico{background:url(${({stateIcon}) => stateIcon[0]}) no-repeat center center;background-size:100%;}
   .st1 .ico{background:url(${({stateIcon}) => stateIcon[1]}) no-repeat center center;background-size:100%;}
   .st2 .ico{background:url(${({stateIcon}) => stateIcon[2]}) no-repeat center center;background-size:100%;}
@@ -47,7 +48,7 @@ const Cards = ({
   currentTime,
   lang,
 }) => {
-  const sData = Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData;
+  const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const chLength = React.useMemo(() => sData.ch.length ,[sData]);
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;

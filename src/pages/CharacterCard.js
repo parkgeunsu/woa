@@ -1,4 +1,6 @@
 import { AppContext } from 'App';
+import { Text } from 'components/Atom';
+import { ChPic, IconPic } from 'components/ImagePic';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
@@ -11,7 +13,9 @@ const Img = styled.img.attrs(
   ({imgurl}) => ({
     src: imgurl 
   })
-)``;
+)`
+  width: 100%;
+`;
 const ChCard = styled.div`
   position:absolute;
   top:0;
@@ -22,7 +26,6 @@ const ChCard = styled.div`
   pointer-events:none;
   & > span {
     display: block;
-    position: absolute;
   }
   ${({size}) => {
     if (size) {
@@ -43,22 +46,10 @@ const ChCard = styled.div`
   &.page {
     position:relative;width:100%;height:85%;padding:0 3% 3% 3%;
   }
-  .job_actiontype{
-    position: absolute;
-    top: 5%;
-    left: 5%;
-    width: 15%;
-    & > span {
-      display: block;
-    }
-  }
 `;
 
-// .ch_wrap .page0 .ring{background-position:center center;background-size:320px;}
-// .ch_wrap .page0 .name_lv{bottom:40px;left:50%;transform:translate(-50%,0) scale(1);}
-// .ch_wrap .page0 .star{left:auto;bottom:110px;transform:scale(1);text-align:center;}
-
 const ListNameLv = styled.span`
+  position: absolute;
   left:50%;
   transform:translate(-50%,0) scale(1);
   text-align:center;
@@ -70,207 +61,355 @@ const ListNameLv = styled.span`
         &:after{content:'';display:block;position:absolute;left:3%;top:-17%;padding-top:30%;width:30%;background:url(${cardLv});background-repeat:no-repeat;background-position:center center;background-size:contain;}
         & {
           img{width:100%;}
-          .name_{
-            position:absolute;
-            display:inline-block;
-            left:33%;
-            top:17%;
-            width:67%;
-            line-height:1;
-            font-size: ${theme.font.t2};
-            text-align:left;
-            z-index:1;
-            box-sizing:border-box;
-          }
-          .name{
-            position:absolute;
-            display:inline-block;
-            right:2%;
-            bottom:17%;
-            width:67%;
-            line-height:1;
-            font-size: ${theme.font.t5};
-            z-index:1;
-            box-sizing:border-box;
-            letter-spacing:-2px;
-            white-space:nowrap;
-            overflow:hidden;
-          }
-          .lv{position:absolute;display:inline-block;left:3%;top:15%;width:30%;line-height:1;font-size:2.1rem;text-align:center;z-index:1;}
         }
       `
-  }}
+  }};
 `;
-const ListCh = styled.span`
-  top:0;width:100%;height:100%;background-repeat:no-repeat;background-image:url(${({chDisplay}) => chDisplay});background-size:100%;background-position:${({isThumb}) => isThumb ? 'center 10%' : 'center center'};z-index:4;
+const Name = styled(Text)`
+  position:absolute;
+  display:inline-block;
+  right:2%;
+  bottom:17%;
+  width:67%;
+  line-height:1;
+  z-index:1;
+  box-sizing:border-box;
+  letter-spacing:-2px;
+  white-space:nowrap;
+  overflow:hidden;
+`;
+const SubName = styled(Text)`
+  position:absolute;
+  display:inline-block;
+  left:33%;
+  top:17%;
+  width:67%;
+  line-height:1;
+  text-align:left;
+  z-index:1;
+  box-sizing:border-box;
+`;
+const Lv = styled(Text)`
+  position: absolute;
+  display: inline-block;
+  left: 3%;
+  top: 15%;
+  width: 30%;
+  line-height: 1;
+  text-align: center;
+  z-index: 1;
+`;
+const ListCh = styled(ChPic)`
+  position: absolute;
+  top: 0;
+  z-index: 4;
 `;
 
-const ListChRing = styled.span`
-  top:0;width:100%;height:100%;background-repeat:no-repeat;background:url(${({ringBack}) => ringBack});background-position:${({isThumb}) => isThumb ? 'center 10%' : 'center center'};background-size:85%;z-index:3;
+const ListChRing = styled(ChPic)`
+  position: absolute;
+  top: 0;
+  z-index: 3;
+`;
+const ListJobAction = styled.div`
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 15%;
+  & > span {
+    display: block;
+  }
 `;
 const ListChJob = styled.span`
-  position:relative;width:100%;padding-top:100%;background-repeat:no-repeat;background:url(${({jobIcon}) => jobIcon});background-position:center center;background-size:100%;z-index:5;
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  pointer-events: none;
+  z-index: 5;
 `;
 const ListChActionType = styled.span`
+  position: absolute;
   ${({isThumb}) => {
     return isThumb ?
       `top:4px;left:4px;width:20%;padding-top:20%;pointer-events:none;` : 
       `position:relative;width:100%;padding-top:100%;`
   }}
-  background:url(${({actionType}) => actionType});
-  background-size:100% 100%;
-  background-repeat:no-repeat;
-  background-position:center center;
   z-index:5;
 `;
-const ListChElement = styled.span`
-  top:0;width:100%;height:100%;background-repeat:no-repeat;background-image:url(${({ringDisplay}) => ringDisplay});background-position:${({isThumb}) => isThumb ? 'center 10%' : 'center center'};background-size:100%;z-index:1;
+const ListElement = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 30%;
+  overflow: hidden;
 `;
-const ListChElement1 = styled.span`
-  top:0;width:100%;height:100%;background-repeat:no-repeat;background-image:url(${({chLv, ringDisplay}) => {
-    if ( chLv > 29) {
-      return ringDisplay;
-    }
-  }});background-position:${({isThumb}) => isThumb ? 'center 10%' : 'center center'};background-size:cover;z-index:2;
+const ListChElement = styled(ChPic)`
+  position: absolute;
+  top: 0;
+  z-index:1;
 `;
-const ListChElement2 = styled.span`
-  top:13%;width:100%;padding-top:100%;background-repeat:no-repeat;background-image:url(${({chLv, ringDisplay}) => {
-    if ( chLv > 49) {
-      return ringDisplay;
-    }
-  }});background-position:${({isThumb}) => isThumb ? 'center 35%' : 'center center'};background-size:100%;z-index:2;transform:scale(1.35,1.35);animation:rotate_ring 50s linear infinite;
+const ListChElement1 = styled(ChPic)`
+  position: absolute;
+  top: 0;
+  z-index: 2;
+`;
+const ListChElement2 = styled(ChPic)`
+  position: absolute;
+  top: ${({isThumb}) => isThumb ? 0 : 13}%;
+  height: auto !important;
+  padding-top: 100%;
+  z-index: 2;
+  transform: scale(1.35,1.35);
+  animation:rotate_ring linear ${({gameSpd}) => 22.5 / gameSpd}s infinite;
+  ${'' /* background-position:${({isThumb}) => isThumb ? 'center 35%' : 'center center'}; */}
+`;
+const ListChFrame = styled(ChPic)`
+  position: absolute;
+  top: 0;
+  z-index: 5;
 `;
 const ListChStar = styled.span`
-  left:0;bottom:22%;width:100%;height:25px;z-index:5;text-align:center;
-  & {
-    span {
-      display:inline-block;width:25px;height:25px;
-      &:first-of-type{background:url(${({starIcon}) => starIcon[0]}) no-repeat center center;background-size:100%}
-      &:nth-of-type(2){background:url(${({starIcon}) => starIcon[1]}) no-repeat center center;background-size:100%;}
-      &:nth-of-type(3){background:url(${({starIcon}) => starIcon[2]}) no-repeat center center;background-size:100%;}
-      &:nth-of-type(4){background:url(${({starIcon}) => starIcon[3]}) no-repeat center center;background-size:100%;}
-      &:nth-of-type(5){background:url(${({starIcon}) => starIcon[4]}) no-repeat center center;background-size:100%;}
-      &:nth-of-type(6){background:url(${({starIcon}) => starIcon[5]}) no-repeat center center;background-size:100%;}
-      &:nth-of-type(7){background:url(${({starIcon}) => starIcon[6]}) no-repeat center center;background-size:100%;}
-    }
-  }
+  position: absolute;
+  left: 0;
+  bottom: 27%;
+  width: 100%;
+  height: 10%;
+  z-index: 5;
+  text-align: center;
 `;
-const makeStar = (n) => {//별 처리
-  let tag = [];
-  for(var i =0; i< n; ++i){
-    tag.push(<span key={i}></span>);
-  }
-  return tag
-}
-const ListChFrame = styled.span`
-  top:0;width:100%;height:100%;background:url(${({cardFrame}) => cardFrame});background-repeat:no-repeat;background-position:center center;background-size:100% 100%;z-index:5;
+const Star = styled(IconPic)`
+  display: inline-block;
+  width: 13%;
+  padding-top: 13%;
 `;
-
 const ChracterCard = ({
   size,
   equalSize,
   saveData,
   slotIdx,
-  isThumb,
+  saveCharacter,
+  usedType,
   noInfo,
+  gameSpd,
 }) => {
   const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
+  // const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const saveCh = React.useMemo(() => {
-    return saveData ? saveData.ch[slotIdx] : '';
-  }, [saveData, slotIdx]);
+    return saveCharacter
+      ? saveCharacter 
+      : saveData 
+        ? saveData.ch[slotIdx] 
+        : '';
+  }, [saveData, slotIdx, saveCharacter]);
   const chData = React.useMemo(() => {
-    return saveData ? gameData.ch[saveCh.idx] : ''
+    return saveData ? gameData.ch[saveCh?.idx] : '';
   }, [gameData, saveCh]);
-  const iconStar = React.useMemo(() => [imgSet.iconStar.iconStar1, imgSet.iconStar.iconStar2, imgSet.iconStar.iconStar3, imgSet.iconStar.iconStar4, imgSet.iconStar.iconStar5, imgSet.iconStar.iconStar6, imgSet.iconStar.iconStar7], [imgSet]);
   const sizeH = React.useMemo(() => equalSize ? size : size * 1.48, [equalSize, size]);
   if (!saveData) { // 새로운 게임
     return (
       <CardContainer size={size} sizeH={sizeH}>
         <ChCard size={size} className="ch_detail">
-          <ListChFrame cardFrame={imgSet.etc.imgCardBack} className="frame" />
+          <ListChFrame type="cardBack" pic="card" idx={2} />
         </ChCard>
       </CardContainer>
     )
   } else {
-    if (isThumb) { //thumb사용일 경우
+    if (usedType === 'battle') { //battle 말판
+      return (
+        <>
+          <ListCh style={{
+            left: '-15%',
+            top: '-15%',
+            width: '130%',
+            height: '130%',
+          }} isThumb={true} pic="ch" idx={chData?.display} />
+          <ListElement>
+            <ListChElement type="elementBack" isThumb={true} pic="card" idx={chData?.element} />
+            {saveCh?.lv > 29 && <ListChElement1 isThumb={true} type="elementBack2" pic="card" idx={chData?.element} />}
+          </ListElement>
+          {saveCh?.lv > 49 && <ListChElement2 style={{
+            left: '-10%',
+            width: '120%',
+            height: '120%',
+          }} isThumb={true} wNum={5} hNum={5} pic="cardRing" idx={chData?.element} gameSpd={gameSpd} />}
+        </>
+      )
+    }
+    if (usedType === 'conversation') { //battle 시나리오
+      return (
+        <>
+          <ListChRing isThumb={true} type="cardBack" pic="card" idx={0} />
+          <ListCh isThumb={true} pic="ch" idx={chData?.display} />
+        </>
+      )
+    }
+    if (usedType === 'timeline') { //battle 타임라인
+      return (
+        <>
+          <ListCh isThumb={true} pic="ch" idx={chData?.display} />
+          <ListChRing style={{
+            borderRadius: '50%',
+          }} isThumb={true} type="cardBack" pic="card" idx={0} />
+          <ListChElement type="elementBack" isThumb={true} pic="card" idx={chData?.element} />
+          {saveCh?.lv > 29 && <ListChElement1 isThumb={true} type="elementBack2" pic="card" idx={chData?.element} />}
+					<div className="ch_name">{chData?.na1}</div>
+        </>
+      )
+    }
+    if (usedType === 'list') { //list 사용
+      return (
+        <div>aa</div>
+      )
+    }
+    if (usedType === 'thumb') { //thumb 사용
       return (
         <>
           {noInfo ? (
             <>
-              <ListCh isThumb={isThumb} chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
-              <ListChRing isThumb={isThumb} ringBack={imgSet.etc.imgRingBack} className="ring" />
-              <ListChElement isThumb={isThumb} ringDisplay={imgSet.ringImg[chData.element]} className="element" />
-              <ListChFrame cardFrame={imgSet.etc.imgCardFrame} className="frame" />
+              <ListCh isThumb={true} pic="ch" idx={chData?.display} />
+              <ListChRing isThumb={true} type="cardBack" pic="card" idx={0} />
+              <ListChElement isThumb={true} ringDisplay={imgSet.ringImg[chData?.element]} className="element" />
+              <ListChFrame type="cardBack" pic="card" idx={1} />
             </>
           ) : (
             <>
-              <ListNameLv isThumb={isThumb} cardLv={imgSet.etc.imgCardLv} backColor={gameData.chGradeColor[saveCh.grade]}>{saveCh.lv}</ListNameLv>
-              <ListCh isThumb={isThumb} chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
-              <ListChRing isThumb={isThumb} ringBack={imgSet.etc.imgRingBack} className="ring" />
-              <ListChElement isThumb={isThumb} ringDisplay={imgSet.ringImg[chData.element]} className="element" />
-              <ListChElement1 isThumb={isThumb} chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
-              <ListChElement2 isThumb={isThumb} chLv={saveCh.lv} ringDisplay={imgSet.ssringImg[chData.element]} className="element_2" />
-              {saveCh.newActionType.map((data, idx) => {
+              <ListNameLv isThumb={true} cardLv={imgSet.etc.imgCardLv} backColor={gameData.chGradeColor[saveCh?.grade]}>{saveCh?.lv}</ListNameLv>
+              <ListCh isThumb={true} pic="ch" idx={chData?.display} />
+              <ListChRing isThumb={true} type="cardBack" pic="card" idx={0} />
+              <ListChElement type="elementBack" isThumb={true} pic="card" idx={chData?.element} />
+              {saveCh?.lv > 29 && <ListChElement1 isThumb={true} type="elementBack2" pic="card" idx={chData?.element} />}
+              {saveCh?.lv > 49 && <ListChElement2 isThumb={true} wNum={5} hNum={5} pic="cardRing" idx={chData?.element} gameSpd={gameSpd} />}
+              {saveCh?.newActionType.map((data, idx) => {
                 return (
-                  <ListChActionType isThumb={isThumb} key={'action'+idx} actionType={imgSet.element[data + 1]} className="list_action_type"/>
+                  <ListChActionType className="list_action_type" isThumb={true} key={'action'+idx}>
+                    <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={idx + 1} />
+                  </ListChActionType>
                 )
               })}
-              <ListChFrame cardFrame={imgSet.etc.imgCardFrame} className="frame" />
+              <ListChFrame isThumb={true} type="cardBack" pic="card" idx={1} />
             </>
           )}
         </>
       )
     }
+    if (usedType === 'gacha') { //gacha 사용
+      const starArr = Array.from({length: saveCh?.grade}, () => ''); 
+      return (
+        <ChCard size={size} className="ch_detail transition">
+          <ListNameLv cardLv={imgSet.etc.imgCardLv} className="name_lv">
+            <Img className="img" imgurl={imgSet.etc.iconCardName} />
+            <Lv code="t0" color="main">{saveCh?.lv}</Lv>
+            {chData?.na3 ? (
+              <>
+                <SubName code="t0" color="main" style={{
+                  top: '10%',
+                  letterSpacing: 0,
+                }}>{chData?.na3}</SubName>
+                <Name code="t0" color="main" style={{
+                  bottom: '3%',
+                  letterSpacing: 0,
+                }}>{`${chData?.na1} ${chData?.na2}`}</Name>
+              </>
+            ) : (
+              <Name code="t0" color="main" style={{
+                bottom: '25%',
+                letterSpacing: 0,
+              }}>{`${chData?.na1} ${chData?.na2}`}</Name>
+            )}
+          </ListNameLv>
+          <ListCh pic="ch" idx={chData?.display} />
+          <ListChRing type="cardBack" pic="card" idx={0} />
+          <ListJobAction style={{
+            left: '3px',
+            top: '3px',
+            width: '20%',
+            fontSize: 0,
+          }}>
+            <ListChJob className="job">
+              <IconPic type="job" isAbsolute={true} pic="icon100" idx={saveCh?.job} />
+            </ListChJob>
+            {saveCh?.newActionType.map((data, idx) => {
+              return (
+                <ListChActionType key={'action'+idx} className="action_type">
+                  <IconPic type="element" isAbsolute={true} pic="icon100" idx={idx + 1} />
+                </ListChActionType>
+              )
+            })}
+          </ListJobAction>
+          <ListChElement type="elementBack" pic="card" idx={chData?.element} />
+          {saveCh?.lv > 29 && <ListChElement1 type="elementBack2" pic="card" idx={chData?.element} />}
+          {saveCh?.lv > 49 && <ListChElement2 wNum={5} hNum={5} pic="cardRing" idx={chData?.element} gameSpd={gameSpd} />}
+          <ListChStar className="star">
+            {starArr.map((star, idx) => {
+              return <Star idx={idx} type="star" pic="icon100" key={`start${idx}`} />;
+            })}
+          </ListChStar>
+          <ListChFrame type="cardBack" pic="card" idx={1} />
+        </ChCard>
+      )
+    }
     if (slotIdx !== '') {
+      const starArr = Array.from({length: saveCh?.grade}, () => ''); 
       return (
         size ? (
           <CardContainer size={size} sizeH={sizeH}>
             <ChCard size={size} className="ch_detail transition">
-              <ListCh chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
-              <ListChRing ringBack={imgSet.etc.imgRingBack} className="ring" />
-              <div className="job_actiontype">
-                <ListChJob jobIcon={imgSet.job[saveCh.job]} className="job"/>
-                {saveCh.newActionType.map((data, idx) => {
+              <ListCh pic="ch" idx={chData?.display} />
+              <ListChRing type="cardBack" pic="card" idx={0} />
+              <ListJobAction>
+                <ListChJob className="job">
+                  <IconPic type="job" isAbsolute={true} pic="icon100" idx={saveCh?.job} />
+                </ListChJob>
+                {saveCh?.newActionType?.map((data, idx) => {
                   return (
-                    <ListChActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="action_type"/>
+                    <ListChActionType key={'action'+idx} className="action_type">
+                      <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={idx + 1} />
+                    </ListChActionType>
                   )
                 })}
-              </div>
-              <ListChElement ringDisplay={imgSet.ringImg[chData.element]} className="element" />
-              <ListChElement1 chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
-              <ListChElement2 chLv={saveCh.lv} ringDisplay={imgSet.ssringImg[chData.element]} className="element_2" />
-              <ListChStar starIcon={iconStar} className="star">
-                {saveCh.grade && makeStar(saveCh.grade)}
+              </ListJobAction>
+              <ListChElement type="elementBack" pic="card" idx={chData?.element} />
+              {saveCh?.lv > 29 && <ListChElement1 type="elementBack2" pic="card" idx={chData?.element} />}
+              {saveCh?.lv > 49 && <ListChElement2 wNum={5} hNum={5} pic="cardRing" idx={chData?.element} gameSpd={gameSpd} />}
+              <ListChStar className="star">
+                {starArr.map((star, idx) => {
+                  return <Star idx={idx} type="star" pic="icon100" key={`start${idx}`} />;
+                })}
               </ListChStar>
-              <ListChFrame cardFrame={imgSet.etc.imgCardFrame} className="frame" />
+              <ListChFrame type="cardBack" pic="card" idx={1} />
             </ChCard>
           </CardContainer>
         ) : (
           <ChCard size={size} className="ch_detail transition">
             <ListNameLv cardLv={imgSet.etc.imgCardLv} className="name_lv">
               <Img className="img" imgurl={imgSet.etc.iconCardName} />
-              <span className="lv">{saveCh.lv}</span>
-              <span className="name_">{chData.na3}</span>
-              <span className="name">{`${chData.na1} ${chData.na2}`}</span>
+              <Lv code="t8" color="main">{saveCh?.lv}</Lv>
+              <SubName code="t2" color="main">{chData?.na3}</SubName>
+              <Name code="t5" color="main">{`${chData?.na1} ${chData?.na2}`}</Name>
             </ListNameLv>
-            <ListCh chDisplay={imgSet.chImg[`ch${chData.display}`]} className="ch transition" />
-            <ListChRing ringBack={imgSet.etc.imgRingBack} className="ring" />
-            <div className="job_actiontype">
-              <ListChJob jobIcon={imgSet.job[saveCh.job]} className="job"/>
-              {saveCh.newActionType.map((data, idx) => {
+            <ListCh pic="ch" idx={chData?.display} />
+            <ListChRing type="cardBack" pic="card" idx={0} />
+            <ListJobAction>
+              <ListChJob className="job">
+                <IconPic type="job" isAbsolute={true} pic="icon100" idx={saveCh?.job} />
+              </ListChJob>
+              {saveCh?.newActionType.map((data, idx) => {
                 return (
-                  <ListChActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="action_type"/>
+                  <ListChActionType key={'action'+idx} className="action_type">
+                    <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={idx + 1} />
+                  </ListChActionType>
                 )
               })}
-            </div>
-            <ListChElement ringDisplay={imgSet.ringImg[chData.element]} className="element" />
-            <ListChElement1 chLv={saveCh.lv} ringDisplay={imgSet.sringImg[chData.element]} className="element_1" />
-            <ListChElement2 chLv={saveCh.lv} ringDisplay={imgSet.ssringImg[chData.element]} className="element_2" />
-            <ListChStar starIcon={iconStar} className="star">
-              {saveCh.grade && makeStar(saveCh.grade)}
+            </ListJobAction>
+            <ListChElement type="elementBack" pic="card" idx={chData?.element} />
+            {saveCh?.lv > 29 && <ListChElement1 type="elementBack2" pic="card" idx={chData?.element} />}
+            {saveCh?.lv > 49 && <ListChElement2 wNum={5} hNum={5} pic="cardRing" idx={chData?.element} gameSpd={gameSpd} />}
+            <ListChStar className="star">
+              {starArr.map((star, idx) => {
+                return <Star idx={idx} type="star" pic="icon100" key={`start${idx}`} />;
+              })}
             </ListChStar>
-            <ListChFrame cardFrame={imgSet.etc.imgCardFrame} className="frame" />
+            <ListChFrame type="cardBack" pic="card" idx={1} />
           </ChCard>
         )
       );
@@ -278,7 +417,7 @@ const ChracterCard = ({
       return (
         <CardContainer size={size} sizeH={sizeH}>
           <ChCard size={size} className="ch_detail">
-            <ListChFrame cardFrame={imgSet.etc.imgCardBack} className="frame" />
+            <ListChFrame type="cardBack" pic="card" idx={1} />
           </ChCard>
         </CardContainer>
       );
@@ -288,7 +427,7 @@ const ChracterCard = ({
 
 ChracterCard.defaultProps = {
   equalSize: false,
-  isThumb: false,
   noInfo: false,
+  gameSpd: 1,
 }
 export default ChracterCard;

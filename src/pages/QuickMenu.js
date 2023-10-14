@@ -1,5 +1,5 @@
 import { AppContext } from 'App';
-import { IconButton } from 'components/Button';
+import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import { useContext, useState } from 'react';
 import styled from 'styled-components';
@@ -46,10 +46,13 @@ const QuickMenuTitle = styled.div`
 `;
 const QuickMenuBody = styled.ul`
   padding: 10px 0;
-  width: 50px;
   background: ${({theme}) => theme.color.menu};
   border-radius: 0 0 20px 0;
   transition: all .3s;
+  li {
+    width: 50px;
+    height: 50px;
+  }
 `;
 
 const QuickMenu = ({
@@ -67,7 +70,7 @@ const QuickMenu = ({
       setShowMenu(prev => !prev);
     }}>{gameData.msg.button['menu'][lang]}</QuickMenuTitle>
     <QuickMenuBody>
-      <li><IconButton size={50} icon={imgSet.icon.iconCard} onClick={() => {
+      <li><IconPic type="quickMenu" pic="icon100" idx={0} onClick={() => {
         util.saveHistory(() => {
           navigate('cardsList');
           changePage('cardsList');
@@ -79,45 +82,45 @@ const QuickMenu = ({
         //   const dd = cc.concat(cc);
         //   sData.ch = dd;
         //   changeSaveData(sData);
-      }}>{gameData.msg.button['cards'][lang]}</IconButton></li>
-      <li><IconButton size={50} icon={imgSet.icon.iconInven} onClick={() => {
+      }}>{gameData.msg.button['cards'][lang]}</IconPic></li>
+      <li><IconPic type="quickMenu" pic="icon100" idx={1} onClick={() => {
         util.saveHistory(() => {
           navigate('inven');
           changePage('inven');
         });//히스토리 저장
-      }}>{gameData.msg.button['inven'][lang]}</IconButton></li>
-      <li><IconButton size={50} icon={imgSet.icon.iconCardPlacement} onClick={() => {
+      }}>{gameData.msg.button['inven'][lang]}</IconPic></li>
+      <li><IconPic type="quickMenu" pic="icon100" idx={2} onClick={() => {
         util.saveHistory(() => {
           navigate('cardPlacement');
           changePage('cardPlacement');
         });//히스토리 저장
-      }}>{gameData.msg.button['cardPlacement'][lang]}</IconButton></li>
-      <li><IconButton size={50} icon={imgSet.icon.iconEnhancingCards} onClick={() => {
+      }}>{gameData.msg.button['cardPlacement'][lang]}</IconPic></li>
+      <li><IconPic type="quickMenu" pic="icon100" idx={3} onClick={() => {
         util.saveHistory(() => {
           navigate('enhancingCards');
           changePage('enhancingCards');
         });//히스토리 저장
-      }}>{gameData.msg.button['enhancingCards'][lang]}</IconButton></li>
-      <li><IconButton size={50} icon={imgSet.icon.iconEnhancingStickers} onClick={() => {
+      }}>{gameData.msg.button['enhancingCards'][lang]}</IconPic></li>
+      <li><IconPic type="quickMenu" pic="icon100" idx={4} onClick={() => {
         util.saveHistory(() => {
           navigate('enhancingStickers');
           changePage('enhancingStickers');
         });//히스토리 저장
-      }}>{gameData.msg.button['enhancingStickers'][lang]}</IconButton></li>
-      <li><IconButton size={50} icon={imgSet.icon.iconComposite} onClick={() => {
+      }}>{gameData.msg.button['enhancingStickers'][lang]}</IconPic></li>
+      <li><IconPic type="quickMenu" pic="icon100" idx={5} onClick={() => {
         util.saveHistory(() => {
           navigate('composite');
           changePage('composite');
         });//히스토리 저장
-      }}>{gameData.msg.button['composite'][lang]}</IconButton></li>
-      <li><IconButton size={50} icon={imgSet.icon.iconChat} onClick={() => {
-      }}>{gameData.msg.button['chat'][lang]}</IconButton></li>
-      <li><IconButton size={50} icon={imgSet.icon.iconSetup} onClick={() => {
+      }}>{gameData.msg.button['composite'][lang]}</IconPic></li>
+      <li><IconPic type="quickMenu" pic="icon100" idx={6} onClick={() => {
+      }}>{gameData.msg.button['chat'][lang]}</IconPic></li>
+      <li><IconPic type="quickMenu" pic="icon100" idx={7} onClick={() => {
         util.saveHistory(() => {
           navigate('setup');
           changePage('setup');
         });//히스토리 저장
-      }}>{gameData.msg.button['setup'][lang]}</IconButton></li>
+      }}>{gameData.msg.button['setup'][lang]}</IconPic></li>
     </QuickMenuBody>
   </QuickMenuBox>
 }

@@ -6,6 +6,7 @@ import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
+import TabMenu from 'components/TabMenu';
 import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -37,8 +38,8 @@ const ItemName = styled.div`
 `;
 const ShipContainer = styled.div``;
 const tradingList = [
-	{na:'buy',icon:"iconHelm"},
-	{na:'sell',icon:"iconArmor"},
+	{na:'buy',icon:10},
+	{na:'sell',icon:11},
 ];
 const storageCheck = (items) => {
 	let total = 0;
@@ -105,21 +106,7 @@ const TradingPost = ({
 			<ShopWrap className="wrap" backImg={imgSet.back[2]} >
 				<div className="shop_top trading">
 					<div className="shop_top_left">
-						<div className="tab_menu vertical transition">
-							{tradingList && tradingList.map((data, idx) => {
-								return (
-									<li key={idx} className={idx === selectTab ? "on" : ""} onClick={() => {
-										setSelectTab(idx);
-										setSelectItem({save:{},game:{},select:'',buttonType:[]});
-									}}>
-										<MenuButton className="tab_menu_button">
-											<span className="name">{gameData.msg.menu[data.na][lang]}</span>
-											<ShopIcon className="icon" icoType={imgSet.icon[data.icon]} />
-										</MenuButton>
-									</li>
-								);
-							})}
-						</div>
+						<TabMenu direction="vertical" list={tradingList} selectTab={selectTab} setSelectTab={setSelectTab} lang={lang} className="transition" />
 						{Object.keys(actionCh).length !== 0 && (<div ref={actionRef} className={`ch_select_area ${actionCh.idx ? 'g' + saveData.ch[actionCh.idx].grade : ''}`} onClick={() => {
 								setPopupOn(true);
 							}}>
@@ -145,7 +132,7 @@ const TradingPost = ({
 										});
 										setRangeValue(0);
 									}}>
-										<ItemPic className="pic" pic={imgSet.images.itemEtc} type="material" idx={items.display}>
+										<ItemPic className="pic" pic="itemEtc" type="material" idx={items.display}>
 											{typeof data.num === 'number' ? (
 												<span className="has_num">{util.comma(data.num)}</span>
 											) : (
@@ -172,7 +159,7 @@ const TradingPost = ({
 												});
 												setRangeValue(0);
 											}}>
-												<ItemPic className="pic" pic={imgSet.images.itemEtc} type="material" idx={items.display}>
+												<ItemPic className="pic" pic="itemEtc" type="material" idx={items.display}>
 													{typeof itemData.num === 'number' ? (
 														<span className="has_num">{itemData.num}</span>
 													) : (
@@ -230,7 +217,7 @@ const TradingPost = ({
 							<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem.game.na[lang]}`}}></span></li>
 							<li className="item_fix" flex="true">
 								<div className={`item ${gameData.itemGrade.txt_e[selectItem.save.grade || selectItem.game.grade].toLowerCase()}`}>
-									<ItemPic className="pic" pic={imgSet.images.itemEtc} type="material" idx={selectItem.game.display} />
+									<ItemPic className="pic" pic="itemEtc" type="material" idx={selectItem.game.display} />
 								</div>
 								<div flex-h="true" style={{flex: 1}}>
 									<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem.save.grade]}>

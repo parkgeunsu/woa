@@ -198,7 +198,7 @@ const MoveRegion = ({
               return <EntryCards key={`entry${cardIdx}`} onClick={() => {
                   console.log(cardIdx);
                 }}>
-                <CharacterCard isThumb={true} saveData={saveData} gameData={gameData} slotIdx={0} />
+                <CharacterCard usedType="thumb" saveData={saveData} gameData={gameData} slotIdx={0} />
               </EntryCards>
             } else {
               return <EntryCards key={`entry${cardIdx}`} onClick={() => {

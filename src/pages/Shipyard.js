@@ -5,16 +5,12 @@ import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
+import TabMenu from 'components/TabMenu';
 import 'css/ship.css';
-import iconCardName from 'images/card/card_name.png';
+import iconCardName from 'images/card_name.png';
 import { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-const Img = styled.img.attrs(
-  ({imgurl}) => ({
-    src: imgurl 
-  })
-)``;
 const ShipWrap = styled.div`
 	background:url(${({backImg}) => backImg});background-size:cover;
 `;
@@ -231,20 +227,7 @@ const Shipyard = ({
   return (
 		<>
 			<ShipWrap className="wrap" backImg={imgSet.back[2]} >
-				<div className="tab_menu shipyard transition">
-					{shipList && shipList.map((data, idx) => {
-						return (
-							<li key={idx} className={idx === selectTab ? "on" : ""} onClick={() => {
-								setSelectTab(idx);
-							}}>
-								<MenuButton className="tab_menu_button">
-									<span className="name">{gameData.msg.menu[data.na][lang]}</span>
-									<ShipIcon className="icon" icoType={imgSet.icon[data.icon]} />
-								</MenuButton>
-							</li>
-						);
-					})}
-				</div>
+				<TabMenu type="shipyard" list={shipList} selectTab={selectTab} setSelectTab={setSelectTab} lang={lang} className="transition" />
 				<div className={`ship_area`}>
 					<div className={`ship_top ${shipList[selectTab].na}`}>
 						{shipList[selectTab].na === 'produce' && (

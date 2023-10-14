@@ -1,9 +1,10 @@
-import React, { useState, useContext, useLayoutEffect, useRef } from 'react';
 import { AppContext } from 'App';
-import { util } from 'components/Libs';
+import { useContext } from 'react';
+// import { util } from 'components/Libs';
+import { IconPic } from 'components/ImagePic';
 import styled from 'styled-components';
-import PopupContainer from 'components/PopupContainer';
-import Popup from 'components/Popup';
+// import PopupContainer from 'components/PopupContainer';
+// import Popup from 'components/Popup';
 const setPos = (pos) => {
   return `
     ${pos[0]}:10px;
@@ -13,8 +14,6 @@ const setPos = (pos) => {
 const QuestionButton = styled.div`
   position:absolute;
   ${({pos}) => setPos(pos)};
-  background:url(${({backImg}) => backImg}) no-repeat center center;
-  background-size:100%;
   width:${({size}) => size}px;
   height:${({size}) => size}px;
   border-radius:${({size}) => size / 2}px;
@@ -27,10 +26,12 @@ const GuideQuestion = ({
   colorSet,
 }) => {
   const imgSet = useContext(AppContext).images;
-  const backImg = colorSet === 'black' ? imgSet.etc.questionBlack : imgSet.etc.questionWhite;
+  const backImg = colorSet === 'black' ? 5 : 6;
   const shadowColor = colorSet === 'black' ? '#fff' : '#000';
   return (
-    <QuestionButton size={size} pos={pos} shadowColor={shadowColor} backImg={backImg} onClick={onclick}></QuestionButton>
+    <QuestionButton size={size} pos={pos} shadowColor={shadowColor} backImg={backImg} onClick={onclick}>
+      <IconPic type="commonBtn" pic="icon100" idx={backImg} />
+    </QuestionButton>
   );
 }
 

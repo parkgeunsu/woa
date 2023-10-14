@@ -2,7 +2,7 @@ import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import GuideQuestion from 'components/GuideQuestion';
-import { ItemPic } from 'components/ImagePic';
+import { IconPic, ItemPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
@@ -94,18 +94,6 @@ const ScenarioName = styled.div`
   text-shadow: 2px 2px 1px #000;
   background: url(${({btnBack}) => btnBack}) no-repeat center center;
   background-size: 100% 100%;
-  ${({newIcon}) => newIcon ? `
-    &:before{
-      content: '';
-      position: absolute;
-      left: -10px;
-      top: -10px;
-      width: 30px;
-      height: 30px;
-      background: url(${newIcon}) no-repeat center center;
-      background-size: 100%;
-    }
-  ` : ''}
 `;
 const ScenarioStage = styled.div`
   margin: 10px 0 0 0;
@@ -118,18 +106,13 @@ const StageName = styled(FlexBox)`
   background: url(${({btnBack}) => btnBack}) no-repeat left center;
   background-size: 100% 100%;
   box-sizing: border-box;
-  ${({newIcon}) => newIcon ? `
-    &:before{
-      content: '';
-      position: absolute;
-      left: -10px;
-      top: -10px;
-      width: 30px;
-      height: 30px;
-      background: url(${newIcon}) no-repeat center center;
-      background-size: 100%;
-    }
-  ` : ''}
+`;
+const StageNewIcon = styled.div`
+  position: absolute;
+  left: -10px;
+  top: -10px;
+  width: 30px;
+  height: 30px;
 `;
 const StageTitle = styled(FlexBox)`
   min-height: 20px;
@@ -151,11 +134,11 @@ const IconSmile = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 20px;
-  ${({selected, icon}) => {
+  ${({selected}) => {
     if (selected) {
-      return `background: url(${icon}) no-repeat center center;box-shadow:0 0 10px #fff;`
+      return `box-shadow:0 0 10px #fff;`
     } else {
-      return `background: url(${icon}) no-repeat center center;filter: grayscale(100%);`
+      return `filter: grayscale(100%);`
     }
   }}
   background-size: 100%;
@@ -176,26 +159,27 @@ const IconClear = styled.div`
   top: -48%;
   width: 100%;
   height: 100%;
-  ${({icon}) => {
-    return `background: url(${icon}) no-repeat center center;`
-  }}
-  background-size: 100%;
   z-index: 1;
 `;
 const DifficultIcon = ({
   selected,
   clear,
   possibleStageNum,
-  icon,
+  iconIdx,
   clearIcon,
   onClick,
 }) => {
+  const imgSet = useContext(AppContext).images;
   return <DifficultContainer onClick={(e) => {
     e.stopPropagation();
     onClick && onClick();
   }}>
-    <IconSmile selected={selected} icon={icon} />
-    {clear && <IconClear icon={clearIcon}/>}
+    <IconSmile selected={selected}>
+      <IconPic type="scenario" pic="icon100" idx={iconIdx} />
+    </IconSmile> 
+    {clear && <IconClear icon={clearIcon}>
+      <IconPic type="scenario" pic="icon100" idx={4} />
+    </IconClear>}
     {!possibleStageNum && <IconDash />}
   </DifficultContainer>
 }
@@ -365,17 +349,21 @@ const ScenarioList = ({
         setOpen(prev => !prev);
         setShowStageIdx('');
       }}>
-      <ScenarioName btnBack={imgSet.button.btnM} newIcon={newGroup ? imgSet.icon.iconNewR : ''}>{dynastyScenario.name[lang]}</ScenarioName>
+      <ScenarioName btnBack={imgSet.button.btnM}>
+        <StageNewIcon>
+          <IconPic type="scenario" pic="icon100" idx={6} />
+        </StageNewIcon>
+        {dynastyScenario.name[lang]}
+      </ScenarioName>
       <DropDownArrow btnBack={imgSet.button.btnArrowL}  isOpen={isOpen} />
       <ScenarioCards code="t5">
         <CardContainer>
-          <CharacterCard isThumb={true} noInfo={true} saveData={saveData} gameData={gameData} slotIdx={0} />
+          <CharacterCard usedType="thumb" noInfo={true} saveData={saveData} gameData={gameData} slotIdx={0} />
         </CardContainer>
         <Text code="t5" color="main">{`x ${difficultRef.current}`}</Text>
       </ScenarioCards>
     </ScenarioNameBox>
     {isOpen && dynastyScenario.stage.map((stageData, stageIdx) => {
-      const newIcon = saveStage.stage[stageIdx].first ? imgSet.icon.iconNewR : '';
       const stageInfo = {
         minLv:100,
         maxLv:0,
@@ -389,7 +377,7 @@ const ScenarioList = ({
         }
       });
       return <ScenarioStage key={`stageData${stageIdx}`}>
-        <StageName key={`stageData${stageIdx}`} newIcon={newIcon} btnBack={imgSet.button.btnLL} justifyContent={'space-between'} onClick={() => {
+        <StageName key={`stageData${stageIdx}`} btnBack={imgSet.button.btnLL} justifyContent={'space-between'} onClick={() => {
           if (showStageIdx === stageIdx) {
             stageIdxRef.current = '';
             setSelectScenario({});
@@ -404,6 +392,9 @@ const ScenarioList = ({
           }
           setShowStageIdx(prev => prev === stageIdx ? '' : stageIdx);
         }}>
+          <StageNewIcon>
+            <IconPic type="scenario" pic="icon100" idx={6} />
+          </StageNewIcon>
           <StageTitle alignItems={'center'} justifyContent={'flex-start'}>{stageData.title[lang]}</StageTitle>
           {stageIdx === showStageIdx && <StageDifficult>
             {gameData.possibleStageNum.map((possibleStage, possibleIdx) => {
@@ -412,7 +403,7 @@ const ScenarioList = ({
                   selected={saveStage.stage[stageIdx].select === possibleIdx}
                   clear={saveStage.stage[stageIdx].clear[possibleIdx]}
                   possibleStageNum={difficultRef.current >= possibleStage}
-                  icon={imgSet.icon[`iconDifficult${possibleIdx}`]}
+                  iconIdx={possibleIdx}
                   clearIcon={imgSet.icon.iconCrown}
                   onClick={(e) => {
                     difficultClick(difficultRef.current >= possibleStage, stageIdx, possibleIdx);
@@ -460,7 +451,7 @@ const ScenarioList = ({
                       setTooltip([gameData.msg.title['gold'][lang], util.comma(dropFirst.num), gameData.msg.title['firstGet'][lang]]);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type="etc" idx={0}>
+                      <ItemPic className="pic" pic="itemEtc" type="etc" idx={0}>
                         {<span className="display_text">{dropFirst.num}</span>}
                       </ItemPic>
                     </span>
@@ -476,7 +467,7 @@ const ScenarioList = ({
                         <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], items.color, items.svgColor || items.id)}}>
                         </svg>
                       </span>
-                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type={dropFirst.type} idx={items.display} />
+                      <ItemPic className="pic" pic="itemEtc" type={dropFirst.type} idx={items.display} />
                     </span>
                   } else if (dropFirst.type === 'Etc') {
                     const items = gameData.items[dropFirst.type.toLowerCase()][dropFirst.idx];
@@ -485,7 +476,7 @@ const ScenarioList = ({
                       setTooltip([items.na[lang], '', gameData.msg.title['firstGet'][lang]]);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type={dropFirst.type} idx={items.display}>
+                      <ItemPic className="pic" pic="itemEtc" type={dropFirst.type} idx={items.display}>
                         {items.displayText && <span className="display_text">{items.displayText}</span>}
                       </ItemPic>
                     </span>
@@ -496,7 +487,7 @@ const ScenarioList = ({
                       setTooltip([items.na[lang], dropFirst.num, gameData.msg.title['firstGet'][lang]]);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type={dropFirst.type} idx={items.display}>
+                      <ItemPic className="pic" pic="itemEtc" type={dropFirst.type} idx={items.display}>
                         {<span className="display_text">{dropFirst.num}</span>}
                       </ItemPic>
                     </span>
@@ -507,7 +498,7 @@ const ScenarioList = ({
                       setTooltip([items.na[lang], '', gameData.msg.title['firstGet'][lang]]);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type={dropFirst.type} idx={items.display} />
+                      <ItemPic className="pic" pic="itemEtc" type={dropFirst.type} idx={items.display} />
                     </span>
                   } else if (dropFirst.type === 'Hole'){
                     const items = gameData.items[dropFirst.type.toLowerCase()][dropFirst.idx];
@@ -516,7 +507,7 @@ const ScenarioList = ({
                       setTooltip([items.na[lang], '', gameData.msg.title['firstGet'][lang]]);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type={dropFirst.type} idx={items.display} />
+                      <ItemPic className="pic" pic="itemEtc" type={dropFirst.type} idx={items.display} />
                     </span>
                   } else {
                     return '';
@@ -532,7 +523,7 @@ const ScenarioList = ({
                       setTooltip([gameData.msg.title['gold'][lang], util.comma(dropAlways.num), '100%']);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type="etc"
+                      <ItemPic className="pic" pic="itemEtc" type="etc"
                        idx={0}>
                         {<span className="display_text">{dropAlways.num}</span>}
                       </ItemPic>
@@ -557,7 +548,7 @@ const ScenarioList = ({
                       setTooltip([items.na[lang], '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type={dropAlways.type} idx={items.display}>
+                      <ItemPic className="pic" pic="itemEtc" type={dropAlways.type} idx={items.display}>
                         {items.displayText && <span className="display_text">{items.displayText}</span>}
                       </ItemPic>
                     </span>
@@ -568,7 +559,7 @@ const ScenarioList = ({
                       setTooltip([items.na[lang], dropAlways.num, dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type={dropAlways.type} idx={items.display}>
+                      <ItemPic className="pic" pic="itemEtc" type={dropAlways.type} idx={items.display}>
                         {<span className="display_text">{dropAlways.num}</span>}
                       </ItemPic>
                     </span>
@@ -579,7 +570,7 @@ const ScenarioList = ({
                       setTooltip([items.na[lang], '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type={dropAlways.type} idx={items.display} />
+                      <ItemPic className="pic" pic="itemEtc" type={dropAlways.type} idx={items.display} />
                     </span>
                   } else if (dropAlways.type === 'Hole'){
                     const items = gameData.items[dropAlways.type.toLowerCase()][dropAlways.idx];
@@ -588,7 +579,7 @@ const ScenarioList = ({
                       setTooltip([items.na[lang], '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic={imgSet.images.itemEtc} type={dropAlways.type} idx={items.display} />
+                      <ItemPic className="pic" pic="itemEtc" type={dropAlways.type} idx={items.display} />
                     </span>
                   } else {
                     return '';
