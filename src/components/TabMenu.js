@@ -1,6 +1,6 @@
 import { AppContext } from 'App';
 import { IconPic } from 'components/ImagePic';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 const TabMenuContainer = styled.div`
@@ -68,11 +68,18 @@ const TabMenu = ({
   direction,
   onClick,
   children,
-  lang,
   ...rest
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  // const imgSet = React.useMemo(() => {
+  //   return context.images;
+  // }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
   return (
     <TabMenuContainer direction={direction} {...rest}>
       {list && list.map((data, idx) => {

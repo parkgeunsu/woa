@@ -1,4 +1,4 @@
-import { actionIcon, anchor, back, bgEffect, button, cannon, control, eff, etc, figure, icon, iconState, images, land, map, passive, ringImg, sail, sringImg, ssringImg, weather, wood } from 'components/ImgSet';
+import { actionIcon, anchor, back, bgEffect, button, cannon, control, eff, etc, figure, icon, iconState, images, map, passive, sail, weather, wood } from 'components/ImgSet';
 //icon100 menu0, element1~2
 export const LoadImage = () => {
   //이미지 프리로드
@@ -19,22 +19,6 @@ export const LoadImage = () => {
     img.src = etc[v];
   }
   iconState.forEach((image) => {
-    const img = new Image();
-    img.src = image;
-  });
-  ringImg.forEach((image) => {
-    const img = new Image();
-    img.src = image;
-  });
-  sringImg.forEach((image) => {
-    const img = new Image();
-    img.src = image;
-  });
-  ssringImg.forEach((image) => {
-    const img = new Image();
-    img.src = image;
-  });
-  land.forEach((image) => {
     const img = new Image();
     img.src = image;
   });
@@ -80,7 +64,7 @@ export const LoadImage = () => {
   });
   for (let v in control) {
     const img = new Image();
-    img.src = etc[v];
+    img.src = control[v];
   };
   for (let v in map) {
     const img = new Image();
@@ -95,11 +79,7 @@ export const LoadImage = () => {
     etc: etc,
     icon: icon,
     button: button,
-    ringImg: ringImg,
-    sringImg: sringImg,
-    ssringImg: ssringImg,
     iconState: iconState,
-    land: land,
     bgEffect: bgEffect,
     passive: passive,
     eff: eff,
@@ -112,7 +92,6 @@ export const LoadImage = () => {
     figure: figure,
     control: control,
     map: map,
-    transparent: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAAtJREFUGFdjYAACAAAFAAGq1chRAAAAAElFTkSuQmCC',
     images: images,
   }
 }

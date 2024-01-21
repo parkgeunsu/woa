@@ -605,40 +605,42 @@ export const items = {
 
     {idx:24,grade:1,imgCate:'itemEtc',display:30,na:{ko:'보물지도 조각',en:'Treasure Map Fragments',jp:'宝の地図の彫刻'},price:100,action:0,invenUse:false,txt:{ko:'10개를 합치면 보물지도를 만들 수 있다.',en:'Combine 10 of them to create a treasure map.',jp:'10個合わせると宝の地図を作ることができる。'},kg:0.3,eff:['?']},
 
-    {idx:25,grade:1,imgCate:'itemEtc',display:31,na:{ko:'선박 설계도',en:'Ship Blueprints',jp:'船舶設計図'},price:100,action:0,invenUse:false,txt:{ko:'선박 설계도 소형, 중형, 대형 중 한개의 설계도를 얻을 수 있다.',en:'Ship Blueprints You can get one of the following blueprints: small, medium, or large.',jp:'船舶設計図 小型、中型、大型のいずれかの設計図が入手できます。'},kg:0.3,eff:['?']},
+    {idx:25,grade:4,imgCate:'itemEtc',display:30,na:{ko:'보물지도 조각',en:'Treasure Map Fragments',jp:'宝の地図の彫刻'},price:100,action:0,invenUse:false,txt:{ko:'10개를 합치면 보물지도를 만들 수 있다.',en:'Combine 10 of them to create a treasure map.',jp:'10個合わせると宝の地図を作ることができる。'},kg:0.3,eff:['?']},
 
-    {idx:26,grade:1,imgCate:'itemEtc',display:32,na:{ko:'선박 설계도 조각',en:'Ship Blueprint Fragments',jp:'船の設計図彫刻'},price:100,action:0,invenUse:false,txt:{ko:'5개는 소형, 10개는 중형, 15개는 대형 설계도를 만들 수 있다.',en:'You can create 5 small, 10 medium, and 15 large schematics.',jp:'5個は小型、10個は中型、15個は大型の設計図を作成することができます。'},kg:0.3,eff:['?']},
+    // {idx:25,grade:1,imgCate:'itemEtc',display:31,na:{ko:'선박 설계도',en:'Ship Blueprints',jp:'船舶設計図'},price:100,action:0,invenUse:false,txt:{ko:'선박 설계도 소형, 중형, 대형 중 한개의 설계도를 얻을 수 있다.',en:'Ship Blueprints You can get one of the following blueprints: small, medium, or large.',jp:'船舶設計図 小型、中型、大型のいずれかの設計図が入手できます。'},kg:0.3,eff:['?']},
 
-    {idx:27,grade:1,imgCate:'itemEtc',displayText:'No1',display:31,na:{ko:'소형 선박 설계도 I',en:'Small Ship Blueprint I',jp:'小型船舶設計図I'},price:100,action:0,invenUse:false,txt:{ko:'소형 선박을 제조 할 수 있는 설계도.',en:'A blueprint from which a small ship can be manufactured.',jp:'小型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
+    // {idx:26,grade:1,imgCate:'itemEtc',display:32,na:{ko:'선박 설계도 조각',en:'Ship Blueprint Fragments',jp:'船の設計図彫刻'},price:100,action:0,invenUse:false,txt:{ko:'5개는 소형, 10개는 중형, 15개는 대형 설계도를 만들 수 있다.',en:'You can create 5 small, 10 medium, and 15 large schematics.',jp:'5個は小型、10個は中型、15個は大型の設計図を作成することができます。'},kg:0.3,eff:['?']},
 
-    {idx:28,grade:1,imgCate:'itemEtc',displayText:'No2',display:31,na:{ko:'소형 선박 설계도 II',en:'Small Ship Blueprint II',jp:'小型船舶設計図II'},price:100,action:0,invenUse:false,txt:{ko:'소형 선박을 제조 할 수 있는 설계도.',en:'A blueprint from which a small ship can be manufactured.',jp:'小型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
+    // {idx:27,grade:1,imgCate:'itemEtc',displayText:'No1',display:31,na:{ko:'소형 선박 설계도 I',en:'Small Ship Blueprint I',jp:'小型船舶設計図I'},price:100,action:0,invenUse:false,txt:{ko:'소형 선박을 제조 할 수 있는 설계도.',en:'A blueprint from which a small ship can be manufactured.',jp:'小型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
 
-    {idx:29,grade:1,imgCate:'itemEtc',displayText:'No3',display:31,na:{ko:'소형 선박 설계도 III',en:'Small Ship Blueprint III',jp:'小型船舶設計図III'},price:100,action:0,invenUse:false,txt:{ko:'소형 선박을 제조 할 수 있는 설계도.',en:'A blueprint from which a small ship can be manufactured.',jp:'小型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
+    // {idx:28,grade:1,imgCate:'itemEtc',displayText:'No2',display:31,na:{ko:'소형 선박 설계도 II',en:'Small Ship Blueprint II',jp:'小型船舶設計図II'},price:100,action:0,invenUse:false,txt:{ko:'소형 선박을 제조 할 수 있는 설계도.',en:'A blueprint from which a small ship can be manufactured.',jp:'小型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
 
-    {idx:30,grade:2,imgCate:'itemEtc',displayText:'No4',display:31,na:{ko:'중형 선박 설계도 I',en:'Medium Ship Blueprint I',jp:'中型船の設計図I'},price:100,action:0,invenUse:false,txt:{ko:'중형 선박을 제조 할 수 있는 설계도.',en:'A blueprint from which a medium ship can be manufactured.',jp:'中型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
+    // {idx:29,grade:1,imgCate:'itemEtc',displayText:'No3',display:31,na:{ko:'소형 선박 설계도 III',en:'Small Ship Blueprint III',jp:'小型船舶設計図III'},price:100,action:0,invenUse:false,txt:{ko:'소형 선박을 제조 할 수 있는 설계도.',en:'A blueprint from which a small ship can be manufactured.',jp:'小型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
 
-    {idx:31,grade:2,imgCate:'itemEtc',displayText:'No5',display:31,na:{ko:'중형 선박 설계도 II',en:'Medium Ship Blueprint II',jp:'中型船の設計図II'},price:100,action:0,invenUse:false,txt:{ko:'중형 선박을 제조 할 수 있는 설계도.',en:'A blueprint from which a medium ship can be manufactured.',jp:'中型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
+    // {idx:30,grade:2,imgCate:'itemEtc',displayText:'No4',display:31,na:{ko:'중형 선박 설계도 I',en:'Medium Ship Blueprint I',jp:'中型船の設計図I'},price:100,action:0,invenUse:false,txt:{ko:'중형 선박을 제조 할 수 있는 설계도.',en:'A blueprint from which a medium ship can be manufactured.',jp:'中型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
 
-    {idx:32,grade:2,imgCate:'itemEtc',displayText:'No6',display:31,na:{ko:'중형 선박 설계도 III',en:'Medium Ship Blueprint III',jp:'中型船の設計図III'},price:100,action:0,invenUse:false,txt:{ko:'중형 선박을 제조 할 수 있는 설계도.',en:'A blueprint from which a medium ship can be manufactured.',jp:'中型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
+    // {idx:31,grade:2,imgCate:'itemEtc',displayText:'No5',display:31,na:{ko:'중형 선박 설계도 II',en:'Medium Ship Blueprint II',jp:'中型船の設計図II'},price:100,action:0,invenUse:false,txt:{ko:'중형 선박을 제조 할 수 있는 설계도.',en:'A blueprint from which a medium ship can be manufactured.',jp:'中型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
 
-    {idx:33,grade:2,imgCate:'itemEtc',displayText:'No7',display:31,na:{ko:'중형 선박 설계도 IV',en:'Medium Ship Blueprint IV',jp:'中型船の設計図IV'},price:100,action:0,invenUse:false,txt:{ko:'중형 선박을 제조 할 수 있는 설계도.',en:'A blueprint from which a medium ship can be manufactured.',jp:'中型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
+    // {idx:32,grade:2,imgCate:'itemEtc',displayText:'No6',display:31,na:{ko:'중형 선박 설계도 III',en:'Medium Ship Blueprint III',jp:'中型船の設計図III'},price:100,action:0,invenUse:false,txt:{ko:'중형 선박을 제조 할 수 있는 설계도.',en:'A blueprint from which a medium ship can be manufactured.',jp:'中型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
 
-    {idx:34,grade:3,imgCate:'itemEtc',displayText:'No8',display:31,na:{ko:'대형 선박 설계도 I',en:'Large Ship Blueprint I',jp:'大型船舶設計図I'},price:100,action:0,invenUse:false,txt:{ko:'대형 선박을 제조 할 수 있는 설계도.',en:'Blueprints for manufacturing large ships.',jp:'大型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
+    // {idx:33,grade:2,imgCate:'itemEtc',displayText:'No7',display:31,na:{ko:'중형 선박 설계도 IV',en:'Medium Ship Blueprint IV',jp:'中型船の設計図IV'},price:100,action:0,invenUse:false,txt:{ko:'중형 선박을 제조 할 수 있는 설계도.',en:'A blueprint from which a medium ship can be manufactured.',jp:'中型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
 
-    {idx:35,grade:3,imgCate:'itemEtc',displayText:'No9',display:31,na:{ko:'대형 선박 설계도 II',en:'Large Ship Blueprint II',jp:'大型船舶設計図II'},price:100,action:0,invenUse:false,txt:{ko:'대형 선박을 제조 할 수 있는 설계도.',en:'Blueprints for manufacturing large ships.',jp:'大型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
+    // {idx:34,grade:3,imgCate:'itemEtc',displayText:'No8',display:31,na:{ko:'대형 선박 설계도 I',en:'Large Ship Blueprint I',jp:'大型船舶設計図I'},price:100,action:0,invenUse:false,txt:{ko:'대형 선박을 제조 할 수 있는 설계도.',en:'Blueprints for manufacturing large ships.',jp:'大型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
 
-    {idx:36,grade:3,imgCate:'itemEtc',displayText:'No10',display:31,na:{ko:'대형 선박 설계도 III',en:'Large Ship Blueprint III',jp:'大型船舶設計図III'},price:100,action:0,invenUse:false,txt:{ko:'대형 선박을 제조 할 수 있는 설계도.',en:'Blueprints for manufacturing large ships.',jp:'大型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
+    // {idx:35,grade:3,imgCate:'itemEtc',displayText:'No9',display:31,na:{ko:'대형 선박 설계도 II',en:'Large Ship Blueprint II',jp:'大型船舶設計図II'},price:100,action:0,invenUse:false,txt:{ko:'대형 선박을 제조 할 수 있는 설계도.',en:'Blueprints for manufacturing large ships.',jp:'大型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
 
-    {idx:37,grade:3,imgCate:'itemEtc',displayText:'No11',display:31,na:{ko:'대형 선박 설계도 IV',en:'Large Ship Blueprint IV',jp:'大型船舶設計図IV'},price:100,action:0,invenUse:false,txt:{ko:'대형 선박을 제조 할 수 있는 설계도.',en:'Blueprints for manufacturing large ships.',jp:'大型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
+    // {idx:36,grade:3,imgCate:'itemEtc',displayText:'No10',display:31,na:{ko:'대형 선박 설계도 III',en:'Large Ship Blueprint III',jp:'大型船舶設計図III'},price:100,action:0,invenUse:false,txt:{ko:'대형 선박을 제조 할 수 있는 설계도.',en:'Blueprints for manufacturing large ships.',jp:'大型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
 
-    {idx:38,grade:3,imgCate:'itemEtc',displayText:'No12',display:31,na:{ko:'대형 선박 설계도 V',en:'Large Ship Blueprint V',jp:'大型船舶設計図V'},price:100,action:0,invenUse:false,txt:{ko:'대형 선박을 제조 할 수 있는 설계도.',en:'Blueprints for manufacturing large ships.',jp:'大型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
+    // {idx:37,grade:3,imgCate:'itemEtc',displayText:'No11',display:31,na:{ko:'대형 선박 설계도 IV',en:'Large Ship Blueprint IV',jp:'大型船舶設計図IV'},price:100,action:0,invenUse:false,txt:{ko:'대형 선박을 제조 할 수 있는 설계도.',en:'Blueprints for manufacturing large ships.',jp:'大型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
 
-    '',
-    {idx:40,grade:1,imgCate:'itemEtc',displayText:'I',display:25,na:{ko:'동물 선수상 설계도',en:'Animal Statue Blueprint',jp:'動物選手像設計図'},price:100,action:0,invenUse:false,txt:{ko:'동물 선수상을 제조 할 수 있는 설계도.',en:'Blueprints for manufacturing an animal statue.',jp:'動物選手像を製造できる設計図。'},kg:0.1,eff:['?']},
+    // {idx:38,grade:3,imgCate:'itemEtc',displayText:'No12',display:31,na:{ko:'대형 선박 설계도 V',en:'Large Ship Blueprint V',jp:'大型船舶設計図V'},price:100,action:0,invenUse:false,txt:{ko:'대형 선박을 제조 할 수 있는 설계도.',en:'Blueprints for manufacturing large ships.',jp:'大型船舶を製造できる設計図。'},kg:0.1,eff:['?']},
 
-    {idx:41,grade:2,imgCate:'itemEtc',displayText:'II',display:25,na:{ko:'위인 선수상 설계도',en:'Great Athlete Award Blueprint',jp:'偉人選手賞設計図'},price:100,action:0,invenUse:false,txt:{ko:'위인 선수상을 제조 할 수 있는 설계도.',en:'Blueprints for manufacturing the Great Athlete Award.',jp:'偉人選手像を製造できる設計図。'},kg:0.1,eff:['?']},
+    // '',
+    // {idx:40,grade:1,imgCate:'itemEtc',displayText:'I',display:25,na:{ko:'동물 선수상 설계도',en:'Animal Statue Blueprint',jp:'動物選手像設計図'},price:100,action:0,invenUse:false,txt:{ko:'동물 선수상을 제조 할 수 있는 설계도.',en:'Blueprints for manufacturing an animal statue.',jp:'動物選手像を製造できる設計図。'},kg:0.1,eff:['?']},
 
-    {idx:42,grade:3,imgCate:'itemEtc',displayText:'III',display:25,na:{ko:'용 선수상 설계도',en:'Dragon Statue Blueprint',jp:'ドラゴン選手像の設計図'},price:100,action:0,invenUse:false,txt:{ko:'용 선수상을 제조 할 수 있는 설계도.',en:'A blueprint for a dragon statue that can be manufactured.',jp:'ドラゴン選手像を製造できる設計図。'},kg:0.1,eff:['?']},
+    // {idx:41,grade:2,imgCate:'itemEtc',displayText:'II',display:25,na:{ko:'위인 선수상 설계도',en:'Great Athlete Award Blueprint',jp:'偉人選手賞設計図'},price:100,action:0,invenUse:false,txt:{ko:'위인 선수상을 제조 할 수 있는 설계도.',en:'Blueprints for manufacturing the Great Athlete Award.',jp:'偉人選手像を製造できる設計図。'},kg:0.1,eff:['?']},
+
+    // {idx:42,grade:3,imgCate:'itemEtc',displayText:'III',display:25,na:{ko:'용 선수상 설계도',en:'Dragon Statue Blueprint',jp:'ドラゴン選手像の設計図'},price:100,action:0,invenUse:false,txt:{ko:'용 선수상을 제조 할 수 있는 설계도.',en:'A blueprint for a dragon statue that can be manufactured.',jp:'ドラゴン選手像を製造できる設計図。'},kg:0.1,eff:['?']},
 
   ]
 }

@@ -1,7 +1,8 @@
 import { AppContext } from 'App';
 import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const QuickMenuBox = styled.div`
@@ -57,13 +58,19 @@ const QuickMenuBody = styled.ul`
 
 const QuickMenu = ({
   type,
-  changePage,
   gameMode,
-  navigate,
-  lang,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const navigate = useNavigate();
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  // const imgSet = React.useMemo(() => {
+  //   return context.images;
+  // }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
   const [showMenu, setShowMenu] = useState(false);
   return <QuickMenuBox showMenu={showMenu} type={type} gameMode={gameMode} className="transition">
     <QuickMenuTitle onClick={() => {
@@ -72,8 +79,7 @@ const QuickMenu = ({
     <QuickMenuBody>
       <li><IconPic type="quickMenu" pic="icon100" idx={0} onClick={() => {
         util.saveHistory(() => {
-          navigate('cardsList');
-          changePage('cardsList');
+          navigate('../cardsList');
         });//히스토리 저장
         // const sData = {...saveData};
         //   const aa = sData.ch.concat(sData.ch);
@@ -85,40 +91,35 @@ const QuickMenu = ({
       }}>{gameData.msg.button['cards'][lang]}</IconPic></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={1} onClick={() => {
         util.saveHistory(() => {
-          navigate('inven');
-          changePage('inven');
+          navigate('../inven');
+          console.log('aaa');
         });//히스토리 저장
       }}>{gameData.msg.button['inven'][lang]}</IconPic></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={2} onClick={() => {
         util.saveHistory(() => {
-          navigate('cardPlacement');
-          changePage('cardPlacement');
+          navigate('../cardPlacement');
         });//히스토리 저장
       }}>{gameData.msg.button['cardPlacement'][lang]}</IconPic></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={3} onClick={() => {
         util.saveHistory(() => {
-          navigate('enhancingCards');
-          changePage('enhancingCards');
+          navigate('../enhancingCards');
         });//히스토리 저장
       }}>{gameData.msg.button['enhancingCards'][lang]}</IconPic></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={4} onClick={() => {
         util.saveHistory(() => {
-          navigate('enhancingStickers');
-          changePage('enhancingStickers');
+          navigate('../enhancingStickers');
         });//히스토리 저장
       }}>{gameData.msg.button['enhancingStickers'][lang]}</IconPic></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={5} onClick={() => {
         util.saveHistory(() => {
-          navigate('composite');
-          changePage('composite');
+          navigate('../composite');
         });//히스토리 저장
       }}>{gameData.msg.button['composite'][lang]}</IconPic></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={6} onClick={() => {
       }}>{gameData.msg.button['chat'][lang]}</IconPic></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={7} onClick={() => {
         util.saveHistory(() => {
-          navigate('setup');
-          changePage('setup');
+          navigate('../setup');
         });//히스토리 저장
       }}>{gameData.msg.button['setup'][lang]}</IconPic></li>
     </QuickMenuBody>

@@ -2,7 +2,8 @@ import { AppContext } from 'App';
 import { ItemPic, MarkPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import TabMenu from 'components/TabMenu';
-import { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const InvenWrap = styled.div`
@@ -31,18 +32,26 @@ const invenList = [
 	{na:'etc',icon:17},
 ];
 const Inven = ({
-	navigate,
 	saveData,
 	changeSaveData,
-	gameSpd,
-	lang,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
-	const gameItem = gameData.items;
-  const [modalOn, setModalOn] = useState(false);
-	const [modalInfo, setModalInfo] = useState({});
-  const [modalType, setModalType] = useState();
+  const navigate = useNavigate();
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
+	const gameItem = React.useMemo(() => {
+		return gameData.items;
+  }, [gameData]);
+  // const [modalOn, setModalOn] = useState(false);
+	// const [modalInfo, setModalInfo] = useState({});
+  // const [modalType, setModalType] = useState();
   const [popupOn, setPopupOn] = useState(false);
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
@@ -51,8 +60,8 @@ const Inven = ({
 	const [selectArea, setSelectArea] = useState('area1');
 	const [selectItem1, setSelectItem1] = useState({save:[],game:[],buttonType:[],selectTab:'',select:''});
 	const [selectItem2, setSelectItem2] = useState({save:[],game:[],buttonType:[],selectTab:'',select:''});
-	const [actionCh, setActionCh] = useState({});//행동할 캐릭터 데이터
-	const actionRef = useRef();//행동할 캐릭터 선택자
+	// const [actionCh, setActionCh] = useState({});//행동할 캐릭터 데이터
+	// const actionRef = useRef();//행동할 캐릭터 선택자
 	useEffect(() => {
 		//equip, hole, upgrade, merterial, etc
 		//console.log(saveData.items);
@@ -63,7 +72,7 @@ const Inven = ({
 			<InvenWrap className="wrap" backImg={imgSet.back[2]} >
 				<div className="shop_top">
 					<div className="shop_top_left">
-						<TabMenu direction="vertical" list={invenList} selectTab={selectTab} setSelectTab={setSelectTab} lang={lang} className="transition" />
+						<TabMenu direction="vertical" list={invenList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" />
 					</div>
 					<div className="shop_item num4 scroll-y">
 						{item[invenList[selectTab].na] && item[invenList[selectTab].na].map((data, idx) => {
@@ -116,7 +125,7 @@ const Inven = ({
 												return (
 													<span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
 														{holeData !== 0 && 
-															<ItemPic className="pic" pic="itemEtc" type="etc" idx={holePic} />}
+															<ItemPic className="pic" pic="itemEtc" type="hole" idx={holePic} />}
 													</span>
 												);
 											})}
@@ -337,7 +346,7 @@ const Inven = ({
 													return (
 														<div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}>
 															<span className="item_holeback">
-																{holeData !== 0 && <ItemPic pic="itemEtc" type="etc" idx={holePic} />}
+																{holePic !== 0 && <ItemPic pic="itemEtc" type="hole" idx={holePic} />}
 															</span>
 														</div>
 													)
@@ -453,9 +462,9 @@ const Inven = ({
 												<div key={`button${idx}`} className="item_button" flex="true">
 													<button text="true" className="button_small" onClick={(e) => {
 														if (selectItem1.selectTab === 'equip' && selectItem1.game.part !== 4 && selectItem1.game.part !== 5) {
-															navigate('stickerShop');
+															navigate('../stickerShop');
 														} else {
-															navigate('toolShop');
+															navigate('../toolShop');
 														}
 														// util.buttonEvent({
 														// 	event: e,
@@ -585,7 +594,7 @@ const Inven = ({
 													return (
 														<div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}>
 															<span className="item_holeback">
-																<ItemPic pic="itemEtc" type="etc" idx={holePic} />
+																{holePic !== 0 && <ItemPic pic="itemEtc" type="hole" idx={holePic} />}
 															</span>
 														</div>
 													)
@@ -647,7 +656,7 @@ const Inven = ({
 											</ItemName>
 										</div>
 									</li>
-									{selectItem2.game.idx <= 100 && (
+									{selectItem2.game.idx < 100 && (
 										<div className="scroll-y">
 											<li className="item_list item_eff">
 												<div className="item_title">{gameData.msg.itemInfo.itemEffect[lang]}</div>
@@ -701,9 +710,9 @@ const Inven = ({
 												<div key={`button${idx}`} className="item_button" flex="true">
 													<button text="true" className="button_small" onClick={(e) => {
 														if (selectItem2.selectTab === 'equip' && selectItem2.game.part !== 4 && selectItem2.game.part !== 5) {
-															navigate('stickerShop');
+															navigate('../stickerShop');
 														} else {
-															navigate('toolShop');
+															navigate('../toolShop');
 														}
 														// util.buttonEvent({
 														// 	event: e,
@@ -795,7 +804,7 @@ const Inven = ({
 				</div>
 			</InvenWrap>
 			{/* <ModalContainer>
-				{modalOn && <Modal fn={changeGachaMode} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} lang={lang} onClose={() => {handleModal()}} gameData={gameData}/>}
+				{modalOn && <Modal fn={changeGachaMode} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {handleModal()}} gameData={gameData}/>}
 			</ModalContainer> */}
 		</>
   );

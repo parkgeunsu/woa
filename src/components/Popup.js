@@ -1,16 +1,14 @@
 import { AppContext } from 'App';
-import ChListCard from 'components/ChListCard';
 import { ChPic, ItemPic, MarkPic } from 'components/ImagePic';
-import { ringImg } from 'components/ImgSet';
 import { util } from 'components/Libs';
 import PopupContainer from 'components/PopupContainer';
-import imgRing from 'images/ring/ring_.png';
 import CharacterCard from 'pages/CharacterCard';
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const PopupRelationList = styled.li`
-  background-image:url(${({ringDisplay}) => ringDisplay});
+  ${'' /* background-image:url(${({ringDisplay}) => ringDisplay}); */}
   background-size:cover;
   box-shadow:${({gameData, chData}) => (
       `0 0 13px ${gameData.chGradeColor[chData.grade]}, 0 0 8px ${gameData.chGradeColor[chData.grade]}, 0 0 5px ${gameData.chGradeColor[chData.grade]}, 0 0 2px ${gameData.chGradeColor[chData.grade]}`
@@ -85,8 +83,9 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         {member && member.map((data ,idx) => {
           const chData = gameData.ch[idx];
           return (
-            <PopupRelationList className="people_list" key={idx} gameData={gameData} chData={chData} ringDisplay={ringImg[chData.element]}>
-              <Img imgurl={imgRing} />
+            <PopupRelationList className="people_list" key={idx} gameData={gameData} chData={chData} >
+            {/* ringDisplay={ringImg[chData.element]} */}
+              <Img imgurl={imgSet.images.transparent800} />
               <PopupRelationListCh>
                 <ChPic pic="ch" idx={chData.display} />
               </PopupRelationListCh>
@@ -315,7 +314,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             {sealed && (
               <div className="item_button" flex="true">
                 <button text="true" onClick={(e) => {
-                  navigate('inven');
+                  navigate('../inven');
                   // 확인
                   // util.buttonEvent({
                   //   event: e,
@@ -331,7 +330,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   // })
                 }} data-buttontype="itemEvaluate">{gameData.msg.button.emotions[lang]}</button>
                 <button text="true" onClick={(e) => {
-                  navigate('stickerShop');
+                  navigate('../stickerShop');
                   // 판매
                   // util.buttonEvent({
                   //   event: e,
@@ -351,7 +350,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             {!sealed && (
               <div className="item_button" flex="true">
                 <button text="true" onClick={(e) => {
-                  navigate('enhancingStickers');
+                  navigate('../enhancingStickers');
                   // 강화
                   // util.buttonEvent({
                   //   event: e,
@@ -381,7 +380,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   })
                 }} data-buttontype="itemEquip">{gameData.msg.button.equip[lang]}</button>
                 <button text="true" onClick={(e) => {
-                  navigate('stickerShop');
+                  navigate('../stickerShop');
                   // util.buttonEvent({
                   //   event: e,
                   //   type: 'itemSell',
@@ -456,7 +455,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               })
             }} data-buttontype="holeEquip">{gameData.msg.button.equip[lang]}</button>
             <button text="true" onClick={(e) => {
-              navigate('stickerShop');
+              navigate('../stickerShop');
               // util.buttonEvent({
               //   event: e,
               //   type: 'itemSell',
@@ -735,7 +734,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
       <div className="select_character">
         <div className="select_chInfo">
           <div className="select_chDisplay">
-            <Img imgurl={imgSet.etc.imgRing} />
+            <Img imgurl={imgSet.images.transparent800} />
             <CharacterCard saveData={saveData} slotIdx={dataObj.selectIdx} />
           </div>
           <div className="select_rBox" flex-v="true">
@@ -773,7 +772,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                 break;
               };
             };
-            const chData = gameData.ch[saveCh.idx];
+            //const chData = gameData.ch[saveCh.idx];
             if (hasSkill) {
               possibleCh ++;
               return (
@@ -781,7 +780,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   e.stopPropagation();
                   dataObj.setSelectIdx(idx);
                 }}>
-                  <ChListCard type="popup" saveCh={saveCh} chData={chData} />
+                  <CharacterCard usedType="popup" saveData={saveData} saveCharacter={saveCh} />
                 </li>
               )
             }
@@ -811,11 +810,18 @@ const Popup = ({
 	dataObj,
   msgText,
   showMsg,
-  navigate,
-  lang,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const navigate = useNavigate();
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
   const [selectIdx, setSelectIdx] = useState(0);
   const [content, setContent] = useState();
   useEffect(() => {

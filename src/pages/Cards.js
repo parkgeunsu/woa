@@ -41,17 +41,22 @@ const ChInfo = styled.div`
   border-image:url(${({frameBack}) => frameBack}) 5 round;z-index:3;
 `;
 const Cards = ({
-  changePage,
-  navigate,
   saveData,
   changeSaveData,
   currentTime,
-  lang,
 }) => {
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const chLength = React.useMemo(() => sData.ch.length ,[sData]);
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
@@ -152,23 +157,23 @@ const Cards = ({
         {currentTime}
       </div>
         <div ref={chRef} className="ch_card transition">
-          <Img imgurl={imgSet.etc.imgRing} />
+          <Img imgurl={imgSet.images.transparent800} />
           <CharacterCard saveData={sData} slotIdx={slotIdx} />
           <ChBack cardBack={imgSet.etc.imgCardBack} className="ch_back transition" />
         </div>
         <CharacterPaging chLength={chLength} saveData={sData} changeChSlot={changeChSlot} slotIdx={slotIdx} />
         <CharacterHeader saveData={sData} chPage={chPage} changeChPage={changeChPage} slotIdx={slotIdx} changeSaveData={changeSaveData} currentTime={currentTime} />
         <ChInfo frameBack={imgSet.etc.frameChBack} className="ch_info transition">
-          <CharacterState saveData={sData} slotIdx={slotIdx} lang={lang} />
-          <CharacterElement saveData={sData} slotIdx={slotIdx} lang={lang} />
-          <CharacterAnimalSkill saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} lang={lang} />
-          <CharacterSkill saveData={sData} slotIdx={slotIdx} lang={lang} />
-          <CharacterRelation saveData={sData} slotIdx={slotIdx} lang={lang} />
-          <CharacterItems navigate={navigate} saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} lang={lang} />
-          <CharacterApplyState saveData={sData} slotIdx={slotIdx} lang={lang} />
+          <CharacterState saveData={sData} slotIdx={slotIdx} />
+          <CharacterElement saveData={sData} slotIdx={slotIdx} />
+          <CharacterAnimalSkill saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />
+          <CharacterSkill saveData={sData} slotIdx={slotIdx} />
+          <CharacterRelation saveData={sData} slotIdx={slotIdx} />
+          <CharacterItems saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />
+          <CharacterApplyState saveData={sData} slotIdx={slotIdx} />
         </ChInfo>
-        <CharacterItemEnhance saveData={sData} slotIdx={slotIdx} lang={lang} />
-        <CharacterChEnhance saveData={sData} slotIdx={slotIdx} lang={lang} />
+        <CharacterItemEnhance saveData={sData} slotIdx={slotIdx} />
+        <CharacterChEnhance saveData={sData} slotIdx={slotIdx} />
     </ChWrap>
   );
 }

@@ -34,8 +34,6 @@ const ChLineup = ({
   showMode,
   saveData,
   changeSaveData,
-  changePage,
-  navigate,
   selectSave,
   selectLineup,
   useList,

@@ -101,13 +101,26 @@ const Lv = styled(Text)`
 `;
 const ListCh = styled(ChPic)`
   position: absolute;
-  top: 0;
+  ${({usedType}) => usedType === 'battle' ? `
+    left: -10%;
+    top: -10%;
+    width: 120%;
+    height: 120%;
+  ` : `
+    top: 0;
+  `}
   z-index: 4;
 `;
-
 const ListChRing = styled(ChPic)`
   position: absolute;
-  top: 0;
+  ${({usedType}) => usedType === 'battle' ? `
+    left: -5%;
+    top: 21%;
+    width: 115%;
+    height: 115%;
+  ` : `
+    top: 0;
+  `}
   z-index: 3;
 `;
 const ListJobAction = styled.div`
@@ -119,11 +132,26 @@ const ListJobAction = styled.div`
     display: block;
   }
 `;
+const ListJobActionListType = styled.div`
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 20%;
+  font-size: 0;
+  z-index: 2;
+`;
 const ListChJob = styled.span`
   position: relative;
   width: 100%;
   padding-top: 100%;
   pointer-events: none;
+  z-index: 5;
+`;
+const ListChJobListType = styled.span`
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  padding-top: 100%;
   z-index: 5;
 `;
 const ListChActionType = styled.span`
@@ -134,6 +162,20 @@ const ListChActionType = styled.span`
       `position:relative;width:100%;padding-top:100%;`
   }}
   z-index:5;
+`;
+const ListChActionTypeListType = styled.span`
+  display: block;
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  z-index: 5;
+`;
+const StyledIconPic = styled(IconPic)`
+  position: absolute;
+  left: 0;
+  top: 0;
 `;
 const ListElement = styled.div`
   position: relative;
@@ -167,19 +209,29 @@ const ListChFrame = styled(ChPic)`
   top: 0;
   z-index: 5;
 `;
+const ListActionPoint = styled.div`
+  position: absolute;
+  left: 50%;
+  bottom: 5px;
+  transform: translate(-50%, 0);
+  white-space: nowrap;
+  text-shadow: 1px 1px 1px #000;
+  font-size: 1rem;
+  z-index: 6;
+`;
 const ListChStar = styled.span`
   position: absolute;
   left: 0;
-  bottom: 27%;
+  bottom: ${({usedType}) => usedType === 'gameMain' ? '15': '22'}%;
   width: 100%;
   height: 10%;
   z-index: 5;
   text-align: center;
 `;
 const Star = styled(IconPic)`
-  display: inline-block;
-  width: 13%;
-  padding-top: 13%;
+  width: 13% !important;
+  height: 0 !important;
+  padding-top: 13% !important;
 `;
 const ChracterCard = ({
   size,
@@ -191,8 +243,16 @@ const ChracterCard = ({
   noInfo,
   gameSpd,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const context = useContext(AppContext);
+  // const lang = React.useMemo(() => {
+  //   return context.setting.lang;
+  // }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
   // const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const saveCh = React.useMemo(() => {
     return saveCharacter
@@ -203,7 +263,7 @@ const ChracterCard = ({
   }, [saveData, slotIdx, saveCharacter]);
   const chData = React.useMemo(() => {
     return saveData ? gameData.ch[saveCh?.idx] : '';
-  }, [gameData, saveCh]);
+  }, [saveData, gameData, saveCh]);
   const sizeH = React.useMemo(() => equalSize ? size : size * 1.48, [equalSize, size]);
   if (!saveData) { // 새로운 게임
     return (
@@ -217,48 +277,83 @@ const ChracterCard = ({
     if (usedType === 'battle') { //battle 말판
       return (
         <>
-          <ListCh style={{
-            left: '-15%',
-            top: '-15%',
-            width: '130%',
-            height: '130%',
-          }} isThumb={true} pic="ch" idx={chData?.display} />
+          <ListCh usedType={usedType} isThumb={true} pic="ch_s" idx={chData?.display} />
+          <ListChRing usedType={usedType} type="cardBack" pic="card_s" idx={0} />
           <ListElement>
-            <ListChElement type="elementBack" isThumb={true} pic="card" idx={chData?.element} />
-            {saveCh?.lv > 29 && <ListChElement1 isThumb={true} type="elementBack2" pic="card" idx={chData?.element} />}
+            <ListChElement type="elementBack" isThumb={true} pic="card_s" idx={chData?.element} />
+            {saveCh?.lv > 29 && <ListChElement1 isThumb={true} type="elementBack2" pic="card_s" idx={chData?.element} />}
           </ListElement>
           {saveCh?.lv > 49 && <ListChElement2 style={{
             left: '-10%',
             width: '120%',
             height: '120%',
-          }} isThumb={true} wNum={5} hNum={5} pic="cardRing" idx={chData?.element} gameSpd={gameSpd} />}
+          }} isThumb={true} wNum={5} hNum={5} pic="cardRing_s" idx={chData?.element} gameSpd={gameSpd} />}
         </>
       )
     }
     if (usedType === 'conversation') { //battle 시나리오
       return (
         <>
-          <ListChRing isThumb={true} type="cardBack" pic="card" idx={0} />
-          <ListCh isThumb={true} pic="ch" idx={chData?.display} />
+          <ListChRing isThumb={true} type="cardBack" pic="card_s" idx={0} />
+          <ListCh isThumb={true} pic="ch_s" idx={chData?.display} />
         </>
       )
     }
     if (usedType === 'timeline') { //battle 타임라인
       return (
         <>
-          <ListCh isThumb={true} pic="ch" idx={chData?.display} />
+          <ListCh isThumb={true} pic="ch_s" idx={chData?.display} />
           <ListChRing style={{
             borderRadius: '50%',
-          }} isThumb={true} type="cardBack" pic="card" idx={0} />
-          <ListChElement type="elementBack" isThumb={true} pic="card" idx={chData?.element} />
-          {saveCh?.lv > 29 && <ListChElement1 isThumb={true} type="elementBack2" pic="card" idx={chData?.element} />}
+          }} isThumb={true} type="cardBack" pic="card_s" idx={0} />
+          <ListChElement type="elementBack" isThumb={true} pic="card_s" idx={chData?.element} />
+          {saveCh?.lv > 29 && <ListChElement1 isThumb={true} type="elementBack2" pic="card_s" idx={chData?.element} />}
 					<div className="ch_name">{chData?.na1}</div>
         </>
       )
     }
     if (usedType === 'list') { //list 사용
       return (
-        <div>aa</div>
+        <>
+          <ListCh pic="ch" idx={chData.display} />
+          <ListChRing type="cardBack" pic="card" idx={0} />
+          <ListJobActionListType>
+            <ListChJobListType>
+              <IconPic type="job" isAbsolute={true} pic="icon100" idx={saveCh.job} />
+            </ListChJobListType>
+            {saveCh.newActionType.map((data, idx) => {
+              return (
+                <ListChActionTypeListType key={'action'+idx}>
+                  <StyledIconPic type="element" pic="icon100" idx={idx + 1} />
+                </ListChActionTypeListType>
+              )
+            })}
+          </ListJobActionListType>
+          <ListChElement type="elementBack" pic="card" idx={chData.element} />
+          <ListChFrame type="cardBack" pic="card" idx={1} />
+          <ListActionPoint>{`${saveCh.actionPoint} / ${saveCh.actionMax}`}</ListActionPoint>
+        </>
+      )
+    }
+    if (usedType === 'paging') { //paging 사용
+      return (
+        <>
+          <ListCh pic="ch" idx={chData.display} />
+          <ListChRing type="cardBack" pic="card" idx={0} />
+          <ListJobActionListType>
+            <ListChJobListType>
+              <IconPic type="job" isAbsolute={true} pic="icon100" idx={saveCh.job} />
+            </ListChJobListType>
+            {saveCh.newActionType.map((data, idx) => {
+              return (
+                <ListChActionTypeListType key={'action'+idx}>
+                  <StyledIconPic type="element" pic="icon100" idx={idx + 1} />
+                </ListChActionTypeListType>
+              )
+            })}
+          </ListJobActionListType>
+          <ListChFrame type="cardBack" pic="card" idx={1} />
+        </>
       )
     }
     if (usedType === 'thumb') { //thumb 사용
@@ -266,19 +361,19 @@ const ChracterCard = ({
         <>
           {noInfo ? (
             <>
-              <ListCh isThumb={true} pic="ch" idx={chData?.display} />
-              <ListChRing isThumb={true} type="cardBack" pic="card" idx={0} />
-              <ListChElement isThumb={true} ringDisplay={imgSet.ringImg[chData?.element]} className="element" />
-              <ListChFrame type="cardBack" pic="card" idx={1} />
+              <ListCh isThumb={true} pic="ch_s" idx={chData?.display} />
+              <ListChRing isThumb={true} type="cardBack" pic="card_s" idx={0} />
+              <ListChElement type="elementBack" isThumb={true} pic="card_s" idx={chData?.element} />
+              <ListChFrame type="cardBack" pic="card_s" idx={1} />
             </>
           ) : (
             <>
               <ListNameLv isThumb={true} cardLv={imgSet.etc.imgCardLv} backColor={gameData.chGradeColor[saveCh?.grade]}>{saveCh?.lv}</ListNameLv>
-              <ListCh isThumb={true} pic="ch" idx={chData?.display} />
-              <ListChRing isThumb={true} type="cardBack" pic="card" idx={0} />
-              <ListChElement type="elementBack" isThumb={true} pic="card" idx={chData?.element} />
-              {saveCh?.lv > 29 && <ListChElement1 isThumb={true} type="elementBack2" pic="card" idx={chData?.element} />}
-              {saveCh?.lv > 49 && <ListChElement2 isThumb={true} wNum={5} hNum={5} pic="cardRing" idx={chData?.element} gameSpd={gameSpd} />}
+              <ListCh isThumb={true} pic="ch_s" idx={chData?.display} />
+              <ListChRing isThumb={true} type="cardBack" pic="card_s" idx={0} />
+              <ListChElement type="elementBack" isThumb={true} pic="card_s" idx={chData?.element} />
+              {saveCh?.lv > 29 && <ListChElement1 isThumb={true} type="elementBack2" pic="card_s" idx={chData?.element} />}
+              {saveCh?.lv > 49 && <ListChElement2 isThumb={true} wNum={5} hNum={5} pic="cardRing_s" idx={chData?.element} gameSpd={gameSpd} />}
               {saveCh?.newActionType.map((data, idx) => {
                 return (
                   <ListChActionType className="list_action_type" isThumb={true} key={'action'+idx}>
@@ -286,7 +381,7 @@ const ChracterCard = ({
                   </ListChActionType>
                 )
               })}
-              <ListChFrame isThumb={true} type="cardBack" pic="card" idx={1} />
+              <ListChFrame absoluteSize={true} type="cardBack" pic="card_s" idx={1} />
             </>
           )}
         </>
@@ -339,7 +434,7 @@ const ChracterCard = ({
           <ListChElement type="elementBack" pic="card" idx={chData?.element} />
           {saveCh?.lv > 29 && <ListChElement1 type="elementBack2" pic="card" idx={chData?.element} />}
           {saveCh?.lv > 49 && <ListChElement2 wNum={5} hNum={5} pic="cardRing" idx={chData?.element} gameSpd={gameSpd} />}
-          <ListChStar className="star">
+          <ListChStar>
             {starArr.map((star, idx) => {
               return <Star idx={idx} type="star" pic="icon100" key={`start${idx}`} />;
             })}
@@ -348,14 +443,46 @@ const ChracterCard = ({
         </ChCard>
       )
     }
+    if (usedType === 'gameMain') { //gameMain 카드 묶음
+      const starArr = Array.from({length: saveCh?.grade}, () => '');
+      return (
+        <CardContainer size={size} sizeH={sizeH}>
+          <ChCard size={size} className="ch_detail transition">
+            <ListCh pic="ch_s" idx={chData?.display} />
+            <ListChRing type="cardBack" pic="card_s" idx={0} />
+            <ListJobAction>
+              <ListChJob className="job">
+                <IconPic type="job" isAbsolute={true} pic="icon100" idx={saveCh?.job} />
+              </ListChJob>
+              {saveCh?.newActionType?.map((data, idx) => {
+                return (
+                  <ListChActionType key={'action'+idx} className="action_type">
+                    <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={idx + 1} />
+                  </ListChActionType>
+                )
+              })}
+            </ListJobAction>
+            <ListChElement type="elementBack" pic="card_s" idx={chData?.element} />
+            {saveCh?.lv > 29 && <ListChElement1 type="elementBack2" pic="card_s" idx={chData?.element} />}
+            {saveCh?.lv > 49 && <ListChElement2 wNum={5} hNum={5} pic="cardRing_s" idx={chData?.element} gameSpd={gameSpd} />}
+            <ListChStar usedType="gameMain">
+              {starArr.map((star, idx) => {
+                return <Star idx={idx} type="star" pic="icon100" key={`start${idx}`} />;
+              })}
+            </ListChStar>
+            <ListChFrame type="cardBack" pic="card_s" idx={1} />
+          </ChCard>
+        </CardContainer>
+      )
+    }
     if (slotIdx !== '') {
       const starArr = Array.from({length: saveCh?.grade}, () => ''); 
       return (
         size ? (
           <CardContainer size={size} sizeH={sizeH}>
             <ChCard size={size} className="ch_detail transition">
-              <ListCh pic="ch" idx={chData?.display} />
-              <ListChRing type="cardBack" pic="card" idx={0} />
+              <ListCh pic="ch_s" idx={chData?.display} />
+              <ListChRing type="cardBack" pic="card_s" idx={0} />
               <ListJobAction>
                 <ListChJob className="job">
                   <IconPic type="job" isAbsolute={true} pic="icon100" idx={saveCh?.job} />
@@ -368,15 +495,15 @@ const ChracterCard = ({
                   )
                 })}
               </ListJobAction>
-              <ListChElement type="elementBack" pic="card" idx={chData?.element} />
-              {saveCh?.lv > 29 && <ListChElement1 type="elementBack2" pic="card" idx={chData?.element} />}
-              {saveCh?.lv > 49 && <ListChElement2 wNum={5} hNum={5} pic="cardRing" idx={chData?.element} gameSpd={gameSpd} />}
-              <ListChStar className="star">
+              <ListChElement type="elementBack" pic="card_s" idx={chData?.element} />
+              {saveCh?.lv > 29 && <ListChElement1 type="elementBack2" pic="card_s" idx={chData?.element} />}
+              {saveCh?.lv > 49 && <ListChElement2 wNum={5} hNum={5} pic="cardRing_s" idx={chData?.element} gameSpd={gameSpd} />}
+              <ListChStar>
                 {starArr.map((star, idx) => {
                   return <Star idx={idx} type="star" pic="icon100" key={`start${idx}`} />;
                 })}
               </ListChStar>
-              <ListChFrame type="cardBack" pic="card" idx={1} />
+              <ListChFrame type="cardBack" pic="card_s" idx={1} />
             </ChCard>
           </CardContainer>
         ) : (
@@ -404,7 +531,7 @@ const ChracterCard = ({
             <ListChElement type="elementBack" pic="card" idx={chData?.element} />
             {saveCh?.lv > 29 && <ListChElement1 type="elementBack2" pic="card" idx={chData?.element} />}
             {saveCh?.lv > 49 && <ListChElement2 wNum={5} hNum={5} pic="cardRing" idx={chData?.element} gameSpd={gameSpd} />}
-            <ListChStar className="star">
+            <ListChStar>
               {starArr.map((star, idx) => {
                 return <Star idx={idx} type="star" pic="icon100" key={`start${idx}`} />;
               })}

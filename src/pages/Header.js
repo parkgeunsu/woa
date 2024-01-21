@@ -2,6 +2,7 @@ import { AppContext } from 'App';
 import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import { useContext, useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -50,11 +51,10 @@ const HeaderList = styled.li`
   &.menu li:last-of-type{margin:0;}
 `;
 const Header = ({
-  navigate,
   saveData,
-  changePage,
-  page,
 }) => {
+  const navigate = useNavigate();
+  const location = useLocation().pathname.split("/")[1];
   const [minusMoney, setMinusMoney] = useState('');
   const [minusDia, setMinusDia] = useState('');
   const [moneyColor, setMoneyColor] = useState('');
@@ -102,10 +102,10 @@ const Header = ({
     <>
       <Wrapper bar={imgSet.etc.bar0} frameMain={imgSet.etc.frameMain}>
         <HeaderGroup>
-          {(page !== 'gameMain' && page !== 'moveEvent') && 
+          {(location !== 'gameMain' && location !== 'moveEvent') && 
             <HeaderList className="back">
               <IconPic className="ico" type="commonBtn" pic="icon100" idx={0} onClick={() => {
-                util.historyBack(navigate, changePage);
+                util.historyBack(navigate);
               }}></IconPic>
             </HeaderList>
           }

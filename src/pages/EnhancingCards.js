@@ -7,7 +7,7 @@ import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import TabMenu from 'components/TabMenu';
 import 'css/itemEnhancement.css';
-import { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const Img = styled.img.attrs(
@@ -304,12 +304,20 @@ const setPercent = (item, tool) => {
 const EnhancingCards = ({
 	saveData,
 	changeSaveData,
-	gameSpd,
-	lang,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
-	const gameItem = gameData.items;
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
+  const gameItem = React.useMemo(() => {
+    return gameData.items;
+  }, [gameData]);
   const [modalOn, setModalOn] = useState(false);
 	const [modalInfo, setModalInfo] = useState({});
   const [modalType] = useState('confirm');
@@ -407,7 +415,7 @@ const EnhancingCards = ({
   return (
 		<>
 			<ItemEnWrap className="wrap" backImg={imgSet.back[2]} >
-				<TabMenu list={itemEnList} selectTab={selectTab} setSelectTab={setSelectTab} lang={lang} className="transition" onClick={(idx) => {
+				<TabMenu list={itemEnList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" onClick={(idx) => {
 					if (idx === 1) {
 						setUpgradeOn(false);
 						setSelectItem3({save:{},select:'',game:{}});
@@ -893,7 +901,7 @@ const EnhancingCards = ({
 				</div>
 			</ItemEnWrap>
 			<ModalContainer>
-				{modalOn && <Modal fn={modalData.fn} payment={modalData.payment} imgSet={imgSet} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} lang={lang} onClose={() => {
+				{modalOn && <Modal fn={modalData.fn} payment={modalData.payment} imgSet={imgSet} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {
 					setModalOn(false);
 				}} gameData={gameData}/>}
 			</ModalContainer>

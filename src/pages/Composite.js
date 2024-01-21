@@ -10,7 +10,7 @@ import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import TabMenu from 'components/TabMenu';
 import 'css/combineItem.css';
-import { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const CombineWrap = styled.div`
@@ -69,12 +69,20 @@ const getTotalEff = (saveItems, gameData, socketEff) => {
 const Composite = ({
 	saveData,
 	changeSaveData,
-	gameSpd,
-	lang,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
-	const gameItem = gameData.items;
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
+  const gameItem = React.useMemo(() => {
+    return gameData.items;
+  }, [gameData]);
   const [modalOn, setModalOn] = useState(false);
 	const [modalInfo, setModalInfo] = useState({});
   const [modalType] = useState('confirm');
@@ -281,7 +289,7 @@ const Composite = ({
 					</div>
 				</div>
 				<div className="combineItem_bottom">
-					<TabMenu list={combineList} selectTab={selectTab} setSelectTab={setSelectTab} lang={lang} className="transition" />
+					<TabMenu list={combineList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" />
 					<div className="combineItem_area num6 scroll-y">
 						{item[combineList[selectTab].keyName] && item[combineList[selectTab].keyName].map((data, idx) => {
 							const cate = combineList[selectTab].keyName;
@@ -437,10 +445,10 @@ const Composite = ({
 				</div>
 			</CombineWrap>
 			<PopupContainer>
-        {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} lang={lang} />}
+        {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
       </PopupContainer>
 			<ModalContainer>
-				{modalOn && <Modal fn={() => {}} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} lang={lang} onClose={() => {
+				{modalOn && <Modal fn={() => {}} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {
 					setModalOn(false);
 				}} gameData={gameData}/>}
 			</ModalContainer>

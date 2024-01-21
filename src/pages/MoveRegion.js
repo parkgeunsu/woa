@@ -6,17 +6,25 @@ import { Select } from 'components/Input';
 import { util } from 'components/Libs';
 import ZoomPinch from 'components/ZoomPinch';
 import CharacterCard from 'pages/CharacterCard';
-import { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 
 const Wrap = styled(FlexBox)`
   position: absolute;
   left: 0;
-  top: ${({moveRegion}) => moveRegion ? '0%' : '-100%'};
+  ${({gameMode}) => {
+    return gameMode ? `
+      opacity: 1;
+      pointer-events: unset;
+    ` : `
+      opacity: 0;
+      pointer-events: none;
+    `;
+  }};
   width: 100%;
-  height: ${({btnSize}) => `calc(100% - ${btnSize}px)`};
-  transition: top 1s;
+  height: calc(100% - 40px);
+  transition: opacity 1s;
   z-index: 10;
   background: linear-gradient(transparent 0%, rgba(0,0,0,.8) 20%, rgba(0,0,0,.8) 80%, transparent 100%);
 `;
@@ -118,23 +126,27 @@ const EntryCards = styled.div`
 const MoveRegion = ({
   gameMode,
   saveData,
-  navigate,
-  changePage,
-  lang,
-  btnSize,
   stay,
   selectMoveRegion,
   setSelectMoveRegion,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
   const stayIdx = useRef(util.getCountryToIdx(stay));
   const currentCountryIdx = useRef(0);
   const [countryList, setCountryList] = useState([]); //국가 선택 글자
   const [entry, setEntry] = useState(['',0,'','','','','','','','']);
   useEffect(() => {
     setCountryList(
-      gameData.country.map((data) => {
+      gameData.country?.map((data) => {
         return gameData.msg.regions[data.name][lang];
       })
     );
@@ -144,13 +156,13 @@ const MoveRegion = ({
     }
   }, [gameMode]);
   return (
-    <Wrap moveRegion={gameMode === 'moveRegion'} btnSize={btnSize} direction="column">
+    <Wrap gameMode={gameMode === 'moveRegion'} direction="column">
       <MarpArea frame={imgSet.etc.frameChBack}>
         <ZoomPinch maxScale={4} mapPos={gameData.country[selectMoveRegion]?.mapPos} onEnd={() => {
           setSelectMoveRegion('');
         }}>
           <WorldMap back={imgSet.map.worldMap}>
-            {gameData.country.map((countryData, countryIdx) => {
+            {gameData.country?.map((countryData, countryIdx) => {
               return (
                 <div key={`mapPiece${countryIdx}`}>
                   <MapPiece select={selectMoveRegion === countryIdx} back={imgSet.map[`map${countryIdx}`]} />

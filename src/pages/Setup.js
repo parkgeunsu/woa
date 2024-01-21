@@ -3,7 +3,7 @@ import { FlexBox } from 'components/Container';
 import { RadioBox } from 'components/Input';
 import { util } from 'components/Libs';
 import { ListItem, ListWrap } from 'components/List';
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled.div`
@@ -36,24 +36,27 @@ const langToIndex = (lang) => {
   }
 }
 const Setup = ({
-  lang,
   setLang,
-  gameSpd,
   setSpeed,
-  bgm,
   setBgm,
-  efm,
   setEfm,
-  res,
   setRes,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const context = useContext(AppContext);
+  const { lang, speed, bgm, efm, resolution } = React.useMemo(() => {
+    return context.setting;
+  }, [context]);
+  // const imgSet = React.useMemo(() => {
+  //   return context.images;
+  // }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
   const [langageValue, setLanguageValue] = useState(langToIndex(lang));
   const [soundValue, setSoundValue] = useState(bgm ? 0 : 1);
   const [effectValue, setEffectValue] = useState(efm ? 0 : 1);
-  const [resolutionValue, setResolutionValue] = useState(res);
-  const [speedValue, setSpeedValue] = useState(gameSpd);
+  const [resolutionValue, setResolutionValue] = useState(resolution);
+  const [speedValue, setSpeedValue] = useState(speed);
   const [selectOnOff, setSelectOnOff] = useState([]); //onoff형태 글자
   const [selectQuality, setSelectQuality] = useState([]); //해상도형태 글자
   const [selectLanguage, setSelectLanguage] = useState([]); //언어형태 글자
@@ -78,7 +81,7 @@ const Setup = ({
       gameData.msg.setup['speed2'][lang],
       gameData.msg.setup['speed3'][lang],
     ]);
-  }, [lang]);
+  }, [gameData, lang]);
   const changeLanguage = (v) => {
     setLang(langToIndex(v));
     setLanguageValue(v);

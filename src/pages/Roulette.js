@@ -8,6 +8,7 @@ import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import ChLineup from 'pages/ChLineup';
 import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 const BASE_ENEMY_NUM = 3;
 const makeAnimalIcon = (color) => {
@@ -55,10 +56,18 @@ const AnimalIcon = ({
 const Wrap = styled(FlexBox)`
   position: absolute;
   left: 0;
-  top: ${({roulette}) => roulette ? '0%' : '-100%'};
+  ${({gameMode}) => {
+    return gameMode ? `
+      opacity: 1;
+      pointer-events: unset;
+    ` : `
+      opacity: 0;
+      pointer-events: none;
+    `;
+  }};
   width: 100%;
-  height: ${({btnSize}) => `calc(100% - ${btnSize}px)`};
-  transition: top 1s;
+  height: calc(100% - 40px);
+  transition: opacity 1s;
   z-index: 10;
   background: linear-gradient(transparent 0%, rgba(0,0,0,.8) 20%, rgba(0,0,0,.8) 80%, transparent 100%);
 `;
@@ -152,10 +161,6 @@ const idxToText = (idx) => {
 const Roulette = ({
   gameMode,
   saveData,
-  navigate,
-  changePage,
-  lang,
-  btnSize,
   rouletteState,
   setRouletteState,
   selectRoulettePos,
@@ -164,8 +169,17 @@ const Roulette = ({
   rouletteEnemy,
   setRouletteEnemy,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const navigate = useNavigate();
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupInfo, setPopupInfo] = useState({});
@@ -190,7 +204,7 @@ const Roulette = ({
   }, [gameMode]);
   return (
     <>
-      <Wrap roulette={gameMode === 'roulette'} btnSize={btnSize} direction="column">
+      <Wrap gameMode={gameMode === 'roulette'} direction="column">
         <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
           setPopupOn(true);
           setPopupInfo({
@@ -215,10 +229,9 @@ const Roulette = ({
         </SpinContainer>
         <LineupContainer>
           <LineupGroup>
-            <ChLineup showMode={true} saveData={saveData} changePage={changePage} navigate={navigate} useList={saveData?.lineup?.save_slot[saveData?.lineup?.select].entry} selectLineup={saveData?.lineup?.save_slot[saveData?.lineup?.select].no} onClick={() => {
+            <ChLineup showMode={true} saveData={saveData} useList={saveData?.lineup?.save_slot[saveData?.lineup?.select].entry} selectLineup={saveData?.lineup?.save_slot[saveData?.lineup?.select].no} onClick={() => {
               util.saveHistory(() => {
-                changePage('cardPlacement');
-                navigate('cardPlacement');
+                navigate('../cardPlacement');
               });//히스토리 저장
             }} />
           </LineupGroup>
@@ -235,7 +248,7 @@ const Roulette = ({
         </LineupContainer>
       </Wrap>
       <PopupContainer>
-        {popupOn && <Popup type={'guide'} dataObj={popupInfo} showPopup={setPopupOn} lang={lang} />}
+        {popupOn && <Popup type={'guide'} dataObj={popupInfo} showPopup={setPopupOn} />}
       </PopupContainer>
     </>
   );

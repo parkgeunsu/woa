@@ -8,6 +8,7 @@ import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import CharacterCard from 'pages/CharacterCard';
 import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
@@ -42,29 +43,30 @@ const ConFirmArea = styled.div`
   width: 100%;
   text-align: right;
 `;
-const startCardArr = [
-  [6],
-  [5,3,2],
-  [4,4,3,2],
-];
 const StartGame = ({
   saveData,
   changeSaveData,
-  changePage,
-  navigate,
-  lang,
   setLang,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const navigate = useNavigate();
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
-  const [msgOn, setMsgOn] = useState(false);
-  const [msg, setMsg] = useState("");
   const selectCard = React.useMemo(() => {
     return paramData?.start?.card;
   }, [paramData]);
+  const [msgOn, setMsgOn] = useState(false);
+  const [msg, setMsg] = useState("");
   const [selectGradeArr, setSelectGradeArr] = useState([]); //시작 카드 유형 배열
   const [nameID, setNameID] = useState(saveData.info?.id ? saveData.info.id : ''); //덱 이름
   const [selectList, setSelectList] = useState([]); //시작 카드 유형 글자
@@ -96,7 +98,7 @@ const StartGame = ({
       gameData.msg.language['english'][lang],
       gameData.msg.language['japanese'][lang],
     ]);
-  }, [lang]);
+  }, [gameData, lang]);
   return (
     <>
       <Wrap direction="column">
@@ -118,7 +120,7 @@ const StartGame = ({
             <StyledListItem title={gameData.msg.title['startingCard'][lang]}>
               <Select selectIdx={selectCardTypeIdx} setSelectIdx={setSelectCardTypeIdx} onClick={(idx) => {
                 setSelectCardTypeIdx(idx);
-                setSelectGradeArr(startCardArr[idx]);
+                setSelectGradeArr(gameData.startCardArr[idx]);
               }} selectOption={selectList} title={gameData.msg.title['startingCardType'][lang]}></Select>
               <CardBox onClick={() => {
                 util.saveData('historyParam', {
@@ -131,8 +133,7 @@ const StartGame = ({
                     country: selectCountryIdx,
                   }
                 });
-                navigate('recruitment');
-                changePage('recruitment');
+                navigate('../recruitment');
                 // changePage('recruitment', {begin: true, cardArr: selectGradeArr, selectType: selectCardTypeIdx, language: selectLanguageIdx, country: selectCountryIdx});
                 const sData = {...saveData}
                 sData.ch = [];
@@ -207,6 +208,7 @@ const StartGame = ({
                 return;
               }
               if (Object.keys(saveData.ch).length === 0) {
+                console.log(selectCard)
 								setMsgOn(true);
                 setMsg(gameData.msg.sentence['selectCards'][lang]);
                 return;
@@ -217,8 +219,8 @@ const StartGame = ({
                 return;
               }
               util.saveData('continueGame', true);
-              navigate('gameMain');
-              changePage('gameMain', {aa: 1, bb: 2});
+              navigate('../gameMain');
+              // changePage('gameMain', {aa: 1, bb: 2});
             }}>{gameData.msg.button['finalize'][lang]}</Button>
           </ConFirmArea>
         </Scroll>

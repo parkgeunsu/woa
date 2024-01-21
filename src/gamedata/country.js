@@ -24,7 +24,7 @@ export const country = [
     mapPos:[-317,223],
   },
   {
-    name:'SaudiArabia',
+    name:'saudiArabia',
     distancePosition:[17,8],
     flagPos:[[180, 86],[193, 60]],
     mapPos:[-125,106],

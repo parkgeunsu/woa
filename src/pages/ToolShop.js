@@ -8,7 +8,7 @@ import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import TabMenu from 'components/TabMenu';
 import 'css/shop.css';
-import { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const Img = styled.img.attrs(
@@ -54,12 +54,20 @@ const ToolShop = ({
 	cityIdx,
 	saveData,
 	changeSaveData,
-	gameSpd,
-	lang,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
-	const gameItem = gameData.items;
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
+  const gameItem = React.useMemo(() => {
+    return gameData.items;
+  }, [gameData]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupInfo, setPopupInfo] = useState({});
   const [msgOn, setMsgOn] = useState(false);
@@ -98,7 +106,7 @@ const ToolShop = ({
 			<ShopWrap className="wrap" backImg={imgSet.back[2]} >
 				<div className="shop_top">
 					<div className="shop_top_left">
-						<TabMenu direction="vertical" list={shopList} selectTab={selectTab} setSelectTab={setSelectTab} lang={lang} className="transition" />
+						<TabMenu direction="vertical" list={shopList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" />
 						{Object.keys(actionCh).length !== 0 && (<div ref={actionRef} className={`ch_select_area ${actionCh.idx ? 'g' + saveData.ch[actionCh.idx].grade : ''}`} onClick={() => {
 								setPopupOn(true);
 							}}>
@@ -855,7 +863,7 @@ const ToolShop = ({
 				</div>
 			</ShopWrap>
 			<PopupContainer>
-        {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} lang={lang} />}
+        {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
       </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}

@@ -1,5 +1,7 @@
+import { AppContext } from 'App';
 import { Prices } from 'components/Components';
 import ModalContainer from 'components/ModalContainer';
+import React, { useContext } from 'react';
 
 const buttonEvent = (dataInfo, btInfo, fn, saveData, gameData, changeSaveData, lang) => {
 	switch(btInfo.action) {
@@ -58,9 +60,12 @@ const Modal = ({
 	saveData,
 	gameData,
 	changeSaveData,
-	lang,
 	fn
 }) => {
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
 	return (
 		<ModalContainer>
 			<div className="modal transition">

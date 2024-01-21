@@ -20,10 +20,17 @@ const Wrap = styled(FlexBox)`
 const CharacterApplyState = ({
   saveData,
   slotIdx,
-  lang,
 }) => {
-  // const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  // const imgSet = React.useMemo(() => {
+  //   return context.images;
+  // }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
@@ -52,7 +59,7 @@ const CharacterApplyState = ({
         </InfoGroup>
       </Wrap>
       <PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} lang={lang} />}
+        {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} />}
       </PopupContainer>
     </>
   );

@@ -55,22 +55,25 @@ const CardBack = styled.div`
   background-size:100%;
 `;
 const GameMain = ({
-  page,
-  changePage,
   saveData,
   changeSaveData,
-  navigate,
   cityIdx,
   gameMode,
   setGameMode,
-  lang,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
   const sData = React.useMemo(() => {
     return Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData;
   }, [saveData]);
-  const cardDeck = React.useMemo(() => sData.ch, [sData.ch]);
   const stay = React.useMemo(() => sData.info.stay, [sData]);
   //roulette
   const [rouletteState, setRouletteState] = useState([]);
@@ -103,15 +106,15 @@ const GameMain = ({
   const [selectMoveRegion, setSelectMoveRegion] = useState('');
   return (
     <Wrap direction="column">
-      <QuickMenu type="main" changePage={changePage} gameMode={gameMode} navigate={navigate} lang={lang} />
+      <QuickMenu type="main" gameMode={gameMode} />
       <CountryTitle alignItems="center" back={imgSet.back[8]}>
         <StyledText code="t7" color="shadow">{gameData.msg.regions[stay][lang]}</StyledText>
       </CountryTitle>
-      <Roulette gameMode={gameMode} saveData={sData} navigate={navigate} changePage={changePage} lang={lang} rouletteState={rouletteState} setRouletteState={setRouletteState} selectRoulettePos={selectRoulettePos} setSelectRoulettePos={setSelectRoulettePos} rouletteArr={rouletteArr.current} rouletteEnemy={rouletteEnemy} setRouletteEnemy={setRouletteEnemy} btnSize={40} />
-      <Scenario gameMode={gameMode} saveData={sData} changeSaveData={changeSaveData} navigate={navigate} changePage={changePage} lang={lang} stay={stay} selectScenario={selectScenario} setSelectScenario={setSelectScenario} btnSize={40} />
-      <MoveRegion gameMode={gameMode} saveData={sData} navigate={navigate} changePage={changePage} lang={lang} btnSize={40} stay={stay} selectMoveRegion={selectMoveRegion} setSelectMoveRegion={setSelectMoveRegion} />
+      <Roulette gameMode={gameMode} saveData={sData} rouletteState={rouletteState} setRouletteState={setRouletteState} selectRoulettePos={selectRoulettePos} setSelectRoulettePos={setSelectRoulettePos} rouletteArr={rouletteArr.current} rouletteEnemy={rouletteEnemy} setRouletteEnemy={setRouletteEnemy} />
+      <Scenario gameMode={gameMode} saveData={sData} changeSaveData={changeSaveData} stay={stay} selectScenario={selectScenario} setSelectScenario={setSelectScenario} />
+      <MoveRegion gameMode={gameMode} saveData={sData} stay={stay} selectMoveRegion={selectMoveRegion} setSelectMoveRegion={setSelectMoveRegion} />
       <CardGroup>
-        {cardDeck?.map((cardData, idx) => {
+        {sData.ch?.map((cardData, idx) => {
           const shadowColor = gameData.chGradeColor[cardData.grade];
           return (
             <Cards shadow={shadowColor} idx={idx} key={`card${idx}`} onTouchStart={(e) => {
@@ -121,13 +124,13 @@ const GameMain = ({
             }} onTouchEnd={() => {
 
             }}>
-              <CharacterCard size="90" equalSize={false} saveData={sData} slotIdx={idx}/>
+              <CharacterCard usedType="gameMain" size="90" equalSize={false} saveData={sData} slotIdx={idx} />
               <CardBack cardBack={imgSet.etc.imgCardBack} />
             </Cards>
           );
         })}
       </CardGroup>
-      <GameMainFooter saveData={sData} changePage={changePage} navigate={navigate} gameMode={gameMode} setGameMode={setGameMode} lang={lang} stay={stay} rouletteState={rouletteState} setRouletteState={setRouletteState} selectRoulettePos={selectRoulettePos} setSelectRoulettePos={setSelectRoulettePos} rouletteArr={rouletteArr.current} rouletteEnemy={rouletteEnemy} setRouletteEnemy={setRouletteEnemy} selectScenario={selectScenario} selectMoveRegion={selectMoveRegion} />
+      <GameMainFooter saveData={sData} gameMode={gameMode} setGameMode={setGameMode} stay={stay} rouletteState={rouletteState} setRouletteState={setRouletteState} selectRoulettePos={selectRoulettePos} setSelectRoulettePos={setSelectRoulettePos} rouletteArr={rouletteArr.current} rouletteEnemy={rouletteEnemy} setRouletteEnemy={setRouletteEnemy} selectScenario={selectScenario} selectMoveRegion={selectMoveRegion} />
     </Wrap>
   );
 };

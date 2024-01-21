@@ -9,6 +9,7 @@ import ModalContainer from 'components/ModalContainer';
 import 'css/gacha.css';
 import CharacterCard from 'pages/CharacterCard';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Img = styled.img.attrs(
@@ -260,12 +261,18 @@ const openCard = (cardList, cardIdx) => {
 const Gacha = ({
 	saveData,
 	changeSaveData,
-	changePage,
-	navigate,
-	lang,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const navigate = useNavigate();
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
@@ -332,7 +339,7 @@ const Gacha = ({
 				});
 			}, gachaIntervalTime + 2500);
 		}
-	}, [gachaMode]);
+	}, [gachaMode, paramData]);
 	useEffect(() => {
 		if (Object.keys(saveData).length > 0) {
 			if (paramData.recruitment.begin) {
@@ -349,14 +356,13 @@ const Gacha = ({
 			}
 		} else {
 			setTimeout(() => {
-				navigate('/');
-				changePage("main");
+				navigate('../');
 			});
 		}
 		return () => {
 			setTime.current = null;
 		}
-	}, []);
+	}, [gameData, paramData]);
   const [modalOn, setModalOn] = useState(false);
 	const [modalInfo, setModalInfo] = useState({});
   const [modalType, setModalType] = useState();
@@ -630,8 +636,7 @@ const Gacha = ({
 									country: paramData.recruitment.country
 								}
 							});
-							navigate('start');
-							changePage('start');
+							navigate('../start');
 						}}>{gameData.msg.button['finalize'][lang]}</Button>
 					</GachaSubmitGroup>}
 					<div className="gacha_event_area" ref={eventRef} onClick={() => {
@@ -650,7 +655,7 @@ const Gacha = ({
 						infoRef.current.classList.remove('on');
 					}} className="gacha_info" borderImg={imgSet.etc.frameChBack}>
 						<div className="gacha_ch_card">
-							<Img imgurl={imgSet.etc.imgRing} />
+							<Img imgurl={imgSet.images.transparent800} />
 							<CharacterCard usedType="gacha" saveData={saveData} slotIdx={infoIdx} />
 							{/* <ul className="ch_detail">
 								<CardLvName className="gacha_name_lv" cardLv={imgSet.etc.imgCardLv}>
@@ -731,7 +736,7 @@ const Gacha = ({
 				)}
 			</GachaWrap>
 			<ModalContainer>
-				{modalOn && <Modal fn={changeGachaMode} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} lang={lang} onClose={() => {
+				{modalOn && <Modal fn={changeGachaMode} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {
 					setModalOn(false);
 				}} gameData={gameData}/>}
 			</ModalContainer>

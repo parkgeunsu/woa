@@ -1,6 +1,6 @@
 import { AppContext } from 'App';
-import ChListCard from 'components/ChListCard';
 import { util } from 'components/Libs';
+import CharacterCard from 'pages/CharacterCard';
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
@@ -28,8 +28,19 @@ const ChracterPaging = ({
   slotIdx,
   changeChSlot,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const context = useContext(AppContext);
+  // const lang = React.useMemo(() => {
+  //   return context.setting.lang;
+  // }, [context]);
+  // const imgSet = React.useMemo(() => {
+  //   return context.images;
+  // }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
+  const sData = React.useMemo(() => {
+    return Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData;
+  }, [saveData]);
   const cardWidth = React.useMemo(() => window.innerWidth * 0.1, []);
 
   //const timerRef = useRef(null); //시간계산
@@ -52,10 +63,8 @@ const ChracterPaging = ({
     <div ref={scrollMove} className={`ch_list scroll-x paging`}>
       <ChListUl chSize={cardWidth} chLength={chLength}>
         {saveData.ch && saveData.ch.map((data, idx) => {
-          const saveCh = saveData.ch[idx];
-          const chData = gameData.ch[saveCh.idx];
           return (
-            <li className={`g${saveCh.grade} ${slotIdx === idx ? 'on' : ''}`} key={idx} onClick={() => {
+            <li className={`g${data.grade} ${slotIdx === idx ? 'on' : ''}`} key={idx} onClick={() => {
               util.saveData('historyParam', {
                 ...util.loadData('historyParam'),
                 cards: {
@@ -64,7 +73,7 @@ const ChracterPaging = ({
               });
               changeChSlot(idx);
             }}>
-              <ChListCard type="paging" saveCh={saveCh} chData={chData} />
+              <CharacterCard usedType="paging" saveData={sData} saveCharacter={data} />
             </li>
           )
         })}

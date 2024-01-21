@@ -67,17 +67,15 @@ export const util = { //this.loadImage();
       callback && callback();
     }, 100);
   },
-  historyBack: (navigate, changePage) => {
+  historyBack: (navigate) => {
     const history = util.loadData('history');
-    if (history === undefined || history.length === 0 || history[0] === '') {
+    if (history === null || history === undefined || history.length === 0 || history[0] === '') {
       navigate('/');
-      changePage("main");
     } else {
-      navigate(history[0]);
-      changePage(history[0]);
+      navigate(`../${history[0]}`);
+      history.shift();//첫 history 삭제
+      util.saveData('history', history);
     }
-    history.shift();//첫 history 삭제
-    util.saveData('history', history);
   },
   getEnemyState: (enemyData, gameData) => {
     const stateArr = gameData.stateName;
@@ -428,7 +426,7 @@ export const util = { //this.loadImage();
         effNum[idx] = [[], []];
         effNum[idx][0] = effData;
         effNum[idx][1] = effData * ((ch['bSt' + idx] + ch['iSt' + idx]) / 100);
-        if(effData === NaN) {
+        if(effData === isNaN()) {
           console.log('pgs');
         }
       }
@@ -1020,7 +1018,8 @@ export const util = { //this.loadImage();
         }
         break;
       case 23: //자신
-          num = [n];
+        num = [n];
+        break;
       default:
         break;
     }
@@ -1229,7 +1228,7 @@ export const util = { //this.loadImage();
       case 3:
         return 'mongolia';
       case 4:
-        return 'SaudiArabia';
+        return 'saudiArabia';
       case 5:
         return 'egypt';
       case 6:
@@ -1700,6 +1699,7 @@ export const util = { //this.loadImage();
           if (data.idx === dataObj.data.saveItemData.idx) {
             overlapIdx = idx;
           }
+          return idx;
         });
         if (typeof overlapIdx === 'number') { //같은 상품이 있으면
           sData.ship[dataObj.data.type.split('ship')[1]].loadedItem[overlapIdx].num += dataObj.data.num;
@@ -1804,6 +1804,7 @@ export const util = { //this.loadImage();
       case 'menu':
       case 'enemies':
       case 'elementBack':
+      case 'land':
         return 0;
       case 'element':
       case 'lv':
@@ -1831,13 +1832,18 @@ export const util = { //this.loadImage();
       case 'animalType':
         return [10, 3];
       case 'card':
+      case 'card_s':
         return [10, 6];
       case 'cardRing':
+      case 'cardRing_s':
         return [5, 5];
       case 'ch':
+      case 'ch_s':
         return [10, 6];
       case 'icon100':
         return [10, 20];
+      case 'icon150':
+        return [10, 10];
       case 'icon200':
         return [10, 10];
       case 'itemEtc':

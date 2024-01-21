@@ -7,6 +7,7 @@ import 'css/battle.css';
 import 'css/battleAnimation.css';
 import CharacterCard from 'pages/CharacterCard';
 import React, { useCallback, useContext, useLayoutEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const TeamIcon = styled.div`
@@ -19,28 +20,27 @@ const TeamIcon = styled.div`
 	transition: all 0.5s;
 `;
 const BattleHeader = styled.div`
+	display: flex;
+	height: 50px;
 	width: 100%;
-  li.back .ico{background-image:url(${({ iconBack }) => iconBack});}
+`;
+const BackButton = styled.div`
+	position:relative;height:100%;padding:0 10px;
+	.ico{display:inline-block;width:40px;height:40px;}
 `;
 const BattleWarp = styled.div`
+	position: relative;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	overflow: hidden;
+	height: calc(100% - 50px);
 	background:url(${({backImg}) => backImg});background-size:cover;
 `;
 const BattleArea = styled.div`
-	height:${({mode}) => {
-		if (mode === "order" || mode === "area") {
-			return "calc(100% - 50px)";
-		} else {
-			return "100%";
-		}
-	}};
+	height: calc(100% - 50px);
 	.units_enemy, .units_ally, .land_ally, .land_enemy{
-		height:${({mode}) => {
-			if (mode === "action") {
-				return "calc(50% - 25px)";
-			} else {
-				return "50%";
-			}
-		}};
+		height: 50%;
 	}
 	&:before{left:${({mode}) => {
 		return !mode ? "-50px" : 0;
@@ -50,11 +50,12 @@ const BattleArea = styled.div`
 	}};background:url(${({frameRight}) => frameRight}) no-repeat 13px center;}
 `;
 const BattleUnit = styled.div`
-	.turnLine{
-		&:before{background:url(${({frameImg}) => frameImg});background-size:contain;}
-		&:after{background:url(${({frameImg}) => frameImg});background-size:contain;}
-	}
-	& > div {width:${({containerW}) => containerW}px;}
+`;
+const BattleLand = styled.div`
+	transition:all ${({ gameSpd }) => 1.125 / gameSpd}s;}
+`;
+const BattleEffect = styled.div`
+	transition:all ${({ gameSpd }) => 1.125 / gameSpd}s;}
 `;
 const TimeLineCh = styled.div`
 	position: relative;
@@ -176,12 +177,6 @@ const Passive = styled.div`
 	left:${({idx}) => idx % 2 === 0 ? -30 : -40}%;
 	top:${({idx}) => idx*20 - 25}%;background:url(${({effImg}) => effImg}) no-repeat center center;background-size:100%;
 `;
-const BattleLand = styled.div`
-	& > div {width:${({containerW}) => containerW}px;transition:all ${({ gameSpd }) => 1.125 / gameSpd}s;}
-`;
-const BattleEffect = styled.div`
-	& > div {width:${({containerW}) => containerW}px;transition:all ${({ gameSpd }) => 1.125 / gameSpd}s;}
-`;
 const EffLand = styled.div`
 	left:${({left}) => left}%;
 	top:${({top}) => top}%;
@@ -197,11 +192,28 @@ const Eff = styled.img`
 	animation-iteration-count: ${({repeat}) => repeat || "infinite"};
 `;
 const Land = styled.div`
+	position:absolute;
+	width: 20%;
+	padding-top: 20%;
+	box-sizing: border-box;
+	border-radius: 0;
+	background-size: 100%;
+	outline: 0px solid #fff;
+	transition: outline 1s;
 	left:${({left}) => left}%;
 	top:${({top}) => top}%;
-	background-image:url(${({landImg}) => landImg});
+	& > .back {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		background: #000;
+		opacity: .1;
+		z-index: 1;
+	}
 `;
-const BattleOrder = styled.div`
+const BattleMsg = styled.div`
 	transition:all ${({gameSpd}) => 0.375 / gameSpd}s;opacity:0;
 `;
 const WeatherIcon = styled.div`
@@ -211,14 +223,79 @@ const WeatherWind = styled.div`
 	.weather_arrow{background-image:url(${({src}) => src});background-size:100%;background-repeat:no-repeat;background-position:center center;transform:rotate(${({weatherInfo}) => weatherInfo.wind}deg);
 	}
 `;
+const BattleOrder = styled.div`
+	position: relative;
+	height: 50px;
+	background-color: var(--color-b);
+`;
 const BattleMenu = styled.div`
-	height:${({mode}) => {
-		if (mode === "order" || mode === "area") {
-			return "50px";
-		} else {
-			return "0px";
-		}
-	}};transition:height ${({gameSpd}) => 0.75 / gameSpd}s;
+	display: flex;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: var(--color-b);
+	overflow: hidden;
+	z-index: 50;
+	transition: opacity ${({gameSpd}) => 0.75 / gameSpd}s;
+	.chInfo{display:flex;flex-basis:60px;align-items:center;justify-content:center;}
+	.chInfo span{display:inline-block;}
+	.chInfo .sp{font-size:1.25rem;}
+	.chInfo .spR{margin:0 0 0 5px;}
+	.chInfo .spR:before{content:'('}
+	.chInfo .spR:after{content:')'}
+	.fix_button{height:100%;}
+	.fix_button button{display:flex;margin:5px;height:40px;border-radius:10px;background: #fff;box-sizing:border-box;align-items:center;}
+	ul{display:flex;flex:1;height:100%;align-items:center;justify-content:flex-start;}
+	ul li{height:100%;}
+	ul li button{display:flex;margin:5px;height:40px;border-radius:10px;background:#fff;box-sizing:border-box;align-items:center;}
+	ul li button span{flex:1;white-space:nowrap;}
+	.skSp{font-size:0.938rem;}
+	.skName{font-size:0.813rem;white-space:nowrap;}
+	${({mode}) => (mode === "order" || mode === "area") ? `
+		pointer-events: unset;
+		opacity: 1;
+	` : `
+		pointer-events: none;
+		opacity: 0;
+	`};
+`;
+const BattleTurn = styled.div`
+	display: flex;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+  flex-direction: row;
+	background: #3e2c00;
+	align-items: center;
+	justify-content: center;
+	${({mode}) => mode === "action" ? `
+		pointer-events: unset;
+		opacity: 1;
+		overflow: unset;
+	` : `
+		pointer-events: none;
+		opacity: 0;
+		overflow: hidden;
+	`
+	};
+	&:before{
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 10px;
+		left: 0;
+		top: -4px;
+		background: url(${({frameImg}) => frameImg});background-size:contain;
+	}
+	&:after{
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 10px;
+		left: 0;
+		bottom: -4px;
+		background: url(${({frameImg}) => frameImg});background-size:contain;
+	}
 `;
 const RelationArea = styled.div`
 	&:after{transition:all ${({gameSpd}) => 0.375 / gameSpd}s ${({gameSpd}) => 0.5 / gameSpd}s ease-in-out;}
@@ -412,7 +489,7 @@ const activeSk = (timeLineData) => { //타임라인에 처리되는 방어등.. 
 		return 'none die';
 	}
 }
-const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, gameSound, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, atkOption) => {
+const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, bgm, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, atkOption) => {
 	if (modeRef.indexOf('battle') >= 0){ //battleLose, battleWin시 
 		return;
 	}
@@ -463,7 +540,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 		}
 		if (skillCate === 1 || skillCate === 4){ //대기, 방어, 철벽방어
 			setTurnIdx(turnIdx + 1);
-			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, gameSound, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, {
+			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, bgm, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, {
 				atkCount: atkC,
 				atkStay: atkS,
 			});
@@ -1281,7 +1358,9 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 											// console.log('die', defData.idx, battleEnemy[defData.idx].state);
 										}
 									});
-									endGameCheck();
+									setTimeout(() => {
+										endGameCheck();
+									}, 2000);
 								}
 							} else { //아군 영역 effect효과
 								if (skillCate === 5) {//버프
@@ -1308,7 +1387,9 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 											// console.log('die', defData.idx, battleAlly[defData.idx].state);
 										}
 									});
-									endGameCheck();
+									setTimeout(() => {
+										endGameCheck();
+									}, 2000);
 								}
 							}
 							setAllyAction(allyAction);
@@ -1335,7 +1416,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 									}
 								}
 								setTurnIdx(turnIdx_);
-								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, gameSound, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, {
+								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, bgm, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, {
 									atkCount: atkC,
 									atkStay: atkS,
 								});
@@ -2114,16 +2195,26 @@ const passiveBuff = (gameData, battleAlly, battleEnemy, allyEnemyPassive, allyPa
 	}
 }
 const Battle = ({
-	navigate,
 	saveData,
   changeSaveData,
-	changePage,
-	lang,
-	gameSpd,
-	gameSound,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const navigate = useNavigate();
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  const speed = React.useMemo(() => {
+    return context.setting.speed;
+  }, [context]);
+  const bgm = React.useMemo(() => {
+    return context.setting.bgm;
+  }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
 	const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
@@ -2133,7 +2224,12 @@ const Battle = ({
 		return isScenario ? gameData.scenario[paramData.scenario.stay][paramData.scenario.dynastyIdx].scenarioList[paramData.scenario.dynastyScenarioIdx].stage[paramData.scenario.stageIdx] : {
 			title: gameData.msg.button['startExploring'][lang],
 			lineup: 0,
-			map: Array.from({length:50}, () => Math.round(Math.random() * 11)),
+			map: Array.from({length:50}, () => {
+				const num = Math.round(Math.random() * 11),
+					landType = Math.floor(num / 3),
+					land = num % 3;
+				return (5 * landType) + land;
+			}),
 			entry:[
 				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
 				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
@@ -2151,10 +2247,10 @@ const Battle = ({
 				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
 			],
 		};
-	}, [gameData, isScenario, paramData]);
+	}, [gameData, isScenario, paramData, lang]);
 	const viewScenario = React.useMemo(() => {
 		return isScenario ? sData.scenario[paramData.scenario.stay][paramData.scenario.dynastyIdx].scenarioList[paramData.scenario.dynastyScenarioIdx].stage[paramData.scenario.stageIdx].first : false;
-	}, [saveData, isScenario, paramData]);
+	}, [sData, isScenario, paramData]);
 	const mapLand = React.useMemo(() => scenarioDetail.map, [scenarioDetail]);
 	const allyDeck = useRef(sData.lineup.save_slot[sData.lineup.select].entry);//캐릭터 저장된 카드index
 	const enemyDeck = React.useMemo(() => scenarioDetail.entry, [scenarioDetail]);
@@ -2167,6 +2263,9 @@ const Battle = ({
 		wind:0,//바람
 		delay:0//턴 유지
 	});//날씨
+	const battleUnitRef = useRef();//유닛 공간
+	const battleLandRef = useRef();//지형 공간
+	const battleEffectRef = useRef();//이펙트 공간
 	const bgCanvasRef = useRef();//날씨 캔버스
 	const allyOrders = useRef([]);//아군 행동저장배열
 	const enemyOrders = useRef([]);//적군 행동저장배열
@@ -2303,7 +2402,7 @@ const Battle = ({
 		} else {//시나리오 패스
 			setTimeout(() => {
 				setMode('relation');
-			}, 75 / gameSpd);
+			}, 75 / speed);
 		}
 		ally.forEach((data, idx) => {//능력치 셋팅
 			const saveCh = sData.ch[data];
@@ -2844,15 +2943,15 @@ const Battle = ({
 						setTimeout(() => {
 							allyRelationArr.current = '';
 							relationCh.current = {};
-						}, 1500 / gameSpd);
-					}, 975 / gameSpd);
-				}, (1500 + allyRelationArr.current.length * 225) / gameSpd);
+						}, 1500 / speed);
+					}, 975 / speed);
+				}, (1500 + allyRelationArr.current.length * 225) / speed);
 			} else {
 				setMode('passive');
 				setTimeout(() => {
 					allyRelationArr.current = '';
 					relationCh.current = {};
-				}, 1500 / gameSpd);
+				}, 1500 / speed);
 			}
 		} else if (mode === 'passive') {
 			setTimeout(() => {
@@ -2861,8 +2960,8 @@ const Battle = ({
 				setTimeout(() => {
 					setMode('order');
 					setOrderIdx(0);
-				}, 750 + allyPassive.current.length * 375 / gameSpd);
-			}, 1500 / gameSpd);
+				}, 750 + allyPassive.current.length * 375 / speed);
+			}, 1500 / speed);
 		} else if (mode === 'action') {
 			setWeather(changeWeather(weather));//날씨 변경
 			const turnPass = true;
@@ -2876,7 +2975,7 @@ const Battle = ({
 				}
 			});
 			if (pB.enemyDmgArr['bleeding'] || pB.allyDmgArr['bleeding']) {
-				pB.timeDelay += 750 / gameSpd;
+				pB.timeDelay += 750 / speed;
 				if (pB.allyDmgArr['bleeding']) {
 					setAllyEffect(pB.allyDmgArr['bleeding']);
 				}
@@ -2884,7 +2983,7 @@ const Battle = ({
 					setEnemyEffect(pB.enemyDmgArr['bleeding']);
 				}
 				if (pB.enemyDmgArr['addicted'] || pB.allyDmgArr['addicted']) {
-					pB.timeDelay += 750 / gameSpd;
+					pB.timeDelay += 750 / speed;
 					setTimeout(() => {
 						if (pB.allyDmgArr['addicted']) {
 							setAllyEffect(pB.allyDmgArr['addicted']);
@@ -2892,10 +2991,10 @@ const Battle = ({
 						if (pB.enemyDmgArr['addicted']) {
 							setEnemyEffect(pB.enemyDmgArr['addicted']);
 						}
-					}, 750 / gameSpd);
+					}, 750 / speed);
 				}
 			} else if (pB.enemyDmgArr['addicted'] || pB.allyDmgArr['addicted']) {
-				pB.timeDelay += 750 / gameSpd;
+				pB.timeDelay += 750 / speed;
 				if (pB.allyDmgArr['addicted']) {
 					setAllyEffect(pB.allyDmgArr['addicted']);
 				}
@@ -2908,7 +3007,7 @@ const Battle = ({
 				setEnemyEffect([]);
 				timeLineSet();//타임라인 구성
 				setTurnIdx(0);
-				actionAnimation(setTurnIdx, setSkillMsg, 0, timeLine.current, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly.current, battleEnemy.current, gameSpd, gameSound, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos.current, enemyPos.current, modeRef.current, setMode, setWeather, allyEnemyPassive, allyPassive.current, enemyPassive.current, setAllyEnemyPassive, allyEnemyBuff, allyBuff.current, enemyBuff.current, setAllyEnemyBuff);
+				actionAnimation(setTurnIdx, setSkillMsg, 0, timeLine.current, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly.current, battleEnemy.current, speed, bgm, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos.current, enemyPos.current, modeRef.current, setMode, setWeather, allyEnemyPassive, allyPassive.current, enemyPassive.current, setAllyEnemyPassive, allyEnemyBuff, allyBuff.current, enemyBuff.current, setAllyEnemyBuff);
 			}, pB.timeDelay);
 		} else if (mode === 'battleWin') {
 			console.log('pgs', '격!퇴!성!공!');
@@ -3025,17 +3124,15 @@ const Battle = ({
   return (
     <>
 			<BattleHeader className="header battle_header" iconBack={imgSet.icon.iconBack}>
-				<ul>
-          <li className="back">
-						<IconPic className="ico" type="commonBtn" pic="icon100" idx={0} onClick={() => {
-							util.saveData('historyParam', {
-								...util.loadData('historyParam'),
-								roulette: {base: {},add: {}, lv: {}, map: {}},
-							});
-							util.historyBack(navigate, changePage);
-						}}></IconPic>
-					</li>
-				</ul>
+				<BackButton className="back">
+					<IconPic className="ico" type="commonBtn" pic="icon100" idx={0} onClick={() => {
+						util.saveData('historyParam', {
+							...util.loadData('historyParam'),
+							roulette: {base: {},add: {}, lv: {}, map: {}},
+						});
+						util.historyBack(navigate);
+					}}></IconPic>
+				</BackButton>
 				<div className="battle_title" flex-h-center="true">
 					<div className="scenario_title">{isScenario ? scenarioDetail.title[lang] : scenarioDetail.title}</div>
 					<div className="team_summary">
@@ -3080,7 +3177,7 @@ const Battle = ({
                     <ChPic isThumb={true} type="cardBack" pic="card" idx={0} />
 									</CardChRing>
 									<CardCh isThumb={true} pic="ch" idx={chData?.display} /> */}
-									<CharacterCard usedType="conversation" saveData={saveData} gameData={gameData} saveCharacter={data} gameSpd={gameSpd} />
+									<CharacterCard usedType="conversation" saveData={saveData} gameData={gameData} saveCharacter={data} gameSpd={speed} />
 									<div className="ch_name">{chData?.na1}</div>
 								</div>
 								{idx === conversationStepRef.current - 1 && (
@@ -3096,7 +3193,7 @@ const Battle = ({
 			)}
 			{mode === "battleWin" && (
 				<BattleEnd className="battle_end" onClick={() => {
-					util.historyBack(navigate, changePage);
+					util.historyBack(navigate);
 				}} flex-h-center="true">
 					<div className="battle_title">격!퇴!성!공!</div>
 					<div className="battle_result_ch" flex-h-center="true">
@@ -3108,7 +3205,7 @@ const Battle = ({
 							return (
 								<div className="battle_end_ch" key={idx} flex-center="true">
 									<div className="end_ch">
-										<CharacterCard usedType="battle" saveData={saveData} gameData={gameData} saveCharacter={allyData} gameSpd={gameSpd} />
+										<CharacterCard usedType="battle" saveData={saveData} gameData={gameData} saveCharacter={allyData} gameSpd={speed} />
 									</div>
 									<div className="battle_end_contribution" flex-h-center="true">
 										<div className="battle_end_hpexp" flex-center="true">
@@ -3140,13 +3237,13 @@ const Battle = ({
 			)}
 			{mode === "battleLose" && (
 				<div className="battle_end" onClick={() => {
-					util.historyBack(navigate, changePage);
+					util.historyBack(navigate);
 				}} flex-h-center="true">
 					<div className="battle_title">격퇴실패</div>
 				</div>
 			)}
       <BattleWarp className={`battle_wrap ${mode}`} backImg={imgSet.back[1]}>
-				<BgEffect className={`bgEffect ${mode === "action" ? "action" : ""}`} img1={imgSet.bgEffect[0]} img2={imgSet.bgEffect[1]} gameSpd={gameSpd}>
+				<BgEffect className={`bgEffect ${mode === "action" ? "action" : ""}`} img1={imgSet.bgEffect[0]} img2={imgSet.bgEffect[1]} gameSpd={speed}>
 					{weather.type === "w0" && (
 						<>
 							<BgLight className="bg_light" type={weather.type} day={weather.day}>
@@ -3189,24 +3286,36 @@ const Battle = ({
 					)}
 				</BgEffect>
 				{allyRelationArr.current && (
-					<RelationArea className={`relation_area ${mode === "relation" ? "on" : ""}`} rtHeight={relationHeight.current} gameSpd={gameSpd}>
+					<RelationArea className={`relation_area ${mode === "relation" ? "on" : ""}`} rtHeight={relationHeight.current} gameSpd={speed}>
 						<div className="relationTitle"><span>인!</span><span>연!</span><span>발!</span><span>동!</span></div>
 						{allyRelationArr.current.map((rtData, idx) => {
 							const rtName = gameData.relation[rtData.idx].na[lang];
 							return (
-								<RelationName key={idx} className="relationName" idx={idx} color={rtData.color} gameSpd={gameSpd}>{rtName}</RelationName>
+								<RelationName key={idx} className="relationName" idx={idx} color={rtData.color} gameSpd={speed}>{rtName}</RelationName>
 							)
 						})}
 					</RelationArea>
 				)}
-				<BattleArea ref={(conatiner) => {
-					if (conatiner) {
-						const area = conatiner.getBoundingClientRect();
-						setContainerW(area.height * 0.5 - 25);
+				<BattleArea ref={(node) => {
+					if (node !== null) {
+						const area = node.getBoundingClientRect(),
+							areaH = area.height * 0.5;
+						if (battleUnitRef?.current) {
+							battleUnitRef.current.children[0].style.width = areaH + 'px';
+							battleUnitRef.current.children[1].style.width = areaH + 'px';
+						}
+						if (battleLandRef?.current) {
+							battleLandRef.current.children[0].style.width = areaH + 'px';
+							battleLandRef.current.children[1].style.width = areaH + 'px';
+						}
+						if (battleEffectRef?.current) {
+							battleEffectRef.current.children[0].style.width = areaH + 'px';
+							battleEffectRef.current.children[1].style.width = areaH + 'px';
+						}
 						containerWH.current = [area.width, area.height];
 					}
 				}} className={`battle_area ${mode === "action" ? "action" : ""}`} mode={mode} frameLeft={imgSet.etc.frameLeft} frameRight={imgSet.etc.frameRight}>
-					<BattleEffect containerW={containerW} className="battle_effect">
+					<BattleEffect ref={battleEffectRef} className="battle_effect">
 						<div className={`land_enemy ${enemyEffect.length === 25 ? "allEff" : ""}`}>
 						{map.map((data, idx) => {
 							const left = idx % 5 * mapSize,
@@ -3223,10 +3332,10 @@ const Battle = ({
 							});
 							const effChk = effNum && effNum !== 0;
 							return (
-								<EffLand key={idx} className={`effect_land ${effChk ? 'dmg' : ''}`} left={left} top={top} gameSpd={gameSpd}>
+								<EffLand key={idx} className={`effect_land ${effChk ? 'dmg' : ''}`} left={left} top={top} gameSpd={speed}>
 									{effectChk && (
 										<>
-											<Eff className="effect_eff" src={imgSet.eff[effAnimation]} frame={gameData.effect[effAnimation].frame} repeat={gameData.effect[effAnimation].repeat} gameSpd={gameSpd}/>
+											<Eff className="effect_eff" src={imgSet.eff[effAnimation]} frame={gameData.effect[effAnimation].frame} repeat={gameData.effect[effAnimation].repeat} gameSpd={speed}/>
 										</>
 									)}
 									<span className="dmgNum">{effChk ? effNum : ''}</span>
@@ -3234,7 +3343,6 @@ const Battle = ({
 							);
 						})}
 						</div>
-						<div className={`turnLine ${mode === 'action' ? 'on' : ''}`}></div>
 						<div className={`land_ally ${allyEffect.length === 25 ? "allEff" : ""}`}>
 						{map.map((data, idx) => {
 							const left = idx % 5 * mapSize,
@@ -3251,10 +3359,10 @@ const Battle = ({
 							});
 							const effChk = effNum && effNum !== 0;
 							return (
-								<EffLand className={`effect_land ${effChk ? 'dmg' : ''}`} key={idx} left={left} top={top} gameSpd={gameSpd}>
+								<EffLand className={`effect_land ${effChk ? 'dmg' : ''}`} key={idx} left={left} top={top} gameSpd={speed}>
 									{effectChk && (
 										<>
-											<Eff className="effect_eff" src={imgSet.eff[effAnimation]} frame={gameData.effect[effAnimation].frame} repeat={gameData.effect[effAnimation].repeat} gameSpd={gameSpd}/>
+											<Eff className="effect_eff" src={imgSet.eff[effAnimation]} frame={gameData.effect[effAnimation].frame} repeat={gameData.effect[effAnimation].repeat} gameSpd={speed}/>
 										</>
 									)}
 									<span className="dmgNum">{effChk ? effNum : ''}</span>
@@ -3263,7 +3371,7 @@ const Battle = ({
 						})}
 						</div>
 					</BattleEffect>
-					<BattleUnit containerW={containerW} className="battle_units" frameImg={imgSet.etc.frameRope}>
+					<BattleUnit ref={battleUnitRef} className="battle_units">
 						<div className="units_enemy">
 							{battleEnemy.current && enemyDeck.map((enemyData, idx)=> {
 								const left = idx % 5 * mapSize,
@@ -3292,10 +3400,10 @@ const Battle = ({
 									return (
 										<BattleCh key={idx} className={`battle_ch ${area ? "effect effect" + element_type : ""} ${actionCh} ${rtCh} ${actionPos} ${state}`} data-ch={chData?.display} data-idx={idx} left={left} top={top} size={mapSize} onClick={(e) => {
 											areaEnemySelect(e, idx);
-										}} gameSpd={gameSpd} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]}>
+										}} gameSpd={speed} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]}>
 											{buffEff && buffEff.map((buffData, idx) => {
 												return (
-													<Buff key={idx} className="ch_buff" gameSpd={gameSpd} effImg={imgSet.eff[buffData]} frame={gameData.effect[buffData].frame} buffEff={buffData} >
+													<Buff key={idx} className="ch_buff" gameSpd={speed} effImg={imgSet.eff[buffData]} frame={gameData.effect[buffData].frame} buffEff={buffData} >
 														<div className="buff_effect"></div>
 													</Buff>
 												);
@@ -3306,7 +3414,7 @@ const Battle = ({
 														<Passive key={idx} className={`ch_passive passive${idx}`} effImg={imgSet.passive[passiveData]} idx={idx} passive={passiveData}/>
 													);
 												})}
-												<CharacterCard usedType="battle" saveData={saveData} gameData={gameData} saveCharacter={enemyData} gameSpd={gameSpd} />
+												<CharacterCard usedType="battle" saveData={saveData} gameData={gameData} saveCharacter={enemyData} gameSpd={speed} />
 												<div className="hpsp">
 													<span className="hp"><em className="gradient_light" style={{width: hasHp + '%'}}></em></span>
 												</div>
@@ -3323,17 +3431,6 @@ const Battle = ({
 										</BattleCh>
 									);
 								}
-							})}
-						</div>
-						<div className={`turnLine ${mode === 'action' ? 'on' : ''}`}>
-							{timeLine.current && timeLine.current.map((data, idx) => {
-								const chData = data.order.team === 'ally' ? battleAlly.current[data.order.idx] : battleEnemy.current[data.order.idx];
-								const activeSkill = activeSk(data);// die 및 active스킬 판단 0대기,2방어,13철벽방어
-								return (
-									<TimeLineCh key={idx} className={turnIdx === idx ? 'on' : ''} state={activeSkill} team={data.order.team} size={30} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]} gameSpd={gameSpd}>
-										<CharacterCard usedType="timeline" saveData={saveData} gameData={gameData} saveCharacter={chData} gameSpd={gameSpd} />
-									</TimeLineCh>
-								)
 							})}
 						</div>
 						<div className="units_ally">
@@ -3368,10 +3465,10 @@ const Battle = ({
 									return (
 										<BattleCh key={idx} className={`battle_ch ${posCh} ${area ? "effect effect" + element_type : ""} ${actionCh} ${rtCh} ${actionPos} ${state}`} data-ch={chData?.display} data-idx={idx} left={left} top={top} size={mapSize} rtColor={rtColor} onClick={(e) => {
 											areaAllySelect(e, idx);
-										}}  gameSpd={gameSpd} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]}>
+										}}  gameSpd={speed} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]}>
 											{buffEff && buffEff.map((buffData, idx) => {
 												return (
-													<Buff key={idx} className="ch_buff" gameSpd={gameSpd} effImg={imgSet.eff[buffData]} frame={gameData.effect[buffData].frame} buffEff={buffData}>
+													<Buff key={idx} className="ch_buff" gameSpd={speed} effImg={imgSet.eff[buffData]} frame={gameData.effect[buffData].frame} buffEff={buffData}>
 														<div className="buff_effect"></div>
 													</Buff>
 												);
@@ -3382,7 +3479,7 @@ const Battle = ({
 														<Passive key={idx} className={`ch_passive passive${idx}`} effImg={imgSet.passive[passiveData]} idx={idx} passive={passiveData}/>
 													);
 												})}
-              					<CharacterCard usedType="battle" saveData={saveData} gameData={gameData} saveCharacter={saveCh} gameSpd={gameSpd} />
+              					<CharacterCard usedType="battle" saveData={saveData} gameData={gameData} saveCharacter={saveCh} gameSpd={speed} />
 												<div className="hpsp">
 													<span className="hp"><em className="gradient_light" style={{width: hasHp + '%'}}></em></span>
 													<span className="sp"><em className="gradient_light" style={{width: hasSp + '%'}}></em></span>
@@ -3403,32 +3500,37 @@ const Battle = ({
 							})}
 						</div>
 					</BattleUnit>
-					<BattleLand containerW={containerW} className={`battle_land ${mode === "relation" ? "" : "ready"} ${landCriticalEffect ? "critical" : ""}`} gameSpd={gameSpd}>
+					<BattleLand ref={battleLandRef} className={`battle_land ${mode === "relation" ? "" : "ready"} ${landCriticalEffect ? "critical" : ""}`} gameSpd={speed}>
 						<div className="land_enemy">
 						{map.map((data, idx) => {
 							const left = idx % 5 * mapSize,
 								top = Math.floor(idx / 5) * mapSize;
 							return (
-								<Land key={idx} className="land" landImg={imgSet.land[mapLand[idx]]} left={left} top={top}></Land>
+								<Land key={idx} left={left} top={top}>
+									<IconPic type="land" isAbsolute={true} isThumb={true} pic="icon150" idx={mapLand[idx]} />
+									<span className="back"></span>
+								</Land>
 							);
 						})}
 						</div>
-						<div className={`turnLine ${mode === 'action' ? 'on' : ''}`}></div>
 						<div className="land_ally">
 						{map.map((data, idx) => {
 							const left = idx % 5 * mapSize,
 								top = Math.floor(idx / 5) * mapSize;
 							return (
-								<Land key={idx} className="land" landImg={imgSet.land[mapLand[idx + 25]]} left={left} top={top}></Land>
+								<Land key={idx} left={left} top={top}>
+									<IconPic type="land" isAbsolute={true} isThumb={true} pic="icon150" idx={mapLand[idx + 25]}/>
+									<span className="back"></span>
+								</Land>
 							);
 						})}
 						</div>
 					</BattleLand>
-					<BattleOrder className={`battle_order ${skillMsg ? 'on' : ''} ${typeof turnIdx === 'number' && timeLine.current[turnIdx]?.order.team === 'ally' ? 'ally' : 'enemy'} ${typeof turnIdx === 'number' && gameData.ch[timeLine.current[turnIdx]?.order.idx]?.face_d}`} gameSpd={gameSpd}>
+					<BattleMsg className={`battle_order ${skillMsg ? 'on' : ''} ${typeof turnIdx === 'number' && timeLine.current[turnIdx]?.order.team === 'ally' ? 'ally' : 'enemy'} ${typeof turnIdx === 'number' && gameData.ch[timeLine.current[turnIdx]?.order.idx]?.face_d}`} gameSpd={speed}>
 						<div className="battle_msg">
 							{typeof turnIdx === 'number' && gameData.skill[timeLine.current[turnIdx]?.order.skIdx]?.na[lang]}
 						</div>
-					</BattleOrder>
+					</BattleMsg>
 					<div className="battle_weather" src={[imgSet.weather]} >
 						<div className={`weather_icon weather_type ${weather.day ? "day" : "night"}`}>
 							<div className="weather_typeIcon" style={{left:`${getWeather(weather) * -50}px`}}>
@@ -3442,52 +3544,61 @@ const Battle = ({
 						</WeatherWind>
 					</div>
 				</BattleArea>
-				{battleAlly.current ?
-					<>
-						<BattleMenu className="battle_menu" mode={mode} gameSpd={gameSpd}>
-							{typeof orderIdx === 'number' && (
-								<>
-									<div className="chInfo">
-										<span className="sp">{battleAlly.current[orderIdx]?.sp}</span>
-										{/* <span className="spR">{battleAlly.current[orderIdx]?.bSt2}</span> */}
-									</div>
-									<div className="fix_button">
-										<button onClick={() => {
-											battleCommand('cancel');
-										}}><span className="skName">{lang === 'ko' ? '취소' : 'Cancel'}</span></button>
-									</div>
-									<ul className="scroll-x">
-										<li><button onClick={() => {
-											battleCommand('wait');
-										}}><span className="skSp">{battleAlly.current[orderIdx]?.bSt2}</span><span className="skName">{lang === 'ko' ? '대기' : 'Wait'}</span></button></li>
-										{battleAlly.current[orderIdx]?.hasSkill && battleAlly.current[orderIdx]?.hasSkill.map((data, idx) => {
-											const sk = gameData.skill;
-											const characterActionType = battleAlly.current[orderIdx].newActionType;//동물 actionType과 skill element간 속성싱크가 1차이가 남
-											const skillType = sk[data.idx].element_type;
-											let actionType = true;
-											if (skillType > 0 && skillType < 7) {
-												characterActionType.forEach((data) => {
-													actionType = (data + 1) === skillType;
-													if (actionType) {
-														return;
-													}
-												});
-												//스킬 공격타입과 캐릭공격타입이 같은지 확인
-											}
-											if (sk[data.idx].cate[0] !== 2 && actionType) {
-												return (
-													<li key={idx}><button onClick={() => {
-														battleCommand(sk[data.idx], data.lv);
-													}}><span className="skSp">{sk[data.idx].sp}</span><span className="skName">{sk[data.idx].na[lang]}</span></button></li>
-												);
-											}
-										})}
-									</ul>
-								</>
-							)}
-						</BattleMenu>
-					</> : ""
-				}
+				<BattleOrder>
+					{battleAlly.current && <BattleMenu className="battle_menu" mode={mode} gameSpd={speed}>
+						{typeof orderIdx === 'number' && (
+							<>
+								<div className="chInfo">
+									<span className="sp">{battleAlly.current[orderIdx]?.sp}</span>
+									{/* <span className="spR">{battleAlly.current[orderIdx]?.bSt2}</span> */}
+								</div>
+								<div className="fix_button">
+									<button onClick={() => {
+										battleCommand('cancel');
+									}}><span className="skName">{lang === 'ko' ? '취소' : 'Cancel'}</span></button>
+								</div>
+								<ul className="scroll-x">
+									<li><button onClick={() => {
+										battleCommand('wait');
+									}}><span className="skSp">{battleAlly.current[orderIdx]?.bSt2}</span><span className="skName">{lang === 'ko' ? '대기' : 'Wait'}</span></button></li>
+									{battleAlly.current[orderIdx]?.hasSkill && battleAlly.current[orderIdx]?.hasSkill.map((data, idx) => {
+										const sk = gameData.skill;
+										const characterActionType = battleAlly.current[orderIdx].newActionType;//동물 actionType과 skill element간 속성싱크가 1차이가 남
+										const skillType = sk[data.idx].element_type;
+										let actionType = true;
+										if (skillType > 0 && skillType < 7) {
+											characterActionType.forEach((data) => {
+												actionType = (data + 1) === skillType;
+												if (actionType) {
+													return;
+												}
+											});
+											//스킬 공격타입과 캐릭공격타입이 같은지 확인
+										}
+										if (sk[data.idx].cate[0] !== 2 && actionType) {
+											return (
+												<li key={idx}><button onClick={() => {
+													battleCommand(sk[data.idx], data.lv);
+												}}><span className="skSp">{sk[data.idx].sp}</span><span className="skName">{sk[data.idx].na[lang]}</span></button></li>
+											);
+										}
+									})}
+								</ul>
+							</>
+						)}
+					</BattleMenu>}
+					<BattleTurn mode={mode} frameImg={imgSet.etc.frameRope}>
+						{timeLine.current && timeLine.current.map((data, idx) => {
+							const chData = data.order.team === 'ally' ? battleAlly.current[data.order.idx] : battleEnemy.current[data.order.idx];
+							const activeSkill = activeSk(data);// die 및 active스킬 판단 0대기,2방어,13철벽방어
+							return (
+								<TimeLineCh key={idx} className={turnIdx === idx ? 'on' : ''} state={activeSkill} team={data.order.team} size={30} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]} gameSpd={speed}>
+									<CharacterCard usedType="timeline" saveData={saveData} gameData={gameData} saveCharacter={chData} gameSpd={speed} />
+								</TimeLineCh>
+							)
+						})}
+					</BattleTurn>
+				</BattleOrder>
 			</BattleWarp>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}

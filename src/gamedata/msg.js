@@ -541,7 +541,7 @@ export const msg = {
 			en:'Mongolia',
 			jp:'モンゴル',
 		},
-		SaudiArabia:{
+		saudiArabia:{
 			ko:'사우디 아라비아',
 			en:'Saudi Arabia',
 			jp:'サウジアラビア',

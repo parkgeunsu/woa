@@ -1,6 +1,6 @@
 import { AppContext } from 'App';
 import { FlexBox } from 'components/Container';
-import { ItemPic } from 'components/ImagePic';
+import { IconPic, ItemPic } from 'components/ImagePic';
 import InfoGroup from 'components/InfoGroup';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
@@ -11,7 +11,6 @@ import 'css/ch.css';
 import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
 const Wrap = styled(FlexBox)`
-  .animal_item_pic{position:relative;margin:0 auto;width:60%;padding-top:60%;}
   .animal_item_pic .line span{position:absolute;width:0;height:2px;background:transparent;border-top:1px solid #fff;border-bottom:1px solid #fff;z-index:2;}
   .equip_items{position:relative;width:100%;}
   .has_items{padding:5px 0;}
@@ -32,8 +31,13 @@ const Wrap = styled(FlexBox)`
 
   .item0{border:none;}
 `;
-const AnimalItemPic = styled.div`
-  &:before{
+const AnimalItemPic = styled(IconPic)`
+  position: relative;
+  margin: 0 20%;
+  padding-top: 60%;
+  width: 60%;
+  height: 0;
+  ${'' /* &:before{
     content:'';
     position:absolute;
     left:0;
@@ -63,7 +67,7 @@ const AnimalItemPic = styled.div`
       `;
     }}
     filter:brightness(.1);
-  }
+  } */}
 `;
 const PossibleKg = styled.div`
   position: absolute;
@@ -73,14 +77,20 @@ const PossibleKg = styled.div`
   font-weight: 600;
 `;
 const CharacterItems = ({
-  navigate,
   saveData,
   changeSaveData,
   slotIdx,
-  lang,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  // const imgSet = React.useMemo(() => {
+  //   return context.images;
+  // }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
   const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
   const chData = React.useMemo(() => gameData.ch[saveCh.idx], [gameData, saveCh]);
   const animalIdx = React.useMemo(() => chData.animal_type, [chData]);
@@ -138,7 +148,7 @@ const CharacterItems = ({
       });
     }
     setPopupOn(prev => !prev);
-  }, [slotIdx]);
+  }, [saveItems, invenItems, slotIdx]);
   return (
     <>
       <Wrap className="items">
@@ -275,7 +285,7 @@ const CharacterItems = ({
         </InfoGroup>
       </Wrap>
       <PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} navigate={navigate} lang={lang} />}
+        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
       </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}

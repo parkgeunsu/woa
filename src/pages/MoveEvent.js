@@ -257,14 +257,19 @@ const EventStatue = styled.div`
 const MoveEvent = ({
   saveData,
   changeSaveData,
-  changePage,
-  navigate,
   cityIdx,
   gameMode,
-  lang,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
   const canvasRef = useRef(null);
   const [countryPattern, setCountryPattern] = useState();
   const paramData = React.useMemo(() => {
@@ -308,7 +313,7 @@ const MoveEvent = ({
     }
   }, [paramData]);
   return <Wrap className="scroll-y" ref={EventAllScroll} color={gameData.eventsCountryColor[paramData.moveEvent.moveTo]} >
-    <QuickMenu type="move" changePage={changePage} gameMode={gameMode} navigate={navigate} lang={lang} />
+    <QuickMenu type="move" gameMode={gameMode} />
     <canvas style={{
       position:'absolute',
       visibility:'hidden',

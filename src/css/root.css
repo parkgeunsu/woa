@@ -376,32 +376,3 @@ b[buff]{color:#02f;text-shadow:-1px -1px 0px #0df,1px 1px 0px #000;}
 .weather .weather_icon.night{background:radial-gradient(at 30% 30%, rgba(100,100,100,1) 0%, rgba(0,0,0,1) 60%);}
 .weather .weather_typeIcon{position:absolute;left:0;top:0;transition:all .5s;}
 .weather .weather_arrow{position:absolute;width:46px;height:46px;transition:all .5s;}
-
-.bgEffect{position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;}
-.bgEffect .cloud{position:absolute;width:1000px;height:400px;z-index:40;animation-play-state:running;}
-.bgEffect.action .cloud{animation-play-state:paused;opacity:0;}
-.bgEffect.action .cloud2{left:-1000px;animation-play-state:paused;}
-.bgEffect .bg_light{position:absolute;left:0;right:0;top:0;bottom:0;z-index:39;transition:all .5s;overflow:hidden;}
-.bgEffect .bg_light .circle{position:absolute;border-radius:50%;}
-.bgEffect .bg_light .circle:first-of-type{left:65%;top:3%;width:10px;height:10px;background:#fff;opacity:.5;filter:blur(2px);}
-.bgEffect .bg_light .circle:nth-of-type(2){left:37%;top:6%;width:60px;height:60px;background:#fff;opacity:.5;filter:blur(3px);}
-.bgEffect .bg_light .circle:nth-of-type(3){left:47%;top:28%;width:20px;height:20px;background:#fff;opacity:.5;filter:blur(2px);}
-.bgEffect .bg_light .circle:nth-of-type(4){left:23%;top:18%;width:30px;height:30px;background:#fff;opacity:.5;filter:blur(3px);}
-.bgEffect .bg_light .circle:nth-of-type(5){left:8%;top:3%;width:20px;height:20px;background:#fff;}
-.bgEffect .bg_light.lightning, .bgEffect .bg_light.lightning{transition:unset;animation:onoff 8s infinite;}
-@keyframes onoff{
-  10%{opacity:1;}
-  11%{opacity:0;}
-  12%{opacity:1;}
-  14%{opacity:0;}
-  15%{opacity:1;}
-  16%{opacity:0;}
-  18%{opacity:1;}
-  66%{opacity:1;}
-  67%{opacity:0;}
-  69%{opacity:1;}
-  70%{opacity:0;}
-  71%{opacity:1;}
-}
-
-.bgEffect canvas{position:absolute;left:0;right:0;top:50px;z-index:40;}

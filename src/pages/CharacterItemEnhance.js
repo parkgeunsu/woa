@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// import { AppContext } from 'App';
+// import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 const ItemEnhance = styled.div`
@@ -35,7 +36,19 @@ const ItemEnhance = styled.div`
   }
 `;
 
-const CharacterItemEnhance = () => {
+const CharacterItemEnhance = ({
+  
+}) => {
+  // const context = useContext(AppContext);
+  // const lang = React.useMemo(() => {
+  //   return context.setting.lang;
+  // }, [context]);
+  // const imgSet = React.useMemo(() => {
+  //   return context.images;
+  // }, [context]);
+  // const gameData = React.useMemo(() => {
+  //   return context.gameData;
+  // }, [context]);
   return (
     <>
       <ItemEnhance className="item_enhance transition">

@@ -42,7 +42,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   background: url(${({page, imgSet}) => {
     switch(page) {
-      case 'main':
+      case '':
         return imgSet[2];
       case 'start':
         return imgSet[1];
@@ -179,15 +179,10 @@ const setCity = (data, lang) => {
 const App = () => {
   const navigate = useNavigate();
   const location = useLocation().pathname.split("/")[1];
-  const [page, setPage] = useState(location || 'main');
-  const [language, setLanguage] = useState('ko');
-  const [speed, setSpeed] = useState(0);
-  const [bgm, setBgm] = useState(1);
-  const [efm, setEfm] = useState(1);
-  const [resolution, setResolution] = useState(0);
+  const [saveData, setSaveData] = useState({});
   const [gameMode, setGameMode] = useState('');
   const slotIdx = 'all';
-  const [cityIdx, setCityIdx] = useState(0);
+  const [cityIdx] = useState(0); //setCityIdx
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
@@ -195,21 +190,48 @@ const App = () => {
     color: ColorSet,
     font: FontSet,
   }
-  const data = {
+  const [conTextData, setConTextData] = useState({
     images: LoadImage(),
     gameData: {
       ...gameData,
     },
-  }
-  const changePage = (pagename) => {
-    console.log(pagename);
-    setPage(pagename);
-  }
+    setting: {
+      lang: 'ko',
+      bgm: true,
+      efm: true,
+      resolution: 1,
+      speed: 1,
+    }
+  });
   const changeSaveData = (objData) => {
     setSaveData(objData);
     util.saveData('saveData', objData);
   }
-  const [saveData, setSaveData] = useState({});
+  const setLang = (data) => {
+    let cloneConTextData = {...conTextData};
+    cloneConTextData.setting.lang = data;
+    setConTextData(cloneConTextData);
+  }
+  const setSpeed = (data) => {
+    let cloneConTextData = {...conTextData};
+    cloneConTextData.setting.speed = data;
+    setConTextData(cloneConTextData);
+  }
+  const setBgm = (data) => {
+    let cloneConTextData = {...conTextData};
+    cloneConTextData.setting.bgm = data;
+    setConTextData(cloneConTextData);
+  }
+  const setEfm = (data) => {
+    let cloneConTextData = {...conTextData};
+    cloneConTextData.setting.efm = data;
+    setConTextData(cloneConTextData);
+  }
+  const setResolution = (data) => {
+    let cloneConTextData = {...conTextData};
+    cloneConTextData.setting.resolution = data;
+    setConTextData(cloneConTextData);
+  }
   // useEffect(() => {
   //   setCityData(city(gameData.city.port));
   // }, [cityIdx]);
@@ -219,24 +241,21 @@ const App = () => {
     let useSaveData = {}
     if (!continueGame) { //신규 게임
       //save 는 가상데이터
-      saveNew.city = setCity(gameData.city.port, language);
+      console.log('aaa');
+      saveNew.city = setCity(gameData.city.port, conTextData.setting.lang);
       useSaveData = saveNew;
       util.saveData('saveData', saveNew);
       util.saveData('version', version);
-      util.saveData('speed', 1);
-      util.saveData('language', 'ko');
-      util.saveData('bgm', true);
-      util.saveData('efm', true);
-      util.saveData('resolution', 1);
+      util.saveData('setting', {
+        lang: 'ko',
+        bgm: true,
+        efm: true,
+        resolution: 1,
+        speed: 1,
+      });
       util.saveData('history',[]);
       setSaveData(saveNew);
     } else {
-      //setting값 스토리지값에서 가져오기
-      setLanguage(util.loadData('language'));
-      setSpeed(util.loadData('speed'));
-      setBgm(util.loadData('bgm'));
-      setEfm(util.loadData('efm'));
-      setResolution(util.loadData('resolution'));
       if (storageVer !== version) { //데이터 버전이 다를 경우
         //버전 업데이트 통신
         useSaveData = util.loadData("saveData");
@@ -258,10 +277,13 @@ const App = () => {
           return sData;
         }
       });
-      navigate('gameMain');
-      changePage('gameMain', {aa: 1, bb: 2});
+      const history = util.loadData('history');
+      if (history === null || history === undefined || history.length === 0 || history[0] === '') {
+        navigate('../gameMain');
+      }
+      // changePage('gameMain', {aa: 1, bb: 2});
     }
-    util.getTimeGap(useSaveData, changeSaveData);//시간 저장
+    //util.getTimeGap(useSaveData, changeSaveData);//시간 저장
     
     return () => {
       localStorage.setItem('closeTime', new Date());
@@ -269,7 +291,7 @@ const App = () => {
   }, []);
   return (
     <ThemeProvider theme={theme}>
-      <RootContainer value={data}>
+      <RootContainer value={conTextData}>
         <svg style={{position:"absolute",width:0,height:0,visibility:"hidden"}}xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100">
           <radialGradient id="radial_rainbow" cx="43.5693" cy="42.9141" r="43.8667" gradientUnits="userSpaceOnUse">
             <stop offset="0" style={{"stopColor":"#FF0000"}}/>
@@ -299,49 +321,49 @@ const App = () => {
             <stop offset="1" style={{"stopColor":"#000000"}}/>
           </linearGradient>
         </svg>
-        <Wrapper page={page} imgSet={data.images.back} className={`root ${page}`}>
+        <Wrapper page={location} imgSet={conTextData.images.back} className={`root ${location}`}>
           {location !== "battle" && location !== "" && location !== "main" && location !== "start" && (location !== "recruitment" && !paramData?.start?.begin) && (
-            <Header saveData={saveData} changePage={changePage} navigate={navigate} page={page} />
+            <Header saveData={saveData} />
           )}
           <ContentContainer direction="column" className="content">
             <Routes>
-              <Route path="/" element={<Menu type="new" changePage={changePage} lang={language} />} />
+              <Route path="/" element={<Menu type="new" />} />
 
-              <Route path="/start" element={<StartGame saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} lang={language} setLang={setLanguage} />} />
+              <Route path="/start" element={<StartGame saveData={saveData} changeSaveData={changeSaveData} setLang={setLang} />} />
 
-              <Route path="/setup" element={<Setup changePage={changePage} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} setLang={setLanguage} setSpeed={setSpeed} setBgm={setBgm} setEfm={setEfm} setRes={setResolution} />} />
+              <Route path="/setup" element={<Setup setLang={setLang} setSpeed={setSpeed} setBgm={setBgm} setEfm={setEfm} setRes={setResolution} />} />
 
-              <Route path="/gameMain" element={<GameMain page={page} changePage={changePage} saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} gameMode={gameMode} setGameMode={setGameMode} />} />
+              <Route path="/gameMain" element={<GameMain saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} gameMode={gameMode} setGameMode={setGameMode} />} />
 
-              <Route path="/cardsList" element={<CharacterList saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} changePage={changePage} cityIdx={cityIdx} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/cardsList" element={<CharacterList saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/cards" element={<Cards saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} changePage={changePage} cityIdx={cityIdx} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/cards" element={<Cards saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/inven" element={<Inven saveData={saveData} changeSaveData={changeSaveData} navigate={navigate} cityIdx={cityIdx} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/inven" element={<Inven saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/cardPlacement" element={<CardPlacement saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />
+              <Route path="/cardPlacement" element={<CardPlacement saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/moveEvent" element={<MoveEvent saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} gameMode={gameMode} lang={language} res={resolution} />} />
+              <Route path="/moveEvent" element={<MoveEvent saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} gameMode={gameMode} />} />
 
-              <Route path="/enhancingCards" element={<EnhancingCards saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/enhancingCards" element={<EnhancingCards saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/enhancingStickers" element={<EnhancingStickers saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/enhancingStickers" element={<EnhancingStickers saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/composite" element={<Composite saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/composite" element={<Composite saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/stickerShop" element={<StickerShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} cityIdx={cityIdx} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/stickerShop" element={<StickerShop saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/toolShop" element={<ToolShop saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/toolShop" element={<ToolShop saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/shipyard" element={<Shipyard saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/shipyard" element={<Shipyard saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/map" element={<Sail saveData={saveData} changeSaveData={changeSaveData} changePage={changePage} navigate={navigate} cityIdx={cityIdx} lang={language} gameSpd={speed} bgm={bgm} efm={efm} res={resolution} />} />
+              <Route path="/map" element={<Sail saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
             </Routes>
           </ContentContainer>
         </Wrapper>
@@ -351,3 +373,4 @@ const App = () => {
 }
 
 export default App;
+

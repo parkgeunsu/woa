@@ -1,7 +1,8 @@
 import { AppContext } from 'App';
-import ChListCard from 'components/ChListCard';
 import { util } from 'components/Libs';
+import CharacterCard from 'pages/CharacterCard';
 import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const ChWrap = styled.div`
@@ -32,11 +33,21 @@ const ChWrap = styled.div`
 const ChracterList = ({
   saveData,
   slotIdx,
-  navigate,
-  changePage,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const navigate = useNavigate();
+  const context = useContext(AppContext);
+  // const lang = React.useMemo(() => {
+  //   return context.setting.lang;
+  // }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  // const gameData = React.useMemo(() => {
+  //   return context.gameData;
+  // }, [context]);
+  const sData = React.useMemo(() => {
+    return Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData;
+  }, [saveData]);
   const iconState = React.useMemo(() => [imgSet.iconState[0], imgSet.iconState[1], imgSet.iconState[2], imgSet.iconState[3], imgSet.iconState[4], imgSet.iconState[5], imgSet.iconState[6]], [imgSet]);
   //const timerRef = useRef(null); //시간계산
   //const [currentTime, setCurrentTime] = useState(1);
@@ -52,10 +63,8 @@ const ChracterList = ({
         <div className={`ch_list scroll-y list`}>
           <ul>
             { saveData.ch && saveData.ch.map((data, idx) => {
-              const saveCh = saveData.ch[idx];
-              const chData = gameData.ch[saveCh.idx];
               return (
-                <li className={`g${saveCh.grade}`} key={idx} onClick={() => {
+                <li className={`g${data.grade}`} key={idx} onClick={() => {
                   util.saveHistory(() => {
                     util.saveData('historyParam', {
                       ...util.loadData('historyParam'),
@@ -63,11 +72,10 @@ const ChracterList = ({
                         selectIdx: idx,
                       }
                     });
-                    navigate('cards');
-                    changePage('cards');
+                    navigate('../cards');
                   });//히스토리 저장
                 }}>
-                  <ChListCard type="list" saveCh={saveCh} chData={chData} />
+                  <CharacterCard usedType="list" saveData={sData} saveCharacter={data} />
                 </li>
               )
             })}

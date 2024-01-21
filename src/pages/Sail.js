@@ -1,7 +1,7 @@
 import { AppContext } from 'App';
 import { util } from 'components/Libs';
 import 'css/map.css';
-import { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 const TIMEOUT_SPEED = 50;
 const Img = styled.img.attrs(
@@ -140,14 +140,22 @@ const Sail = ({
 	saveData,
 	changeSaveData,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
-	const setting = useContext(AppContext).setting,
-		gameSpd = setting.speed,
-		lang = setting.lang;
-	const [modalOn, setModalOn] = useState(false);
-	const [modalInfo, setModalInfo] = useState({});
-	const [modalType, setModalType] = useState();
+  const context = useContext(AppContext);
+  // const lang = React.useMemo(() => {
+  //   return context.setting.lang;
+  // }, [context]);
+  const speed = React.useMemo(() => {
+    return context.setting.speed;
+  }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
+	// const [modalOn, setModalOn] = useState(false);
+	// const [modalInfo, setModalInfo] = useState({});
+	// const [modalType, setModalType] = useState();
 	const rotateSpeed1 = useRef(0);//wheel 회전각도
 	const rotateSpeed2 = useRef(0);//sail 회전각도
 	const frictionCount = useRef(1);//wheel 마찰개수
@@ -445,12 +453,12 @@ const Sail = ({
 					<Ship ref={shipContainerRef}>
 						<div className="ship" ref={shipRef}>
 						{selectShip.shipIdx !== '' && <div className={`ship_display size${shipSize(selectShip.shipIdx)} ship${selectShip.shipIdx}`}>
-								<svg className="ship_body" xmlns="http://www.w3.org/2000/svg" width="320px" height="600px" viewBox="0 0 320 600" dangerouslySetInnerHTML={{__html: util.setShipColor(gameData.shipSvg[selectShip.shipIdx], imgSet.wood[selectShip.wood] || imgSet.transparent, gameData.ships.woodColor[gameData.ships.wood[selectShip.wood]?.woodColor ?? 4], Math.random().toString(36).substring(2, 11), [gameData.sailSvg[`${selectShip.shipIdx}_${selectShip.sail0}_1`], gameData.sailSvg[`${selectShip.shipIdx}_${selectShip.sail1}_2`], gameData.sailSvg[`${selectShip.shipIdx}_${selectShip.sail2}_3`]], [selectShip.sail0Color, selectShip.sail1Color, selectShip.sail2Color], [gameData.cannonSvg[`${selectShip.shipIdx}_${selectShip.cannon0}_1`], gameData.cannonSvg[`${selectShip.shipIdx}_${selectShip.cannon1}_2`], gameData.cannonSvg[`${selectShip.shipIdx}_${selectShip.cannon2}_3`]])}}></svg>
+								<svg className="ship_body" xmlns="http://www.w3.org/2000/svg" width="320px" height="600px" viewBox="0 0 320 600" dangerouslySetInnerHTML={{__html: util.setShipColor(gameData.shipSvg[selectShip.shipIdx], imgSet.wood[selectShip.wood] || imgSet.images.transparent, gameData.ships.woodColor[gameData.ships.wood[selectShip.wood]?.woodColor ?? 4], Math.random().toString(36).substring(2, 11), [gameData.sailSvg[`${selectShip.shipIdx}_${selectShip.sail0}_1`], gameData.sailSvg[`${selectShip.shipIdx}_${selectShip.sail1}_2`], gameData.sailSvg[`${selectShip.shipIdx}_${selectShip.sail2}_3`]], [selectShip.sail0Color, selectShip.sail1Color, selectShip.sail2Color], [gameData.cannonSvg[`${selectShip.shipIdx}_${selectShip.cannon0}_1`], gameData.cannonSvg[`${selectShip.shipIdx}_${selectShip.cannon1}_2`], gameData.cannonSvg[`${selectShip.shipIdx}_${selectShip.cannon2}_3`]])}}></svg>
 								{selectShip.figure !== '' && <svg className="ship_face" style={{filter:`drop-shadow(0 0 7px ${gameData.ships.figureColor[gameData.ships.figurehead[selectShip.figure].color][2]})`}} xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg[gameData.ships.figurehead[selectShip.figure].display], gameData.ships.figureColor, gameData.ships.figurehead[selectShip.figure].color)}}></svg>}
 							</div>}
 						</div>
 					</Ship>
-					<BgEffect className="bgEffect" img1={imgSet.bgEffect[0]} img2={imgSet.bgEffect[1]} gameSpd={gameSpd}>
+					<BgEffect className="bgEffect" img1={imgSet.bgEffect[0]} img2={imgSet.bgEffect[1]} gameSpd={speed}>
 						{weather.type === "w0" && (
 							<>
 								<BgLight className="bg_light" type={weather.type} day={weather.day}>

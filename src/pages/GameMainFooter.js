@@ -6,12 +6,14 @@ import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
   position: relative;
   width: 100%;
   min-height: 36px;
+  z-index: 10;
 `;
 const ButtonWrap = styled(FlexBox)`
   position: absolute;
@@ -65,12 +67,9 @@ const checkStep = (data) => {
   return 0;
 }
 const GameMainFooter = ({
-  navigate,
   saveData,
-  changePage,
   gameMode,
   setGameMode,
-  lang,
   stay,
   rouletteState,
   setRouletteState,
@@ -82,8 +81,17 @@ const GameMainFooter = ({
   selectScenario,
   selectMoveRegion,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const navigate = useNavigate();
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
   const currentStep = React.useMemo(() => {
@@ -138,8 +146,7 @@ const GameMainFooter = ({
                       stageDifficult: selectScenario.stageDifficult,
                     }
                   });
-                  navigate('battle');
-                  changePage('battle');
+                  navigate('../battle');
                 });
                 setRouletteIdx(0);
                 return;
@@ -216,8 +223,7 @@ const GameMainFooter = ({
                     stageDifficult: selectScenario.stageDifficult,
                   }
                 });
-                navigate('battle');
-                changePage('battle');
+                navigate('../battle');
               });
             }}>{gameData.scenario[stay][selectScenario.dynastyIdx]?.scenarioList[selectScenario.dynastyScenarioIdx].stage[selectScenario.stageIdx].title[lang]} {gameData.msg.button['startBattle'][lang]}</StyledButton>
           }
@@ -251,8 +257,7 @@ const GameMainFooter = ({
                     currentStep: 0,
                   }
                 });
-                navigate('moveEvent');
-                changePage('moveEvent');
+                navigate('../moveEvent');
               });
             }
           }}>

@@ -5,7 +5,7 @@ import iconArrowDown from 'images/ico/arrow_down.png';
 import iconArrowUp from 'images/ico/arrow_up.png';
 import ChLineup from 'pages/ChLineup';
 import CharacterCard from 'pages/CharacterCard';
-import { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled.div`
@@ -29,10 +29,17 @@ const checkUseList = (useList, chIdx) => {
 const CardPlacement = ({
   saveData,
   changeSaveData,
-	lang,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const context = useContext(AppContext);
+  // const lang = React.useMemo(() => {
+  //   return context.setting.lang;
+  // }, [context]);
+  // const imgSet = React.useMemo(() => {
+  //   return context.images;
+  // }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
 	const [saveSlot, setSaveSlot] = useState(saveData?.lineup?.select); // 저장된 슬롯
 	const [selectSave, setSelectSave] = useState(saveData?.lineup?.select); // 선택된 진형슬롯
 	const [selectLineup, setSelectLineup] = useState(saveData?.lineup?.save_slot[selectSave].no); // 저장된 슬롯에 선택된 진형
@@ -234,7 +241,7 @@ const CardPlacement = ({
 										clickLineupCh(saveCh.idx, idx);
 									}
 								}} key={idx} data-idx={idx}>
-									<CharacterCard isThumb={true} saveData={saveData} gameData={gameData} slotIdx={idx} />
+									<CharacterCard usedType="thumb" saveData={saveData} gameData={gameData} slotIdx={idx} />
 								</li>
 							);
 						})}

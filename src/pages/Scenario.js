@@ -10,15 +10,24 @@ import Tooltip from 'components/Tooltip';
 import TooltipContainer from 'components/TooltipContainer';
 import CharacterCard from 'pages/CharacterCard';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
   position: absolute;
   left: 0;
-  top: ${({scenario}) => scenario ? '0%' : '-100%'};
+  ${({gameMode}) => {
+    return gameMode ? `
+      opacity: 1;
+      pointer-events: unset;
+    ` : `
+      opacity: 0;
+      pointer-events: none;
+    `;
+  }};
   width: 100%;
-  height: ${({btnSize}) => `calc(100% - ${btnSize}px)`};
-  transition: top 1s;
+  height: calc(100% - 40px);
+  transition: opacity 1s;
   z-index: 10;
   background: linear-gradient(transparent 0%, rgba(0,0,0,.8) 10%, rgba(0,0,0,.8) 90%, transparent 100%);
 `;
@@ -169,7 +178,6 @@ const DifficultIcon = ({
   clearIcon,
   onClick,
 }) => {
-  const imgSet = useContext(AppContext).images;
   return <DifficultContainer onClick={(e) => {
     e.stopPropagation();
     onClick && onClick();
@@ -297,7 +305,6 @@ const difficultCurrent = (gameData, openCount) => {
 const ScenarioList = ({
   gameData,
   imgSet,
-  changePage,
   navigate,
   saveData,
   changeSaveData,
@@ -422,8 +429,7 @@ const ScenarioList = ({
                     ...util.loadData('historyParam'),
                     scenario: selectScenario
                   });
-                  changePage('cardPlacement');
-                  navigate('cardPlacement');
+                  navigate('../cardPlacement');
                 });//히스토리 저장
               }}>
               {stageData.map.map((mapData, mapIdx) => {
@@ -597,16 +603,21 @@ const Scenario = ({
   gameMode,
   saveData,
   changeSaveData,
-  navigate,
-  changePage,
-  lang,
   stay,
   selectScenario,
   setSelectScenario,
-  btnSize,
 }) => {
-  const imgSet = useContext(AppContext).images;
-  const gameData = useContext(AppContext).gameData;
+  const navigate = useNavigate();
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  const gameData = React.useMemo(() => {
+    return context.gameData;
+  }, [context]);
   const [tooltipOn, setTooltipOn] = useState(false);
   const [tooltip, setTooltip] = useState('');
   const [tooltipPos, setTooltipPos] = useState([0,0]);
@@ -617,10 +628,10 @@ const Scenario = ({
     if (gameMode === 'scenario') {
       setScenarioData(gameData.scenario[stay]);
     }
-  }, [gameMode]);
+  }, [gameData, gameMode]);
   return (
     <>
-      <Wrap scenario={gameMode === 'scenario'} btnSize={btnSize} direction="column">
+      <Wrap gameMode={gameMode === 'scenario'} direction="column">
         <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
           setPopupOn(true);
           setPopupInfo({
@@ -639,7 +650,7 @@ const Scenario = ({
                   {dynastyData.scenarioList?.map((dynastyScenario, dynastyScenarioIdx) => {
                     const saveStage = saveData.scenario[stay][dynastyIdx].scenarioList[dynastyScenarioIdx],
                       stageDifficult = saveStage?.open;
-                    return (stageDifficult > 0 && <ScenarioList key={`scenarios${dynastyScenarioIdx}`} changePage={changePage} navigate={navigate} gameData={gameData} saveData={saveData} changeSaveData={changeSaveData} stay={stay} dynastyIdx={dynastyIdx} dynastyScenarioIdx={dynastyScenarioIdx} dynastyScenario={dynastyScenario} imgSet={imgSet} selectScenario={selectScenario} setSelectScenario={setSelectScenario} setTooltip={setTooltip} setTooltipOn={setTooltipOn} setTooltipPos={setTooltipPos} lang={lang} />)
+                    return (stageDifficult > 0 && <ScenarioList key={`scenarios${dynastyScenarioIdx}`} navigate={navigate} gameData={gameData} saveData={saveData} changeSaveData={changeSaveData} stay={stay} dynastyIdx={dynastyIdx} dynastyScenarioIdx={dynastyScenarioIdx} dynastyScenario={dynastyScenario} imgSet={imgSet} selectScenario={selectScenario} setSelectScenario={setSelectScenario} setTooltip={setTooltip} setTooltipOn={setTooltipOn} setTooltipPos={setTooltipPos} lang={lang} />)
                   })}
               </CountryScenario>
             })}
@@ -650,7 +661,7 @@ const Scenario = ({
 				{tooltipOn && <Tooltip pos={tooltipPos} text={tooltip} showTooltip={setTooltipOn} />}
 			</TooltipContainer>
       <PopupContainer>
-        {popupOn && <Popup type={'guide'} dataObj={popupInfo} showPopup={setPopupOn} lang={lang} />}
+        {popupOn && <Popup type={'guide'} dataObj={popupInfo} showPopup={setPopupOn} />}
       </PopupContainer>
     </>
   )

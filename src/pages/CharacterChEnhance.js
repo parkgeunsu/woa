@@ -1,3 +1,5 @@
+// import { AppContext } from 'App';
+// import React, { useContext } from 'react';
 import frameChBack from 'images/frame/frame_chback.png';
 import styled from 'styled-components';
 
@@ -20,7 +22,19 @@ const ChEnhance = styled.div`
   }
 `;
 
-const CharacterItemEnhance = () => {
+const CharacterItemEnhance = ({
+
+}) => {
+  // const context = useContext(AppContext);
+  // const lang = React.useMemo(() => {
+  //   return context.setting.lang;
+  // }, [context]);
+  // const imgSet = React.useMemo(() => {
+  //   return context.images;
+  // }, [context]);
+  // const gameData = React.useMemo(() => {
+  //   return context.gameData;
+  // }, [context]);
   return (
     <>
       <ChEnhance frameBack={frameChBack} className="ch_enhance">

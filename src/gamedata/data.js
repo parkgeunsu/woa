@@ -26,6 +26,7 @@ export const gameData = {
     itemType: [{ko:'',en:''},{ko:'투구',en:'Helm'},{ko:'갑옷',en:'Armor'},{ko:'무기',en:'Weapon'},{ko:'반지',en:'Ring'},{ko:'목걸이',en:'Necklace'}],
     stateName: ['통솔', '체력', '완력', '민첩', '지력', '정신', '매력', '행운'],
     chMenu: ['display', 'state', 'element', 'animalSkill', 'skill', 'relation', 'item', 'applyState'],
+    startCardArr: [[6], [5,3,2], [4,4,3,2],],
     country: country,
     countryEventsNum : 4, //지역이동시 기본 이벤트 값 4
     events: events,

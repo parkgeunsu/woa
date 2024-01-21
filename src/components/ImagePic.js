@@ -1,6 +1,6 @@
 import { AppContext } from 'App';
 import { util } from 'components/Libs';
-import React, { useCallback, useContext, useState } from 'react';
+import React, { forwardRef, useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
 
 ////etc 0, hole 100, colorance 200, upgrade 300, material 400
@@ -27,16 +27,20 @@ const ItemPic = ({
   children,
   ...rest
 }) => {
+  const context = useContext(AppContext);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
   const startIdx = React.useMemo(() => {
     return type ==='equip' || !type ? '' : util.typeToStartIdx(type);
   }, [type]);
   const picSize = useCallback((node) => {
     if (node !== null) {
       const size = node.getBoundingClientRect().width;
-      node.style.background = `url(${pic}) no-repeat -${(idx % 10) * size}px -${Math.floor(idx / 10) * size + size * startIdx}px`;
+      node.style.background = `url(${imgSet.images[pic]}) no-repeat -${(idx % 10) * size}px -${Math.floor(idx / 10) * size + size * startIdx}px`;
       node.style.backgroundSize = `${size * 10}px`;
     }
-  }, [pic, idx, startIdx]);
+  }, [pic, idx, imgSet, startIdx]);
   return (
     <StyledItemPic ref={picSize} startIdx={startIdx} className="pic" itemPic={pic} idx={idx} {...rest}>
       {children}
@@ -71,15 +75,18 @@ const StyledIconPic = styled.span`
     }
   }}
 `;
-const IconPic = ({
+const IconPic = forwardRef(({
   type,
   idx,
   pic,
   isAbsolute,
   children,
   ...rest
-}) => {
-  const imgSet = useContext(AppContext).images;
+}, ref) => {
+  const context = useContext(AppContext);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
   const whNum = React.useMemo(() => {
     return util.iconHNum(pic);
   }, [pic]);
@@ -87,11 +94,11 @@ const IconPic = ({
     return !type ? 0 : util.iconToStartIdx(type);
   }, [type]);
   return (
-    <StyledIconPic isAbsolute={isAbsolute} whNum={whNum} startIdx={startIdx} className="pic" itemPic={imgSet.images[pic]} idx={idx} {...rest}>
+    <StyledIconPic {...ref ? ref={ref} : '' } isAbsolute={isAbsolute} whNum={whNum} startIdx={startIdx} className="pic" itemPic={imgSet.images[pic]} idx={idx} {...rest}>
       {children}
     </StyledIconPic>
   )
-}
+});
 IconPic.defaultProps = {
   isAbsolute: false,
 }
@@ -100,12 +107,13 @@ const StyledPic = styled.span`
   display: inline-block;
   width: 100%;
   height: 100%;
-  ${({chPic, type, startIdx, idx, whNum, isThumb}) => {
-    const posY = Math.floor(idx / whNum[0]) * (100 / (whNum[1] - 1)) + (100 / (whNum[1] - 1)) * startIdx - (isThumb ? 
-      type ? 0.6745 * startIdx : Math.floor(idx / whNum[0]) - 1.4825 : 
-    0);
+  ${({chPic, type, startIdx, idx, whNum, isThumb, absoluteSize}) => {
+    const posY = Math.floor((absoluteSize ? idx + 10 : idx) / whNum[0]) * (100 / (whNum[1] - 1)) + (100 / (whNum[1] - 1)) * startIdx - (
+      isThumb ?
+        type ? 0.6745 * startIdx : Math.floor(idx / whNum[0]) - 1.4825 
+      : absoluteSize ? 6.1 : 0);
     return `
-      background: url(${chPic}) no-repeat ${(idx % whNum[0]) * (100 / (whNum[0] - 1))}% ${posY}%;
+      background: url(${chPic}) no-repeat ${((absoluteSize ? idx + 10 : idx) % whNum[0]) * (100 / (whNum[0] - 1))}% ${posY}%;
       background-size: ${whNum[0] * 100}%;
     `;
     //0.6745, 1.4825
@@ -116,10 +124,14 @@ const ChPic = ({
   pic,
   type,
   isThumb,
+  absoluteSize,
   children,
   ...rest
 }) => {
-  const imgSet = useContext(AppContext).images;
+  const context = useContext(AppContext);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
   const whNum = React.useMemo(() => {
     return util.iconHNum(pic);
   }, [pic]);
@@ -127,7 +139,7 @@ const ChPic = ({
     return !type ? 0 : util.iconToStartIdx(type);
   }, [type]);
   return (
-    <StyledPic startIdx={startIdx} type={type} whNum={whNum} isThumb={isThumb} chPic={imgSet.images[pic]} idx={idx} {...rest}>
+    <StyledPic startIdx={startIdx} absoluteSize={absoluteSize} type={type} whNum={whNum} isThumb={isThumb} chPic={imgSet.images[pic]} idx={idx} {...rest}>
       {children}
     </StyledPic>
   )
@@ -207,6 +219,10 @@ const MarkPic = ({
   pic,
   idx,
 }) => {
+  const context = useContext(AppContext);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
   const [size, setSize] = useState(0);
   const picSize = useCallback((node) => {
     if (node !== null) {
@@ -216,7 +232,7 @@ const MarkPic = ({
   const mark = React.useMemo(() => Array.from({length: length}, () => ''), [length]);
   return (
     mark.map((markData, markIdx) => {
-      return <MarkWrap ref={picSize} size={size} pic={pic} idx={idx} key={`markIdx${markIdx}`}>
+      return <MarkWrap ref={picSize} size={size} pic={imgSet.images[pic]} idx={idx} key={`markIdx${markIdx}`}>
         <MarkImg type="light"/>
         <MarkImg type="front"/>
         <MarkImg type="shadow"/>

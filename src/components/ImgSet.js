@@ -21,7 +21,6 @@ import frameRope from 'images/frame/frame_rope.png';
 import frameWood from 'images/frame/frame_wood.png';
 import skillFrame from 'images/frame/skill_frame.png';
 import stateBack from 'images/pattern/white_brick_wall_@2X_.png';
-import imgRing from 'images/ring/ring_.png';
 
 import iconStateType0 from 'images/ico/state_type0.png';
 import iconStateType1 from 'images/ico/state_type1.png';
@@ -59,47 +58,6 @@ import iconState4 from 'images/ico/st4.png';
 import iconState5 from 'images/ico/st5.png';
 import iconState6 from 'images/ico/st6.png';
 import tombstone from 'images/ico/tombstone.png';
-import grass1 from 'images/land/grass1.png';
-import grass2 from 'images/land/grass2.png';
-import grass3 from 'images/land/grass3.png';
-import land1 from 'images/land/land1.png';
-import land2 from 'images/land/land2.png';
-import land3 from 'images/land/land3.png';
-import stone1 from 'images/land/stone1.png';
-import stone2 from 'images/land/stone2.png';
-import stone3 from 'images/land/stone3.png';
-import water1 from 'images/land/water1.png';
-import water2 from 'images/land/water2.png';
-import water3 from 'images/land/water3.png';
-import ring0 from 'images/ring/ring0.png';
-import ring1 from 'images/ring/ring1.png';
-import ring2 from 'images/ring/ring2.png';
-import ring3 from 'images/ring/ring3.png';
-import ring4 from 'images/ring/ring4.png';
-import ring5 from 'images/ring/ring5.png';
-import ring6 from 'images/ring/ring6.png';
-import ring7 from 'images/ring/ring7.png';
-import ring_ from 'images/ring/ring_.png';
-import sring0 from 'images/sring/sring0.png';
-import sring1 from 'images/sring/sring1.png';
-import sring10 from 'images/sring/sring10.png';
-import sring2 from 'images/sring/sring2.png';
-import sring3 from 'images/sring/sring3.png';
-import sring4 from 'images/sring/sring4.png';
-import sring5 from 'images/sring/sring5.png';
-import sring6 from 'images/sring/sring6.png';
-import sring7 from 'images/sring/sring7.png';
-import ssring0 from 'images/ssring/ssring0.png';
-import ssring1 from 'images/ssring/ssring1.png';
-import ssring10 from 'images/ssring/ssring10.png';
-import ssring2 from 'images/ssring/ssring2.png';
-import ssring3 from 'images/ssring/ssring3.png';
-import ssring4 from 'images/ssring/ssring4.png';
-import ssring5 from 'images/ssring/ssring5.png';
-import ssring6 from 'images/ssring/ssring6.png';
-import ssring7 from 'images/ssring/ssring7.png';
-import ssring8 from 'images/ssring/ssring8.png';
-import ssring9 from 'images/ssring/ssring9.png';
 
 //wheel
 import controlWheel0 from 'images/control/wheel0.png';
@@ -298,10 +256,13 @@ import worldMap from 'images/map/worldmap.png';
 // import map1 from 'images/map/map1.png';
 
 import animalType from 'images/animalType.png'; //4000, 10, 3
-import card from 'images/card.png'; //8000 x 7110, 10, 6
+import { default as card, default as card_s } from 'images/card.png'; //8000 x 7110, 10, 6
 import cardRing from 'images/cardRing.png'; //5500 x 5500, 5, 5
+import cardRing_s from 'images/cardRing_s.png'; //1375 x 1375, 5, 5
 import ch from 'images/ch.png'; //8000 x 7110, 10, 6
+import ch_s from 'images/ch_s.png'; //2000 x 1778, 10, 6
 import icon100 from 'images/icon100.png'; //1000, 10, 20
+import icon150 from 'images/icon150.png'; //1500, 10, 10
 import icon200 from 'images/icon200.png'; //2000, 10, 10
 import itemEtc from 'images/itemEtc.png'; //1000, 10, 50
 import itemTicket from 'images/itemTicket.png'; //1200, 12, 1
@@ -312,22 +273,13 @@ export const back = [
   back0,back1,back2,back3,itemEn0,itemEn1,scroll,stamp,countryTitle
 ];
 export const etc = {
-  imgRing:imgRing,frameChBack:frameChBack,stateBack:stateBack,imgCardLv:imgCardLv,iconCardName:iconCardName,frameRope:frameRope,frameWood:frameWood,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,wind:wind,color:color,
+  frameChBack:frameChBack,stateBack:stateBack,imgCardLv:imgCardLv,iconCardName:iconCardName,frameRope:frameRope,frameWood:frameWood,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,wind:wind,color:color,
 };
 export const icon = {iconStateType0:iconStateType0,iconStateType1:iconStateType1,iconStateType2:iconStateType2,iconStateType3:iconStateType3,
 };
 export const button = {
   btnL:btnL,btnLL:btnLL,btnLD:btnLD,btnM:btnM,btnML:btnML,btnMD:btnMD,btnS:btnS,btnSL:btnSL,btnSD:btnSD,btnCircle:btnCircle,btnCircleL:btnCircleL,btnCircleD:btnCircleD,btnArrow:btnArrow,btnArrowL:btnArrowL,btnArrowD:btnArrowD,btnSix:btnSix,btnSixL:btnSixL,btnSixD:btnSixD
 }
-export const ringImg = [
-  "","","","","",ring0,ring1,ring2,ring3,ring4,ring5,ring6,ring7,ring_
-];
-export const sringImg = [
-  "","","","","",sring0,sring1,sring2,sring3,sring4,sring5,sring6,sring7,sring10
-];
-export const ssringImg = [
-  "","","","","",ssring0,ssring1,ssring2,ssring3,ssring4,ssring5,ssring6,ssring7,ssring8,ssring9,ssring10
-];
 export const iconState = [
   iconState0,iconState1,iconState2,iconState3,iconState4,iconState5,iconState6
 ];
@@ -336,9 +288,6 @@ export const control = {
 };
 export const weather = [
   sun,moon,suncloud,mooncloud,sunrain,moonrain,sunthunder,moonthunder,sunsnow,moonsnow
-];
-export const land = [
-  grass1,grass2,grass3,land1,land2,land3,stone1,stone2,stone3,water1,water2,water3
 ];
 export const bgEffect = [
   cloud1,cloud2
@@ -373,5 +322,7 @@ export const map = {
 };
 
 export const images = {
-  ch:ch,card:card,cardRing:cardRing,icon100:icon100,icon200:icon200,moveEvent:moveEvent,moveEventCountry:moveEventCountry,itemTicket:itemTicket,itemEtc:itemEtc,animalType:animalType,
+  ch:ch,ch_s:ch_s,card:card,card_s:card_s,cardRing:cardRing,cardRing_s:cardRing_s,icon100:icon100,icon150:icon150,icon200:icon200,moveEvent:moveEvent,moveEventCountry:moveEventCountry,itemTicket:itemTicket,itemEtc:itemEtc,animalType:animalType,
+  transparent:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAAtJREFUGFdjYAACAAAFAAGq1chRAAAAAElFTkSuQmCC',
+  transparent800:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAyAAAAShAQMAAADx9W3YAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAJZJREFUeNrswYEAAAAAgKD9qRepAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADg9uBAAAAAAECQv/UgVwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8BDTlAABJUQ2AgAAAABJRU5ErkJggg==',
 }
