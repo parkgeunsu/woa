@@ -11,6 +11,10 @@ import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
+  position: absolute;
+  top: 0;
+  padding: 25px 20px 20px;
+  box-sizing: border-box;
   .skill_header{align-items:center;margin:0 0 25px 0;}
   .skill_group{position:relative;height:50px;}
   .skill_list{position:absolute;width:50px;height:50px;box-sizing:border-box;border-radius:30px;}

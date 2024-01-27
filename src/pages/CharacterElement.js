@@ -1,4 +1,5 @@
 import { AppContext } from 'App';
+import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import { IconPic } from 'components/ImagePic';
 import InfoGroup from 'components/InfoGroup';
@@ -8,13 +9,16 @@ import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
+  position: absolute;
+  top: 0;
+  padding: 25px 20px 20px;
+  box-sizing: border-box;
 `;
 const Element = styled.div`
   position: relative;
-  width: 100%;
-  height: 20px;
   margin: 0 0 5px 0;
-  .element_iconMini{background-image:url(${({ icon }) => icon});background-size:100%;}
+  width: 100%;
+  height: 40px;
   &:last-of-type{
     margin-bottom: 0;
   }
@@ -31,24 +35,27 @@ const ElementIcon = styled.div`
 `;
 const ElementBar = styled.div`
   position: absolute;
+  top: 6px;
   width: calc(100% - 80px);
-  height: 16px;
+  height: 24px;
+  border: 3px double var(--color-w);
   background: #333;
-  border-radius: 10px;
+  border-radius: 20px;
   white-space: nowrap;
   overflow: ${({ percent }) => percent > 100 ? 'unset' : 'hidden'};
   ${({direction}) => direction === 'L' ? `
-    left:40px;top:12px;
+    left: 45px;
   ` : `
-    right:40px;top:12px;
+    right: 45px;
   `}
 `;
 const ElementCurrentBar = styled.span`
   display: inline-block;
   position: absolute;
   height: 100%;
-  border-radius: 10px;
+  border-radius: 20px;
   width: ${({ percent }) => percent > 100 ? 100 : percent}%;
+  transition: width linear 0.5s;
   ${({direction}) => direction === 'L' ? `
     background-image:linear-gradient(90deg,rgba(255,255,255,.5),transparent 3px,transparent calc(100% - 3px), rgba(255,255,255,.5)),linear-gradient(180deg,rgba(255,255,255,.5),rgba(0,0,0,.2) 4px,transparent 7px,transparent 14px, rgba(255,255,255,.5)),linear-gradient(90deg,#7ad8d9,#13003a);
     left:0;text-align:right;
@@ -57,8 +64,6 @@ const ElementCurrentBar = styled.span`
     right:0;text-align:left;
   `}
 `;
-// .ch_info .element .info_group dd .el:nth-of-type(2n + 1) .element_currentBar{}
-// .ch_info .element .info_group dd .el:nth-of-type(2n) .element_currentBar{}
 
 const ElementIconMini = styled.span`
   position: absolute;
@@ -71,10 +76,10 @@ const ElementIconMini = styled.span`
     left: 0;
   `}
 `;
-const ElementNum = styled.span`
+const ElementNum = styled(Text)`
   position: absolute;
   width: 20px;
-  line-height: 16px;
+  line-height: 24px;
   text-align: center;
   ${({direction}) => direction === 'L' ? `
     right: -20px;
@@ -143,42 +148,15 @@ const CharacterElement = ({
                   <IconPic type="element" pic="icon100" idx={idx + 1} />
                 </ElementIcon>
                 <ElementBar percent={elementPercent} direction={direction}>
-                  <ElementCurrentBar className={`element_currentBar transition`} percent={elementPercent} direction={direction}>
-                    <ElementIconMini className="element_iconMini" direction={direction}/>
-                    <ElementNum className="element_num" direction={direction}>{num}</ElementNum>
+                  <ElementCurrentBar percent={elementPercent} direction={direction}>
+                    <ElementIconMini direction={direction}/>
+                    <ElementNum code="t2" color="main" direction={direction}>{num}</ElementNum>
                   </ElementCurrentBar>
                 </ElementBar>
               </Element>
             )
-            // return (
-            //   <div key={`chst${idx}`} className={`st st${idx}`} flex="true">
-            //     <span className="name">{data}</span>
-            //     <span className="total_bar">
-            //       <FrameBar chMaxSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="frame_bar transition gradient_light">
-            //         <Bar idx={idx} rSt={slotCh['rSt'+idx]} chMaxSt={slotCh['maxSt'+idx]} stateType={imgSet.iconState[idx]} className="bar transition gradient_dark_y">
-            //           <span className="ico"></span>
-            //           {/* <span className="txt_current">0</span> */}
-            //         </Bar>
-            //       </FrameBar>
-            //       <BackBar stateBack={stateBack} chMaxSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="back_bar transition" />
-            //     </span>
-            //     <TextTotal rSt={slotCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="txt_total" title={data.title}>
-            //       {idx === 6 ? slotCh['maxSt'+idx] : slotCh['rSt'+idx]}
-            //     </TextTotal>
-            //   </div>
-            // )
           })}
         </InfoGroup>
-        {/* <InfoGroup className="info_group ch_group">
-          <dt>{}
-            <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
-              
-            }} />
-          </dt>
-          <dd className="scroll-y" flex-h="true">
-            
-          </dd>
-        </InfoGroup> */}
       </Wrap>
       <PopupContainer>
         {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} />}

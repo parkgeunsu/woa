@@ -22,11 +22,7 @@ const ChCard = styled.div`
   left:0;
   width:100%;
   height:100%;
-  z-index:2;
   pointer-events:none;
-  & > span {
-    display: block;
-  }
   ${({size}) => {
     if (size) {
       return `
@@ -36,31 +32,58 @@ const ChCard = styled.div`
       `
     } else {
       return `
-        border-radius: 20px;
         box-shadow:0 0 1px #ff0,0 0 2px #fff,0 0 10px #000;
       `
     }
   }}
   overflow:hidden;
-  transform:rotateY(0deg);
   &.page {
     position:relative;width:100%;height:85%;padding:0 3% 3% 3%;
   }
 `;
 
-const ListNameLv = styled.span`
+const ListNameLv = styled.div`
   position: absolute;
-  left:50%;
-  transform:translate(-50%,0) scale(1);
   text-align:center;
-  ${({isThumb, theme, backColor, cardLv}) => {
+  ${({isThumb, backColor, cardLv}) => {
     return isThumb ?
-      `bottom:5%;width:14px;height:14px;z-index:6;font-size:0.625rem;line-height:1;font-weight:600;border-radius:50%;background-color:${backColor};` : 
       `
-        bottom:7%;width:85%;text-shadow:0 0 1px #fff;z-index:3;font-size:0;
-        &:after{content:'';display:block;position:absolute;left:3%;top:-17%;padding-top:30%;width:30%;background:url(${cardLv});background-repeat:no-repeat;background-position:center center;background-size:contain;}
+        left: calc(50% - 7px);
+        bottom: 5%;
+        width: 14px;
+        height: 14px;
+        z-index: 6;
+        font-size: 0.625rem;
+        line-height: 1;
+        font-weight: 600;
+        border-radius: 50%;
+        background-color: ${backColor};
+      `
+        : 
+      `
+        left: 7.5%;
+        bottom: 7%;
+        width: 85%;
+        text-shadow: 0 0 1px #fff;
+        z-index: 3;
+        font-size: 0;
+        &:after {
+          content: '';
+          display: block;
+          position: absolute;
+          left: 3%;
+          top: -17%;
+          padding-top: 30%;
+          width: 30%;
+          background: url(${cardLv});
+          background-repeat: no-repeat;
+          background-position: center center;
+          background-size: contain;
+        }
         & {
-          img{width:100%;}
+          img{
+            width: 100%;
+          }
         }
       `
   }};
@@ -131,6 +154,7 @@ const ListJobAction = styled.div`
   & > span {
     display: block;
   }
+  pointer-events: none;
 `;
 const ListJobActionListType = styled.div`
   position: absolute;
@@ -138,32 +162,40 @@ const ListJobActionListType = styled.div`
   top: 3px;
   width: 20%;
   font-size: 0;
-  z-index: 2;
+  z-index: 5;
 `;
-const ListChJob = styled.span`
+const ListChJob = styled.div`
   position: relative;
   width: 100%;
   padding-top: 100%;
-  pointer-events: none;
   z-index: 5;
 `;
-const ListChJobListType = styled.span`
+const ListChJobListType = styled.div`
   position: relative;
   display: inline-block;
   width: 100%;
   padding-top: 100%;
   z-index: 5;
 `;
-const ListChActionType = styled.span`
-  position: absolute;
+const ListChActionType = styled.div`
   ${({isThumb}) => {
     return isThumb ?
-      `top:4px;left:4px;width:20%;padding-top:20%;pointer-events:none;` : 
-      `position:relative;width:100%;padding-top:100%;`
+      `
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 20%;
+        padding-top: 20%;
+      ` : 
+      `
+        position: relative;
+        width: 100%;
+        padding-top: 100%;
+      `
   }}
   z-index:5;
 `;
-const ListChActionTypeListType = styled.span`
+const ListChActionTypeListType = styled.div`
   display: block;
   position: relative;
   width: 100%;
@@ -197,11 +229,11 @@ const ListChElement1 = styled(ChPic)`
 const ListChElement2 = styled(ChPic)`
   position: absolute;
   top: ${({isThumb}) => isThumb ? 0 : 13}%;
-  height: auto !important;
+  height: 0 !important;
   padding-top: 100%;
   z-index: 2;
-  transform: scale(1.35,1.35);
-  animation:rotate_ring linear ${({gameSpd}) => 22.5 / gameSpd}s infinite;
+  transform: scale(1.35);
+  animation: rotate_ring linear ${({gameSpd}) => 22.5 / gameSpd}s infinite;
   ${'' /* background-position:${({isThumb}) => isThumb ? 'center 35%' : 'center center'}; */}
 `;
 const ListChFrame = styled(ChPic)`
@@ -219,7 +251,7 @@ const ListActionPoint = styled.div`
   font-size: 1rem;
   z-index: 6;
 `;
-const ListChStar = styled.span`
+const ListChStar = styled.div`
   position: absolute;
   left: 0;
   bottom: ${({usedType}) => usedType === 'gameMain' ? '15': '22'}%;
@@ -242,6 +274,7 @@ const ChracterCard = ({
   usedType,
   noInfo,
   gameSpd,
+  ...rest
 }) => {
   const context = useContext(AppContext);
   // const lang = React.useMemo(() => {
@@ -257,8 +290,8 @@ const ChracterCard = ({
   const saveCh = React.useMemo(() => {
     return saveCharacter
       ? saveCharacter 
-      : saveData 
-        ? saveData.ch[slotIdx] 
+      : saveData && Object.keys(saveData).length > 0
+        ? saveData.ch[slotIdx]
         : '';
   }, [saveData, slotIdx, saveCharacter]);
   const chData = React.useMemo(() => {
@@ -315,8 +348,8 @@ const ChracterCard = ({
     if (usedType === 'list') { //list 사용
       return (
         <>
-          <ListCh pic="ch" idx={chData.display} />
-          <ListChRing type="cardBack" pic="card" idx={0} />
+          <ListCh pic="ch_s" idx={chData.display} />
+          <ListChRing type="cardBack" pic="card_s" idx={0} />
           <ListJobActionListType>
             <ListChJobListType>
               <IconPic type="job" isAbsolute={true} pic="icon100" idx={saveCh.job} />
@@ -324,13 +357,13 @@ const ChracterCard = ({
             {saveCh.newActionType.map((data, idx) => {
               return (
                 <ListChActionTypeListType key={'action'+idx}>
-                  <StyledIconPic type="element" pic="icon100" idx={idx + 1} />
+                  <StyledIconPic type="element" pic="icon100" idx={data + 1} />
                 </ListChActionTypeListType>
               )
             })}
           </ListJobActionListType>
-          <ListChElement type="elementBack" pic="card" idx={chData.element} />
-          <ListChFrame type="cardBack" pic="card" idx={1} />
+          <ListChElement type="elementBack" pic="card_s" idx={chData.element} />
+          <ListChFrame type="cardBack" pic="card_s" idx={1} />
           <ListActionPoint>{`${saveCh.actionPoint} / ${saveCh.actionMax}`}</ListActionPoint>
         </>
       )
@@ -347,7 +380,7 @@ const ChracterCard = ({
             {saveCh.newActionType.map((data, idx) => {
               return (
                 <ListChActionTypeListType key={'action'+idx}>
-                  <StyledIconPic type="element" pic="icon100" idx={idx + 1} />
+                  <StyledIconPic type="element" pic="icon100" idx={data + 1} />
                 </ListChActionTypeListType>
               )
             })}
@@ -377,7 +410,7 @@ const ChracterCard = ({
               {saveCh?.newActionType.map((data, idx) => {
                 return (
                   <ListChActionType className="list_action_type" isThumb={true} key={'action'+idx}>
-                    <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={idx + 1} />
+                    <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={data + 1} />
                   </ListChActionType>
                 )
               })}
@@ -390,7 +423,7 @@ const ChracterCard = ({
     if (usedType === 'gacha') { //gacha 사용
       const starArr = Array.from({length: saveCh?.grade}, () => ''); 
       return (
-        <ChCard size={size} className="ch_detail transition">
+        <ChCard size={size} className="ch_detail">
           <ListNameLv cardLv={imgSet.etc.imgCardLv} className="name_lv">
             <Img className="img" imgurl={imgSet.etc.iconCardName} />
             <Lv code="t0" color="main">{saveCh?.lv}</Lv>
@@ -412,8 +445,8 @@ const ChracterCard = ({
               }}>{`${chData?.na1} ${chData?.na2}`}</Name>
             )}
           </ListNameLv>
-          <ListCh pic="ch" idx={chData?.display} />
-          <ListChRing type="cardBack" pic="card" idx={0} />
+          <ListCh pic="ch_s" idx={chData?.display} />
+          <ListChRing type="cardBack" pic="card_s" idx={0} />
           <ListJobAction style={{
             left: '3px',
             top: '3px',
@@ -423,23 +456,23 @@ const ChracterCard = ({
             <ListChJob className="job">
               <IconPic type="job" isAbsolute={true} pic="icon100" idx={saveCh?.job} />
             </ListChJob>
-            {saveCh?.newActionType.map((data, idx) => {
+            {saveCh && saveCh?.newActionType.map((data, idx) => {
               return (
                 <ListChActionType key={'action'+idx} className="action_type">
-                  <IconPic type="element" isAbsolute={true} pic="icon100" idx={idx + 1} />
+                  <IconPic type="element" isAbsolute={true} pic="icon100" idx={data + 1} />
                 </ListChActionType>
               )
             })}
           </ListJobAction>
-          <ListChElement type="elementBack" pic="card" idx={chData?.element} />
-          {saveCh?.lv > 29 && <ListChElement1 type="elementBack2" pic="card" idx={chData?.element} />}
-          {saveCh?.lv > 49 && <ListChElement2 wNum={5} hNum={5} pic="cardRing" idx={chData?.element} gameSpd={gameSpd} />}
+          <ListChElement type="elementBack" pic="card_s" idx={chData?.element} />
+          {saveCh?.lv > 29 && <ListChElement1 type="elementBack2" pic="card_s" idx={chData?.element} />}
+          {saveCh?.lv > 49 && <ListChElement2 wNum={5} hNum={5} pic="cardRing_s" idx={chData?.element} gameSpd={gameSpd} />}
           <ListChStar>
             {starArr.map((star, idx) => {
               return <Star idx={idx} type="star" pic="icon100" key={`start${idx}`} />;
             })}
           </ListChStar>
-          <ListChFrame type="cardBack" pic="card" idx={1} />
+          <ListChFrame type="cardBack" pic="card_s" idx={1} />
         </ChCard>
       )
     }
@@ -447,7 +480,7 @@ const ChracterCard = ({
       const starArr = Array.from({length: saveCh?.grade}, () => '');
       return (
         <CardContainer size={size} sizeH={sizeH}>
-          <ChCard size={size} className="ch_detail transition">
+          <ChCard size={size} className="ch_detail">
             <ListCh pic="ch_s" idx={chData?.display} />
             <ListChRing type="cardBack" pic="card_s" idx={0} />
             <ListJobAction>
@@ -457,7 +490,7 @@ const ChracterCard = ({
               {saveCh?.newActionType?.map((data, idx) => {
                 return (
                   <ListChActionType key={'action'+idx} className="action_type">
-                    <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={idx + 1} />
+                    <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={data + 1} />
                   </ListChActionType>
                 )
               })}
@@ -476,11 +509,11 @@ const ChracterCard = ({
       )
     }
     if (slotIdx !== '') {
-      const starArr = Array.from({length: saveCh?.grade}, () => ''); 
+      const starArr = Array.from({length: saveCh?.grade}, () => '');
       return (
         size ? (
           <CardContainer size={size} sizeH={sizeH}>
-            <ChCard size={size} className="ch_detail transition">
+            <ChCard size={size} className="ch_detail">
               <ListCh pic="ch_s" idx={chData?.display} />
               <ListChRing type="cardBack" pic="card_s" idx={0} />
               <ListJobAction>
@@ -490,7 +523,7 @@ const ChracterCard = ({
                 {saveCh?.newActionType?.map((data, idx) => {
                   return (
                     <ListChActionType key={'action'+idx} className="action_type">
-                      <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={idx + 1} />
+                      <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={data + 1} />
                     </ListChActionType>
                   )
                 })}
@@ -507,7 +540,7 @@ const ChracterCard = ({
             </ChCard>
           </CardContainer>
         ) : (
-          <ChCard size={size} className="ch_detail transition">
+          <ChCard size={size} className="ch_detail" {...rest}>
             <ListNameLv cardLv={imgSet.etc.imgCardLv} className="name_lv">
               <Img className="img" imgurl={imgSet.etc.iconCardName} />
               <Lv code="t8" color="main">{saveCh?.lv}</Lv>
@@ -523,7 +556,7 @@ const ChracterCard = ({
               {saveCh?.newActionType.map((data, idx) => {
                 return (
                   <ListChActionType key={'action'+idx} className="action_type">
-                    <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={idx + 1} />
+                    <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={data + 1} />
                   </ListChActionType>
                 )
               })}

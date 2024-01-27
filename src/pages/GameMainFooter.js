@@ -210,7 +210,11 @@ const GameMainFooter = ({
           }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
           {Object.keys(selectScenario).length === 0 ? 
             <StyledButton btnImg={imgSet.button.btnMD}>{gameData.msg.sentence['selectScenario'][lang]}</StyledButton> :
-            <StyledButton btnImg={imgSet.button.btnMD} type="icon" icon={imgSet.icon[`iconDifficult${selectScenario?.stageDifficult}`]} onClick={() => {
+            <StyledButton btnImg={imgSet.button.btnMD} type="icon" icon={{
+              pic: 'icon100',
+              type: 'scenario',
+              idx: selectScenario?.stageDifficult
+            }} onClick={() => {
               console.log('전투개시');
               util.saveHistory(() => {
                 util.saveData('historyParam', {
@@ -265,7 +269,7 @@ const GameMainFooter = ({
               {stayIdx.current === selectMoveRegion ? <>
                 {gameData.msg.sentence['sameCountry'][lang]}
               </> : <>
-                {gameData.msg.regions[stay][lang]} <StyledIcon url={imgSet.icon.iconBack} /> {gameData.msg.regions[util.getIdxToCountry(selectMoveRegion)][lang]}
+                {gameData.msg.regions[stay][lang]} <StyledIcon url={imgSet.icon?.iconBack} /> {gameData.msg.regions[util.getIdxToCountry(selectMoveRegion)][lang]}
               </>
               }
             </FlexBox>

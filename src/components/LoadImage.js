@@ -1,4 +1,4 @@
-import { actionIcon, anchor, back, bgEffect, button, cannon, control, eff, etc, figure, icon, iconState, images, map, passive, sail, weather, wood } from 'components/ImgSet';
+import { actionIcon, anchor, back, bgEffect, button, cannon, control, eff, etc, figure, images, map, passive, sail, weather, wood } from 'components/ImgSet';
 //icon100 menu0, element1~2
 export const LoadImage = () => {
   //이미지 프리로드
@@ -6,10 +6,6 @@ export const LoadImage = () => {
     const img = new Image();
     img.src = image;
   });
-  for (let v in icon) {
-    const img = new Image();
-    img.src = icon[v];
-  }
   for (let v in button) {
     const img = new Image();
     img.src = button[v];
@@ -18,10 +14,6 @@ export const LoadImage = () => {
     const img = new Image();
     img.src = etc[v];
   }
-  iconState.forEach((image) => {
-    const img = new Image();
-    img.src = image;
-  });
   bgEffect.forEach((image) => {
     const img = new Image();
     img.src = image;
@@ -77,9 +69,7 @@ export const LoadImage = () => {
   return {
     back: back,
     etc: etc,
-    icon: icon,
     button: button,
-    iconState: iconState,
     bgEffect: bgEffect,
     passive: passive,
     eff: eff,

@@ -48,8 +48,6 @@ const Wrapper = styled.div`
         return imgSet[1];
       case 'setup':
         return imgSet[2];
-      case 'recruitment':
-        return imgSet[3];
       case 'gameMain':
         return imgSet[0];
       case 'cards':
@@ -61,6 +59,7 @@ const Wrapper = styled.div`
         return imgSet[1];
       case 'moveEvent':
         return imgSet[3];
+      case 'recruitment':
       default:
         return ``;
     }
@@ -240,8 +239,10 @@ const App = () => {
       continueGame = util.loadData('continueGame');
     let useSaveData = {}
     if (!continueGame) { //신규 게임
+      if (location !== '') {
+        navigate('../');
+      }
       //save 는 가상데이터
-      console.log('aaa');
       saveNew.city = setCity(gameData.city.port, conTextData.setting.lang);
       useSaveData = saveNew;
       util.saveData('saveData', saveNew);
@@ -277,10 +278,11 @@ const App = () => {
           return sData;
         }
       });
-      const history = util.loadData('history');
-      if (history === null || history === undefined || history.length === 0 || history[0] === '') {
+      if (!location || location === 'start') {
         navigate('../gameMain');
       }
+      // const history = util.loadData('history');
+      // if ((history === null || history === undefined || history.length === 0 || history[0] === '') && 
       // changePage('gameMain', {aa: 1, bb: 2});
     }
     //util.getTimeGap(useSaveData, changeSaveData);//시간 저장

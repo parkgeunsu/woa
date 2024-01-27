@@ -71,7 +71,7 @@ const save = {
     },
   ],
   "ch":[
-    {"idx":1,"stateType":0,"element":[8],"actionType":1,"job":0,"newActionType":[1],"grade":6,"mark":2,"stateLuk":146,"lv":45,"exp":10,"hasExp":50000,"actionPoint":10,"actionMax":75,"pointTime":2000,"battleBeige":[0,0,0,0],"animalBeige":1,"items":[
+    {"idx":1,"element":[8],"actionType":1,"job":0,"newActionType":[1],"grade":6,"mark":2,"stateLuk":146,"lv":45,"exp":10,"hasExp":50000,"actionPoint":10,"actionMax":75,"pointTime":2000,"battleBeige":[0,0,0,0],"animalBeige":1,"items":[
       {"id":"d3a5xzncc","idx": 2,"grade": 2,"hole": [0],"color": ["hsla(63,97%,88%,1)","hsla(278,96%,21%,1)"],"baseEff": [{"type": 4,"num": ["82","98","121","140"]}],"addEff": [{"type": 13,"num": ["46"]},{"type": 4,"num": ["178"]},{"type": 8,"num": ["4"]},{"type": 11,"num": ["25"]}],"mark": 0,"markNum": 2,"modifier": {"ko":"사파이어의 고양이두마리","en":"Sappire's two Cats"},"part":1,"sealed":false,"slot":1,"weaponType":0,"favorite":0},
       {"id":"jikz3q7ft","idx": 8,"grade": 2,"hole": [0,0,0,0],"color": ["hsla(29,22%,43%,1)"],"baseEff": [{"type": 4,"num": ["305","386","480","583"]}],"addEff": [{"type": 13,"num": ["2"]},{"type": 13,"num": ["18"]},{"type": 4,"num": ["359"]}],"mark": 0,"markNum": 4,"modifier": {"ko":"다이아몬드의 고양이네마리","en":"Diamods's four Cats"},"part":2,"sealed":false,"slot":4,"weaponType":0,"favorite":0},
       // {"idx":11,"slot":3,"hole":[],"grade":2},
@@ -90,7 +90,7 @@ const save = {
       [{idx:124,lv:1},{idx:116,lv:1},{idx:204,lv:1},{}],
       [{},{},{},{}],
     ]},
-    {"idx":0,"stateType":0,"element":[11],"actionType":3,"job":12,"newActionType":[3],"grade":5,"mark":0,"stateLuk":200,"lv":40,"exp":0,"hasExp":1000,"actionPoint":26,"actionMax":55,"pointTime":1200,"battleBeige":[0,0,0,0],"animalBeige":0,"items":[
+    {"idx":0,"element":[11],"actionType":3,"job":12,"newActionType":[3],"grade":5,"mark":0,"stateLuk":200,"lv":40,"exp":0,"hasExp":1000,"actionPoint":26,"actionMax":55,"pointTime":1200,"battleBeige":[0,0,0,0],"animalBeige":0,"items":[
       {"id":"xh7lqinoo","idx": 2,"grade": 2,"hole": [0],"color": ["hsla(63,97%,88%,1)","hsla(278,96%,21%,1)"],"baseEff": [{"type": 4,"num": ["82","98","121","140"]}],"addEff": [{"type": 13,"num": ["46"]},{"type": 4,"num": ["178"]},{"type": 8,"num": ["4"]},{"type": 11,"num": ["25"]}],"mark": 0,"markNum": 2,"modifier": {"ko":"사파이어의 고양이두마리","en":"Sappire's two Cats"},"part":1,"sealed":false,"slot":1,"weaponType":0,"favorite":0},
       {"id":"papul9e8r","idx": 0,"grade": 2,"hole": [0,0,0,0],"color": ["hsla(29,22%,43%,1)"],"baseEff": [{"type": 4,"num": ["305","386","480","583"]}],"addEff": [{"type": 13,"num": ["2"]},{"type": 13,"num": ["18"]},{"type": 4,"num": ["359"]}],"mark": 0,"markNum": 4,"modifier": {"ko":"다이아몬드의 고양이네마리","en":"Diamods's four Cats"},"part":2,"sealed":false,"slot":4,"weaponType":0,"favorite":0},
       {},
@@ -108,7 +108,7 @@ const save = {
       [{idx:107,lv:0},{},{},{}],
       [{},{},{},{}],
     ]},
-    // {"idx":4,"stateType":0,"element":[10],"stateLuk":95,"lv":50,"exp":0,"hasExp":9000,"actionPoint":20,"battleBeige":[0,0,0,0],"animalBeige":0,"sk":[{"idx":1,"lv":1},{"idx":2,"lv":1},{"idx":9,"lv":1}],"items":[
+    // {"idx":4,"element":[10],"stateLuk":95,"lv":50,"exp":0,"hasExp":9000,"actionPoint":20,"battleBeige":[0,0,0,0],"animalBeige":0,"sk":[{"idx":1,"lv":1},{"idx":2,"lv":1},{"idx":9,"lv":1}],"items":[
     //   {},
     //   {},
     //   {},
@@ -117,7 +117,7 @@ const save = {
     //   {},
     //   {},
     //   {},]},
-    // {"idx":7,"stateType":0,"element":[6],"stateLuk":35,"lv":50,"exp":10,"hasExp":5000,"actionPoint":20,"battleBeige":[0,0,0,0],"animalBeige":0,"sk":[{"idx":1,"lv":3,"exp":90},{"idx":2,"lv":5,"exp":70},{"idx":3,"lv":3,"exp":0},{"idx":4,"lv":3,"exp":0}],"items":[
+    // {"idx":7,"element":[6],"stateLuk":35,"lv":50,"exp":10,"hasExp":5000,"actionPoint":20,"battleBeige":[0,0,0,0],"animalBeige":0,"sk":[{"idx":1,"lv":3,"exp":90},{"idx":2,"lv":5,"exp":70},{"idx":3,"lv":3,"exp":0},{"idx":4,"lv":3,"exp":0}],"items":[
     //   {"idx":5,"slot":0,"hole":[4,0,12,23],"grade":1},
     //   {},
     //   {"idx":3,"slot":3,"hole":[],"grade":2},

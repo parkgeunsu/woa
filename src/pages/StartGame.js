@@ -1,6 +1,8 @@
 import { AppContext } from 'App';
+import { Text } from 'components/Atom';
 import { Button } from 'components/Button';
 import { FlexBox, TitleBox } from 'components/Container';
+import { IconPic } from 'components/ImagePic';
 import { Select, TextField } from 'components/Input';
 import { util } from 'components/Libs';
 import { ListItem, ListWrap } from 'components/List';
@@ -23,6 +25,16 @@ const Scroll = styled(FlexBox)`
 `;
 const StyledListItem = styled(ListItem)`
   margin: 0 0 20px 0;
+`;
+const IconBox = styled.div`
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+`;
+const StyledText = styled(Text)`
+  display: inline-block;
+  margin: 0 0 0 10px;
 `;
 const CardBox = styled(FlexBox)`
   margin: 15px 0 0 0;
@@ -62,9 +74,8 @@ const StartGame = ({
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
-  const selectCard = React.useMemo(() => {
-    return paramData?.start?.card;
-  }, [paramData]);
+  const [selectCard, setSelectCard] = useState(!util.loadData('continueGame') ? paramData?.start?.card : []);
+  console.log(selectCard);
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
   const [selectGradeArr, setSelectGradeArr] = useState([]); //시작 카드 유형 배열
@@ -73,6 +84,7 @@ const StartGame = ({
   const [countryList, setCountryList] = useState([]); //국가 선택 글자
   const [languageList, setLanguageList] = useState([]); //언어 선택 글자
   const [selectCardTypeIdx, setSelectCardTypeIdx] = useState(paramData?.start?.selectType || ''); //시작 카드 유형 index
+  const [hasMoney, setHasMoney] = useState(typeof selectCardTypeIdx === 'number' ? String(gameData.startGold[selectCardTypeIdx]).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : 0); //소지금
   const [selectCountryIdx, setSelectCountryIdx] = useState(paramData?.start?.country || ''); //시작 국가 선택 index
   const [selectLanguageIdx, setSelectLanguageIdx] = useState(paramData?.recruitment?.language || 0); //게임 언어 선택 index
   useEffect(() => {
@@ -120,7 +132,12 @@ const StartGame = ({
             <StyledListItem title={gameData.msg.title['startingCard'][lang]}>
               <Select selectIdx={selectCardTypeIdx} setSelectIdx={setSelectCardTypeIdx} onClick={(idx) => {
                 setSelectCardTypeIdx(idx);
+                setHasMoney(String(gameData.startGold[idx]).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
                 setSelectGradeArr(gameData.startCardArr[idx]);
+                const hParam = {...util.loadData('historyParam')};
+                delete hParam?.start?.card;
+                util.saveData('historyParam', hParam);
+                setSelectCard('');
               }} selectOption={selectList} title={gameData.msg.title['startingCardType'][lang]}></Select>
               <CardBox onClick={() => {
                 util.saveData('historyParam', {
@@ -138,7 +155,7 @@ const StartGame = ({
                 const sData = {...saveData}
                 sData.ch = [];
                 changeSaveData(sData);
-              }} justifyContent={'space-between'}>
+              }} justifyContent={selectGradeArr.length === 1 ? 'center' : 'space-between'} >
                 {selectCard && selectCard[0].idx ? selectCard.map((cardData, idx) => {
                   const name = gameData.ch[cardData.idx].na1;
                   return (
@@ -153,6 +170,12 @@ const StartGame = ({
                   )
                 })}
               </CardBox>
+            </StyledListItem>
+            <StyledListItem title={gameData.msg.title['money'][lang]}>
+              <IconBox>
+                <IconPic className="ico" type="commonBtn" pic="icon100" idx={3} /> 
+              </IconBox>
+              <StyledText code="t3" color="point5">{hasMoney}</StyledText>
             </StyledListItem>
             <StyledListItem title={gameData.msg.title['startingArea'][lang]}>
               <Select selectIdx={selectCountryIdx} setSelectIdx={setSelectCountryIdx} onClick={(idx) => {
@@ -199,6 +222,7 @@ const StartGame = ({
                   sData.scenario[chCountry][chPeriod].scenarioList[chScenario].open += 1;
                 }
               });
+              sData.info.money = hasMoney;
               changeSaveData(sData);
 
               //필드 유효성 검사

@@ -7,6 +7,10 @@ import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
+  position: absolute;
+  top: 0;
+  padding: 25px 20px 20px;
+  box-sizing: border-box;
   dd{position:relative;padding:5px;}
   li{display:flex;margin:0 0 10px 0;justify-content:space-between;}
   li .name{padding:0 0 0 5px;width:22%;font-size:0.688rem;color:#999;text-align:left;}

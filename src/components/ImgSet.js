@@ -22,11 +22,6 @@ import frameWood from 'images/frame/frame_wood.png';
 import skillFrame from 'images/frame/skill_frame.png';
 import stateBack from 'images/pattern/white_brick_wall_@2X_.png';
 
-import iconStateType0 from 'images/ico/state_type0.png';
-import iconStateType1 from 'images/ico/state_type1.png';
-import iconStateType2 from 'images/ico/state_type2.png';
-import iconStateType3 from 'images/ico/state_type3.png';
-
 import cloud1 from 'images/bg/cloud1.png';
 import cloud2 from 'images/bg/cloud2.png';
 import btnArrow from 'images/button/button_arrow.png';
@@ -50,13 +45,6 @@ import btnSixL from 'images/button/button_six_l.png';
 import defenceIcon0 from 'images/ico/shield0.png';
 import defenceIcon1 from 'images/ico/shield1.png';
 import defenceIcon2 from 'images/ico/shield2.png';
-import iconState0 from 'images/ico/st0.png';
-import iconState1 from 'images/ico/st1.png';
-import iconState2 from 'images/ico/st2.png';
-import iconState3 from 'images/ico/st3.png';
-import iconState4 from 'images/ico/st4.png';
-import iconState5 from 'images/ico/st5.png';
-import iconState6 from 'images/ico/st6.png';
 import tombstone from 'images/ico/tombstone.png';
 
 //wheel
@@ -275,14 +263,9 @@ export const back = [
 export const etc = {
   frameChBack:frameChBack,stateBack:stateBack,imgCardLv:imgCardLv,iconCardName:iconCardName,frameRope:frameRope,frameWood:frameWood,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,skillFrame:skillFrame,wind:wind,color:color,
 };
-export const icon = {iconStateType0:iconStateType0,iconStateType1:iconStateType1,iconStateType2:iconStateType2,iconStateType3:iconStateType3,
-};
 export const button = {
   btnL:btnL,btnLL:btnLL,btnLD:btnLD,btnM:btnM,btnML:btnML,btnMD:btnMD,btnS:btnS,btnSL:btnSL,btnSD:btnSD,btnCircle:btnCircle,btnCircleL:btnCircleL,btnCircleD:btnCircleD,btnArrow:btnArrow,btnArrowL:btnArrowL,btnArrowD:btnArrowD,btnSix:btnSix,btnSixL:btnSixL,btnSixD:btnSixD
 }
-export const iconState = [
-  iconState0,iconState1,iconState2,iconState3,iconState4,iconState5,iconState6
-];
 export const control = {
   wheel0:controlWheel0,sail0:controlSail0
 };

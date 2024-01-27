@@ -49,7 +49,7 @@ const ItemPic = ({
 }
 
 //menu0, element1-2, 
-const StyledIconPic = styled.span`
+const StyledIconPic = styled.div`
   display: inline-block;
   ${({itemPic, startIdx, idx, whNum}) => {
     return `
@@ -103,8 +103,7 @@ IconPic.defaultProps = {
   isAbsolute: false,
 }
 
-const StyledPic = styled.span`
-  display: inline-block;
+const StyledPic = styled.div`
   width: 100%;
   height: 100%;
   ${({chPic, type, startIdx, idx, whNum, isThumb, absoluteSize}) => {

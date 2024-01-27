@@ -1,17 +1,4 @@
 @charset "utf-8";
-.gacha_wrap{display:flex;position:absolute;left:0;right:0;top:0;bottom:0;flex-direction:column;width:100%;height:100%;box-sizing:border-box;overflow:hidden;}
-
-.gacha_menu{padding:0 20px;flex-grow:0;overflow:hidden;}
-.gacha_menu li{margin:0 0 10px 0;}
-.gacha_menu li:last-of-type{margin:0;}
-.gacha_menu_button{display:block;padding:10px 0;width:100%;background:rgba(255,255,255,.5);color:#000;border-radius:20px;text-align:center;}
-.gacha_menu_button .menu{padding:0 20px;}
-
-.gacha_area{flex-grow:1;perspective:300px;perspective-origin:50% 100%;transform-style:flat;}
-
-.gacha_bg.start{position:absolute;transform:rotateX(45deg);content:'';left:-50%;bottom:-20%;width:200%;height:80%;background: radial-gradient(hsl(0, 100%, 27%) 4%, hsl(0, 100%, 18%) 9%, hsla(0, 100%, 20%, 0) 9%) 0 0, radial-gradient(hsl(0, 100%, 27%) 4%, hsl(0, 100%, 18%) 8%, hsla(0, 100%, 20%, 0) 10%) 50px 50px, radial-gradient(hsla(0, 100%, 30%, 0.8) 20%, hsla(0, 100%, 20%, 0)) 50px 0, radial-gradient(hsla(0, 100%, 30%, 0.8) 20%, hsla(0, 100%, 20%, 0)) 0 50px, radial-gradient(hsla(0, 100%, 20%, 1) 35%, hsla(0, 100%, 20%, 0) 60%) 50px 0, radial-gradient(hsla(0, 100%, 20%, 1) 35%, hsla(0, 100%, 20%, 0) 60%) 100px 50px, radial-gradient(hsla(0, 100%, 15%, 0.7), hsla(0, 100%, 20%, 0)) 0 0, radial-gradient(hsla(0, 100%, 15%, 0.7), hsla(0, 100%, 20%, 0)) 50px 50px, linear-gradient(45deg, hsla(0, 100%, 20%, 0) 49%, hsla(0, 100%, 0%, 1) 50%, hsla(0, 100%, 20%, 0) 70%) 0 0, linear-gradient(-45deg, hsla(0, 100%, 20%, 0) 49%, hsla(0, 100%, 0%, 1) 50%, hsla(0, 100%, 20%, 0) 70%) 0 0;background-color:#300;background-size:100px 100px;}
-
-.gacha_cards.pos .gacha_card{left:0 !important;top:0 !important;}
 .gacha_cards.pos .gacha_card:first-of-type{transform:translate(10%,10%) !important;}
 .gacha_cards.pos .gacha_card:nth-of-type(2){transform:translate(130%,10%) !important;}
 .gacha_cards.pos .gacha_card:nth-of-type(3){transform:translate(250%,10%) !important;}
@@ -31,28 +18,6 @@
 .gacha_cards.begin4 .gacha_card:nth-of-type(3){left:80%;top:50%;transform:translate(-50%, -50%) !important;}
 .gacha_cards.begin4 .gacha_card:last-of-type{left:50%;top:80%;transform:translate(-50%, -50%) !important;}
 .gacha_cards.posOne .gacha_card{left:0 !important;top:0 !important;transform:scale(1.5) translate(80%,80%) !important;}
-.gacha_cards.cardMode .gacha_card{pointer-events: unset;}
-
-.gacha_card{position:absolute;transition:all linear 2s;opacity:0;z-index:1;width:30%;pointer-events:none;}
-.gacha_card.ready{opacity:1;transition:all .5s;}
-.gacha_card.on{left:50% !important;top:20% !important;transform:translate(-50%,-50%) rotateX(0deg) rotateZ(0deg) !important;}
-.gacha_card.on .gacha_front{box-shadow:none !important;}
-.gacha_card.open .gacha_front{z-index:2;transform:rotateY(1440deg);}
-.gacha_card.open .gacha_back{z-index:1;transform:rotateY(1270deg);}
-.gacha_card.open.special div{transition:all 3s;}
-.gacha_card.open.special .gacha_front{z-index:2;transform:rotateY(14400deg);}
-.gacha_card.open.special .gacha_back{z-index:1;transform:rotateY(12700deg);}
-.gacha_card.open.special:before{content:'';position:absolute;left:50%;top:50%;padding-top:500%;width:500%;transform:translate(-50%,-50%) scale(0);background-image:radial-gradient(rgba(255,100,0,.7) 0%,rgba(255,210,0,.8) 40%,transparent 80%);background-size:100%;animation:sp_eff1 3s;transform-origin:center;}
-.gacha_card.open.special:after{content:'';position:absolute;left:50%;top:50%;padding-top:500%;width:500%;transform:translate(-50%,-50%) scale(0);background-image:radial-gradient(rgba(255,255,255,1) 0%, rgba(200,25,0,.4) 50%,transparent 80%);background-size:100%;animation:sp_eff2 3s;transform-origin:center;}
-
-.gacha_effect{position:absolute;left:0;top:-10%;width:100%;padding-top:100%;background-image:radial-gradient(rgba(255,255,255,1) 0%,rgba(255,255,255,0) 70%);background-size:cover;transform:scale(0);z-index:11;}
-.gacha_effect.grade6{animation:grade6 linear 3s;}
-.gacha_effect.grade5{animation:grade5 linear 2.5s;}
-.gacha_effect.grade4{animation:grade4 linear 2s;}
-.gacha_effect.grade3{animation:grade3 linear 1.5s;}
-
-.gacha_event_area{position:absolute;left:0;right:0;top:0;bottom:0;z-index:20;pointer-events:none;}
-.gacha_event_area.on{pointer-events: unset;}
 
 .gacha_info{display:none;position:absolute;left:0;right:0;top:0;bottom:0;z-index:3;}
 .gacha_info.on {display:block;}
@@ -83,72 +48,16 @@
 
 @keyframes sp_eff1{
   0%{transform:translate(-50%,-50%) scale(0);}
-  30%{transform:translate(-50%,-50%) scale(1);}
-  50%{transform:translate(-50%,-50%) scale(.3);}
-  50%{transform:translate(-50%,-50%) scale(.8);}
+  30%{transform:translate(-50%,-50%) scale(0.85);}
+  50%{transform:translate(-50%,-50%) scale(.2);}
+  50%{transform:translate(-50%,-50%) scale(.7);}
   100%{transform:translate(-50%,-50%) scale(0);}
 }
 @keyframes sp_eff2{
   0%{transform:translate(-50%,-50%) scale(0);}
-  10%{transform:translate(-50%,-50%) scale(.3);}
-  30%{transform:translate(-50%,-50%) scale(.9);}
-  70%{transform:translate(-50%,-50%) scale(.2);}
-  85%{transform:translate(-50%,-50%) scale(.6);}
+  10%{transform:translate(-50%,-50%) scale(.2);}
+  30%{transform:translate(-50%,-50%) scale(.8);}
+  70%{transform:translate(-50%,-50%) scale(.1);}
+  85%{transform:translate(-50%,-50%) scale(.5);}
   100%{transform:translate(-50%,-50%) scale(0);}
-}
-@keyframes grade3{
-  0%{transform:scale(0,0);background-image:radial-gradient(#fff 0%,rgba(255,255,255,0) 70%);}
-  12.5%{transform:scale(6,6);}
-  25%{transform:scale(0,0);background-image:radial-gradient(#00a90c 0%,rgba(255,255,255,0) 70%);}
-  37.5%{transform:scale(6,6);}
-  50%{transform:scale(0,0);background-image:radial-gradient(#0090ff 0%,rgba(255,255,255,0) 70%);}
-  62.5%{transform:scale(6,6);}
-  75%{transform:scale(0,0);background-image:radial-gradient(#f4ea19 0%,rgba(255,255,255,0) 70%);}
-  87.5%{transform:scale(6,6);}
-  100%{transform:scale(0,0);background-image:radial-gradient(#f4ea19 0%,rgba(255,255,255,0) 70%);}
-}
-@keyframes grade4{
-  0%{transform:scale(0,0);background-image:radial-gradient(#fff 0%,rgba(255,255,255,0) 70%);}
-  10%{transform:scale(6,6);}
-  20%{transform:scale(0,0);background-image:radial-gradient(#00a90c 0%,rgba(255,255,255,0) 70%);}
-  30%{transform:scale(6,6);}
-  40%{transform:scale(0,0);background-image:radial-gradient(#0090ff 0%,rgba(255,255,255,0) 70%);}
-  50%{transform:scale(6,6);}
-  60%{transform:scale(0,0);background-image:radial-gradient(#f4ea19 0%,rgba(255,255,255,0) 70%);}
-  70%{transform:scale(6,6);}
-  80%{transform:scale(0,0);background-image:radial-gradient(#a800ff 0%,rgba(255,255,255,0) 70%);}
-  90%{transform:scale(6,6);}
-  100%{transform:scale(0,0);background-image:radial-gradient(#a800ff 0%,rgba(255,255,255,0) 70%);}
-}
-@keyframes grade5{
-  0%{transform:scale(0,0);background-image:radial-gradient(#fff 0%,rgba(255,255,255,0) 70%);}
-  8.3%{transform:scale(6,6);}
-  16.6%{transform:scale(0,0);background-image:radial-gradient(#00a90c 0%,rgba(255,255,255,0) 70%);}
-  25%{transform:scale(6,6);}
-  33.3%{transform:scale(0,0);background-image:radial-gradient(#0090ff 0%,rgba(255,255,255,0) 70%);}
-  41.6%{transform:scale(6,6);}
-  50%{transform:scale(0,0);background-image:radial-gradient(#f4ea19 0%,rgba(255,255,255,0) 70%);}
-  58.3%{transform:scale(6,6);}
-  66.6%{transform:scale(0,0);background-image:radial-gradient(#a800ff 0%,rgba(255,255,255,0) 70%);}
-  75%{transform:scale(6,6);}
-  83.3%{transform:scale(0,0);background-image:radial-gradient(#ff8000 0%,rgba(255,255,255,0) 70%);}
-  91.6%{transform:scale(6,6);}
-  100%{transform:scale(0,0);background-image:radial-gradient(#ff8000 0%,rgba(255,255,255,0) 70%);}
-}
-@keyframes grade6{
-  0%{transform:scale(0,0);background-image:radial-gradient(#fff 0%,rgba(255,255,255,0) 70%);}
-  7.2%{transform:scale(6,6);}
-  14.5%{transform:scale(0,0);background-image:radial-gradient(#00a90c 0%,rgba(255,255,255,0) 70%);}
-  21.7%{transform:scale(6,6);}
-  29%{transform:scale(0,0);background-image:radial-gradient(#0090ff 0%,rgba(255,255,255,0) 70%);}
-  36.2%{transform:scale(6,6);}
-  43.5%{transform:scale(0,0);background-image:radial-gradient(#f4ea19 0%,rgba(255,255,255,0) 70%);}
-  50.2%{transform:scale(6,6);}
-  57.5%{transform:scale(0,0);background-image:radial-gradient(#a800ff 0%,rgba(255,255,255,0) 70%);}
-  64.7%{transform:scale(6,6);}
-  72%{transform:scale(0,0);background-image:radial-gradient(#ff8000 0%,rgba(255,255,255,0) 70%);}
-  79.2%{transform:scale(6,6);}
-  86%{transform:scale(0,0);background-image:radial-gradient(#ff2a00 0%,rgba(255,255,255,0) 70%);}
-  93%{transform:scale(6,6);}
-  100%{transform:scale(0,0);background-image:radial-gradient(#ff2a00 0%,rgba(255,255,255,0) 70%);}
 }

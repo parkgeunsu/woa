@@ -83,10 +83,8 @@ export const util = { //this.loadImage();
     let enemy = {};
     const itemEff = util.getItemEff('', enemyData, gameData.items, true);
     for (const idx of stateArr.keys()) {
-      const st = gameData.ch[enemyData.idx]['st' + idx] || 0,
-        per_current = gameData.stateType[2].arr[enemyData.lv-1]*0.01,
-        stateCurrent = Math.round(st*per_current);
-      battleState_[idx] = stateCurrent;
+      const st = gameData.ch[enemyData.idx]['st' + idx] || 0;
+      battleState_[idx] = st;
     }
     battleState_[7] = gameData.ch[enemyData.idx].st3 + gameData.ch[enemyData.idx].st5 + gameData.ch[enemyData.idx].st6;
     battleState_[8] = Math.round(Math.random()*200);
@@ -163,16 +161,13 @@ export const util = { //this.loadImage();
     let battleState_ = [];
     let saveChSlot = saveData.ch[saveSlot] || obj.newState;
     for (const idx of stateArr.keys()) {
-      const st = gameData.ch[saveChSlot.idx]['st' + idx] || 0,//실제 능력치
-        per_current = gameData.stateType[saveChSlot.stateType].arr[saveChSlot.lv-1]*0.01,//성장타입에 따른 LV당 %
-        stateCurrent = Math.round(st*per_current),//성장타입에 따른 LV당 능력치
-        stateMax = Math.round(gameData.stateType[saveChSlot.stateType].arr[49]*0.01*st);//성장타입에 따른 최대 능력치
-      saveChSlot['rSt' + idx] = stateCurrent; //레벨당 현재능력치
-      saveChSlot['maxSt' + idx] = stateMax; //레벨당 최대능력치
-      battleState_[idx] = stateCurrent;
+      const st = gameData.ch[saveChSlot.idx]['st' + idx] || 0;
+      saveChSlot['st' + idx] = st//현재능력치
+      battleState_[idx] = st;
     }
-    battleState_[7] = gameData.ch[saveChSlot.idx].st3 + gameData.ch[saveChSlot.idx].st5 + gameData.ch[saveChSlot.idx].st6;
-    battleState_[8] = saveChSlot.stateLuk;
+    saveChSlot['st7'] = saveChSlot.stateLuk; //행운
+    battleState_[7] = gameData.ch[saveChSlot.idx].st3 + gameData.ch[saveChSlot.idx].st5 + gameData.ch[saveChSlot.idx].st6; //속도?
+    battleState_[8] = saveChSlot.stateLuk; //행운
     //등급에 따른 추가 능력치
     let addGradePercent = 1;
     for (let i = gameData.ch[saveChSlot.idx].grade; i < obj.grade; ++i) {
@@ -1609,7 +1604,7 @@ export const util = { //this.loadImage();
       }
       if (!itemSubmit) { //해당 슬롯에 아이템이 있을 경우, 아이템 다른부위로 적용된 경우 파악
         dataObj.showMsg(true);
-        dataObj.msgText(`<span caution>${gameData.msg.sentence.samePart[dataObj.lang]}</span>`);
+        dataObj.msgText(`<span caution>${gameData.msg.sentence.nonePart[dataObj.lang]}</span>`);
       }
     } else if (dataObj.type === 'itemRelease') { //아이템 해제
       const saveCh = sData.ch[dataObj.data.slotIdx];
@@ -1817,6 +1812,8 @@ export const util = { //this.loadImage();
       case 'commonBtn':
       case 'cardBack':
         return 4;
+      case 'item':
+        return 5;
       case 'scenario':
         return 7;
       case 'job':

@@ -17,46 +17,163 @@ const Img = styled.img.attrs(
     src: imgurl 
   })
 )``;
-const GachaWrap = styled.div`
+const GachaWrap = styled(FlexBox)`
+	position: relative;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	overflow: hidden;
 `;
 const GachaMenu = styled.ul`
+	padding: 0 20px;
+	flex-grow: 0;
+	overflow: hidden;
 	height: ${({gachaMode}) => {
 		return gachaMode === ('start' || 'card') ? 0 : 'auto';
 	}};
-`;
-const GachaMenuButton = styled.button``;
-const GachaSubmitGroup = styled(FlexBox)`
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	width: 30%;
-	transform: translate(-50%, -50%);
-`;
-const GachaCard = styled.div`
-	transform-origin: 50% 50%;
-	left: ${({posX}) => posX}%;
-	top: ${({posY}) => posY}%;
-	padding-top: ${30*1.481}%;
-	transform: translate(-50%,-50%) rotateX(45deg) rotateZ(${({rotate}) => rotate}deg);
-	&.open {
-		transform: scale(1.3) translate(-50%,-50%) rotateX(0deg) rotateZ(0deg) !important;
+	li {
+		margin: 0 0 10px 0;
+		&:last-of-type{
+			margin: 0;
+		}
 	}
 `;
-const GachaFront = styled.div`
-	position:absolute;
+const GachaArea = styled.div`
+	position: relative;
+	width: 100%;
+	height: calc(100% - 50px);
+`;
+const GachaEffect = styled.div`
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	&:before {
+		content: '';
+		display: block;
+		width: 100%;
+		height: 100%;
+		opacity: 0;
+		transition: opacity linear 1s;
+	}
+	background: radial-gradient(hsl(9, 100%, 27%) 4%, hsl(9, 100%, 18%) 9%, hsla(9, 100%, 20%, 0) 9%) 0 0, radial-gradient(hsl(9, 100%, 27%) 4%, hsl(9, 100%, 18%) 8%, hsla(9, 100%, 20%, 0) 10%) 50px 50px, radial-gradient(hsla(9, 100%, 30%, 0.8) 20%, hsla(9, 100%, 20%, 0)) 50px 0, radial-gradient(hsla(9, 100%, 30%, 0.8) 20%, hsla(9, 100%, 20%, 0)) 0 50px, radial-gradient(hsla(9, 100%, 20%, 1) 35%, hsla(9, 100%, 20%, 0) 60%) 50px 0, radial-gradient(hsla(9, 100%, 20%, 1) 35%, hsla(9, 100%, 20%, 0) 60%) 100px 50px, radial-gradient(hsla(9, 100%, 15%, 0.7), hsla(9, 100%, 20%, 0)) 0 0, radial-gradient(hsla(9, 100%, 15%, 0.7), hsla(9, 100%, 20%, 0)) 50px 50px, linear-gradient(45deg, hsla(9, 100%, 20%, 0) 49%, hsla(9, 100%, 0%, 1) 50%, hsla(9, 100%, 20%, 0) 70%) 0 0, linear-gradient(-45deg, hsla(9, 100%, 20%, 0) 49%, hsla(9, 100%, 0%, 1) 50%, hsla(9, 100%, 20%, 0) 70%) 0 0;
+	background-color: #300;
+	background-size: 100px 100px;
+	&.grade6:before {
+		opacity: 1;
+		background: radial-gradient(hsl(30, 100%, 27%) 4%, hsl(30, 100%, 18%) 9%, hsla(30, 100%, 20%, 0) 9%) 0 0, radial-gradient(hsl(30, 100%, 27%) 4%, hsl(30, 100%, 18%) 8%, hsla(30, 100%, 20%, 0) 10%) 50px 50px, radial-gradient(hsla(30, 100%, 30%, 0.8) 20%, hsla(30, 100%, 20%, 0)) 50px 0, radial-gradient(hsla(30, 100%, 30%, 0.8) 20%, hsla(30, 100%, 20%, 0)) 0 50px, radial-gradient(hsla(30, 100%, 20%, 1) 35%, hsla(30, 100%, 20%, 0) 60%) 50px 0, radial-gradient(hsla(30, 100%, 20%, 1) 35%, hsla(30, 100%, 20%, 0) 60%) 100px 50px, radial-gradient(hsla(30, 100%, 15%, 0.7), hsla(30, 100%, 20%, 0)) 0 0, radial-gradient(hsla(30, 100%, 15%, 0.7), hsla(30, 100%, 20%, 0)) 50px 50px, linear-gradient(45deg, hsla(30, 100%, 20%, 0) 49%, hsla(30, 100%, 0%, 1) 50%, hsla(30, 100%, 20%, 0) 70%) 0 0, linear-gradient(-45deg, hsla(30, 100%, 20%, 0) 49%, hsla(30, 100%, 0%, 1) 50%, hsla(30, 100%, 20%, 0) 70%) 0 0;
+		background-color: #300;
+		background-size: 100px 100px;
+	}
+	&.grade5:before {
+		opacity: 1;
+		background: radial-gradient(hsl(279, 100%, 27%) 4%, hsl(279, 100%, 18%) 9%, hsla(279, 100%, 20%, 0) 9%) 0 0, radial-gradient(hsl(279, 100%, 27%) 4%, hsl(279, 100%, 18%) 8%, hsla(279, 100%, 20%, 0) 10%) 50px 50px, radial-gradient(hsla(279, 100%, 30%, 0.8) 20%, hsla(279, 100%, 20%, 0)) 50px 0, radial-gradient(hsla(279, 100%, 30%, 0.8) 20%, hsla(279, 100%, 20%, 0)) 0 50px, radial-gradient(hsla(279, 100%, 20%, 1) 35%, hsla(279, 100%, 20%, 0) 60%) 50px 0, radial-gradient(hsla(279, 100%, 20%, 1) 35%, hsla(279, 100%, 20%, 0) 60%) 100px 50px, radial-gradient(hsla(279, 100%, 15%, 0.7), hsla(279, 100%, 20%, 0)) 0 0, radial-gradient(hsla(279, 100%, 15%, 0.7), hsla(279, 100%, 20%, 0)) 50px 50px, linear-gradient(45deg, hsla(279, 100%, 20%, 0) 49%, hsla(279, 100%, 0%, 1) 50%, hsla(279, 100%, 20%, 0) 70%) 0 0, linear-gradient(-45deg, hsla(279, 100%, 20%, 0) 49%, hsla(279, 100%, 0%, 1) 50%, hsla(279, 100%, 20%, 0) 70%) 0 0;
+		background-color: #300;
+		background-size: 100px 100px;
+	}
+	&.grade4:before {
+		opacity: 1;
+		background: radial-gradient(hsl(57, 100%, 27%) 4%, hsl(57, 100%, 18%) 9%, hsla(57, 100%, 20%, 0) 9%) 0 0, radial-gradient(hsl(57, 100%, 27%) 4%, hsl(57, 100%, 18%) 8%, hsla(57, 100%, 20%, 0) 10%) 50px 50px, radial-gradient(hsla(57, 100%, 30%, 0.8) 20%, hsla(57, 100%, 20%, 0)) 50px 0, radial-gradient(hsla(57, 100%, 30%, 0.8) 20%, hsla(57, 100%, 20%, 0)) 0 50px, radial-gradient(hsla(57, 100%, 20%, 1) 35%, hsla(57, 100%, 20%, 0) 60%) 50px 0, radial-gradient(hsla(57, 100%, 20%, 1) 35%, hsla(57, 100%, 20%, 0) 60%) 100px 50px, radial-gradient(hsla(57, 100%, 15%, 0.7), hsla(57, 100%, 20%, 0)) 0 0, radial-gradient(hsla(57, 100%, 15%, 0.7), hsla(57, 100%, 20%, 0)) 50px 50px, linear-gradient(45deg, hsla(57, 100%, 20%, 0) 49%, hsla(57, 100%, 0%, 1) 50%, hsla(57, 100%, 20%, 0) 70%) 0 0, linear-gradient(-45deg, hsla(57, 100%, 20%, 0) 49%, hsla(57, 100%, 0%, 1) 50%, hsla(57, 100%, 20%, 0) 70%) 0 0;
+		background-color: #300;
+		background-size: 100px 100px;
+	}
+	&.grade3:before {
+		opacity: 1;
+		background: radial-gradient(hsl(206, 100%, 27%) 4%, hsl(206, 100%, 18%) 9%, hsla(206, 100%, 20%, 0) 9%) 0 0, radial-gradient(hsl(206, 100%, 27%) 4%, hsl(206, 100%, 18%) 8%, hsla(206, 100%, 20%, 0) 10%) 50px 50px, radial-gradient(hsla(206, 100%, 30%, 0.8) 20%, hsla(206, 100%, 20%, 0)) 50px 0, radial-gradient(hsla(206, 100%, 30%, 0.8) 20%, hsla(206, 100%, 20%, 0)) 0 50px, radial-gradient(hsla(206, 100%, 20%, 1) 35%, hsla(206, 100%, 20%, 0) 60%) 50px 0, radial-gradient(hsla(206, 100%, 20%, 1) 35%, hsla(206, 100%, 20%, 0) 60%) 100px 50px, radial-gradient(hsla(206, 100%, 15%, 0.7), hsla(206, 100%, 20%, 0)) 0 0, radial-gradient(hsla(206, 100%, 15%, 0.7), hsla(206, 100%, 20%, 0)) 50px 50px, linear-gradient(45deg, hsla(206, 100%, 20%, 0) 49%, hsla(206, 100%, 0%, 1) 50%, hsla(206, 100%, 20%, 0) 70%) 0 0, linear-gradient(-45deg, hsla(206, 100%, 20%, 0) 49%, hsla(206, 100%, 0%, 1) 50%, hsla(206, 100%, 20%, 0) 70%) 0 0;
+		background-color: #300;
+		background-size: 100px 100px;
+	}
+`;
+const GachaOrder = styled(FlexBox)`
+	position: relative;
+	height: 50px;
+	width: 100%;
+	background-color: var(--color-b);
+`;
+const StyledButton = styled(Button)`
+  background: url(${({btnImg}) => btnImg}) no-repeat center center !important;
+  background-size: 100% 100% !important;
+`;
+const GachaMenuButton = styled.button`
+	display: block;
+	padding: 10px 0;
+	width: 100%;
+	background: rgba(255,255,255,.5);
+	color: #000;
+	border-radius: 20px;
+	text-align: center;
+	.menu {
+		padding: 0 20px;
+	}
+`;
+const GachaCard = styled.div`
+	position: absolute;
+	transform-origin: 50% 50%;
+	padding-top: ${30*1.481}%;
+	width: 30%;
+	transition: opacity linear 0.3s;
+	opacity: 0;
+	z-index: 1;
+	&.on {
+		opacity: 1;
+	}
+	&.open {
+		.gacha_front{
+			opacity: 1;
+		}
+		.gacha_back{
+			opacity: 0;
+		}
+	}
+	&.special {
+		.gacha_front{
+			opacity: 1;
+		}
+		.gacha_back{
+			opacity: 0;
+		}
+		&:before {
+			content:'';
+			position:absolute;
+			left:50%;
+			top:50%;
+			padding-top:500%;
+			width:500%;
+			transform:translate(-50%,-50%) scale(0);
+			background-image:radial-gradient(rgba(255,100,0,.7) 0%,rgba(255,210,0,.8) 40%,transparent 80%);
+			background-size:100%;
+			animation:sp_eff1 3s;
+			transform-origin:center;
+			z-index:10;
+		}
+		&:after {
+			content:'';
+			position:absolute;
+			left:50%;
+			top:50%;
+			padding-top:500%;
+			width:500%;
+			transform:translate(-50%,-50%) scale(0);
+			background-image:radial-gradient(rgba(255,255,255,1) 0%, rgba(200,25,0,.4) 50%,transparent 80%);
+			background-size:100%;
+			animation:sp_eff2 3s;
+			transform-origin:center;
+			z-index:10;
+		}
+	}
+`;
+const GachaShadow = styled.div`
+	position: absolute;
 	left: 0;
 	right: 0;
 	top: 0;
 	bottom: 0;
 	border-radius: 5%;
 	overflow: hidden;
-	backface-visibility: hidden;
-	transition: all .7s;
-	z-index: 1;
-	background: #000;
-	transform: rotateY(180deg);
-	box-shadow:${({gameData, idx}) => {
-		const grade = gameData.ch[idx].grade;
+	pointer-events: none;
+	box-shadow:${({gameData, cardIdx}) => {
+		const grade = gameData.ch[cardIdx].grade;
 		const gradeColor = gameData.chGradeColor[grade*1];
 		if (grade === 1) {
 			return;
@@ -75,18 +192,27 @@ const GachaFront = styled.div`
 		}
 	}};
 `;
+const GachaFront = styled.div`
+	position:absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	transition: opacity linear .5s;
+	opacity: 0;
+	background: #000;
+	pointer-events: none;
+`;
 const GachaBack = styled(ChPic)`
 	position:absolute;
 	left: 0;
 	right: 0;
 	top: 0;
 	bottom: 0;
-	border-radius: 5%;
-	overflow: hidden;
-	backface-visibility: hidden;
-	transition: all .7s;
-	transform: rotateY(0deg);
-	z-index: 2;
+	overflow:hidden;
+	transition: opacity linear .5s;
+	opacity: 1;
+	pointer-events: none;
 `;
 const GachaInfo = styled.div`
 	.ch_state{border-image:url(${({ borderImg }) => borderImg}) 5 round;}
@@ -204,9 +330,6 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 			idx: newIdx,
 			grade: cardG,
 			slotIdx: saveData.ch.length + i,
-			posX: Math.random() * 100,
-			posY: Math.random() * 40 + 60,
-			rotate: Math.random() * 360,
 		});
 		chDataArr.push(util.saveLvState('', {
 			itemEff: util.getItemEff(),
@@ -232,7 +355,6 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 				sk: [{idx: 1, lv: 1, exp: 0,},{idx: 2, lv: 1, exp: 0,},],
 				animalSkill:[],
 				hasSkill: [{idx: 1, lv: 1, exp: 0,},{idx: 2, lv: 1, exp: 0,},],
-				stateType: Math.floor(Math.random()*4),
 			},
 		}, saveData, gameData));
 	};
@@ -248,14 +370,6 @@ const makeStar = (n) => {//별 처리
     tag.push(<span key={i}></span>);
   }
   return tag
-}
-const openCard = (cardList, cardIdx) => {
-	const card = cardList[cardIdx];
-	const cardGrade = card.dataset['grade'];
-	if (cardGrade > 5) {//고급 등급 효과 추가
-		card.classList.add('special');
-	}
-	card.classList.add('open');
 }
 
 const Gacha = ({
@@ -277,20 +391,18 @@ const Gacha = ({
     return util.loadData('historyParam');
   }, []);
 	const [gachaMode, setGachaMode] = useState('');
-	const [cardStateType, setCardStateType] = useState(''); //카드 성장타입
-	const [cardStar, setCardStar] = useState(0); //카드 성장타입
-	const setTime = useRef(null); //타임아웃 ref
+	// const [cardStar, setCardStar] = useState(0); //카드 성장타입
+	const setTimeCard = useRef({}); //타임아웃 ref
+	const setTimeEffect = useRef(null); //타임아웃 ref
 	const maxCardGrade = useRef(null); //뽑은 카드 최대등급
 	const effectRef = useRef(null); // 이펙트 효과
 	const cardGroupRef = useRef(null); //카드 그룹
-	const eventRef = useRef(null); //터치 이벤트 영역
 	const infoRef = useRef(null); //카드 정보창
 	const graphRef = useRef(null); //카드정보 그래프
 	const cardRef = useRef([]); //단일 카드
-	const openCardIdx = useRef(0); //카드 뒤짚기 순번
 	const [infoIdx, setInfoIdx] = useState(0); //카드정보 카드번호
 	const [slotIdx, setSlotIdx] = useState(0); //카드 슬롯번호
-	const [showButton, setShowButton] = useState(false); //확정버튼 그룹
+	const [step, setStep] = useState(0); //진행단계
 	const changeGachaMode = (mode, data, saveData, gameData, changeSaveData) => {
 		if (mode === 'start') { // 뽑기모드
 			let sData = {...saveData};
@@ -313,33 +425,28 @@ const Gacha = ({
 		if (Object.keys(saveData).length !== 0 && gachaMode === '') {
 			setGachaMode('init');
 		}
-		return () => {
-			clearTimeout(setTime.current);
-			setTime.current = null;
-		}
-	}, [saveData]);
+	}, [saveData, gachaMode]);
 	useEffect(() => {
-		if (gachaMode === 'start') { // 뽑기모드
-			const gachaLength = cardRef.current.length;
-			const gachaIntervalTime = gachaLength * 200;
-			cardRef.current.forEach((el, idx) => {
-				setTime.current = setTimeout(()=>{
-					el.classList.add('on');
-				}, 200 * idx+1000);
-			});
-			setTime.current = setTimeout(()=>{
-				effectRef.current.classList.add('grade' + maxCardGrade.current);
-			}, gachaIntervalTime + 1500);
-			setTime.current = setTimeout(() => {
-				const beginCheck = paramData.recruitment.begin ? `begin${gachaLength}` : 'pos';
-				cardGroupRef.current.classList.add(beginCheck);
-				eventRef.current.classList.add('on'); //터치 활성화
-				cardRef.current.forEach((el, idx) => {
-					el.classList.remove('on');
-				});
-			}, gachaIntervalTime + 2500);
+		return () => { 
+			clearTimeout(setTimeCard.current);
+			setTimeCard.current = null;
+			clearTimeout(setTimeEffect.current);
+			setTimeEffect.current = null;
 		}
-	}, [gachaMode, paramData]);
+	}, []);
+	const animate = (el, idx) => {
+		if (idx === el.length) {
+			setTimeEffect.current  = setTimeout(() => {
+				setStep(1);
+				effectRef.current.classList.add('grade' + maxCardGrade.current);
+			}, 300);
+		} else {
+			setTimeCard.current = setTimeout(() => {
+				el[idx].classList.add('on');
+				animate(el, idx + 1);
+			}, 300); 
+		}
+	}
 	useEffect(() => {
 		if (Object.keys(saveData).length > 0) {
 			if (paramData.recruitment.begin) {
@@ -352,15 +459,19 @@ const Gacha = ({
 				changeSaveData(sData); //세이브
 				maxCardGrade.current = cardList.maxCard;
 				setGachaCard(cardList.chArr);
-				setGachaMode('start'); 
+				//setGachaMode('start');
+
+				const gachaLength = paramData.recruitment.cardArr.length;
+				const beginCheck = paramData.recruitment.begin ? `begin${gachaLength}` : 'pos';
+				cardGroupRef.current.classList.add(beginCheck);
+				setTimeCard.current = setTimeout(() => {
+					animate(cardRef.current, 0);
+				}, 300);
 			}
 		} else {
 			setTimeout(() => {
 				navigate('../');
 			});
-		}
-		return () => {
-			setTime.current = null;
 		}
 	}, [gameData, paramData]);
   const [modalOn, setModalOn] = useState(false);
@@ -540,9 +651,9 @@ const Gacha = ({
 	}, [graphRef]);
   return (
 		<>
-			<GachaWrap className="gacha_wrap">
-				<GachaMenu gachaMode={gachaMode} className="gacha_menu transition">
-					{gachaList && gachaList.map((data, idx) => {
+			<GachaWrap direction="column" className="gacha_wrap">
+				{!paramData.recruitment.begin && <GachaMenu gachaMode={gachaMode} className="transition">
+					{gachaList.map((data, idx) => {
 						return (
 							<li key={idx} onClick={() => {handleModal('confirm', idx);}}>
 								<GachaMenuButton className="gacha_menu_button">{`${data.na[lang]}`}
@@ -551,189 +662,176 @@ const Gacha = ({
 							</li>
 						);
 					})}
-				</GachaMenu>
-				<div className="gacha_area">
+				</GachaMenu>}
+				<GachaArea>
 					<div ref={cardGroupRef} className="gacha_cards">
-						{gachaMode === 'start' && gachaCard && gachaCard.map((data, idx) => {
-							const chData = gameData.ch[data.idx];
-							const star = data.grade;
+						{gachaCard.map((data, idx) => {
 							return (
-								<GachaCard onClick={() => {
-									setInfoIdx(data.idx);
-									setSlotIdx(data.slotIdx);
-									infoRef.current.classList.add('on');
-									popCard(gameData.ch[infoIdx]);
-									setCardStateType(gameData.stateType[saveData.ch[data.slotIdx]?.stateType].na);
-									setCardStar(data.grade);
-								}} ref={(element) => {cardRef.current[idx] = element}} key={`gachaCard${idx}`} posX={data.posX} posY={data.posY} rotate={data.rotate} className="gacha_card ready" data-grade={chData.grade}>
-									<GachaFront className="gacha_front" idx={data.idx} gameData={gameData}>
+								<GachaCard onClick={(e) => {
+									if (step === 2) {
+										setInfoIdx(data.idx);
+										setSlotIdx(data.slotIdx);
+										infoRef.current.classList.add('on');
+										popCard(gameData.ch[infoIdx]);
+									} else {//카드 열기
+										const cardGrade = gameData.ch[data.idx].grade;
+										if (cardGrade > 5) {
+											e.target.classList.add('special');
+										} else {
+											e.target.classList.add('open');
+										}
+										let openCardNum = 0;
+										cardRef.current.forEach((el) => {
+											if (el.classList.contains('open') || el.classList.contains('special')) {
+												openCardNum ++;
+											}
+										});
+										if (openCardNum === cardRef.current.length) {
+											setStep(2);
+										}
+										// setCardStar(data.grade);
+									}
+								}} ref={(element) => {cardRef.current[idx] = element}} key={`gachaCard${idx}`} className="gacha_card">
+									<GachaFront className="gacha_front">
           					<CharacterCard usedType="gacha" saveData={saveData} slotIdx={idx} />
-										{/* <ul>
-											<CardLvName className="gacha_name_lv" cardLv={imgSet.etc.imgCardLv}>
-												<Img className="img" imgurl={imgSet.etc.iconCardName} />
-								 				<span className="lv">1</span><span className="name">{chData.na1}</span>
-								 			</CardLvName>
-											<CardDisplay>
-												<ChPic pic="ch" idx={chData.display} />
-											</CardDisplay>
-								 			<CardRing className="gacha_ring">
-                				<ChPic type="cardBack" pic="card" idx={0} />
-											</CardRing>
-								 			<CardElement className="gacha_element" ringDisplay={imgSet.ringImg[chData.element]} />
-								 			<CardStar className="gacha_star" starIcon={iconStar}>
-											 	{star && makeStar(star)}
-											</CardStar>
-											<div className="gacha_job_actiontype">
-												<CardJob className="gacha_job">
-													<IconPic type="job" isAbsolute={true} pic="icon100" idx={saveData.ch[data.slotIdx]?.job} />
-												</CardJob>
-												{saveData.ch[data.slotIdx]?.newActionType.map((data, idx) => {
-													return (
-														<CardActionType key={'action'+idx} className="gacha_action_type">
-															<IconPic type="element" isAbsolute={true} pic="icon100} idx={idx + 1} />
-														</CardActionType>
-													)
-												})}
-											</div>
-								 			<CardFrame className="gacha_frame" cardFrame={imgSet.etc.imgCardFrame} />
-										</ul> */}
 									</GachaFront>
 									<GachaBack className="gacha_back" type="cardBack" pic="card" idx={2} />
+									<GachaShadow cardIdx={data.idx} gameData={gameData} />
 								</GachaCard>
 							);
 						})}
 					</div>
-					<div className={`gacha_bg ${gachaMode === "start" ? "start" : ""}`}></div>
-					<div ref={effectRef} className="gacha_effect"></div>
-					{showButton && <GachaSubmitGroup direction="column">
-						<Button size="large" style={{margin: '0 0 20px 0'}} onClick={() => {
-              const sData = {...saveData}
-              sData.ch = [];
-							const startingGrade = paramData.recruitment.cardArr; //최초 시작 영웅들 등급
-							const cardList = makeCard(startingGrade, 'p', gameData, saveData, changeSaveData);
-							cardList.chDataArr.forEach((data, idx) => {
-								sData.ch.push(data);
-							});
-							changeSaveData(sData); //세이브
-							maxCardGrade.current = cardList.maxCard;
-							setGachaCard(cardList.chArr);
-							setGachaMode('start');
+					<GachaEffect ref={effectRef}/>
+				</GachaArea>
+				<GachaOrder>
+					{step === 1 && <StyledButton btnImg={imgSet.button.btnMD} onClick={() => {
+						cardRef.current.forEach((el, idx) => {
+							const data = gachaCard[idx];
+							const cardGrade = gameData.ch[data.idx].grade;
+							if (cardGrade > 5) {
+								el.classList.add('special');
+							} else {
+								el.classList.add('open');
+							}
+							setStep(2);
+						})
+          }}>{gameData.msg.button['flipAllCards'][lang]}</StyledButton>}
+					{step === 2 && (
+						<>
+							<StyledButton btnImg={imgSet.button.btnMD} onClick={() => {
+								cardRef.current.forEach((el) => {
+									el.classList.remove('special');
+									el.classList.remove('open');
+								});
+								const sData = {...saveData}
+								sData.ch = [];
+								const startingGrade = paramData.recruitment.cardArr; //최초 시작 영웅들 등급
+								const cardList = makeCard(startingGrade, 'p', gameData, saveData, changeSaveData);
+								setTimeout(() => {
+									cardList.chDataArr.forEach((data, idx) => {
+										sData.ch.push(data);
+									});
+									changeSaveData(sData); //세이브
+									maxCardGrade.current = cardList.maxCard;
+									setGachaCard(cardList.chArr);
+									setGachaMode('start');
 
-							setShowButton(false);
-							eventRef.current.classList.add('on');
-							cardGroupRef.current.classList.remove('cardMode');
-							openCardIdx.current = 0;
-						}}>{gameData.msg.button['redraw'][lang]}</Button>
-						<Button size="large" onClick={() => {
-							const startingGrade = paramData.recruitment.cardArr; //최초 시작 영웅들 등급
-							util.saveData('historyParam', {
-								...util.loadData('historyParam'),
-								start: {
-									card: gachaCard,
-									chArr: startingGrade,
-									selectType: paramData.recruitment.selectType,
-									language: paramData.recruitment.language,
-									country: paramData.recruitment.country
-								}
-							});
-							navigate('../start');
-						}}>{gameData.msg.button['finalize'][lang]}</Button>
-					</GachaSubmitGroup>}
-					<div className="gacha_event_area" ref={eventRef} onClick={() => {
-						openCard(cardRef.current, openCardIdx.current);
-						openCardIdx.current ++;
-						if (!cardRef.current[openCardIdx.current]) {
-							eventRef.current.classList.remove('on');
-							setShowButton(true);
-							// awb.main.el.root.classList.remove('noback');
-							cardGroupRef.current.classList.add('cardMode');
-						}
-					}}></div>
-				</div>
-				{gachaMode === 'start' && (
-					<GachaInfo ref={infoRef} onClick={() => {
-						infoRef.current.classList.remove('on');
-					}} className="gacha_info" borderImg={imgSet.etc.frameChBack}>
-						<div className="gacha_ch_card">
-							<Img imgurl={imgSet.images.transparent800} />
-							<CharacterCard usedType="gacha" saveData={saveData} slotIdx={infoIdx} />
-							{/* <ul className="ch_detail">
-								<CardLvName className="gacha_name_lv" cardLv={imgSet.etc.imgCardLv}>
-									<Img className="img" imgurl={imgSet.etc.iconCardName} />
-									<span className="lv">1</span><span className="name_">{gameData.ch[infoIdx].na}</span><span className="name">{gameData.ch[infoIdx].na1}</span>
-								</CardLvName>
-								<CardDisplay>
-									<ChPic pic="ch" idx={gameData.ch[infoIdx].display} />
-								</CardDisplay>
-								<CardRing className="gacha_ring">
-                  <ChPic type="cardBack" pic="card" idx={0} />
-								</CardRing>
-								<CardElement className="gacha_element" ringDisplay={imgSet.ringImg[gameData.ch[infoIdx].element]} />
-								<CardStar type={'open'} className="gacha_star" starIcon={iconStar}>
-									{cardStar && makeStar(cardStar)}
-								</CardStar>
-								<div className="gacha_job_actiontype">
-									<CardJob className="gacha_job">
-										<IconPic type="job" isAbsolute={true} pic="icon100" idx={saveData.ch[slotIdx]?.job} />
-									</CardJob>
-									{saveData.ch[slotIdx]?.newActionType.map((data, idx) => {
-										return (
-											<CardActionType key={'action'+idx} className="gacha_action_type">
-												<IconPic type="element" isAbsolute={true} pic="icon100" idx={idx + 1} />
-											</CardActionType>
-										)
-									})}
-								</div>
-								<CardFrame className="gacha_frame" cardFrame={imgSet.etc.imgCardFrame} />
-							</ul> */}
-						</div>
-						<div className="gacha_ch_graph">
-							<canvas ref={graphRef}></canvas>
-						</div>
-						<div className="ch_state scroll-y">
-							<ul>
-								<li>
-									<dl>
-										<dt>State (능력치)</dt>
-										<dd>
-												<span className="st st0">{`${gameData.ch[infoIdx].st0} (${gameData.stateName[0]})`} </span>
-												<span className="st st1">{`${gameData.ch[infoIdx].st1} (${gameData.stateName[1]})`} </span>
-												<span className="st st2">{`${gameData.ch[infoIdx].st2} (${gameData.stateName[2]})`} </span>
-												<span className="st st3">{`${gameData.ch[infoIdx].st3} (${gameData.stateName[3]})`} </span>
-												<span className="st st4">{`${gameData.ch[infoIdx].st4} (${gameData.stateName[4]})`} </span>
-												<span className="st st5">{`${gameData.ch[infoIdx].st5} (${gameData.stateName[5]})`} </span>
-												<span className="st st6">{`${gameData.ch[infoIdx].st6} (${gameData.stateName[6]})`} </span>
-										</dd>
-									</dl>
-								</li>
-								<li>
-									<dl>
-										<dt>Growth (성장)</dt>
-										<dd><span>{cardStateType}</span></dd>
-									</dl>
-								</li>
-								<li>
-									<dl>
-										<dt>Relation (인연)</dt>
-										<dd>
-											{gameData.ch[infoIdx].relation && gameData.ch[infoIdx].relation.map((data, idx) => {
-												return (
-													<span key={idx}>{gameData.relation[data].na[lang]}</span>
-												);
-											})}
-										</dd>
-									</dl>
-								</li>
-								<li>
-									<dl>
-										<dt>Skill (스킬)</dt>
-										<dd><span>스킬1</span></dd>
-									</dl>
-								</li>
-							</ul>
-						</div>
-					</GachaInfo>
-				)}
+									setStep(1);
+								}, 500);
+							}}>{gameData.msg.button['redraw'][lang]}</StyledButton>
+							<StyledButton btnImg={imgSet.button.btnMD} onClick={() => {
+								const startingGrade = paramData.recruitment.cardArr; //최초 시작 영웅들 등급
+								util.saveData('historyParam', {
+									...util.loadData('historyParam'),
+									start: {
+										card: gachaCard,
+										chArr: startingGrade,
+										selectType: paramData.recruitment.selectType,
+										language: paramData.recruitment.language,
+										country: paramData.recruitment.country
+									}
+								});
+								navigate('../start');
+							}}>{gameData.msg.button['finalize'][lang]}</StyledButton>
+						</>
+					)}
+				</GachaOrder>
+				<GachaInfo ref={infoRef} onClick={() => {
+					infoRef.current.classList.remove('on');
+				}} className="gacha_info" borderImg={imgSet.etc.frameChBack}>
+					<div className="gacha_ch_card">
+						<Img imgurl={imgSet.images.transparent800} />
+						<CharacterCard usedType="gacha" saveData={saveData} slotIdx={infoIdx} />
+						{/* <ul className="ch_detail">
+							<CardLvName className="gacha_name_lv" cardLv={imgSet.etc.imgCardLv}>
+								<Img className="img" imgurl={imgSet.etc.iconCardName} />
+								<span className="lv">1</span><span className="name_">{gameData.ch[infoIdx].na}</span><span className="name">{gameData.ch[infoIdx].na1}</span>
+							</CardLvName>
+							<CardDisplay>
+								<ChPic pic="ch" idx={gameData.ch[infoIdx].display} />
+							</CardDisplay>
+							<CardRing className="gacha_ring">
+								<ChPic type="cardBack" pic="card" idx={0} />
+							</CardRing>
+							<CardElement className="gacha_element" ringDisplay={imgSet.ringImg[gameData.ch[infoIdx].element]} />
+							<CardStar type={'open'} className="gacha_star" starIcon={iconStar}>
+								{cardStar && makeStar(cardStar)}
+							</CardStar>
+							<div className="gacha_job_actiontype">
+								<CardJob className="gacha_job">
+									<IconPic type="job" isAbsolute={true} pic="icon100" idx={saveData.ch[slotIdx]?.job} />
+								</CardJob>
+								{saveData.ch[slotIdx]?.newActionType.map((data, idx) => {
+									return (
+										<CardActionType key={'action'+idx} className="gacha_action_type">
+											<IconPic type="element" isAbsolute={true} pic="icon100" idx={idx + 1} />
+										</CardActionType>
+									)
+								})}
+							</div>
+							<CardFrame className="gacha_frame" cardFrame={imgSet.etc.imgCardFrame} />
+						</ul> */}
+					</div>
+					<div className="gacha_ch_graph">
+						<canvas ref={graphRef}></canvas>
+					</div>
+					<div className="ch_state scroll-y">
+						<ul>
+							<li>
+								<dl>
+									<dt>State (능력치)</dt>
+									<dd>
+											<span className="st st0">{`${gameData.ch[infoIdx].st0} (${gameData.stateName[0]})`} </span>
+											<span className="st st1">{`${gameData.ch[infoIdx].st1} (${gameData.stateName[1]})`} </span>
+											<span className="st st2">{`${gameData.ch[infoIdx].st2} (${gameData.stateName[2]})`} </span>
+											<span className="st st3">{`${gameData.ch[infoIdx].st3} (${gameData.stateName[3]})`} </span>
+											<span className="st st4">{`${gameData.ch[infoIdx].st4} (${gameData.stateName[4]})`} </span>
+											<span className="st st5">{`${gameData.ch[infoIdx].st5} (${gameData.stateName[5]})`} </span>
+											<span className="st st6">{`${gameData.ch[infoIdx].st6} (${gameData.stateName[6]})`} </span>
+									</dd>
+								</dl>
+							</li>
+							<li>
+								<dl>
+									<dt>Relation (인연)</dt>
+									<dd>
+										{gameData.ch[infoIdx].relation && gameData.ch[infoIdx].relation.map((data, idx) => {
+											return (
+												<span key={idx}>{gameData.relation[data].na[lang]}</span>
+											);
+										})}
+									</dd>
+								</dl>
+							</li>
+							<li>
+								<dl>
+									<dt>Skill (스킬)</dt>
+									<dd><span>스킬1</span></dd>
+								</dl>
+							</li>
+						</ul>
+					</div>
+				</GachaInfo>
 			</GachaWrap>
 			<ModalContainer>
 				{modalOn && <Modal fn={changeGachaMode} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {

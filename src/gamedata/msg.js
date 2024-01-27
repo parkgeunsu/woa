@@ -167,6 +167,46 @@ export const msg = {
 		}
 	},
 	state:{
+		lds:{
+			ko:'통솔',
+			en:'LDS',
+			jp:'統率',
+		},
+		sta:{
+			ko:'체력',
+			en:'STA',
+			jp:'体力',
+		},
+		str:{
+			ko:'무력',
+			en:'STR',
+			jp:'完力',
+		},
+		spd:{
+			ko:'속도',
+			en:'SPD',
+			jp:'速度',
+		},
+		int:{
+			ko:'지력',
+			en:'INT',
+			jp:'知力',
+		},
+		men:{
+			ko:'정신',
+			en:'MEN',
+			jp:'精神',
+		},
+		chr:{
+			ko:'매력',
+			en:'CHR',
+			jp:'魅力',
+		},
+		luk:{
+			ko:'행운',
+			en:'LUK',
+			jp:'幸運',
+		},
 		hp:{
 			ko:'체력',
 			en:'HP',
@@ -206,16 +246,6 @@ export const msg = {
 			ko:'체력회복',
 			en:'RCV',
 			jp:'体力回復',
-		},
-		spd:{
-			ko:'속도',
-			en:'SPD',
-			jp:'速度',
-		},
-		luk:{
-			ko:'행운',
-			en:'LUK',
-			jp:'幸運',
 		},
 		land:{
 			ko:'땅',
@@ -310,6 +340,11 @@ export const msg = {
 			ko:'지역 선택',
 			en:'Select Region',
 			jp:'地域選択'
+		},
+		money:{
+			ko:'소지금',
+			en:'Money',
+			jp:'所持金',
 		},
 		name:{
 			ko:'이름',
@@ -670,6 +705,11 @@ export const msg = {
 			en:'Redraw',
 			jp:'再抽選する',
 		},
+		flipAllCards:{
+			ko:'카드 전체 뒤집기',
+			en:'Flip all Cards',
+			jp:'カード全体を裏返す',
+		},
 		confirm:{
 			ko:'확인',
 			en:'Confirm',
@@ -929,10 +969,10 @@ export const msg = {
 			en:'The equipment you are trying to wear is heavy.',
 			jp:'着用しようとする機器が重い。',
 		},
-		samePart:{
-			ko:'같은 부위에 이미 다른 아이템이 착용 중입니다.',
-			en:'Another item is already being worn in the same part.',
-			jp:'同じ部位に既に他のアイテムを着用中です。',
+		nonePart:{
+			ko:'착용 가능한 슬롯이 없습니다.',
+			en:'No slots are available for wear.',
+			jp:'着用可能なスロットはありません。',
 		},
 		selectQuantity:{
 			ko:'수량을 선택하세요.',

@@ -4,6 +4,7 @@ const StyledText = styled.div`
   line-height: 1.5;
   font-size: ${({theme, code}) => theme.font[code] || theme.font.t1};
   color: ${({theme, color}) => theme.color[color] || theme.color.sub};
+  font-weight: ${({weight}) => weight};
   text-align: ${({align}) => align};
 `;
 
@@ -11,11 +12,12 @@ const Text = ({
   code,
   color,
   align,
+  weight,
   children,
   ...rest
 }) => {
   return (
-    <StyledText code={code} color={color} align={align} {...rest}>{children}</StyledText>
+    <StyledText code={code} color={color} align={align} weight={weight} {...rest}>{children}</StyledText>
   )
 }
 

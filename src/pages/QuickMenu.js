@@ -92,7 +92,6 @@ const QuickMenu = ({
       <li><IconPic type="quickMenu" pic="icon100" idx={1} onClick={() => {
         util.saveHistory(() => {
           navigate('../inven');
-          console.log('aaa');
         });//히스토리 저장
       }}>{gameData.msg.button['inven'][lang]}</IconPic></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={2} onClick={() => {

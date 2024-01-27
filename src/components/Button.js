@@ -1,4 +1,5 @@
 import { FlexBox } from 'components/Container';
+import { IconPic } from 'components/ImagePic';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -46,13 +47,11 @@ const ButtonText = styled.span`
   line-height: inherit;
   font-size: inherit;
 `;
-const ButtonIcon = styled.span`
+const StyledIconPic = styled(IconPic)`
   display: inline-block;
   margin: 0 5px 0 0;
   width: 16px;
   height: 16px;
-  background: url(${({icon}) => icon}) no-repeat center center !important;
-  background-size: 100% 100% !important;
   flex-shrink: 0;
 `;
 const Button = ({
@@ -73,7 +72,7 @@ const Button = ({
       {type === 'icon' && (
         <ActiveButton style={{paddingLeft: "20px"}} width={width} size={size} {...rest}>
           <FlexBox>
-            <ButtonIcon icon={icon} />
+            <StyledIconPic type={icon.type} pic={icon.pic} idx={icon.idx} />
             <ButtonText>{children}</ButtonText>
           </FlexBox>
         </ActiveButton>

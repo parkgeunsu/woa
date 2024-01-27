@@ -1,4 +1,5 @@
 import { AppContext } from 'App';
+import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import InfoGroup from 'components/InfoGroup';
 import { util } from 'components/Libs';
@@ -8,35 +9,69 @@ import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
-  .total_bar{position:relative;margin:0 5px;height:24px;flex:1;border-radius:6px;border:3px double #913300;background-color:transparent;overflow:hidden;}
-  .frame_bar{position:absolute;left:0;height:100%;background-color:#333;border-radius:4px;}
-  .bar{position:relative;height:100%;border-radius:4px;}
-  .ico{position:absolute;right:2px;top:1px;width:22px;height:22px;}
-  .back_bar{position:absolute;right:0;height:100%;border-radius:4px;}
-  .txt_total{margin:auto 0;width:30px;text-align:center;font-size:1rem;font-weight:600;}
+  position: absolute;
+  top: 0;
+  padding: 25px 20px 20px;
+  box-sizing: border-box;
 `;
-const FrameBar = styled.span`
-  width: ${({chMaxSt, maxSt}) => {
-    return (chMaxSt/maxSt)*100;
-  }}%;
-`;
-const Bar = styled.span`
-  width:${({rSt, chMaxSt, idx}) => (rSt/chMaxSt) * 100}%;
-  .ico{
-    background:url(${({stateType}) => stateType}) no-repeat center center;
+const ChInfo = styled.ul`
+  margin: 0 0 10px 0;
+  li {
+    position: relative;
+    margin: 0 0 5px 0;
+    width: calc(100% - 10px);
   }
 `;
-const BackBar = styled.span`
-  background:url(${({stateBack}) => stateBack}) repeat-x left center;
-  width: ${({chMaxSt, maxSt}) => {
-    return 100 - (chMaxSt/maxSt)*100;
-  }}% !important;
+const ActionPoint = styled(FlexBox)`
+  flex: 1;
+  & > span {
+    font-weight: 600;
+    font-size: ${({theme}) => theme.font.t3};
+  }
 `;
-const TextTotal = styled.span`
-  color:${({maxSt, rSt}) => {
-    return util.getPercentColor(maxSt ,rSt);
+const StyledText = styled(Text)`
+  margin: 2px 5px 0 0;
+  text-align: right;
+  & > span {
+    font-size: inherit;
+  }
+`;
+const StateBar = styled(FlexBox)`
+  margin: 0 0 5px 0;
+  &:last-of-type {
+    margin: 0;
+  }
+  height: auto;
+`;
+const TotalBar = styled.span`
+  position:relative;
+  margin: 0 5px;
+  flex: 1;
+  height: 24px;
+  border-radius: 20px;
+  border: 3px double var(--color-w);
+  background-color: #333;
+  overflow: hidden;
+`;
+const Bar = styled.span`
+  display: inline-block;
+  position: relative;
+  height: 100%;
+  border-radius: 20px;
+  width: ${({chSt, maxSt}) => {
+    return (chSt / maxSt) * 100;
+  }}%;
+  vertical-align: middle;
+  transition: width linear 0.5s;
+`;
+const TextTotal = styled(Text)`
+  margin: auto 0;
+  width: 30px;
+  text-align: center;
+  color: ${({maxSt, chSt}) => {
+    return util.getPercentColor(maxSt ,chSt);
   }} !important;
-  text-shadow: 0 0 ${({maxSt, rSt}) => (rSt / maxSt) * 10}px #fff;
+  text-shadow: 0 0 ${({maxSt, chSt}) => (chSt / maxSt) * 10}px #fff;
 `;
 
 const CharacterState = ({
@@ -47,13 +82,28 @@ const CharacterState = ({
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
-  const imgSet = React.useMemo(() => {
-    return context.images;
-  }, [context]);
+  // const imgSet = React.useMemo(() => {
+  //   return context.images;
+  // }, [context]);
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
   const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
+  const saveExp = React.useMemo(() => {
+    return Object.keys(saveCh).length > 0 ? {
+      current: saveCh.exp,
+      max: gameData.exp['grade' + saveCh.grade][saveCh.lv-1]
+    } : {
+      current : 0,
+      max: 0,
+    }
+  }, [gameData, saveCh]);
+  const saveHasExp = React.useMemo(() => {
+    return {
+      current: saveCh.hasExp,
+      max: gameData.hasMaxExp[saveCh.grade]
+    }
+  }, [gameData, saveCh]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
@@ -70,43 +120,51 @@ const CharacterState = ({
             data:gameData.guide["characterState"],
           });
         }}>
+          <ChInfo>
+            <li>
+              <FlexBox>
+                <Text code="t3" color="main" weight="600">{gameData.msg.state.sp[lang]}</Text>
+                <ActionPoint justifyContent="flex-end">
+                  <span className="current">{saveData.ch[slotIdx].actionPoint}</span><span className="bar">/</span><span className="max">50</span>
+                </ActionPoint>
+              </FlexBox>
+            </li>
+            <li>
+              <FlexBox>
+                <Text code="t3" color="main" weight="600">{gameData.msg.info.exp[lang]}</Text>
+                <TotalBar style={{marginRight: 0}} className="gradient_light">
+                  <Bar className="gradient_dark transition" style={{ width: util.getPercent(saveExp.max, saveExp.current)+'%'}}></Bar>
+                </TotalBar>
+              </FlexBox>
+              <StyledText code="t3" color="main" weight="600">
+                <span className="current">{saveExp.current}</span> <span className="bar">/</span> <span className="max">{saveExp.max}</span>
+              </StyledText>
+            </li>
+            <li>
+              <FlexBox>
+                <Text code="t3" color="main" weight="600">{gameData.msg.info.cumulativeExp[lang]}</Text>
+                <TotalBar style={{marginRight: 0}} className="gradient_light">
+                  <Bar className="gradient_dark transition" style={{ width: util.getPercent(saveHasExp.max, saveHasExp.current)+'%'}}></Bar>
+                </TotalBar>
+              </FlexBox>
+              <StyledText code="t3" color="main" weight="600">
+                <span className="current">{saveHasExp.current}</span> <span className="bar">/</span> <span className="max">{saveHasExp.max}</span>
+              </StyledText>
+            </li>
+          </ChInfo>
           {stateArr && stateArr.map((data, idx) => {
             return (
-              <div key={`chst${idx}`} className={`st st${idx}`} flex="true">
-                {idx === stateArr.length - 1 ? (
-                  <>
-                    <span className="name">{data}</span>
-                    <span className="total_bar">
-                      <FrameBar chMaxSt={100} maxSt={100} className="frame_bar transition gradient_light">
-                        <Bar idx={idx} rSt={saveCh.stateLuk} chMaxSt={gameData.stateMax[idx]} stateType={imgSet.iconState[idx]} className="bar transition gradient_dark_y">
-                          <span className="ico"></span>
-                          {/* <span className="txt_current">0</span> */}
-                        </Bar>
-                      </FrameBar>
-                      <BackBar stateBack={imgSet.etc.stateBack} chMaxSt={saveCh.stateLuk} maxSt={gameData.stateMax[idx]} className="back_bar transition" />
-                    </span>
-                    <TextTotal rSt={saveCh.stateLuk} maxSt={gameData.stateMax[idx]} className="txt_total" title={data.title}>
-                      {saveCh.stateLuk}
-                    </TextTotal>
-                  </>
-                ) : (
-                  <>
-                    <span className="name">{data}</span>
-                    <span className="total_bar">
-                      <FrameBar chMaxSt={saveCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="frame_bar transition gradient_light">
-                        <Bar idx={idx} rSt={saveCh['rSt'+idx]} chMaxSt={saveCh['maxSt'+idx]} stateType={imgSet.iconState[idx]} className="bar transition gradient_dark_y">
-                          <span className="ico"></span>
-                          {/* <span className="txt_current">0</span> */}
-                        </Bar>
-                      </FrameBar>
-                      <BackBar stateBack={imgSet.etc.stateBack} chMaxSt={saveCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="back_bar transition" />
-                    </span>
-                    <TextTotal rSt={saveCh['maxSt'+idx]} maxSt={gameData.stateMax[idx]} className="txt_total" title={data.title}>
-                      {saveCh['rSt'+idx]}
-                    </TextTotal>
-                  </>
-                )}
-              </div>
+              <StateBar key={`chst${idx}`}>
+                <>
+                  <Text code="t3" color="main" weight="600">{gameData.msg.state[data][lang]}</Text>
+                  <TotalBar className="gradient_light">
+                    <Bar idx={idx} chSt={saveCh['st'+idx]} maxSt={gameData.stateMax[idx]} className="gradient_dark_y" />
+                  </TotalBar>
+                  <TextTotal code="t3" weight="600" chSt={saveCh['st'+idx]} maxSt={gameData.stateMax[idx]} className="txt_total">
+                    {saveCh['st'+idx]}
+                  </TextTotal>
+                </>
+              </StateBar>
             )
           })}
         </InfoGroup>

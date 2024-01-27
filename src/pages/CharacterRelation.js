@@ -8,6 +8,10 @@ import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
+  position: absolute;
+  top: 0;
+  padding: 25px 20px 20px;
+  box-sizing: border-box;
   .relationMember{margin:10px 0 0 0;justify-content:center;}
   .name{width:80px;line-height:1.3;font-size:0.75rem;color:#fff !important;font-weight:600;color:#fff;word-break:keep-all !important;text-align:center !important;}
   .txt{margin:auto 0;padding:0 10px;flex:1;line-height:1.3;font-size:0.75rem;word-break:keep-all;}
