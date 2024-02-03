@@ -3,7 +3,7 @@
 //num 효과
 //member 활성화 조건인물 0없음
 //limit 최소 인원 0없음
-//eff type(효과 dmg_type&buff_type) 체력(HP)(0), 행동SP(1), 행동회복(RSP)(2), 물리 공격(ATK)(3), 물리 방어(DEF)(4), 술법 공격(MAK)(5), 술법 방어(MDF)(6), 회복(RCV)(7), 속도(SPD)(8), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(20),암(21),수(22),화(23),풍(24),지(25), 진형(100)
+//eff type(효과 dmg_type&buff_type) 체력(HP)(0), 행동SP(1), 행동회복(RSP)(2), 물리 공격(ATK)(3), 물리 방어(DEF)(4), 술법 공격(MAK)(5), 술법 방어(MDF)(6), 회복(RCV)(7), 속도(SPD)(8), 쪼기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(20),암(21),수(22),화(23),풍(24),지(25), 진형(100)
 export const relation = [
     // {idx:0,na:'해군3대장',tag:'<em link="relation_0">해군3대장</em>',txt:'HP <b buff>30%</b> <i icon up>증가</i>, SP <b buff>1</b> <i icon up>증가</i> 한다.',eff:[{ta:0,type:0,num:'30%'},{ta:0,type:26,num:'1'}],member:[0,1],limit:[0]},
     // {idx:1,na:'임진왜란 영웅',tag:'<em link="relation_1">임진왜란 영웅</em>',txt:'<em link="relation_2"><u>임진왜란 참전</u></em>대상 데미지 <b dmg>100%</b> <i icon up>증가</i> 한다.',eff:[{ta:0,type:0,num:'30%'},{ta:'임진왜란 참전',type:3,num:'100%'}],member:[0],limit:[0]},

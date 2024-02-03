@@ -27,10 +27,13 @@ const ElementIcon = styled.div`
   position: absolute;
   width: 40px;
   height: 40px;
-  ${({direction}) => direction === 'L' ? `
+  border-radius: 50%;
+  ${({direction, actionPossibleElement, theme}) => direction === 'L' ? `
     left: 0;
+    ${actionPossibleElement ? `box-shadow: 6px 0 0 0 ${theme.color.red};` : ''}
   ` : `
     right: 0;
+    ${actionPossibleElement ? `box-shadow: -6px 0 0 0 ${theme.color.red};` : ''}
   `}
 `;
 const ElementBar = styled.div`
@@ -38,7 +41,7 @@ const ElementBar = styled.div`
   top: 6px;
   width: calc(100% - 80px);
   height: 24px;
-  border: 3px double var(--color-w);
+  border: ${({actionPossibleElement}) => actionPossibleElement ? `3px double var(--color-red);` : `3px double var(--color-w);`}
   background: #333;
   border-radius: 20px;
   white-space: nowrap;
@@ -142,12 +145,19 @@ const CharacterElement = ({
             const num = slotCh['el' + idx] + slotCh['iSt' + (15 + idx)];
             const elementPercent = num * .5,
               direction = idx%2 === 0 ? 'L' : 'R';
+            let actionPossibleElement = 'possible';
+            saveData.ch[slotIdx].newActionType.forEach((type) => {
+              actionPossibleElement = type === idx;
+              if (actionPossibleElement) {
+                return;
+              }
+            });
             return (
               <Element className={`el el${idx}`} key={`chst${idx}`}>
-                <ElementIcon direction={direction}>
+                <ElementIcon actionPossibleElement={actionPossibleElement} direction={direction}>
                   <IconPic type="element" pic="icon100" idx={idx + 1} />
                 </ElementIcon>
-                <ElementBar percent={elementPercent} direction={direction}>
+                <ElementBar actionPossibleElement={actionPossibleElement} percent={elementPercent} direction={direction}>
                   <ElementCurrentBar percent={elementPercent} direction={direction}>
                     <ElementIconMini direction={direction}/>
                     <ElementNum code="t2" color="main" direction={direction}>{num}</ElementNum>

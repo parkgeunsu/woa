@@ -1,16 +1,17 @@
 // cate(스킬종류, 배열) 중복가능
 // none1
-// passive2,
-// active3(적군), 턴제로 실행
-// active4(본인), 바로실행 
-// buff5(아군전체), debuff6(적군전체) 턴제로 실행
-// active7(적군), 디버프 추가
-// active8(적군), 버프 추가
-// active9(적군), 상태이상 추가
-// weather10(날씨), 날씨 변환
+// passive2, (전투 시작전 실행)
+// active3(적군), (턴제로 실행)
+// active4(본인), 바로실행 (ex: defence)
+// buff5(아군전체) (턴제로 실행), 
+// debuff6(적군전체) (턴제로 실행),
+// active7(적군), 디버프 추가 (턴제로 실행)
+// active8(적군), 버프 추가 (턴제로 실행)
+// active9(적군), 상태이상 추가 (턴제로 실행)
+// weather10(날씨), 날씨 변환 (턴제로 실행)
 // job11(직업)
-//element_type 무속성(0),찌르기(1),할퀴기(2),물기(3),치기(4),누르기(5),던지기(6),빛(7),어둠(8),물(9),불(10),바람(11),땅(12)
-//eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 행운LUK(9), 출혈(50), 중독(51), 석화(52), 혼란(53), 기절(54), 변이(55), 패시브(100)
+//element_type 무속성(0),쪼기(1),할퀴기(2),물기(3),치기(4),누르기(5),던지기(6),빛(7),어둠(8),물(9),불(10),바람(11),땅(12)
+//eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 행운LUK(9), 쪼기(11), 할퀴기(12), 물기(13), 치기(14), 누르기(15), 던지기(16), 빛(17), 어둠(18), 물(19), 불(20), 바람(21), 땅(22), 출혈(50), 중독(51), 석화(52), 혼란(53), 기절(54), 변이(55), 패시브(100)
 //ta_ 아군0, 적군1
 //ta getEffectArea 효과범위, passive일 경우 1:단일, 10:전체, 100:직업
 //num 효과
@@ -22,78 +23,128 @@
 //영역 1단일, 2가로2, 3가로3, 4세로2, 5세로3, 6가로행, 7세로열, 8십자5, 9십자9, 10대각선/, 11대각선\, 12└┐, 13┌┘, 14卍, 20전체, 21정사각형9, 22정사각형4, 23자신
 export const skill = [
 	{idx:0,
-		na:{ko:'대기',en:'Wait'},element_type:0,cate:[1],txt:{ko:'대기',en:'Stand by.'}
+		na:{ko:'대기',en:'Wait',jp:'スタンバイ'},element_type:0,cate:[1],txt:{ko:'<u>자신</u>, <b buff>$(0)</b> SP 회복',en:'<u>Self</u>, <b buff>$(0)</b> SP Recovery',jp:'<u>自分</u>、 <b buff>$(0)</b> SP 回復'}
 		,ta_:0,ta:1,effAnimation:1
-		,eff:[{type:4,num:['100%','110%','125%','135%','150%']}],atkCount:[1],turn:1,sp:0},
+		,eff:[{type:4,num:['100%','120%','140%','170%','200%']}],atkCount:[1],turn:1,sp:0},
 	{idx:1,
-		na:{ko:'공격',en:'Attack'},element_type:0,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 공격',en:'<u>Single</u>, <b dmg>$(0)</b> attack'}
+		na:{ko:'공격',en:'Attack',jp:'攻撃'},element_type:0,cate:[3],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 공격',en:'<u>Single Enemy</u>, <b dmg>$(0)</b> attack',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b> 攻撃'}
 		,ta_:1,ta:1,effAnimation:1
 		,eff:[{type:3,num:['100%','110%','125%','135%','150%']}],atkCount:[1],turn:1,sp:5},
 	{idx:2,
-		na:{ko:'방어',en:'Defense'},element_type:0,cate:[4],txt:{ko:'<u>자신</u>, <b buff>$(0)</b> 방어(DEF) <i icon up></i> 증가',en:'<u>Self</u>, <b buff>$(0)</b> Defense(DEF) <i icon up></i> increase'}
+		na:{ko:'방어',en:'Defense',jp:'防衛'},element_type:0,cate:[4],txt:{ko:'<u>자신</u>, <b buff>$(0)</b> 방어(DEF) <i icon up></i> 증가',en:'<u>Self</u>, <b buff>$(0)</b> Defense(DEF) <i icon up></i> increase',jp:'<u>自分</u>, <b buff>$(0)</b> 防御(DEF) <i icon up></i> 増加'}
 		,ta_:0,ta:1,effAnimation:1
 		,eff:[{type:4,num:['100%','110%','125%','135%','150%']}],atkCount:[1],turn:1,sp:4},
+	// {idx:4,
+	// 	na:{ko:'학익진 강화',en:'Strengthening the formation of "Hakikjin"',jp:'学翼陣強化'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 학익진효과 <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, "Hak Ik jin" Formation Effect <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>味方全体</u>, 学翼陣効果 <b buff>$(0)</b> <i icon up></i> 増加'}
+	// 	,ta_:0,ta:10,effAnimation:1
+	// 	,eff:[{type:100,num:['20%','25%','30%','35%','40%']}],atkCount:[0],turn:0,sp:0}, //이순신
+	// {idx:5,
+	// 	na:{ko:'격려',en:'Encouragement',jp:'激励'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 진형효과 <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, The Formative Effect <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>味方全体</u>, 陣形効果 <b buff>$(0)</b> <i icon up></i> 増加'}
+	// 	,ta_:0,ta:10,effAnimation:1
+	// 	,eff:[{type:100,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
 	{idx:3,
-		na:{ko:'침뱉기',en:'Spitting'},element_type:9,cate:[3],txt:{ko:'<u>가로한줄</u>, <b dmg>$(0)</b> <i el el4>수속성</i> 공격',en:'<u>A horizontal line</u>, <b dmg>$(0)</b> Attack of <i el el4>Water elements</i>'}
-		,ta_:1,ta:6,effAnimation:4
-		,eff:[{type:5,num:['70%','80%','90%','100%','110%']}],atkCount:[1],turn:1,sp:12},
+		na:{ko:'빛의 하수인',en:'Minions of Light',jp:'光の手先'},element_type:7,cate:[11],txt:{ko:'빛속성의 스킬 사용 가능<br/><u>자신</u>, 빛속성 <b buff>$(0)</b> <i icon up></i> 증가',en:'Ability to use skills with the Light Element<br/><u>Self</u>, Light Element <b buff>$(0)</b> <i icon up></i> increase',jp:'光属性のスキル使用可能<br/><u>自分</u>, 光属性 <b buff>$(0)</b> <i icon up></i> 増加'}
+		,ta_:0,ta:1,effAnimation:3
+		,eff:[{type:17,num:['20%','20%','20%','20%','20%']}],atkCount:[0],turn:0,sp:0},
 	{idx:4,
-		na:{ko:'학익진 강화',en:'Strengthening the formation of "Hakikjin"'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>전체</u>, 학익진효과 <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, "Hak Ik jin" Formation Effect <b buff>$(0)</b> <i icon up></i> increase'}
-		,ta_:0,ta:10,effAnimation:1
-		,eff:[{type:100,num:['20%','25%','30%','35%','40%']}],atkCount:[0],turn:0,sp:0}, //이순신
-	{idx:5,
-		na:{ko:'격려',en:'Encouragement'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 진형효과 <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, The Formative Effect <b buff>$(0)</b> <i icon up></i> increase'}
-		,ta_:0,ta:10,effAnimation:1
-		,eff:[{type:100,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
-	{idx:6,
-		na:{ko:'불정령',en:'Spirit of Fire'},element_type:10,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 공격(ATK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Attack(ATK) <b buff>$(0)</b> <i icon up></i> increase'}
-		,ta_:0,ta:10,effAnimation:0
-		,eff:[{type:3,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
-	{idx:7,
-		na:{ko:'빛정령',en:'Spirit of Light'},element_type:7,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 술법공격(MAK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Magic Attack(MAK) <b buff>$(0)</b> <i icon up></i> increase'}
+		na:{ko:'어둠의 하수인',en:'Minions of Darkness',jp:'暗の手先'},element_type:8,cate:[11],txt:{ko:'어둠속성의 스킬 사용 가능<br/><u>자신</u>, 어둠속성 <b buff>$(0)</b> <i icon up></i> 증가',en:'Ability to use skills with the Darkness Element<br/><u>Self</u>, Darkness Element <b buff>$(0)</b> <i icon up></i> increase',jp:'闇属性のスキル使用可能<br/><u>自分</u>, 闇属性 <b buff>$(0)</b> <i icon up></i> 増加'}
 		,ta_:0,ta:10,effAnimation:3
-		,eff:[{type:5,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
+		,eff:[{type:18,num:['20%','20%','20%','20%','20%']}],atkCount:[0],turn:0,sp:0},
+	{idx:5,
+		na:{ko:'물의 하수인',en:'Minions of Water',jp:'水の手先'},element_type:9,cate:[11],txt:{ko:'물속성의 스킬 사용 가능<br/><u>자신</u>, 물속성 <b buff>$(0)</b> <i icon up></i> 증가',en:'Ability to use skills with the Water Element<br/><u>Self</u>, Water Element <b buff>$(0)</b> <i icon up></i> increase',jp:'水属性のスキル使用可能<br/><u>自分</u>, 水属性 <b buff>$(0)</b> <i icon up></i> 増加'}
+		,ta_:0,ta:10,effAnimation:3
+		,eff:[{type:19,num:['20%','20%','20%','20%','20%']}],atkCount:[0],turn:0,sp:0},
+	{idx:6,
+		na:{ko:'불의 하수인',en:'Minions of Fire',jp:'火の手先'},element_type:10,cate:[11],txt:{ko:'불속성의 스킬 사용 가능<br/><u>자신</u>, 불속성 <b buff>$(0)</b> <i icon up></i> 증가',en:'Ability to use skills with the Fire Element<br/><u>Self</u>, Fire Element <b buff>$(0)</b> <i icon up></i> increase',jp:'火属性のスキル使用可能<br/><u>自分</u>, 火属性 <b buff>$(0)</b> <i icon up></i> 増加'}
+		,ta_:0,ta:10,effAnimation:3
+		,eff:[{type:20,num:['20%','20%','20%','20%','20%']}],atkCount:[0],turn:0,sp:0},
+	{idx:7,
+		na:{ko:'바람의 하수인',en:'Minions of Wind',jp:'風の手先'},element_type:11,cate:[11],txt:{ko:'바람속성의 스킬 사용 가능<br/><u>자신</u>, 바람속성 <b buff>$(0)</b> <i icon up></i> 증가',en:'Ability to use skills with the Wind Element<br/><u>Self</u>, Wind Element <b buff>$(0)</b> <i icon up></i> increase',jp:'風属性のスキル使用可能<br/><u>自分</u>, 風属性 <b buff>$(0)</b> <i icon up></i> 増加'}
+		,ta_:0,ta:10,effAnimation:3
+		,eff:[{type:21,num:['20%','20%','20%','20%','20%']}],atkCount:[0],turn:0,sp:0},
 	{idx:8,
-		na:{ko:'물정령',en:'Spirit of Water'},element_type:9,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 체력(HP) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Health Point(HP) <b buff>$(0)</b> <i icon up></i> increase'}
-		,ta_:0,ta:10,effAnimation:1
-		,eff:[{type:0,num:['20%','25%','30%','35%','40%']}],atkCount:[0],turn:0,sp:0},
+		na:{ko:'땅의 하수인',en:'Minions of Earth',jp:'地の手先'},element_type:12,cate:[11],txt:{ko:'땅속성의 스킬 사용 가능<br/><u>자신</u>, 땅속성 <b buff>$(0)</b> <i icon up></i> 증가',en:'Ability to use skills with the Earth Element<br/><u>Self</u>, Earth Element <b buff>$(0)</b> <i icon up></i> increase',jp:'地属性のスキル使用可能<br/><u>自分</u>, 地属性 <b buff>$(0)</b> <i icon up></i> 増加'}
+		,ta_:0,ta:10,effAnimation:3
+		,eff:[{type:22,num:['20%','20%','20%','20%','20%']}],atkCount:[0],turn:0,sp:0},
 	{idx:9,
-		na:{ko:'집중타',en:'Concentrated Attack'},element_type:0,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 강한 공격',en:'<u>Single</u>, <b dmg>$(0)</b> a strong attack'}
-		,ta_:1,ta:1,effAnimation:2
-		,eff:[{type:3,num:['150%','175%','200%','225%','250%']}],atkCount:[1],turn:1,sp:9},
+		na:{ko:'빛의 정령',en:'Spirit of Light',jp:'光の精霊'},element_type:7,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 빛속성 <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Light Element <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>味方全体</u>, 光属性 <b buff>$(0)</b> <i icon up></i> 増加'}
+		,ta_:0,ta:10,effAnimation:3
+		,eff:[{type:17,num:['10%','20%','30%','40%','50%']}],atkCount:[0],turn:0,sp:0},
 	{idx:10,
-		na:{ko:'때린데 또 까',en:'Hit again Hit'},element_type:0,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 2회 공격',en:'<u>Single</u>, <b dmg>$(0)</b> a two-time attacks'}
-		,ta_:1,ta:1,effAnimation:3
-		,eff:[{type:3,num:['80%','90%','100%','110%','120%']}],atkCount:[2],turn:1,sp:8},
+		na:{ko:'어둠의 정령',en:'Spirit of Dark',jp:'暗の精霊'},element_type:8,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 어둠속성 <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Dark Element <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>味方全体</u>, 暗属性 <b buff>$(0)</b> <i icon up></i> 増加'}
+		,ta_:0,ta:10,effAnimation:3
+		,eff:[{type:18,num:['10%','20%','30%','40%','50%']}],atkCount:[0],turn:0,sp:0},
 	{idx:11,
-		na:{ko:'연속 공격',en:'Series of Attacks'},element_type:0,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 2~4회 공격',en:'<u>Single</u>, <b dmg>$(0)</b> 2 to 4 attacks'}
-		,ta_:1,ta:1,effAnimation:2
-		,eff:[{type:3,num:['60%','65%','75%','80%','85%']}],atkCount:[3, "randomCount"],turn:1,sp:10},
+		na:{ko:'물의 정령',en:'Spirit of Water',jp:'水の精霊'},element_type:9,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 물속성 <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Water Element <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>味方全体</u>, 水属性 <b buff>$(0)</b> <i icon up></i> 増加'}
+		,ta_:0,ta:10,effAnimation:1
+		,eff:[{type:19,num:['10%','20%','30%','40%','50%']}],atkCount:[0],turn:0,sp:0},
 	{idx:12,
-		na:{ko:'무차별 공격',en:'Indiscriminate Attack'},element_type:0,cate:[3],txt:{ko:'<u>단일 랜덤</u>, <b dmg>$(0)</b> 3회 공격',en:'<u>Single Random</u>, <b dmg>$(0)</b> a three-time attack'}
-		,ta_:1,ta:1,effAnimation:3
-		,eff:[{type:3,num:['100%','110%','120%','130%','140%']}],atkCount:[3, "another"],turn:1,sp:9},
+		na:{ko:'불의 정령',en:'Spirit of Fire',jp:'火の精霊'},element_type:10,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 불속성 <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Fire Element <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>味方全体</u>, 火属性 <b buff>$(0)</b> <i icon up></i> 増加'}
+		,ta_:0,ta:10,effAnimation:0
+		,eff:[{type:20,num:['10%','20%','30%','40%','50%']}],atkCount:[0],turn:0,sp:0},
 	{idx:13,
-		na:{ko:'철벽방어',en:'Iron Defense'},element_type:0,cate:[4],txt:{ko:'<u>자신</u>, 방어(DEF) <b buff>$(0)</b>, 술법방어(MDF) <b buff>$(1)</b> <i icon up></i> 증가',en:'<u>Self</u>, Defense(DEF) <b buff>$(0)</b>, Magic Defense(MDF) <b buff>$(1)</b> <i icon up></i> increase'}
-		,ta_:0,ta:1,effAnimation:2
-		,eff:[{type:4,num:['40%','60%','80%','100%','130%']},{type:6,num:['40%','60%','80%','100%','130%']}],atkCount:[1],turn:1,sp:5},
+		na:{ko:'바람의 정령',en:'Spirit of Wind',jp:'風の精霊'},element_type:11,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 바람속성 <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Wind Element <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>味方全体</u>, 風属性 <b buff>$(0)</b> <i icon up></i> 増加'}
+		,ta_:0,ta:10,effAnimation:0
+		,eff:[{type:21,num:['10%','20%','30%','40%','50%']}],atkCount:[0],turn:0,sp:0},
 	{idx:14,
-		na:{ko:'마법방어',en:'Magic Defense'},element_type:0,cate:[4],txt:{ko:'<u>자신</u>, <b buff>$(0)</b> 술법방어(MDF) <i icon up></i> 증가',en:'<u>Self</u>, Magic Defense(MDF) <b buff>$(0)</b> <i icon up></i> increase'}
-		,ta_:0,ta:1,effAnimation:1
-		,eff:[{type:6,num:['50%','70%','100%','120%','150%']}],atkCount:[1],turn:1,sp:4},
+		na:{ko:'땅의 정령',en:'Spirit of Earth',jp:'地の精霊'},element_type:12,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 땅속성 <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Earth Element <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>味方全体</u>, 地属性 <b buff>$(0)</b> <i icon up></i> 増加'}
+		,ta_:0,ta:10,effAnimation:0
+		,eff:[{type:22,num:['10%','20%','30%','40%','50%']}],atkCount:[0],turn:0,sp:0},
 	{idx:15,
-		na:{ko:'나무뒤에 숨기',en:'Hiding Behind a Tree'},element_type:0,cate:[4],txt:{ko:'<u>자신</u>, <b buff>$(0)</b> 방어(DEF) <i icon up>증가</i>',en:'<u>Self</u>, Defense(MDF) <b buff>$(0)</b> <i icon up></i> increase'}
-		,ta_:0,ta:1,effAnimation:4
-		,eff:[{type:4,num:['300','400','650','800','1000']}],atkCount:[1],turn:1,sp:5},
+		na:{ko:'언변',en:'Speech',jp:'言論'},element_type:0,cate:[11],txt:{ko:'상점에서 가격흥정 가능',en:'Negotiate prices in your store',jp:'ショップで価格交渉可能'},ta_:0,ta:1,effAnimation:29,skillClass:2,eff:[{type:'grade',num:['10','20','30','40','50']}],sp:3},
 	{idx:16,
-		na:{ko:'테스트',en:'Test'},element_type:0,cate:[6],txt:{ko:`<u>적군</u>, 방어(DEF) <b dmg>$(0)</b>, 3턴 <i icon down></i> 감소`,en:'<u>Single Enemy</u>, Defense(MDF) <b buff>$(0)</b>, a 3turn <i icon down></i> reduction'}
-		,ta_:1,ta:15,effAnimation:13
-		,eff:[{type:4,num:['-300','-400','-500','-600','-150']}],turn:1,atkCount:[1],sp:6},
+		na:{ko:'선박 전문',en:'Ship Specialty',jp:'船舶専門'},element_type:0,cate:[11],txt:{ko:'선박 제작/분해 가능',en:'Can build/disassemble ships',jp:'船舶製作/分解可能'},ta_:0,ta:1,effAnimation:30,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
 	{idx:17,
-		na:{ko:'반격',en:'Counter Attack'},element_type:0,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 공격',en:'<u>Single</u>, <b dmg>$(0)</b> attack'}
-		,ta_:1,ta:1,effAnimation:1
-		,eff:[{type:3,num:['100%','110%','125%','135%','150%']}],atkCount:[1],turn:1,sp:0},{},{},{},//20
-	{},{},{},{},{},{},{},{},{},{},//30
+		na:{ko:'장비 전문',en:'Equipment Specialty',jp:'設備専門'},element_type:0,cate:[11],txt:{ko:'장비 제작/분해 가능',en:'Can build/disassemble equipment',jp:'機器製作/分解可能'},ta_:0,ta:1,effAnimation:31,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
+	{idx:18,
+		na:{ko:'조각',en:'Sculpture',jp:'彫刻'},element_type:0,cate:[11],txt:{ko:'조각상 제작 가능',en:'Statues can be crafted',jp:'彫像製作可能'},ta_:0,ta:1,effAnimation:32,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
+	{idx:19,
+		na:{ko:'식물 재배',en:'Plant Cultivation',jp:'植物栽培'},element_type:0,cate:[11],txt:{ko:'식물 재배 가능',en:'Can grow plants',jp:'植物栽培可能'},ta_:0,ta:1,effAnimation:33,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
+	{idx:20,
+		na:{ko:'연금술',en:'Alchemy',jp:'錬金術'},element_type:0,cate:[11],txt:{ko:'아이템 합성 가능',en:'Items can be composited',jp:'アイテム合成可能'},ta_:0,ta:1,effAnimation:34,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
+	{idx:21,
+		na:{ko:'보석 세공',en:'Jewelry',jp:'宝石細工'},element_type:0,cate:[11],txt:{ko:'목걸이, 반지 제작/분해 가능',en:'Can create/disassemble necklaces and rings',jp:'ネックレス、指輪製作/分解可能'},ta_:0,ta:1,effAnimation:35,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
+	{idx:22,
+		na:{ko:'관찰력',en:'Observation',jp:'観察力'},element_type:0,cate:[11],txt:{ko:'고급 등급의 동물 찾을 확률 증가',en:'Increased chance of finding an advanced ranked animal',jp:'高級ランクの動物が見つかる確率アップ'},ta_:0,ta:1,effAnimation:36,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
+	{idx:23,
+		na:{ko:'예술',en:'Art',jp:'アート'},element_type:0,cate:[11],txt:{ko:'예술품 제작 가능',en:'Can create art',jp:'アート作品制作可能'},ta_:0,ta:1,effAnimation:37,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
+	// {idx:9,
+	// 	na:{ko:'집중타격',en:'Concentrated Attack',jp:'集中攻撃'},element_type:0,cate:[3],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 강한 공격',en:'<u>Single Enemy</u>, <b dmg>$(0)</b> a strong attack',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b> 強い攻撃'}
+	// 	,ta_:1,ta:1,effAnimation:2
+	// 	,eff:[{type:3,num:['150%','175%','200%','225%','250%']}],atkCount:[1],turn:1,sp:9},
+	// {idx:10,
+	// 	na:{ko:'때린데 또 까',en:'Hit again Hit',jp:'再びヒット'},element_type:0,cate:[3],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 2회 공격',en:'<u>Single Enemy</u>, <b dmg>$(0)</b> a two-time attacks',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b> 2回攻撃'}
+	// 	,ta_:1,ta:1,effAnimation:3
+	// 	,eff:[{type:3,num:['80%','90%','100%','110%','120%']}],atkCount:[2],turn:1,sp:8},
+	// {idx:11,
+	// 	na:{ko:'연속 공격',en:'Series of Attacks',jp:'連続攻撃'},element_type:0,cate:[3],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 2~4회 공격',en:'<u>Single Enemy</u>, <b dmg>$(0)</b> 2 to 4 attacks',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b> 2～4回攻撃'}
+	// 	,ta_:1,ta:1,effAnimation:2
+	// 	,eff:[{type:3,num:['60%','65%','75%','80%','85%']}],atkCount:[3, "randomCount"],turn:1,sp:10},
+	// {idx:12,
+	// 	na:{ko:'무차별 공격',en:'Indiscriminate Attack',jp:'無差別攻撃'},element_type:0,cate:[3],txt:{ko:'<u>단일 랜덤</u>, <b dmg>$(0)</b> 3회 공격',en:'<u>Single Random</u>, <b dmg>$(0)</b> a three-time attack',jp:'<u>単一 ランダム</u>, <b dmg>$(0)</b> 3回攻撃'}
+	// 	,ta_:1,ta:1,effAnimation:3
+	// 	,eff:[{type:3,num:['100%','110%','120%','130%','140%']}],atkCount:[3, "another"],turn:1,sp:9},
+	// {idx:13,
+	// 	na:{ko:'철벽방어',en:'Iron Defense',jp:'鉄壁の防御'},element_type:0,cate:[4],txt:{ko:'<u>자신</u>, 방어(DEF) <b buff>$(0)</b>, 술법방어(MDF) <b buff>$(1)</b> <i icon up></i> 증가',en:'<u>Self</u>, Defense(DEF) <b buff>$(0)</b>, Magic Defense(MDF) <b buff>$(1)</b> <i icon up></i> increase',jp:'<u>自分</u>, 防衛(DEF) <b buff>$(0)</b>, 術法防御(MDF) <b buff>$(1)</b> <i icon up></i> 増加'}
+	// 	,ta_:0,ta:1,effAnimation:2
+	// 	,eff:[{type:4,num:['40%','60%','80%','100%','130%']},{type:6,num:['40%','60%','80%','100%','130%']}],atkCount:[1],turn:1,sp:5},
+	// {idx:14,
+	// 	na:{ko:'마법방어',en:'Magic Defense',jp:'魔法防御'},element_type:0,cate:[4],txt:{ko:'<u>자신</u>, <b buff>$(0)</b> 술법방어(MDF) <i icon up></i> 증가',en:'<u>Self</u>, Magic Defense(MDF) <b buff>$(0)</b> <i icon up></i> increase',jp:'<u>自分</u>, <b buff>$(0)</b> 術法防御(MDF) <i icon up></i> 増加'}
+	// 	,ta_:0,ta:1,effAnimation:1
+	// 	,eff:[{type:6,num:['50%','70%','100%','120%','150%']}],atkCount:[1],turn:1,sp:4},
+	// {idx:15,
+	// 	na:{ko:'나무뒤에 숨기',en:'Hiding Behind a Tree',jp:'木陰に隠れる'},element_type:0,cate:[4],txt:{ko:'<u>자신</u>, <b buff>$(0)</b> 방어(DEF) <i icon up>증가</i>',en:'<u>Self</u>, Defense(MDF) <b buff>$(0)</b> <i icon up></i> increase',jp:'<u>自分</u>, <b buff>$(0)</b> 防御(DEF) <i icon up>増加</i>'}
+	// 	,ta_:0,ta:1,effAnimation:4
+	// 	,eff:[{type:4,num:['300','400','650','800','1000']}],atkCount:[1],turn:1,sp:5},
+	// {idx:16,
+	// 	na:{ko:'테스트',en:'Test',jp:'test'},element_type:0,cate:[6],txt:{ko:`<u>적군</u>, 방어(DEF) <b dmg>$(0)</b>, 3턴 <i icon down></i> 감소`,en:'<u>Single Enemy</u>, Defense(MDF) <b buff>$(0)</b>, a 3turn <i icon down></i> reduction',jp:'test'}
+	// 	,ta_:1,ta:15,effAnimation:13
+	// 	,eff:[{type:4,num:['-300','-400','-500','-600','-150']}],turn:1,atkCount:[1],sp:6},
+	// {idx:17,
+	// 	na:{ko:'반격',en:'Counter Attack',jp:'反撃'},element_type:0,cate:[3],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 반격',en:'<u>Single Enemy</u>, <b dmg>$(0)</b> counter attack',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b> 反撃'}
+	// 	,ta_:1,ta:1,effAnimation:1
+	// 	,eff:[{type:3,num:['100%','110%','125%','135%','150%']}],atkCount:[1],turn:1,sp:0},
+	{},{},{},{},{},{},{},//30
 	{},{},{},{},{},{},{},{},{},{},//40
 	{},{},{},{},{},{},{},{},{},{},//50
 	{},{},{},{},{},{},{},{},{},{},//60
@@ -101,224 +152,224 @@ export const skill = [
 	{},{},{},{},{},{},{},{},{},{},//80
 	{},{},{},{},{},{},{},{},{},{},//90
 	{},{},{},{},{},{},{},{},{},{},//100
-	{idx:101,
-		na:{ko:'재빠른 움직임',en:'Quick Movement'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 속도(SPD) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Speed(SPD) <b buff>$(0)</b> <i icon up></i> increase'}
+	{},{},{},{},{},{},{},{},{},{},//110
+	{},{},{},{},{},{},{},{},{},{},//120
+	{},{},{},{},{},{},{},{},{},{},//130
+	{},{},{},{},{},{},{},{},{},{},//140
+	{},{},{},{},{},{},{},{},{},{},//150
+	{},{},{},{},{},{},{},{},{},{},//160
+	{},{},{},{},{},{},{},{},{},{},//170
+	{},{},{},{},{},{},{},{},{},{},//180
+	{},{},{},{},{},{},{},{},{},{},//190
+	{},{},{},{},{},{},{},{},{},{},//200
+	{idx:201,
+		na:{ko:'재빠른 움직임',en:'Quick Movement',jp:'素早い動き'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 속도(SPD) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Speed(SPD) <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>自分</u>, 速度(SPD) <b buff>$(0)</b> <i icon up></i> 増加'}
 		,ta_:1,ta:1,effAnimation:2,skillClass:0
 		,eff:[{type:8,num:['5','10','15','20','25']}],atkCount:[1],turn:1,sp:0},
-	{idx:102,
-		na:{ko:'사자의 빛나는 영광',en:'Lion\'s Shining Glory'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 공격(ATK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Attack(ATK) <b buff>$(0)</b> <i icon up></i> increase'}
+	{idx:202,
+		na:{ko:'사자의 빛나는 영광',en:'Lion\'s Shining Glory',jp:'ライオンの輝く栄光'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 공격(ATK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Attack(ATK) <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>味方全体</u>, 攻撃(ATK) <b buff>$(0)</b> <i icon up></i> 増加'}
 		,ta_:1,ta:10,effAnimation:2,skillClass:2
 		,eff:[{type:3,num:['10%','15%','20%','25%','30%']}],atkCount:[1],turn:1,sp:0},
-	{idx:103,
-		na:{ko:'호랑이의 거친 용맹',en:'Tiger\'s Wild Bravery'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 공격(ATK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Attack(ATK) <b buff>$(0)</b> <i icon up></i> increase'}
+	{idx:203,
+		na:{ko:'호랑이의 거친 용맹',en:'Tiger\'s Wild Bravery',jp:'虎の荒々しい勇気'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 공격(ATK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Attack(ATK) <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>自分</u>, 攻撃(ATK) <b buff>$(0)</b> <i icon up></i> 増加'}
 		,ta_:1,ta:1,effAnimation:2,skillClass:2
 		,eff:[{type:3,num:['10%','20%','30%','40%','50%']}],atkCount:[1],turn:1,sp:0},
-	{idx:104,
-		na:{ko:'곰의 강철 피부',en:'Bear\'s Steel Skin'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 방어(DEF) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Defence(DEF) <b buff>$(0)</b> <i icon up></i> increase'}
+	{idx:204,
+		na:{ko:'곰의 강철 피부',en:'Bear\'s Steel Skin',jp:'クマのスチールスキン'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 방어(DEF) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Defence(DEF) <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>自分</u>, 防衛(DEF) <b buff>$(0)</b> <i icon up></i> 増加'}
 		,ta_:1,ta:1,effAnimation:2,skillClass:2
 		,eff:[{type:4,num:['20%','25%','30%','35%','45%']}],atkCount:[1],turn:1,sp:0},
-	{idx:105,
-		na:{ko:'독수리의 영리함',en:'Eagle\'s Cleverness'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 술법공격(MAK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Magic Attack(MAK) <b buff>$(0)</b> <i icon up></i> increase'}
+	{idx:205,
+		na:{ko:'독수리의 영리함',en:'Eagle\'s Cleverness',jp:'ワシの賢さ'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 술법공격(MAK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Magic Attack(MAK) <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>味方全体</u>, 術法攻撃(MAK) <b buff>$(0)</b> <i icon up></i> 増加'}
 		,ta_:1,ta:10,effAnimation:2,skillClass:2
 		,eff:[{type:5,num:['10%','15%','20%','25%','30%']}],atkCount:[1],turn:1,sp:0},
-	{idx:106,
-		na:{ko:'뱀의 교활함',en:'Snake\'s Craftiness'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 술법공격(MAK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Magic Attack(MAK) <b buff>$(0)</b> <i icon up></i> increase'}
+	{idx:206,
+		na:{ko:'뱀의 교활함',en:'Snake\'s Craftiness',jp:'蛇の狡猾さ'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 술법공격(MAK) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Magic Attack(MAK) <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>自分</u>, 術法攻撃(MAK) <b buff>$(0)</b> <i icon up></i> 増加'}
 		,ta_:1,ta:1,effAnimation:2,skillClass:2
 		,eff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],turn:1,sp:0},
-	{idx:107,
-		na:{ko:'손톱 갈기',en:'Nail Clipper'},element_type:0,cate:[5],txt:{ko:'<u>자신</u>, 공격(ATK) <b buff>$(0)</b> <i icon up></i> 증가',en:'<u>Self</u>, Attack(ATK) <b buff>$(0)</b> <i icon up></i> increase'}
+	{idx:207,
+		na:{ko:'손톱 갈기',en:'Nail Clipper',jp:'爪研ぎ'},element_type:0,cate:[5],txt:{ko:'<u>자신</u>, 공격(ATK) <b buff>$(0)</b> <i icon up></i> 증가',en:'<u>Self</u>, Attack(ATK) <b buff>$(0)</b> <i icon up></i> increase',jp:'<u>自分</u>, 攻撃(ATK) <b buff>$(0)</b> <i icon up></i> 増加'}
 		,ta_:1,ta:1,effAnimation:1,buffAnimation:0,skillClass:0
 		,buff:[{type:3,num:['30%','40%','50%','60%','70%']}],buffCount:[2,2,2,2,2],atkCount:[1],turn:1,sp:0},
-	{idx:108,
-		na:{ko:'영역표시',en:'Mark the Area.'},element_type:2,cate:[5],txt:{ko:'<u>전체</u>, 속도(SPD) <b buff>$(0)</b> 3턴 <i icon up></i> 증가',en:'<u>All Allies</u>, 3turn Speed(SPD) <b buff>$(0)</b> <i icon up></i> increase'}
+	{idx:208,
+		na:{ko:'영역표시',en:'Mark the Area',jp:'エリア表示'},element_type:2,cate:[5],txt:{ko:'<u>아군 전체</u>, 속도(SPD) <b buff>$(0)</b> 3턴 <i icon up></i> 증가',en:'<u>All Allies</u>, 3turn Speed(SPD) <b buff>$(0)</b> <i icon up></i> increase',jp:'<u>味方全体</u>, 速度(SPD) <b buff>$(0)</b> 3ターン <i icon up></i> 増加'}
 		,ta_:1,ta:10,effAnimation:1,buffAnimation:1,skillClass:1
 		,buff:[{type:8,num:['3','6','9','12','15']}],buffCount:[2,2,2,2,2],atkCount:[1],turn:3,sp:0},
-	{idx:109,
-		na:{ko:'몸집 키우기',en:'Grows in Size'},element_type:2,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 체력(HP) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Heath Point(HP) <b buff>$(0)</b> <i icon up></i> increase'}
+	{idx:209,
+		na:{ko:'몸집 키우기',en:'Grows in Size',jp:'身長を伸ばす'},element_type:2,cate:[2],txt:{ko:'전투 참여시 <u>자신</u>, 체력(HP) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>Self</u>, Heath Point(HP) <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>自分</u>, 体力(HP) <b buff>$(0)</b> <i icon up></i> 増加'}
 		,ta_:1,ta:1,effAnimation:1,skillClass:0
 		,eff:[{type:0,num:['50%','75%','100%','125%','150%']}],atkCount:[1],turn:1,sp:0},
-	{idx:110,
-		na:{ko:'빵굽기1',en:'Baking Cat1'},element_type:2,cate:[5],txt:{ko:'<u>자신</u>, 공격력(ATK) <b buff>$(0)</b>, 방어력(DEF) <b buff>$(1)</b> 3턴 <i icon up></i> 증가',en:'in battle <u>Self</u>, Attack(ATK) <b buff>$(0)</b>, 3turn Defense(DEF) <b buff>$(1)</b> <i icon up></i> increase'}
+	{idx:210,
+		na:{ko:'빵굽기1',en:'Baking Cat1',jp:'パン焼き機1'},element_type:2,cate:[5],txt:{ko:'<u>자신</u>, 공격(ATK) <b buff>$(0)</b>, 방어(DEF) <b buff>$(1)</b> 3턴 <i icon up></i> 증가',en:'in battle <u>Self</u>, Attack(ATK) <b buff>$(0)</b>, 3turn Defense(DEF) <b buff>$(1)</b> <i icon up></i> increase',jp:'<u>自分</u>, 攻撃(ATK) <b buff>$(0)</b>, 防衛(DEF) <b buff>$(1)</b> 3ターン <i icon up></i> 増加'}
 		,ta_:1,ta:1,effAnimation:1,buffAnimation:3,skillClass:0
 		,buff:[{type:3,num:['30%','40%','50%','60%','80%']},{type:4,num:['30%','40%','50%','60%','80%']}],buffCount:[2,2,2,2,2],atkCount:[0],turn:3,sp:10},
-	{idx:111,
-		na:{ko:'그루밍',en:'Grooming'},element_type:0,cate:[5],txt:{ko:'<u>단일 아군</u>, <b dmg>$<0></b> 속도(SPD) 3턴 <i icon up></i> 증가',en:'<u>Single Ally</u>, Speed(SPD) <b buff>$<0></b>, a 3turn <i icon up></i> increase'}
+	{idx:211,
+		na:{ko:'그루밍',en:'Grooming',jp:'グルーミング'},element_type:0,cate:[5],txt:{ko:'<u>단일 아군</u>, <b dmg>$<0></b> 속도(SPD) 3턴 <i icon up></i> 증가',en:'<u>Single Ally</u>, Speed(SPD) <b buff>$<0></b>, a 3turn <i icon up></i> increase',jp:'<u>単一味方</u>, <b dmg>$<0></b> 速度(SPD) 3ターン <i icon up></i> 増加'}
 		,ta_:1,ta:1,effAnimation:1,buffAnimation:12
 		,buff:[{type:8,num:['30%','40%','50%','60%','70%']}],buffCount:[2,2,2,2,2],turn:3,atkCount:[1],sp:5},
-	{idx:112,
-		na:{ko:'포효',en:'Roar'},element_type:2,cate:[6],txt:{ko:'<u>적군 전체</u>, 속도(SPD) <b buff>$<0></b> <i icon down></i> 감소',en:'in battle <u>All Enemy</u>, Speed(SPD) <b buff>$<0></b> <i icon down></i> reduction'}
+	{idx:212,
+		na:{ko:'포효',en:'Roar',jp:'轟音'},element_type:2,cate:[6],txt:{ko:'<u>적군 전체</u>, 속도(SPD) <b buff>$<0></b> <i icon down></i> 감소',en:'in battle <u>All Enemy</u>, Speed(SPD) <b buff>$<0></b> <i icon down></i> reduction',jp:'<u>敵軍全体</u>, 速度(SPD) <b buff>$<0></b> <i icon down></i> 減少'}
 		,ta_:1,ta:20,effAnimation:1,buffAnimation:1,skillClass:1
 		,buff:[{type:8,num:['-10','-15','-20','-25','-30']}],buffCount:[2,2,2,2,2],atkCount:[1],turn:1,sp:15},
-	{idx:113,
-		na:{ko:'하악질',en:'Animal Yells'},element_type:2,cate:[6],txt:{ko:'<u>단일 적군</u>, <b dmg>$<0></b> 공격(ATK) 3턴 <i icon down></i> 감소',en:'<u>Single Enemy</u>, Attack(ATK) <b buff>$<0></b>, a 3turn <i icon down></i> reduction'}
+	{idx:213,
+		na:{ko:'하악질',en:'Animal Yells',jp:'動物の雄叫び'},element_type:2,cate:[6],txt:{ko:'<u>단일 적군</u>, <b dmg>$<0></b> 공격(ATK) 3턴 <i icon down></i> 감소',en:'<u>Single Enemy</u>, Attack(ATK) <b buff>$<0></b>, a 3turn <i icon down></i> reduction',jp:'<u>単一敵軍</u>, <b dmg>$<0></b> 攻撃(ATK) 3ターン <i icon down></i> 減少'}
 		,ta_:1,ta:1,effAnimation:1,buffAnimation:1
 		,buff:[{type:3,num:['-30%','-35%','-40%','-45%','-50%']}],buffCount:[2,2,2,2,2],atkCount:[0],turn:1,sp:11},
-	{idx:114,
-		na:{ko:'꾹꾹이',en:'Cat Pokes'},element_type:2,cate:[6],txt:{ko:'<u>단일 적군</u>, 방어력(DEF) <b buff>$<0></b> 3턴 <i icon down></i> 감소',en:'<u>Single Enemy</u>, Defence(DEF) <b buff>$<0></b>, a 3turn <i icon down></i> reduction'}
+	{idx:214,
+		na:{ko:'꾹꾹이',en:'Cat Pokes',jp:'もぐもぐ'},element_type:2,cate:[6],txt:{ko:'<u>단일 적군</u>, 방어(DEF) <b buff>$<0></b> 3턴 <i icon down></i> 감소',en:'<u>Single Enemy</u>, Defence(DEF) <b buff>$<0></b>, a 3turn <i icon down></i> reduction',jp:'<u>単一敵軍</u>, 防衛(DEF) <b buff>$<0></b> 3ターン <i icon down></i> 減少'}
 		,ta_:1,ta:1,effAnimation:1,buffAnimation:4,skillClass:0
 		,buff:[{type:3,num:['-20%','-30%','-40%','-50%','-60%']}],buffCount:[2,2,2,2,2],atkCount:[0],turn:1,sp:7},
-	{idx:115,
-		na:{ko:'할퀴기',en:'Scratching'},element_type:2,cate:[7],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 출혈 공격, 3턴 <b dmg>$<0></b>',en:'<u>Single</u>, <b dmg>$(0)</b> bleeding attack 2turns <b dmg>$<0></b>'}
+	{idx:215,
+		na:{ko:'할퀴기',en:'Scratching',jp:'掻くこと'},element_type:2,cate:[7],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 출혈 공격, 3턴 <b dmg>$<0></b>',en:'<u>Single</u>, <b dmg>$(0)</b> bleeding attack 2turns <b dmg>$<0></b>',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b> 出血攻撃, 3ターン <b dmg>$<0></b>'}
 		,ta_:1,ta:20,effAnimation:2,buffAnimation:8,skillClass:1
 		,eff:[{type:3,num:['100%','130%','150%','170%','200%']}],buff:[{type:50,num:['-100','-200','-300','-400','-500']}],buffCount:[3,3,3,3,3],buffChance:['60%','70%','80%','90%','90%'],atkCount:[1],turn:2,sp:5},
 //------------------
-	{idx:116,
-		na:{ko:'고양이의 예민한 직감',en:'Cat\'s keen Intuition'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 공격(ATK), 방어력(DEF) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Attack(ATK), Defence(DEF) <b buff>$(0)</b> <i icon up></i> increase'}
+	{idx:216,
+		na:{ko:'고양이의 예민한 직감',en:'Cat\'s keen Intuition',jp:'猫の鋭い直感'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 공격(ATK), 방어(DEF) <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, Attack(ATK), Defence(DEF) <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>味方全体</u>, 攻撃(ATK), 防衛(DEF) <b buff>$(0)</b> <i icon up></i> 増加'}
 		,ta_:1,ta:1,effAnimation:3,skillClass:2
 		,eff:[{type:3,num:['5%','10%','15%','20%','25%']}, {type:4,num:['5%','10%','15%','20%','25%']}],atkCount:[1],turn:1,sp:0},
-	{idx:117,
-		na:{ko:'야행성',en:'Roar'},element_type:0,cate:[2],txt:{ko:'<u>자신</u>, <span night>밤</span>, 속도(SPD) <b buff>$<0></b> <i icon up></i> 증가',en:'<u>Self</u>, <span night>Night</span>, Speed(SPD) <b buff>$<0></b> <i icon up></i> increase'}
+	{idx:217,
+		na:{ko:'야행성',en:'Roar',jp:'夜行性'},element_type:0,cate:[2],txt:{ko:'<u>자신</u>, <span night>밤</span>, 속도(SPD) <b buff>$<0></b> <i icon up></i> 증가',en:'<u>Self</u>, <span night>Night</span>, Speed(SPD) <b buff>$<0></b> <i icon up></i> increase',jp:'<u>自分</u>, <span night>夜</span>, 速度(SPD) <b buff>$<0></b> <i icon up></i> 増加'}
 		,ta_:1,ta:1,effAnimation:1,buffAnimation:1,skillClass:0
 		,eff:[{type:8,num:['10','15','25','30','40']}],atkCount:[1],turn:1,sp:0},
-	{idx:118,
-		na:{ko:'빵굽기2',en:'Baking Cat2'},element_type:2,cate:[5],txt:{ko:'<u>자신</u>, 공격력(ATK) <b buff>$(0)</b>, 방어력(DEF) <b buff>$(1)</b> 3턴 <i icon up></i> 증가',en:'in battle <u>Self</u>, Attack(ATK) <b buff>$(0)</b>, 3turn Defense(DEF) <b buff>$(1)</b> <i icon up></i> increase'}
+	{idx:218,
+		na:{ko:'빵굽기2',en:'Baking Cat2',jp:'パン焼き機2'},element_type:2,cate:[5],txt:{ko:'<u>자신</u>, 공격(ATK) <b buff>$(0)</b>, 방어(DEF) <b buff>$(1)</b> 3턴 <i icon up></i> 증가',en:'in battle <u>Self</u>, Attack(ATK) <b buff>$(0)</b>, 3turn Defense(DEF) <b buff>$(1)</b> <i icon up></i> increase',jp:'<u>自分</u>, 攻撃(ATK) <b buff>$(0)</b>, 防衛(DEF) <b buff>$(1)</b> 3ターン <i icon up></i> 増加'}
 		,ta_:1,ta:1,effAnimation:1,buffAnimation:3,skillClass:0
 		,buff:[{type:3,num:['50%','60%','70%','80%','100%']},{type:4,num:['50%','60%','70%','80%','100%']}],buffCount:[2,2,2,2,2],atkCount:[0],turn:3,sp:10},
-	{idx:119,
-		na:{ko:'한손타격1',en:'One-handed Blow'},element_type:4,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 공격',en:'<u>Single</u>, <b dmg>$(0)</b> attack'}
+	{idx:219,
+		na:{ko:'한손타격1',en:'One-handed Blow',jp:'片手打撃1'},element_type:4,cate:[3],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 공격',en:'<u>Single Enemy</u>, <b dmg>$(0)</b> attack',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b> 攻撃'}
 		,ta_:1,ta:1,effAnimation:1
 		,eff:[{type:3,num:['130%','140%','170%','180%','200%']}],atkCount:[1],turn:1,sp:12},
-	{idx:120,
-		na:{ko:'한손타격2',en:'One-handed Blow2'},element_type:4,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 공격',en:'<u>Single</u>, <b dmg>$(0)</b> attack'}
+	{idx:220,
+		na:{ko:'한손타격2',en:'One-handed Blow2',jp:'片手打撃2'},element_type:4,cate:[3],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 공격',en:'<u>Single Enemy</u>, <b dmg>$(0)</b> attack',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b> 攻撃'}
 		,ta_:1,ta:1,effAnimation:1
 		,eff:[{type:3,num:['150%','170%','190%','220%','250%']}],atkCount:[1],turn:1,sp:15},
-	{idx:121,
-		na:{ko:'양손타격1',en:'Double-handed Blow1'},element_type:4,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 2회 공격',en:'<u>Single</u>, <b dmg>$(0)</b> a two-time attacks'}
+	{idx:221,
+		na:{ko:'양손타격1',en:'Double-handed Blow1',jp:'両手打撃1'},element_type:4,cate:[3],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 2회 공격',en:'<u>Single Enemy</u>, <b dmg>$(0)</b> a two-time attacks',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b> 2回攻撃'}
 		,ta_:1,ta:1,effAnimation:1
 		,eff:[{type:3,num:['80%','90%','100%','120%','130%']}],atkCount:[2],turn:1,sp:12},
-	{idx:122,
-		na:{ko:'양손타격2',en:'Double-handed Blow2'},element_type:4,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 2회 공격',en:'<u>Single</u>, <b dmg>$(0)</b> a two-time attacks'}
+	{idx:222,
+		na:{ko:'양손타격2',en:'Double-handed Blow2',jp:'両手打撃2'},element_type:4,cate:[3],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 2회 공격',en:'<u>Single Enemy</u>, <b dmg>$(0)</b> a two-time attacks',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b> 2回攻撃'}
 		,ta_:1,ta:1,effAnimation:1
 		,eff:[{type:3,num:['100%','120%','130%','140%','150%']}],atkCount:[2],turn:1,sp:15},
-	{idx:123,
-		na:{ko:'뒷발차기1',en:'Back Kick1'},element_type:4,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 공격',en:'<u>Single</u>, <b dmg>$(0)</b> attack'}
+	{idx:223,
+		na:{ko:'뒷발차기1',en:'Back Kick1',jp:'後ろ足蹴り1'},element_type:4,cate:[3],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 공격',en:'<u>Single Enemy</u>, <b dmg>$(0)</b> attack',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b> 攻撃'}
 		,ta_:1,ta:2,effAnimation:1
 		,eff:[{type:3,num:['120%','130%','140%','150%','160%']}],atkCount:[1],turn:1,sp:13},
-	{idx:124,
-		na:{ko:'뒷발차기2',en:'Back Kick2'},element_type:4,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 공격',en:'<u>Single</u>, <b dmg>$(0)</b> attack'}
+	{idx:224,
+		na:{ko:'뒷발차기2',en:'Back Kick2',jp:'後ろ足蹴り2'},element_type:4,cate:[3],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 공격',en:'<u>Single Enemy</u>, <b dmg>$(0)</b> attack',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b> 攻撃'}
 		,ta_:1,ta:2,effAnimation:1
 		,eff:[{type:3,num:['130%','140%','150%','160%','170%']}],atkCount:[1],turn:1,sp:15},
-	{idx:125,
-		na:{ko:'뒷발차기3',en:'Back Kick3'},element_type:4,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 공격',en:'<u>Single</u>, <b dmg>$(0)</b> attack'}
+	{idx:225,
+		na:{ko:'뒷발차기3',en:'Back Kick3',jp:'後ろ足蹴り3'},element_type:4,cate:[3],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 공격',en:'<u>Single Enemy</u>, <b dmg>$(0)</b> attack',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b> 攻撃'}
 		,ta_:1,ta:3,effAnimation:1
 		,eff:[{type:3,num:['130%','140%','150%','160%','170%']}],atkCount:[1],turn:1,sp:15},
 //---------------------------------------------------
-	{idx:126,
-		na:{ko:'후려치기',en:'Scratching'},element_type:2,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:''}
+	{idx:226,
+		na:{ko:'후려치기',en:'Slap',jp:'叩きつけ'},element_type:2,cate:[3],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:'<u>Single Enemy</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b>의 두번 공격을 한다.'}
 		,ta_:1,ta:1,effAnimation:2,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[1],turn:1,sp:5},
-	{idx:127,
-		na:{ko:'광견병',en:'Scratching'},element_type:0,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:''}
+	{idx:227,
+		na:{ko:'광견병',en:'Rabies',jp:'狂犬病'},element_type:0,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:'',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b>의 두번 공격을 한다.'}
 		,ta_:1,ta:1,effAnimation:2,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[1],turn:1,sp:5},
-	{idx:128,
-		na:{ko:'화염 발톱',en:'Scratching'},element_type:2,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:''}
+	{idx:228,
+		na:{ko:'화염 발톱',en:'Flame Claw',jp:'炎の爪'},element_type:2,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:'',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b>의 두번 공격을 한다.'}
 		,ta_:1,ta:1,effAnimation:1,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[2],turn:1,sp:5},
-	{idx:129,
-		na:{ko:'굶주림',en:'Scratching'},element_type:2,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:''}
+	{idx:229,
+		na:{ko:'굶주림',en:'Hunger',jp:'飢餓'},element_type:2,cate:[3],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:'<u>Single Enemy</u>, ',jp:'<u>単一敵軍</u>, ',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b>의 두번 공격을 한다.'}
 		,ta_:1,ta:1,effAnimation:1,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[2],turn:1,sp:5},
-	{idx:130,
-		na:{ko:'충격파',en:'Scratching'},element_type:2,cate:[3],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:''}
+	{idx:230,
+		na:{ko:'충격파',en:'Shockwave',jp:'衝撃波'},element_type:2,cate:[3],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:'<u>Single Enemy</u>, Make two attacks of <b dmg>$(0)</b>',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b>の2回攻撃をする。'}
 		,ta_:1,ta:1,effAnimation:1,skillClass:1
 		,eff:[{type:3,num:['150%','160%','170%','180%','200%']}],atkCount:[2],turn:1,sp:5},
-	{idx:131,
-		na:{ko:'테스트',en:'Test'},element_type:2,cate:[7],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 중독 공격, 3턴 <b dmg>$<0></b>',en:'<u>Single</u>, <b dmg>$(0)</b> poison attack 2turns <b dmg>$<0></b>'}
+	{idx:231,
+		na:{ko:'테스트',en:'Test',jp:'test'},element_type:2,cate:[7],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 중독 공격, 3턴 <b dmg>$<0></b>',en:'<u>Single Enemy</u>, <b dmg>$(0)</b> poison attack 2turns <b dmg>$<0></b>', jp:'<u>単一敵軍</u>, <b dmg>$(0)</b> 毒攻撃、3ターン <b dmg>$<0></b>'}
 		,ta_:1,ta:20,effAnimation:5,buffAnimation:5,skillClass:1
 		,eff:[{type:3,num:['70%','100%','150%','170%','200%']}],buff:[{type:51,num:['-50','-100','-300','-400','-500']}],buffCount:[2,2,2,2,2],buffChance:['70%','75%','80%','85%','90%'],atkCount:[1],turn:2,sp:5},
-	{idx:132,
-		na:{ko:'테스트2',en:'Test2'},element_type:2,cate:[7],txt:{ko:'<u>단일</u>, <b dmg>$(0)</b> 석화 공격, 3턴 <b dmg>$<0></b>',en:'<u>Single</u>, <b dmg>$(0)</b> petrification attack 4turns <b dmg>$<0></b>'}
+	{idx:232,
+		na:{ko:'테스트2',en:'Test2',jp:'test2'},element_type:2,cate:[7],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 석화 공격, 3턴 <b dmg>$<0></b>',en:'<u>Single Enemy</u>, <b dmg>$(0)</b> petrification attack 4turns <b dmg>$<0></b>',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b> 石化攻撃、3ターン <b dmg>$<0></b>'}
 		,ta_:1,ta:20,effAnimation:7,buffAnimation:0,skillClass:1
 		,eff:[{type:3,num:['10%','100%','150%','170%','200%']}],buff:[{type:52,num:['-50','-100','-300','-400','-500']}],buffCount:[4,4,4,4,4],buffChance:['70%','75%','80%','85%','90%'],atkCount:[1],turn:2,sp:5},
-	{idx:133,
-		na:{ko:'개구리 기우제',en:'Test2'},element_type:0,cate:[10],txt:{ko:'<u>날씨</u>, 비오는 날씨로 밤으로 변환',en:'<u>Weather</u>, Convert to rainy weather'}
+	{idx:233,
+		na:{ko:'개구리 기우제',en:'Frog Rainmaker',jp:'カエル祈雨祭'},element_type:0,cate:[10],txt:{ko:'<u>날씨</u>, 비오는 날씨로 밤으로 변환',en:'<u>Weather</u>, Convert to rainy weather',jp:'<u>天気</u>, 雨天で夜に変換'}
 		,ta_:1,ta:20,effAnimation:7,buffAnimation:0,skillClass:1
 		,buff:[{type:2.0,num:['70%','75%','80%','85%','90%']}],buffCount:[4,4,4,4,4],buffChance:['70%','75%','80%','85%','90%'],atkCount:[1],turn:2,sp:5},
-	{idx:134,
-		na:{ko:'호랑이&여우 결혼식',en:'Test2'},element_type:0,cate:[10],txt:{ko:'<u>날씨</u>, 비오는 날씨로 낮으로 변환',en:'<u>Weather</u>, Convert to rainy weather'}
+	{idx:234,
+		na:{ko:'호랑이&여우 결혼식',en:'Tiger&Fox Wedding',jp:'トラ＆キツネの結婚式'},element_type:0,cate:[10],txt:{ko:'<u>날씨</u>, 비오는 날씨로 낮으로 변환',en:'<u>Weather</u>, Convert to rainy weather',jp:'<u>天気</u>, 雨天で昼間に変換'}
 		,ta_:1,ta:20,effAnimation:7,buffAnimation:0,skillClass:1
 		,buff:[{type:2.1,num:['70%','75%','80%','85%','90%']}],buffCount:[4,4,4,4,4],buffChance:['70%','75%','80%','85%','90%'],atkCount:[1],turn:2,sp:5},
-	'','','','','','',//140
-	'','','','','','','','','','',//150
-	'','','','','','','','','','',//160
-	'','','','','','','','','','',//170
-	'','','','','','','','','','',//180
-	'','','','','','','','','','',//190
-	'','','','','','','','','','',//200
-	{idx:201,
-		na:{ko:'언변',en:'Speech'},element_type:0,cate:[11],txt:{ko:'상점에서 가격흥정이 가능하다.',en:'It is possible to negotiate the price in the store.'},ta_:0,ta:100,effAnimation:29,skillClass:2,eff:[{type:'grade',num:['10','20','30','40','50']}],sp:3},
-	{idx:202,
-		na:{ko:'선박 전문',en:'Ship Specialty'},element_type:0,cate:[11],txt:{ko:'선박을 제작/분해 할 수 있다.',en:'Ships can be built/disassembled.'},ta_:0,ta:100,effAnimation:30,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
-	{idx:203,
-		na:{ko:'장비 전문',en:'Equipment Specialty'},element_type:0,cate:[11],txt:{ko:'장비를 제작/분해 할 수 있다.',en:'Equipment can be crafted/dismantled.'},ta_:0,ta:100,effAnimation:31,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
-	{idx:204,
-		na:{ko:'조각',en:'Sculpture'},element_type:0,cate:[11],txt:{ko:'조각상을 만들 수 있다.',en:'You can make statues.'},ta_:0,ta:100,effAnimation:32,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
-	{idx:205,
-		na:{ko:'식물 재배',en:'Plant Cultivation'},element_type:0,cate:[11],txt:{ko:'식물을 재배 할 수 있다.',en:'You can grow plants.'},ta_:0,ta:100,effAnimation:33,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
-	{idx:206,
-		na:{ko:'연금술',en:'Alchemy'},element_type:0,cate:[11],txt:{ko:'아이템 합성을 할 수 있다.',en:'Items can be synthesized.'},ta_:0,ta:100,effAnimation:34,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
-	{idx:207,
-		na:{ko:'보석 세공',en:'Jewelry'},element_type:0,cate:[11],txt:{ko:'목거리, 반지를 제작/분해 할 수 있다.',en:'You can make/disassemble a necklace, a ring.'},ta_:0,ta:100,effAnimation:35,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
-	{idx:208,
-		na:{ko:'관찰력',en:'Observation'},element_type:0,cate:[11],txt:{ko:'모집시 고급 등급을 찾을 확률이 높아집니다.',en:'Increases the chance of finding advanced ranks when recruiting.'},ta_:0,ta:100,effAnimation:36,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
-	{idx:209,
-		na:{ko:'예술',en:'Art'},element_type:0,cate:[11],txt:{ko:'예술품을 만들 수 있다.',en:'You can make art objects.'},ta_:0,ta:100,effAnimation:37,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
+	{idx:235,
+		na:{ko:'침뱉기',en:'Spitting',jp:'唾を吐く'},element_type:9,cate:[3],txt:{ko:'<u>가로한줄</u>, <b dmg>$(0)</b> <i el el4>수속성</i> 공격',en:'<u>A horizontal line</u>, <b dmg>$(0)</b> Attack of <i el el4>Water elements</i>',jp:'<u>横一列</u>, <b dmg>$(0)</b> <i el el4>水属性</i> 攻撃'}
+		,ta_:1,ta:6,effAnimation:4
+		,eff:[{type:5,num:['70%','80%','90%','100%','110%']}],atkCount:[1],turn:1,sp:12},'','','','','',//240
+	'','','','','','','','','','',//250
+	'','','','','','','','','','',//260
+	'','','','','','','','','','',//270
+	'','','','','','','','','','',//280
+	'','','','','','','','','','',//290
+	'','','','','','','','','','',//300
 ];
 // 모아치기
 // 빙결, 석화, 스킬 캔슬기
 
 // 동물타입
-// * 0고양이 - 고양이의 예민한 직감(passive)●, 야행성(passive)●
-// 하악질(buff)●, 꾹꾹이(buff)●, 그루밍(buff)●, 빵굽기2(buff)●,  
+// * 공통
+// 재빠른 움직임●, 
+// * 0고양이 - 고양이의 예민한 직감(passive)●, 야행성(passive)●, 고양이과(passive)
+// 하악질(buff)●, 꾹꾹이(buff)●, 그루밍(buff)●, 빵굽기2(buff)●, 가속1(buff)
 // 한손타격1(치기)●, 양손타격1(치기)●, 뒷발치기1(치기)●, 할퀴기(할퀴기), 물기(물기)
 
-// * 1사자 - 사자의 빛나는 영광(passive), 밀림의왕(passive), 야행성(passive)
+// * 1사자 - 사자의 빛나는 영광(passive), 밀림의왕(passive), 야행성(passive), 고양이과(passive)
 // 포효(buff), 하악질(buff), 빵굽기1(buff)●, 금빛갈기(buff), 
 // 한손타격2(치기)●, 양손타격1(치기)●, 뒷발치기1(치기)●, 송곳니뚫기(물기), 물기(물기), 할퀴기(할퀴기), 무리 사냥(광), 얼음발톱(수)
 
-// * 2호랑이 - 호랑이의 거친 용맹(passive), 정글의왕(passive), 야행성(passive)
-// 포효(buff), 하악질(buff), 빵굽기1(buff)●, 잠행(buff),
+// * 2호랑이 - 호랑이의 거친 용맹(passive), 정글의왕(passive), 야행성(passive), 고양이과(passive)
+// 포효(buff), 하악질(buff), 빵굽기1(buff)●, 잠행(buff)
 // 한손타격1(치기)●, 양손타격2(치기)●, 뒷발치기1(치기)●, 송곳니뚫기(물기), 물기(물기), 앞발휘두르기(광역), 피의서약, 화염발톨(화)
 
-// * 3강아지 - 강아지의 충성스러운 용기(passive),
+// * 3강아지 - 강아지의 충성스러운 용기(passive), 개과(passive)
 // 발달된후각(buff), 
 // 송곳니뚫기(물기), 물어뜯기(물기), 물기(물기), 광견병(독, 광역), 추격하기(반격기)
 
-// * 4늑대 - 늑대의 강인한 의리(passive), 달빛소나타(passive), 
+// * 4늑대 - 늑대의 강인한 의리(passive), 달빛소나타(passive), 개과(passive)
 // 하울링(buff), 집념의추적(buff), 발달된후각(buff),
 // 뼈아작내기(물기), 송곳니뚫기(물기), 물어뜯기(물기), 물기(물기), 무리사냥(광), 광견병(광역),
 // [유혹(여우한정)], 
 
 // * 5물개 - 물개의 유연한 가르기(passive), 
+// 회전박치기(바람)(세로 일자영역), 
 // [송곳니뚫기(바다사자특정)], 
 
 // * 6너구리 - 너구리의 영특한 계산(passive), 반격(passive),
 // 물기(물기), 고드름던지기(수), 찹찹(회복,자신),
 // [주머니털기(너구리한정)], [조개 선물(회복)(해달한정)],
 
-// * 7쥐 - 쥐의 민첩한 은든술(passive), 
+// * 7쥐 - 쥐의 민첩한 은든술(passive) - 시작 두턴간 무적, 
+// 가속2(buff),
 // 물기(물기), 민접한 스틸(아이템획득), 쥐구멍숨기(회피),
 
-// * 8토끼 -  토끼의 뛰어난 점프력(spd, luk)(passive), 
+// * 8토끼 -  토끼의 뛰어난 점프력(spd, luk)(passive),
+// 가속2(buff),
 // 뒷발치기1(치기)●, 물기(물기)
 
 // * 9원숭이 - 원숭이의 영리한 지략(passive), 
-// 조롱하기(buff)
-// 돌던지기(땅), 모래뿌리기(땅), 고드름던지기(수), 침뱉기(수, 광), 
+// 조롱하기(buff),
+// 돌던지기(땅), 모래뿌리기(땅), 고드름던지기(수), 침뱉기(수, 광)●, 가속1(buff)
 // [온천반신욕(일본원숭이한정)],
 
 // * 10고릴라 - 고릴리의 막강한 파괴(atk)(passive), 
-// 가슴치기(buff), 
-// 허리접기(5), 모래뿌리기(땅), 침뱉기(수, 광), 1톤 펀치(치기), 돌던지기(땅), 바위 던지기(땅), 고드름던지기(수)
+// 가슴치기(buff), 돌진2(광역, 치기)
+// 허리접기(5), 모래뿌리기(땅), 침뱉기(수, 광)●, 1톤 펀치(치기), 돌던지기(땅), 바위 던지기(땅), 고드름던지기(수)
 
-// * 11캥거루 - 캥거루의 치유의 주머니(힐 기술)(passive), 
-// 
-// 하이킥(치기), 꼬리치기2(치기), 주머니회복(회복)
+// * 11캥거루 - 캥거루의 치유의 주머니(힐 기술)(passive), 매턴 10% 회복
+// 가속1(buff)
+// 아웃복싱(치기), 원투타격(치기), 하이킥(치기), 꼬리치기2(치기), 만능주머니 랜덤 효과
 
 // * 12소 - 소의 우직한 전진(passive),
 // 뿔갉기(buff),  
-// 뿔찌르기(찌르기), 돌진3(광역, 치기), 머리박치기(치기), 발구르기(광역, 땅), 짓밟기2(누르기) 
+// 뿔찌르기(쪼기), 돌진3(광역, 치기), 머리박치기(치기), 발구르기(광역, 땅), 짓밟기2(누르기) 
 
 // * 13곰 - 곰의 우렁찬 포효(hp)(passive), 
 // 포효(buff), 
@@ -330,10 +381,10 @@ export const skill = [
 
 // * 15사슴 - 사슴의 성스러운 보호(mdk)(passive), 
 // 뿔갉기(buff), 
-// 뿔찌르기(찌르기), 정화(상태이상치료), 그룹정화(상태이상치료), 뒷발치기1(치기)●, 돌진1(광역, 치기)
+// 뿔찌르기(쪼기), 정화(상태이상치료), 그룹정화(상태이상치료), 뒷발치기1(치기)●, 돌진1(광역, 치기)
 	
 // * 16코뿔소 - 코뿔소의 돌진하는 용맹(passive), 
-// 코뿔박치기(찌르기), 뚫기(), 돌진3(광역, 치기), 머리박치기(치기), 발구르기(광역, 땅)
+// 코뿔박치기(쪼기), 뚫기(), 돌진3(광역, 치기), 머리박치기(치기), 발구르기(광역, 땅)
 
 // * 17코끼리 - 코끼리의 무거운 한방(광역공격위주)(passive), 
 // 포효(buff), 
@@ -343,23 +394,24 @@ export const skill = [
 // 기침(buff),
 // 목치기(치기), 뒷발치기2(치기)●, 돌진2(광역, 치기), 머리박치기(치기), 초저주파(광역, 빛), 발구르기(광역, 땅)
 
-// * 19새 - 새의 청량한 노래(passive), 
-// 쪼기1(찌르기), 낙석(땅), 날개치기1(바람), 고공낙하(광역, 바람), 치유의 노래(회복, 광역), 공중부양(회피)
+// * 19새 - 새의 청량한 노래(passive), 조류과(passive)
+// 가속2(buff), 
+// 쪼기1(쪼기), 낙석(땅), 날개치기1(바람), 고공낙하(광역, 바람), 치유의 노래(회복, 광역), 공중부양(회피)
 	
-// * 20독수리 - 독수리의 영리한 전략(passive), 반격(passive),
-// 쪼기2(찌르기), 낙석(땅), 고공낙하(광역, 바람), 날개치기2(바람), 윈드커터(바람), 공중부양(회피)
+// * 20독수리 - 독수리의 영리한 전략(passive), 반격(passive), 조류과(passive)
+// 쪼기2(쪼기), 낙석(땅), 고공낙하(광역, 바람), 날개치기2(바람), 윈드커터(바람), 공중부양(회피)
 
-// * 21뱀 - 뱀의 교활한 계략(passive), 
+// * 21뱀 - 뱀의 교활한 계략(passive), 파충류과(passive)
 // 독뿌리기(광역, 어둠), 감아쪼이기(누르기), 허물벗기(회복), 흡혈공격(물기), 
 	
-// * 22도마뱀 - 도마뱀의 뛰어난 은둔술(passive), 
+// * 22도마뱀 - 도마뱀의 뛰어난 은둔술(passive), 파충류과(passive)
 // 물기(물기), 혓바닥공격(치기), 허물벗기(회복), 꼬리자르기(회피),
 // 위장술(카멜레온한정), 
 
-// * 23거북이 - 거북이의 강철 피부(passive), 
+// * 23거북이 - 거북이의 강철 피부(passive), 파충류과(passive)
 // 절단물기(물기), 물기(물기), 튼튼한등껍질(방어),
 
-// * 24개구리 - 개구리의 신속한 점프력(passive), 개구리 뿔피리(passive), 
+// * 24개구리 - 개구리의 신속한 점프력(passive), 개구리 뿔피리(passive), 파충류과(passive)
 // 뒷발치기1(치기)●, 개구리 기우제(날씨변경), 음파공격(광역, 빛), 혓바닥공격(치기), 고드름던지기(수), 점프(회피), 물기(물기)
 // [청개구리 공격(한정)], [독뿌리기(암)(한정)], 
 

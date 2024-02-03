@@ -1,6 +1,8 @@
 import { AppContext } from 'App';
 import { FlexBox } from 'components/Container';
+import { IconPic } from 'components/ImagePic';
 import InfoGroup from 'components/InfoGroup';
+import { util } from 'components/Libs';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import React, { useContext, useState } from 'react';
@@ -33,7 +35,6 @@ const Skill = styled.div`
     border-color: var(--color-magic);
     opacity: 1;
   ` : ''}
-  .action-type{margin:0 0 0 3px;width:20px;height:20px;}
   .txt{flex:1;min-height:30px;line-height:1.2;font-size:0.75rem;}
   .lv{margin:0 10px 0 0;}
   &:after {
@@ -103,125 +104,21 @@ const SkillIcon = styled.span`
   position: relative;
   width: 40px;
   height: 40px;
-  background-position: center center;
-  background-repeat: no-repeat;
-  font-size: 0;
-  border-radius: 40px;
-  box-shadow: 3px 3px 5px #000;
-  background: url(${({ frameImg }) => frameImg});
-  background-size: 100%;
-  &:before {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 8%;
-    left: 8%;
-    width: 90%;
-    height: 90%;
-    background: url(${({skillIcon}) => skillIcon});
-    background-size: 500% auto;
-    background-position: ${({skillScene, skillFrame}) => `${skillScene%5 * 25}% ${Math.floor(skillScene/5) * 100/(Math.floor((skillFrame - 1) / 5))}%`};
-    background-repeat: no-repeat;
-    filter: brightness(0);
-  };
-  &:after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 5%;
-    left: 5%;
-    width: 90%;
-    height: 90%;
-    background: url(${({skillIcon}) => skillIcon});
-    background-size: 500% auto;
-    background-position: ${({skillScene, skillFrame}) => `${skillScene%5 * 25}% ${Math.floor(skillScene/5) * 100/(Math.floor((skillFrame - 1) / 5))}%`};
-    background-repeat: no-repeat;
-  };
+  border-radius: 50%;
 `;
-const SkillIcon2 = styled.span`
-  position: relative;
-  width: 40px;
-  height: 40px;
-  background-position: center center;
-  background-repeat: no-repeat;
-  font-size: 0;
-  border-radius: 40px;
-  box-shadow: 3px 3px 5px #000;
-  background: url(${({ frameImg }) => frameImg});
-  background-size: 100%;
-  background: url(${({ frameImg }) => frameImg});
-  background-size: 100%;
-  &:before {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 23%;
-    left: 23%;
-    width: 60%;
-    height: 60%;
-    filter:b rightness(0);
-    background: url(${({skillIcon}) => skillIcon});
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center center;
-  };
-  &:after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 20%;
-    left: 20%;
-    width: 60%;
-    height: 60%;
-    background: url(${({skillIcon}) => skillIcon});
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center center;
-  };
-`;
-const SkillIcon3 = styled.span`
-  position: relative;
-  width: 40px;
-  height: 40px;
-  background-position: center center;
-  background-repeat: no-repeat;
-  font-size: 0;
-  border-radius: 40px;
-  box-shadow: 3px 3px 5px #000;
-  background: url(${({ frameImg }) => frameImg});
-  background-size: 100%;
-  background: url(${({ frameImg }) => frameImg});
-  background-size: 100%;
-  &:before {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 13%;
-    left: 13%;
-    width: 80%;
-    height: 80%;
-    background: url(${({skillIcon}) => skillIcon});
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center center;
-    filter: brightness(0);
-  };
-  &:after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 10%;
-    left: 10%;
-    width: 80%;
-    height: 80%;
-    background: url(${({skillIcon}) => skillIcon});
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center center;
-  };
+const StyledIconPic = styled(IconPic)`
+  position: absolute;
+  left: 15%;
+  top: 15%;
+  width: 70%;
+  height: 70%;
+  z-index: 1;
 `;
 const ActionType = styled.span`
-  background: url(${({actionType}) => actionType}) no-repeat center center;background-size: 100%;
+  position: relative;
+  margin: 0 0 0 3px;
+  width: 20px;
+  height: 20px;
 `;
 const LvBar = styled(FlexBox)`
   height: auto;
@@ -272,18 +169,12 @@ const CharacterSkill = ({
             data:gameData.guide["characterSkill"],
           });
         }}>
-          {saveSkill && saveSkill.map((skData, idx) => {
-            const skData_ = gameData.skill[skData.idx];
-            const cate = skData_.cate[0];
-            const replaceArr = skData_.txt[lang].match(/[$][(]\d[)]*/g) || [];
-            const replaceArr_ = skData_.txt[lang].match(/[$][<]\d[>]*/g) || [];
-            const skillType = skData_.element_type;
-            let replaceText = skData_.txt[lang];
-            replaceArr.forEach((data, idx) => {
-              replaceText = replaceText.replace(data, skData_.eff[idx].num[skData.lv - 1]);
-            });
-            replaceArr_.forEach((data, idx) => {
-              replaceText = replaceText.replace(data, skData_.buff[idx].num[skData.lv - 1]);
+          {saveSkill && saveSkill.map((skillData, idx) => {
+            const skData = gameData.skill[skillData.idx];
+            const {skillText, skillType, skillCate} = util.getSkillText({
+              skill: skData,
+              lv: skillData.lv - 1,
+              lang: lang,
             });
             let actionPossibleSkill = 'possible';
             if (skillType > 0 && skillType < 7) {
@@ -295,23 +186,30 @@ const CharacterSkill = ({
               });
             }
             return (
-              <Skill key={idx} possible={actionPossibleSkill} skillCate={cate}>
+              <Skill key={idx} possible={actionPossibleSkill} skillCate={skillCate}>
                 <SkillInfo>
-                  {(cate === 2 || cate === 11) && ( //passive
-                    <SkillIcon3 skillIcon={imgSet.passive[skData_.effAnimation]} frameImg={imgSet.etc.skillFrame}/>
-                  )}
-                  {cate === 4 && ( //defence
-                    <SkillIcon2 skillIcon={imgSet.actionIcon[skData_.effAnimation]} frameImg={imgSet.etc.skillFrame}/>
-                  )}
+                  <SkillIcon>
+                    {(skillCate === 2 || skillCate === 11) ? ( //passive, job
+                      <IconPic pic="skill" idx={skData.idx} />
+                    ) : (
+                      <>
+                        <IconPic type="skillBack" pic="icon200" idx="0" />
+                        <StyledIconPic pic="skill" idx={skData.idx} />
+                      </>
+                    )}
+                  </SkillIcon>
+                  {/* 
                   {cate !== 2 && cate !== 4 && cate !== 11 && (
-                    <SkillIcon skillIcon={imgSet.eff[skData_.effAnimation]} skillScene={gameData.effect[skData_.effAnimation].imgScene} skillFrame={gameData.effect[skData_.effAnimation].frame} frameImg={imgSet.etc.skillFrame}/>
-                  )}
+                    <SkillIcon skillIcon={imgSet.eff[skData.effAnimation]} skillScene={gameData.effect[skData.effAnimation].imgScene} skillFrame={gameData.effect[skData.effAnimation].frame} />
+                  )} */}
                   <div style={{padding:"0 0 5px 10px",width:"100%", flex:1}} flex-h-center="true">
                     <SkillName>
-                      <span className="lv">LV.{skData.lv}</span>{skData_.na[lang]}
-                      {skData_.element_type !== 0 && <ActionType className="action-type" actionType={imgSet.element[skData_.element_type]} />}
+                      <span className="lv">LV.{skillData.lv}</span>{skData.na[lang]}
+                      {skData.element_type !== 0 && <ActionType>
+                        <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={skData.element_type} />
+                      </ActionType>}
                     </SkillName>
-                    <div className="txt" dangerouslySetInnerHTML={{__html: replaceText}} />
+                    <div className="txt" dangerouslySetInnerHTML={{__html: skillText}} />
                   </div>
                 </SkillInfo>
                 {typeof skData.exp === "number" && (

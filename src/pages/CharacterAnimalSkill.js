@@ -1,12 +1,14 @@
 import { AppContext } from 'App';
+import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
-import { SkillMark } from 'components/ImagePic';
+import { IconPic, SkillMark } from 'components/ImagePic';
 import InfoGroup from 'components/InfoGroup';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
+import useLongPress from 'hooks/useLongPress';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
@@ -15,61 +17,126 @@ const Wrap = styled(FlexBox)`
   top: 0;
   padding: 25px 20px 20px;
   box-sizing: border-box;
-  .skill_header{align-items:center;margin:0 0 25px 0;}
-  .skill_group{position:relative;height:50px;}
-  .skill_list{position:absolute;width:50px;height:50px;box-sizing:border-box;border-radius:30px;}
-  .skill_list.pos0{left:0;}
-  .skill_list.pos1{left:calc(33.3% - 12.5px);}
-  .skill_list.pos2{left:calc(66.6% - 25px)}
-  .skill_list.pos3{left:calc(100% - 50px)}
-  .skill_button{position:relative;width:100%;height:100%;opacity:.2;}
-  .skill_button .limitLv{position:absolute;top:-15px;right:-10px;width:100%;text-align:right;}
-  .skill_button .lv{position:absolute;bottom:0;right:-10px;width:100%;text-align:right;}
-  .skill_button.used{opacity:1;}
-  .skill_button:before{content:"";display:block;position:absolute;top:13%;left:13%;width:80%;height:80%;background-repeat:no-repeat;filter:brightness(0);}
-  .skill_button:after{content:"";display:block;position:absolute;top:10%;left:10%;width:80%;height:80%;background-repeat:no-repeat;}
-  .skill_button.cate2:before{left:13%;top:13%;padding-top:80%;width:80%;height:0;}
-  .skill_button.cate2:after{left:10%;top:10%;padding-top:80%;width:80%;height:0;}
-  .skill_button.cate4:before{left:23%;top:23%;width:60%;background-position:center center;}
-  .skill_button.cate4:after{left:20%;top:20%;width:60%;background-position:center center;}
-  .skill_description{position:absolute;top:-17px;left:-10px;padding:0px 2px;border-radius:5px;color:#000;font-size:0.688rem;background:#aaa;font-weight:600;}
-  .skill_description{position:absolute;top:-17px;left:-10px;padding:0px 2px;border-radius:5px;color:#000;font-size:0.688rem;background:#aaa;font-weight:600;}
-  .skill_line{display:flex;position:relative;height:20px;}
-  .skill_line span{position:relative;width:25%;height:100%;}
-  .skill_line span:after{content:'';position:absolute;width:3px;height:100%;left:50%;top:0;transform:translate(-50%, 0);background:#ddd;opacity:0;}
-  .skill_line span.line:after{opacity:.3;}
-  .skill_line span.line.used:after{opacity:1;}
-  .skill_line span:first-of-type:after{left:25px;}
-  .skill_line span:nth-of-type(3):after{left:66%;}
-  .skill_line span:last-of-type:after{left:auto;right:22px;}
+`;
+const SkillHorizontal = styled.div`
+  position: relative;
+  margin: 0 auto;
+  width: 90%;
+  & > div {
+    position:relative;height:50px;
+  }
+`;
+const SkillHeader = styled(FlexBox)`
+margin: 0 0 25px 0;
+  height: auto;
+  align-items: center;
+`;
+const SkillList = styled.div`
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  box-sizing: border-box;
+  border-radius: 30px;
+  left: ${({pos}) => {
+    switch(pos) {
+      case 0:
+        return 0;
+      case 1:
+        return `calc(33.3% - 16.5px)`;
+      case 2:
+        return `calc(66.6% - 33px)`;
+      case 3:
+        return `calc(100% - 50px)`;
+      default:
+        break;
+    }
+  }};
+`;
+const SkillLv = styled(Text)`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 30%;
+  height: 30%;
+  border-radius: 50% 50% 0 50%;
+  ${({theme}) => `
+    border: 2px solid ${theme.color.sub};
+    background-color: ${theme.color.main};
+    box-shadow: 0 0 5px ${theme.color.sub};
+  `};
+  line-height: 1.2;
+  z-index: 5;
 `;
 const SkillButton = styled.div`
-  background:url(${({ frameImg }) => frameImg});background-size:100%;
-  ${({skillCate, skillIcon, skillScene, skillFrame}) => {
-    if (skillCate === 2 || skillCate === 11) {
-      return `
-        &:before{background:url(${skillIcon});background-size:100%;}
-        &:after{background:url(${skillIcon});background-size:100%;}
-      `;
-    } else if (skillCate === 4) {
-      return `
-        &:before{background:url(${skillIcon});background-size:contain;}
-        &:after{background:url(${skillIcon});background-size:contain;}
-      `;
-    } else {
-      return `
-        &:before{background:url(${skillIcon});}
-        &:after{background:url(${skillIcon});background-size:500% auto;background-position:${skillScene%5 * 25}% ${Math.floor(skillScene/5) * 100/(Math.floor((skillFrame - 1) / 5))}%};
-      `;
-    }
-  }}
+  position: relative;
+  width: 100%;
+  height: 100%;
+  opacity: ${({used}) => used ? 1 : 0.4};
+  .limitLv {
+    position: absolute;
+    top: -15px;
+    right: 0;
+    width: 100%;
+    text-align: right;
+  }
 `;
-
+const StyledIconPic = styled(IconPic)`
+  position: absolute;
+  left: 15%;
+  top: 15%;
+  width: 70%;
+  height: 70%;
+  z-index: 1;
+`;
 const SkillPoint = styled.div`
   position: relative;
   height: 40px;
   flex: 1;
 `;
+const SkillLine = styled(FlexBox)`
+  height: auto;
+  position: relative;
+  height: 30px;
+  span {
+    position: relative;
+    width: 25%;
+    height: 100%;
+  }
+  span:after {
+    content: '';
+    position: absolute;
+    width: 3px;
+    height: 100%;
+    left: 50%;
+    top: 0;
+    transform: translate(-50%, 0);
+    background: #ddd;
+    opacity: 0;
+  }
+  span.line:after{opacity:.3;}
+  span.line.used:after{opacity:1;}
+  span:first-of-type:after{
+    left: 25px;
+  }
+  span:nth-of-type(2):after{
+    left: calc(50% - 2px);
+  }
+  span:nth-of-type(3):after{
+    left: calc(50% + 3px);
+  }
+  span:nth-of-type(4):after{
+    left: auto;
+    right: 22px;
+  }
+`;
+
+const LongPress = ({
+  clickHandler,
+  longPressHandler,
+}) => {
+  return useLongPress(clickHandler, longPressHandler);
+}
+
 const CharacterAnimalSkill = ({
   saveData,
   slotIdx,
@@ -88,9 +155,11 @@ const CharacterAnimalSkill = ({
   const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
   const animalPoint = React.useMemo(() => {
     return saveCh.animalBeige;
-  }, [saveCh]);
-  const animalSkill = React.useMemo(() => saveCh.animalSkill, [saveCh]);
-  const itemPoint = React.useMemo(() => saveCh.items, [saveCh]);
+  }, [saveData, slotIdx]);
+  const animalSkill = React.useMemo(() => {
+    return saveCh.animalSkill;
+  }, [saveData, slotIdx]);
+  const itemPoint = React.useMemo(() => saveCh.items, [saveData, slotIdx]);
   const animalType = React.useMemo(() => gameData.ch[saveCh.idx].animal_type, [gameData, saveCh]);
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
@@ -108,9 +177,9 @@ const CharacterAnimalSkill = ({
             data:gameData.guide["characterAnimalSkill"],
           });
         }}>
-          <div flex="true" className="skill_header">
+          <SkillHeader>
             <div className="skill_reset" onClick={() => {
-              let sData = {...saveData};
+              const sData = {...saveData};
               sData.ch[slotIdx].animalBeige = util.getAnimalPoint(itemPoint, animalType, saveData.ch[slotIdx].mark);
               sData.ch[slotIdx].animalSkill = saveCh.animalSkill.map((skGroup) => {
                 return skGroup.map((skData) => {
@@ -126,66 +195,44 @@ const CharacterAnimalSkill = ({
               });
               saveCh.hasSkill = [...saveCh.sk];
               changeSaveData(sData);
+              setMsgOn(true);
+              setMsg(gameData.msg.sentence.resetAnimalSkill[lang]);
             }}>{gameData.msg.button.skillReset[lang]}</div>
             <SkillPoint className="skill_point">
               <SkillMark point={animalPoint} pic="animalType" idx={animalType}/>
             </SkillPoint>
-          </div>
-          { animalSkill && animalSkill.map((skGroup, groupIdx) => {
+          </SkillHeader>
+          {animalSkill && animalSkill.map((skGroup, groupIdx) => {
             return (
-              <div key={groupIdx}>
+              <SkillHorizontal key={groupIdx}>
                 <div className="skill_group" >
                   {skGroup.map((skData, skIdx) => {
                     if (Object.keys(skData).length !== 0){
                       const sk = gameData.skill[skData.idx];
-                      const skCate = sk.cate[0];
+                      const skillCate = sk.cate[0];
                       const skillIcon = (() => {
-                        if (skCate === 2 || skCate === 11) {//passive, job
+                        if (skillCate === 2 || skillCate === 11) {//passive, job
                           return imgSet.passive[sk.effAnimation];
-                        } else if (skCate === 4) {//defence
+                        } else if (skillCate === 4) {//defence
                           return imgSet.actionIcon[sk.effAnimation];
                         } else {
                           return imgSet.eff[sk.effAnimation];
-                        }
+                      }
                       })();
                       return (
-                        <div key={skIdx} className={`skill_list pos${skIdx % 4}`}>
-                          <SkillButton skillCate={skCate} skillIcon={skillIcon} skillScene={gameData.effect[sk.effAnimation]?.imgScene} skillFrame={gameData.effect[sk.effAnimation]?.frame} frameImg={imgSet.etc.skillFrame} className={`skill_button cate${skCate} ${skData.lv > 0 ? "used" : ""}`} flex-h-center="true" onClick={() => {
-                            let sData = {...saveData};
-                            if (sData.ch[slotIdx].animalBeige <= 0) {
-                              setMsgOn(true);
-                              setMsg(gameData.msg.sentence.lackBadges[lang]);
-                            } else {
-                              if (skIdx % 4 === 3) {
-                                if (sData.ch[slotIdx].animalBeige > 0) {
-                                  if (sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv > 4) {
-                                    setMsgOn(true);
-                                      setMsg(gameData.msg.sentence.maxSkillLv[lang]);
-                                  } else {
-                                    sData.ch[slotIdx].animalBeige -= 1;
-                                    sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv += 1;
-                                    const animalIdx = sData.ch[slotIdx].animalSkill[groupIdx][skIdx].idx;
-                                    const overlapIdx = sData.ch[slotIdx].hasSkill.findIndex((hSkill, idx) => {
-                                      if (hSkill.idx === animalIdx) {
-                                        return idx;
-                                      }
-                                    });
-                                    if (overlapIdx >= 0) {
-                                      sData.ch[slotIdx].hasSkill[overlapIdx].lv = sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv;
-                                    } else {
-                                      sData.ch[slotIdx].hasSkill.push(sData.ch[slotIdx].animalSkill[groupIdx][skIdx]);
-                                    }
-                                    changeSaveData(sData);
-                                  }
-                                } else {
-                                  sData.ch[slotIdx].animalBeige = 0;
-                                }
+                        <SkillList key={skIdx} pos={skIdx % 4}>
+                          <SkillButton used={skData.lv > 0} {...LongPress({
+                            clickHandler: () => {
+                              let sData = {...saveData};
+                              if (sData.ch[slotIdx].animalBeige <= 0) {
+                                setMsgOn(true);
+                                setMsg(gameData.msg.sentence.lackBadges[lang]);
                               } else {
-                                if (!saveCh.animalSkill[groupIdx - 1] || (saveCh.animalSkill[groupIdx - 1][skIdx] && saveCh.animalSkill[groupIdx - 1][skIdx].lv > groupIdx - 1)) {//선행 스킬 체크
+                                if (skIdx % 4 === 3) {
                                   if (sData.ch[slotIdx].animalBeige > 0) {
                                     if (sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv > 4) {
                                       setMsgOn(true);
-                                      setMsg(gameData.msg.sentence.maxSkillLv[lang]);
+                                        setMsg(gameData.msg.sentence.maxSkillLv[lang]);
                                     } else {
                                       sData.ch[slotIdx].animalBeige -= 1;
                                       sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv += 1;
@@ -206,37 +253,65 @@ const CharacterAnimalSkill = ({
                                     sData.ch[slotIdx].animalBeige = 0;
                                   }
                                 } else {
-                                  setMsgOn(true);
-                                  const beforeSkill = gameData.skill[saveCh.animalSkill[groupIdx - 1][skIdx].idx].na[lang];
-                                  setMsg(gameData.msg.sentenceFn.beforeSkill(lang, beforeSkill, groupIdx));
+                                  if (!saveCh.animalSkill[groupIdx - 1] || (saveCh.animalSkill[groupIdx - 1][skIdx] && saveCh.animalSkill[groupIdx - 1][skIdx].lv > groupIdx - 1)) {//선행 스킬 체크
+                                    if (sData.ch[slotIdx].animalBeige > 0) {
+                                      if (sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv > 4) {
+                                        setMsgOn(true);
+                                        setMsg(gameData.msg.sentence.maxSkillLv[lang]);
+                                      } else {
+                                        sData.ch[slotIdx].animalBeige -= 1;
+                                        sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv += 1;
+                                        const animalIdx = sData.ch[slotIdx].animalSkill[groupIdx][skIdx].idx;
+                                        const overlapIdx = sData.ch[slotIdx].hasSkill.findIndex((hSkill, idx) => {
+                                          if (hSkill.idx === animalIdx) {
+                                            return idx;
+                                          }
+                                        });
+                                        if (overlapIdx >= 0) {
+                                          sData.ch[slotIdx].hasSkill[overlapIdx].lv = sData.ch[slotIdx].animalSkill[groupIdx][skIdx].lv;
+                                        } else {
+                                          sData.ch[slotIdx].hasSkill.push(sData.ch[slotIdx].animalSkill[groupIdx][skIdx]);
+                                        }
+                                        changeSaveData(sData);
+                                      }
+                                    } else {
+                                      sData.ch[slotIdx].animalBeige = 0;
+                                    }
+                                  } else {
+                                    setMsgOn(true);
+                                    const beforeSkill = gameData.skill[saveCh.animalSkill[groupIdx - 1][skIdx].idx].na[lang];
+                                    setMsg(gameData.msg.sentenceFn.beforeSkill(lang, beforeSkill, groupIdx));
+                                  }
                                 }
                               }
+                            }, 
+                            longPressHandler: () => {
+                              setPopupType('skillDescription');
+                              setPopupOn(true);
+                              setPopupInfo({
+                                sk:sk,
+                                skData:skData,
+                              });
                             }
-                          }}>
-                            <div className="limitLv">{`${skData.lv} / ${groupIdx + 1}`}</div>
-                            {/* {sk.na[lang]}  */}
-                            <div className="lv">{skData.lv > 0 && `Lv.${skData.lv}`}</div>
+                          })}>
+                            {/* <div className="limitLv">{`${skData.lv} / ${groupIdx + 1}`}</div> */}
+                            {skData.lv > 0 && <SkillLv code="t3" weight="600" color="sub">{skData.lv}</SkillLv>}
+                            {(skillCate === 2 || skillCate === 11) ? ( //passive, job
+                              <IconPic pic="skill" idx={skData.idx} />
+                            ) : (
+                              <>
+                                <IconPic type="skillBack" pic="icon200" idx={util.idxToSkillBack(skillCate)} />
+                                <StyledIconPic pic="skill" idx={skData.idx} />
+                              </>
+                            )}
                           </SkillButton>
-                          <button className="skill_description" onClick={(e) => {
-                            setPopupType('skillDescription');
-                            setPopupOn(true);
-                            setPopupInfo({
-                              sk:sk,
-                              skData:skData,
-                              skillCate:skCate,
-                              skillIcon:skillIcon,
-                              skillScene:gameData.effect[sk.effAnimation]?.imgScene,
-                              skillFrame:gameData.effect[sk.effAnimation]?.frame,
-                              frameImg:imgSet.etc.skillFrame,
-                            });
-                          }}>{gameData.msg.button.skill[lang]}</button>
-                        </div>
+                        </SkillList>
                       )
                     }
                   })}
                 </div>
                 {groupIdx < animalSkill.length - 1 && (
-                  <div className="skill_line">
+                  <SkillLine justifyContent="flex-start">
                     {skGroup.map((skData, skIdx) => {
                       if (Object.keys(skData).length !== 0){
                         let used = '';
@@ -250,9 +325,9 @@ const CharacterAnimalSkill = ({
                         }
                       }
                     })}
-                  </div>
+                  </SkillLine>
                 )}
-              </div>
+              </SkillHorizontal>
             )
           })}
         </InfoGroup>

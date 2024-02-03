@@ -2,7 +2,17 @@
 export const job = [
   {idx:0,
     na:'군주',txt:'무리의 리더로, 무리를 통솔하는 능력이 뛰어나다.',
-    skill:[3,4,5,6],drop:{
+    skill:{
+      type:'random',
+      initialCounts:3,
+      basic:[9,10],
+      lv0:[], //45%
+      lv1:[], //40%
+      lv2:[], //15%
+      lv3:[9,10], //15%
+      maxLv:[0,1,2,9,10],
+    },
+    drop:{
       gold:100,
       equip:[
         '1-0-0-1', '1-0-0-4', '1-0-0-6',
@@ -15,7 +25,17 @@ export const job = [
     }},
   {idx:1,
     na:'책사',txt:'우두머리를 보좌하고 술법을 주로 사용한다.',
-    skill:[3,4,5,6],drop:{
+    skill:{
+      type:'choose', //물, 불, 바람, 땅
+      initialCounts:2,
+      basic:[5,6,7,8],
+      lv0:[],
+      lv1:[],
+      lv2:[],
+      lv3:[],
+      maxLv:[0,1,2],
+    },
+    drop:{
       gold:100,
       equip:[
         '1-0-0-0', '1-0-0-2',
@@ -25,7 +45,18 @@ export const job = [
       hole:[],
     }},
   {idx:2,
-    na:'기사',txt:'강한 정신력을 바탕으로 맷집이 뛰어나다.',skill:[3,4,5,6],drop:{
+    na:'기사',txt:'강한 정신력을 바탕으로 맷집이 뛰어나다.',
+    skill:{
+      type:'choose', //방어스킬, 공격스킬
+      initialCounts:2,
+      basic:[],
+      lv0:[],
+      lv1:[],
+      lv2:[],
+      lv3:[],
+      maxLv:[0,1,2],
+    },
+    drop:{
       gold:100,
       equip:[
         '1-0-0-6', '1-0-0-7',
@@ -36,7 +67,17 @@ export const job = [
     }},
   {idx:3,
     na:'무사',txt:'모든 능력이 평균적으로 높다.',
-    skill:[4],drop:{
+    skill:{
+      type:'random',
+      initialCounts:1,
+      basic:[],
+      lv0:[],
+      lv1:[],
+      lv2:[],
+      lv3:[],
+      maxLv:[0,1,2],
+    },
+    drop:{
       gold:100,
       equip:[
         '1-0-0-1', '1-0-0-4',
@@ -47,7 +88,17 @@ export const job = [
     }},
   {idx:4,
     na:'학자',txt:'높은 지능을 기반으로 술법공격이 뛰어나다.',
-    skill:[3,4,5,6],drop:{
+    skill:{
+      type:'choose',//전투스킬, 직업스킬
+      initialCounts:1,
+      basic:[],
+      lv0:[],
+      lv1:[],
+      lv2:[],
+      lv3:[],
+      maxLv:[0,1,2],
+    },
+    drop:{
       gold:100,
       equip:[
         '1-0-0-0','1-0-0-2',
@@ -58,18 +109,38 @@ export const job = [
     }},
   {idx:5,
     na:'닌자',txt:'민첩함을 바탕으로한 공격에 능숙하다.',
-    skill:[3,4,5,6],drop:{
+    skill:{
+      type:'random',
+      initialCounts:1,
+      basic:[10],
+      lv0:[],
+      lv1:[],
+      lv2:[],
+      lv3:[10],
+      maxLv:[0,1,2,10],
+    },
+    drop:{
       gold:100,
       equip:[
         '1-0-0-0',
         '2-0-0-2', '2-0-0-4',
         '3-0-0', '3-0-1', '3-0-7',//쌍수
       ],
-      hole:[],
+      hole:[4],
     }},
   {idx:6,
     na:'도인',txt:'잔꾀를 부리는 술법공격을 사용한다.',
-    skill:[3,4,5,6],drop:{
+    skill:{
+      type:'choose',//빛, 어둠
+      initialCounts:1,
+      basic:[3,4],
+      lv0:[],
+      lv1:[],
+      lv2:[],
+      lv3:[],
+      maxLv:[0,1,2],
+    },
+    drop:{
       gold:100,
       equip:[
         '1-0-0-0', '1-0-0-5',
@@ -81,7 +152,17 @@ export const job = [
     }},
   {idx:7,
     na:'무희',txt:'무리를 격려하는 술법을 사용한다.',
-    skill:[3,4,5,6],drop:{
+    skill:{
+      type:'random',
+      initialCounts:1,
+      basic:[9],
+      lv0:[],
+      lv1:[],
+      lv2:[],
+      lv3:[],
+      maxLv:[0,1,2,9],
+    },
+    drop:{
       gold:100,
       equip:[
         '1-0-0-0',
@@ -94,7 +175,17 @@ export const job = [
     }},
   {idx:8,
     na:'도적',txt:'직업군중에서 민첩성이 가장 높다.',
-    skill:[4],drop:{
+    skill:{
+      type:'choose',//활, 단검
+      initialCounts:1,
+      basic:[],
+      lv0:[],
+      lv1:[],
+      lv2:[],
+      lv3:[],
+      maxLv:[0,1,2],
+    },
+    drop:{
       gold:100,
       equip:[
         '1-0-0-1', '1-0-0-2',
@@ -106,7 +197,17 @@ export const job = [
     }},
   {idx:9,
     na:'궁수',txt:'범위형 공격을 주로 사용한다.',
-    skill:[3,4,5,6],drop:{
+    skill:{
+      type:'random',
+      initialCounts:1,
+      basic:[],
+      lv0:[],
+      lv1:[],
+      lv2:[],
+      lv3:[],
+      maxLv:[0,1,2],
+    },
+    drop:{
       gold:100,
       equip:[
         '1-0-0-1',
@@ -117,7 +218,14 @@ export const job = [
     }},
   {idx:10,
     na:'야만용사',txt:'강인한 신체능력을 보유한 직업으로 물리 공격을 주로 사용한다.',
-    skill:[3,4,5,6],drop:{
+    skill:{
+      type:'choose',//도끼, 창, 양손검
+      initialCounts:1,
+      lv1:[0,1,2],
+      lv2:[],
+      lv3:[],
+    },
+    drop:{
       gold:100,
       equip:[
         '1-0-0-3', '1-0-0-5',
@@ -128,7 +236,17 @@ export const job = [
     }},
   {idx:11,
     na:'상인',txt:'',
-    skill:[3,4,5,6],drop:{
+    skill:{
+      type:'random',
+      initialCounts:3,
+      basic:[],
+      lv0:[],
+      lv1:[],
+      lv2:[],
+      lv3:[],
+      maxLv:[0,1,2],
+    },
+    drop:{
       gold:100,
       equip:[
         '1-0-0-2',
@@ -141,7 +259,17 @@ export const job = [
     }},
   {idx:12,
     na:'한량',txt:'',
-    skill:[3,4,5,6],drop:{
+    skill:{
+      type:'random',
+      initialCounts:2,
+      basic:[13],
+      lv0:[],
+      lv1:[],
+      lv2:[],
+      lv3:[13],
+      maxLv:[0,1,2,13],
+    },
+    drop:{
       gold:100,
       equip:[
         '2-0-0-0', '2-0-0-4', 
@@ -151,7 +279,17 @@ export const job = [
     }},
   {idx:13,
     na:'장군',txt:'',
-    skill:[3,4,5,6],drop:{
+    skill:{
+      type:'random',
+      initialCounts:3,
+      basic:[9],
+      lv0:[],
+      lv1:[],
+      lv2:[],
+      lv3:[9],
+      maxLv:[0,1,2,9],
+    },
+    drop:{
       gold:100,
       equip:[
         '1-0-0-3', '1-0-0-4',
@@ -162,7 +300,17 @@ export const job = [
     }},
   {idx:14,
     na:'농부',txt:'',
-    skill:[3,4,5,6],drop:{
+    skill:{
+      type:'random',
+      initialCounts:2,
+      basic:[14],
+      lv0:[],
+      lv1:[],
+      lv2:[],
+      lv3:[14],
+      maxLv:[0,1,2,14],
+    },
+    drop:{
       gold:100,
       equip:[
         '1-0-0-2', '1-0-0-3',
@@ -173,7 +321,17 @@ export const job = [
     }},
   {idx:15,
     na:'의술사',txt:'',
-    skill:[3,4,5,6],drop:{
+    skill:{
+      type:'random',
+      initialCounts:2,
+      basic:[],
+      lv0:[],
+      lv1:[],
+      lv2:[],
+      lv3:[],
+      maxLv:[0,1,2],
+    },
+    drop:{
       gold:100,
       equip:[
         '1-0-0-0',
@@ -184,7 +342,17 @@ export const job = [
     }},
   {idx:16,
     na:'기술자',txt:'',
-    skill:[3,4,5,6],drop:{
+    skill:{
+      type:'random',
+      initialCounts:2,
+      basic:[],
+      lv0:[],
+      lv1:[],
+      lv2:[],
+      lv3:[],
+      maxLv:[0,1,2],
+    },
+    drop:{
       gold:100,
       equip:[
         '1-0-0-3', '1-0-0-6',
@@ -194,3 +362,21 @@ export const job = [
       hole:[],
     }},
 ]
+
+// * 0군주 - 빛의정령, 어둠의정령
+// * 1책사 - (불의정령, 물의정령, 바람의정령, 땅의정령 중 3가지 종류만 제공) 택1,
+// * 2기사 -
+// * 3무사 -
+// * 4학자 -
+// * 5닌자 - 어둠의정령
+// * 6도인 - (빛의정령, 어둠의정령) 택1
+// * 7무희 - 빛의정령
+// * 8도적 -
+// * 9궁수 -
+// * 10야만용사 -
+// * 11상인 -
+// * 12한량 -
+// * 13장군 -
+// * 14농부 -
+// * 15의술사 -
+// * 16기술자 -

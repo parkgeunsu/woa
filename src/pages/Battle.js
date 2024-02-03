@@ -1162,7 +1162,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 							}
 						}
 
-						//찌르기(0),할퀴기(1),물기(2),치기(3),누르기(4),던지기(5),빛(6),어둠(7),물(8),불(9),바람(10),땅(11)
+						//쪼기(0),할퀴기(1),물기(2),치기(3),누르기(4),던지기(5),빛(6),어둠(7),물(8),불(9),바람(10),땅(11)
 						elementDefencePercent = skType > 0 ? (defEnemy[`el${skType - 1}`] + defEnemy[`iSt${skType + 15}`]) / 100 : 1; //속성치에 따른 방어적용치
 						//스킬 공격치 적용
 						//skill dmg
@@ -1209,7 +1209,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 						});
 						if (Object.keys(sk).length !== 0) {
 							gameData.skill[sk[0].idx].eff.forEach((skData) => {
-								const stateName = util.getStateName(skData.type).toLocaleLowerCase();
+								const stateName = util.getStateName(skData.type);
 								const skill = sk[0].lv > 5 ? 5 : sk[0].lv;
 								defNum[stateName] = util.getPercentNumber(skData.num[skill - 1], defEnemy[stateName]);
 							})
@@ -1228,7 +1228,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 							});
 						}
 						gameData.skill[attackerSkill[0].idx].eff.forEach((skData) => {
-							const stateName = util.getStateName(skData.type).toLocaleLowerCase();
+							const stateName = util.getStateName(skData.type);
 							const skill = attackerSkill[0].lv > 5 ? 5 : attackerSkill[0].lv;
 							atkNum[stateName] = util.getPercentNumber(skData.num[skill - 1], attacker[stateName]);
 						});
@@ -1601,7 +1601,7 @@ const passiveBuff = (gameData, battleAlly, battleEnemy, allyEnemyPassive, allyPa
 		if (ally.state === 'die') {
 			ally.sk.forEach((allySkill) => {//죽은 캐릭 스킬
 				const gameDataSkill = gameData.skill[allySkill.idx];
-				const state = util.getStateName(gameDataSkill.eff[0].type).toLowerCase();
+				const state = util.getStateName(gameDataSkill.eff[0].type);
 				battleAllyCopy.forEach((ally_) => {//죽은 캐릭 패시브 제거
 					if (state === 'hp' && ally_['passive'+state]) {
 						const remainPercent = ally_['current'+state + '_'] / ally_['passive'+state];
@@ -1621,7 +1621,7 @@ const passiveBuff = (gameData, battleAlly, battleEnemy, allyEnemyPassive, allyPa
 				passiveType = gameDataSkill.eff[0].type,
 				passiveNum = gameDataSkill.eff[0].num[allySkill.lv - 1],
 				passiveEff = gameDataSkill.effAnimation;
-			const state = util.getStateName(passiveType).toLowerCase();
+			const state = util.getStateName(passiveType);
 			if (gameDataSkill.ta === 10) {//전체 캐릭 패시브 적용
 				battleAllyCopy.forEach((ally_, chIdx) => {
 					if (ally_.state === 'die') {
@@ -1746,7 +1746,7 @@ const passiveBuff = (gameData, battleAlly, battleEnemy, allyEnemyPassive, allyPa
 				return;
 			}
 			let buff = {...buff_},
-				state = util.getStateName(buff.type).toLowerCase();
+				state = util.getStateName(buff.type);
 			switch(state) {
 				case 'bleeding':
 					state = 'hp';
@@ -1900,7 +1900,7 @@ const passiveBuff = (gameData, battleAlly, battleEnemy, allyEnemyPassive, allyPa
 		if (enemy.state === 'die') {
 			enemy.sk.forEach((enemySkill) => {//죽은 캐릭 스킬
 				const gameDataSkill = gameData.skill[enemySkill.idx];
-				const state = util.getStateName(gameDataSkill.eff[0].type).toLowerCase();
+				const state = util.getStateName(gameDataSkill.eff[0].type);
 				battleEnemyCopy.forEach((enemy_) => {//죽은 캐릭 패시브 제거
 					if (state === 'hp' && enemy_['passive'+state]) {
 						const remainPercent = enemy_['current'+state + '_'] / enemy_['passive'+state];
@@ -1919,7 +1919,7 @@ const passiveBuff = (gameData, battleAlly, battleEnemy, allyEnemyPassive, allyPa
 				passiveType = gameDataSkill.eff[0].type,
 				passiveNum = gameDataSkill.eff[0].num[enemySkill.lv - 1],
 				passiveEff = gameDataSkill.effAnimation;
-			const state = util.getStateName(passiveType).toLowerCase();
+			const state = util.getStateName(passiveType);
 			if (gameDataSkill.ta === 10) {//전체 캐릭 패시브 적용
 				battleEnemyCopy.forEach((enemy_, chIdx) => {
 					if (enemy_.state === 'die') {
@@ -2042,7 +2042,7 @@ const passiveBuff = (gameData, battleAlly, battleEnemy, allyEnemyPassive, allyPa
 				return;
 			}
 			let buff = {...buff_},
-				state = util.getStateName(buff.type).toLowerCase();
+				state = util.getStateName(buff.type);
 			switch(state) {
 				case 'bleeding':
 					state = 'hp';

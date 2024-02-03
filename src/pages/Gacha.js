@@ -353,7 +353,13 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 				items: [{}, {}, {}, {}, {}, {}, {}, {}],
 				lv: 50,
 				sk: [{idx: 1, lv: 1, exp: 0,},{idx: 2, lv: 1, exp: 0,},],
-				animalSkill:[],
+				// animalSkill:[],
+				animalSkill:[
+					[{idx:15,lv:1},{idx:11,lv:1},{idx:6,lv:0},{idx:12,lv:0}],
+					[{idx:21,lv:1},{idx:10,lv:1},{idx:13,lv:0},{idx:5,lv:0}],
+					[{idx:23,lv:1},{idx:16,lv:1},{idx:14,lv:0},{}],
+					[{},{},{},{}],
+				],
 				hasSkill: [{idx: 1, lv: 1, exp: 0,},{idx: 2, lv: 1, exp: 0,},],
 			},
 		}, saveData, gameData));

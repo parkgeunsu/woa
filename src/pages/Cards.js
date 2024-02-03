@@ -7,11 +7,11 @@ import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
-import 'css/character.css';
 import React, { useCallback, useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { util } from 'components/Libs';
+import ItemGradeColor from 'components/ItemGradeColor';
 import CharacterAnimalSkill from 'pages/CharacterAnimalSkill';
 import CharacterApplyState from 'pages/CharacterApplyState';
 import CharacterCard from 'pages/CharacterCard';
@@ -169,9 +169,6 @@ const ItemList = styled.li`
   }
   .txt{position:absolute;left:2px;right:2px;bottom:2px;font-size:0.688rem;text-align:center;z-index:1;}
   .pic{position:absolute;left:0;right:0;bottom:0;top:0;width:100%;}
-  .pic.sealed svg{filter:brightness(0.3) drop-shadow(0px 0px 1px #fff);}
-  .pic.sealed:before{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);content:'?';z-index:1;font-size:1.25rem;}
-  .pic.impossible svg{filter:invert(1);}
   .hole{position:absolute;left:0;right:0;top:0;bottom:0;z-index:3;pointer-events:none;}
   .hole .hole_slot{position:absolute;width:25%;padding-top:25%;border-radius:50%;border:1px solid #000;background:rgba(0,0,0,.7);}
   .hole .hole_slot.fixed{background:rgba(255,172,47,.7)}
@@ -307,7 +304,7 @@ const Cards = ({
     <>
       <ChWrap className="ch_wrap"  backImg={imgSet.back[0]} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
         <ChArea>
-          <div style={{position:"absolute",right:"10px",top:"50px",zIndex:100, backgroundColor: '#fff'}}>
+          <div style={{position:"absolute",left:0,top:0,zIndex:100, backgroundColor: '#fff'}}>
             <button onClick={() => {
               const option = {
                 type:'equip',
@@ -369,9 +366,9 @@ const Cards = ({
                       return chk;
                     })();
                     return (
-                      <ItemList key={`hequip${idx}`} onClick={() => {handlePopup('hequip', data.idx, idx, data.part, data.grade, data.weaponType)}} className={`item item${data.part} ${gameData.itemGrade.txt_e[data.grade].toLowerCase()}`} data-itemnum={`equip_${data.idx}`}>
-                        <em>
-                          <ItemPic type="equip" className={`pic ${data.sealed ? "sealed" : ""} ${equipPossible ? "impossible" : ""}`}>
+                      <ItemList key={`hequip${idx}`} onClick={() => {handlePopup('hequip', data.idx, idx, data.part, data.grade, data.weaponType)}} data-itemnum={`equip_${data.idx}`}>
+                        <ItemGradeColor part={data.part} grade={gameData.itemGrade.txt_e[data.grade].toLowerCase()} sealed={data.sealed} impossible={equipPossible}>
+                          <ItemPic type="equip" className={`pic`}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.svgColor || data.id)}}>
                             </svg>
                           </ItemPic>
@@ -385,7 +382,7 @@ const Cards = ({
                               );
                             })}
                           </span>
-                        </em>
+                        </ItemGradeColor>
                       </ItemList>
                     )
                   })}
@@ -395,10 +392,10 @@ const Cards = ({
                   { invenItems.hole && invenItems.hole.map((data, idx) => {
                     const items = gameItem.hole[data.idx];
                     return (
-                      <ItemList key={`hole${idx}`} onClick={() => {handlePopup('hole', data.idx, idx)}} className="item item11" data-itemnum={`hole_${data.idx}`}>
-                        <em>
+                      <ItemList key={`hole${idx}`} onClick={() => {handlePopup('hole', data.idx, idx)}} data-itemnum={`hole_${data.idx}`}>
+                        <ItemGradeColor part="11">
                           <ItemPic type="hole" className="pic" pic="itemEtc" idx={items.display} />
-                        </em>
+                        </ItemGradeColor>
                       </ItemList>
                     )
                   })}
@@ -408,10 +405,10 @@ const Cards = ({
                   { invenItems.upgrade && invenItems.upgrade.map((data, idx) => {
                     const items = gameItem.upgrade[data.idx];
                     return (
-                      <ItemList key={`upgrade${idx}`} onClick={() => {handlePopup('upgrade', data.idx, idx)}} className="item item12" data-itemnum={`upgrade_${data.idx}`}>
-                        <em>
+                      <ItemList key={`upgrade${idx}`} onClick={() => {handlePopup('upgrade', data.idx, idx)}} data-itemnum={`upgrade_${data.idx}`}>
+                        <ItemGradeColor part="12">
                           <ItemPic type="upgrade" className="pic" pic="itemEtc" idx={items.display} />
-                        </em>
+                        </ItemGradeColor>
                       </ItemList>
                     )
                   })}
@@ -421,10 +418,10 @@ const Cards = ({
                   { invenItems.material && invenItems.material.map((data, idx) => {
                     const items = gameItem.material[data.idx];
                     return (
-                      <ItemList key={`material${idx}`} onClick={() => {handlePopup('material', data.idx, idx)}} className="item item13" data-itemnum={`material_${data.idx}`}>
-                        <em>
+                      <ItemList key={`material${idx}`} onClick={() => {handlePopup('material', data.idx, idx)}} data-itemnum={`material_${data.idx}`}>
+                        <ItemGradeColor part="13">
                           <ItemPic type="material" className="pic" pic="itemEtc" idx={items.display} />
-                        </em>
+                        </ItemGradeColor>
                       </ItemList>
                     )
                   })}
@@ -434,10 +431,10 @@ const Cards = ({
                   { invenItems.etc && invenItems.etc.map((data, idx) => {
                     const items = gameItem.etc[data.idx];
                     return (
-                      <ItemList key={`etc${idx}`} onClick={() => {handlePopup('etc', data.idx, idx)}} className="item item13" data-itemnum={`etc_${data.idx}`}>
-                        <em>
+                      <ItemList key={`etc${idx}`} onClick={() => {handlePopup('etc', data.idx, idx)}} data-itemnum={`etc_${data.idx}`}>
+                        <ItemGradeColor part="13">
                           <ItemPic type="etc" className="pic" pic="itemEtc" idx={items.display} />
-                        </em>
+                        </ItemGradeColor>
                       </ItemList>
                     )
                   })}

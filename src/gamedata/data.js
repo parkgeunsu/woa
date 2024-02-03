@@ -34,7 +34,7 @@ export const gameData = {
     eventsHead: [0,1,6,6,2,2,3,3,4,5,7,7], //이벤트 지형 타입
     eventsCountryColor: ['#fff','#f0d','#d00','#d60','#0a0','#ffcc15','#66beff','#134077','#0040ff','#a800ff','#ff2a00','#00a90c'],
     percent: percent,
-    addGradeArr: [1,1.2,1.3,1.4,1.5,1.6,1.8],//등급에 따른 추가 능력치
+    addGradeArr: [1,1.1,1.25,1.35,1.5,1.7,2],//등급에 따른 추가 능력치
     possibleStageNum: [1,3,5,10],//시나리오 난이도 진행 가능한 카드영웅 갯수
     animal_type:animals,//'독0','빛1','암2','물3','불4','바람5','땅6'
     ch:ch,//face_d 얼굴방향, awaken 각성속성
@@ -53,7 +53,7 @@ export const gameData = {
     hasMaxExp:[0,50000,80000,120000,150000,200000,250000,300000],
     exp:exp,
     gradeUp:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,5,5,5,10,10,10,10,10,20,20,20,20,20,25,25,25,30,40],//인물 초월시재료
-    element:[{ko:'찌르기',en:'Sting'},{ko:'할퀴기',en:'Claw'},{ko:'물기',en:'Bite'},{ko:'치기',en:'Hit'},{ko:'누르기',en:'Crush'},{ko:'던지기',en:'Throw'},{ko:'빛',en:'Light'},{ko:'어둠',en:'Darkness'},{ko:'물',en:'Water'},{ko:'불',en:'Fire'},{ko:'바람',en:'Wind'},{ko:'땅',en:'Earth'}],
+    element:[{ko:'쪼기',en:'Peck'},{ko:'할퀴기',en:'Claw'},{ko:'물기',en:'Bite'},{ko:'치기',en:'Hit'},{ko:'누르기',en:'Crush'},{ko:'던지기',en:'Throw'},{ko:'빛',en:'Light'},{ko:'어둠',en:'Darkness'},{ko:'물',en:'Water'},{ko:'불',en:'Fire'},{ko:'바람',en:'Wind'},{ko:'땅',en:'Earth'}],
     roulette:[
       {idx: 0, cardIdx: 0, type: 'enemies', amount: 3},
       {idx: 1, cardIdx: 1, type: 'enemies', amount: 4},

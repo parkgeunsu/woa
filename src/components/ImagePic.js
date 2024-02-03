@@ -293,6 +293,10 @@ const SkillMark = ({
   pic,
   idx,
 }) => {
+  const context = useContext(AppContext);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
   const [size, setSize] = useState(0);
   const picSize = useCallback((node) => {
     if (node !== null) {
@@ -307,13 +311,13 @@ const SkillMark = ({
     return Array.from({length: arrLength[0]}, () => 10).concat(Array.from({length: arrLength[1]}, () => 5).concat(Array.from({length: arrLength[2]}, () => 1)));
   }, [point]);
   return (
-    mark.map((markData, markIdx) => 
-      <SkillMarkWrap key={`markIdx${markIdx}`} ref={picSize} size={size} type={markData} pic={pic} idx={idx} posIdx={markIdx}>
+    mark.map((markData, markIdx) => {
+      return <SkillMarkWrap key={`markIdx${markIdx}`} ref={picSize} size={size} type={markData} pic={imgSet.images[pic]} idx={idx} posIdx={markIdx}>
         <MarkImg type="light"/>
         <MarkImg type="front"/>
         <MarkImg type="shadow"/>
       </SkillMarkWrap>
-    )
+    })
   )
 }
 

@@ -10,18 +10,10 @@ import TabMenu from 'components/TabMenu';
 import 'css/shop.css';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import ItemGradeColor from 'components/ItemGradeColor';
 
-const Img = styled.img.attrs(
-  ({imgurl}) => ({
-    src: imgurl 
-  })
-)``;
 const ShopWrap = styled.div`
 	background:url(${({backImg}) => backImg});background-size:cover;
-`;
-const MenuButton = styled.button``;
-const ShopIcon = styled.span`
-	background:url(${({ icoType }) => icoType}) no-repeat left center;background-size:100%;
 `;
 const ItemContainer = styled.ul`
   border:5px solid transparent;
@@ -37,20 +29,12 @@ const ItemContainer = styled.ul`
 const ItemName = styled.div`
   .item_grade{color:${({ color }) => color};}
 `;
-
 const shopList = [
 	{na:'helm',icon:10},
 	{na:'armor',icon:11},
 	{na:'weapon',icon:12},
 	{na:'inven',icon:13},
 ];
-const makeMark = (markNum, img) => {
-  let markTag = '';
-  for (let i = 0; i < markNum; ++i) {
-    markTag += `<span><img src="${img}" class="light"/><img src="${img}" class="front"/><img src="${img}" class="shadow"/></span>`
-  }
-  return markTag;
-}
 const StickerShop = ({
 	cityIdx,
 	saveData,
@@ -129,6 +113,10 @@ const StickerShop = ({
 											button.push('buy');
 										} else {
 											button.push('sell');
+											console.log(itemSelect.sealed)
+											if (itemSelect.sealed) {
+												button.push('evaluate');
+											}
 										}
 										if (selectItem1.select !== '' && selectItem1.selectTab === selectTab && selectItem1.select === idx) {
 											setSelectItem1({save:{},game:{},select:'',selectTab:'',buttonType:[]});
@@ -146,6 +134,9 @@ const StickerShop = ({
 											button.push('buy');
 										} else {
 											button.push('sell');
+											if (itemSelect.sealed) {
+												button.push('evaluate');
+											}
 										}
 										if (selectItem2.select !== '' && selectItem2.selectTab === selectTab && selectItem2.select === idx) {
 											setSelectItem2({save:{},game:{},select:'',selectTab:'',buttonType:[]});
@@ -185,9 +176,11 @@ const StickerShop = ({
 						}}>
 							<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.save.colorantSet ? util.getColorant(selectItem1.save.colorantSet, gameData).na[lang] : ''} ${selectItem1.save.modifier[lang]} ${selectItem1.game.na[lang]}`}}></span></li>
 							<li className="item_fix" flex="true">
-								<ItemPic type="equip" className={`item item${selectItem1.game.part} ${gameData.itemGrade.txt_e[selectItem1.save.grade].toLowerCase()} ${selectItem1.save.sealed ? "sealed" : ""} favorite${selectItem1.save.favorite}`}>
-									<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem1.game.display], selectItem1.save.color, selectItem1.save.svgColor || selectItem1.save.id)}}></svg>
-								</ItemPic>
+								<ItemGradeColor part={selectItem1.game.part} grade={gameData.itemGrade.txt_e[selectItem1.save.grade].toLowerCase()} sealed={selectItem1.save.sealed} size="50">
+									<ItemPic type="equip" className={`item favorite${selectItem1.save.favorite}`}>
+										<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem1.game.display], selectItem1.save.color, selectItem1.save.svgColor || selectItem1.save.id)}}></svg>
+									</ItemPic>
+								</ItemGradeColor>
 								<div flex-h="true" style={{flex: 1,}}>
 									<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem1.save.grade]}>
 										<div className="item_top">
@@ -207,7 +200,11 @@ const StickerShop = ({
 										{selectItem1.save.hole.map((holeData, idx) => {
 											const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 											return (
-												<div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}><span className="item_holeback"><Img imgurl={imgSet.itemHole[holePic]} /></span></div>
+												<div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}>
+													<span className="item_holeback">
+														<ItemPic className="pic" pic="itemEtc" type="hole" idx={holePic} />
+													</span>
+												</div>
 											)
 										})}
 									</div>
@@ -299,6 +296,11 @@ const StickerShop = ({
 													<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${util.comma(selectItem1.game.price * (selectItem1.game.grade || selectItem1.save.grade))}`}</em></div>
 													<div className="item_button" flex="true">
 														<button text="true" className="button_small" onClick={(e) => {
+															if (actionCh.idx === '') {
+																setMsgOn(true);
+																setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[201].na));
+																return;
+															}
 															let saveD = {...saveData};
 															if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemSell) {//행동력 지불
 																saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemSell;
@@ -328,6 +330,35 @@ const StickerShop = ({
 													</div>
 												</div>
 											)
+										{/* case "evaluate":
+											return (
+												<div key={`button${idx}`} className="item_button" flex="true">
+													<button text="true" className="button_small" onClick={(e) => {
+														util.buttonEvent({
+															event: e,
+															type: 'itemEvaluate',
+															data: {
+																slotIdx:0,
+																gameItem:selectItem1.game,
+																itemSaveSlot:selectItem1.select,
+																saveItemData:saveData.items.equip[selectItem1.select],
+																type:'hequip',
+															},
+															saveData: saveData,
+															changeSaveData: changeSaveData,
+															gameData: gameData,
+															msgText: setMsg,
+															showMsg: setMsgOn,
+															showPopup: setPopupOn,
+															lang: lang,
+														});
+														setSelectItem1({
+															...selectItem1,
+															save:{...item[invenList[selectTab].na][selectItem1.select]},
+														});
+													}} data-buttontype="itemSell">{gameData.msg.button.emotions[lang]}</button>
+												</div>
+											); */}
 										default:
 											break;
 									}
@@ -345,9 +376,11 @@ const StickerShop = ({
 						}}>
 							<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.save.modifier[lang]} ${selectItem2.game.na[lang]}`}}></span></li>
 							<li className="item_fix" flex="true">
-								<ItemPic type="equip" className={`item item${selectItem2.game.part} ${gameData.itemGrade.txt_e[selectItem2.save.grade].toLowerCase()} ${selectItem2.save.sealed ? "sealed" : ""} favorite${selectItem2.save.favorite}`}>
-									<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem2.game.display], selectItem2.save.color, selectItem2.save.svgColor ||selectItem2.save.id)}}></svg>
-								</ItemPic>
+								<ItemGradeColor part={selectItem2.game.part} grade={gameData.itemGrade.txt_e[selectItem2.save.grade].toLowerCase()} sealed={selectItem2.save.sealed} size="50">
+									<ItemPic type="equip" className={`item favorite${selectItem2.save.favorite}`}>
+										<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem2.game.display], selectItem2.save.color, selectItem2.save.svgColor ||selectItem2.save.id)}}></svg>
+									</ItemPic>
+								</ItemGradeColor>
 								<div flex-h="true" style={{flex: 1,}}>
 									<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem2.save.grade]}>
 										<div className="item_top">
@@ -367,7 +400,11 @@ const StickerShop = ({
 										{selectItem2.save.hole.map((holeData, idx) => {
 											const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 											return (
-												<div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}><span className="item_holeback"><Img imgurl={imgSet.itemHole[holePic]} /></span></div>
+												<div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}>
+													<span className="item_holeback">
+														<ItemPic className="pic" pic="itemEtc" type="hole" idx={holePic} />
+													</span>
+												</div>
 											)
 										})}
 									</div>

@@ -10,6 +10,7 @@ import TabMenu from 'components/TabMenu';
 import 'css/shop.css';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import ItemGradeColor from 'components/ItemGradeColor';
 
 const Img = styled.img.attrs(
   ({imgurl}) => ({
@@ -339,9 +340,11 @@ const ToolShop = ({
 								<>
 									<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.save.colorantSet ? util.getColorant(selectItem1.save.colorantSet, gameData).na[lang] : ''} ${selectItem1.save.modifier[lang]} ${selectItem1.game.na[lang]}`}}></span></li>
 									<li className="item_fix" flex="true">
-										<ItemPic type="equip" className={`item item${selectItem1.game.part} ${gameData.itemGrade.txt_e[selectItem1.save.grade].toLowerCase()} ${selectItem1.save.sealed ? "sealed" : ""} favorite${selectItem1.save.favorite}`}>
-											<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem1.game.display], selectItem1.save.color, selectItem1.save.svgColor || selectItem1.save.id)}}></svg>
-										</ItemPic>
+										<ItemGradeColor part={selectItem1.game.part} grade={gameData.itemGrade.txt_e[selectItem1.save.grade].toLowerCase()} sealed={selectItem1.save.sealed} size="50">
+											<ItemPic type="equip" className={`item favorite${selectItem1.save.favorite}`}>
+												<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem1.game.display], selectItem1.save.color, selectItem1.save.svgColor || selectItem1.save.id)}}></svg>
+											</ItemPic>
+										</ItemGradeColor>
 										<div flex-h="true" style={{flex: 1,}}>
 											<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem1.save.grade]}>
 												<div className="item_top">
@@ -361,7 +364,11 @@ const ToolShop = ({
 												{selectItem1.save.hole.map((holeData, idx) => {
 													const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 													return (
-														<div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}><span className="item_holeback"><Img imgurl={imgSet.itemHole[holePic]} /></span></div>
+														<div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}>
+															<span className="item_holeback">
+                    						<ItemPic pic="itemEtc" type="hole" idx={holePic} />
+															</span>
+														</div>
 													)
 												})}
 											</div>
@@ -605,9 +612,11 @@ const ToolShop = ({
 								<>
 									<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.save.modifier[lang]} ${selectItem2.game.na[lang]}`}}></span></li>
 									<li className="item_fix" flex="true">
-										<ItemPic type="equip" className={`item item${selectItem2.game.part} ${gameData.itemGrade.txt_e[selectItem2.save.grade].toLowerCase()} ${selectItem2.save.sealed ? "sealed" : ""} favorite${selectItem2.save.favorite}`}>
-											<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem2.game.display], selectItem2.save.color, selectItem2.save.svgColor ||selectItem2.save.id)}}></svg>
-										</ItemPic>
+										<ItemGradeColor part={selectItem2.game.part} grade={gameData.itemGrade.txt_e[selectItem2.save.grade].toLowerCase()} sealed={selectItem2.save.sealed} size="50">
+											<ItemPic type="equip" className={`item favorite${selectItem2.save.favorite}`}>
+												<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem2.game.display], selectItem2.save.color, selectItem2.save.svgColor ||selectItem2.save.id)}}></svg>
+											</ItemPic>
+										</ItemGradeColor>
 										<div flex-h="true" style={{flex: 1,}}>
 											<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem2.save.grade]}>
 												<div className="item_top">
@@ -627,7 +636,11 @@ const ToolShop = ({
 												{selectItem2.save.hole.map((holeData, idx) => {
 													const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 													return (
-														<div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}><span className="item_holeback"><Img imgurl={imgSet.itemHole[holePic]} /></span></div>
+														<div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}>
+															<span className="item_holeback">
+                    						<ItemPic pic="itemEtc" type="hole" idx={holePic} />
+															</span>
+														</div>
 													)
 												})}
 											</div>

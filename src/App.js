@@ -160,14 +160,20 @@ const setCity = (data, lang) => {
   let items = [[],[],[],[]];//장비상 아이템 생성
   for (let i = 0; i < 20; i ++) {
     for (let j = 1; j < 4; j ++) {
-        items[j - 1][i] = {...util.getItem(false, gameData, false, {
-        type:'equip',
-        items:j,//장비만 해당
-        //아이템종류, 세부종류(검,단검), 매직등급
-        lv:Math.round(Math.random()*100),
-        sealed:false,
-        }, false, lang),
-      };
+      items[j - 1][i] = {...util.getItem(
+        false,
+        gameData,
+        false,
+        {
+          type:'equip',
+          items:j,//장비만 해당
+          //아이템종류, 세부종류(검,단검), 매직등급
+          lv:Math.round(Math.random()*100),
+          sealed:false,
+        },
+        false,
+        lang
+      )};
     }
   }
   cityD[0].stickerShop.helm = items[0];
@@ -207,26 +213,41 @@ const App = () => {
     util.saveData('saveData', objData);
   }
   const setLang = (data) => {
-    let cloneConTextData = {...conTextData};
+    const setting = util.loadData('setting');
+    setting.lang = data;
+    util.saveData('setting', setting);
+    const cloneConTextData = {...conTextData};
     cloneConTextData.setting.lang = data;
     setConTextData(cloneConTextData);
   }
   const setSpeed = (data) => {
+    const setting = util.loadData('setting');
+    setting.speed = data;
+    util.saveData('setting', setting);
     let cloneConTextData = {...conTextData};
     cloneConTextData.setting.speed = data;
     setConTextData(cloneConTextData);
   }
   const setBgm = (data) => {
+    const setting = util.loadData('setting');
+    setting.bgm = data;
+    util.saveData('setting', setting);
     let cloneConTextData = {...conTextData};
     cloneConTextData.setting.bgm = data;
     setConTextData(cloneConTextData);
   }
   const setEfm = (data) => {
+    const setting = util.loadData('setting');
+    setting.efm = data;
+    util.saveData('setting', setting);
     let cloneConTextData = {...conTextData};
     cloneConTextData.setting.efm = data;
     setConTextData(cloneConTextData);
   }
   const setResolution = (data) => {
+    const setting = util.loadData('setting');
+    setting.resolution = data;
+    util.saveData('setting', setting);
     let cloneConTextData = {...conTextData};
     cloneConTextData.setting.resolution = data;
     setConTextData(cloneConTextData);
@@ -264,6 +285,10 @@ const App = () => {
       } else {
         useSaveData = util.loadData("saveData");
       }
+      const setting = util.loadData('setting');
+      let cloneConTextData = {...conTextData};
+      cloneConTextData.setting = setting;
+      setConTextData(cloneConTextData);
       setSaveData(() => {
         if (useSaveData.ch[0].bSt0) { //캐릭 전투능력치 설정이 안되어 있을 경우
           util.saveData('saveData', useSaveData);

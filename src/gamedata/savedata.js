@@ -85,9 +85,9 @@ const save = {
     "hasSkill":[{"idx":1,"lv":1,"exp":0},{"idx":2,"lv":1,"exp":0},{"idx":6,"lv":1,"exp":0},{"idx":7,"lv":1,"exp":0},{idx:115,lv:1},{idx:111,lv:1},{idx:112,lv:1},{idx:121,lv:1},{idx:101,lv:1},{idx:116,lv:1},{idx:124,lv:1},{idx:201,lv:1},{idx:203,lv:1},{idx:204,lv:1}],
     "sk":[{"idx":1,"lv":1,"exp":0},{"idx":2,"lv":1,"exp":0},{"idx":6,"lv":1,"exp":0},{"idx":7,"lv":1,"exp":0}],
     "animalSkill":[
-      [{idx:115,lv:1},{idx:111,lv:1},{idx:201,lv:1},{idx:103,lv:0}],
-      [{idx:121,lv:1},{idx:101,lv:1},{idx:203,lv:1},{}],
-      [{idx:124,lv:1},{idx:116,lv:1},{idx:204,lv:1},{}],
+      [{idx:15,lv:1},{idx:11,lv:1},{idx:6,lv:0},{idx:13,lv:0}],
+      [{idx:21,lv:1},{idx:10,lv:1},{idx:13,lv:0},{idx:5,lv:0}],
+      [{idx:24,lv:1},{idx:16,lv:1},{idx:14,lv:0},{}],
       [{},{},{},{}],
     ]},
     {"idx":0,"element":[11],"actionType":3,"job":12,"newActionType":[3],"grade":5,"mark":0,"stateLuk":200,"lv":40,"exp":0,"hasExp":1000,"actionPoint":26,"actionMax":55,"pointTime":1200,"battleBeige":[0,0,0,0],"animalBeige":0,"items":[
@@ -103,9 +103,9 @@ const save = {
     "hasSkill":[{"idx":1,"lv":1,"exp":0},{"idx":2,"lv":1,"exp":0},{idx:121,lv:1},{idx:202,lv:1}],
     "sk":[{"idx":1,"lv":1,"exp":0},{"idx":2,"lv":1,"exp":0}],
     "animalSkill":[
-      [{idx:121,lv:1},{idx:102,lv:0},{idx:202,lv:1},{}],
-      [{idx:104,lv:0},{idx:105,lv:0},{idx:106,lv:0},{}],
-      [{idx:107,lv:0},{},{},{}],
+      [{idx:21,lv:1},{idx:12,lv:0},{idx:22,lv:1},{}],
+      [{idx:4,lv:0},{idx:5,lv:0},{idx:16,lv:0},{}],
+      [{idx:17,lv:0},{},{},{}],
       [{},{},{},{}],
     ]},
     // {"idx":4,"element":[10],"stateLuk":95,"lv":50,"exp":0,"hasExp":9000,"actionPoint":20,"battleBeige":[0,0,0,0],"animalBeige":0,"sk":[{"idx":1,"lv":1},{"idx":2,"lv":1},{"idx":9,"lv":1}],"items":[

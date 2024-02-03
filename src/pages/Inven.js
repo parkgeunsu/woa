@@ -5,20 +5,25 @@ import TabMenu from 'components/TabMenu';
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import ItemGradeColor from 'components/ItemGradeColor';
 
 const InvenWrap = styled.div`
 	background:url(${({backImg}) => backImg});background-size:cover;
 `;
 const ItemContainer = styled.ul`
-  border:5px solid transparent;
-  border-image:url(${({frameBack}) => frameBack}) 5 round;
-	&.on{
-		outline:5px solid #000;
+  border: 5px solid transparent;
+  border-image: url(${({frameBack}) => frameBack}) 5 round;
+	&.on {
+		outline: 5px solid #000;
 	}
-  .item_header{border:5px solid transparent;
-  border-image:url(${({frameBack}) => frameBack}) 5 round;
+  .item_header {border:5px solid transparent;
+  border-image: url(${({frameBack}) => frameBack}) 5 round;
   }
-  .item_name{color:${({ color }) => color};text-shadow:-1px -1px 1px rgba(255,255,255,.5), 1px 1px 1px #000;}
+  .item_name {
+		color:${({ color }) => color};
+		text-shadow:-1px -1px 1px rgba(255,255,255,.5), 1px 1px 1px #000;
+		text-align: center;
+	}
 `;
 const ItemName = styled.div`
   .item_grade{color:${({ color }) => color};}
@@ -313,18 +318,20 @@ const Inven = ({
 								<>
 									<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.save.colorantSet ? util.getColorant(selectItem1.save.colorantSet, gameData).na[lang] : ''} ${selectItem1.save.modifier[lang]} ${selectItem1.game.na[lang]}`}}></span></li>
 									<li className="item_fix" flex="true">
-										<ItemPic type="equip" className={`item item${selectItem1.game.part} ${gameData.itemGrade.txt_e[selectItem1.save.grade].toLowerCase()} ${selectItem1.save.sealed ? "sealed" : ""} favorite${selectItem1.save.favorite}`} onClick={(e) => {
-											e.stopPropagation();
-											let sData = {...saveData},
-												cloneSelectItem = {...selectItem1};
-											cloneSelectItem.save.favorite = ++cloneSelectItem.save.favorite > 5 ? 1 : cloneSelectItem.save.favorite;
-											setSelectItem1(cloneSelectItem);
-											sData.items.equip[cloneSelectItem.select].favorite = cloneSelectItem.save.favorite;
-											changeSaveData(sData);
-											console.log('즐겨찾기');
-										}}>
-											<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem1.game.display], selectItem1.save.color, selectItem1.save.svgColor || selectItem1.save.id)}}></svg>
-										</ItemPic>
+										<ItemGradeColor part={selectItem1.game.part} grade={gameData.itemGrade.txt_e[selectItem1.save.grade].toLowerCase()} sealed={selectItem1.save.sealed} size="50">
+											<ItemPic type="equip" className={`item favorite${selectItem1.save.favorite}`} onClick={(e) => {
+												e.stopPropagation();
+												let sData = {...saveData},
+													cloneSelectItem = {...selectItem1};
+												cloneSelectItem.save.favorite = ++cloneSelectItem.save.favorite > 5 ? 1 : cloneSelectItem.save.favorite;
+												setSelectItem1(cloneSelectItem);
+												sData.items.equip[cloneSelectItem.select].favorite = cloneSelectItem.save.favorite;
+												changeSaveData(sData);
+												console.log('즐겨찾기');
+											}}>
+												<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem1.game.display], selectItem1.save.color, selectItem1.save.svgColor || selectItem1.save.id)}}></svg>
+											</ItemPic>
+										</ItemGradeColor>
 										<div flex-h="true" style={{flex: 1,}}>
 											<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem1.save.grade]}>
 												<div className="item_top">
@@ -346,7 +353,7 @@ const Inven = ({
 													return (
 														<div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}>
 															<span className="item_holeback">
-																{holePic !== 0 && <ItemPic pic="itemEtc" type="hole" idx={holePic} />}
+                    						<ItemPic pic="itemEtc" type="hole" idx={holePic} />
 															</span>
 														</div>
 													)
@@ -561,18 +568,20 @@ const Inven = ({
 								<>
 									<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.save.colorantSet ? util.getColorant(selectItem2.save.colorantSet, gameData).na[lang] : ''} ${selectItem2.save.modifier[lang]} ${selectItem2.game.na[lang]}`}}></span></li>
 									<li className="item_fix" flex="true">
-										<ItemPic type="equip" className={`item item${selectItem2.game.part} ${gameData.itemGrade.txt_e[selectItem2.save.grade].toLowerCase()} ${selectItem2.sealed ? "sealed" : ""} favorite${selectItem2.save.favorite}`} onClick={(e) => {
-											e.stopPropagation();
-											let sData = {...saveData},
-												cloneSelectItem = {...selectItem2};
-											cloneSelectItem.save.favorite = ++cloneSelectItem.save.favorite > 5 ? 1 : cloneSelectItem.save.favorite;
-											setSelectItem2(cloneSelectItem);
-											sData.items.equip[cloneSelectItem.select].favorite = cloneSelectItem.save.favorite;
-											changeSaveData(sData);
-											console.log('즐겨찾기');
-										}}>
-											<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem2.game.display], selectItem2.save.color, selectItem2.save.svgColor || selectItem2.save.id)}}></svg>
-										</ItemPic>
+										<ItemGradeColor part={selectItem2.game.part} grade={gameData.itemGrade.txt_e[selectItem2.save.grade].toLowerCase()} sealed={selectItem2.save.sealed} size="50">
+											<ItemPic type="equip" className={`item favorite${selectItem2.save.favorite}`} onClick={(e) => {
+												e.stopPropagation();
+												let sData = {...saveData},
+													cloneSelectItem = {...selectItem2};
+												cloneSelectItem.save.favorite = ++cloneSelectItem.save.favorite > 5 ? 1 : cloneSelectItem.save.favorite;
+												setSelectItem2(cloneSelectItem);
+												sData.items.equip[cloneSelectItem.select].favorite = cloneSelectItem.save.favorite;
+												changeSaveData(sData);
+												console.log('즐겨찾기');
+											}}>
+												<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem2.game.display], selectItem2.save.color, selectItem2.save.svgColor || selectItem2.save.id)}}></svg>
+											</ItemPic>
+										</ItemGradeColor>
 										<div flex-h="true" style={{flex: 1,}}>
 											<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem2.save.grade]}>
 												<div className="item_top">
@@ -594,7 +603,7 @@ const Inven = ({
 													return (
 														<div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}>
 															<span className="item_holeback">
-																{holePic !== 0 && <ItemPic pic="itemEtc" type="hole" idx={holePic} />}
+                    						<ItemPic pic="itemEtc" type="hole" idx={holePic} />
 															</span>
 														</div>
 													)

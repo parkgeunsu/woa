@@ -13,7 +13,7 @@ const Msg = ({
 			timeRef.current = setTimeout(() => {
 				showMsg(prev => !prev);
 			}, 300);
-		}, 1000);
+		}, 1500);
 		return () => {
 			clearTimeout(timeRef.current);
 		}

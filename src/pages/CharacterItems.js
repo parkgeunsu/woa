@@ -8,7 +8,7 @@ import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
-import 'css/ch.css';
+import ItemGradeColor from 'components/ItemGradeColor';
 import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
 
@@ -17,6 +17,17 @@ const Wrap = styled(FlexBox)`
   top: 0;
   padding: 25px 20px 20px;
   box-sizing: border-box;
+`;
+const ActionType = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  transform: translate(-50%, 0);
+  box-shadow: ${({theme}) => `0 0 10px 5px ${theme.color.red}`};
+  z-index: 10;
 `;
 const EquipItems = styled.div`
   position: relative;
@@ -66,8 +77,6 @@ const ItemList = styled.li`
   ` : ''};
   .txt{position:absolute;left:2px;right:2px;bottom:2px;font-size:0.688rem;text-align:center;z-index:1;}
   .pic{position:absolute;left:0;right:0;bottom:0;top:0;width:100%;}
-  .pic.sealed svg{filter:brightness(0.3) drop-shadow(0px 0px 1px #fff);}
-  .pic.sealed:before{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);content:'?';z-index:1;font-size:1.25rem;}
   .pic.impossible svg{filter:invert(1);}
   .hole{position:absolute;left:0;right:0;top:0;bottom:0;z-index:3;pointer-events:none;}
   .hole .hole_slot{position:absolute;width:25%;padding-top:25%;border-radius:50%;border:1px solid #000;background:rgba(0,0,0,.7);}
@@ -212,6 +221,9 @@ const CharacterItems = ({
             <Text code="t5" color="main" weight="600">{`${possibleKg[0]}kg / ${possibleKg[1]}kg`}</Text>
           </PossibleKg>
           <EquipItems>
+            <ActionType>
+              <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={saveCh.newActionType[0] + 1} />
+            </ActionType>
             <AnimalItemPic ref={animalPic} pic="animalType" idx={animalIdx} className={`animal_item_pic animal_type${animalIdx}`} />
             <EquipItem className="e_items">
               {saveItems && saveItems.map((data, idx) => {
@@ -221,8 +233,8 @@ const CharacterItems = ({
                   const items = data.part === 3 ? gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx] : gameItem.equip[data.part][0][itemsGrade][data.idx];
                   const itemsHole = data.hole;
                   return (
-                    <ItemList key={`equip${idx}`} onClick={() => {handlePopup('equip', data.idx, idx, data.part, data.grade, data.weaponType)}} className={`item item${gameData.animal_type[animalIdx].equip[idx]} ${gameData.itemGrade.txt_e[data.grade].toLowerCase()}`}>
-                      <em>
+                    <ItemList key={`equip${idx}`} onClick={() => {handlePopup('equip', data.idx, idx, data.part, data.grade, data.weaponType)}}>
+                      <ItemGradeColor part={gameData.animal_type[animalIdx].equip[idx]} grade={gameData.itemGrade.txt_e[data.grade].toLowerCase()}>
                         <ItemPic type="equip" className="pic">
                           <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.svgColor || data.id)}}>
                           </svg>
@@ -237,7 +249,7 @@ const CharacterItems = ({
                             );
                           })}
                         </span>
-                      </em>
+                      </ItemGradeColor>
                     </ItemList>
                   )
                 } else {

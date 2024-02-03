@@ -68,7 +68,7 @@ export const msg = {
 		element:{
 			ko:'속성',
 			en:'Element',
-			jp:'プロパティ',
+			jp:'属性',
 		},
 		equipment:{
 			ko:'장비 착용',
@@ -247,10 +247,15 @@ export const msg = {
 			en:'RCV',
 			jp:'体力回復',
 		},
-		land:{
-			ko:'땅',
-			en:'Land',
-			jp:'地',
+		light:{
+			ko:'빛',
+			en:'Light',
+			jp:'光',
+		},
+		dark:{
+			ko:'어둠',
+			en:'Dark',
+			jp:'暗',
 		},
 		water:{
 			ko:'물',
@@ -261,6 +266,51 @@ export const msg = {
 			ko:'불',
 			en:'Fire',
 			jp:'火',
+		},
+		wind:{
+			ko:'바람',
+			en:'Wind',
+			jp:'風',
+		},
+		earth:{
+			ko:'땅',
+			en:'Earth',
+			jp:'地',
+		},
+		peck:{
+			ko:'쪼기',
+			en:'Peck',
+			jp:'ついばむ',
+		},
+		claw:{
+			ko:'할퀴기',
+			en:'Claw',
+			jp:'掻くこと',
+		},
+		bite:{
+			ko:'물기',
+			en:'Bite',
+			jp:'噛む',
+		},
+		hit:{
+			ko:'치기',
+			en:'Hit',
+			jp:'打撃',
+		},
+		press:{
+			ko:'누르기',
+			en:'Press',
+			jp:'押す',
+		},
+		throw:{
+			ko:'던지기',
+			en:'Throw',
+			jp:'投げる',
+		},
+		grade:{
+			ko:'등급',
+			en:'Grade',
+			jp:'グレード',
 		},
 		city:{
 			ko:'도시',
@@ -294,15 +344,20 @@ export const msg = {
 			en:'Success',
 			jp:'成功',
 		},
-		grade:{
-			ko:'등급',
-			en:'Grade',
-			jp:'グレード',
-		},
 		undefined:{
 			ko:'미정',
 			en:'Undefined',
 			jp:'未定',
+		},
+		unlearned:{
+			ko:'미습득',
+			en:'Unlearned',
+			jp:'未習得',
+		},
+		unSealed:{
+			ko:'미확인',
+			en:'unSealed',
+			jp:'未確認',
 		},
 	},
 	title:{
@@ -1058,6 +1113,11 @@ export const msg = {
 			ko:'같은 나라는 이동할 수 없습니다.',
 			en:'You can\'t move to the same country.',
 			jp:'同じ国は移動できません。'
+		},
+		resetAnimalSkill:{
+			ko:'동물스킬이 초기화 되었습니다.',
+			en:'Animal Skills have been reset.',
+			jp:'動物スキルが初期化されました。'
 		}
 	},
 	grammar:{
@@ -1158,6 +1218,8 @@ export const msg = {
 					return `선행 스킬(${txt})의 레벨이<br/> ${lv}레벨 이상 이어야 가능합니다.`;
 				case 'en':
 					return `Leading skill(${txt}) level must be<br/>at least ${lv} level.`;
+				case 'jp':
+					return `先行スキル(${txt})のレベルが<br/> ${lv}レベル以上である必要があります。`;
 				default:
 					break;
 			}
@@ -1168,6 +1230,8 @@ export const msg = {
 					return `<${item[lang]}> 이/가 부족합니다.`;
 				case 'en':
 					return `There's not enough <${item[lang]}>.`;
+				case 'jp':
+					return `<${item[lang]}> この/が不足しています。`;
 				default:
 					break;
 			}
@@ -1178,6 +1242,8 @@ export const msg = {
 					return `<${ch}>의 행동력이 부족합니다.`;
 				case 'en':
 					return `<${ch}>'s lack of action.`;
+				case 'jp':
+					return `<${ch}>の行動力が不足しています。`;
 				default:
 					break;
 			}
@@ -1188,6 +1254,8 @@ export const msg = {
 					return `<${skill[lang]}> 스킬을 보유한 캐릭이 없습니다.`;
 				case 'en':
 					return `There is no character with <${skill[lang]}> skills.`;
+				case 'jp':
+					return `<${skill[lang]}> スキルを保有しているキャラクターがいません。`;
 				default:
 					break;
 			}
@@ -1198,6 +1266,8 @@ export const msg = {
 					return `<${skill[lang]}> 스킬을 보유한 캐릭터를 선택십시오.`;
 				case 'en':
 					return `Choose a character with <${skill[lang]}> skills.`;
+				case 'jp':
+					return `<${skill[lang]}> スキルを持つキャラクターを選択してください。`;
 				default:
 					break;
 			}

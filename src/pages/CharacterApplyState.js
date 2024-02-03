@@ -12,7 +12,6 @@ const Wrap = styled(FlexBox)`
   padding: 25px 20px 20px;
   box-sizing: border-box;
   dd{position:relative;padding:5px;}
-  li{display:flex;margin:0 0 10px 0;justify-content:space-between;}
   li .name{padding:0 0 0 5px;width:22%;font-size:0.688rem;color:#999;text-align:left;}
   li .name b{display:block;font-size:0.875rem;color:#fff;font-weight:600;}
   li .current{width:48%;font-size:1rem;font-weight:600;color:#0b7;text-align:center;letter-spacing:-1px;}
@@ -20,7 +19,11 @@ const Wrap = styled(FlexBox)`
   li .total{padding:0 5px 0 0;width:30%;font-size:1.5rem;font-weight:600;color:#0b7;text-align:right;}
   li:last-of-type{margin:0;}
 `;
-
+const StateList = styled.li`
+  display: flex;
+  margin: 0 0 10px 0;
+  justify-content: space-between;
+`;
 const CharacterApplyState = ({
   saveData,
   slotIdx,
@@ -52,11 +55,11 @@ const CharacterApplyState = ({
           <ul className="total_states">
             {BattleStateName && BattleStateName.map((bData, idx) => {
               return (
-                <li key={idx} className={bData}>
-                  <span className="name">{gameData.msg.state[bData].ko}<b>{gameData.msg.state[bData].en}</b></span>
+                <StateList key={idx} className={bData}>
+                  <span className="name">{gameData.msg.state[bData][lang]}<b>{gameData.msg.state[bData].en}</b></span>
                   <span className="current">{`${saveData.ch[slotIdx]['bSt'+idx]} + `}<b>{`${saveData.ch[slotIdx]['iSt'+idx]}`}</b></span>
                   <span className="total">{saveData.ch[slotIdx]['bSt'+idx] + saveData.ch[slotIdx]['iSt'+idx]}</span>
-                </li>
+                </StateList>
               )
             })}
           </ul>

@@ -75,7 +75,6 @@ const StartGame = ({
     return util.loadData('historyParam');
   }, []);
   const [selectCard, setSelectCard] = useState(!util.loadData('continueGame') ? paramData?.start?.card : []);
-  console.log(selectCard);
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
   const [selectGradeArr, setSelectGradeArr] = useState([]); //시작 카드 유형 배열

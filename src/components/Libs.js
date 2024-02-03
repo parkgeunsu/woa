@@ -78,16 +78,15 @@ export const util = { //this.loadImage();
     }
   },
   getEnemyState: (enemyData, gameData) => {
-    const stateArr = gameData.stateName;
     let battleState_ = [];
     let enemy = {};
     const itemEff = util.getItemEff('', enemyData, gameData.items, true);
-    for (const idx of stateArr.keys()) {
+    for (const idx of gameData.stateName.keys()) {
       const st = gameData.ch[enemyData.idx]['st' + idx] || 0;
       battleState_[idx] = st;
     }
-    battleState_[7] = gameData.ch[enemyData.idx].st3 + gameData.ch[enemyData.idx].st5 + gameData.ch[enemyData.idx].st6;
-    battleState_[8] = Math.round(Math.random()*200);
+    battleState_[7] = gameData.ch[enemyData.idx].st3 + gameData.ch[enemyData.idx].st5 + gameData.ch[enemyData.idx].st6; //속도
+    battleState_[8] = Math.round(Math.random()*200); //행운
     const battleState = util.getTotalState(battleState_);
     //등급에 따른 추가 능력치
     let addGradePercent = 1;
@@ -157,16 +156,15 @@ export const util = { //this.loadImage();
     return enemy;
   },
   saveLvState: (saveSlot, obj, saveData, gameData) => {//카드 획득시 레벨당 능력치 저장(캐릭터 저장된 슬롯번호, {카드등급, 아이템 이펙트등...})
-    const stateArr = gameData.stateName;
     let battleState_ = [];
     let saveChSlot = saveData.ch[saveSlot] || obj.newState;
-    for (const idx of stateArr.keys()) {
+    for (const idx of gameData.stateName.keys()) {
       const st = gameData.ch[saveChSlot.idx]['st' + idx] || 0;
       saveChSlot['st' + idx] = st//현재능력치
       battleState_[idx] = st;
     }
     saveChSlot['st7'] = saveChSlot.stateLuk; //행운
-    battleState_[7] = gameData.ch[saveChSlot.idx].st3 + gameData.ch[saveChSlot.idx].st5 + gameData.ch[saveChSlot.idx].st6; //속도?
+    battleState_[7] = gameData.ch[saveChSlot.idx].st3 + gameData.ch[saveChSlot.idx].st5 + gameData.ch[saveChSlot.idx].st6; //속도
     battleState_[8] = saveChSlot.stateLuk; //행운
     //등급에 따른 추가 능력치
     let addGradePercent = 1;
@@ -184,7 +182,6 @@ export const util = { //this.loadImage();
       const iSt = util.compileState(saveChSlot[`el${i}`], obj.itemEff[i+15]);
       saveChSlot['iSt' + (i+15)] = iSt;
     }
-    // console.log(saveChSlot);//animal_type
     for (const idx of gameData.element.keys()) {
       saveChSlot = {
         ...saveChSlot,
@@ -273,7 +270,7 @@ export const util = { //this.loadImage();
     } else {
       saveItems = typeof idx === 'number' ? saveCh[idx].items : [{}, {}, {}, {}, {}, {}, {}, {}];
     }
-    //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(21),암(22),수(23),화(24),풍(25),지(26), 진형(100)
+    //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 쪼기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(21),암(22),수(23),화(24),풍(25),지(26), 진형(100)
     let effData = [];
     for (const item of saveItems) {
       if(Object.keys(item).length !== 0){
@@ -557,8 +554,8 @@ export const util = { //this.loadImage();
     return totalEff;
   },
   getEffectType: (num, type) => {
-    //eff type(효과 dmg_type&buff_type) 찌르기(0),할퀴기(1),물기(2),치기(3),누르기(4),독(11),명(12),암(13),수(14),화(15),풍(16),지(17), 공(21),방(22),술공(23),술방(24),HP(25),SP(26),RSP(27),속도(28),명중(29),진형(100)
-    let arr = ['체력(HP)','행동력(SP)','행동회복력(RSP)','공격력(ATK)','방어력(DEF)','술법공격력(MAK)','술법방어력(MDF)','회복력(RCV)','속도(SPD)','행운(LUK)','찌르기','할퀴기','물기','치기','누르기','던지기','','','','','',
+    //eff type(효과 dmg_type&buff_type) 쪼기(0),할퀴기(1),물기(2),치기(3),누르기(4),독(11),명(12),암(13),수(14),화(15),풍(16),지(17), 공(21),방(22),술공(23),술방(24),HP(25),SP(26),RSP(27),속도(28),명중(29),진형(100)
+    let arr = ['체력(HP)','행동력(SP)','행동회복력(RSP)','공격력(ATK)','방어력(DEF)','술법공격력(MAK)','술법방어력(MDF)','회복력(RCV)','속도(SPD)','행운(LUK)','쪼기','할퀴기','물기','치기','누르기','던지기','','','','','',
     '빛','어둠','물','불','바람','땅','빛 강화','어둠 강화','물 강화','불 강화',
     '바람 강화','땅 강화','','','','','','','','',
     '','','','','','','','','','',
@@ -567,7 +564,7 @@ export const util = { //this.loadImage();
     '','','','','','','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','진형'];
-    let arr_ko = ['체력','행동력','행동회복력','공격력','방어력','술법공격력','술법방어력','회복력','속도','행운','찌르기','할퀴기','물기','치기','누르기','던지기','','','','','',
+    let arr_ko = ['체력','행동력','행동회복력','공격력','방어력','술법공격력','술법방어력','회복력','속도','행운','쪼기','할퀴기','물기','치기','누르기','던지기','','','','','',
     '빛','어둠','물','불','바람','땅','어둠 강화','물 강화','불 강화',
     '바람 강화','땅 강화','','','','','','','','',
     '','','','','','','','','','',
@@ -586,7 +583,7 @@ export const util = { //this.loadImage();
     '','','','','','','','','','',
     '','','','','','','','','','Formation'];
 
-    //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 찌르기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(20),암(21),수(22),화(23),풍(24),지(25), 진형(100)
+    //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 쪼기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(20),암(21),수(22),화(23),풍(24),지(25), 진형(100)
   
     if (type === 'en') {
       return arr_en[num];
@@ -722,85 +719,65 @@ export const util = { //this.loadImage();
   getStateName: (type) => {
     switch (type) {
       case 0:
-        return 'HP';
+        return 'hp';
       case 1:
-        return 'SP';
+        return 'sp';
       case 2:
-        return 'RSP';
+        return 'rsp';
       case 3:
-        return 'ATK';
+        return 'atk';
       case 4:
-        return 'DEF';
+        return 'def';
       case 5:
-        return 'MAK';
+        return 'mak';
       case 6:
-        return 'MDF';
+        return 'mdf';
       case 7:
-        return 'RCV';
+        return 'rcv';
       case 8:
-        return 'SPD';
+        return 'spd';
       case 9:
-        return 'LUK';
-      case 50:
-        return 'BLEEDING';
-      case 51:
-        return 'ADDICTED';
-      case 52:
-        return 'PETRIFICATION';
-      case 53:
-        return 'CONFUSION';
-      case 54:
-        return 'FAINT';
-      case 55:
-        return 'TRANSFORM';
-      case 100:
-        return 'FORMATION';
-      default:
-        break;
-    }
-  },
-  getMagicState: (type) => {
-    switch (type) {
-      case 0:
-        return 'HP';
-      case 1:
-        return 'SP';
-      case 2:
-        return 'RSP';
-      case 3:
-        return 'ATK';
-      case 4:
-        return 'DEF';
-      case 5:
-        return 'MAK';
-      case 6:
-        return 'MDF';
-      case 7:
-        return 'RCV';
-      case 8:
-        return 'SPD';
-      case 9:
-        return 'ATK';
-      case 10:
-        return 'ATK';
+        return 'luk';
       case 11:
-        return 'ATK';
+        return 'peck';
       case 12:
-        return 'ATK';
+        return 'claw';
       case 13:
-        return 'ATK';
+        return 'bite';
       case 14:
-        return 'ATK';
-      case 20:
-        return 'ATK';
+        return 'hit';
+      case 15:
+        return 'press';
       case 16:
-        return 'ATK';
+        return 'throw';
       case 17:
-        return 'ATK';
+        return 'light';
       case 18:
-        return 'ATK';
+        return 'dark';
+      case 19:
+        return 'water';
+      case 20:
+        return 'fire';
+      case 21:
+        return 'wind';
+      case 22:
+        return 'earth';
+      case 50:
+        return 'bleeding';
+      case 51:
+        return 'addicted';
+      case 52:
+        return 'petrification';
+      case 53:
+        return 'confusion';
+      case 54:
+        return 'faint';
+      case 55:
+        return 'transform';
+      case 100:
+        return 'formation';
       default:
-        break;
+        return type;
     }
   },
   getPercentNumber: (plusNum, nowNum) => {
@@ -1360,7 +1337,7 @@ export const util = { //this.loadImage();
         addEff:[],
         mark:'',
         markNum:0,
-        modifier:{ko:'미개봉',en:'Sealed'},
+        modifier:{ko:'미확인',en:'unSealed',jp:'未確認'},
         weaponType:weaponType,
         sealed:true,
         favorite:0,
@@ -1405,7 +1382,7 @@ export const util = { //this.loadImage();
         [[10,30],[30,60],[10,100]], //회복력
         [[1,10],[10,25],[1,40]], //속도
         [[10,20],[20,50],[10,100]], //행운
-        [[1,15],[5,15],[1,20]], //찌르기
+        [[1,15],[5,15],[1,20]], //쪼기
         [[1,15],[5,15],[1,20]], //할퀴기
         [[1,15],[5,15],[1,20]], //물기
         [[1,15],[5,15],[1,20]], //치기
@@ -1483,8 +1460,16 @@ export const util = { //this.loadImage();
         return 1;
       }
     })();
-    const animalModifier = [`${mark !== '' ? gameData.animal_type[mark].na.ko : ''}${gameData.items.markModifier.ko[markNum]}`,`${gameData.items.markModifier.en[markNum]} ${mark !== '' ? gameData.animal_type[mark].na.en : ''}${markNum > 1 ? 's' : ''}`];
-    const modifier = {ko:gameData.items.slotModifier.ko[slotNum] + ' ' + animalModifier[0],en:gameData.items.slotModifier.en[slotNum] + ' ' + animalModifier[1]};
+    const animalModifier = [
+      `${mark !== '' ? gameData.animal_type[mark].na.ko : ''}${gameData.items.markModifier.ko[markNum]}`,
+      `${gameData.items.markModifier.en[markNum]} ${mark !== '' ? gameData.animal_type[mark].na.en : ''}${markNum > 1 ? 's' : ''}`,
+      `${mark !== '' ? gameData.animal_type[mark].na.jp : ''}${gameData.items.markModifier.jp[markNum]}`,
+    ];
+    const modifier = {
+      ko:gameData.items.slotModifier.ko[slotNum] + ' ' + animalModifier[0],
+      en:gameData.items.slotModifier.en[slotNum] + ' ' + animalModifier[1],
+      jp:gameData.items.slotModifier.jp[slotNum] + ' ' + animalModifier[2],
+    };
     itemLv -= slotNum * 5;
     const itemObj = {
       id:id,
@@ -1778,6 +1763,25 @@ export const util = { //this.loadImage();
     });
     return blockPercent.filter((block) => percent < block.num)[0].idx;
   },
+  getSkillText: (skillObj) => { //스킬 텍스트 전환 $(0), $<0>
+    const {skill, lv, lang} = skillObj;
+    const cate = skill.cate[0];
+    const replaceArr = skill.txt[lang].match(/[$][(]\d[)]*/g) || [];
+    const replaceArr_ = skill.txt[lang].match(/[$][<]\d[>]*/g) || [];
+    const skillType = skill.element_type;
+    let replaceText = skill.txt[lang];
+    replaceArr.forEach((data, idx) => {
+      replaceText = replaceText.replace(data, skill.eff[idx].num[lv >= 0 ? lv : 0]);
+    });
+    replaceArr_.forEach((data, idx) => {
+      replaceText = replaceText.replace(data, skill.buff[idx].num[lv >= 0 ? lv : 0]);
+    });
+    return {
+      skillText: replaceText,
+      skillType: skillType,
+      skillCate: cate,
+    }
+  },
   typeToStartIdx: (type) => {
     switch(type) {
       case 'equip':
@@ -1817,11 +1821,12 @@ export const util = { //this.loadImage();
       case 'scenario':
         return 7;
       case 'job':
+      case 'skillBack':
         return 9;
       case 'star':
         return 12;
       default:
-        break;
+        return 0;
     }
   },
   iconHNum: (type) => {
@@ -1851,8 +1856,30 @@ export const util = { //this.loadImage();
         return [12, 5];
       case 'moveEventCountry':
         return [14, 1];
+      case 'skill':
+        return [10, 30];
       default:
         break;
     }
-  }
+  },
+  idxToSkillBack: (cateIdx) => {
+    switch(cateIdx) {
+      case 2: //passive
+        return 4;
+      case 3: //active
+        return 1;
+      case 4: //defence
+        return 0;
+      case 5: //buff
+        return 2;
+      case 7: //active + debuff & buff
+      case 8:
+      case 9:
+        return 6;
+      case 6: //debuff
+        return 5;
+      default: //job, weather
+        return 3;
+    }
+  },
 }

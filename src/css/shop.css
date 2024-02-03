@@ -7,7 +7,7 @@
 .shop_bottom .item_select1{border:5px double #ffac2f;}
 .shop_bottom .item_select2{margin:0 0 0 5px;border:5px double #e14040;}
 .shop_bottom .item_select > div{padding:5px;width:100%;box-sizing:border-box;}
-.shop_bottom .item_select1 .item_fix{padding:5px;border-bottom:5px double #ffac2f;}
+.shop_bottom .item_select1 .item_fix{position:relative;padding:5px;border-bottom:5px double #ffac2f;}
 .shop_bottom .item_select2 .item_fix{padding:5px;border-bottom:5px double #e14040;}
 .shop_bottom .item_select .item{position:relative;width:50px;height:50px;}
 .shop_bottom .item_select .item:after{position:absolute;left:50%;top:2px;transform:translate(-50%,0);color:#fff;text-shadow:-1px -1px 0 #fff,1px 1px 0 #000;}
@@ -79,3 +79,17 @@
 .shop_bottom.trading .item_fix{padding:5px;border-bottom:5px double #ffac2f;}
 .shop_bottom.trading .item_footer{padding:10px 20px 0;}
 .shop_bottom.trading .item_footer .item_button{margin:5px 0 0 0;}
+
+
+
+
+
+
+/*character*/
+.stone_w:after{background:radial-gradient(farthest-side at 35% 35%, #fff, #000);}
+.stone_k:after{background:radial-gradient(farthest-side at 35% 35%, #777, #000);}
+.stone_r:after{background:radial-gradient(farthest-side at 35% 35%, #f38, #000);}
+.stone_b:after{background:radial-gradient(farthest-side at 35% 35%, #37f, #000);}
+.stone_y:after{background:radial-gradient(farthest-side at 35% 35%, #f83, #000);}
+.stone_g:after{background:radial-gradient(farthest-side at 35% 35%, #3f7, #000);}
+.stone_empty:after{background:#000;}

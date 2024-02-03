@@ -1,7 +1,6 @@
 import { AppContext } from 'App';
 import { FlexBox } from 'components/Container';
 import { RadioBox } from 'components/Input';
-import { util } from 'components/Libs';
 import { ListItem, ListWrap } from 'components/List';
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -85,27 +84,22 @@ const Setup = ({
   const changeLanguage = (v) => {
     setLang(langToIndex(v));
     setLanguageValue(v);
-    util.saveData('language', langToIndex(v));
   }
   const changeSound = (v) => {
     setSoundValue(v);
     setBgm(v);
-    util.saveData('bgm', v);
   }
   const changeEffect = (v) => {
     setEffectValue(v);
     setEfm(v);
-    util.saveData('efm', v);
   }
   const changeResolution = (v) => {
     setResolutionValue(v);
     setRes(v);
-    util.saveData('resolution', v);
   }
   const changeSpeed = (v) => {
     setSpeedValue(v);
     setSpeed(v + 1);
-    util.saveData('speed', v + 1);
   }
   return (
     <Wrap>
