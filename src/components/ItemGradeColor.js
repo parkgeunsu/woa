@@ -121,9 +121,10 @@ const ItemGradeColor = ({
   impossible,
   size,
   children,
+  ...rest
 }) => {
   return (
-    <ItemContainer part={part} grade={grade} sealed={sealed} impossible={impossible} size={size}>
+    <ItemContainer part={part} grade={grade} sealed={sealed} impossible={impossible} size={size} {...rest}>
       {children}
     </ItemContainer>
   )

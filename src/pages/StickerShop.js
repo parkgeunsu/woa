@@ -9,7 +9,6 @@ import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import TabMenu from 'components/TabMenu';
 import 'css/shop.css';
-import useLongPress from 'hooks/useLongPress';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -302,12 +301,6 @@ const StickerShop = ({
 				break;
 		}
 	}, [shopType]);
-	const LongPress = ({
-		clickHandler,
-		longPressHandler,
-	}) => {
-		return useLongPress(clickHandler, longPressHandler);
-	}
 	const [selectArea, setSelectArea] = useState('area1');
 	const [selectItem1, setSelectItem1] = useState({save:{},game:{},select:'',selectTab:'',
 	bottomType:'',buttonType:[]});
@@ -324,16 +317,14 @@ const StickerShop = ({
 			});
 		}
 	}, [sData]);
-  const handlePopup = useCallback((itemType, itemIdx, itemSaveSlot, tapIdx, itemPart, itemGrade, itemWeaponType) => {
-    const saveItemData = item[tapIdx][itemSaveSlot];
+  const handlePopup = useCallback((saveObj) => {
+		const {saveItemData, itemType, itemIdx} = saveObj;
 		setPopupType(itemType);
-    const itemsGrade = itemGrade < 5 ? 0 : itemGrade - 5;
-    const gameItemData = itemPart === 3 ? gameItem['equip'][itemPart][itemWeaponType][itemsGrade][itemIdx] : gameItem['equip'][itemPart][0][itemsGrade][itemIdx];
-    //     gameItemData = gameItem[itemType][itemIdx];
+    const gameItemData = saveItemData.part === 3 ? gameItem['equip'][saveItemData.part][saveItemData.weaponType][saveItemData.quality][itemIdx] : gameItem['equip'][saveItemData.part][0][saveItemData.quality][itemIdx];
 		setPopupInfo({
 			// slotIdx: slotIdx,
 			gameItem: gameItemData,
-			itemSaveSlot: itemSaveSlot,
+			itemSaveSlot: saveItemData.idx,
 			saveItemData: saveItemData,
 			type: itemType,
 		});
@@ -363,99 +354,91 @@ const StickerShop = ({
 										const items = data.part === 3 ? gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx] : gameItem.equip[data.part][0][itemsGrade][data.idx];
 										const itemsHole = data.hole;
 										return items && (
-											<div className={`item_layout ${gameData.itemGrade.txt_e[data.grade].toLowerCase()} ${selectItem1.selectTab === selectTab && selectItem1.select === idx ? 'select1' : ''} ${selectItem2.selectTab === selectTab && selectItem2.select === idx ? 'select2' : ''} favorite${data.favorite}`} key={`items${idx}`} {...LongPress({
-												clickHandler: () => {
-													const itemSelect = {...item[selectTab][idx]};
-													const itemsGrade = itemSelect.grade < 5 ? 0 : itemSelect.grade - 5;
-													const items = itemSelect.part === 3 ? gameItem.equip[itemSelect.part][itemSelect.weaponType][itemsGrade][itemSelect.idx] : gameItem.equip[itemSelect.part][0][itemsGrade][itemSelect.idx];
-													if (shopType === 'shop') {
-														if (selectArea === 'area2') {
-															let button = [];
-															if (selectTab < 3) {
-																button.push('buy');
-															} else {
-																button.push('sell');
-																if (itemSelect.sealed) {
-																	button.push('evaluate');
-																}
-															}
-															if (selectItem1.select !== '' && selectItem1.selectTab === selectTab && selectItem1.select === idx) {
-																setSelectItem1({save:{},game:{},select:'',selectTab:'',bottomType:'',buttonType:[]});
-															}
-															setSelectItem2({
-																save:itemSelect,
-																game:items,
-																select:idx,
-																selectTab:selectTab,
-																bottomType:typeList[scrollIdx].bottomType,
-																buttonType:button,
-															});
+											<div className={`item_layout ${gameData.itemGrade.txt_e[data.grade].toLowerCase()} ${selectItem1.selectTab === selectTab && selectItem1.select === idx ? 'select1' : ''} ${selectItem2.selectTab === selectTab && selectItem2.select === idx ? 'select2' : ''} favorite${data.favorite}`} key={`items${idx}`} onClick={() => {
+												const itemSelect = {...item[selectTab][idx]};
+												const itemsGrade = itemSelect.grade < 5 ? 0 : itemSelect.grade - 5;
+												itemSelect.quality = itemsGrade;
+												const items = itemSelect.part === 3 ? gameItem.equip[itemSelect.part][itemSelect.weaponType][itemsGrade][itemSelect.idx] : gameItem.equip[itemSelect.part][0][itemsGrade][itemSelect.idx];
+												if (shopType === 'shop') {
+													if (selectArea === 'area2') {
+														let button = [];
+														if (selectTab < 3) {
+															button.push('buy');
 														} else {
-															let button = [];
-															if (selectTab < 3) {
-																button.push('buy');
-															} else {
-																button.push('sell');
-																if (itemSelect.sealed) {
-																	button.push('evaluate');
-																}
-															}
-															if (selectItem2.select !== '' && selectItem2.selectTab === selectTab && selectItem2.select === idx) {
-																setSelectItem2({save:{},game:{},select:'',selectTab:'',bottomType:'',buttonType:[]});
-															}
-															setSelectItem1({
-																save:itemSelect,
-																game:items,
-																select:idx,
-																selectTab:selectTab,
-																bottomType:typeList[scrollIdx].bottomType,
-																buttonType:button,
-															});
-														}
-													} else if (shopType === 'inven') {
-														if (selectArea === 'area2') {
-															let button = ['sell'];
-															if (data.sealed) {
+															button.push('sell');
+															if (itemSelect.sealed) {
 																button.push('evaluate');
 															}
-															if (selectItem1.select !== '' && selectItem1.selectTab === typeList[selectTab].na && selectItem1.select === idx) {
-																setSelectItem1({save:{},game:{},select:'',selectTab:'',buttonType:[]});
-															}
-															setSelectItem2({
-																save:data,
-																game:items,
-																select:idx,
-																selectTab:selectTab,
-																bottomType:typeList[scrollIdx].bottomType,
-																buttonType:button,
-															});
-														} else {
-															let button = ['sell'];
-															if (data.sealed) {
-																button.push('evaluate');
-															}
-															if (selectItem2.select !== '' && selectItem2.selectTab === typeList[selectTab].na && selectItem2.select === idx) {
-																setSelectItem2({save:{},game:{},select:'',selectTab:'',buttonType:[]});
-															}
-															setSelectItem1({
-																save:data,
-																game:items,
-																select:idx,
-																selectTab:selectTab,
-																bottomType:typeList[scrollIdx].bottomType,
-																buttonType:button,
-															});
 														}
-													}
-												},
-												longPressHandler: () => {
-													if (shopType === 'shop') {
-														handlePopup((selectTab < 3 ? 'equip' : 'hequip'), data.idx, idx, scrollIdx, data.part, data.grade, data.weaponType);
+														if (selectItem1.select !== '' && selectItem1.selectTab === selectTab && selectItem1.select === idx) {
+															setSelectItem1({save:{},game:{},select:'',selectTab:'',bottomType:'',buttonType:[]});
+														}
+														setSelectItem2({
+															save:itemSelect,
+															game:items,
+															select:idx,
+															selectTab:selectTab,
+															bottomType:typeList[scrollIdx].bottomType,
+															buttonType:button,
+														});
 													} else {
-														handlePopup('hequip', data.idx, idx, scrollIdx, data.part, data.grade, data.weaponType);
+														let button = [];
+														if (selectTab < 3) {
+															button.push('buy');
+														} else {
+															button.push('sell');
+															if (itemSelect.sealed) {
+																button.push('evaluate');
+															}
+														}
+														if (selectItem2.select !== '' && selectItem2.selectTab === selectTab && selectItem2.select === idx) {
+															setSelectItem2({save:{},game:{},select:'',selectTab:'',bottomType:'',buttonType:[]});
+														}
+														setSelectItem1({
+															save:itemSelect,
+															game:items,
+															select:idx,
+															selectTab:selectTab,
+															bottomType:typeList[scrollIdx].bottomType,
+															buttonType:button,
+														});
+													}
+												} else if (shopType === 'inven') {
+													if (selectArea === 'area2') {
+														let button = ['sell'];
+														if (itemSelect.sealed) {
+															button.push('evaluate');
+														}
+														if (selectItem1.select !== '' && selectItem1.selectTab === typeList[selectTab].na && selectItem1.select === idx) {
+															setSelectItem1({save:{},game:{},select:'',selectTab:'',buttonType:[]});
+														}
+														setSelectItem2({
+															save:itemSelect,
+															game:items,
+															select:idx,
+															selectTab:selectTab,
+															bottomType:typeList[scrollIdx].bottomType,
+															buttonType:button,
+														});
+													} else {
+														let button = ['sell'];
+														if (itemSelect.sealed) {
+															button.push('evaluate');
+														}
+														if (selectItem2.select !== '' && selectItem2.selectTab === typeList[selectTab].na && selectItem2.select === idx) {
+															setSelectItem2({save:{},game:{},select:'',selectTab:'',buttonType:[]});
+														}
+														setSelectItem1({
+															save:itemSelect,
+															game:items,
+															select:idx,
+															selectTab:selectTab,
+															bottomType:typeList[scrollIdx].bottomType,
+															buttonType:button,
+														});
 													}
 												}
-											})}>
+											}}>
 												<span className={`pic ${data.sealed ? "sealed" : ""}`}>
 													<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.svgColor || data.id)}}>
 													</svg>
@@ -531,7 +514,21 @@ const StickerShop = ({
 										<span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.save.colorantSet ? util.getColorant(selectItem1.save.colorantSet, gameData).na[lang] : ''} ${selectItem1.save.modifier[lang]} ${selectItem1.game.na[lang]}`}}></span>
 									</ItemHeader>
 									<ItemFix itemSelect="select1">
-										<ItemGradeColor part={selectItem1.game.part} grade={gameData.itemGrade.txt_e[selectItem1.save.grade].toLowerCase()} sealed={selectItem1.save.sealed} size="50">
+										<ItemGradeColor part={selectItem1.game.part} grade={gameData.itemGrade.txt_e[selectItem1.save.grade].toLowerCase()} sealed={selectItem1.save.sealed} size="50" onClick={() => {
+											if (shopType === 'shop') {
+												handlePopup({
+													saveItemData: selectItem1.save,
+													itemType: (selectTab < 3 ? 'equip' : 'hequip'),
+													itemIdx: selectItem1.idx,
+												});
+											} else {
+												handlePopup({
+													saveItemData: selectItem1.save,
+													itemType: 'hequip',
+													itemIdx: selectItem1.idx,
+												});
+											}
+										}}>
 											<ItemPic type="equip" className={`item favorite${selectItem1.save.favorite}`}>
 												<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem1.game.display], selectItem1.save.color, selectItem1.save.svgColor || selectItem1.save.id)}}></svg>
 											</ItemPic>
@@ -547,7 +544,7 @@ const StickerShop = ({
 										</div>
 									</ItemFix>
 									<div className="scroll-y">
-										{(selectItem1.save.markNum > 0 || selectItem1.save.hole > 0) && <ItemList type="typeSlot" className="item_list">
+										{(selectItem1.save.markNum > 0 || selectItem1.save.hole.length > 0) && <ItemList type="typeSlot" className="item_list">
 											<div className="item_type">
 												<MarkPic length={selectItem1.save.markNum} pic="animalType" idx={selectItem1.save.mark} />
 											</div>
@@ -609,7 +606,13 @@ const StickerShop = ({
 										<span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.game.na[lang]}`}}></span>
 									</ItemHeader>
 									<ItemFix itemSelect="select1">
-										<ItemGradeColor grade={gameData.itemGrade.txt_e[selectItem1.save.grade || selectItem1.game.grade].toLowerCase()} size="50">
+										<ItemGradeColor grade={gameData.itemGrade.txt_e[selectItem1.save.grade || selectItem1.game.grade].toLowerCase()} size="50" onClick={() => {
+											handlePopup({
+												saveItemData: selectItem1.save,
+												itemType: 'hole',
+												itemIdx: selectItem1.idx,
+											});
+										}}>
 											<ItemPic pic="itemEtc" type={selectItem1.bottomType} idx={selectItem1.game.display} />
 										</ItemGradeColor>
 										<div flex-h="true" style={{flex: 1,}}>
@@ -642,7 +645,13 @@ const StickerShop = ({
 										<span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.game.na[lang]}`}}></span>
 									</ItemHeader>
 									<ItemFix itemSelect="select1">
-										<ItemGradeColor grade={gameData.itemGrade.txt_e[selectItem1.save.grade || selectItem1.game.grade].toLowerCase()} size="50">
+										<ItemGradeColor grade={gameData.itemGrade.txt_e[selectItem1.save.grade || selectItem1.game.grade].toLowerCase()} size="50" onClick={() => {
+											handlePopup({
+												saveItemData: selectItem1.save,
+												itemType: typeList[selectTab].na,
+												itemIdx: selectItem1.idx,
+											});
+										}}>
 											<ItemPic pic="itemEtc" type={typeList[selectTab].na} idx={selectItem1.game.display} />
 										</ItemGradeColor>
 										<div flex-h="true" style={{flex: 1,}}>
@@ -765,10 +774,7 @@ const StickerShop = ({
 														showPopup: setPopupOn,
 														lang: lang,
 													});
-													setSelectItem1({
-														...selectItem1,
-														save:{...item[selectTab][selectItem1.select]},
-													});
+													setSelectItem1({save:{},game:{},select:'',selectTab:'',bottomType:'',buttonType:[]})
 												}} data-buttontype="itemSell">{gameData.msg.button.emotions[lang]}</button>
 											);
 										case 'use':
@@ -791,7 +797,7 @@ const StickerShop = ({
 														showPopup: setPopupOn,
 														lang: lang,
 													});
-													setSelectItem1({save:[],game:[],buttonType:[],selectTab:'',select:''});
+													setSelectItem1({save:{},game:{},select:'',selectTab:'',bottomType:'',buttonType:[]});
 												}} data-buttontype="itemUse">{gameData.msg.button.use[lang]}</button>
 											)
 										default:
@@ -816,7 +822,21 @@ const StickerShop = ({
 										<span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.save.modifier[lang]} ${selectItem2.game.na[lang]}`}}></span>
 									</ItemHeader>
 									<ItemFix itemSelect="select2">
-										<ItemGradeColor part={selectItem2.game.part} grade={gameData.itemGrade.txt_e[selectItem2.save.grade].toLowerCase()} sealed={selectItem2.save.sealed} size="50">
+										<ItemGradeColor part={selectItem2.game.part} grade={gameData.itemGrade.txt_e[selectItem2.save.grade].toLowerCase()} sealed={selectItem2.save.sealed} size="50" onClick={() => {
+											if (shopType === 'shop') {
+												handlePopup({
+													saveItemData: selectItem2.save,
+													itemType: (selectTab < 3 ? 'equip' : 'hequip'),
+													itemIdx: selectItem2.idx,
+												});
+											} else {
+												handlePopup({
+													saveItemData: selectItem2.save,
+													itemType: 'hequip',
+													itemIdx: selectItem2.idx,
+												});
+											}
+										}}>
 											<ItemPic type="equip" className={`item favorite${selectItem2.save.favorite}`}>
 												<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem2.game.display], selectItem2.save.color, selectItem2.save.svgColor ||selectItem2.save.id)}}></svg>
 											</ItemPic>
@@ -832,7 +852,7 @@ const StickerShop = ({
 										</div>
 									</ItemFix>
 									<div className="scroll-y">
-										{(selectItem2.save.markNum > 0 || selectItem2.save.hole > 0) && <ItemList type="typeSlot" className="item_list">
+										{(selectItem2.save.markNum > 0 || selectItem2.save.hole.length > 0) && <ItemList type="typeSlot" className="item_list">
 											<div className="item_type">
 												<MarkPic length={selectItem2.save.markNum} pic="animalType" idx={selectItem2.save.mark} />
 											</div>
@@ -894,7 +914,13 @@ const StickerShop = ({
 										<span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.game.na[lang]}`}}></span>
 									</ItemHeader>
 									<ItemFix itemSelect="select1">
-										<ItemGradeColor grade={gameData.itemGrade.txt_e[selectItem2.save.grade || selectItem2.game.grade].toLowerCase()} size="50">
+										<ItemGradeColor grade={gameData.itemGrade.txt_e[selectItem2.save.grade || selectItem2.game.grade].toLowerCase()} size="50" onClick={() => {
+											handlePopup({
+												saveItemData: selectItem2.save,
+												itemType: 'hole',
+												itemIdx: selectItem2.idx,
+											});
+										}}>
 											<ItemPic pic="itemEtc" type={selectItem2.bottomType} idx={selectItem2.game.display} />
 										</ItemGradeColor>
 										<div flex-h="true" style={{flex: 1,}}>
@@ -927,7 +953,13 @@ const StickerShop = ({
 										<span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.game.na[lang]}`}}></span>
 									</ItemHeader>
 									<ItemFix itemSelect="select1">
-										<ItemGradeColor grade={gameData.itemGrade.txt_e[selectItem2.save.grade || selectItem2.game.grade].toLowerCase()} size="50">
+										<ItemGradeColor grade={gameData.itemGrade.txt_e[selectItem2.save.grade || selectItem2.game.grade].toLowerCase()} size="50" onClick={() => {
+											handlePopup({
+												saveItemData: selectItem2.save,
+												itemType: typeList[selectTab].na,
+												itemIdx: selectItem2.idx,
+											});
+										}}>
 											<ItemPic pic="itemEtc" type={typeList[selectTab].na} idx={selectItem2.game.display} />
 										</ItemGradeColor>
 										<div flex-h="true" style={{flex: 1,}}>
@@ -1040,10 +1072,7 @@ const StickerShop = ({
 															showPopup: setPopupOn,
 															lang: lang,
 														});
-														setSelectItem2({
-															...selectItem2,
-															save:{...item[selectTab][selectItem2.select]},
-														});
+														setSelectItem2({save:{},game:{},select:'',selectTab:'',bottomType:'',buttonType:[]});
 													}} data-buttontype="itemSell">{gameData.msg.button.emotions[lang]}</button>
 												);
 											case 'use':
@@ -1066,7 +1095,7 @@ const StickerShop = ({
 															showPopup: setPopupOn,
 															lang: lang,
 														});
-														setSelectItem2({save:[],game:[],buttonType:[],selectTab:'',select:''});
+														setSelectItem2({save:{},game:{},select:'',selectTab:'',bottomType:'',buttonType:[]});
 													}} data-buttontype="itemUse">{gameData.msg.button.use[lang]}</button>
 												)
 											default:

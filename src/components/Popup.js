@@ -1029,7 +1029,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             <CharacterCard saveData={saveData} slotIdx={dataObj.selectIdx} />
           </div>
           <div className="select_rBox" flex-v="true">
-            <Img imgurl={imgSet.passive[gameData.skill[skillIdx].effAnimation]} />
+            {/* <Img imgurl={imgSet.passive[gameData.skill[skillIdx].effAnimation]} /> */}
             {dataObj.selectIdx !== '' ? <ul className="select_chState">
               <li>통솔: {saveData.ch[dataObj.selectIdx].rSt0}</li>
               <li>체력: {saveData.ch[dataObj.selectIdx].rSt1}</li>
