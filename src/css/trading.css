@@ -57,7 +57,6 @@
 .trading_area .item_select .item_list .item_slot .item_holes.fixed .item_holeback{background:rgba(255,172,47,.7);}
 .trading_area .item_select .item_list.item_hole{padding:0 10px;}
 .trading_area .item_select .item_list .item_holes img{margin:2px 0 0 0;width:20px;height:20px;vertical-align:middle;}
-.trading_area .item_select .item_list .item_holeName{display:inline-block;margin:0 0 0 5px;color:#e14040;font-weight:600;}
 .trading_area .item_select .item_list.item_set{margin:0 0 10px 0;padding:0 10px;}
 .trading_area .item_select .item_list .item_setNa{margin:0 0 10px 0;color:#0f0;font-size:14px;}
 .trading_area .item_select1 .item_footer{padding:5px;border-top:5px double #ffac2f;}

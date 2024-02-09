@@ -438,7 +438,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             <div className="item_setNa">{setsInfo.na}</div>
             {setsInfo.part && setsInfo.part.map((data, idx) => {
               return (
-                <div key={idx} className={`item_set_piece ${getSetChk(saveData.ch[dataObj.slotIdx].items, data)}`}>{gameData.items.equip[data].na}</div>
+                <div key={idx} className={`item_set_piece ${dataObj.slotIdx ? getSetChk(saveData.ch[dataObj.slotIdx].items, data) : ''}`}>{gameData.items.equip[data].na}</div>
               ) 
             })}
           </PopupItemList>
@@ -563,7 +563,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             <div className="item_setNa">{setsInfo.na}</div>
             {setsInfo.part && setsInfo.part.map((data, idx) => {
               return (
-                <div key={idx} className={`item_set_piece ${getSetChk(saveData.ch[dataObj.slotIdx].items, data)}`}>{gameData.items.equip[data].na}</div>
+                <div key={idx} className={`item_set_piece ${dataObj.slotIdx ? getSetChk(saveData.ch[dataObj.slotIdx].items, data) : ''}`}>{gameData.items.equip[data].na}</div>
               ) 
             })}
           </PopupItemList>

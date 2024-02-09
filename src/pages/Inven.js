@@ -1,28 +1,93 @@
 import { AppContext } from 'App';
 import { ItemPic, MarkPic } from 'components/ImagePic';
+import ItemGradeColor from 'components/ItemGradeColor';
 import { util } from 'components/Libs';
 import TabMenu from 'components/TabMenu';
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import ItemGradeColor from 'components/ItemGradeColor';
 
 const InvenWrap = styled.div`
-	background:url(${({backImg}) => backImg});background-size:cover;
+`;
+const InvenTop = styled.div`
+	display: flex;
+	margin: 0 0 10px 0;
+	height: calc(50% - 10px);
+	padding: 0 20px;
+	flex-grow: 1;
+`;
+const InvenTopLeft = styled.div`
+	position: relative;
+	width: 30%;
+`;
+const InvenScrollContent = styled.div`
+	position: relative;
+	padding: 5px;
+	flex-wrap: wrap;
+	width: 70%;
+	height: 100%;
+	border-radius: 0 10px 10px 10px;
+	background: rgba(0,0,0,.5);
+	box-sizing: border-box;
+`;
+const InvenBottom = styled.div`
+	display: flex;
+	padding: 0 20px;
+	height: 50%;
 `;
 const ItemContainer = styled.ul`
-  border: 5px solid transparent;
+  display: flex;
+	${({itemSelect}) => itemSelect === 'select1' ? `
+		border: 3px double #ffac2f;
+	` : `
+		margin: 0 0 0 5px;
+		border: 3px double #e14040;
+	`}
+	flex-direction: column;
+	width: 50%;
+	background: rgba(0,0,0,.7);
   border-image: url(${({frameBack}) => frameBack}) 5 round;
+	& > div {
+		padding: 5px;
+		width: 100%;
+		box-sizing: border-box;
+	}
 	&.on {
 		outline: 5px solid #000;
 	}
-  .item_header {border:5px solid transparent;
-  border-image: url(${({frameBack}) => frameBack}) 5 round;
-  }
-  .item_name {
-		color:${({ color }) => color};
-		text-shadow:-1px -1px 1px rgba(255,255,255,.5), 1px 1px 1px #000;
-		text-align: center;
+	.item {
+		position: relative;
+		width: 50px;
+		height: 50px;
+	}
+	.item:after {
+		content: '';
+		position: absolute;
+		left: 50%;
+		top: 2px;
+		transform: translate(-50%,0);
+		color: #fff;
+		text-shadow: -1px -1px 0 #fff, 1px 1px 0 #000;
+	}
+	.item.favorite1:after {
+		content: '■';
+		color: #ffff00;
+	}
+	.item.favorite2:after {
+		content: '♥';
+		color: #ff0000;
+	}
+	.item.favorite3:after {
+		content: '●';
+		color: #ff00ff;
+	}
+	.item.favorite4:after {
+		content: '♠';
+		color: #00ffff;
+	}
+	.item.favorite5:after {
+		content: '♣';
+		color: #00ff00;
 	}
 `;
 const ItemName = styled.div`
@@ -74,12 +139,12 @@ const Inven = ({
 	}, [saveData]);
   return (
 		<>
-			<InvenWrap className="wrap" backImg={imgSet.back[2]} >
-				<div className="shop_top">
-					<div className="shop_top_left">
+			<InvenWrap className="wrap">
+				<InvenTop>
+					<InvenTopLeft>
 						<TabMenu direction="vertical" list={invenList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" />
-					</div>
-					<div className="shop_item num4 scroll-y">
+					</InvenTopLeft>
+					<InvenScrollContent className="num4 scroll-y">
 						{item[invenList[selectTab].na] && item[invenList[selectTab].na].map((data, idx) => {
 							const cate = invenList[selectTab].na;
 							if (cate === 'equip') {
@@ -307,9 +372,9 @@ const Inven = ({
 								)
 							}
 						})}
-					</div>
-				</div>
-				<div className="shop_bottom">
+					</InvenScrollContent>
+				</InvenTop>
+				<InvenBottom>
 					{Object.keys(selectItem1.save).length !== 0 ? (
 						<ItemContainer className={`item_select item_select1 items ${selectArea === "area1" ? "on" : ""}`} color={gameData.itemGrade.color[selectItem1.save.grade]} onClick={() => {
 							setSelectArea('area1');
@@ -810,7 +875,7 @@ const Inven = ({
 							setSelectArea('area2');
 						}}></ItemContainer>
 					)}
-				</div>
+				</InvenBottom>
 			</InvenWrap>
 			{/* <ModalContainer>
 				{modalOn && <Modal fn={changeGachaMode} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {handleModal()}} gameData={gameData}/>}

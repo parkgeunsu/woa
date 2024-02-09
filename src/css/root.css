@@ -147,7 +147,6 @@ b[buff]{color:#02f;text-shadow:-1px -1px 0px #0df,1px 1px 0px #000;}
 .popup_cont .items .item_list .item_holeback{display:inline-block;background-image:radial-gradient(at 50%, #000 30%, #888 100%);border-radius:30px;width:24px;height:24px;text-align:center;}
 .popup_cont .items .item_list.item_hole{padding:0 10px;}
 .popup_cont .items .item_list .item_holes img{margin:2px 0 0 0;width:20px;height:20px;vertical-align:middle;}
-.popup_cont .items .item_list .item_holeName{display:inline-block;margin:0 0 0 5px;color:#e14040;font-weight:600;}
 .popup_cont .items .item_list.item_set{margin:0 0 10px 0;padding:0 10px;}
 .popup_cont .items .item_list .item_setNa{margin:0 0 10px 0;color:#0f0;font-size:0.875rem;}
 .popup_cont .items .item_list .item_set_piece{margin:0 0 5px 15px;color:#555;}

@@ -15,7 +15,7 @@ import EnhancingStickers from 'pages/EnhancingStickers';
 import Recruitment from 'pages/Gacha';
 import GameMain from 'pages/GameMain';
 import Header from 'pages/Header';
-import Inven from 'pages/Inven';
+// import Inven from 'pages/Inven';
 import Menu from 'pages/Menu';
 import MoveEvent from 'pages/MoveEvent';
 import Sail from 'pages/Sail';
@@ -366,7 +366,7 @@ const App = () => {
 
               <Route path="/cards" element={<Cards saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/inven" element={<Inven saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+              <Route path="/inven" element={<StickerShop shopType="inven" saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
               <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
@@ -382,7 +382,7 @@ const App = () => {
 
               <Route path="/composite" element={<Composite saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/stickerShop" element={<StickerShop saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+              <Route path="/stickerShop" element={<StickerShop shopType="shop" saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
               <Route path="/toolShop" element={<ToolShop saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 

@@ -10,8 +10,8 @@ import PopupContainer from 'components/PopupContainer';
 import React, { useCallback, useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { util } from 'components/Libs';
 import ItemGradeColor from 'components/ItemGradeColor';
+import { util } from 'components/Libs';
 import CharacterAnimalSkill from 'pages/CharacterAnimalSkill';
 import CharacterApplyState from 'pages/CharacterApplyState';
 import CharacterCard from 'pages/CharacterCard';
@@ -365,8 +365,10 @@ const Cards = ({
                       }
                       return chk;
                     })();
-                    return (
-                      <ItemList key={`hequip${idx}`} onClick={() => {handlePopup('hequip', data.idx, idx, data.part, data.grade, data.weaponType)}} data-itemnum={`equip_${data.idx}`}>
+                    return items && (
+                      <ItemList key={`hequip${idx}`} onClick={() => {
+                        handlePopup('hequip', data.idx, idx, data.part, data.grade, data.weaponType);
+                      }} data-itemnum={`equip_${data.idx}`}>
                         <ItemGradeColor part={data.part} grade={gameData.itemGrade.txt_e[data.grade].toLowerCase()} sealed={data.sealed} impossible={equipPossible}>
                           <ItemPic type="equip" className={`pic`}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.svgColor || data.id)}}>

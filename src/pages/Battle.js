@@ -525,14 +525,14 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 		let buffDebuff = []; //버프 임시저장 변수
 		if (timeLine[turnIdx].order.team === 'ally') {//캐릭 상태이상으로 스킵 체크
 			const allyState = battleAlly[timeLine[turnIdx].order.idx].state;
-			if (allyState.indexOf('die') >= 0 || allyState.indexOf('petrification') >= 0 || allyState.indexOf('confusion') >= 0 || allyState.indexOf('faint') >= 0) {//죽은 상태, 석화, 혼란, 기절
+			if (allyState.indexOf('die') >= 0 || allyState.indexOf('petrification') >= 0 || allyState.indexOf('confusion') >= 0 || allyState.indexOf('stun') >= 0) {//죽은 상태, 석화, 혼란, 기절
 				skillCate = 1;
 			} else if (allyState.indexOf('bleeding') >= 0) {//출혈
 			} else if (allyState.indexOf('transform') >= 0) {//변이
 			}
 		} else {
 			const enemyState = battleEnemy[timeLine[turnIdx].order.idx].state;
-			if (enemyState.indexOf('die') >= 0 || enemyState.indexOf('petrification') >= 0 || enemyState.indexOf('confusion') >= 0 || enemyState.indexOf('faint') >= 0) {//죽은 상태
+			if (enemyState.indexOf('die') >= 0 || enemyState.indexOf('petrification') >= 0 || enemyState.indexOf('confusion') >= 0 || enemyState.indexOf('stun') >= 0) {//죽은 상태, 석화, 혼란, 기절
 				skillCate = 1;
 			} else if (enemyState.indexOf('bleeding') >= 0) {//출혈
 			} else if (enemyState.indexOf('transform') >= 0) {//변이
@@ -1769,10 +1769,10 @@ const passiveBuff = (gameData, battleAlly, battleEnemy, allyEnemyPassive, allyPa
 					ccSingle = 'confusion';
 					cc += ' confusion';
 					break;
-				case 'faint':
+				case 'stun':
 					state = '';
-					ccSingle = 'faint';
-					cc += ' faint';
+					ccSingle = 'stun';
+					cc += ' stun';
 					break;
 				case 'transform':
 					state = '';
@@ -2065,10 +2065,10 @@ const passiveBuff = (gameData, battleAlly, battleEnemy, allyEnemyPassive, allyPa
 					ccSingle = 'confusion';
 					cc += ' confusion';
 					break;
-				case 'faint':
+				case 'stun':
 					state = '';
-					ccSingle = 'faint';
-					cc += ' faint';
+					ccSingle = 'stun';
+					cc += ' stun';
 					break;
 				case 'transform':
 					state = '';
@@ -2926,7 +2926,7 @@ const Battle = ({
 	};
 	useLayoutEffect(() => {
 		const state = battleAlly.current[orderIdx]?.state;
-		if (state && (state.indexOf('petrification') >= 0 || state.indexOf('confusion') >= 0 || state.indexOf('faint') >= 0)) { //상태 이상일 경우 다음 캐릭으로 이동
+		if (state && (state.indexOf('petrification') >= 0 || state.indexOf('confusion') >= 0 || state.indexOf('stun') >= 0)) { //상태 이상일 경우 다음 캐릭으로 이동
 			setOrderIdx((prev) => ++prev);
 		}
 	}, [orderIdx]);

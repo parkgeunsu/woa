@@ -221,7 +221,7 @@ const StartGame = ({
                   sData.scenario[chCountry][chPeriod].scenarioList[chScenario].open += 1;
                 }
               });
-              sData.info.money = hasMoney;
+              sData.info.money = Number(util.removeComma(hasMoney));
               changeSaveData(sData);
 
               //필드 유효성 검사

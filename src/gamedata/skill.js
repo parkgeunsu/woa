@@ -34,14 +34,6 @@ export const skill = [
 		na:{ko:'방어',en:'Defense',jp:'防衛'},element_type:0,cate:[4],txt:{ko:'<u>자신</u>, <b buff>$(0)</b> 방어(DEF) <i icon up></i> 증가',en:'<u>Self</u>, <b buff>$(0)</b> Defense(DEF) <i icon up></i> increase',jp:'<u>自分</u>, <b buff>$(0)</b> 防御(DEF) <i icon up></i> 増加'}
 		,ta_:0,ta:1,effAnimation:1
 		,eff:[{type:4,num:['100%','110%','125%','135%','150%']}],atkCount:[1],turn:1,sp:4},
-	// {idx:4,
-	// 	na:{ko:'학익진 강화',en:'Strengthening the formation of "Hakikjin"',jp:'学翼陣強化'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 학익진효과 <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, "Hak Ik jin" Formation Effect <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>味方全体</u>, 学翼陣効果 <b buff>$(0)</b> <i icon up></i> 増加'}
-	// 	,ta_:0,ta:10,effAnimation:1
-	// 	,eff:[{type:100,num:['20%','25%','30%','35%','40%']}],atkCount:[0],turn:0,sp:0}, //이순신
-	// {idx:5,
-	// 	na:{ko:'격려',en:'Encouragement',jp:'激励'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 진형효과 <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, The Formative Effect <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>味方全体</u>, 陣形効果 <b buff>$(0)</b> <i icon up></i> 増加'}
-	// 	,ta_:0,ta:10,effAnimation:1
-	// 	,eff:[{type:100,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
 	{idx:3,
 		na:{ko:'빛의 하수인',en:'Minions of Light',jp:'光の手先'},element_type:7,cate:[11],txt:{ko:'빛속성의 스킬 사용 가능<br/><u>자신</u>, 빛속성 <b buff>$(0)</b> <i icon up></i> 증가',en:'Ability to use skills with the Light Element<br/><u>Self</u>, Light Element <b buff>$(0)</b> <i icon up></i> increase',jp:'光属性のスキル使用可能<br/><u>自分</u>, 光属性 <b buff>$(0)</b> <i icon up></i> 増加'}
 		,ta_:0,ta:1,effAnimation:3
@@ -107,7 +99,15 @@ export const skill = [
 	{idx:22,
 		na:{ko:'관찰력',en:'Observation',jp:'観察力'},element_type:0,cate:[11],txt:{ko:'고급 등급의 동물 찾을 확률 증가',en:'Increased chance of finding an advanced ranked animal',jp:'高級ランクの動物が見つかる確率アップ'},ta_:0,ta:1,effAnimation:36,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
 	{idx:23,
-		na:{ko:'예술',en:'Art',jp:'アート'},element_type:0,cate:[11],txt:{ko:'예술품 제작 가능',en:'Can create art',jp:'アート作品制作可能'},ta_:0,ta:1,effAnimation:37,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},
+		na:{ko:'예술',en:'Art',jp:'アート'},element_type:0,cate:[11],txt:{ko:'예술품 제작 가능',en:'Can create art',jp:'アート作品制作可能'},ta_:0,ta:1,effAnimation:37,skillClass:2,eff:[{type:'grade',num:['5','10','15','20','25']}],sp:3},	
+	// {idx:4,
+	// 	na:{ko:'학익진 강화',en:'Strengthening the formation of "Hakikjin"',jp:'学翼陣強化'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 학익진효과 <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, "Hak Ik jin" Formation Effect <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>味方全体</u>, 学翼陣効果 <b buff>$(0)</b> <i icon up></i> 増加'}
+	// 	,ta_:0,ta:10,effAnimation:1
+	// 	,eff:[{type:100,num:['20%','25%','30%','35%','40%']}],atkCount:[0],turn:0,sp:0}, //이순신
+	// {idx:5,
+	// 	na:{ko:'격려',en:'Encouragement',jp:'激励'},element_type:0,cate:[2],txt:{ko:'전투 참여시 <u>아군 전체</u>, 진형효과 <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <u>All Allies</u>, The Formative Effect <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <u>味方全体</u>, 陣形効果 <b buff>$(0)</b> <i icon up></i> 増加'}
+	// 	,ta_:0,ta:10,effAnimation:1
+	// 	,eff:[{type:100,num:['10%','15%','20%','25%','30%']}],atkCount:[0],turn:0,sp:0},
 	// {idx:9,
 	// 	na:{ko:'집중타격',en:'Concentrated Attack',jp:'集中攻撃'},element_type:0,cate:[3],txt:{ko:'<u>단일 적군</u>, <b dmg>$(0)</b> 강한 공격',en:'<u>Single Enemy</u>, <b dmg>$(0)</b> a strong attack',jp:'<u>単一敵軍</u>, <b dmg>$(0)</b> 強い攻撃'}
 	// 	,ta_:1,ta:1,effAnimation:2
@@ -414,6 +414,99 @@ export const skill = [
 // * 24개구리 - 개구리의 신속한 점프력(passive), 개구리 뿔피리(passive), 파충류과(passive)
 // 뒷발치기1(치기)●, 개구리 기우제(날씨변경), 음파공격(광역, 빛), 혓바닥공격(치기), 고드름던지기(수), 점프(회피), 물기(물기)
 // [청개구리 공격(한정)], [독뿌리기(암)(한정)], 
+
+
+//베기
+//살점 분리(ㄴㄱ자(17),베기220), 십자 베기(십자(9),스턴,베기140), 두번 베기(베기80x2), 강하게 베기(베기130), 대지 가르기(가로일자(6),출혈,베기150), 발도(세로일자(7),출혈,베기200)
+
+//치기
+//골절 공격(4칸사각(22),기절,치기160), 휘두르기(기절,치기120), 뇌진탕 공격(9칸사각(21),기절,치기150), 망치 이연격(기절,치기90x2)
+
+//찌르기
+//관통 공격(세로일자(7), 찌르기200)
+
+//빛속성
+//천둥(랜덤15(27),석화,130), 벼락(랜덤5(25),석화,160), 번개광선(랜덤 세로3(32),석화,150)
+
+//암흑속성
+//블랙홀(원(24),중독,170), 어둠광선(랜덤 세로3(32),중독,150)
+
+//수속성
+//물대포(세로한줄,140)
+
+//화속성
+//불 덩어리(180), 화염숨결(작은 마름모(28)), 화염링(큰 링(30), 160)
+
+//바람속성
+//바람칼날(170), 회오리(4칸사각(22),160), 돌개바람(랜덤10(26), 140)
+
+//땅속성
+//낙석(랜덤5(25),기절,120), 지진(9칸사각(21),150), 대지진(전체(20),기절,150)
+
+
+
+//군주
+//빛의 정령(9), 어둠의 정령(10), 언변(15), 연금술(20), 관찰력(22),
+//십자 베기, 두번 베기
+
+//마법사
+//물의 하수인(5), 불의 하수인(6), 바람의 하수인(7), 땅의 하수인(8), 물의 정령(11), 불의 정령(12), 바람의 정령(13), 땅의 정령(14), 언변(15),
+
+//기사
+//땅의 정령(14)
+
+//무사
+//불의 정령(12), 장비 전문(17),
+//대지 가르기, 발도, 살점분리
+
+//학자
+//언변(15), 연금술(20), 관찰력(22)
+//
+
+//닌자
+//어둠의 정령(10)
+
+//도술사
+//빛의 하수인(3), 어둠의 하수인(4), 빛의 정령(9), 어둠의 정령(10), 연금술(20)
+//
+
+//무희
+//언변(15), 관찰력(22), 예술(23), 
+//
+
+//도적
+//언변(15), 관찰력(22),
+//
+
+//궁수
+//
+
+//야만용사
+//
+
+//상인
+//언변(15), 장비 전문(17)
+//
+
+//한량
+//바람의 정령(13), 언변(15), 보석 세공(21)
+//
+
+//장군
+//물의 정령(11), 관찰력(22),
+//
+
+//농부
+//장비 전문(17), 식물 재배(19)
+//
+
+//의술사
+//언변(15), 관찰력(22),
+//
+
+//기술자
+//선박 전문(16), 장비 전문(17), 조각(18), 연금술(20), 보석 세공(21), 예술(23)
+//
 
 
 //돌진: 범위3,5,7
