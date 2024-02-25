@@ -329,7 +329,7 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 		chArr.push({
 			idx: newIdx,
 			grade: cardG,
-			slotIdx: saveData.ch.length + i,
+			chSlotIdx: saveData.ch.length + i,
 		});
 		chDataArr.push(util.saveLvState('', {
 			itemEff: util.getItemEff(),

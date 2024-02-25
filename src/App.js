@@ -16,14 +16,13 @@ import Recruitment from 'pages/Gacha';
 import GameMain from 'pages/GameMain';
 import Header from 'pages/Header';
 // import Inven from 'pages/Inven';
+import InvenShop from 'pages/InvenShop';
 import Menu from 'pages/Menu';
 import MoveEvent from 'pages/MoveEvent';
 import Sail from 'pages/Sail';
 import Setup from 'pages/Setup';
 import Shipyard from 'pages/Shipyard';
 import StartGame from 'pages/StartGame';
-import StickerShop from 'pages/StickerShop';
-import ToolShop from 'pages/ToolShop';
 import TradingPost from 'pages/TradingPost';
 import React, { createContext, useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
@@ -156,7 +155,7 @@ const setCity = (data, lang) => {
       }, false, lang),
     }
   }
-  cityD[0].toolShop.accessory = accessory;
+  cityD[0].tool.accessory = accessory;
   let items = [[],[],[],[]];//장비상 아이템 생성
   for (let i = 0; i < 20; i ++) {
     for (let j = 1; j < 4; j ++) {
@@ -176,9 +175,9 @@ const setCity = (data, lang) => {
       )};
     }
   }
-  cityD[0].stickerShop.helm = items[0];
-  cityD[0].stickerShop.armor = items[1];
-  cityD[0].stickerShop.weapon = items[2];
+  cityD[0].shop.helm = items[0];
+  cityD[0].shop.armor = items[1];
+  cityD[0].shop.weapon = items[2];
   return cityD;
 }
 const App = () => {
@@ -296,7 +295,7 @@ const App = () => {
         } else {
           const sData = util.saveCharacter({
             saveData: useSaveData, 
-            slotIdx: slotIdx,
+            chSlotIdx: slotIdx,
             gameData: gameData,
           });
           util.saveData('saveData', sData);
@@ -366,7 +365,7 @@ const App = () => {
 
               <Route path="/cards" element={<Cards saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/inven" element={<StickerShop shopType="inven" saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+              <Route path="/inven" element={<InvenShop shopType="inven" saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
               <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
@@ -382,9 +381,9 @@ const App = () => {
 
               <Route path="/composite" element={<Composite saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/stickerShop" element={<StickerShop shopType="shop" saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+              <Route path="/shop" element={<InvenShop shopType="shop" saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/toolShop" element={<ToolShop saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+              <Route path="/tool" element={<InvenShop shopType="tool" saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
               <Route path="/shipyard" element={<Shipyard saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 

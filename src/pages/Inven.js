@@ -4,7 +4,7 @@ import ItemGradeColor from 'components/ItemGradeColor';
 import { util } from 'components/Libs';
 import TabMenu from 'components/TabMenu';
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const InvenWrap = styled.div`
@@ -106,6 +106,8 @@ const Inven = ({
 	changeSaveData,
 }) => {
   const navigate = useNavigate();
+	const {state} = useLocation();
+	console.log(state);
   const context = useContext(AppContext);
   const lang = React.useMemo(() => {
     return context.setting.lang;
@@ -376,7 +378,7 @@ const Inven = ({
 				</InvenTop>
 				<InvenBottom>
 					{Object.keys(selectItem1.save).length !== 0 ? (
-						<ItemContainer className={`item_select item_select1 items ${selectArea === "area1" ? "on" : ""}`} color={gameData.itemGrade.color[selectItem1.save.grade]} onClick={() => {
+						<ItemContainer className={`item_select item_select1 items ${selectArea === "area1" ? "on" : ""}`} itemSelect="select1" color={gameData.itemGrade.color[selectItem1.save.grade]} onClick={() => {
 							setSelectArea('area1');
 						}}>
 							{selectItem1.selectTab === 'equip' && (
@@ -517,6 +519,7 @@ const Inven = ({
 												{selectItem1.game.txt[lang]}
 											</div>
 										</li>
+
 									</div>
 								</>
 							)}
@@ -534,9 +537,9 @@ const Inven = ({
 												<div key={`button${idx}`} className="item_button" flex="true">
 													<button text="true" className="button_small" onClick={(e) => {
 														if (selectItem1.selectTab === 'equip' && selectItem1.game.part !== 4 && selectItem1.game.part !== 5) {
-															navigate('../stickerShop');
+															navigate('../shop');
 														} else {
-															navigate('../toolShop');
+															navigate('../tool');
 														}
 														// util.buttonEvent({
 														// 	event: e,
@@ -559,6 +562,13 @@ const Inven = ({
 													}} data-buttontype="itemSell">{gameData.msg.button.sell[lang]}</button>
 												</div>
 											);
+										case "socket":
+											return (
+												<div key={`button${idx}`} className="item_button" flex="true">
+													<button text="true" className="button_small" onClick={(e) => {
+													}} data-buttontype="itemSocket">{gameData.msg.button.socket[lang]}</button>
+												</div>
+											)
 										case "evaluate":
 											return (
 												<div key={`button${idx}`} className="item_button" flex="true">
@@ -784,9 +794,9 @@ const Inven = ({
 												<div key={`button${idx}`} className="item_button" flex="true">
 													<button text="true" className="button_small" onClick={(e) => {
 														if (selectItem2.selectTab === 'equip' && selectItem2.game.part !== 4 && selectItem2.game.part !== 5) {
-															navigate('../stickerShop');
+															navigate('../shop');
 														} else {
-															navigate('../toolShop');
+															navigate('../tool');
 														}
 														// util.buttonEvent({
 														// 	event: e,
@@ -809,6 +819,13 @@ const Inven = ({
 													}} data-buttontype="itemSell">{gameData.msg.button.sell[lang]}</button>
 												</div>
 											);
+										case "socket":
+											return (
+												<div key={`button${idx}`} className="item_button" flex="true">
+													<button text="true" className="button_small" onClick={(e) => {
+													}} data-buttontype="itemSocket">{gameData.msg.button.socket[lang]}</button>
+												</div>
+											)
 										case "evaluate":
 											return (
 												<div key={`button${idx}`} className="item_button" flex="true">

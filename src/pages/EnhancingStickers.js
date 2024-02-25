@@ -11,18 +11,11 @@ import PopupContainer from 'components/PopupContainer';
 import TabMenu from 'components/TabMenu';
 import 'css/itemEnhancement.css';
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-const Img = styled.img.attrs(
-  ({imgurl}) => ({
-    src: imgurl 
-  })
-)``;
 const ItemEnWrap = styled.div`
 	background:url(${({backImg}) => backImg});background-size:cover;
-`;
-const ShopIcon = styled.span`
-	background:url(${({ icoType }) => icoType}) no-repeat left center;background-size:100%;
 `;
 const itemEnList = [
 	{na:'socket',icon:14},
@@ -314,11 +307,28 @@ const setPercent = (item, tool) => {
 		return 0;
 	}
 }
+const selectTabFn = (state) => {
+	if (!state) {
+		return 0;
+	}
+	return state.dataObj.tabIdx;
+}
+const selectItemFn = (state) => {
+	if (!state) {
+		return {save:{},select:'',game:{}}
+	}
+	return {
+		save:state.dataObj.saveItemData,
+		select:state.dataObj.itemSaveSlot,
+		game:state.dataObj.gameItem
+	}
+}
 const EnhancingStickers = ({
 	saveData,
 	changeSaveData,
 }) => {
   const context = useContext(AppContext);
+	const {state} = useLocation();
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -338,13 +348,17 @@ const EnhancingStickers = ({
   const [modalType] = useState('confirm');
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
-	const [selectTab, setSelectTab] = useState(0);
+	const [selectTab, setSelectTab] = useState(selectTabFn(state));
 	const [item, setItem] = useState({...saveData.items});
-	const [selectItem1, setSelectItem1] = useState({save:{},select:'',game:{}});//좌측 장비 save, game
+	const [selectItem1, setSelectItem1] = useState(selectItemFn(state));//좌측 장비 save, game
 	const [possibleHole, setPossibleHole] = useState([]);
 	const [selectItem2, setSelectItem2] = useState({save:[],select:[],game:[]});//탭1 우측 홀 save, game
 	const [selectItem3, setSelectItem3] = useState({save:{},select:'',game:{}});//탭2 우측 홀 save, game
 	const [colorantIdx, setColorantIdx] = useState(0);
+	useEffect(() => {
+		selectTabFn(state);
+		setSelectItem1(state);
+	}, [state]);
 	const [mainColor, setMainColor] = useState(saveData?.items?.equip[0] ? saveData.items.equip[0].color : '');//합성된 장비 색상
 	const [itemEffShow, setItemEffShow] = useState(false);//아이템 효과 보기
 	const [mItemEff, setMItemEff] = useState();//아이템 효과 문구

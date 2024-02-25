@@ -1,6 +1,7 @@
 import { AppContext } from 'App';
 import { ActionChDisplay } from 'components/Components';
 import { ItemPic, MarkPic } from 'components/ImagePic';
+import ItemGradeColor from 'components/ItemGradeColor';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
@@ -10,19 +11,9 @@ import TabMenu from 'components/TabMenu';
 import 'css/shop.css';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import ItemGradeColor from 'components/ItemGradeColor';
 
-const Img = styled.img.attrs(
-  ({imgurl}) => ({
-    src: imgurl 
-  })
-)``;
 const ShopWrap = styled.div`
 	background:url(${({backImg}) => backImg});background-size:cover;
-`;
-const MenuButton = styled.button``;
-const ShopIcon = styled.span`
-	background:url(${({ icoType }) => icoType}) no-repeat left center;background-size:100%;
 `;
 const ItemContainer = styled.ul`
   border:5px solid transparent;
@@ -86,16 +77,16 @@ const ToolShop = ({
 		if (Object.keys(saveData).length !== 0) {
 			const cityData = saveData.city[cityIdx];
 			const items = [
-				[...cityData.toolShop.accessory],
-				[...cityData.toolShop.upgrade],
-				[...cityData.toolShop.etc],
+				[...cityData.tool.accessory],
+				[...cityData.tool.upgrade],
+				[...cityData.tool.etc],
 				[[...saveData.items.equip],[...saveData.items.upgrade],[...saveData.items.etc]],
 			];
 			setItem(items);
-			setActionCh(saveData.actionCh.toolShop);
+			setActionCh(saveData.actionCh.tool);
 			setPopupInfo({
 				ch:saveData.ch,
-				actionCh:saveData.actionCh.toolShop.idx,
+				actionCh:saveData.actionCh.tool.idx,
 				type:'toolShop'
 			})
 		}

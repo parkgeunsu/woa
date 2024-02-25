@@ -4,7 +4,7 @@ import { ChPic, IconPic, ItemPic, MarkPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import PopupContainer from 'components/PopupContainer';
 import CharacterCard from 'pages/CharacterCard';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -322,7 +322,7 @@ const PopupDescription = styled.div`
   .skill_eff_list{margin:0 0 5px 0;font-size:0.875rem;text-align:center;}
   .skill_eff_list.on{font-size:1rem;font-weight:600;color:#ff2a00;text-shadow:0 0 10px #ff2a00;}
 `;
-const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, showPopup, lang, navigate) => {
+const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, showPopup, lang, navigate, timeoutRef) => {
 	if (type === 'relation') {
     const member = dataObj.relation.member;
 		return (
@@ -348,7 +348,6 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     const saveItems = dataObj.saveItemData;
     const grade = saveItems.grade || items.grade;
     const setsInfo = gameData.items.set_type[items.set];
-    //아이템 기본, 추가, 홀 효과
     const totalEff = util.getTotalEff(saveItems, gameData);
 		return (
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack}>
@@ -438,7 +437,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             <div className="item_setNa">{setsInfo.na}</div>
             {setsInfo.part && setsInfo.part.map((data, idx) => {
               return (
-                <div key={idx} className={`item_set_piece ${dataObj.slotIdx ? getSetChk(saveData.ch[dataObj.slotIdx].items, data) : ''}`}>{gameData.items.equip[data].na}</div>
+                <div key={idx} className={`item_set_piece ${dataObj.chSlotIdx ? getSetChk(saveData.ch[dataObj.chSlotIdx].items, data) : ''}`}>{gameData.items.equip[data].na}</div>
               ) 
             })}
           </PopupItemList>
@@ -449,7 +448,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             <em>{`₩${items.price * saveItems.grade}`}</em>
           </PopupItemPrice>
           <div className="item_button" flex="true">
-            <button text="true" onClick={(e) => {
+            <button text="true" onClick={(e) => {//해제
               util.buttonEvent({
                 event: e,
                 type: 'itemRelease',
@@ -461,7 +460,12 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                 showMsg: showMsg,
                 showPopup: showPopup,
                 lang: lang,
-              })
+              });
+              navigate('../cards', {state: {dataObj: {
+                chSlotIdx: dataObj.chSlotIdx,
+                chTabIdx: 6,
+                invenOpened: true,
+              }}});
             }} data-buttontype="itemRelease">{gameData.msg.button.release[lang]}</button>
           </div>
         </PopupItemList>
@@ -474,6 +478,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     const grade = saveItems.grade || items.grade;
     const setsInfo = gameData.items.set_type[items.set];
     const sealed = dataObj.saveItemData.sealed;
+    const hasSocket = dataObj.saveItemData.slot;
     //아이템 기본, 추가, 홀 효과
     const totalEff = util.getTotalEff(saveItems, gameData);
     return (
@@ -563,7 +568,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             <div className="item_setNa">{setsInfo.na}</div>
             {setsInfo.part && setsInfo.part.map((data, idx) => {
               return (
-                <div key={idx} className={`item_set_piece ${dataObj.slotIdx ? getSetChk(saveData.ch[dataObj.slotIdx].items, data) : ''}`}>{gameData.items.equip[data].na}</div>
+                <div key={idx} className={`item_set_piece ${dataObj.chSlotIdx ? getSetChk(saveData.ch[dataObj.chSlotIdx].items, data) : ''}`}>{gameData.items.equip[data].na}</div>
               ) 
             })}
           </PopupItemList>
@@ -575,59 +580,50 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           </PopupItemPrice>
           {sealed && (
             <div className="item_button" flex="true">
-              <button text="true" onClick={(e) => {
-                navigate('../inven');
-                // 확인
-                // util.buttonEvent({
-                //   event: e,
-                //   type: 'itemEvaluate',
-                //   data: dataObj,
-                //   saveData: saveData,
-                //   changeSaveData: changeSaveData,
-                //   gameData: gameData,
-                //   msgText: msgText,
-                //   showMsg: showMsg,
-                //   showPopup: showPopup,
-                //   lang: lang,
-                // })
+              <button text="true" onClick={() => {//감정
+                showMsg(true);
+                msgText(gameData.msg.sentence.goInven[lang]);
+                timeoutRef.current = setTimeout(() => {
+                  navigate('../inven', {state: {dataObj: dataObj}});
+                }, 1800);
               }} data-buttontype="itemEvaluate">{gameData.msg.button.emotions[lang]}</button>
-              <button text="true" onClick={(e) => {
-                navigate('../stickerShop');
-                // 판매
-                // util.buttonEvent({
-                //   event: e,
-                //   type: 'itemSell',
-                //   data: dataObj,
-                //   saveData: saveData,
-                //   changeSaveData: changeSaveData,
-                //   gameData: gameData,
-                //   msgText: msgText,
-                //   showMsg: showMsg,
-                //   showPopup: showPopup,
-                //   lang: lang,
-                // })
+              <button text="true" onClick={() => {//판매
+                showMsg(true);
+                msgText(gameData.msg.sentence.goShop[lang]);
+                timeoutRef.current = setTimeout(() => {
+                  navigate('../shop', {state: {dataObj: dataObj}});
+                }, 1800);
               }} data-buttontype="itemSell">{gameData.msg.button.sell[lang]}</button>
             </div>
           )}
           {!sealed && (
             <div className="item_button" flex="true">
-              <button text="true" onClick={(e) => {
-                navigate('../enhancingStickers');
-                // 강화
-                // util.buttonEvent({
-                //   event: e,
-                //   type: 'enhancingStickers',
-                //   data: dataObj,
-                //   saveData: saveData,
-                //   changeSaveData: changeSaveData,
-                //   gameData: gameData,
-                //   msgText: msgText,
-                //   showMsg: showMsg,
-                //   showPopup: showPopup,
-                //   lang: lang,
-                // })
+              <button text="true" onClick={() => {//강화
+                showMsg(true);
+                msgText(gameData.msg.sentence.goForge[lang]);
+                timeoutRef.current = setTimeout(() => {
+                  navigate('../enhancingStickers', {state: {dataObj: {
+                    tabIdx: 1,
+                    gameItem: dataObj.gameItem,
+                    saveItemData: dataObj.saveItemData,
+                    itemSaveSlot: dataObj.itemSaveSlot,
+                  }}});
+                }, 1800);
               }} data-buttontype="enhancingStickers">{gameData.msg.button.enhance[lang]}</button>
-              <button text="true" onClick={(e) => {
+              {hasSocket && <button text="true" onClick={(e) => {//소켓
+                showMsg(true);
+                msgText(gameData.msg.sentence.goForge[lang]);
+                timeoutRef.current = setTimeout(() => {
+                  console.log(dataObj);
+                  navigate('../enhancingStickers', {state: {dataObj: {
+                    tabIdx: 0,
+                    gameItem: dataObj.gameItem,
+                    saveItemData: dataObj.saveItemData,
+                    itemSaveSlot: dataObj.itemSaveSlot,
+                  }}});
+                }, 1800);
+              }} data-buttontype="itemSocket">{gameData.msg.button.socket[lang]}</button>}
+              <button text="true" onClick={(e) => {//장착
                 util.buttonEvent({
                   event: e,
                   type: 'itemEquip',
@@ -639,22 +635,19 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   showMsg: showMsg,
                   showPopup: showPopup,
                   lang: lang,
-                })
+                });
+                navigate('../cards', {state: {dataObj: {
+                  chSlotIdx: dataObj.chSlotIdx,
+                  chTabIdx: 6,
+                  invenOpened: true,
+                }}});
               }} data-buttontype="itemEquip">{gameData.msg.button.equip[lang]}</button>
-              <button text="true" onClick={(e) => {
-                navigate('../stickerShop');
-                // util.buttonEvent({
-                //   event: e,
-                //   type: 'itemSell',
-                //   data: dataObj,
-                //   saveData: saveData,
-                //   changeSaveData: changeSaveData,
-                //   gameData: gameData,
-                //   msgText: msgText,
-                //   showMsg: showMsg,
-                //   showPopup: showPopup,
-                //   lang: lang,
-                // })
+              <button text="true" onClick={(e) => {//판매
+                showMsg(true);
+                msgText(gameData.msg.sentence.goShop[lang]);
+                timeoutRef.current = setTimeout(() => {
+                  navigate('../shop', {state: {dataObj: dataObj}});
+                }, 1800);
               }} data-buttontype="itemSell">{gameData.msg.button.sell[lang]}</button>
             </div>
           )}
@@ -707,7 +700,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             <em>{`₩${items.price}`}</em>
           </PopupItemPrice>
           <div className="item_button" flex="true">
-            <button text="true" onClick={(e) => {
+            <button text="true" onClick={(e) => {//장착
               util.buttonEvent({
                 event: e,
                 type: 'holeEquip',
@@ -721,8 +714,12 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                 lang: lang,
               })
             }} data-buttontype="holeEquip">{gameData.msg.button.equip[lang]}</button>
-            <button text="true" onClick={(e) => {
-              navigate('../stickerShop');
+            <button text="true" onClick={(e) => {//판매
+              showMsg(true);
+              msgText(gameData.msg.sentence.goTool[lang]);
+              timeoutRef.current = setTimeout(() => {
+                navigate('../tool', {state: {dataObj: dataObj}});
+              }, 1800);
               // util.buttonEvent({
               //   event: e,
               //   type: 'itemSell',
@@ -782,18 +779,23 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               })
             }} data-buttontype="itemUse">{gameData.msg.button.use[lang]}</button>
             <button text="true" onClick={(e) => {
-              util.buttonEvent({
-                event: e,
-                type: 'itemSell',
-                data: dataObj,
-                saveData: saveData,
-                changeSaveData: changeSaveData,
-                gameData: gameData,
-                msgText: msgText,
-                showMsg: showMsg,
-                showPopup: showPopup,
-                lang: lang,
-              })
+              showMsg(true);
+              msgText(gameData.msg.sentence.goTool[lang]);
+              timeoutRef.current = setTimeout(() => {
+                navigate('../tool', {state: {dataObj: dataObj}});
+              }, 1800);
+              // util.buttonEvent({
+              //   event: e,
+              //   type: 'itemSell',
+              //   data: dataObj,
+              //   saveData: saveData,
+              //   changeSaveData: changeSaveData,
+              //   gameData: gameData,
+              //   msgText: msgText,
+              //   showMsg: showMsg,
+              //   showPopup: showPopup,
+              //   lang: lang,
+              // })
             }} data-buttontype="itemSell">{gameData.msg.button.sell[lang]}</button>
           </div>
         </PopupItemList>
@@ -827,18 +829,23 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           </PopupItemPrice>
           <div className="item_button" flex="true">
             <button text="true" onClick={(e) => {
-              util.buttonEvent({
-                event: e,
-                type: 'itemSell',
-                data: dataObj,
-                saveData: saveData,
-                changeSaveData: changeSaveData,
-                gameData: gameData,
-                msgText: msgText,
-                showMsg: showMsg,
-                showPopup: showPopup,
-                lang: lang,
-              })
+              showMsg(true);
+              msgText(gameData.msg.sentence.goTrade[lang]);
+              timeoutRef.current = setTimeout(() => {
+                navigate('../tradingPost', {state: {dataObj: dataObj}});
+              }, 1800);
+              // util.buttonEvent({
+              //   event: e,
+              //   type: 'itemSell',
+              //   data: dataObj,
+              //   saveData: saveData,
+              //   changeSaveData: changeSaveData,
+              //   gameData: gameData,
+              //   msgText: msgText,
+              //   showMsg: showMsg,
+              //   showPopup: showPopup,
+              //   lang: lang,
+              // })
             }} data-buttontype="itemSell">{gameData.msg.button.sell[lang]}</button>
           </div>
         </PopupItemList>
@@ -886,18 +893,23 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               })
             }} data-buttontype="itemUse">{gameData.msg.button.use[lang]}</button>
             <button text="true" onClick={(e) => {
-              util.buttonEvent({
-                event: e,
-                type: 'itemSell',
-                data: dataObj,
-                saveData: saveData,
-                changeSaveData: changeSaveData,
-                gameData: gameData,
-                msgText: msgText,
-                showMsg: showMsg,
-                showPopup: showPopup,
-                lang: lang,
-              })
+              showMsg(true);
+              msgText(gameData.msg.sentence.goTool[lang]);
+              timeoutRef.current = setTimeout(() => {
+                navigate('../tool', {state: {dataObj: dataObj}});
+              }, 1800);
+              // util.buttonEvent({
+              //   event: e,
+              //   type: 'itemSell',
+              //   data: dataObj,
+              //   saveData: saveData,
+              //   changeSaveData: changeSaveData,
+              //   gameData: gameData,
+              //   msgText: msgText,
+              //   showMsg: showMsg,
+              //   showPopup: showPopup,
+              //   lang: lang,
+              // })
             }} data-buttontype="itemSell">{gameData.msg.button.sell[lang]}</button>
           </div>
         </PopupItemList>
@@ -999,8 +1011,8 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
       possibleCh = 0;
     switch(dataObj.type) {
       case 'tradingPost':
-      case 'stickerShop':
-      case 'toolShop':
+      case 'shop':
+      case 'tool':
         skillIdx = 201;
         break;
       case 'shipyard':
@@ -1115,12 +1127,13 @@ const Popup = ({
   }, [context]);
   const [selectIdx, setSelectIdx] = useState(0);
   const [content, setContent] = useState();
+  const timeoutRef = useRef(null);
   useEffect(() => {
     if (type === 'selectCh') {
       dataObj.selectIdx = selectIdx;
       dataObj.setSelectIdx = setSelectIdx;
     }
-    setContent(typeAsContent(type, dataObj, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, showPopup, lang, navigate));
+    setContent(typeAsContent(type, dataObj, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, showPopup, lang, navigate, timeoutRef));
   }, [selectIdx]);
   useEffect(() => {
     if (saveData && Object.keys(saveData).length !== 0) {

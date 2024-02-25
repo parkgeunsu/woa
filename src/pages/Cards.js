@@ -7,7 +7,8 @@ import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
-import React, { useCallback, useContext, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import ItemGradeColor from 'components/ItemGradeColor';
@@ -178,12 +179,25 @@ const ItemList = styled.li`
   .hole .hole_slot.hole3{left:0;bottom:0;}
   .hole .hole_slot.hole4{left:50%;top:50%;transform:translate(-50%,-50%);}
 `;
+const setSlotIdxFn = (state, paramData) => {
+  if (!state) {
+		return paramData.cards.selectIdx || 0;
+	}
+  return state.dataObj.chSlotIdx;
+}
+const setPageIdxFn = (state) => {
+  if (!state) {
+		return 0;
+	}
+  return state.dataObj.chTabIdx;
+}
 const Cards = ({
   saveData,
   changeSaveData,
   currentTime,
 }) => {
   const context = useContext(AppContext);
+	const {state} = useLocation();
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -207,15 +221,31 @@ const Cards = ({
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
-  const [slotIdx, setSlotIdx] = useState(paramData.cards.selectIdx);
-  const [chPage, setChPage] = useState(0);
+  const [slotIdx, setSlotIdx] = useState(setSlotIdxFn(state, paramData));
+  const [chPage, setChPage] = useState(setPageIdxFn(state));
+  useEffect(() => {
+		setSlotIdx(setSlotIdxFn(state, paramData));
+		setChPage(setPageIdxFn(state));
+    if (state?.dataObj.invenOpened) {
+      invenRef.current.opend = 'opend';
+      invenRef.current.style.top = "calc(50% - 10px)";
+    } else {
+      invenRef.current.opend = '';
+      invenRef.current.style.top = "100%";
+    }
+	}, [state, paramData]);
   const changeChPage = (idx) => {
     setChPage(idx);
   }
   const changeChSlot = (idx) => {
     setSlotIdx(idx);
   }
-  const handlePopup = useCallback((itemType, itemIdx, itemSaveSlot, itemPart, itemGrade, itemWeaponType) => {
+  const handlePopup = useCallback((saveObj) => {
+		const {itemType, itemData, itemSaveSlot} = saveObj,
+      itemIdx = itemData.idx,
+      itemPart = itemData.part,
+      itemGrade = itemData.grade,
+      itemWeaponType = itemData.weaponType;
     if( itemType ){
       let saveItemData;
       if (itemType === 'hequip') {
@@ -232,7 +262,7 @@ const Cards = ({
         gameItemData = gameItem[itemType][itemIdx];
       }
       setPopupInfo({
-        slotIdx: slotIdx,
+        chSlotIdx: slotIdx,
         gameItem: gameItemData,
         itemSaveSlot: itemSaveSlot,
         saveItemData: saveItemData,
@@ -367,7 +397,11 @@ const Cards = ({
                     })();
                     return items && (
                       <ItemList key={`hequip${idx}`} onClick={() => {
-                        handlePopup('hequip', data.idx, idx, data.part, data.grade, data.weaponType);
+                        handlePopup({
+                          itemType: 'hequip',
+                          itemData: data,
+                          itemSaveSlot: idx,
+                        });
                       }} data-itemnum={`equip_${data.idx}`}>
                         <ItemGradeColor part={data.part} grade={gameData.itemGrade.txt_e[data.grade].toLowerCase()} sealed={data.sealed} impossible={equipPossible}>
                           <ItemPic type="equip" className={`pic`}>
@@ -394,7 +428,13 @@ const Cards = ({
                   { invenItems.hole && invenItems.hole.map((data, idx) => {
                     const items = gameItem.hole[data.idx];
                     return (
-                      <ItemList key={`hole${idx}`} onClick={() => {handlePopup('hole', data.idx, idx)}} data-itemnum={`hole_${data.idx}`}>
+                      <ItemList key={`hole${idx}`} data-itemnum={`hole_${data.idx}`} onClick={() => {
+                        handlePopup({
+                          itemType: 'hole',
+                          itemData: data,
+                          itemSaveSlot: idx,
+                        });
+                      }}>
                         <ItemGradeColor part="11">
                           <ItemPic type="hole" className="pic" pic="itemEtc" idx={items.display} />
                         </ItemGradeColor>
@@ -407,7 +447,13 @@ const Cards = ({
                   { invenItems.upgrade && invenItems.upgrade.map((data, idx) => {
                     const items = gameItem.upgrade[data.idx];
                     return (
-                      <ItemList key={`upgrade${idx}`} onClick={() => {handlePopup('upgrade', data.idx, idx)}} data-itemnum={`upgrade_${data.idx}`}>
+                      <ItemList key={`upgrade${idx}`} data-itemnum={`upgrade_${data.idx}`}  onClick={() => {
+                        handlePopup({
+                          itemType: 'upgrade',
+                          itemData: data,
+                          itemSaveSlot: idx,
+                        });
+                      }} >
                         <ItemGradeColor part="12">
                           <ItemPic type="upgrade" className="pic" pic="itemEtc" idx={items.display} />
                         </ItemGradeColor>
@@ -420,7 +466,13 @@ const Cards = ({
                   { invenItems.material && invenItems.material.map((data, idx) => {
                     const items = gameItem.material[data.idx];
                     return (
-                      <ItemList key={`material${idx}`} onClick={() => {handlePopup('material', data.idx, idx)}} data-itemnum={`material_${data.idx}`}>
+                      <ItemList key={`material${idx}`} data-itemnum={`material_${data.idx}`} onClick={() => {
+                        handlePopup({
+                          itemType: 'material',
+                          itemData: data,
+                          itemSaveSlot: idx,
+                        });
+                      }}>
                         <ItemGradeColor part="13">
                           <ItemPic type="material" className="pic" pic="itemEtc" idx={items.display} />
                         </ItemGradeColor>
@@ -433,7 +485,13 @@ const Cards = ({
                   { invenItems.etc && invenItems.etc.map((data, idx) => {
                     const items = gameItem.etc[data.idx];
                     return (
-                      <ItemList key={`etc${idx}`} onClick={() => {handlePopup('etc', data.idx, idx)}} data-itemnum={`etc_${data.idx}`}>
+                      <ItemList key={`etc${idx}`} data-itemnum={`etc_${data.idx}`} onClick={() => {
+                        handlePopup({
+                          itemType: 'etc',
+                          itemData: data,
+                          itemSaveSlot: idx,
+                        });
+                      }}>
                         <ItemGradeColor part="13">
                           <ItemPic type="etc" className="pic" pic="itemEtc" idx={items.display} />
                         </ItemGradeColor>

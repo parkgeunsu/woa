@@ -269,8 +269,8 @@ export const ActionChDisplay = ({
     hasSkill = false;
   switch(type) {
     case 'tradingPost':
-    case 'stickerShop':
-    case 'toolShop':
+    case 'shop':
+    case 'tool':
       skillIdx = 201;
       break;
     case 'shipyard':

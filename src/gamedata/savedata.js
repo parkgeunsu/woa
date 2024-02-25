@@ -8,8 +8,8 @@ const save = {
     shipIdx:0,
   },
   "actionCh":{
-    stickerShop:{idx:''},
-    toolShop:{idx:''},
+    shop:{idx:''},
+    tool:{idx:''},
     shipyard:{idx:''},
     tradingPost:{idx:''},
     enhancingCards:{idx:''},
@@ -413,8 +413,8 @@ const saveNew = {
     shipIdx:0,
   },
   "actionCh":{
-    stickerShop:{idx:''},
-    toolShop:{idx:''},
+    shop:{idx:''},
+    tool:{idx:''},
     shipyard:{idx:''},
     tradingPost:{idx:''},
     enhancingCards:{idx:''},

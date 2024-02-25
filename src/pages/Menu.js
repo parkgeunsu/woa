@@ -54,8 +54,8 @@ const Menu = ({
               <>
                 <li><Button type="menu" to="/cards" onClick={() => {console.log("card");}}>{gameData.msg.menu['card'][lang]}</Button></li>
                 <li><Button type="menu" to="/inven" onClick={() => {console.log("inven");}}>{gameData.msg.menu['inven'][lang]}</Button></li>
-                <li><Button type="menu" to="/stickerShop" onClick={() => {console.log("stickerShop");}}>{gameData.msg.menu['stickerShop'][lang]}</Button></li>
-                <li><Button type="menu" to="/toolShop" onClick={() => {console.log("toolShop");}}>{gameData.msg.menu['toolShop'][lang]}</Button></li>
+                <li><Button type="menu" to="/shop" onClick={() => {console.log("shop");}}>{gameData.msg.menu['shop'][lang]}</Button></li>
+                <li><Button type="menu" to="/tool" onClick={() => {console.log("tool");}}>{gameData.msg.menu['tool'][lang]}</Button></li>
                 <li><Button type="menu" to="/shipyard" onClick={() => {console.log("shipyard");}}>{gameData.msg.menu['shipyard'][lang]}</Button></li>
                 <li><Button type="menu" to="/tradingPost" onClick={() => {console.log("tradingPost");}}>{gameData.msg.menu['tradingPost'][lang]}</Button></li>
                 <li><Button type="menu" to="/enhancingCards" onClick={() => {console.log("enhancingCards");}}>{gameData.msg.menu['enhancingCards'][lang]}</Button></li>

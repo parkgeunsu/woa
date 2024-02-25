@@ -3,12 +3,12 @@ import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import { IconPic, ItemPic } from 'components/ImagePic';
 import InfoGroup from 'components/InfoGroup';
+import ItemGradeColor from 'components/ItemGradeColor';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
-import ItemGradeColor from 'components/ItemGradeColor';
 import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
 
@@ -198,7 +198,7 @@ const CharacterItems = ({
         gameItemData = gameItem[itemType][itemIdx];
       }
       setPopupInfo({
-        slotIdx: slotIdx,
+        chSlotIdx: slotIdx,
         gameItem: gameItemData,
         itemSaveSlot: itemSaveSlot,
         saveItemData: saveItemData,

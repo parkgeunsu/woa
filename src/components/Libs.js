@@ -241,14 +241,14 @@ export const util = { //this.loadImage();
     let saveCh = [
       ...dataObj.saveData.ch,
     ];
-    if (typeof dataObj.slotIdx === "number") { //슬롯설정이 되면 개별 캐릭만 실행
-      const itemEff = util.getItemEff(dataObj.slotIdx, saveCh, gameItem);
-      saveCh[dataObj.slotIdx] = util.saveLvState(dataObj.slotIdx, {
+    if (typeof dataObj.chSlotIdx === "number") { //슬롯설정이 되면 개별 캐릭만 실행
+      const itemEff = util.getItemEff(dataObj.chSlotIdx, saveCh, gameItem);
+      saveCh[dataObj.chSlotIdx] = util.saveLvState(dataObj.chSlotIdx, {
         itemEff: itemEff,
-        grade: gameData.ch[saveCh[dataObj.slotIdx].idx].grade,
+        grade: gameData.ch[saveCh[dataObj.chSlotIdx].idx].grade,
         newState: {},
       }, saveData, gameData)
-    } else if (dataObj.slotIdx === "all") { //슬롯설정이 없으면 전체 캐릭 실행
+    } else if (dataObj.chSlotIdx === "all") { //슬롯설정이 없으면 전체 캐릭 실행
       for (const idx of saveCh.keys()) {
         const itemEff = util.getItemEff(idx, saveCh, gameItem);
         saveCh[idx] = util.saveLvState(idx, {
@@ -1589,9 +1589,8 @@ export const util = { //this.loadImage();
   getAnimalSkill: () => {
     
   },
-  buttonEvent: (dataObj) => {
+  buttonEvent: (dataObj, callback) => {
     dataObj.event.stopPropagation();
-    console.log(dataObj);
     const gameData = dataObj.gameData;
     let sData = {...dataObj.saveData};
     if (dataObj.type === 'enhancingStickers') {
@@ -1599,7 +1598,7 @@ export const util = { //this.loadImage();
     } else if (dataObj.type === 'itemEquip') { //아이템 착용
       const invenPart = dataObj.data.saveItemData.part;
       let overlapCheck = true;
-      const saveCh = sData.ch[dataObj.data.slotIdx];
+      const saveCh = sData.ch[dataObj.data.chSlotIdx];
       //아이템 무게 측정
       let currentKg = 0;
       let itemSubmit = false;
@@ -1640,7 +1639,7 @@ export const util = { //this.loadImage();
               overlapCheck = false;
               dataObj.changeSaveData(util.saveCharacter({//데이터 저장
                 saveData: sData,
-                slotIdx: dataObj.data.slotIdx,
+                chSlotIdx: dataObj.data.chSlotIdx,
                 gameData: gameData,
               }));
               dataObj.showPopup(false);
@@ -1655,9 +1654,9 @@ export const util = { //this.loadImage();
         dataObj.msgText(`<span caution>${gameData.msg.sentence.nonePart[dataObj.lang]}</span>`);
       }
     } else if (dataObj.type === 'itemRelease') { //아이템 해제
-      const saveCh = sData.ch[dataObj.data.slotIdx];
+      const saveCh = sData.ch[dataObj.data.chSlotIdx];
       sData.items['equip'].push(dataObj.data.saveItemData);//인벤에 아이템 넣기
-      sData.ch[dataObj.data.slotIdx].items[dataObj.data.itemSaveSlot] = {}; //아이템 삭제
+      sData.ch[dataObj.data.chSlotIdx].items[dataObj.data.itemSaveSlot] = {}; //아이템 삭제
       if (dataObj.data.saveItemData.mark === gameData.ch[saveCh.idx].animal_type) {//동물 뱃지 수정
         saveCh.animalBeige = util.getAnimalPoint(saveCh.items, gameData.ch[saveCh.idx].animal_type, saveCh.mark);
       }
@@ -1683,12 +1682,12 @@ export const util = { //this.loadImage();
       }
       dataObj.changeSaveData(util.saveCharacter({//데이터 저장
         saveData: sData,
-        slotIdx: dataObj.data.slotIdx,
+        chSlotIdx: dataObj.data.chSlotIdx,
         gameData: gameData,
       }));
       dataObj.showPopup(false);
     } else if (dataObj.type === 'itemUse') { //아이템 사용
-      const saveCh = sData.ch[dataObj.data.slotIdx];
+      const saveCh = sData.ch[dataObj.data.chSlotIdx];
       switch (dataObj.data.gameItem.action) {
         case 99: //골드 획득
           sData.info.money += dataObj.data.gameItem.price;//돈 계산
@@ -1710,7 +1709,7 @@ export const util = { //this.loadImage();
             const maxExp = gameData.exp['grade'+ch.grade][ch.lv-1];
             dataObj.changeSaveData(util.saveCharacter({//데이터 저장
               saveData: sData,
-              slotIdx: dataObj.data.slotIdx,
+              chSlotIdx: dataObj.data.chSlotIdx,
               gameData: gameData,
             }));
             if (ch.exp >= maxExp) { //레벨업
@@ -1722,7 +1721,7 @@ export const util = { //this.loadImage();
                   lvUp(ch, dataObj);
                 }, 300);
                 if(ch.lv % 10 === 0) {
-                  util.getSkill(gameData, ch, dataObj.data.slotIdx, dataObj.saveData, dataObj.changeSaveData);
+                  util.getSkill(gameData, ch, dataObj.data.chSlotIdx, dataObj.saveData, dataObj.changeSaveData);
                 }
               }
             }
@@ -1782,6 +1781,7 @@ export const util = { //this.loadImage();
         } else {
           sData.info.money += dataObj.data.gameItem.price;//돈 계산
         }
+        console.log(dataObj.data);
         sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
       }
       dataObj.changeSaveData(sData);//데이터 저장
@@ -1805,6 +1805,7 @@ export const util = { //this.loadImage();
     } else if (dataObj.type === 'holeEquip') {
       dataObj.showPopup(false);
     }
+    callback && callback();
   },
   getColorant:(colorSet, gameData) => {
     const dataIdx = colorSet.split('_');

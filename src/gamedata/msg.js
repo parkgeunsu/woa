@@ -830,6 +830,11 @@ export const msg = {
 			en:'Release',
 			jp:'解除',
 		},
+		socket:{
+			ko:'소켓',
+			en:'Socket',
+			jp:'ソケット',
+		},
 		equip:{
 			ko:'장착',
 			en:'Equip',
@@ -1118,7 +1123,37 @@ export const msg = {
 			ko:'동물스킬이 초기화 되었습니다.',
 			en:'Animal Skills have been reset.',
 			jp:'動物スキルが初期化されました。'
-		}
+		},
+		goShop:{
+			ko:'상점으로 이동합니다.',
+			en:'Go to the store.',
+			jp:'ショップに移動します。',
+		},
+		goInven:{
+			ko:'창고로 이동합니다.',
+			en:'Go to your warehouse.',
+			jp:'倉庫に移動します。',
+		},
+		goTool:{
+			ko:'도구점으로 이동합니다.',
+			en:'Go to the toolbar.',
+			jp:'工具店に移動します。',
+		},
+		goTrade:{
+			ko:'교역소로 이동합니다.',
+			en:'Go to the trading post.',
+			jp:'交易所に移動します。',
+		},
+		goLab:{
+			ko:'실험실로 이동합니다.',
+			en:'Go to the lab.',
+			jp:'実験室に移動します。',
+		},
+		goForge:{
+			ko:'대장간으로 이동합니다.',
+			en:'Go to the Forge.',
+			jp:'鍛冶場に移動します。',
+		},
 	},
 	grammar:{
 		conjunction:{
