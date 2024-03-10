@@ -71,7 +71,7 @@ export const msg = {
 			jp:'属性',
 		},
 		equipment:{
-			ko:'장비 착용',
+			ko:'장비착용',
 			en:'Wearing Equipment',
 			jp:'装備着用',
 		},
@@ -1153,6 +1153,11 @@ export const msg = {
 			ko:'대장간으로 이동합니다.',
 			en:'Go to the Forge.',
 			jp:'鍛冶場に移動します。',
+		},
+		goItemEquip:{
+			ko:'아이템 장착하러 이동합니다.',
+			en:'Go to Equip Item.',
+			jp:'アイテム装着に移動します。',
 		},
 	},
 	grammar:{

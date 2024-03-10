@@ -303,7 +303,12 @@ const App = () => {
         }
       });
       if (!location || location === 'start') {
-        navigate('../gameMain');
+        util.saveHistory({
+          location: 'gameMain',
+          navigate: navigate,
+          callback: () => {},
+          isNavigate: false,
+        });
       }
       // const history = util.loadData('history');
       // if ((history === null || history === undefined || history.length === 0 || history[0] === '') && 

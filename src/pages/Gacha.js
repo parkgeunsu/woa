@@ -710,7 +710,7 @@ const Gacha = ({
 					<GachaEffect ref={effectRef}/>
 				</GachaArea>
 				<GachaOrder>
-					{step === 1 && <StyledButton btnImg={imgSet.button.btnMD} onClick={() => {
+					{step === 1 && <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
 						cardRef.current.forEach((el, idx) => {
 							const data = gachaCard[idx];
 							const cardGrade = gameData.ch[data.idx].grade;
@@ -724,7 +724,7 @@ const Gacha = ({
           }}>{gameData.msg.button['flipAllCards'][lang]}</StyledButton>}
 					{step === 2 && (
 						<>
-							<StyledButton btnImg={imgSet.button.btnMD} onClick={() => {
+							<StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
 								cardRef.current.forEach((el) => {
 									el.classList.remove('special');
 									el.classList.remove('open');
@@ -745,7 +745,7 @@ const Gacha = ({
 									setStep(1);
 								}, 500);
 							}}>{gameData.msg.button['redraw'][lang]}</StyledButton>
-							<StyledButton btnImg={imgSet.button.btnMD} onClick={() => {
+							<StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
 								const startingGrade = paramData.recruitment.cardArr; //최초 시작 영웅들 등급
 								util.saveData('historyParam', {
 									...util.loadData('historyParam'),

@@ -1,5 +1,6 @@
 import { FlexBox } from 'components/Container';
 import { IconPic } from 'components/ImagePic';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -17,11 +18,17 @@ const LinkButton = styled(Link)`
 `;
 const ActiveButton = styled.button`
   display: inline-block;
-  width: ${({width}) =>  width ? `${width}px` : '100%'};
-  ${({size}) => {
-    return size === 'small' ? 
-    `height: 25px;` : 
-    `padding: 10px 15px`;
+  width: ${({width}) =>  width ? 
+    width === '100%' ? 
+      width : 
+      `${width}px` : 
+  'auto'};
+  ${({type, size}) => {
+    return type === 'icon' ? 
+      `padding: 5px`
+     : size === 'small' ? 
+      `height: 25px;` : 
+      `padding: 10px 15px`;
   }};
   background: rgba(0,0,0,.7);
   color: #fff;
@@ -49,9 +56,9 @@ const ButtonText = styled.span`
 `;
 const StyledIconPic = styled(IconPic)`
   display: inline-block;
-  margin: 0 5px 0 0;
-  width: 16px;
-  height: 16px;
+  ${({isChildren}) => isChildren ? `margin: 0 5px 0 0;` : ''}
+  width: 24px;
+  height: 24px;
   flex-shrink: 0;
 `;
 const Button = ({
@@ -62,6 +69,7 @@ const Button = ({
   icon,
   ...rest
 }) => {
+  const isChildren = React.useMemo(() => children ? true : false, [children]);
   return (
     <>
       {type === 'menu' && (
@@ -70,10 +78,10 @@ const Button = ({
         </LinkButton>
       )}
       {type === 'icon' && (
-        <ActiveButton style={{paddingLeft: "20px"}} width={width} size={size} {...rest}>
+        <ActiveButton type={type} width={width} size={size} {...rest}>
           <FlexBox>
-            <StyledIconPic type={icon.type} pic={icon.pic} idx={icon.idx} />
-            <ButtonText>{children}</ButtonText>
+            <StyledIconPic type={icon.type} pic={icon.pic} idx={icon.idx} isChildren={isChildren} />
+            {isChildren && <ButtonText>{children}</ButtonText>}
           </FlexBox>
         </ActiveButton>
       )}
@@ -101,13 +109,14 @@ const IconButton = ({
   size,
   icon,
   onClick,
-  children,
   ...rest
 }) => {
   return (
     <IconBtn size={size} icon={icon} {...rest} onClick={() => {
       onClick && onClick();
-    }}>{children}</IconBtn>
+    }}>
+      <IconPic type="commonBtn" pic="icon100" idx={23} />
+    </IconBtn>
   )
 }
 export { Button, IconButton };

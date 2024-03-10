@@ -153,6 +153,7 @@ const CharacterAnimalSkill = ({
     return context.gameData;
   }, [context]);
   const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
+  const chName = React.useMemo(() => gameData.ch[saveCh.idx].na1, [saveData, slotIdx]);
   const animalPoint = React.useMemo(() => {
     return saveCh.animalBeige;
   }, [saveData, slotIdx]);
@@ -170,7 +171,7 @@ const CharacterAnimalSkill = ({
   return (
     <>
       <Wrap className="skillAnimal scroll-y">
-        <InfoGroup title={gameData.msg.menu.animalSkill[lang]} guideClick={() => {
+        <InfoGroup pointTitle={chName} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.animalSkill[lang]}`} guideClick={() => {
           setPopupType('guide');
           setPopupOn(true);
           setPopupInfo({
@@ -178,7 +179,7 @@ const CharacterAnimalSkill = ({
           });
         }}>
           <SkillHeader>
-            <div className="skill_reset" onClick={() => {
+            <div onClick={() => {
               const sData = {...saveData};
               sData.ch[slotIdx].animalBeige = util.getAnimalPoint(itemPoint, animalType, saveData.ch[slotIdx].mark);
               sData.ch[slotIdx].animalSkill = saveCh.animalSkill.map((skGroup) => {

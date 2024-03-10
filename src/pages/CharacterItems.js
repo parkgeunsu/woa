@@ -20,17 +20,17 @@ const Wrap = styled(FlexBox)`
 `;
 const ActionType = styled.div`
   position: absolute;
-  left: 50%;
-  top: 0;
-  width: 60px;
-  height: 60px;
+  right: 5px;
+  bottom: 5px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  transform: translate(-50%, 0);
   box-shadow: ${({theme}) => `0 0 10px 5px ${theme.color.red}`};
   z-index: 10;
 `;
 const EquipItems = styled.div`
   position: relative;
+  height: 100%;
   width: 100%;
 `;
 const EquipItem = styled.ul``;
@@ -41,36 +41,36 @@ const ItemList = styled.li`
   padding-top: calc(20% - 5px);
   border: 1px solid #fff;
   &:first-of-type {
-    left: 6%;
+    left: 3%;
     top: 5px;
   }
   &:nth-of-type(2) {
-    right: 6%;
+    right: 3%;
     top: 5px;
   }
   &:nth-of-type(3) {
-    left: 6%;
-    top: calc(27% + 2px);
+    left: 3%;
+    top: 20%;
   }
   &:nth-of-type(4) {
-    right: 6%;
-    top: calc(27% + 2px);
+    right: 3%;
+    top: 20%;
   }
   &:nth-of-type(5) {
-    left: 6%;
-    bottom: calc(27% + 2px);
+    left: 3%;
+    top: 40%;
   }
   &:nth-of-type(6) {
-    right: 6%;
-    bottom: calc(27% + 2px);
+    right: 3%;
+    top: 40%;
   }
   &:nth-of-type(7) {
-    left: 6%;
-    bottom: 5px;
+    left: 3%;
+    top: 60%;
   }
   &:nth-of-type(8) {
-    right: 6%;
-    bottom: 5px;
+    right: 3%;
+    top: 60%;
   }
   ${({empty}) => empty ? `
     background-image: radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-grey) 100%);
@@ -103,9 +103,11 @@ const EmptyIconPic = styled(IconPic)`
 // .item.item5{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-yellow) 100%);}
 
 const AnimalItemPic = styled(IconPic)`
-  position: relative;
-  padding-top: 100%;
-  width: 100%;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding-top: 70%;
+  width: 70%;
   height: 0;
   ${'' /* &:before{
     content:'';
@@ -140,8 +142,49 @@ const AnimalItemPic = styled(IconPic)`
   } */}
 `;
 const PossibleKg = styled(FlexBox)`
-  margin: 0 0 10px 0;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100px;
   height: auto;
+`;
+const PossibleKgBar = styled.div`
+  position: relative;
+  margin: 0 0 5px 0;
+  width: 100%;
+  height: 10px;
+  border: ${({theme}) => `1px solid ${theme.color.grey1};`};
+  background: ${({theme}) => theme.color.grey3};
+  border-radius: 20px;
+  overflow: hidden;
+`;
+const PossibleKgCurrentBar = styled.span`
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  width: ${({ percent }) => percent > 100 ? 100 : percent}%;
+  height: 100%;
+  border-radius: 20px;
+  transition: width linear 0.5s;
+`;
+const State = styled(FlexBox)`
+  position: absolute;
+  left: 25%;
+  right: 25%;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  ul {
+    width: 100%;
+  }
+`;
+const StateList = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+const StateText = styled(Text)`
+  margin: 0 10px 0 0;
 `;
 const CharacterItems = ({
   saveData,
@@ -210,21 +253,24 @@ const CharacterItems = ({
   return (
     <>
       <Wrap className="items">
-        <InfoGroup title={gameData.msg.menu.equipment[lang]} guideClick={() => {
+        <InfoGroup pointTitle={chData.na1} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.equipment[lang]}`} guideClick={() => {
           setPopupType('guide');
           setPopupOn(true);
           setPopupInfo({
             data:gameData.guide["characterItem"],
           });
         }}>
-          <PossibleKg justifyContent="flex-end">
-            <Text code="t5" color="main" weight="600">{`${possibleKg[0]}kg / ${possibleKg[1]}kg`}</Text>
+          <PossibleKg direction="column" alignItems="flex-start" justifyContent="flex-start">
+            <PossibleKgBar>
+              <PossibleKgCurrentBar className="gradient_dark_g" percent={(possibleKg[0] / possibleKg[1]) * 100} />
+            </PossibleKgBar>
+            <Text code="t2" color="main">{`${possibleKg[0]}kg / ${possibleKg[1]}kg`}</Text>
           </PossibleKg>
+          <AnimalItemPic ref={animalPic} pic="animalType" idx={animalIdx} className={`animal_item_pic animal_type${animalIdx}`} />
+          <ActionType>
+            <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={saveCh.newActionType[0] + 1} />
+          </ActionType>
           <EquipItems>
-            <ActionType>
-              <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={saveCh.newActionType[0] + 1} />
-            </ActionType>
-            <AnimalItemPic ref={animalPic} pic="animalType" idx={animalIdx} className={`animal_item_pic animal_type${animalIdx}`} />
             <EquipItem className="e_items">
               {saveItems && saveItems.map((data, idx) => {
                 const itemChk = Object.keys(data).length;
@@ -285,6 +331,18 @@ const CharacterItems = ({
                 }
               })}
             </EquipItem>
+            <State alignItems="flex-start">
+              <ul>
+                {gameData.battleStateName.map((bData, idx) => {
+                  return (
+                    <StateList key={idx} className={bData}>
+                      <StateText code="t1" color="land3">{gameData.msg.state[bData].en}</StateText>
+                      <Text code="t4" color="set">{saveCh['bSt'+idx] + saveCh['iSt'+idx]}</Text>
+                    </StateList>
+                  )
+                })}
+              </ul>
+            </State>
           </EquipItems>
         </InfoGroup>
       </Wrap>

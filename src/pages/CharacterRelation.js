@@ -1,4 +1,5 @@
 import { AppContext } from 'App';
+import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import { ChPic } from 'components/ImagePic';
 import InfoGroup from 'components/InfoGroup';
@@ -45,6 +46,14 @@ const CardCh = styled.span`
 	height: 130%;
 `;
 
+const ChDescription = styled(Text)`
+  padding: 10px;
+  flex: 0.7;
+  text-align: left;
+`;
+const ChRelation = styled(FlexBox)`
+  flex: 1;
+`;
 const CharacterRelation = ({
   saveData,
   slotIdx,
@@ -74,7 +83,7 @@ const CharacterRelation = ({
   return (
     <>
       <Wrap className="relation">
-        <InfoGroup title={gameData.msg.menu.relation[lang]} guideClick={() => {
+        <InfoGroup pointTitle={chData.na1} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.relation[lang]}`} guideClick={() => {
           setPopupType('guide');
           setPopupOn(true);
           setPopupInfo({
@@ -82,53 +91,58 @@ const CharacterRelation = ({
             lang:lang,
           });
         }}>
-          {chRelation && chRelation.map((rtData, idx) => {
-            const relationData = gameData.relation[rtData];
-            return (
-              <div key={idx} className="rt" flex-h="true">
-                <div className="relationInfo" flex="true">
-                  <span className="name">{relationData.na[lang]}</span>
-                  <span className="txt" dangerouslySetInnerHTML={{__html: relationData.txt[lang]}} />
-                </div>
-                <div className={`relationMember`} flex="true">
-                  {relationData.member && relationData.member.map((data, idx_) => {
-                    const chData = gameData.ch[data];
-                    let hasRelation = false;
-                    saveData.ch.filter((saveCh) => {
-                      if (saveCh.idx === data) {
-                        hasRelation = true;
-                        relationAll[idx][idx_] = true;
-                        return;
-                      }
-                    });
-                    let rtAll = true;
-                    relationAll[idx].forEach((rtData) => {
-                      if (rtData === false) {
-                        rtAll = false;
-                      }
-                    });
-                    return (
-                      chData && (
-                        <div key={idx_} style={{
-                          margin: "0 10px 0 0",
-                        }}>
-                          <div className={`relation_ch ${hasRelation ? 'on' : ''} ${rtAll}`}>
-                            <CardChRing>
-                              <ChPic isThumb={true} type="cardBack" pic="card" idx={0} />
-                            </CardChRing>
-                            <CardCh>
-                              <ChPic isThumb={true} pic="ch" idx={chData.display} />
-                            </CardCh>
+          <ChRelation>
+            {chRelation && chRelation.map((rtData, idx) => {
+              const relationData = gameData.relation[rtData];
+              return (
+                <div key={idx} className="rt" flex-h="true">
+                  <div className="relationInfo" flex="true">
+                    <span className="name">{relationData.na[lang]}</span>
+                    <span className="txt" dangerouslySetInnerHTML={{__html: relationData.txt[lang]}} />
+                  </div>
+                  <div className={`relationMember`} flex="true">
+                    {relationData.member && relationData.member.map((data, idx_) => {
+                      const chData = gameData.ch[data];
+                      let hasRelation = false;
+                      saveData.ch.filter((saveCh) => {
+                        if (saveCh.idx === data) {
+                          hasRelation = true;
+                          relationAll[idx][idx_] = true;
+                          return;
+                        }
+                      });
+                      let rtAll = true;
+                      relationAll[idx].forEach((rtData) => {
+                        if (rtData === false) {
+                          rtAll = false;
+                        }
+                      });
+                      return (
+                        chData && (
+                          <div key={idx_} style={{
+                            margin: "0 10px 0 0",
+                          }}>
+                            <div className={`relation_ch ${hasRelation ? 'on' : ''} ${rtAll}`}>
+                              <CardChRing>
+                                <ChPic isThumb={true} type="cardBack" pic="card" idx={0} />
+                              </CardChRing>
+                              <CardCh>
+                                <ChPic isThumb={true} pic="ch" idx={chData.display} />
+                              </CardCh>
+                            </div>
+                            {rtAll && <div className="rtAll">ALL</div>}
                           </div>
-                          {rtAll && <div className="rtAll">ALL</div>}
-                        </div>
+                        )
                       )
-                    )
-                  })}
+                    })}
+                  </div>
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </ChRelation>
+          <ChDescription code="t2" color="main" className="scroll-y">
+            {chData.txt}
+          </ChDescription>
         </InfoGroup>
       </Wrap>
       <PopupContainer>

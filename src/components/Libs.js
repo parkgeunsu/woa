@@ -55,24 +55,33 @@ export const util = { //this.loadImage();
   removeData: (key) => {
     localStorage.removeItem(key);
   },
-  saveHistory: (callback) => {
-    const history = util.loadData('history') || [];
+  saveHistory: ({location, navigate, callback, isNavigate, state}) => {
+    let history = isNavigate ? util.loadData('history') || [] : [];
     setTimeout(() => {
-      const currentLocation = window.location.pathname.split('/')[1],
-        prevLocation = history.length > 0 ? util.loadData('history')[0] : '';
-      if (currentLocation !== prevLocation) {
-        history.unshift(currentLocation);
+      const prevLocation = history.length > 0 ? history[0] : '';
+      if (location !== prevLocation.pageName) {
+        history.unshift({
+          location: location,
+          state: state ? {
+            ...state,
+          } : '',
+        });
         util.saveData('history', history);
       }
       callback && callback();
+      navigate(`../${location}`, {state: state ? state : ''});
     }, 100);
   },
   historyBack: (navigate) => {
     const history = util.loadData('history');
-    if (history === null || history === undefined || history.length === 0 || history[0] === '') {
+    if (history === null || history === undefined || Object.keys(history).length === 1 || history[1] === '') {
       navigate('/');
     } else {
-      navigate(`../${history[0]}`);
+      navigate(`../${history[1].location}`, {
+        state: {
+          ...history[1].state,
+        }
+      });
       history.shift();//첫 history 삭제
       util.saveData('history', history);
     }
@@ -503,14 +512,8 @@ export const util = { //this.loadImage();
     }
   },
   getPercentColor: (max, num) => { //능력치 높고낮음 처리컬러
-    const co = num/max*765;
-    if(co < 255){
-      return 'rgb('+co+',0,0)';
-    } else if (co < 510) {
-      return 'rgb(255,'+co%255+',0)';
-    }else{
-      return 'rgb(255,255,'+co%510+')';
-    }
+    const co = (num / max) * 150;
+    return `hsl(${150 - co}deg 100% 50%)`;
   },
   getPercent: (total, current) => { //퍼센트 계산
     if(current === 0){
@@ -585,7 +588,7 @@ export const util = { //this.loadImage();
     '','','','','','','','','','',
     '','','','','','','','','','진형'];
     let arr_ko = ['체력','행동력','행동회복력','공격력','방어력','술법공격력','술법방어력','회복력','속도','행운','쪼기','할퀴기','물기','치기','누르기','던지기','','','','','',
-    '빛','어둠','물','불','바람','땅','어둠 강화','물 강화','불 강화',
+    '빛','어둠','물','불','바람','땅','빛 강화','어둠 강화','물 강화','불 강화',
     '바람 강화','땅 강화','','','','','','','','',
     '','','','','','','','','','',
     '','','','','','','','','','',

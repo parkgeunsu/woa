@@ -1,4 +1,6 @@
 import { AppContext } from 'App';
+import { Text } from 'components/Atom';
+import { Button } from 'components/Button';
 import { ActionChDisplay } from 'components/Components';
 import { ItemPic, MarkPic } from 'components/ImagePic';
 import ItemGradeColor from 'components/ItemGradeColor';
@@ -231,6 +233,24 @@ const ShopItem = styled.div`
 		opacity: 0;
 	`};
 `;
+const StyledButton = styled(Button)`
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), rgba(255,255,255,0.5));
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.5), 0 0 1px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0,0,0,1);
+  border-radius: 20px;
+  color:rgba(255,255,255,0.9);
+  line-height:1;
+`;
+const buttonType = (button, itemData) => {
+	if (itemData.sealed) {
+		button.push('evaluate');
+	} else {
+		if (itemData.slot) {
+			button.unshift('socket');
+		}
+		button.unshift('equip', 'enhance');
+	}
+	return button;
+}
 const ShopFooter = ({
 	selectItem,
 	setSelectItem,
@@ -472,7 +492,7 @@ const ShopFooter = ({
 				switch(button) {
 					case 'buy':
 						return (
-							<button key={`button${idx}`} text="true" className="button_small" onClick={(e) => {
+							<StyledButton key={`button${idx}`} type="icon" icon={{type:'commonBtn', pic:'icon100', idx:24}} onClick={(e) => {
 								if (shopType === 'shop') {
 									if (selectedItem.gameItem?.part <= 3) { //무기이면
 										// if (actionCh.idx === '') {
@@ -510,14 +530,22 @@ const ShopFooter = ({
 										setMsgOn(true);
 										setMsg(gameData.msg.sentence.goTool[lang]);
 										timeoutRef.current = setTimeout(() => {
-											navigate('../tool', {state: {dataObj: {
-												saveItemData: selectedItem.saveItemData,
-												gameItem: selectedItem.gameItem,
-												itemSaveSlot: selectedItem.itemSaveSlot,
-												selectTab: 0,
-												type: selectedItem.itemCate,
-												selectSlot: selectSlot,
-											}}});
+											util.saveHistory({
+												location: 'tool',
+												navigate: navigate,
+												callback: () => {},
+												state: {
+													dataObj: {
+														saveItemData: selectedItem.saveItemData,
+														gameItem: selectedItem.gameItem,
+														itemSaveSlot: selectedItem.itemSaveSlot,
+														selectTab: 0,
+														type: selectedItem.itemCate,
+														selectSlot: selectSlot,
+													}
+												},
+												isNavigate: true,
+											});
 										}, 1800);
 									}
 								} else if (shopType === 'tool') {
@@ -525,14 +553,22 @@ const ShopFooter = ({
 										setMsgOn(true);
 										setMsg(gameData.msg.sentence.goShop[lang]);
 										timeoutRef.current = setTimeout(() => {
-											navigate('../shop', {state: {dataObj: {
-												saveItemData: selectedItem.saveItemData,
-												gameItem: selectedItem.gameItem,
-												itemSaveSlot: selectedItem.itemSaveSlot,
-												selectTab: 0,
-												type: 'equip',
-												selectSlot: selectSlot,
-											}}});
+											util.saveHistory({
+												location: 'shop',
+												navigate: navigate,
+												callback: () => {},
+												state: {
+													dataObj: {
+														saveItemData: selectedItem.saveItemData,
+														gameItem: selectedItem.gameItem,
+														itemSaveSlot: selectedItem.itemSaveSlot,
+														selectTab: 0,
+														type: 'equip',
+														selectSlot: selectSlot,
+													}
+												},
+												isNavigate: true,
+											});
 										}, 1800);
 									} else {
 										// if (actionCh.idx === '') {
@@ -570,72 +606,191 @@ const ShopFooter = ({
 								}	else if (shopType === 'inven') {
 									console.log('a');
 								}
-							}} data-buttontype="itemBuy">{gameData.msg.button.buy[lang]}</button>
+							}} data-buttontype="itemBuy" />
 						)
 					case 'sell':
 						return (
-							<button key={`button${idx}`} text="true" className="button_small" onClick={(e) => {
+							<StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} key={`button${idx}`} onClick={(e) => {
 								if (shopType === 'shop') {
-									if (selectedItem.gameItem?.part <= 3) { //무기이면
-										// if (actionCh.idx === '') {
-										// 	setMsgOn(true);
-										// 	setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[201].na));
-										// 	return;
-										// }
-										let saveD = {...saveData};
-										// if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemSell) {//행동력 지불
-										// saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemSell;
-										util.buttonEvent({
-											event: e,
-											type: 'itemSell',
-											data: {
-												slotIdx: 0,
-												gameItem: selectedItem.gameItem,
-												itemSaveSlot: selectedItem.itemSaveSlot,
-												type: 'equip',
-											},
-											saveData: saveD,
-											changeSaveData: changeSaveData,
-											gameData: gameData,
-											msgText: setMsg,
-											showMsg: setMsgOn,
-											showPopup: setPopupOn,
-											lang: lang,
-										});
-										setSelectItem({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
-										// } else {
-										// 	setMsgOn(true);
-										// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
-										// }
-									} else {
+									if (typeof selectedItem.gameItem?.part === 'number') { //장비면
+										if (selectedItem.gameItem?.part <= 3) { //무기이면
+											// if (actionCh.idx === '') {
+											// 	setMsgOn(true);
+											// 	setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[201].na));
+											// 	return;
+											// }
+											let saveD = {...saveData};
+											// if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemSell) {//행동력 지불
+											// saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemSell;
+											util.buttonEvent({
+												event: e,
+												type: 'itemSell',
+												data: {
+													slotIdx: 0,
+													gameItem: selectedItem.gameItem,
+													itemSaveSlot: selectedItem.itemSaveSlot,
+													type: 'equip',
+												},
+												saveData: saveD,
+												changeSaveData: changeSaveData,
+												gameData: gameData,
+												msgText: setMsg,
+												showMsg: setMsgOn,
+												showPopup: setPopupOn,
+												lang: lang,
+											}, () => {
+												if (saveData.items.equip[selectedItem.itemSaveSlot]) { //다음 아이템이 있으면
+													const itemData = saveData.items.equip[selectedItem.itemSaveSlot],
+														itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5,
+														nextItem = itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx] : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx];
+													timeoutRef.current = setTimeout(() => {
+														util.saveHistory({
+															location: 'shop',
+															navigate: navigate,
+															callback: () => {},
+															state: {
+																dataObj: {
+																	saveItemData: saveData.items.equip[selectedItem.itemSaveSlot],
+																	gameItem: nextItem,
+																	itemSaveSlot: selectedItem.itemSaveSlot,
+																	selectTab: selectTab,
+																	type: 'equip',
+																	selectSlot: selectSlot,
+																}
+															},
+															isNavigate: true,
+														});
+													}, 1800);
+												} else {
+													setSelectItem({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
+												}
+											});
+											// } else {
+											// 	setMsgOn(true);
+											// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
+											// }
+										} else {
+											setMsgOn(true);
+											setMsg(gameData.msg.sentence.goTool[lang]);
+											timeoutRef.current = setTimeout(() => {
+												util.saveHistory({
+													location: 'tool',
+													navigate: navigate,
+													callback: () => {},
+													state: {
+														dataObj: {
+															saveItemData: selectedItem.saveItemData,
+															gameItem: selectedItem.gameItem,
+															itemSaveSlot: selectedItem.itemSaveSlot,
+															selectTab: 3,
+															type: selectedItem.itemCate,
+															selectSlot: selectSlot,
+														}
+													},
+													isNavigate: true,
+												});
+											}, 1800);
+										}
+									} else { //기타 도구이면
 										setMsgOn(true);
 										setMsg(gameData.msg.sentence.goTool[lang]);
 										timeoutRef.current = setTimeout(() => {
-											navigate('../tool', {state: {dataObj: {
-												saveItemData: selectedItem.saveItemData,
-												gameItem: selectedItem.gameItem,
-												itemSaveSlot: selectedItem.itemSaveSlot,
-												selectTab: typeof selectedItem.gameItem.part === 'number' ? 3 : 0,
-												type: selectedItem.itemCate,//'equip',//shopType === 'shop' ? 'equip' : typeList[selectTab].na,
-												selectSlot: selectSlot,
-											}}});
+											util.saveHistory({
+												location: 'tool',
+												navigate: navigate,
+												callback: () => {},
+												state: {
+													dataObj: {
+														saveItemData: selectedItem.saveItemData,
+														gameItem: selectedItem.gameItem,
+														itemSaveSlot: selectedItem.itemSaveSlot,
+														selectTab: 3,
+														type: selectedItem.itemCate,
+														selectSlot: selectSlot,
+													}
+												},
+												isNavigate: true,
+											});
 										}, 1800);
 									}
 								} else if (shopType === 'tool') {
-									if (selectedItem.gameItem?.part <= 3) { //무기이면
-										setMsgOn(true);
-										setMsg(gameData.msg.sentence.goShop[lang]);
-										timeoutRef.current = setTimeout(() => {
-											navigate('../shop', {state: {dataObj: {
-												saveItemData: selectedItem.saveItemData,
-												gameItem: selectedItem.gameItem,
-												itemSaveSlot: selectedItem.itemSaveSlot,
-												selectTab: typeof selectedItem.gameItem.part === 'number' ? 3 : 0,
-												type: typeList[selectTab].na,
-												selectSlot: selectSlot,
-											}}});
-										}, 1800);
-									} else {
+									if (typeof selectedItem.gameItem?.part === 'number') { //장비면
+										if (selectedItem.gameItem?.part <= 3) { //무기이면
+											setMsgOn(true);
+											setMsg(gameData.msg.sentence.goShop[lang]);
+											timeoutRef.current = setTimeout(() => {
+												util.saveHistory({
+													location: 'shop',
+													navigate: navigate,
+													callback: () => {},
+													state: {
+														dataObj: {
+															saveItemData: selectedItem.saveItemData,
+															gameItem: selectedItem.gameItem,
+															itemSaveSlot: selectedItem.itemSaveSlot,
+															selectTab: 3,
+															type: typeList[selectTab].itemCate,
+															selectSlot: selectSlot,
+														}
+													},
+													isNavigate: true,
+												});
+											}, 1800);
+										} else {
+											// if (actionCh.idx === '') {
+											// 	setMsgOn(true);
+											// 	setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[201].na));
+											// 	return;
+											// }
+											let saveD = {...saveData};
+											// if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemSell) {//행동력 지불
+											//saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemSell;
+											util.buttonEvent({
+												event: e,
+												type: 'itemSell',
+												data: {
+													slotIdx: 0,
+													gameItem: selectedItem.gameItem,
+													itemSaveSlot: selectedItem.itemSaveSlot,
+													type: selectedItem.itemCate,
+												},
+												saveData: saveD,
+												changeSaveData: changeSaveData,
+												gameData: gameData,
+												msgText: setMsg,
+												showMsg: setMsgOn,
+												showPopup: setPopupOn,
+												lang: lang,
+											}, () => {
+												console.log(selectedItem);
+												// if (saveData.items.equip[selectedItem.itemSaveSlot]) { //다음 아이템이 있으면
+												// 	const itemData = saveData.items.equip[selectedItem.itemSaveSlot],
+												// 		itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5,
+												// 		nextItem = itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx] : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx];
+												// 	navigate('../tool', {state: {dataObj: {
+												// 		saveItemData: saveData.items.equip[selectedItem.itemSaveSlot],
+												// 		gameItem: nextItem,
+												// 		itemSaveSlot: selectedItem.itemSaveSlot,
+												// 		selectTab: selectTab,
+												// 		type: 'equip',
+												// 		selectSlot: selectSlot,
+
+												// 		saveItemData: selectedItem.saveItemData,
+												// 		gameItem: selectedItem.gameItem,
+												// 		itemSaveSlot: selectedItem.itemSaveSlot,
+												// 		selectTab: typeof selectedItem.gameItem.part === 'number' ? 3 : 0,
+												// 		type: selectedItem.itemCate,//'equip',//shopType === 'shop' ? 'equip' : typeList[selectTab].na,
+												// 		selectSlot: selectSlot,
+												// 	}}});
+												// } else {
+												// 	setSelectItem({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
+												// }
+											});
+											// } else {
+											// 	setMsgOn(true);
+											// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
+										}
+									} else { //기타 도구이면
 										// if (actionCh.idx === '') {
 										// 	setMsgOn(true);
 										// 	setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[201].na));
@@ -644,7 +799,6 @@ const ShopFooter = ({
 										let saveD = {...saveData};
 										// if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemSell) {//행동력 지불
 										//saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemSell;
-										console.log(selectedItem);
 										util.buttonEvent({
 											event: e,
 											type: 'itemSell',
@@ -661,80 +815,176 @@ const ShopFooter = ({
 											showMsg: setMsgOn,
 											showPopup: setPopupOn,
 											lang: lang,
+										}, () => {
+											console.log(selectedItem);
+											// if (saveData.items.equip[selectedItem.itemSaveSlot]) { //다음 아이템이 있으면
+											// 	const itemData = saveData.items.equip[selectedItem.itemSaveSlot],
+											// 		itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5,
+											// 		nextItem = itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx] : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx];
+											// 	navigate('../tool', {state: {dataObj: {
+											// 		saveItemData: saveData.items.equip[selectedItem.itemSaveSlot],
+											// 		gameItem: nextItem,
+											// 		itemSaveSlot: selectedItem.itemSaveSlot,
+											// 		selectTab: selectTab,
+											// 		type: 'equip',
+											// 		selectSlot: selectSlot,
+
+											// 		saveItemData: selectedItem.saveItemData,
+											// 		gameItem: selectedItem.gameItem,
+											// 		itemSaveSlot: selectedItem.itemSaveSlot,
+											// 		selectTab: typeof selectedItem.gameItem.part === 'number' ? 3 : 0,
+											// 		type: selectedItem.itemCate,//'equip',//shopType === 'shop' ? 'equip' : typeList[selectTab].na,
+											// 		selectSlot: selectSlot,
+											// 	}}});
+											// } else {
+											// 	setSelectItem({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
+											// }
 										});
-										setSelectItem({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
 										// } else {
 										// 	setMsgOn(true);
 										// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
 									}
 								} else if (shopType === 'inven') {
-									if (selectedItem.gameItem?.part <= 3) { //무기이면
-										setMsgOn(true);
-										setMsg(gameData.msg.sentence.goShop[lang]);
-										timeoutRef.current = setTimeout(() => {
-											navigate('../shop', {state: {dataObj: {
-												saveItemData: selectedItem.saveItemData,
-												gameItem: selectedItem.gameItem,
-												itemSaveSlot: selectedItem.itemSaveSlot,
-												selectTab: typeof selectedItem.gameItem.part === 'number' ? 3 : 0,
-												type: selectedItem.itemCate,
-												selectSlot: selectSlot,
-											}}});
-										}, 1800);
-									} else {
+									if (typeof selectedItem.gameItem?.part === 'number') { //장비면
+										if (selectedItem.gameItem?.part <= 3) { //무기이면
+											setMsgOn(true);
+											setMsg(gameData.msg.sentence.goShop[lang]);
+											timeoutRef.current = setTimeout(() => {
+												util.saveHistory({
+													location: 'shop',
+													navigate: navigate,
+													callback: () => {},
+													state: {
+														dataObj: {
+															saveItemData: selectedItem.saveItemData,
+															gameItem: selectedItem.gameItem,
+															itemSaveSlot: selectedItem.itemSaveSlot,
+															selectTab: 3,
+															type: selectedItem.itemCate,
+															selectSlot: selectSlot,
+														}
+													},
+													isNavigate: true,
+												});
+											}, 1800);
+										} else {
+											setMsgOn(true);
+											setMsg(gameData.msg.sentence.goTool[lang]);
+											timeoutRef.current = setTimeout(() => {
+												util.saveHistory({
+													location: 'tool',
+													navigate: navigate,
+													callback: () => {},
+													state: {
+														dataObj: {
+															saveItemData: selectedItem.saveItemData,
+															gameItem: selectedItem.gameItem,
+															itemSaveSlot: selectedItem.itemSaveSlot,
+															selectTab: 3,
+															type: selectedItem.itemCate,
+															selectSlot: selectSlot,
+														}
+													},
+													isNavigate: true,
+												});
+											}, 1800);
+										}
+									} else { //기타 도구이면
 										setMsgOn(true);
 										setMsg(gameData.msg.sentence.goTool[lang]);
 										timeoutRef.current = setTimeout(() => {
-											navigate('../tool', {state: {dataObj: {
-												saveItemData: selectedItem.saveItemData,
-												gameItem: selectedItem.gameItem,
-												itemSaveSlot: selectedItem.itemSaveSlot,
-												selectTab: typeof selectedItem.gameItem.part === 'number' ? 3 : 0,
-												type: selectedItem.itemCate,
-												selectSlot: selectSlot,
-											}}});
+											util.saveHistory({
+												location: 'tool',
+												navigate: navigate,
+												callback: () => {},
+												state: {
+													dataObj: {
+														saveItemData: selectedItem.saveItemData,
+														gameItem: selectedItem.gameItem,
+														itemSaveSlot: selectedItem.itemSaveSlot,
+														selectTab: 3,
+														type: selectedItem.itemCate,
+														selectSlot: selectSlot,
+													}
+												},
+												isNavigate: true,
+											});
 										}, 1800);
 									}
 								}
-							}} data-buttontype="itemSell">{gameData.msg.button.sell[lang]}</button>
+							}} data-buttontype="itemSell" />
+						)
+					case 'equip':
+						return (
+							<StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:20}} key={`button${idx}`} onClick={(e) => {
+								setMsgOn(true);
+								setMsg(gameData.msg.sentence.goItemEquip[lang]);
+								timeoutRef.current = setTimeout(() => {
+									util.saveHistory({
+										location: 'cards',
+										navigate: navigate,
+										callback: () => {},
+										state: {
+											dataObj: {
+												chSlotIdx: 0,
+												chTabIdx: 5,
+												invenOpened: true,
+											}
+										},
+										isNavigate: true,
+									});
+								}, 1800);
+							}} data-buttontype="itemEquip" />
 						)
 					case 'enhance':
 						return (
-							<div key={`button${idx}`} className="item_button" flex="true">
-								<button text="true" className="button_small" onClick={(e) => {
-									setMsgOn(true);
-									setMsg(gameData.msg.sentence.goForge[lang]);
-									timeoutRef.current = setTimeout(() => {
-										navigate('../enhancingStickers', {state: {dataObj: {
-											tabIdx: 1,
-											gameItem: selectedItem.gameItem,
-											saveItemData: selectedItem.saveItemData,
-											itemSaveSlot: selectedItem.itemSaveSlot,
-										}}});
-									}, 1800);
-								}} data-buttontype="itemSocket">{gameData.msg.button.enhance[lang]}</button>
-							</div>
+							<StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:21}} key={`button${idx}`} onClick={(e) => {
+								setMsgOn(true);
+								setMsg(gameData.msg.sentence.goForge[lang]);
+								timeoutRef.current = setTimeout(() => {
+									util.saveHistory({
+										location: 'enhancingStickers',
+										navigate: navigate,
+										callback: () => {},
+										state: {
+											dataObj: {
+												gameItem: selectedItem.gameItem,
+												saveItemData: selectedItem.saveItemData,
+												itemSaveSlot: selectedItem.itemSaveSlot,
+											},
+											tabIdx: 1
+										},
+										isNavigate: true,
+									});
+								}, 1800);
+							}} data-buttontype="itemSocket" />
 						)
 					case 'socket':
 						return (
-							<div key={`button${idx}`} className="item_button" flex="true">
-								<button text="true" className="button_small" onClick={(e) => {
-									setMsgOn(true);
-                	setMsg(gameData.msg.sentence.goForge[lang]);
-									timeoutRef.current = setTimeout(() => {
-										navigate('../enhancingStickers', {state: {dataObj: {
-											tabIdx: 1,
-											gameItem: selectedItem.gameItem,
-											saveItemData: selectedItem.saveItemData,
-											itemSaveSlot: selectedItem.itemSaveSlot,
-										}}});
-									}, 1800);
-								}} data-buttontype="itemSocket">{gameData.msg.button.socket[lang]}</button>
-							</div>
+							<StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:22}} key={`button${idx}`} onClick={(e) => {
+								setMsgOn(true);
+								setMsg(gameData.msg.sentence.goForge[lang]);
+								timeoutRef.current = setTimeout(() => {
+									util.saveHistory({
+										location: 'enhancingStickers',
+										navigate: navigate,
+										callback: () => {},
+										state: {
+											dataObj: {
+												gameItem: selectedItem.gameItem,
+												saveItemData: selectedItem.saveItemData,
+												itemSaveSlot: selectedItem.itemSaveSlot,
+											},
+											tabIdx: 0
+										},
+										isNavigate: true,
+									});
+								}, 1800);
+							}} data-buttontype="itemSocket" />
 						)
 					case "evaluate":
 						return (
-							<button key={`button${idx}`} text="true" className="button_small" onClick={(e) => {
+							<StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:25}} key={`button${idx}`} onClick={(e) => {
 								if (shopType === 'inven') {
 									util.buttonEvent({
 										event: e,
@@ -754,34 +1004,52 @@ const ShopFooter = ({
 										showPopup: setPopupOn,
 										lang: lang,
 									}, () => {
-										setSelectItem({
-											saveItemData: saveData.items.equip[selectedItem.itemSaveSlot],
-											gameItem: selectedItem.gameItem,
-											itemSaveSlot: selectedItem.itemSaveSlot,
-											selectTab: selectTab,
-											itemCate: typeList[selectTab].itemCate,
-											buttonType: ['sell'],
-										});
+										timeoutRef.current = setTimeout(() => {
+											util.saveHistory({
+												location: 'inven',
+												navigate: navigate,
+												callback: () => {},
+												state: {
+													dataObj: {
+														saveItemData: saveData.items.equip[selectedItem.itemSaveSlot],
+														gameItem: selectedItem.gameItem,
+														itemSaveSlot: selectedItem.itemSaveSlot,
+														selectTab: selectTab,
+														type: typeList[selectTab].itemCate,
+														selectSlot: selectSlot,
+													}
+												},
+												isNavigate: true,
+											});
+										}, 1800);
 									});
 								} else {
 									setMsgOn(true);
 									setMsg(gameData.msg.sentence.goInven[lang]);
 									timeoutRef.current = setTimeout(() => {
-										navigate('../inven', {state: {dataObj: {
-											saveItemData: selectedItem.saveItemData,
-											gameItem: selectedItem.gameItem,
-											itemSaveSlot: selectedItem.itemSaveSlot,
-											selectTab: typeof selectedItem.gameItem.part === 'number' ? 0 : 1,
-											type: shopType === 'shop' ? 'equip' : typeList[selectTab].na,
-											selectSlot: selectSlot,
-										}}});
+										util.saveHistory({
+											location: 'inven',
+											navigate: navigate,
+											callback: () => {},
+											state: {
+												dataObj: {
+													saveItemData: selectedItem.saveItemData,
+													gameItem: selectedItem.gameItem,
+													itemSaveSlot: selectedItem.itemSaveSlot,
+													selectTab: typeof selectedItem.gameItem.part === 'number' ? 0 : 1,
+													type: shopType === 'shop' ? 'equip' : typeList[selectTab].itemCate,
+													selectSlot: selectSlot,
+												}
+											},
+											isNavigate: true,
+										});
 									}, 1800);
 								}
-							}} data-buttontype="itemSell">{gameData.msg.button.emotions[lang]}</button>
+							}} data-buttontype="itemEvaluate" />
 						);
 					case 'use':
 						return (
-							<button key={`button${idx}`} text="true" className="button_small" onClick={(e) => {
+							<StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:26}} key={`button${idx}`} onClick={(e) => {
 								util.buttonEvent({
 									event: e,
 									type: 'itemUse',
@@ -789,7 +1057,7 @@ const ShopFooter = ({
 										slotIdx: 0,
 										gameItem: selectedItem.gameItem,
 										itemSaveSlot:selectedItem.itemSaveSlot,
-										type: shopType === 'shop' ? 'equip' : typeList[selectTab].na,
+										type: shopType === 'shop' ? 'equip' : typeList[selectTab].itemCate,
 									},
 									saveData: saveData,
 									changeSaveData: changeSaveData,
@@ -800,7 +1068,7 @@ const ShopFooter = ({
 									lang: lang,
 								});
 								setSelectItem({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
-							}} data-buttontype="itemUse">{gameData.msg.button.use[lang]}</button>
+							}} data-buttontype="itemUse" />
 						)
 					default:
 						break;
@@ -812,17 +1080,28 @@ const ShopFooter = ({
 }
 
 const selectTabFn = (state, shopType, typeList) => {
-	if (!state) {
+	console.log(state);
+	if (!state || Object.keys(state).length <= 0) {
 		return 0;
 	}
+	if (typeof state.dataObj?.selectTab === 'number') {
+		return state.dataObj.selectTab;
+	}
+	let _selectTab = 0;
 	switch (shopType) {
 		case 'shop':
-			return 3;
 		case 'tool':
-		case 'inven':
-			let _selectTab = 0;
+			_selectTab = 3;
 			for (const [idx, data] of typeList.entries()) {
-				if (data.na === state.dataObj.type) {
+				if (data.na === state.dataObj.type) { 
+					_selectTab = idx;
+					break;
+				}
+			}
+			return _selectTab;
+		case 'inven':
+			for (const [idx, data] of typeList.entries()) {
+				if (data.na === state.dataObj.type) { 
 					_selectTab = idx;
 					break;
 				}
@@ -832,21 +1111,15 @@ const selectTabFn = (state, shopType, typeList) => {
 			break;
 	}
 }
-const selectItemFn = (state, shopType, selectSlot) => {
-	if (state) {
+const selectItemFn = (sData, state, shopType, selectSlot) => {
+	if (state && Object.keys(state).length > 0) {
 		if (state.dataObj.selectSlot === selectSlot) {
-			let button = ['sell'];
-			if (state.dataObj.saveItemData.sealed) {
-				button.push('evaluate');
-			} else {
-				if (state.dataObj.saveItemData.slot) {
-					button.push('socked');
-				}
-			}
+			const saveItems = sData.items[state.dataObj.type][state.dataObj.itemSaveSlot].sealed ? state.dataObj.saveItemData : sData.items[state.dataObj.type][state.dataObj.itemSaveSlot];
+			const button = buttonType(['sell'], saveItems);
 			switch (shopType) {
 				case 'shop':
 					return {
-						saveItemData: state.dataObj.saveItemData,
+						saveItemData: saveItems,
 						gameItem: state.dataObj.gameItem,
 						itemSaveSlot: state.dataObj.itemSaveSlot,
 						selectTab: state.dataObj.selectTab,
@@ -855,7 +1128,16 @@ const selectItemFn = (state, shopType, selectSlot) => {
 					};
 				case 'inven':
 					return {
-						saveItemData: state.dataObj.saveItemData,
+						saveItemData: saveItems,
+						gameItem: state.dataObj.gameItem,
+						itemSaveSlot: state.dataObj.itemSaveSlot,
+						selectTab: state.dataObj.selectTab,
+						itemCate: state.dataObj.type,
+						buttonType: button,
+					};
+				case 'tool':
+					return {
+						saveItemData: saveItems,
 						gameItem: state.dataObj.gameItem,
 						itemSaveSlot: state.dataObj.itemSaveSlot,
 						selectTab: state.dataObj.selectTab,
@@ -897,6 +1179,7 @@ const ShopList = ({
 	gameData,
 	shopType,
 	typeList,
+	invenNa,
 	list,
 	scrollIdx,
 	invenIdx,
@@ -908,165 +1191,135 @@ const ShopList = ({
 	setSelectItem2,
 	selectArea,
 }) => {
-	const invenNa = useRef(['equip', 'hole', 'upgrade', 'material', 'etc']);
 	return <>
 		{list.map((itemData, idx) => {
-		if (typeof itemData.part === 'number') { // 장비인지
-			const itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5;
-			const items = itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx] : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx];
-			const itemsHole = itemData.hole;
-			return items && (
-				<div className={`item_layout ${gameData.itemGrade.txt_e[itemData.grade].toLowerCase()} ${selectItem1?.selectTab === selectTab && selectItem1?.itemSaveSlot === idx ? 'select1' : ''} ${selectItem2?.selectTab === selectTab && selectItem2?.itemSaveSlot === idx ? 'select2' : ''} favorite${itemData.favorite}`} key={`items${idx}`} onClick={() => {
-					itemData.quality = itemsGrade;
-					const items = itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx] : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx];
-					let button = [];
-					if (shopType === 'shop') {
-						if (selectTab < 3) {
-							button.push('buy');
-						} else {
-							button.push('sell');
-							if (itemData.sealed) {
-								button.push('evaluate');
+			const selectedItem1 = typeof invenIdx === 'number' ? selectItem1?.itemCate === invenNa[invenIdx] && selectItem1?.selectTab === selectTab && selectItem1?.itemSaveSlot === idx : selectItem1?.selectTab === selectTab && selectItem1?.itemSaveSlot === idx,
+				selectedItem2 = typeof invenIdx === 'number' ? selectItem2?.itemCate === invenNa[invenIdx] && selectItem2?.selectTab === selectTab && selectItem2?.itemSaveSlot === idx : selectItem2?.selectTab === selectTab && selectItem2?.itemSaveSlot === idx;
+			if (typeof itemData.part === 'number') { // 장비인지
+				const itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5;
+				const items = itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx] : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx];
+				const itemsHole = itemData.hole;
+				return items && (
+					<div className={`item_layout ${gameData.itemGrade.txt_e[itemData.grade].toLowerCase()} ${selectedItem1 ? 'select1' : ''} ${ selectedItem2 ? 'select2' : ''} favorite${itemData.favorite}`} key={`items${idx}`} onClick={() => {
+						itemData.quality = itemsGrade;
+						const items = itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx] : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx];
+						let button = [];
+						if (shopType === 'shop') {
+							if (selectTab < 3) {
+								button.push('buy');
 							} else {
-								button.push('enhance');
-								if (itemData.slot) {
-									button.push('socket');
-								}
+								button.push('sell');
+								button = buttonType(button, itemData);
 							}
-						}
-					} else if (shopType === 'tool') {
-						if (selectTab < 3) {
-							button.push('buy');
-						} else {
-							button.push('sell');
-							if (itemData.sealed) {
-								button.push('evaluate');
+						} else if (shopType === 'tool') {
+							if (selectTab < 3) {
+								button.push('buy');
 							} else {
-								button.push('enhance');
-								if (itemData.slot) {
-									button.push('socket');
-								}
+								button.push('sell');
+								button = buttonType(button, itemData);
 							}
-						}
-					} else if (shopType === 'inven') {
-						button.push('sell');
-						if (itemData.sealed) {
-							button.push('evaluate');
-						} else {
-							button.push('enhance');
-							if (itemData.slot) {
-								button.push('socket');
-							}
-						}
-					}
-					if (selectArea === 'area2') {
-						if (selectItem1.itemSaveSlot !== '' && selectItem1.selectTab === selectTab && selectItem1.itemSaveSlot === idx) {
-							setSelectItem1({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
-						}
-						setSelectItem2({
-							saveItemData:itemData,
-							gameItem:items,
-							itemSaveSlot:idx,
-							selectTab:selectTab,
-							itemCate:typeList[scrollIdx].itemCate,
-							buttonType:button,
-						});
-					} else {
-						if (selectItem2.itemSaveSlot !== '' && selectItem2.selectTab === selectTab && selectItem2.itemSaveSlot === idx) {
-							setSelectItem2({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
-						}
-						setSelectItem1({
-							saveItemData:itemData,
-							gameItem:items,
-							itemSaveSlot:idx,
-							selectTab:selectTab,
-							itemCate:typeList[scrollIdx].itemCate,
-							buttonType:button,
-						});
-					}
-				}}>
-					<span className={`pic ${itemData.sealed ? "sealed" : ""}`}>
-						<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], itemData.color, itemData.svgColor || itemData.id)}}>
-						</svg>
-					</span>
-					<span className="hole" flex-center="true">
-						{itemsHole.map((holeData, holeidx) => {
-							const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
-							return (
-								<span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
-									<ItemPic className="pic" pic="itemEtc" type="hole" idx={holePic} />
-								</span>
-							);
-						})}
-					</span>
-				</div>
-			)
-		} else {
-			const itemTypeNa = typeof invenIdx === 'number' ? invenNa.current[invenIdx] : typeList[scrollIdx].na;
-			const items = gameItem[itemTypeNa][itemData.idx];
-			const grade = itemData.grade || items?.grade || 0;
-			return items && (
-				<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${selectItem1?.selectTab === typeList[scrollIdx].na && selectItem1?.itemSaveSlot === idx ? 'select1' : ''} ${selectItem2?.selectTab === typeList[scrollIdx].na && selectItem2?.itemSaveSlot === idx ? 'select2' : ''}`} key={`items${idx}`} onClick={() => {
-					let button = [];
-					if (shopType === 'shop') {
-						if (selectTab < 3) {
-							button.push('buy');
-						} else {
+						} else if (shopType === 'inven') {
 							button.push('sell');
-							if (itemData.sealed) {
-								button.push('evaluate');
-							}
+							button = buttonType(button, itemData);
 						}
-					} else if (shopType === 'tool') {
-						if (selectTab < 3) {
-							button.push('buy');
+						if (selectArea === 'area2') {
+							if (selectItem1.itemSaveSlot !== '' && selectItem1.selectTab === selectTab && selectItem1.itemSaveSlot === idx) {
+								setSelectItem1({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
+							}
+							setSelectItem2({
+								saveItemData:itemData,
+								gameItem:items,
+								itemSaveSlot:idx,
+								selectTab:selectTab,
+								itemCate:typeList[scrollIdx].itemCate,
+								buttonType:button,
+							});
 						} else {
+							if (selectItem2.itemSaveSlot !== '' && selectItem2.selectTab === selectTab && selectItem2.itemSaveSlot === idx) {
+								setSelectItem2({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
+							}
+							setSelectItem1({
+								saveItemData:itemData,
+								gameItem:items,
+								itemSaveSlot:idx,
+								selectTab:selectTab,
+								itemCate:typeList[scrollIdx].itemCate,
+								buttonType:button,
+							});
+						}
+					}}>
+						<span className={`pic ${itemData.sealed ? "sealed" : ""}`}>
+							<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], itemData.color, itemData.svgColor || itemData.id)}}>
+							</svg>
+						</span>
+						<span className="hole" flex-center="true">
+							{itemsHole.map((holeData, holeidx) => {
+								const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
+								return (
+									<span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
+										<ItemPic className="pic" pic="itemEtc" type="hole" idx={holePic} />
+									</span>
+								);
+							})}
+						</span>
+					</div>
+				)
+			} else {
+				const itemTypeNa = typeof invenIdx === 'number' ? invenNa[invenIdx] : typeList[scrollIdx].na;
+				const items = gameItem[itemTypeNa][itemData.idx];
+				const grade = itemData.grade || items?.grade || 0;
+				return items && (
+					<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${selectedItem1 ? 'select1' : ''} ${selectedItem2 ? 'select2' : ''}`} key={`items${idx}`} onClick={() => {
+						let button = [];
+						if (shopType === 'shop') {
+							if (selectTab < 3) {
+								button.push('buy');
+							} else {
+								button.push('sell');
+								button = buttonType(button, itemData);
+							}
+						} else if (shopType === 'tool') {
+							if (selectTab < 3) {
+								button.push('buy');
+							} else {
+								button.push('sell');
+								button = buttonType(button, itemData);
+							}
+						} else if (shopType === 'inven') {
 							button.push('sell');
-							if (itemData.sealed) {
-								button.push('evaluate');
-							}
+							button = buttonType(button, itemData);
 						}
-					} else if (shopType === 'inven') {
-						button.push('sell');
-						if (itemData.sealed) {
-							button.push('evaluate');
+						if (selectArea === 'area2') {
+							if (selectItem1.itemSaveSlot && (Object.entries(itemData).toString() === Object.entries(selectItem1.saveItemData).toString())) {
+								setSelectItem1({saveItemData:[],gameItem:[],itemSaveSlot:'',buttonType:[],selectTab:'',itemCate:''});
+							}
+							console.log(itemData, items,itemTypeNa,typeList[scrollIdx].na)
+							setSelectItem2({
+								saveItemData:itemData,
+								gameItem:items,
+								itemSaveSlot:idx,
+								selectTab:selectTab,
+								itemCate:itemTypeNa,
+								buttonType:button,
+							});
 						} else {
-							if (itemData.slot) {
-								button.push('socket');
+							if (selectItem2.itemSaveSlot && (Object.entries(itemData).toString() === Object.entries(selectItem2?.saveItemData).toString())) {
+								setSelectItem2({saveItemData:[],gameItem:[],itemSaveSlot:'',buttonType:[],selectTab:'',itemCate:''});
 							}
+							setSelectItem1({
+								saveItemData:itemData,
+								gameItem:items,
+								itemSaveSlot:idx,
+								selectTab:selectTab,
+								itemCate:itemTypeNa,
+								buttonType:button,
+							});
 						}
-					}
-					if (selectArea === 'area2') {
-						if (selectItem1.itemSaveSlot && (Object.entries(itemData).toString() === Object.entries(selectItem1.saveItemData).toString())) {
-							setSelectItem1({saveItemData:[],gameItem:[],itemSaveSlot:'',buttonType:[],selectTab:'',itemCate:''});
-						}
-						console.log(itemData, items,itemTypeNa,typeList[scrollIdx].na)
-						setSelectItem2({
-							saveItemData:itemData,
-							gameItem:items,
-							itemSaveSlot:idx,
-							selectTab:typeList[scrollIdx].na,
-							itemCate:itemTypeNa,
-							buttonType:button,
-						});
-					} else {
-						if (selectItem2.itemSaveSlot && (Object.entries(itemData).toString() === Object.entries(selectItem2?.saveItemData).toString())) {
-							setSelectItem2({saveItemData:[],gameItem:[],itemSaveSlot:'',buttonType:[],selectTab:'',itemCate:''});
-						}
-						setSelectItem1({
-							saveItemData:itemData,
-							gameItem:items,
-							itemSaveSlot:idx,
-							selectTab:typeList[scrollIdx].na,
-							itemCate:itemTypeNa,
-							buttonType:button,
-						});
-					}
-				}}>
-					<ItemPic className="pic" pic="itemEtc" type={itemTypeNa} idx={items.display} />
-				</div>
-			)
-		}
+					}}>
+						<ItemPic className="pic" pic="itemEtc" type={itemTypeNa} idx={items.display} />
+					</div>
+				)
+			}
 		})}
 	</>
 }
@@ -1078,9 +1331,9 @@ const InvenShop = ({
 }) => {
   const context = useContext(AppContext);
 	const {state} = useLocation();
-  // const lang = React.useMemo(() => {
-  //   return context.setting.lang;
-  // }, [context]);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
   const imgSet = React.useMemo(() => {
     return context.images;
   }, [context]);
@@ -1121,7 +1374,7 @@ const InvenShop = ({
 					[...sData.items.material],
 					[...sData.items.etc],
 				];
-			default:
+			default: 
 				break;
 		}
 	}, [cityIdx, sData, shopType]);
@@ -1132,14 +1385,14 @@ const InvenShop = ({
 					{na:'helm',itemCate:'equip',icon:10},
 					{na:'armor',itemCate:'equip',icon:11},
 					{na:'weapon',itemCate:'equip',icon:12},
-					{na:'inven',itemCate:'',icon:13},
+					{na:'inven',itemCate:'equip',icon:13},
 				];
 			case 'tool':
 				return [
 					{na:'accessory',itemCate:'equip',icon:18},
 					{na:'upgrade',itemCate:'upgrade',icon:15},
 					{na:'etc',itemCate:'etc',icon:17},
-					{na:'inven',itemCate:'',icon:13},
+					{na:'inven',itemCate:'equip',icon:13},
 				];
 			case 'inven':
 				return [
@@ -1153,15 +1406,16 @@ const InvenShop = ({
 				break;
 		}
 	}, [shopType]);
+	const invenNa = useRef(['equip', 'hole', 'upgrade', 'material', 'etc']);
 	const [selectTab, setSelectTab] = useState(selectTabFn(state, shopType, typeList));
 	const [selectArea, setSelectArea] = useState('area1');
-	const [selectItem1, setSelectItem1] = useState(selectItemFn(state, shopType, 1));
-	const [selectItem2, setSelectItem2] = useState(selectItemFn(state, shopType, 2));
+	const [selectItem1, setSelectItem1] = useState(selectItemFn(sData, state, shopType, 1));
+	const [selectItem2, setSelectItem2] = useState(selectItemFn(sData, state, shopType, 2));
 	useEffect(() => {
 		setSelectTab(selectTabFn(state, shopType, typeList));
-		setSelectItem1(selectItemFn(state, shopType, 1));
-		setSelectItem2(selectItemFn(state, shopType, 2));
-	}, [state, shopType, typeList]);
+		setSelectItem1(selectItemFn(sData, state, shopType, 1));
+		setSelectItem2(selectItemFn(sData, state, shopType, 2));
+	}, [sData, state, shopType, typeList]);
 	const actionCh = React.useMemo(() => sData.actionCh.shop, [sData]);//행동할 캐릭터 데이터
 	const actionRef = useRef();//행동할 캐릭터 선택자
 	useEffect(() => {
@@ -1192,7 +1446,12 @@ const InvenShop = ({
 							return <ShopItem className="scroll-y" selected={selectTab === scrollIdx} key={`scrollContent${scrollIdx}`}>
 								{typeList[scrollIdx].na === 'inven' ? 
 									scrollData.map((invenData, invenIdx) => {
-										return <ShopList gameData={gameData} shopType={shopType} typeList={typeList} list={invenData} scrollIdx={scrollIdx} invenIdx={invenIdx} selectTab={selectTab} gameItem={gameItem} selectItem1={selectItem1} setSelectItem1={setSelectItem1} selectItem2={selectItem2} setSelectItem2={setSelectItem2} selectArea={selectArea} key={`inven${invenIdx}`}/>
+										return (
+											<div key={`inven${invenIdx}`}>
+												<Text code="t3" color="main">{gameData.msg.menu[invenNa.current[invenIdx]][lang]}</Text>
+												<ShopList gameData={gameData} shopType={shopType} typeList={typeList} invenNa={invenNa.current} list={invenData} scrollIdx={scrollIdx} invenIdx={invenIdx} selectTab={selectTab} gameItem={gameItem} selectItem1={selectItem1} setSelectItem1={setSelectItem1} selectItem2={selectItem2} setSelectItem2={setSelectItem2} selectArea={selectArea} />
+											</div>
+										)
 									})
 								: 
 									<ShopList gameData={gameData} shopType={shopType} typeList={typeList} list={scrollData} scrollIdx={scrollIdx} selectTab={selectTab} gameItem={gameItem} selectItem1={selectItem1} setSelectItem1={setSelectItem1} selectItem2={selectItem2} setSelectItem2={setSelectItem2} selectArea={selectArea} />

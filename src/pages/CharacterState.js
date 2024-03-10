@@ -1,6 +1,8 @@
 import { AppContext } from 'App';
 import { Text } from 'components/Atom';
+import { Button } from 'components/Button';
 import { FlexBox } from 'components/Container';
+import { IconPic } from 'components/ImagePic';
 import InfoGroup from 'components/InfoGroup';
 import { util } from 'components/Libs';
 import Popup from 'components/Popup';
@@ -16,18 +18,20 @@ const Wrap = styled(FlexBox)`
 `;
 const ChInfo = styled.ul`
   margin: 0 0 10px 0;
+  width: 100%;
   li {
     position: relative;
-    margin: 0 0 5px 0;
-    width: calc(100% - 10px);
+    width: 100%;
   }
 `;
 const ActionPoint = styled(FlexBox)`
   flex: 1;
   & > span {
-    font-weight: 600;
-    font-size: ${({theme}) => theme.font.t3};
+    font-size: ${({theme}) => theme.font.t2};
   }
+`;
+const ChInfoBar = styled.span`
+  margin: 0 3px;
 `;
 const StyledText = styled(Text)`
   margin: 2px 5px 0 0;
@@ -36,26 +40,19 @@ const StyledText = styled(Text)`
     font-size: inherit;
   }
 `;
-const StateBar = styled(FlexBox)`
-  margin: 0 0 5px 0;
-  &:last-of-type {
-    margin: 0;
-  }
-  height: auto;
-`;
-const TotalBar = styled.span`
+const TotalBar = styled.div`
   position:relative;
-  margin: 0 5px;
-  flex: 1;
-  height: 24px;
+  margin: 3px 0 0 0;
+  width: 100%;
+  height: 14px;
   border-radius: 20px;
-  border: 3px double var(--color-w);
+  border: 1px solid ${({theme}) => theme.color.grey1};
+  box-sizing: border-box;
   background-color: #333;
   overflow: hidden;
 `;
 const Bar = styled.span`
-  display: inline-block;
-  position: relative;
+  position: absolute;
   height: 100%;
   border-radius: 20px;
   width: ${({chSt, maxSt}) => {
@@ -64,16 +61,100 @@ const Bar = styled.span`
   vertical-align: middle;
   transition: width linear 0.5s;
 `;
+const StateContainer = styled(FlexBox)`
+  width: 40%;
+`;
+const StateGroup = styled(FlexBox)`
+  margin: 0 0 2px 0;
+  padding: 3px;
+  background: ${({theme}) => `linear-gradient(${theme.color.land5}, ${theme.color.land5} 15%, ${theme.color.land4} 50%, ${theme.color.land3} 50%, ${theme.color.land3} 85%, ${theme.color.land5})`
+  };
+  border-radius: 20px;
+  box-sizing: border-box;
+  &:last-of-type {
+    margin: 0;
+  }
+  height: auto;
+`;
+const StateInner = styled(FlexBox)`
+  padding: 1px 5px 1px 10px;
+  width: auto;
+  background: ${({theme}) => theme.color.grey3};
+  border-radius: 15px;
+  box-sizing: border-box;
+  box-shadow: inset 0 0 10px ${({theme}) => theme.color.sub};
+`;
+const StateText = styled(Text)`
+  line-height: 1 !important;
+  letter-spacing: 2px;
+`;
 const TextTotal = styled(Text)`
-  margin: auto 0;
+  margin: 0 0 0 5px;
   width: 30px;
-  text-align: center;
-  color: ${({maxSt, chSt}) => {
-    return util.getPercentColor(maxSt ,chSt);
-  }} !important;
-  text-shadow: 0 0 ${({maxSt, chSt}) => (chSt / maxSt) * 10}px #fff;
+  line-height: 1 !important;
 `;
 
+const ElementContainer = styled(FlexBox)`
+  margin: 0 0 0 10px;
+  width: calc(60% - 10px);
+  `;
+const Element = styled.div`
+  position: relative;
+  margin: 0 0 4px 0;
+  width: 100%;
+  height: 24px;
+  &:last-of-type{
+    margin-bottom: 0;
+  }
+`;
+const ElementIcon = styled.div`
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  right: 0;
+  z-index: 1;
+  ${({actionPossibleElement}) => actionPossibleElement ? `
+    animation: horizontalMove infinite alternate 1s ease-in-out;
+  ` : ''}
+`;
+const ElementBar = styled.div`
+  position: absolute;
+  top: 4px;
+  width: calc(100% - 40px);
+  height: 14px;
+  border: ${({actionPossibleElement, theme}) => actionPossibleElement ? `1px solid ${theme.color.red};` : `1px solid ${theme.color.grey1};`};
+  background: ${({theme}) => theme.color.grey3};
+  border-radius: 20px;
+  white-space: nowrap;
+  overflow: ${({ percent }) => percent > 100 ? 'unset' : 'hidden'};
+  right: 26px;
+`;
+const ElementCurrentBar = styled.span`
+  display: inline-block;
+  position: absolute;
+  height: 100%;
+  border-radius: 20px;
+  width: ${({ percent }) => percent > 100 ? 100 : percent}%;
+  transition: width linear 0.5s;
+  right: 0;
+  text-align: left;
+`;
+
+const ElementNum = styled(Text)`
+  position: absolute;
+  top: 1px;
+  width: 20px;
+  line-height: 14px;
+  text-align: center;
+  left: -20px;
+`;
+const ApplyStateBtn = styled(Button)`
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  box-shadow: 0 0 10px ${({theme}) => theme.color.point1};
+`;
 const CharacterState = ({
   saveData,
   slotIdx,
@@ -89,6 +170,7 @@ const CharacterState = ({
     return context.gameData;
   }, [context]);
   const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
+  const chName = React.useMemo(() => gameData.ch[saveCh.idx].na1, [saveData, slotIdx]);
   const saveExp = React.useMemo(() => {
     return Object.keys(saveCh).length > 0 ? {
       current: saveCh.exp,
@@ -107,70 +189,110 @@ const CharacterState = ({
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
-  const stateArr = React.useMemo(() => gameData.stateName, [gameData]);
   // const chIdx = saveCh.idx;
   // util.saveLvState(0);
   return (
     <>
       <Wrap className="state">
-        <InfoGroup title={gameData.msg.menu.state[lang]} guideClick={() => {
+        <InfoGroup pointTitle={chName} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.state[lang]}`} guideClick={() => {
           setPopupType('guide');
           setPopupOn(true);
           setPopupInfo({
             data:gameData.guide["characterState"],
           });
         }}>
-          <ChInfo>
-            <li>
-              <FlexBox>
-                <Text code="t3" color="main" weight="600">{gameData.msg.state.sp[lang]}</Text>
-                <ActionPoint justifyContent="flex-end">
-                  <span className="current">{saveData.ch[slotIdx].actionPoint}</span><span className="bar">/</span><span className="max">50</span>
-                </ActionPoint>
-              </FlexBox>
-            </li>
-            <li>
-              <FlexBox>
-                <Text code="t3" color="main" weight="600">{gameData.msg.info.exp[lang]}</Text>
-                <TotalBar style={{marginRight: 0}} className="gradient_light">
-                  <Bar className="gradient_dark transition" style={{ width: util.getPercent(saveExp.max, saveExp.current)+'%'}}></Bar>
-                </TotalBar>
-              </FlexBox>
-              <StyledText code="t3" color="main" weight="600">
-                <span className="current">{saveExp.current}</span> <span className="bar">/</span> <span className="max">{saveExp.max}</span>
-              </StyledText>
-            </li>
-            <li>
-              <FlexBox>
-                <Text code="t3" color="main" weight="600">{gameData.msg.info.cumulativeExp[lang]}</Text>
-                <TotalBar style={{marginRight: 0}} className="gradient_light">
-                  <Bar className="gradient_dark transition" style={{ width: util.getPercent(saveHasExp.max, saveHasExp.current)+'%'}}></Bar>
-                </TotalBar>
-              </FlexBox>
-              <StyledText code="t3" color="main" weight="600">
-                <span className="current">{saveHasExp.current}</span> <span className="bar">/</span> <span className="max">{saveHasExp.max}</span>
-              </StyledText>
-            </li>
-          </ChInfo>
-          {stateArr && stateArr.map((data, idx) => {
-            return (
-              <StateBar key={`chst${idx}`}>
-                <>
-                  <Text code="t3" color="main" weight="600">{gameData.msg.state[data][lang]}</Text>
-                  <TotalBar className="gradient_light">
-                    <Bar idx={idx} chSt={saveCh['st'+idx]} maxSt={gameData.stateMax[idx]} className="gradient_dark_y" />
-                  </TotalBar>
-                  <TextTotal code="t3" weight="600" chSt={saveCh['st'+idx]} maxSt={gameData.stateMax[idx]} className="txt_total">
-                    {saveCh['st'+idx]}
-                  </TextTotal>
-                </>
-              </StateBar>
-            )
-          })}
+          <FlexBox direction="row">
+            <StateContainer direction="column" justifyContent="flex-start">
+              <ChInfo>
+                <li>
+                  <FlexBox>
+                    <Text code="t1" color="main">{gameData.msg.state.sp[lang]}</Text>
+                    <ActionPoint justifyContent="flex-end">
+                      <span className="current">{saveData.ch[slotIdx].actionPoint}</span><ChInfoBar>/</ChInfoBar><span className="max">50</span>
+                    </ActionPoint>
+                  </FlexBox>
+                </li>
+                <li>
+                  <FlexBox direction="column" alignItems="flex-start">
+                    <Text code="t1" color="main">{gameData.msg.info.exp[lang]}</Text>
+                    <TotalBar className="gradient_light">
+                      <Bar className="gradient_dark_g transition" style={{ width: util.getPercent(saveExp.max, saveExp.current)+'%'}}></Bar>
+                    </TotalBar>
+                  </FlexBox>
+                  <StyledText code="t1" color="main">
+                    <span className="current">{saveExp.current}</span> <ChInfoBar>/</ChInfoBar> <span className="max">{saveExp.max}</span>
+                  </StyledText>
+                </li>
+                <li>
+                  <FlexBox direction="column" alignItems="flex-start">
+                    <Text code="t1" color="main">{gameData.msg.info.cumulativeExp[lang]}</Text>
+                    <TotalBar className="gradient_light">
+                      <Bar className="gradient_dark transition" style={{ width: util.getPercent(saveHasExp.max, saveHasExp.current)+'%'}}></Bar>
+                    </TotalBar>
+                  </FlexBox>
+                  <StyledText code="t1" color="main">
+                    <span className="current">{saveHasExp.current}</span> <ChInfoBar>/</ChInfoBar> <span className="max">{saveHasExp.max}</span>
+                  </StyledText>
+                </li>
+              </ChInfo>
+              {gameData.stateName.map((data, idx) => {
+                const stateColor = util.getPercentColor(gameData.stateMax[idx] ,saveCh['st' + idx]);
+                return (
+                  <StateGroup key={`chst${idx}`} stateColor={stateColor} justifyContent="flex-start">
+                    <StateInner>
+                      <StateText code="t2" color={stateColor}>{gameData.msg.state[data][lang]}</StateText>
+                      {/* <TotalBar className="gradient_light">
+                        <Bar idx={idx} chSt={saveCh['st'+idx]} maxSt={gameData.stateMax[idx]} className="gradient_dark_y" />
+                      </TotalBar> */}
+                      <TextTotal code="t3" weight="600" color="main" className="txt_total">
+                        {saveCh['st'+idx]}
+                      </TextTotal>
+                    </StateInner>
+                  </StateGroup>
+                )
+              })}
+            </StateContainer>
+            <ElementContainer direction="column" justifyContent="flex-start">
+              {gameData.element.map((data, idx) => {
+                const num = saveCh['el' + idx] + saveCh['iSt' + (15 + idx)];
+                const elementPercent = num * .5;
+                let actionPossibleElement = 'possible';
+                saveData.ch[slotIdx].newActionType.forEach((type) => {
+                  actionPossibleElement = type === idx;
+                  if (actionPossibleElement) {
+                    return;
+                  }
+                });
+                return (
+                  <Element className={`el el${idx}`} key={`chst${idx}`}>
+                    <ElementIcon actionPossibleElement={actionPossibleElement}>
+                      <IconPic type="element" pic="icon100" idx={idx + 1} />
+                    </ElementIcon>
+                    <ElementBar actionPossibleElement={actionPossibleElement} percent={elementPercent}>
+                      <ElementCurrentBar className={actionPossibleElement ? 'gradient_dark_r' : 'gradient_dark_b'} percent={elementPercent}>
+                        <ElementNum code="t2" color="main">{num}</ElementNum>
+                      </ElementCurrentBar>
+                    </ElementBar>
+                  </Element>
+                )
+              })}
+            </ElementContainer>
+          </FlexBox>
         </InfoGroup>
+        <ApplyStateBtn size="30" type="icon" icon={{
+          pic: "icon100",
+          type: 'menu',
+          idx: 6,
+        }} onClick={() => {
+          setPopupType('applyState');
+          setPopupOn(true);
+          setPopupInfo({
+            chSlotIdx: slotIdx,
+          });
+        }}/>
       </Wrap>
       <PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} />}
+        {popupOn && <Popup type={popupType} saveData={saveData} dataObj={popupInfo} showPopup={setPopupOn} />}
       </PopupContainer>
     </>
   );

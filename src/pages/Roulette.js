@@ -230,8 +230,11 @@ const Roulette = ({
         <LineupContainer>
           <LineupGroup>
             <ChLineup showMode={true} saveData={saveData} useList={saveData?.lineup?.save_slot[saveData?.lineup?.select].entry} selectLineup={saveData?.lineup?.save_slot[saveData?.lineup?.select].no} onClick={() => {
-              util.saveHistory(() => {
-                navigate('../cardPlacement');
+              util.saveHistory({
+                location: 'cardPlacement',
+                navigate: navigate,
+                callback: () => {},
+                isNavigate: true,
               });//히스토리 저장
             }} />
           </LineupGroup>

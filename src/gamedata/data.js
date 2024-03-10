@@ -25,7 +25,8 @@ export const version = "0.1";
 export const gameData = {
     itemType: [{ko:'',en:''},{ko:'투구',en:'Helm'},{ko:'갑옷',en:'Armor'},{ko:'무기',en:'Weapon'},{ko:'반지',en:'Ring'},{ko:'목걸이',en:'Necklace'}],
     stateName: ['lds', 'sta', 'str', 'spd', 'int', 'men', 'chr', 'luk'],
-    chMenu: ['display', 'state', 'element', 'animalSkill', 'skill', 'relation', 'item', 'applyState'],
+    battleStateName: ['hp','sp','rsp','atk','def','mak','mdf','rcv','spd','luk'],
+    chMenu: ['display', 'state', 'animalSkill', 'skill', 'relation', 'item'],
     startCardArr: [[6], [5,3,2], [4,4,3,2],],
     startGold: [10000, 20000, 30000],
     country: country,

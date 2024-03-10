@@ -14,9 +14,7 @@ import styled from 'styled-components';
 import ItemGradeColor from 'components/ItemGradeColor';
 import { util } from 'components/Libs';
 import CharacterAnimalSkill from 'pages/CharacterAnimalSkill';
-import CharacterApplyState from 'pages/CharacterApplyState';
 import CharacterCard from 'pages/CharacterCard';
-import CharacterElement from 'pages/CharacterElement';
 import CharacterItems from 'pages/CharacterItems';
 import CharacterPaging from 'pages/CharacterPaging';
 import CharacterRelation from 'pages/CharacterRelation';
@@ -360,12 +358,10 @@ const Cards = ({
             <Img imgurl={imgSet.images.transparent800} />
             {chPage === 0 ? <CharacterCard saveData={sData} slotIdx={slotIdx} /> : <ChBack type="cardBack" pic="card" idx={1} />}
             {chPage === 1 && <CharacterState saveData={sData} slotIdx={slotIdx} />}
-            {chPage === 2 && <CharacterElement saveData={sData} slotIdx={slotIdx} />}
-            {chPage === 3 && <CharacterAnimalSkill saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
-            {chPage === 4 && <CharacterSkill saveData={sData} slotIdx={slotIdx} />}
-            {chPage === 5 && <CharacterRelation saveData={sData} slotIdx={slotIdx} />}
-            {chPage === 6 && <CharacterItems saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
-            {chPage === 7 && <CharacterApplyState saveData={sData} slotIdx={slotIdx} />}
+            {chPage === 2 && <CharacterAnimalSkill saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
+            {chPage === 3 && <CharacterSkill saveData={sData} slotIdx={slotIdx} />}
+            {chPage === 4 && <CharacterRelation saveData={sData} slotIdx={slotIdx} />}
+            {chPage === 5 && <CharacterItems saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
           </ChCard>
           <CharacterPaging chLength={chLength} saveData={sData} changeChSlot={changeChSlot} slotIdx={slotIdx} />
           <ChInven ref={invenRef} frameBack={imgSet.etc.frameChBack}>

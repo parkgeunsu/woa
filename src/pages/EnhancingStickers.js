@@ -311,11 +311,22 @@ const selectTabFn = (state) => {
 	if (!state) {
 		return 0;
 	}
-	return state.dataObj.tabIdx;
+	return state.tabIdx;
 }
-const selectItemFn = (state) => {
+const selectItemFn = (state, item, gameItem) => {
 	if (!state) {
-		return {save:{},select:'',game:{}}
+		return {
+			save: {},
+			select: '',
+			game: {},
+		}
+	}
+	if (typeof state.tabIdx === 'number') {
+		return {
+			save: item.equip[0],
+			select: 0,
+			game: gameItem.equip[item.equip[0].part][item.equip[0].weaponType][item.equip[0].grade < 5 ? 0 : item.equip[0].grade - 5][item.equip[0].idx]
+		}
 	}
 	return {
 		save:state.dataObj.saveItemData,
@@ -350,7 +361,7 @@ const EnhancingStickers = ({
   const [msg, setMsg] = useState("");
 	const [selectTab, setSelectTab] = useState(selectTabFn(state));
 	const [item, setItem] = useState({...saveData.items});
-	const [selectItem1, setSelectItem1] = useState(selectItemFn(state));//좌측 장비 save, game
+	const [selectItem1, setSelectItem1] = useState(selectItemFn(state, item, gameItem));//좌측 장비 save, game
 	const [possibleHole, setPossibleHole] = useState([]);
 	const [selectItem2, setSelectItem2] = useState({save:[],select:[],game:[]});//탭1 우측 홀 save, game
 	const [selectItem3, setSelectItem3] = useState({save:{},select:'',game:{}});//탭2 우측 홀 save, game
@@ -411,9 +422,9 @@ const EnhancingStickers = ({
 			const itemIdx = selectItem1.select ? selectItem1.select : 0,
 				itemSave = {...saveData.items.equip[itemIdx]};
 			setSelectItem1({
-				save:itemSave,
-				select:itemIdx,
-				game:gameItem.equip[saveData.items.equip[itemIdx].part][saveData.items.equip[itemIdx].weaponType][saveData.items.equip[itemIdx].grade < 5 ? 0 : saveData.items.equip[itemIdx].grade - 5][saveData.items.equip[itemIdx].idx],
+				save: itemSave,
+				select: itemIdx,
+				game: gameItem.equip[saveData.items.equip[itemIdx].part][saveData.items.equip[itemIdx].weaponType][saveData.items.equip[itemIdx].grade < 5 ? 0 : saveData.items.equip[itemIdx].grade - 5][saveData.items.equip[itemIdx].idx],
 			});
 			setItem({...saveData.items});
 			let baseSelectItem = {save:[],select:[],game:[]},
@@ -687,7 +698,7 @@ const EnhancingStickers = ({
 										const items = gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx];
 										const grade = data.grade || items.grade;
 										const itemsHole = data.hole;
-										return (
+										return items && (
 											<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${selectItem1.select === idx ? 'select1' : ''}`} key={`hole_${idx}`} onClick={() => {//하단 좌측 장비 클릭
 												setMainColor(data.color);//상단 장비 합성배경 색상
 												let baseSelectItem = {save:[],select:[],game:[]};
@@ -793,7 +804,7 @@ const EnhancingStickers = ({
 								<div className="button_group">
 									<button className="button_big" text="true" onClick={(e) => {
 										e.stopPropagation();
-										console.log('업그레이드');
+										console.log('업그레이드', selectItem1);
 										if (actionCh.idx === '') {
 											setMsgOn(true);
 											setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[207].na));
@@ -923,7 +934,7 @@ const EnhancingStickers = ({
 										const items = gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx];
 										const grade = data.grade || items.grade;
 										const itemsHole = data.hole;
-										return (
+										return items && (
 											<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${selectItem1.select === idx ? 'select1' : ''}`} key={`hole_${idx}`} onClick={() => {//하단 좌측 장비 클릭
 												let baseSelectItem = {save:[],select:[],game:[]};data.hole.forEach((holeData,idx) => {//박혀 있는 hole셋팅
 													if (holeData) {

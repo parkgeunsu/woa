@@ -74,14 +74,25 @@ const ChracterList = ({
             { saveData.ch && saveData.ch.map((data, idx) => {
               return (
                 <li className={`g${data.grade}`} key={idx} onClick={() => {
-                  util.saveHistory(() => {
-                    util.saveData('historyParam', {
-                      ...util.loadData('historyParam'),
-                      cards: {
-                        selectIdx: idx,
+                  util.saveHistory({
+                    location: 'cards',
+                    navigate: navigate,
+                    callback: () => {
+                      util.saveData('historyParam', {
+                        ...util.loadData('historyParam'),
+                        cards: {
+                          chSlotIdx: idx,
+                          chTabIdx: 0,
+                        }
+                      });
+                    },
+                    state: {
+                      dataObj: {
+                        chSlotIdx: idx,
+                        chTabIdx: 0,
                       }
-                    });
-                    navigate('../cards');
+                    },
+                    isNavigate: true,
                   });//히스토리 저장
                 }}>
                   <CharacterCard usedType="list" saveData={sData} saveCharacter={data} />

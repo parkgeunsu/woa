@@ -422,12 +422,19 @@ const ScenarioList = ({
           <StageInfoWrap direction="column">
             <StageInfo justifyContent="flex-start" alignItems="flex-start">
               <StageMap onClick={() => {
-                util.saveHistory(() => {
-                  util.saveData('historyParam', {
-                    ...util.loadData('historyParam'),
+                util.saveHistory({
+                  location: 'cardPlacement',
+                  navigate: navigate,
+                  callback: () => {
+                    util.saveData('historyParam', {
+                      ...util.loadData('historyParam'),
+                      scenario: selectScenario
+                    });
+                  },
+                  state: {
                     scenario: selectScenario
-                  });
-                  navigate('../cardPlacement');
+                  },
+                  isNavigate: true,
                 });//히스토리 저장
               }}>
               {stageData.map.map((mapData, mapIdx) => {

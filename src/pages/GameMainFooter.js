@@ -109,13 +109,13 @@ const GameMainFooter = ({
     <>
       <Wrapper className="footer">
         <ButtonWrap gameMode={gameMode === ''} isRoot={true}>
-          <StyledButton btnImg={imgSet.button.btnMD} onClick={() => {
+          <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
             setGameMode('roulette');
           }}>{gameData.msg.button['exploreRegions'][lang]}</StyledButton>
-          <StyledButton btnImg={imgSet.button.btnMD} onClick={() => {
+          <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
             setGameMode('scenario');
           }}>{gameData.msg.button['scenarios'][lang]}</StyledButton>
-          <StyledButton btnImg={imgSet.button.btnMD} onClick={() => {
+          <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
             setGameMode('moveRegion');
           }}>{gameData.msg.button['moveRegion'][lang]}</StyledButton>
         </ButtonWrap>
@@ -124,7 +124,7 @@ const GameMainFooter = ({
             setRouletteIdx(0);
             setGameMode('');
           }}>{gameData.msg.button['cancel'][lang]}</StyledButton>}
-          <StyledButton btnImg={imgSet.button.btnMD} onClick={() => {
+          <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
             if (!isRouletteSpin) {
               if (rouletteIdx === 3) {//탐색시작
                 let isEmptyEntry = true;
@@ -138,15 +138,25 @@ const GameMainFooter = ({
                   setMsg(gameData.msg.sentence['organizeCard'][lang]);
                   return;
                 }
-                util.saveHistory(() => {
-                  util.saveData('historyParam', {
-                    ...util.loadData('historyParam'),
+                util.saveHistory({
+                  location: 'battle',
+                  navigate: navigate,
+                  callback: () => {
+                    util.saveData('historyParam', {
+                      ...util.loadData('historyParam'),
+                      scenario: {
+                        stay: stay,
+                        stageDifficult: selectScenario.stageDifficult,
+                      }
+                    });
+                  },
+                  state: {
                     scenario: {
                       stay: stay,
                       stageDifficult: selectScenario.stageDifficult,
                     }
-                  });
-                  navigate('../battle');
+                  },
+                  isNavigate: true,
                 });
                 setRouletteIdx(0);
                 return;
@@ -205,20 +215,33 @@ const GameMainFooter = ({
           }}>{pickMsg}</StyledButton>
         </ButtonWrap>
         <ButtonWrap alignItems="self-end" gameMode={gameMode === 'scenario'}>
-          <StyledButton btnImg={imgSet.button.btnSD} className="backBtn"  onClick={() => {
+          <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="backBtn"  onClick={() => {
             setGameMode('');
           }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
           {Object.keys(selectScenario).length === 0 ? 
-            <StyledButton btnImg={imgSet.button.btnMD}>{gameData.msg.sentence['selectScenario'][lang]}</StyledButton> :
-            <StyledButton btnImg={imgSet.button.btnMD} type="icon" icon={{
+            <StyledButton width="100%" btnImg={imgSet.button.btnMD}>{gameData.msg.sentence['selectScenario'][lang]}</StyledButton> :
+            <StyledButton width="100%" btnImg={imgSet.button.btnMD} type="icon" icon={{
               pic: 'icon100',
               type: 'scenario',
               idx: selectScenario?.stageDifficult
             }} onClick={() => {
               console.log('전투개시');
-              util.saveHistory(() => {
-                util.saveData('historyParam', {
-                  ...util.loadData('historyParam'),
+              util.saveHistory({
+                location: 'battle',
+                navigate: navigate,
+                callback: () => {
+                  util.saveData('historyParam', {
+                    ...util.loadData('historyParam'),
+                    scenario: {
+                      stay: stay,
+                      dynastyIdx: selectScenario.dynastyIdx,
+                      dynastyScenarioIdx: selectScenario.dynastyScenarioIdx,
+                      stageIdx: selectScenario.stageIdx,
+                      stageDifficult: selectScenario.stageDifficult,
+                    }
+                  });
+                },
+                state: {
                   scenario: {
                     stay: stay,
                     dynastyIdx: selectScenario.dynastyIdx,
@@ -226,17 +249,17 @@ const GameMainFooter = ({
                     stageIdx: selectScenario.stageIdx,
                     stageDifficult: selectScenario.stageDifficult,
                   }
-                });
-                navigate('../battle');
+                },
+                isNavigate: true,
               });
             }}>{gameData.scenario[stay][selectScenario.dynastyIdx]?.scenarioList[selectScenario.dynastyScenarioIdx].stage[selectScenario.stageIdx].title[lang]} {gameData.msg.button['startBattle'][lang]}</StyledButton>
           }
         </ButtonWrap>
         <ButtonWrap alignItems="self-end" gameMode={gameMode === 'moveRegion'}>
-          <StyledButton btnImg={imgSet.button.btnSD} className="backBtn"  onClick={() => {
+          <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="backBtn"  onClick={() => {
             setGameMode('');
           }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
-          <StyledButton btnImg={imgSet.button.btnMD} onClick={() => {
+          <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
             if (selectMoveRegion === '') {
               setMsgOn(true);
               setMsg(gameData.msg.sentence['selectMoveCountry'][lang]);
@@ -245,23 +268,27 @@ const GameMainFooter = ({
               setMsg(gameData.msg.sentence['sameCountry'][lang]);
             } else {
               console.log('지역이동');
-              util.saveHistory(() => {
-                const distance = util.getDistanceToEvent(gameData.country[stayIdx.current].distancePosition, gameData.country[selectMoveRegion]?.distancePosition) + gameData.countryEventsNum;
-                util.saveData('historyParam', {
-                  ...util.loadData('historyParam'),
-                  moveEvent: {
-                    stay: stay,
-                    moveTo: selectMoveRegion,
-                    distance: distance,
-                    blockArr: {
-                      block: Array.from({length:distance}, () => Math.floor(Math.random() * gameData.events.block.length)),
-                      type: Array.from({length:distance}, () => util.fnPercent(gameData.percent.eventsPercent)),
-                    },
-                    spBlockArr: Array.from({length:Math.floor(distance / 4) + 1}, () => { return {type: util.fnPercent(gameData.percent.bigEventsPercent), get: false}}),
-                    currentStep: 0,
-                  }
-                });
-                navigate('../moveEvent');
+              util.saveHistory({
+                location: 'moveEvent',
+                navigate: navigate,
+                callback: () => {
+                  const distance = util.getDistanceToEvent(gameData.country[stayIdx.current].distancePosition, gameData.country[selectMoveRegion]?.distancePosition) + gameData.countryEventsNum;
+                  util.saveData('historyParam', {
+                    ...util.loadData('historyParam'),
+                    moveEvent: {
+                      stay: stay,
+                      moveTo: selectMoveRegion,
+                      distance: distance,
+                      blockArr: {
+                        block: Array.from({length:distance}, () => Math.floor(Math.random() * gameData.events.block.length)),
+                        type: Array.from({length:distance}, () => util.fnPercent(gameData.percent.eventsPercent)),
+                      },
+                      spBlockArr: Array.from({length:Math.floor(distance / 4) + 1}, () => { return {type: util.fnPercent(gameData.percent.bigEventsPercent), get: false}}),
+                      currentStep: 0,
+                    }
+                  });
+                },
+                isNavigate: true,
               });
             }
           }}>

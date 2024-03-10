@@ -155,6 +155,7 @@ const CharacterSkill = ({
     return context.gameData;
   }, [context]);
   const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
+  const chName = React.useMemo(() => gameData.ch[saveCh.idx].na1, [saveData, slotIdx]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
@@ -162,7 +163,7 @@ const CharacterSkill = ({
   return (
     <>
       <Wrap className="skill scroll-y">
-        <InfoGroup title={gameData.msg.menu.skill[lang]} guideClick={() => {
+        <InfoGroup pointTitle={chName} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.skill[lang]}`} guideClick={() => {
           setPopupType('guide');
           setPopupOn(true);
           setPopupInfo({
