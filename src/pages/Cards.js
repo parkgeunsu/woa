@@ -90,14 +90,18 @@ const ChInfo = styled.div`
     margin:auto 0;text-align:left;font-size:0.813rem;color:#999;
   }
 `;
-const ChOrder = styled(FlexBox)`
+const ButtonArea = styled(FlexBox)`
   position: relative;
-  padding: 0 20px;
   height: 50px;
   width: 100%;
-  flex-wrap: wrap;
   background-color: var(--color-b);
-  overflow-x: auto;
+`;
+const StyledButton = styled(Button)`
+  flex-basis: 40px;
+`;
+const ChOrder = styled.div`
+  white-space: nowrap;
+  text-align: center;
 `;
 const StyledIconPic = styled(IconPic)`
   display: inline-block;
@@ -226,7 +230,7 @@ const Cards = ({
 		setChPage(setPageIdxFn(state));
     if (state?.dataObj.invenOpened) {
       invenRef.current.opend = 'opend';
-      invenRef.current.style.top = "calc(50% - 10px)";
+      invenRef.current.style.top = "calc(65% - 10px)";
     } else {
       invenRef.current.opend = '';
       invenRef.current.style.top = "100%";
@@ -270,67 +274,9 @@ const Cards = ({
     setPopupOn(prev => !prev);
   }, [invenItems, slotIdx]);
   const invenRef = useRef(null);
-  const touchPosition = useRef(null);
-  const hasScrollElement = useRef(null);
-  const handleTouchStart = (e) => {
-    hasScrollElement.current = e.target.closest(".scroll-y");
-    const touchDown = [e.touches[0].clientX, e.touches[0].clientY];
-    touchPosition.current = touchDown;
-  }
-  const handleTouchMove = (e) => {
-    const touchDown = touchPosition.current;
-    const currentTouch = [e.touches[0].clientX, e.touches[0].clientY];
-    if (!touchDown || !currentTouch) {
-      return;
-    }
-    const diffX = touchDown[0] - currentTouch[0],
-      diffY = touchDown[1] - currentTouch[1];
-    if (hasScrollElement.current === null) {
-      if (Math.abs(diffX) > Math.abs(diffY)){
-        if (diffX > 5) { //오른쪽
-          setSlotIdx((prevSlot) => {
-            prevSlot--;
-            return prevSlot < 0 ? chLength - 1 : prevSlot;
-          });
-        }
-        if (diffX < -5) { //왼쪽
-          setSlotIdx((prevSlot) => {
-            prevSlot++;
-            return prevSlot > chLength - 1 ? 0 : prevSlot;
-          });
-        }
-      } else {
-        if (diffY > 5) { //위로
-          setChPage((prevPage) => {
-            return prevPage < 6 ? ++prevPage : 0;
-          });
-        }
-        if (diffY < -5) { //아래로
-          setChPage(0);
-        }
-      }
-    } else {
-      if (Math.abs(diffX) > Math.abs(diffY)){
-        if (diffX > 5) { //오른쪽
-          setSlotIdx((prevSlot) => {
-            prevSlot--;
-            return prevSlot < 0 ? chLength - 1 : prevSlot;
-          });
-        }
-        if (diffX < -5) { //왼쪽
-          setSlotIdx((prevSlot) => {
-            prevSlot++;
-            return prevSlot > chLength - 1 ? 0 : prevSlot;
-          });
-        }
-      }
-    }
-    touchPosition.current = null;
-    hasScrollElement.current = null;
-  }
   return (
     <>
-      <ChWrap className="ch_wrap"  backImg={imgSet.back[0]} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
+      <ChWrap className="ch_wrap"  backImg={imgSet.back[0]}>
         <ChArea>
           <div style={{position:"absolute",left:0,top:0,zIndex:100, backgroundColor: '#fff'}}>
             <button onClick={() => {
@@ -371,7 +317,7 @@ const Cards = ({
                 invenRef.current.style.top = "100%";
               } else {
                 invenRef.current.opend = 'opend';
-                invenRef.current.style.top = "calc(50% - 10px)";
+                invenRef.current.style.top = "calc(65% - 10px)";
               }
             }}>
               <Text code="t2" color="main">{gameData.msg.menu.inven[lang]}</Text></InvenToggleButton>
@@ -501,7 +447,14 @@ const Cards = ({
           {/* <CharacterItemEnhance saveData={sData} slotIdx={slotIdx} />
           <CharacterChEnhance saveData={sData} slotIdx={slotIdx} /> */}
         </ChArea>
-        <ChOrder justifyContent="flex-start">
+        <ButtonArea justifyContent="flex-start">
+          <StyledButton onClick={() => {
+            setSlotIdx((prevSlot) => {
+              prevSlot--;
+              return prevSlot < 0 ? chLength - 1 : prevSlot;
+            });
+          }}>이전</StyledButton>
+          <ChOrder className="scroll-x">
           {gameData.chMenu.map((data, idx) => {
             return (
               <StyledIconPic selected={idx === chPage} key={`chmenubutton${idx}`} pic="icon100" idx={idx} onClick={() => {
@@ -509,7 +462,14 @@ const Cards = ({
               }} />
             )
           })}
-        </ChOrder>
+          </ChOrder>
+          <StyledButton onClick={() => {
+            setSlotIdx((prevSlot) => {
+              prevSlot++;
+              return prevSlot > chLength - 1 ? 0 : prevSlot;
+            });
+          }}>다음</StyledButton>
+        </ButtonArea>
       </ChWrap>
       <PopupContainer>
         {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={sData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}

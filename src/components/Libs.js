@@ -810,11 +810,6 @@ export const util = { //this.loadImage();
       return nowNum + plusNum;
     }
   },
-  getDistanceToEvent: (arr1, arr2, baseNum) => {//지도 거리 대비 이벤트 갯수
-    if (!arr1 || !arr2) return '';
-    baseNum = baseNum ?? 0;
-    return Math.round(Math.sqrt(Math.pow(arr1[0] - arr2[0], 2) + Math.pow(arr1[1] - arr2[1], 2))) + baseNum;
-  },
   getEffectArea: (type, n) => {//type: 효과타입, n: 사용위치(0~24)
     let num = [];
     switch(type){
@@ -945,7 +940,7 @@ export const util = { //this.loadImage();
       case 16: //┌┘9
         return [4,9,14,13,12,11,10,15,20];
       case 17: //卍17
-        return [0,1,2,4,7,9,11,12,13,14,15,17,20,22,23,24];
+        return [0,1,2,4,7,9,10,11,12,13,14,15,17,20,22,23,24];
       case 20: //▦25 전체
         return [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
       case 21: //□9 정사각형9
@@ -1028,13 +1023,13 @@ export const util = { //this.loadImage();
         return [2,6,7,8,10,11,12,13,14,16,17,18,22];
       case 30: //큰 링
         return [1,2,3,5,9,10,14,15,19,21,22,23];
-      case 31: //랜덤 세로 2줄
+      case 31: //랜덤 세로 2열
         return util.getLineNumber(true, 2);
-      case 32: //랜덤 세로 3줄
+      case 32: //랜덤 세로 3열
         return util.getLineNumber(true, 3);
-      case 33: //랜덤 가로 2줄
+      case 33: //랜덤 가로 2행
         return util.getLineNumber(false, 2);
-      case 34: //랜덤 가로 3줄
+      case 34: //랜덤 가로 3행
         return util.getLineNumber(false, 3);
       case 35: //x 5
         if (n === 0 || n === 2) {
@@ -1254,62 +1249,131 @@ export const util = { //this.loadImage();
       return 1;
     }
   },
+  getDistanceToEvent: (arr1, arr2, baseNum) => {//지도 거리 대비 이벤트 갯수
+    if (!arr1 || !arr2) return '';
+    baseNum = baseNum ?? 0;
+    return Math.round(Math.sqrt(Math.pow(arr1[0] - arr2[0], 2) + Math.pow(arr1[1] - arr2[1], 2))) + baseNum;
+  },
   getIdxToCountry: (idx) => {
     switch(idx) {
       case 0:
-        return 'korea';
+        return 'japan0';
       case 1:
-        return 'japan';
+        return 'japan1';
       case 2:
-        return 'china';
+        return 'japan2';
       case 3:
-        return 'mongolia';
+        return 'korea0';
       case 4:
-        return 'saudiArabia';
+        return 'korea1';
       case 5:
-        return 'egypt';
+        return 'korea2';
       case 6:
-        return 'greece';
+        return 'mongolia0';
       case 7:
-        return 'italy';
+        return 'mongolia1';
       case 8:
-        return 'unitedKingdom';
+        return 'mongolia2';
       case 9:
-        return 'france';
+        return 'mongolia3';
       case 10:
-        return 'spain';
+        return 'mongolia4';
       case 11:
-        return 'portugal';
+        return 'china0';
+      case 12:
+        return 'china1';
+      case 13:
+        return 'china2';
+      case 14:
+        return 'china3';
+      case 15:
+        return 'china4';
+      case 16:
+        return 'china5';
+      case 17:
+        return 'china6';
+      case 18:
+        return 'china7';
+      case 19:
+        return 'saudiArabia0';
+      case 20:
+        return 'egypt0';
+      case 21:
+        return 'greece0';
+      case 22:
+        return 'italy0';
+      case 23:
+        return 'france0';
+      case 24:
+        return 'spain0';
+      case 25:
+        return 'portugal0';
+      case 26:
+        return 'unitedKingdom0';
+      case 27:
+        return 'unitedKingdom1';
       default:
         return '';
     }
   },
   getCountryToIdx: (country) => {
     switch(country) {
-      case 'korea':
+      case 'japan0':
         return 0;
-      case 'japan':
+      case 'japan1':
         return 1;
-      case 'china':
+      case 'japan2':
         return 2;
-      case 'mongolia':
+      case 'korea0':
         return 3;
-      case 'saudiArabia':
+      case 'korea1':
         return 4;
-      case 'egypt':
+      case 'korea2':
         return 5;
-      case 'greece':
+      case 'mongolia0':
         return 6;
-      case 'italy':
+      case 'mongolia1':
         return 7;
-      case 'unitedKingdom':
+      case 'mongolia2':
         return 8;
-      case 'france':
+      case 'mongolia3':
         return 9;
-      case 'spain':
+      case 'mongolia4':
         return 10;
-      case 'portugal':
+      case 'china0':
         return 11;
+      case 'china1':
+        return 12;
+      case 'china2':
+        return 13;
+      case 'china3':
+        return 14;
+      case 'china4':
+        return 15;
+      case 'china5':
+        return 16;
+      case 'china6':
+        return 17;
+      case 'china7':
+        return 18;
+      case 'saudiArabia0':
+        return 19;
+      case 'egypt0':
+        return 20;
+      case 'greece0':
+        return 21;
+      case 'italy0':
+        return 22;
+      case 'france0':
+        return 23;
+      case 'spain0':
+        return 24;
+      case 'portugal0':
+        return 25;
+      case 'unitedKingdom0':
+        return 26;
+      case 'unitedKingdom1':
+        return 27;
       default:
         return '';
     }

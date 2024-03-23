@@ -126,7 +126,7 @@ const ListCh = styled(ChPic)`
   position: absolute;
   ${({usedType}) => usedType === 'battle' ? `
     left: -10%;
-    top: -10%;
+    top: -15%;
     width: 120%;
     height: 120%;
   ` : `

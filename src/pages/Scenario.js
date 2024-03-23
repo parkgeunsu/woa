@@ -655,12 +655,12 @@ const Scenario = ({
         <ScrollWrap className="scroll-y">
           <CountryContainer>
             <CountryName>
-              {gameData.msg.regions[stay][lang]}
+              {gameData.country.regions[util.getCountryToIdx(stay)][lang]}
             </CountryName>
             {scenarioData.map((dynastyData, dynastyIdx) => {
               return <CountryScenario key={`countryData${dynastyIdx}`}>
                 {dynastyData.scenarioList?.length > 0 && 
-                  <CountryPeriod btnBack={imgSet.button.btnLD}>{gameData.msg.regions[dynastyData.name][lang]}</CountryPeriod>}
+                  <CountryPeriod btnBack={imgSet.button.btnLD}>{gameData.country.regions[util.getCountryToIdx(dynastyData.name)][lang]}</CountryPeriod>}
                   {dynastyData.scenarioList?.map((dynastyScenario, dynastyScenarioIdx) => {
                     const saveStage = saveData.scenario[stay][dynastyIdx].scenarioList[dynastyScenarioIdx],
                       stageDifficult = saveStage?.open;

@@ -23,10 +23,68 @@ const BattleHeader = styled.div`
 	display: flex;
 	height: 50px;
 	width: 100%;
+	.scenario_title {
+		margin: 0 0 5px 0;
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: #000;
+	}
+	.team_summary {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		border-radius: 10px;
+	}
+	.team_summary .ally_team,
+	.team_summary .enemy_team {
+		position: absolute;
+		width: 50%;
+		height: 100%;
+		transition: all 0.5s;
+	}
+	.ally_team {
+		left: 0;
+		background-color: var(--color-blue);
+		border-radius: 10px 0 0 10px;
+	}
+	.enemy_team {
+		right: 0;
+		background-color: var(--color-red);
+		border-radius: 0 10px 10px 0;
+	}
+	.ally_power {
+		position: absolute;
+		left: 0;
+		top: -17px;
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: #000;
+	}
+	.enemy_power {
+		position: absolute;
+		right: 0;
+		top: -17px;
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: #000;
+	}
 `;
 const BackButton = styled.div`
-	position:relative;height:100%;padding:0 10px;
-	.ico{display:inline-block;width:40px;height:40px;}
+	position: relative;
+	height: 100%;
+	padding: 0 10px;
+	.ico{
+		display: inline-block;
+		width: 40px;
+		height: 40px;
+	}
+`;
+const BattleTitle = styled.div`
+	padding: 10px 10px;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	justify-content: space-around;
 `;
 const BattleWarp = styled.div`
 	position: relative;
@@ -35,7 +93,8 @@ const BattleWarp = styled.div`
 	box-sizing: border-box;
 	overflow: hidden;
 	height: calc(100% - 50px);
-	background:url(${({backImg}) => backImg});background-size:cover;
+	background: url(${({backImg}) => backImg});
+	background-size: cover;
 `;
 const BattleArea = styled.div`
 	height: calc(100% - 50px);
@@ -52,10 +111,78 @@ const BattleArea = styled.div`
 const BattleUnit = styled.div`
 `;
 const BattleLand = styled.div`
-	transition:all ${({ gameSpd }) => 1.125 / gameSpd}s;}
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	transition: all ${({ gameSpd }) => 1.125 / gameSpd}s;
+	.land_ally {
+		position: relative;
+		margin: 0 auto;
+	}
+	.land_enemy {
+		position: relative;
+		margin: 0 auto;
+	}
+	& > div {
+		position: relative;
+		margin: 0 auto;
+		box-sizing: border-box;
+	}
+	&.ready .land {
+		outline-width: 2px;
+	}
+	&.critical {
+		animation: landCritical 0.2s ease-in-out;
+	}
 `;
 const BattleEffect = styled.div`
-	transition:all ${({ gameSpd }) => 1.125 / gameSpd}s;}
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  z-index: 3;
+  pointer-events: none;
+  overflow: hidden;
+	transition: all ${({ gameSpd }) => 1.125 / gameSpd}s;
+	.land_ally {
+		position: relative;
+		margin: 0 auto;
+		&.allEff .effect_land {
+			display: none;
+			&:nth-of-type(13) {
+				display: block;
+				transform: scale(5);
+				z-index: 1;
+			}
+		}
+	}
+	.land_enemy {
+		position: relative;
+		margin: 0 auto;
+		&.allEff .effect_land {
+			display: none;
+			&:nth-of-type(13) {
+				display: block;
+				transform: scale(5);
+				z-index: 1;
+			}
+		}
+	}
+	& > div {
+		position: relative;
+		margin: 0 auto;
+		box-sizing: border-box;
+	}
+	&.ready .land {
+		outline-width: 2px;
+	}
 `;
 const TimeLineCh = styled.div`
 	position: relative;
@@ -180,6 +307,7 @@ const Passive = styled.div`
 const EffLand = styled.div`
 	left:${({left}) => left}%;
 	top:${({top}) => top}%;
+	transform: ${({size, rotate}) => `rotate(${rotate}deg) scale(${size})`};
 	.dmgNum{
 		transition:all ${({gameSpd}) => 1.125 / gameSpd}s ease-in;
 	}
@@ -188,7 +316,7 @@ const Eff = styled.img`
 	height:${({frame}) => {
 		return Math.ceil(frame / 5) * 100;
 	}}%;
-	animation:frame${({frame}) => frame} ${({gameSpd}) => 1.125 / gameSpd}s steps(1);
+	animation:${({frame, gameSpd}) => `frame${frame} ${(frame / 10) * 1.125 / gameSpd}s steps(1)`};
 	animation-iteration-count: ${({repeat}) => repeat || "infinite"};
 `;
 const Land = styled.div`
@@ -540,10 +668,40 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 		}
 		if (skillCate === 1 || skillCate === 4){ //대기, 방어, 철벽방어
 			setTurnIdx(turnIdx + 1);
-			actionAnimation(setTurnIdx, setSkillMsg, turnIdx + 1, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, bgm, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, {
-				atkCount: atkC,
-				atkStay: atkS,
-			});
+			actionAnimation({
+        setTurnIdx: setTurnIdx,
+        setSkillMsg: setSkillMsg, 
+        turnIdx: turnIdx + 1,
+        timeLine: timeLine,
+        resetOrder: resetOrder,
+        setAllyEffect: setAllyEffect,
+        setEnemyEffect: setEnemyEffect,
+        gameData: gameData,
+        battleAlly: battleAlly,
+        battleEnemy: battleEnemy,
+        gameSpd: gameSpd,
+        bgm: bgm,
+        setAllyAction: setAllyAction,
+        setEnemyAction: setEnemyAction,
+        setLandCriticalEffect: setLandCriticalEffect,
+        allyPos: allyPos,
+        enemyPos: enemyPos,
+        modeRef: modeRef,
+        setMode: setMode,
+        setWeather: setWeather,
+        allyEnemyPassive: allyEnemyPassive,
+        allyPassive: allyPassive,
+        enemyPassive: enemyPassive,
+        setAllyEnemyPassive: setAllyEnemyPassive,
+        allyEnemyBuff: allyEnemyBuff,
+        allyBuff: allyBuff,
+        enemyBuff: enemyBuff,
+        setAllyEnemyBuff: setAllyEnemyBuff,
+        atkOption: {
+          atkCount: atkC,
+          atkStay: atkS,
+        }
+      });
 		} else { //액티브 스킬
 			let attacker = {},
 				defencer = [],
@@ -1285,54 +1443,60 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 									});
 								}
 							}
-							if (targets.length === 25){
+							// if (targets.length === 25){
+							// 	targets.forEach((data, idx) => {
+							// 		let chk = false;
+							// 		targetIdx.forEach((taIdx) => {
+							// 			if (taIdx === data) {
+							// 				chk = true;
+							// 				return;
+							// 			}
+							// 		});
+							// 		if (chk) { //스킬 맞는 위치와 범위값중 일치하는지 확인
+							// 			targetArr[idx] = {
+							// 				posIdx:data,
+							// 				animation:0,
+							// 				dmg:Math.floor(dmg[targetCount]),
+							// 			};
+							// 			targetCount ++;
+							// 		} else {
+							// 			targetArr[idx] = {
+							// 				posIdx:data,
+							// 				animation:0,
+							// 			};
+							// 		}
+							// 	});
+							// 	targetArr[12].posIdx = 12;
+							// 	targetArr[12].animation = gameData.skill[skillIdx].effAnimation;
+							// } else {
 								targets.forEach((data, idx) => {
 									let chk = false;
 									targetIdx.forEach((taIdx) => {
 										if (taIdx === data) {
 											chk = true;
-											return;
 										}
 									});
-									if (chk) { //스킬 맞는 위치와 범위값중 일치하는지 확인
-										targetArr[idx] = {
-											posIdx:data,
-											animation:0,
-											dmg:Math.floor(dmg[targetCount]),
-										};
-										targetCount ++;
-									} else {
-										targetArr[idx] = {
-											posIdx:data,
-											animation:0,
-										};
-									}
-								});
-								targetArr[12].posIdx = 12;
-								targetArr[12].animation = gameData.skill[skillIdx].effAnimation;
-							} else {
-								targets.forEach((data, idx) => {
-									let chk = false;
-									targetIdx.forEach((taIdx) => {
-										if (taIdx === data) {
-											chk = true;
-										}
-									});
+									const effSize = Math.max((timeLine[turnIdx].order.skLv - 1) * 0.5 + gameData.skill[skillIdx].effSize, gameData.skill[skillIdx].effSize),
+										effRotate = gameData.skill[skillIdx].effRotate;
 									if (chk) { //스킬 맞는 위치와 범위값중 일치하는지 확인
 										targetArr[idx] = {
 											posIdx:data,
 											animation:gameData.skill[skillIdx].effAnimation,
 											dmg:Math.floor(dmg[targetCount]),
+											size:effSize,
+											rotate:effRotate,
 										};
 										targetCount ++;
 									} else {
 										targetArr[idx] = {
 											posIdx:data,
 											animation:gameData.skill[skillIdx].effAnimation,
+											size:effSize,
+											rotate:effRotate,
 										};
 									}
 								});
-							}
+							// }
 							if (timeLine[turnIdx].order.team === 'ally') { //적군 영역 effect효과
 								if (skillCate === 5) {//버프
 									setAllyEffect([
@@ -1416,11 +1580,41 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 									}
 								}
 								setTurnIdx(turnIdx_);
-								actionAnimation(setTurnIdx, setSkillMsg, turnIdx_, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, bgm, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, {
-									atkCount: atkC,
-									atkStay: atkS,
-								});
-							}, 750 / gameSpd);//공격 이펙트 효과시간
+								actionAnimation({
+                  setTurnIdx: setTurnIdx,
+                  setSkillMsg: setSkillMsg, 
+                  turnIdx: turnIdx_,
+                  timeLine: timeLine,
+                  resetOrder: resetOrder,
+                  setAllyEffect: setAllyEffect,
+                  setEnemyEffect: setEnemyEffect,
+                  gameData: gameData,
+                  battleAlly: battleAlly,
+                  battleEnemy: battleEnemy,
+                  gameSpd: gameSpd,
+                  bgm: bgm,
+                  setAllyAction: setAllyAction,
+                  setEnemyAction: setEnemyAction,
+                  setLandCriticalEffect: setLandCriticalEffect,
+                  allyPos: allyPos,
+                  enemyPos: enemyPos,
+                  modeRef: modeRef,
+                  setMode: setMode,
+                  setWeather: setWeather,
+                  allyEnemyPassive: allyEnemyPassive,
+                  allyPassive: allyPassive,
+                  enemyPassive: enemyPassive,
+                  setAllyEnemyPassive: setAllyEnemyPassive,
+                  allyEnemyBuff: allyEnemyBuff,
+                  allyBuff: allyBuff,
+                  enemyBuff: enemyBuff,
+                  setAllyEnemyBuff: setAllyEnemyBuff,
+                  atkOption: {
+                    atkCount: atkC,
+                    atkStay: atkS,
+                  }
+                });
+							}, ((gameData.effectFrameNum[targetArr[0].animation] / 10) * 1125 * (skill.effAnimationRepeat || 1)) / gameSpd);//공격 이펙트 효과시간
 						}, 150 / gameSpd);
 					}, 600 / gameSpd);//메시지창 사라짐
 				}, 150 / gameSpd);//메시지 오픈
@@ -2215,7 +2409,7 @@ const Battle = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-	const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
+	const sData = React.useMemo(() => saveData && Object.keys(saveData).length !== 0 ? saveData : util.loadData('saveData'), [saveData]);
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
@@ -3007,7 +3201,37 @@ const Battle = ({
 				setEnemyEffect([]);
 				timeLineSet();//타임라인 구성
 				setTurnIdx(0);
-				actionAnimation(setTurnIdx, setSkillMsg, 0, timeLine.current, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly.current, battleEnemy.current, speed, bgm, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos.current, enemyPos.current, modeRef.current, setMode, setWeather, allyEnemyPassive, allyPassive.current, enemyPassive.current, setAllyEnemyPassive, allyEnemyBuff, allyBuff.current, enemyBuff.current, setAllyEnemyBuff);
+				actionAnimation({
+          setTurnIdx: setTurnIdx,
+          setSkillMsg: setSkillMsg, 
+          turnIdx: 0,
+          timeLine: timeLine.current,
+          resetOrder: resetOrder,
+          setAllyEffect: setAllyEffect,
+          setEnemyEffect: setEnemyEffect,
+          gameData: gameData,
+          battleAlly: battleAlly.current,
+          battleEnemy: battleEnemy.current,
+          gameSpd: speed,
+          bgm: bgm,
+          setAllyAction: setAllyAction,
+          setEnemyAction: setEnemyAction,
+          setLandCriticalEffect: setLandCriticalEffect,
+          allyPos: allyPos.current,
+          enemyPos: enemyPos.current,
+          modeRef: modeRef.current,
+          setMode: setMode,
+          setWeather: setWeather,
+          allyEnemyPassive: allyEnemyPassive,
+          allyPassive: allyPassive.current,
+          enemyPassive: enemyPassive.current,
+          setAllyEnemyPassive: setAllyEnemyPassive,
+          allyEnemyBuff: allyEnemyBuff,
+          allyBuff: allyBuff.current,
+          enemyBuff: enemyBuff.current,
+          setAllyEnemyBuff: setAllyEnemyBuff,
+          atkOption: {},
+        });
 			}, pB.timeDelay);
 		} else if (mode === 'battleWin') {
 			console.log('pgs', '격!퇴!성!공!');
@@ -3123,7 +3347,7 @@ const Battle = ({
 	});
   return (
     <>
-			<BattleHeader className="header battle_header" iconBack={imgSet.icon.iconBack}>
+			<BattleHeader className="header battle_header">
 				<BackButton className="back">
 					<IconPic className="ico" type="commonBtn" pic="icon100" idx={0} onClick={() => {
 						util.saveData('historyParam', {
@@ -3133,7 +3357,7 @@ const Battle = ({
 						util.historyBack(navigate);
 					}}></IconPic>
 				</BackButton>
-				<div className="battle_title" flex-h-center="true">
+				<BattleTitle flex-h-center="true">
 					<div className="scenario_title">{isScenario ? scenarioDetail.title[lang] : scenarioDetail.title}</div>
 					<div className="team_summary">
 						<div style={{width: teamPower.current.allyPercent+"%"}} className="ally_team gradient_dark"></div>
@@ -3144,7 +3368,7 @@ const Battle = ({
 						<div className="ally_power">{teamPower.current.allyHp}</div>
 						<div className="enemy_power">{teamPower.current.enemyHp}</div>
 					</div>
-				</div>
+				</BattleTitle>
 			</BattleHeader>
 			{mode === "scenario" && (
 				<div ref={conversationScrollContainer} className="battle_scenario scroll-y" onClick={() => {
@@ -3322,20 +3546,24 @@ const Battle = ({
 								top = Math.floor(idx / 5) * mapSize;
 							let effectChk = false,
 								effAnimation = '',
-								effNum = '';
+								effNum = '',
+								effSize = '',
+								effRotate = '';
 							enemyEffect.forEach((effData) => {
 								if (effData.posIdx === idx) {
 									effectChk = true;
 									effAnimation = effData.animation;
 									effNum = effData.dmg;
+									effSize = effData.size;
+									effRotate = effData.rotate;
 								}
 							});
 							const effChk = effNum && effNum !== 0;
 							return (
-								<EffLand key={idx} className={`effect_land ${effChk ? 'dmg' : ''}`} left={left} top={top} gameSpd={speed}>
+								<EffLand key={idx} className={`effect_land ${effChk ? 'dmg' : ''}`} size={effSize} rotate={effRotate} left={left} top={top} gameSpd={speed}>
 									{effectChk && (
 										<>
-											<Eff className="effect_eff" src={imgSet.eff[effAnimation]} frame={gameData.effect[effAnimation].frame} repeat={gameData.effect[effAnimation].repeat} gameSpd={speed}/>
+											<Eff className="effect_eff" src={imgSet.effect[`effect${effAnimation}`]} frame={gameData.effectFrameNum[effAnimation]} repeat={gameData.skill[effAnimation].effAnimationRepeat} gameSpd={speed}/>
 										</>
 									)}
 									<span className="dmgNum">{effChk ? effNum : ''}</span>
@@ -3349,20 +3577,24 @@ const Battle = ({
 								top = Math.floor(idx / 5) * mapSize;
 							let effectChk = false,
 								effAnimation = '',
-								effNum = '';
+								effNum = '',
+								effSize = '',
+								effRotate = '';
 							allyEffect.forEach((effData) => {
 								if (effData.posIdx === idx) {
 									effectChk = true;
 									effAnimation = effData.animation;
 									effNum = effData.dmg;
+									effSize = effData.size;
+									effRotate = effData.rotate;
 								}
 							});
 							const effChk = effNum && effNum !== 0;
 							return (
-								<EffLand className={`effect_land ${effChk ? 'dmg' : ''}`} key={idx} left={left} top={top} gameSpd={speed}>
+								<EffLand className={`effect_land ${effChk ? 'dmg' : ''}`} size={effSize} rotate={effRotate} key={idx} left={left} top={top} gameSpd={speed}>
 									{effectChk && (
 										<>
-											<Eff className="effect_eff" src={imgSet.eff[effAnimation]} frame={gameData.effect[effAnimation].frame} repeat={gameData.effect[effAnimation].repeat} gameSpd={speed}/>
+											<Eff className="effect_eff" src={imgSet.effect[`effect${effAnimation}`]} frame={gameData.effectFrameNum[effAnimation]} repeat={gameData.skill[effAnimation].effAnimationRepeat} gameSpd={speed}/>
 										</>
 									)}
 									<span className="dmgNum">{effChk ? effNum : ''}</span>

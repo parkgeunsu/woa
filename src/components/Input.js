@@ -62,6 +62,7 @@ const TextWrap = styled.input.attrs({
   type: 'text'
 })`
   padding: 5px;
+  width: ${({width}) => width}px;
   vertical-align: middle;
   font-size: ${({theme}) => theme.font.t1};
   ${({theme, transparent}) => {
@@ -100,20 +101,21 @@ const TextField = ({
   multi,
   transparent,
   onChange,
+  width,
+  ...rest
 }) => {
-  const textInput = useRef();
   return multi ? (
     <TextMultiWrap
       onChange={(e) => {
         onChange && onChange(e.target.value);
       }} 
-      placeholder={placeholder} transparent={transparent} value={text} />
+      placeholder={placeholder} width={width} transparent={transparent} value={text} {...rest} />
   ) : (
     <TextWrap
       onChange={(e) => {
         onChange && onChange(e.target.value);
       }} 
-      placeholder={placeholder} transparent={transparent} value={text} />
+      placeholder={placeholder} width={width} transparent={transparent} value={text} {...rest} />
   )
 }
 
@@ -253,7 +255,12 @@ const Select = ({
         <SelectOptionArea>
           <SelectOptionGroupBox className={animation ? 'on' : ''}>
             <SelectOptionGroupTitle>{title}</SelectOptionGroupTitle>
-            <SelectOptionGroup className="scroll-y">
+            <SelectOptionGroup ref={(node) => {
+              if (node !== null) {
+                const nodeHeight = node.children[0].children[0].getBoundingClientRect().height;
+                node.scrollTo(0, selectIdx * nodeHeight);
+              }
+            }} className="scroll-y">
               <ul>
                 {selectOption.map((data, idx) => {
                   return (

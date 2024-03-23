@@ -296,7 +296,7 @@ const GameMainFooter = ({
               {stayIdx.current === selectMoveRegion ? <>
                 {gameData.msg.sentence['sameCountry'][lang]}
               </> : <>
-                {gameData.msg.regions[stay][lang]} <StyledIcon url={imgSet.icon?.iconBack} /> {gameData.msg.regions[util.getIdxToCountry(selectMoveRegion)][lang]}
+                {gameData.country.regions[util.getCountryToIdx(stay)].name[lang]} <StyledIcon url={imgSet.icon?.iconBack} /> {selectMoveRegion !== '' && gameData.country.regions[selectMoveRegion].name[lang]}
               </>
               }
             </FlexBox>

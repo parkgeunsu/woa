@@ -1,6 +1,5 @@
 import { FlexBox } from 'components/Container';
 import { util } from 'components/Libs';
-import { LoadImage } from 'components/LoadImage';
 import { ColorSet, FontSet } from 'components/Theme';
 import 'css/root.css';
 import { gameData, version } from 'gamedata/data';
@@ -15,7 +14,6 @@ import EnhancingStickers from 'pages/EnhancingStickers';
 import Recruitment from 'pages/Gacha';
 import GameMain from 'pages/GameMain';
 import Header from 'pages/Header';
-// import Inven from 'pages/Inven';
 import InvenShop from 'pages/InvenShop';
 import Menu from 'pages/Menu';
 import MoveEvent from 'pages/MoveEvent';
@@ -27,6 +25,8 @@ import TradingPost from 'pages/TradingPost';
 import React, { createContext, useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
+
+import TestSkill from 'pages/TestSkill';
 
 export const AppContext = createContext();
 
@@ -180,7 +180,9 @@ const setCity = (data, lang) => {
   cityD[0].shop.weapon = items[2];
   return cityD;
 }
-const App = () => {
+const App = ({
+  loadData,
+}) => {
   const navigate = useNavigate();
   const location = useLocation().pathname.split("/")[1];
   const [saveData, setSaveData] = useState({});
@@ -195,7 +197,7 @@ const App = () => {
     font: FontSet,
   }
   const [conTextData, setConTextData] = useState({
-    images: LoadImage(),
+    images: loadData,
     gameData: {
       ...gameData,
     },
@@ -255,6 +257,7 @@ const App = () => {
   //   setCityData(city(gameData.city.port));
   // }, [cityIdx]);
   useEffect(() => {
+    // setConTextData();
     const storageVer = util.loadData('version'),
       continueGame = util.loadData('continueGame');
     let useSaveData = {}
@@ -352,8 +355,8 @@ const App = () => {
             <stop offset="1" style={{"stopColor":"#000000"}}/>
           </linearGradient>
         </svg>
-        <Wrapper page={location} imgSet={conTextData.images.back} className={`root ${location}`}>
-          {location !== "battle" && location !== "" && location !== "main" && location !== "start" && (location !== "recruitment" && !paramData?.start?.begin) && (
+        <Wrapper page={location} imgSet={conTextData?.images.back} className={`root ${location}`}>
+          {location !== "battle" && location !== "" && location !== "main" && location !== "start" && (location !== "recruitment" && !paramData?.start?.begin) && location.indexOf('test') < 0 && (
             <Header saveData={saveData} />
           )}
           <ContentContainer direction="column" className="content">
@@ -395,6 +398,8 @@ const App = () => {
               <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
               <Route path="/map" element={<Sail saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+
+              <Route path="/testSkill" element={<TestSkill />} saveData={saveData} />
             </Routes>
           </ContentContainer>
         </Wrapper>

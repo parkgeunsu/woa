@@ -3,7 +3,6 @@ import { chArr } from 'gamedata/chArr';
 import { city } from 'gamedata/city';
 import { colorSvg } from 'gamedata/colorSvg';
 import { country, events } from 'gamedata/country';
-import { effect } from 'gamedata/effect';
 import { exp } from 'gamedata/exp';
 import { guide } from 'gamedata/guide';
 import { ch } from 'gamedata/heros';
@@ -77,7 +76,22 @@ export const gameData = {
     skill:skill,
     relation:relation,
     scenario:scenario,
-    effect:effect,
+    effectFrameNum: [
+      8,25,25,15,30,15,35,15,15,15,
+      30,45,30,45,30,30,30,15,15,30,
+      30,23,23,75,30,23,30,30,45,30,
+      45,60,//cursed
+      14,23,15,15,30,30,38,43,45,90,//dark
+      14,22,15,15,30,37,30,45,45,90,//fire
+      14,22,15,15,30,30,40,45,45,90,//light
+      30,15,30,15,30,15,30,15,30,30,
+      45,45,30,30,45,30,40,40,30,30,
+      45,45,50,50,90,90,90,//nocturne
+      14,23,15,15,30,30,40,45,45,90,//water
+      14,23,15,15,30,30,40,45,45,90,//wind
+      27,35,26,33,31,34,31,100,27,33,31,41,47,20,14,20,24,38,31,37,29,37,52,8,13,11,10,38,49,56,38,56,41,60,46,21,25,16,12,13,14,15,33,39,40,9,10,13,15,44,24,25,33,10,22,33,48,46,66,28,24,37,//pack1
+      32,46,46,44,33,47,31,58,34,29,49,52,61,42,61,65,35,36,35,24,26,35,60,47,32,27,32,35,27,31,50,50,//pack2
+    ],
     itemsSvg:itemsSvg,
     colorSvg:colorSvg,
     shipSvg:shipSvg,

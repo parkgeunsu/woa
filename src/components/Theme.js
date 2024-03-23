@@ -42,6 +42,7 @@ const ColorSet = {
 	land9: "rgb(42,165,206)",
 	land10: "rgb(10,84,159)",
 	land11: "rgb(0,9,91)",
+	water: "#0d3167",
 }
 const FontSet = {
 	t0: "0.625rem", //10

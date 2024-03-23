@@ -100,8 +100,8 @@ const StartGame = ({
       gameData.msg.sentence['card3'][lang],
     ]);
     setCountryList(
-      gameData.country.map((data) => {
-        return gameData.msg.regions[data.name][lang];
+      gameData.country.regions.map((data) => {
+        return data.name[lang];
       })
     );
     setLanguageList([
@@ -180,7 +180,7 @@ const StartGame = ({
               <Select selectIdx={selectCountryIdx} setSelectIdx={setSelectCountryIdx} onClick={(idx) => {
                 setSelectCountryIdx(idx);
                 const sData = {...saveData};
-                sData.info.stay = gameData.country[idx].name;
+                sData.info.stay = gameData.country.regions[idx].id;
                 changeSaveData(sData);
               }} selectOption={countryList} title={gameData.msg.title['selectRegion'][lang]}></Select>
               {/* <TextField transparent={true} placeholder={gameData.msg.sentence['selectCountry'][lang]} text="" /> */}

@@ -239,7 +239,7 @@ const Roulette = ({
             }} />
           </LineupGroup>
           <ExploringInfo direction="column" frameMain={imgSet.etc.frameMain}>
-            <Text code="t3" color="main">{gameData.msg.title['region'][lang]} : {gameData.msg.regions[sData.info.stay][lang]}</Text>
+            <Text code="t3" color="main">{gameData.msg.title['region'][lang]} : {gameData.country.regions[util.getCountryToIdx(sData.info.stay)][lang]}</Text>
             <Text code="t3" color="main">{gameData.msg.title['wildlife'][lang]} : 
             {rouletteEnemy.base.color?.map((colorData, idx) => <AnimalIcon key={`color${idx}`} color={colorData}/>)}
             {rouletteEnemy.add.color?.length > 0 && ' + '} 

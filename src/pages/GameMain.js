@@ -108,7 +108,7 @@ const GameMain = ({
     <Wrap direction="column">
       <QuickMenu type="main" gameMode={gameMode} />
       <CountryTitle alignItems="center" back={imgSet.back[8]}>
-        <StyledText code="t7" color="shadow">{gameData.msg.regions[stay][lang]}</StyledText>
+        <StyledText code="t6" color="shadow">{gameData.country.regions[util.getCountryToIdx(stay)].name[lang]}</StyledText>
       </CountryTitle>
       <Roulette gameMode={gameMode} saveData={sData} rouletteState={rouletteState} setRouletteState={setRouletteState} selectRoulettePos={selectRoulettePos} setSelectRoulettePos={setSelectRoulettePos} rouletteArr={rouletteArr.current} rouletteEnemy={rouletteEnemy} setRouletteEnemy={setRouletteEnemy} />
       <Scenario gameMode={gameMode} saveData={sData} changeSaveData={changeSaveData} stay={stay} selectScenario={selectScenario} setSelectScenario={setSelectScenario} />
