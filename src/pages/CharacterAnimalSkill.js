@@ -217,7 +217,7 @@ const CharacterAnimalSkill = ({
                         } else if (skillCate === 4) {//defence
                           return imgSet.actionIcon[sk.effAnimation];
                         } else {
-                          return imgSet.eff[sk.effAnimation];
+                          return imgSet.effect[sk.effAnimation].img;
                       }
                       })();
                       return (

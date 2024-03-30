@@ -201,7 +201,7 @@ const CharacterSkill = ({
                   </SkillIcon>
                   {/* 
                   {cate !== 2 && cate !== 4 && cate !== 11 && (
-                    <SkillIcon skillIcon={imgSet.eff[skData.effAnimation]} skillScene={gameData.effect[skData.effAnimation].imgScene} skillFrame={gameData.effect[skData.effAnimation].frame} />
+                    <SkillIcon skillIcon={imgSet.effect[skData.effAnimation]} skillScene={gameData.effect[skData.effAnimation].imgScene} skillFrame={gameData.effect[skData.effAnimation].frame} />
                   )} */}
                   <div style={{padding:"0 0 5px 10px",width:"100%", flex:1}} flex-h-center="true">
                     <SkillName>

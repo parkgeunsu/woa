@@ -130,10 +130,16 @@ const BattleEffect = styled.div`
 		outline-width: 2px;
 	}
 `;
-const EffLand = styled.div`
-	left:${({left}) => left}%;
-	top:${({top}) => top}%;
-	transform: ${({size, rotate}) => `rotate(${rotate}deg) scale(${size})`};
+const EffLand = styled.div.attrs(
+	props => ({
+		style: {
+			left: `${props.left}%`,
+			top:`${props.top}%`,
+			filter:`${props.filter}`,
+			transform:`rotate(${props.rotate}deg) scale(${props.size})`,
+		},
+	})
+)`
 	.dmgNum{
 		transition:all ${({gameSpd}) => 1.125 / gameSpd}s ease-in;
 	}
@@ -287,7 +293,7 @@ const Land = styled.div`
 const BattleMsg = styled.div`
 	transition:all ${({gameSpd}) => 0.375 / gameSpd}s;opacity:0;
 `;
-const actionAnimation = ({setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, bgm, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, atkOption, customSkill}) => {
+const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, bgm, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, atkOption, customSkill}) => {
 	const endGameCheck = () => {//게임 종료 체크
 		const chLength = [battleAlly.length, battleEnemy.length],
 			allyEnemyDie = [0,0];
@@ -329,7 +335,8 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder
 			setTurnIdx(turnIdx + 1);
 			actionAnimation({
         setTurnIdx: setTurnIdx,
-        setSkillMsg: setSkillMsg, 
+        setShowSkillMsg: setShowSkillMsg,
+				skillEffect: skillEffect,
         turnIdx: turnIdx + 1,
         timeLine: timeLine,
         resetOrder: resetOrder,
@@ -1073,9 +1080,9 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder
 			//timeLine[turnIdx] 공격자
 			setTimeout(() => {
 				setTimeout(() => {
-					setSkillMsg(true);
+					setShowSkillMsg(true);
 					setTimeout(() => {
-						setSkillMsg(false);
+						setShowSkillMsg(false);
 						setTimeout(() => {
 							const targets = util.getEffectArea(
                 customSkill ? customSkill.ta : gameData.skill[skillIdx].ta,
@@ -1155,7 +1162,6 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder
 								});
 							// }
 							if (timeLine[turnIdx].order.team === 'ally') { //적군 영역 effect효과
-								console.log(skill);
 								if (skillCate === 5) {//버프
 									setAllyEffect([
 										...targetArr,
@@ -1240,7 +1246,8 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder
 								setTurnIdx(turnIdx_);
 								actionAnimation({
                   setTurnIdx: setTurnIdx,
-                  setSkillMsg: setSkillMsg, 
+                  setShowSkillMsg: setShowSkillMsg,
+									skillEffect: skillEffect,
                   turnIdx: turnIdx_,
                   timeLine: timeLine,
                   resetOrder: resetOrder,
@@ -1272,8 +1279,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder
                     atkStay: atkS,
                   }
                 });
-							}, ((gameData.effectFrameNum[targetArr[0].animation] / 10) * 1125 * (customSkill.effAnimationRepeat || 1)) / gameSpd);//공격 이펙트 효과시간
-              console.log(targetArr)
+							}, ((skillEffect[targetArr[0].animation].frame / 10) * 1125 * (customSkill.effAnimationRepeat || 1)) / gameSpd);//공격 이펙트 효과시간
 						}, 150 / gameSpd);
 					}, 600 / gameSpd);//메시지창 사라짐
 				}, 150 / gameSpd);//메시지 오픈
@@ -1290,17 +1296,16 @@ const StyleSelect = styled(Select)`
 `;
 const speedList = [1,1.5,2,3];
 const skillCateList = ['none','passive','active(emeny)','active(self)','buff','debuff','active(debuff)','active(buff)','weather','job'];//1부터
+const skillFilterList = ['none','hue(90deg)','hue(180deg)','invert(100%)'];
 const taList = [
   '단일','가로2','가로3','세로2','세로3','가로행','세로열','십자5','십자9','대각선',
   '반대 대각선','----','----','----','└┐9','┌┘9','卍17','----','----','전체',
   '사각9','사각4','자신','원','랜덤5','랜덤10','랜덤15','작은 마름모','큰 마름모','큰 링',
   '랜덤 세로2열','랜덤 세로 3열','랜덤 가로 2행','랜덤 가로 3행','x5','x9'
 ];//1부터
-const skillEffectList = [
-  'cursed1','cursed2','cursed3','cursed4','cursed5','cursed6','cursed7','cursed8','cursed9','cursed10','cursed11','cursed12','cursed13','cursed14','cursed15','cursed16','cursed17','cursed18','cursed19','cursed20','cursed21','cursed22','cursed23','cursed24','cursed25','cursed26','cursed27','cursed28','cursed29','cursed30','cursed31','cursed32','dark33','dark34','dark35','dark36','dark37','dark38','dark39','dark40','dark41','dark42','fire43','fire44','fire45','fire46','fire47','fire48','fire49','fire50','fire51','fire52','light53','light54','light55','light56','light57','light58','light59','light60','light61','light62','nocturne63','nocturne64','nocturne65','nocturne66','nocturne67','nocturne68','nocturne69','nocturne70','nocturne71','nocturne72','nocturne73','nocturne74','nocturne75','nocturne76','nocturne77','nocturne78','nocturne79','nocturne80','nocturne81','nocturne82','nocturne83','nocturne84','nocturne85','nocturne86','nocturne87','nocturne88','nocturne89','water90','water91','water92','water93','water94','water95','water96','water97','water98','water99','wind100','wind101','wind102','wind103','wind104','wind105','wind106','wind107','wind108','wind109','pack1_110','pack1_111','pack1_112','pack1_113','pack1_114','pack1_115','pack1_116','pack1_117','pack1_118','pack1_119','pack1_120','pack1_121','pack1_122','pack1_123','pack1_124','pack1_125','pack1_126','pack1_127','pack1_128','pack1_129','pack1_130','pack1_131','pack1_132','pack1_133','pack1_134','pack1_135','pack1_136','pack1_137','pack1_138','pack1_139','pack1_140','pack1_141','pack1_142','pack1_143','pack1_144','pack1_145','pack1_146','pack1_147','pack1_148','pack1_149','pack1_150','pack1_151','pack1_152','pack1_153','pack1_154','pack1_155','pack1_156','pack1_157','pack1_158','pack1_159','pack1_160','pack1_161','pack1_162','pack1_163','pack1_164','pack1_165','pack1_166','pack1_167','pack1_168','pack1_169','pack1_170','pack1_171','pack2_172','pack2_173','pack2_174','pack2_175','pack2_176','pack2_177','pack2_178','pack2_179','pack2_180','pack2_181','pack2_182','pack2_183','pack2_184','pack2_185','pack2_186','pack2_187','pack2_188','pack2_189','pack2_190','pack2_191','pack2_192','pack2_193','pack2_194','pack2_195','pack2_196','pack2_197','pack2_198','pack2_199','pack2_200','pack2_201','pack2_202','pack2_203',
-];
+//var a = '';for(var i = 195; i < 221; i++){a += `'thaumaturgy${i}',`}
 const skillRepeatList = [1,2,3,4];
-const skillSizeList = [1,1.5,2,2.5,3,3.5,4,4.5,5];
+const skillSizeList = [1,1.5,2,3,4,5];
 const skillRotateList = [0,90,180,270];
 const TestSkill = ({
   saveData,
@@ -1320,7 +1325,9 @@ const TestSkill = ({
     return context.gameData;
   }, [context]);
   const [selectSpeed, setSelectSpeed] = useState(2);
-  const [selectSkillCate, setSelectSkillCate] = useState(2);
+	const skillEffectList = Object.keys(imgSet.effect);
+  // const [selectSkillCate, setSelectSkillCate] = useState(2);
+  const [selectSkillFilter, setSelectSkillFilter] = useState(0);
   const [selectSkillTaget, setSelectSkillTaget] = useState(0);
   const [selectEffectAnimation, setSelectEffectAnimation] = useState(0);
   const [selectEffectSize, setSelectEffectSize] = useState(0);
@@ -1341,14 +1348,15 @@ const TestSkill = ({
     idx:233,
 		na:{ko:'테스트',en:'test',jp:'test'},
     element_type:0,
-    cate:[selectSkillCate + 1],
+    cate:[3],//[selectSkillCate + 1],
     txt:{ko:'<u>날씨</u>, 비오는 날씨로 밤으로 변환',en:'<u>Weather</u>, Convert to rainy weather',jp:'<u>天気</u>, 雨天で夜に変換'},
     ta_:1,
     ta:selectSkillTaget + 1,
-    effAnimation:selectEffectAnimation,
+    effAnimation:skillEffectList[selectEffectAnimation],
     effAnimationRepeat:skillRepeatList[selectEffectRepeat],
 		effSize: skillSizeList[selectEffectSize],
 		effRotate: skillRotateList[selectEffectRotate],
+		effFilter: '',
     buffAnimation:0,
     skillClass:1,
     buff:[{type:2.0,num:['70%','75%','80%','85%','90%']}],
@@ -1424,7 +1432,7 @@ const TestSkill = ({
 	const [allyEnemyBuff, setAllyEnemyBuff] = useState([[],[]]);
 	const [effectAllyArea, setEffectAllyArea] = useState([]); //아군스킬 영역
 	const [effectEnemyArea, setEffectEnemyArea] = useState([]); //적군스킬 영역
-	const [skillMsg, setSkillMsg] = useState(false); //메시지창 on/off
+	const [showSkillMsg, setShowSkillMsg] = useState(false); //메시지창 on/off
 	const [allyEffect, setAllyEffect] = useState([]);//아군 데미지효과
 	const [enemyEffect, setEnemyEffect] = useState([]);//적군 데미지효과
   const map = Array.from({length: 25}, (undefined, i) => {
@@ -1674,6 +1682,7 @@ const TestSkill = ({
 					team: 'ally',
 					idx: orderIdx,
 					skIdx: currentSkill.current.sk.idx,
+					// skFrame: imgSet.effect[]
 					skLv: currentSkill.current.skLv,
 					enemyTarget: true,
 					targetIdx: targetIdx,
@@ -1818,6 +1827,7 @@ const TestSkill = ({
 				currentSkill.current = {
 					sk: skill,
 					skLv: skLv,
+					skFrame: imgSet.effect[skill.effAnimation].frame,
 				}
 			}
 		}
@@ -1993,7 +2003,8 @@ const TestSkill = ({
 				setTurnIdx(0);
 				actionAnimation({
           setTurnIdx: setTurnIdx,
-          setSkillMsg: setSkillMsg, 
+          setShowSkillMsg: setShowSkillMsg,
+					skillEffect: imgSet.effect,
           turnIdx: 0,
           timeLine: timeLine.current,
           resetOrder: resetOrder,
@@ -2039,15 +2050,29 @@ const TestSkill = ({
             setSelectSpeed(idx);
             setSpeed(speedList[idx]);
           }} selectOption={speedList} title={'속도'}></StyleSelect>
-          <StyleSelect selectIdx={selectSkillCate} setSelectIdx={setSelectSkillCate} onClick={(idx) => {
-            setSelectSkillCate(idx);
+          <StyleSelect selectIdx={selectSkillFilter} setSelectIdx={setSelectSkillFilter} onClick={(idx) => {
+            setSelectSkillFilter(idx);
             setSkill((prev) => {
+							const filter = (() => {
+								switch(idx) {
+									case 0:
+										return '';
+									case 1:
+										return 'hue-rotate(90deg)';
+									case 2:
+										return 'hue-rotate(180deg)';
+									case 3:
+										return 'invert(100%)';
+									default:
+										return '';
+								}
+							})();
               return {
                 ...prev,
-                cate: [idx + 1],
+                effFilter: filter,
               }
             });
-          }} selectOption={skillCateList} title={'타입'}></StyleSelect>
+          }} selectOption={skillFilterList} title={'색상'}></StyleSelect>
           <StyleSelect selectIdx={selectSkillTaget} setSelectIdx={setSelectSkillTaget} onClick={(idx) => {
             setSelectSkillTaget(idx);
             setSkill((prev) => {
@@ -2062,7 +2087,7 @@ const TestSkill = ({
             setSkill((prev) => {
               return {
                 ...prev,
-                effAnimation: idx,
+                effAnimation: skillEffectList[idx],
               }
             });
           }} selectOption={skillEffectList} title={'이펙트'}></StyleSelect>
@@ -2132,10 +2157,10 @@ const TestSkill = ({
               });
               const effChk = effNum && effNum !== 0;
               return (
-                <EffLand key={idx} className={`effect_land ${effChk ? 'dmg' : ''}`} rotate={skill.effRotate} size={skill.effSize} left={left} top={top} gameSpd={speed}>
+                <EffLand key={`effect${idx}`} className={`effect_land ${effChk ? 'dmg' : ''}`} filter={skill.effFilter} rotate={skill.effRotate} size={skill.effSize} left={left} top={top} gameSpd={speed}>
                   {effectChk && (
                     <>
-                      <Eff className="effect_eff" src={imgSet.effect[`effect${effAnimation}`]} frame={gameData.effectFrameNum[effAnimation]} repeat={skill.effAnimationRepeat} gameSpd={speed}/>
+                      <Eff className="effect_eff" src={imgSet.effect[effAnimation].img} frame={imgSet.effect[effAnimation].frame} repeat={skill.effAnimationRepeat} gameSpd={speed}/>
                     </>
                   )}
                   <span className="dmgNum">{effChk ? effNum : ''}</span>
@@ -2162,7 +2187,7 @@ const TestSkill = ({
                 <EffLand className={`effect_land ${effChk ? 'dmg' : ''} `} rotate={skill.effRotate} size={skill.effSize} key={idx} left={left} top={top} gameSpd={speed}>
                   {effectChk && (
                     <>
-                      <Eff className="effect_eff" src={imgSet.effect[`effect${effAnimation}`]} frame={gameData.effectFrameNum[effAnimation]} repeat={skill.effAnimationRepeat} gameSpd={speed}/>
+                      <Eff className="effect_eff" src={imgSet.effect[effAnimation].img} frame={imgSet.effect[effAnimation].frame} repeat={skill.effAnimationRepeat} gameSpd={speed}/>
                     </>
                   )}
                   <span className="dmgNum">{effChk ? effNum : ''}</span>
@@ -2197,7 +2222,7 @@ const TestSkill = ({
                     }} gameSpd={speed} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]}>
                       {buffEff && buffEff.map((buffData, idx) => {
                         return (
-                          <Buff key={idx} className="ch_buff" gameSpd={speed} effImg={imgSet.eff[buffData]} frame={gameData.effectFrameNum[buffData]} buffEff={buffData} >
+                          <Buff key={idx} className="ch_buff" gameSpd={speed} effImg={imgSet.effect[buffData].img} frame={imgSet.effect[buffData].frame} buffEff={buffData} >
                             <div className="buff_effect"></div>
                           </Buff>
                         );
@@ -2255,7 +2280,7 @@ const TestSkill = ({
                     }}  gameSpd={speed} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]}>
                       {buffEff && buffEff.map((buffData, idx) => {
                         return (
-                          <Buff key={idx} className="ch_buff" gameSpd={speed} effImg={imgSet.eff[buffData]} frame={gameData.effectFrameNum[buffData]} buffEff={buffData}>
+                          <Buff key={idx} className="ch_buff" gameSpd={speed} effImg={imgSet.effect[buffData].img} frame={imgSet.effect[buffData].frame} buffEff={buffData}>
                             <div className="buff_effect"></div>
                           </Buff>
                         );
@@ -2313,7 +2338,7 @@ const TestSkill = ({
           })}
           </div>
         </BattleLand>
-        <BattleMsg className={`battle_order ${skillMsg ? 'on' : ''} ${typeof turnIdx === 'number' && timeLine.current[turnIdx]?.order.team === 'ally' ? 'ally' : 'enemy'} ${typeof turnIdx === 'number' && gameData.ch[timeLine.current[turnIdx]?.order.idx]?.face_d}`} gameSpd={speed}>
+        <BattleMsg className={`battle_order ${showSkillMsg ? 'on' : ''} ${typeof turnIdx === 'number' && timeLine.current[turnIdx]?.order.team === 'ally' ? 'ally' : 'enemy'} ${typeof turnIdx === 'number' && gameData.ch[timeLine.current[turnIdx]?.order.idx]?.face_d}`} gameSpd={speed}>
           <div className="battle_msg">
             {typeof turnIdx === 'number' && gameData.skill[timeLine.current[turnIdx]?.order.skIdx]?.na[lang]}
           </div>

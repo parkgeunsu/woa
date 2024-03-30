@@ -304,10 +304,16 @@ const Passive = styled.div`
 	left:${({idx}) => idx % 2 === 0 ? -30 : -40}%;
 	top:${({idx}) => idx*20 - 25}%;background:url(${({effImg}) => effImg}) no-repeat center center;background-size:100%;
 `;
-const EffLand = styled.div`
-	left:${({left}) => left}%;
-	top:${({top}) => top}%;
-	transform: ${({size, rotate}) => `rotate(${rotate}deg) scale(${size})`};
+const EffLand = styled.div.attrs(
+	props => ({
+		style: {
+			left: `${props.left}%`,
+			top:`${props.top}%`,
+			filter:`${props.filter}`,
+			transform:`rotate(${props.rotate}deg) scale(${props.size})`,
+		},
+	})
+)`
 	.dmgNum{
 		transition:all ${({gameSpd}) => 1.125 / gameSpd}s ease-in;
 	}
@@ -617,7 +623,7 @@ const activeSk = (timeLineData) => { //타임라인에 처리되는 방어등.. 
 		return 'none die';
 	}
 }
-const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, bgm, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, atkOption) => {
+const actionAnimation = (setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, bgm, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, atkOption) => {
 	if (modeRef.indexOf('battle') >= 0){ //battleLose, battleWin시 
 		return;
 	}
@@ -670,7 +676,8 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 			setTurnIdx(turnIdx + 1);
 			actionAnimation({
         setTurnIdx: setTurnIdx,
-        setSkillMsg: setSkillMsg, 
+        setSkillMsg: setSkillMsg,
+				skillEffect: skillEffect,
         turnIdx: turnIdx + 1,
         timeLine: timeLine,
         resetOrder: resetOrder,
@@ -1476,8 +1483,9 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 											chk = true;
 										}
 									});
-									const effSize = Math.max((timeLine[turnIdx].order.skLv - 1) * 0.5 + gameData.skill[skillIdx].effSize, gameData.skill[skillIdx].effSize),
-										effRotate = gameData.skill[skillIdx].effRotate;
+									const effSize = (timeLine[turnIdx].order.skLv - 1) * 0.5 + gameData.skill[skillIdx].effSize,
+										effRotate = gameData.skill[skillIdx].effRotate,
+										effFilter = gameData.skill[skillIdx].effFilter;
 									if (chk) { //스킬 맞는 위치와 범위값중 일치하는지 확인
 										targetArr[idx] = {
 											posIdx:data,
@@ -1485,6 +1493,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 											dmg:Math.floor(dmg[targetCount]),
 											size:effSize,
 											rotate:effRotate,
+											filter:effFilter,
 										};
 										targetCount ++;
 									} else {
@@ -1493,6 +1502,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 											animation:gameData.skill[skillIdx].effAnimation,
 											size:effSize,
 											rotate:effRotate,
+											filter:effFilter,
 										};
 									}
 								});
@@ -1583,6 +1593,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
 								actionAnimation({
                   setTurnIdx: setTurnIdx,
                   setSkillMsg: setSkillMsg, 
+									skillEffect: skillEffect,
                   turnIdx: turnIdx_,
                   timeLine: timeLine,
                   resetOrder: resetOrder,
@@ -1614,7 +1625,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, turnIdx, timeLine, resetOrder,
                     atkStay: atkS,
                   }
                 });
-							}, ((gameData.effectFrameNum[targetArr[0].animation] / 10) * 1125 * (skill.effAnimationRepeat || 1)) / gameSpd);//공격 이펙트 효과시간
+							}, ((skillEffect[targetArr[0].animation].frame / 10) * 1125 * (skill.effAnimationRepeat || 1)) / gameSpd);//공격 이펙트 효과시간
 						}, 150 / gameSpd);
 					}, 600 / gameSpd);//메시지창 사라짐
 				}, 150 / gameSpd);//메시지 오픈
@@ -3203,7 +3214,8 @@ const Battle = ({
 				setTurnIdx(0);
 				actionAnimation({
           setTurnIdx: setTurnIdx,
-          setSkillMsg: setSkillMsg, 
+          setSkillMsg: setSkillMsg,
+					skillEffect: imgSet.effect,
           turnIdx: 0,
           timeLine: timeLine.current,
           resetOrder: resetOrder,
@@ -3548,7 +3560,8 @@ const Battle = ({
 								effAnimation = '',
 								effNum = '',
 								effSize = '',
-								effRotate = '';
+								effRotate = '',
+								effFilter = '';
 							enemyEffect.forEach((effData) => {
 								if (effData.posIdx === idx) {
 									effectChk = true;
@@ -3556,14 +3569,15 @@ const Battle = ({
 									effNum = effData.dmg;
 									effSize = effData.size;
 									effRotate = effData.rotate;
+									effFilter = effData.filter;
 								}
 							});
 							const effChk = effNum && effNum !== 0;
 							return (
-								<EffLand key={idx} className={`effect_land ${effChk ? 'dmg' : ''}`} size={effSize} rotate={effRotate} left={left} top={top} gameSpd={speed}>
+								<EffLand key={idx} className={`effect_land ${effChk ? 'dmg' : ''}`} size={effSize} rotate={effRotate} filter={effFilter} left={left} top={top} gameSpd={speed}>
 									{effectChk && (
 										<>
-											<Eff className="effect_eff" src={imgSet.effect[`effect${effAnimation}`]} frame={gameData.effectFrameNum[effAnimation]} repeat={gameData.skill[effAnimation].effAnimationRepeat} gameSpd={speed}/>
+											<Eff className="effect_eff" src={imgSet.effect[effAnimation].img} frame={imgSet.effect[effAnimation].frame} repeat={gameData.skill[effAnimation].effAnimationRepeat} gameSpd={speed}/>
 										</>
 									)}
 									<span className="dmgNum">{effChk ? effNum : ''}</span>
@@ -3579,7 +3593,8 @@ const Battle = ({
 								effAnimation = '',
 								effNum = '',
 								effSize = '',
-								effRotate = '';
+								effRotate = '',
+								effFilter = '';
 							allyEffect.forEach((effData) => {
 								if (effData.posIdx === idx) {
 									effectChk = true;
@@ -3587,14 +3602,15 @@ const Battle = ({
 									effNum = effData.dmg;
 									effSize = effData.size;
 									effRotate = effData.rotate;
+									effFilter = effData.filter;
 								}
 							});
 							const effChk = effNum && effNum !== 0;
 							return (
-								<EffLand className={`effect_land ${effChk ? 'dmg' : ''}`} size={effSize} rotate={effRotate} key={idx} left={left} top={top} gameSpd={speed}>
+								<EffLand className={`effect_land ${effChk ? 'dmg' : ''}`} size={effSize} rotate={effRotate} filter={effFilter} key={idx} left={left} top={top} gameSpd={speed}>
 									{effectChk && (
 										<>
-											<Eff className="effect_eff" src={imgSet.effect[`effect${effAnimation}`]} frame={gameData.effectFrameNum[effAnimation]} repeat={gameData.skill[effAnimation].effAnimationRepeat} gameSpd={speed}/>
+											<Eff className="effect_eff" src={imgSet.effect[effAnimation].img} frame={imgSet.effect[effAnimation].frame} repeat={gameData.skill[effAnimation].effAnimationRepeat} gameSpd={speed}/>
 										</>
 									)}
 									<span className="dmgNum">{effChk ? effNum : ''}</span>
@@ -3635,7 +3651,7 @@ const Battle = ({
 										}} gameSpd={speed} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]}>
 											{buffEff && buffEff.map((buffData, idx) => {
 												return (
-													<Buff key={idx} className="ch_buff" gameSpd={speed} effImg={imgSet.eff[buffData]} frame={gameData.effect[buffData].frame} buffEff={buffData} >
+													<Buff key={idx} className="ch_buff" gameSpd={speed} effImg={imgSet.effect[buffData]} frame={gameData.effect[buffData].frame} buffEff={buffData} >
 														<div className="buff_effect"></div>
 													</Buff>
 												);
@@ -3700,7 +3716,7 @@ const Battle = ({
 										}}  gameSpd={speed} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]}>
 											{buffEff && buffEff.map((buffData, idx) => {
 												return (
-													<Buff key={idx} className="ch_buff" gameSpd={speed} effImg={imgSet.eff[buffData]} frame={gameData.effect[buffData].frame} buffEff={buffData}>
+													<Buff key={idx} className="ch_buff" gameSpd={speed} effImg={imgSet.effect[buffData].img} frame={gameData.effect[buffData].frame} buffEff={buffData}>
 														<div className="buff_effect"></div>
 													</Buff>
 												);
