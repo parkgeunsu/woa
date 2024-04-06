@@ -53,7 +53,7 @@ export const gameData = {
     hasMaxExp:[0,50000,80000,120000,150000,200000,250000,300000],
     exp:exp,
     gradeUp:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,5,5,5,10,10,10,10,10,20,20,20,20,20,25,25,25,30,40],//인물 초월시재료
-    element:[{ko:'쪼기',en:'Peck'},{ko:'할퀴기',en:'Claw'},{ko:'물기',en:'Bite'},{ko:'치기',en:'Hit'},{ko:'누르기',en:'Crush'},{ko:'던지기',en:'Throw'},{ko:'빛',en:'Light'},{ko:'어둠',en:'Darkness'},{ko:'물',en:'Water'},{ko:'불',en:'Fire'},{ko:'바람',en:'Wind'},{ko:'땅',en:'Earth'}],
+    element:[{ko:'쪼기',en:'Peck',jp:'ピグテール'},{ko:'할퀴기',en:'Claw',jp:'掻き分け'},{ko:'물기',en:'Bite',jp:'噛むこと'},{ko:'치기',en:'Hit',jp:'打撃'},{ko:'누르기',en:'Crush',jp:'押す'},{ko:'던지기',en:'Throw',jp:'投げる'},{ko:'빛',en:'Light',jp:'光'},{ko:'어둠',en:'Darkness',jp:'暗'},{ko:'물',en:'Water',jp:'水'},{ko:'불',en:'Fire',jp:'火'},{ko:'바람',en:'Wind',jp:'風'},{ko:'땅',en:'Earth',jp:'地'}],
     roulette:[
       {idx: 0, cardIdx: 0, type: 'enemies', amount: 3},
       {idx: 1, cardIdx: 1, type: 'enemies', amount: 4},

@@ -797,6 +797,8 @@ export const util = { //this.loadImage();
         return 'stun';//기절
       case 55:
         return 'transform';//변이
+      case 56:
+        return 'immediateDeath';//즉사
       case 100:
         return 'formation';//진형
       default:
@@ -935,12 +937,38 @@ export const util = { //this.loadImage();
         } else {
           return [24];
         }
+      case 12: //고정 세로2열
+        return [1,3,6,8,11,13,16,18,21,23];
+      case 13: //고정 세로3열
+        return [0,2,4,5,7,9,10,12,14,15,17,19,20,22,24];
+      case 14: //⏊ 4
+        if (n === 0) {
+          return [0,1,2];
+        } else if (n === 4) {
+          return [2,3,4];
+        } else if (n === 20) {
+          return [16,20,21,22];
+        } else if (n === 24) {
+          return [18,22,23,24];
+        } else if (n === 1 || n === 2 || n === 3) {
+          return [n-1,n,n+1];
+        } else if (n === 5 || n === 10 || n === 15) {
+          return [n-5,n,n+1];
+        } else if (n === 9 || n === 14 || n === 19) {
+          return [n-5,n-1,n];
+        } else {
+          return [n-5,n-1,n,n+1];
+        }
       case 15: //└┐9
         return [0,5,10,11,12,13,14,19,24];
       case 16: //┌┘9
         return [4,9,14,13,12,11,10,15,20];
       case 17: //卍17
         return [0,1,2,4,7,9,10,11,12,13,14,15,17,20,22,23,24];
+      case 18: //고정 가로2행
+        return [5,6,7,8,9,15,16,17,18,19];
+      case 19: //고정 가로3행
+        return [0,1,2,3,4,10,11,12,13,14,20,21,22,23,24];
       case 20: //▦25 전체
         return [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
       case 21: //□9 정사각형9
@@ -1053,6 +1081,24 @@ export const util = { //this.loadImage();
         }
       case 36: //x 9
         return [0,4,6,8,12,16,18,20,24];
+      case 37: //ㅜ 4
+      if (n === 0) {
+        return [0,1,2,6];
+      } else if (n === 4) {
+        return [2,3,4,8];
+      } else if (n === 20) {
+        return [20,21,22];
+      } else if (n === 24) {
+        return [22,23,24];
+      } else if (n === 1 || n === 2 || n === 3) {
+        return [n-1,n,n+1,n+5];
+      } else if (n === 5 || n === 10 || n === 15) {
+        return [n,n+1,n+5];
+      } else if (n === 9 || n === 14 || n === 19) {
+        return [n-1,n,n+5];
+      } else {
+        return [n-1,n,n+1,n+5];
+      }
       default:
         break;
     }
@@ -1900,15 +1946,23 @@ export const util = { //this.loadImage();
   getSkillText: (skillObj) => { //스킬 텍스트 전환 $(0), $<0>
     const {skill, lv, lang} = skillObj;
     const cate = skill.cate[0];
-    const replaceArr = skill.txt[lang].match(/[$][(]\d[)]*/g) || [];
-    const replaceArr_ = skill.txt[lang].match(/[$][<]\d[>]*/g) || [];
+    const replaceEffArr = skill.txt[lang].match(/[$][(]\d[)]*/g) || [];
+    const replaceBuffArr = skill.txt[lang].match(/[$][<]\d[>]*/g) || [];
+    const replaceBuffCountArr = skill.txt[lang].match(/[$][(]turn[)]*/g) || [];
+    const replaceBuffChanceArr = skill.txt[lang].match(/[$][(]chance[)]*/g) || [];
     const skillType = skill.element_type;
     let replaceText = skill.txt[lang];
-    replaceArr.forEach((data, idx) => {
+    replaceEffArr.forEach((data, idx) => {
       replaceText = replaceText.replace(data, skill.eff[idx].num[lv >= 0 ? lv : 0]);
     });
-    replaceArr_.forEach((data, idx) => {
+    replaceBuffArr.forEach((data, idx) => {
       replaceText = replaceText.replace(data, skill.buff[idx].num[lv >= 0 ? lv : 0]);
+    });
+    replaceBuffCountArr.forEach((data) => {
+      replaceText = replaceText.replace(data, skill.buffCount[lv >= 0 ? lv : 0]);
+    });
+    replaceBuffChanceArr.forEach((data) => {
+      replaceText = replaceText.replace(data, skill.buffChance[lv >= 0 ? lv : 0]);
     });
     return {
       skillText: replaceText,
