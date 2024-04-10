@@ -624,7 +624,7 @@ export const effect = {
   press0:{img:press0,frame:10},press1:{img:press1,frame:15},press2:{img:aniPack4_17,frame:21},
   bite0:{img:bite0,frame:15,used:'송곳니뚫기'},bite1:{img:bite1,frame:30},
   claw0:{img:claw0,frame:15,used:'양손타격'},claw1:{img:claw1,frame:15,used:'한손타격'},claw2:{img:claw2,frame:10},claw3:{img:aniPack4_4,frame:5,used:'화염 발톱'},
-  blood0:{img:blood0,frame:15},blood1:{img:blood1,frame:30,used:'구토'},blood2:{img:blood2,frame:45},blood3:{img:blood3,frame:30},blood4:{img:blood4,frame:15},blood5:{img:blood5,frame:15},blood6:{img:blood6,frame:30},blood7:{img:blood7,frame:30},blood8:{img:blood8,frame:23},blood9:{img:blood9,frame:30},
+  blood0:{img:blood0,frame:15},blood1:{img:blood1,frame:30,used:'구토'},blood2:{img:blood2,frame:45,used:'삼키기'},blood3:{img:blood3,frame:30},blood4:{img:blood4,frame:15},blood5:{img:blood5,frame:15},blood6:{img:blood6,frame:30},blood7:{img:blood7,frame:30},blood8:{img:blood8,frame:23},blood9:{img:blood9,frame:30},
   blood10:{img:blood10,frame:30},blood11:{img:blood11,frame:45},blood12:{img:blood12,frame:30},blood13:{img:blood13,frame:45},blood14:{img:blood14,frame:60},blood15:{img:blood15,frame:26},blood16:{img:blood16,frame:27},
   fire0:{img:fire0,frame:14},fire1:{img:fire1,frame:22},fire2:{img:fire2,frame:15},fire3:{img:fire3,frame:15},fire4:{img:fire4,frame:30},fire5:{img:fire5,frame:37},fire6:{img:fire6,frame:30},fire7:{img:fire7,frame:45},fire8:{img:fire8,frame:45},fire9:{img:fire9,frame:90},
   fire10:{img:fire10,frame:50},fire11:{img:fire11,frame:30},fire12:{img:fire12,frame:44},fire13:{img:fire13,frame:90},fire14:{img:fire14,frame:48},fire15:{img:aniPack4_12,frame:5},

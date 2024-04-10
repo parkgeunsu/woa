@@ -1148,7 +1148,7 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 							// 	targetArr[12].posIdx = 12;
 							// 	targetArr[12].animation = customSkill ? customSkill.effAnimation : gameData.skill[skillIdx].effAnimation;
 							// } else {
-								if (customSkill ? customSkill.allEff : skill[skillIdx].allEff) {
+								if (customSkill ? customSkill.allEff[timeLine[turnIdx].order.skLv - 1] : skill[skillIdx].allEff[timeLine[turnIdx].order.skLv - 1]) {
 									targetArr.allEff = true;
 								}
 								targets.forEach((data, idx) => {
@@ -1378,7 +1378,7 @@ const TestSkill = ({
 		effSize: skillSizeList[selectEffectSize],
 		effRotate: skillRotateList[selectEffectRotate],
 		effFilter: '',
-		allEff: false,
+		allEff: [0],
     buffAnimation:0,
     skillClass:1,
     buff:[{type:2.0,num:['70%','75%','80%','85%','90%']}],
@@ -2137,7 +2137,7 @@ const TestSkill = ({
             setSkill((prev) => {
               return {
                 ...prev,
-                allEff: idx === 0 ? false : true,
+                allEff: idx === 0 ? [0] : [1],
               }
             });
           }} selectOption={skillAllList} title={'전체이펙트'}></StyleSelect>

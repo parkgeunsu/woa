@@ -815,15 +815,15 @@ export const util = { //this.loadImage();
   getEffectArea: (type, n) => {//type: 효과타입, n: 사용위치(0~24)
     let num = [];
     switch(type){
-      case 1: // .1 단일
+      case 1: // 1 단일
         return [n];
-      case 2: // ─2 가로2
+      case 2: // 2 가로2
         if (n%5 === 4) {
           return [n,n-1];
         } else {
           return  [n,n+1];
         }
-      case 3:// ─3 가로3
+      case 3:// 3 가로3
         if (n%5 === 3) {
           return [n,n+1,n-1];
         } else if (n%5 === 4){
@@ -831,13 +831,13 @@ export const util = { //this.loadImage();
         } else {
           return [n,n+1,n+2];
         }
-      case 4: // ┃2 세로2
+      case 4: // 2 세로2
         if (n > 19) {
           return [n,n-5];
         } else {
           return [n,n+5];
         }
-      case 5:// ┃3 세로3
+      case 5:// 3 세로3
         if (n > 19) {
           return [n,n-5,n-10];
         } else if (n > 14){
@@ -845,7 +845,7 @@ export const util = { //this.loadImage();
         } else {
           return [n,n+5,n+10];
         }
-      case 6: // ─5 가로행
+      case 6: // 5 가로행
         if (n < 5) {
           return [0,1,2,3,4];
         } else if (n < 10){
@@ -857,7 +857,7 @@ export const util = { //this.loadImage();
         } else {
           return [20,21,22,23,24];
         }
-      case 7: // ┃5 세로열
+      case 7: // 5 세로열
         if (n%5 === 0) {
           return [0,5,10,15,20];
         } else if (n%5 === 1){
@@ -917,7 +917,7 @@ export const util = { //this.loadImage();
         } else {
           return [20];
         }
-      case 11: // \5 반대 대각선
+      case 11: // \5 역 대각선
         if (n === 4 || n === 8 || n === 12 || n === 16 || n === 20) {
           return [4,8,12,16,20];
         } else if (n === 3 || n === 7 || n === 11 || n === 15) {
@@ -1943,6 +1943,49 @@ export const util = { //this.loadImage();
     });
     return blockPercent.filter((block) => percent < block.num)[0].idx;
   },
+  getSkillAreaLang: (areaIdx, lang) => {
+    const areaArr = [
+      {},
+      {ko:'단일',en:'Single',jp:'単一'},
+      {ko:'가로 2마리',en:'2 horizontal',jp:'横2匹'},
+      {ko:'가로 3마리',en:'3 horizontal',jp:'横3匹'},
+      {ko:'세로 2마리',en:'2 verticals',jp:'縦2匹'},
+      {ko:'세로 3마리',en:'3 verticals',jp:'縦3匹'},
+      {ko:'가로 행',en:'Horizontal rows',jp:'横列'},
+      {ko:'세로 열',en:'Vertical columns',jp:'縦列'},
+      {ko:'작은 십자 형태',en:'Small cross',jp:'小さな十字形'},
+      {ko:'큰 십자 형태',en:'Large cross',jp:'大きな十字形'},
+      {ko:'대각선 형태',en:'Diagonal shape',jp:'斜めの形'},
+      {ko:'역대각선 형태',en:'Inverted Diagonal shape',jp:'逆斜めの形'},
+      {ko:'고정 세로2열',en:'Fixed Vertical2 columns',jp:'固定縦2列'},
+      {ko:'고정 세로3열',en:'Fixed Vertical3 columns',jp:'固定縦3列'},
+      {ko:'⏊ 형태',en:'⏊ Shape',jp:'形 ⏊形状'},
+      {ko:'└┐ 형태',en:'└┐ Shape',jp:'形 └┐形状'},
+      {ko:'┌┘ 형태',en:'┌┘ Shape',jp:'形 ┌┘形状'},
+      {ko:'卍 형태',en:'卍 Shape',jp:'形 卍形状'},
+      {ko:'고정 가로2행',en:'Fixed horizontal2 rows',jp:'固定横2行'},
+      {ko:'고정 가로3행',en:'Fixed horizontal3 rows',jp:'固定横3行'},
+      {ko:'전체',en:'All',jp:'全体'},
+      {ko:'큰 사각형 형태',en:'Large rectangle shape',jp:'大きな四角形'},
+      {ko:'작은 사각형 형태',en:'Small rectangle shape',jp:'小さな四角形'},
+      {ko:'자신',en:'Self',jp:'自己'},
+      {ko:'원 형태',en:'Circle shape',jp:'円形'},
+      {ko:'랜덤 5마리',en:'5 Random',jp:'ランダム5匹'},
+      {ko:'랜덤 10마리',en:'10 Random',jp:'ランダム10匹'},
+      {ko:'랜덤 15마리',en:'15 Random',jp:'ランダム15匹'},
+      {ko:'작은 마름모 형태',en:'Small rhombus shape',jp:'小さな菱形の形'},
+      {ko:'큰 마름모 형태',en:'Large rhombus shape',jp:'大きな菱形の形'},
+      {ko:'큰 링',en:'Large ring',jp:'大きなリング'},
+      {ko:'랜덤 세로 2열',en:'Random Vertical 2 columns',jp:'ランダム縦2列'},
+      {ko:'랜덤 세로 3열',en:'Random Vertical 3 columns',jp:'ランダム縦3列'},
+      {ko:'랜덤 가로 2행',en:'Random horizontal 2 rows',jp:'ランダム横2行'},
+      {ko:'랜덤 가로 3행',en:'Random horizontal 3 rows',jp:'ランダム横3行'},
+      {ko:'작은 x 형태',en:'Small X shape',jp:'小さいxの形'},
+      {ko:'큰 x 형태',en:'Large X shape',jp:'大きいxの形'},
+      {ko:'⏉ 형태',en:'⏉ Shape',jp:'形 ⏉形状'},
+    ];
+    return areaArr[areaIdx][lang];
+  },
   getSkillText: (skillObj) => { //스킬 텍스트 전환 $(0), $<0>
     const {skill, lv, lang} = skillObj;
     const cate = skill.cate[0];
@@ -1964,6 +2007,7 @@ export const util = { //this.loadImage();
     replaceBuffChanceArr.forEach((data) => {
       replaceText = replaceText.replace(data, skill.buffChance[lv >= 0 ? lv : 0]);
     });
+    replaceText = replaceText.replace('<area>', `<u>${util.getSkillAreaLang(skill.ta[lv], lang)}</u>`);
     return {
       skillText: replaceText,
       skillType: skillType,

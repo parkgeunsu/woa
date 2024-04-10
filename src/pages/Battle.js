@@ -1488,7 +1488,7 @@ const actionAnimation = (setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLine
 							// 	targetArr[12].posIdx = 12;
 							// 	targetArr[12].animation = gameData.skill[skillIdx].effAnimation;
 							// } else {
-								if (skill[skillIdx].allEff) {
+								if (skill[skillIdx].allEff[timeLine[turnIdx].order.skLv - 1]) {
 									targetArr.allEff = true;
 								}
 								targets.forEach((data, idx) => {
