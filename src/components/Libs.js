@@ -1943,7 +1943,53 @@ export const util = { //this.loadImage();
     });
     return blockPercent.filter((block) => percent < block.num)[0].idx;
   },
-  getSkillAreaLang: (areaIdx, lang) => {
+  getSkillElementLang: ({element, cate, atkCount, lang}) => {
+    const attack = [
+      {},
+      {ko:'공격',en:'Attack',jp:'攻撃'},
+      {ko:'두번 공격',en:'Double Attack',jp:'2回攻撃'},
+      {ko:'세번 공격',en:'Triple Attack',jp:'3回攻撃'},
+      {ko:'네번 공격',en:'Four attacks',jp:'4回攻撃'},
+    ];
+    const elementTag = [
+      {type:'ac',idx:0},
+      {type:'ac',idx:1},
+      {type:'ac',idx:2},
+      {type:'ac',idx:3},
+      {type:'ac',idx:4},
+      {type:'ac',idx:5},
+      {type:'ac',idx:6},
+      {type:'el',idx:2},
+      {type:'el',idx:3},
+      {type:'el',idx:4},
+      {type:'el',idx:5},
+      {type:'el',idx:6},
+      {type:'el',idx:7},
+    ]
+    const elementArr = [
+      {ko:'통상',en:'Normal',jp:'通常'},
+      {ko:'쪼기',en:'Peck',jp:'ピグテール'},
+      {ko:'할퀴기',en:'Claw',jp:'掻き分け'},
+      {ko:'물기',en:'Bite',jp:'噛むこと'},
+      {ko:'치기',en:'Hit',jp:'打撃'},
+      {ko:'누르기',en:'Crush',jp:'押す'},
+      {ko:'던지기',en:'Throw',jp:'投げる'},
+      {ko:'빛속성',en:'Light Element',jp:'光属性'},
+      {ko:'어둠속성',en:'Darkness Element',jp:'闇属性'},
+      {ko:'물속성',en:'Water Element',jp:'水属性'},
+      {ko:'불속성',en:'Fire Element',jp:'火属性'},
+      {ko:'바람속성',en:'Wind Element',jp:'風属性'},
+      {ko:'땅속성',en:'Earth Element',jp:'地属性'},
+    ];
+    const elTag = elementTag[element];
+    return cate !== 2 ? `<i ${elTag.type} ${elTag.type}${elTag.idx}>${elementArr[element][lang]}</i> ${attack[atkCount][lang]}` : `<i ${elTag.type} ${elTag.type}${elTag.idx}>${elementArr[element][lang]}</i>`;
+  },
+  getSkillAreaLang: ({isAlly, areaIdx, cate, lang}) => {
+    const teamArr = [
+      {ko:'아군',en:'Ally',jp:'味方'},
+      {ko:'적군',en:'Enemy',jp:'敵軍'}
+    ];
+    const inBattle = {ko:'전투 참여시',en:'in battle',jp:'戦闘参加時'};
     const areaArr = [
       {},
       {ko:'단일',en:'Single',jp:'単一'},
@@ -1955,7 +2001,7 @@ export const util = { //this.loadImage();
       {ko:'세로 열',en:'Vertical columns',jp:'縦列'},
       {ko:'작은 십자 형태',en:'Small cross',jp:'小さな十字形'},
       {ko:'큰 십자 형태',en:'Large cross',jp:'大きな十字形'},
-      {ko:'대각선 형태',en:'Diagonal shape',jp:'斜めの形'},
+      {ko:'대각선 형태',en:'Diagonal shape',jp:'斜めの形'},//10
       {ko:'역대각선 형태',en:'Inverted Diagonal shape',jp:'逆斜めの形'},
       {ko:'고정 세로2열',en:'Fixed Vertical2 columns',jp:'固定縦2列'},
       {ko:'고정 세로3열',en:'Fixed Vertical3 columns',jp:'固定縦3列'},
@@ -1965,7 +2011,7 @@ export const util = { //this.loadImage();
       {ko:'卍 형태',en:'卍 Shape',jp:'形 卍形状'},
       {ko:'고정 가로2행',en:'Fixed horizontal2 rows',jp:'固定横2行'},
       {ko:'고정 가로3행',en:'Fixed horizontal3 rows',jp:'固定横3行'},
-      {ko:'전체',en:'All',jp:'全体'},
+      {ko:'전체',en:'All',jp:'全体'},//20
       {ko:'큰 사각형 형태',en:'Large rectangle shape',jp:'大きな四角形'},
       {ko:'작은 사각형 형태',en:'Small rectangle shape',jp:'小さな四角形'},
       {ko:'자신',en:'Self',jp:'自己'},
@@ -1975,7 +2021,7 @@ export const util = { //this.loadImage();
       {ko:'랜덤 15마리',en:'15 Random',jp:'ランダム15匹'},
       {ko:'작은 마름모 형태',en:'Small rhombus shape',jp:'小さな菱形の形'},
       {ko:'큰 마름모 형태',en:'Large rhombus shape',jp:'大きな菱形の形'},
-      {ko:'큰 링',en:'Large ring',jp:'大きなリング'},
+      {ko:'큰 링',en:'Large ring',jp:'大きなリング'},//30
       {ko:'랜덤 세로 2열',en:'Random Vertical 2 columns',jp:'ランダム縦2列'},
       {ko:'랜덤 세로 3열',en:'Random Vertical 3 columns',jp:'ランダム縦3列'},
       {ko:'랜덤 가로 2행',en:'Random horizontal 2 rows',jp:'ランダム横2行'},
@@ -1984,30 +2030,190 @@ export const util = { //this.loadImage();
       {ko:'큰 x 형태',en:'Large X shape',jp:'大きいxの形'},
       {ko:'⏉ 형태',en:'⏉ Shape',jp:'形 ⏉形状'},
     ];
-    return areaArr[areaIdx][lang];
+    const areaText = areaIdx !== 23 ? `<span ${isAlly === 0 ? 'ally' : 'enemy'}>${teamArr[isAlly][lang]}</span> ${areaArr[areaIdx][lang]}` : areaArr[areaIdx][lang];
+    return cate === 2 ? `<u>${inBattle[lang]}</u> ${areaText}` : areaText;
+  },
+  getSkillDmgLang: ({eff, lang}) => {
+    const dmg = {ko:'데미지',en:'damage',jp:'ダメージ'};
+    return `<br/><b dmg>${eff}</b> ${dmg[lang]}`;
+  },
+  getSkillBuffLang: ({buff, type, lang}) => {
+    const buffType = [
+      {ko:'체력(HP)',en:'Heath Point(HP)',jp:'体力(HP)'},
+      {ko:'행동(SP)',en:'Stamina Point(SP)',jp:'行動(SP)'},
+      {ko:'SP 회복',en:'SP Recovery',jp:'SP 回復'},
+      {ko:'공격(ATK)',en:'Attack(ATK)',jp:'攻撃(ATK)'},
+      {ko:'방어(DEF)',en:'Defense(DEF)',jp:'攻撃(DEF)'},
+      {ko:'술법공격(MAK)',en:'Magic Attack(MAK)',jp:'術法攻撃(MAK)'},
+      {ko:'술법방어(MDF)',en:'Magic Defense(MDF)',jp:'術法防御(MDF)'},
+      {ko:'회복(RCV)',en:'Recovery(RCV)',jp:'回復(RCV)'},
+      {ko:'속도(SPD)',en:'Speed(SPD)',jp:'速度(SPD)'},
+      {ko:'행운(LUK)',en:'Lucky(LUK)',jp:'幸運(LUK)'},
+      {},
+      {ko:'쪼기',en:'Peck',jp:'ピグテール'},
+      {ko:'할퀴기',en:'Claw',jp:'掻き分け'},
+      {ko:'물기',en:'Bite',jp:'噛むこと'},
+      {ko:'치기',en:'Hit',jp:'打撃'},
+      {ko:'누르기',en:'Crush',jp:'押す'},
+      {ko:'던지기',en:'Throw',jp:'投げる'},
+      {ko:'빛속성',en:'Light Element',jp:'光属性'},
+      {ko:'어둠속성',en:'Darkness Element',jp:'闇属性'},
+      {ko:'물속성',en:'Water Element',jp:'水属性'},
+      {ko:'불속성',en:'Fire Element',jp:'火属性'},
+      {ko:'바람속성',en:'Wind Element',jp:'風属性'},
+      {ko:'땅속성',en:'Earth Element',jp:'地属性'},
+      {},{},{},{},{},{},{},{},
+      {},{},{},{},{},{},{},{},{},{},
+      {},{},{},{},{},{},{},{},{},
+      {ko:'출혈',en:'Bleeding',jp:'出血'},
+      {ko:'중독',en:'Addiction',jp:'中毒'},
+      {ko:'석화',en:'Petrification',jp:'石化'},
+      {ko:'혼란',en:'Confusion',jp:'混乱'},
+      {ko:'기절',en:'Stun',jp:'気絶'},
+      {ko:'변이',en:'Mutation',jp:'変異'},
+      {ko:'즉사',en:'Immediate Death',jp:'即死'},
+      {},{},{},{},
+      {},{},{},{},{},{},{},{},{},{},
+      {},{},{},{},{},{},{},{},{},{},
+      {},{},{},{},{},{},{},{},{},{},
+      {},{},{},{},{},{},{},{},{},
+      {ko:'패시브',en:'Passive',jp:'パッシブ'},
+    ];
+    const updownText = [
+      {ko:'증가',en:'increase',jp:'増加',tag:'up'},
+      {ko:'감소',en:'reduction',jp:'減少',tag:'down'},
+    ];
+    const upDown = buff.indexOf('-') >= 0 ? 1 : 0;
+    return buff ? `<br/>${buffType[type][lang]} <b buff>${buff}</b>, <i icon ${updownText[upDown].tag}></i> ${updownText[upDown][lang]}` : buffType[type][lang];
+  },
+  getSkillConditionBuffLang: ({condition, lang}) => {
+    const conditionType = [
+      {},
+      {ko:'밤',en:'Night',jp:'夜',tag:'night'},
+    ];
+    return `<span ${conditionType[condition].tag}>${conditionType[condition][lang]}</span>,`;
+  },
+  getSkillBuffCountLang: ({buffCount, lang}) => {
+    const turnText = {ko:'턴',en:'turn',jp:'ターン'};
+    return `${buffCount}${turnText[lang]}`;
+  },
+  getSkillBuffChanceLang: ({buffChance, lang}) => {
+    const chanceText = {ko:'확률',en:'chance',jp:'確率'};
+    return `<br/><span chance>${buffChance}</span> ${chanceText[lang]}`;
+  },
+  getSkillPossibleLang: ({element, lang}) => {
+    const possibleElement = [
+      {},
+      {ko:'',en:'',jp:''},
+      {ko:'',en:'',jp:''},
+      {ko:'',en:'',jp:''},
+      {ko:'',en:'',jp:''},
+      {ko:'',en:'',jp:''},
+      {ko:'',en:'',jp:''},
+      {ko:'빛속성의 스킬 사용 가능',en:'Ability to use skills with the Light Element',jp:'光属性のスキル使用可能'},
+      {ko:'어둠속성의 스킬 사용 가능',en:'Ability to use skills with the Darkness Element',jp:'闇属性のスキル使用可能'},
+      {ko:'물속성의 스킬 사용 가능',en:'Ability to use skills with the Water Element',jp:'水属性のスキル使用可能'},
+      {ko:'불속성의 스킬 사용 가능',en:'Ability to use skills with the Fire Element',jp:'火属性のスキル使用可能'},
+      {ko:'바람속성의 스킬 사용 가능',en:'Ability to use skills with the Wind Element',jp:'風属性のスキル使用可能'},
+      {ko:'땅속성의 스킬 사용 가능',en:'Ability to use skills with the Earth Element',jp:'地属性のスキル使用可能'},
+    ]
+    return `${possibleElement[element][lang]}<br/>`;
+  },
+  getSkillJobLang: ({jobIdx, lang}) => {
+    const jobText = [
+      {},
+      {ko:'상점에서 가격흥정 가능',en:'Negotiate prices in your store',jp:'ショップで価格交渉可能'},
+      {ko:'선박 제작/분해 가능',en:'Can build/disassemble ships',jp:'船舶製作/分解可能'},
+      {ko:'장비 제작/분해 가능',en:'Can build/disassemble equipment',jp:'機器製作/分解可能'},
+      {ko:'조각상 제작 가능',en:'Statues can be crafted',jp:'彫像製作可能'},
+      {ko:'식물 재배 가능',en:'Can grow plants',jp:'植物栽培可能'},
+      {ko:'아이템 합성 가능',en:'Items can be composited',jp:'アイテム合成可能'},
+      {ko:'목걸이, 반지 제작/분해 가능',en:'Can create/disassemble necklaces and rings',jp:'ネックレス、指輪製作/分解可能'},
+      {ko:'고급 등급의 동물 찾을 확률 증가',en:'Increased chance of finding an advanced ranked animal',jp:'高級ランクの動物が見つかる確率アップ'},
+      {ko:'예술품 제작 가능',en:'Can create art',jp:'アート作品制作可能'},
+    ];
+    return jobText[jobIdx][lang];
   },
   getSkillText: (skillObj) => { //스킬 텍스트 전환 $(0), $<0>
     const {skill, lv, lang} = skillObj;
     const cate = skill.cate[0];
-    const replaceEffArr = skill.txt[lang].match(/[$][(]\d[)]*/g) || [];
-    const replaceBuffArr = skill.txt[lang].match(/[$][<]\d[>]*/g) || [];
-    const replaceBuffCountArr = skill.txt[lang].match(/[$][(]turn[)]*/g) || [];
-    const replaceBuffChanceArr = skill.txt[lang].match(/[$][(]chance[)]*/g) || [];
     const skillType = skill.element_type;
-    let replaceText = skill.txt[lang];
-    replaceEffArr.forEach((data, idx) => {
-      replaceText = replaceText.replace(data, skill.eff[idx].num[lv >= 0 ? lv : 0]);
-    });
-    replaceBuffArr.forEach((data, idx) => {
-      replaceText = replaceText.replace(data, skill.buff[idx].num[lv >= 0 ? lv : 0]);
-    });
-    replaceBuffCountArr.forEach((data) => {
-      replaceText = replaceText.replace(data, skill.buffCount[lv >= 0 ? lv : 0]);
-    });
-    replaceBuffChanceArr.forEach((data) => {
-      replaceText = replaceText.replace(data, skill.buffChance[lv >= 0 ? lv : 0]);
-    });
-    replaceText = replaceText.replace('<area>', `<u>${util.getSkillAreaLang(skill.ta[lv], lang)}</u>`);
+    let replaceText = skill.txt;
+    // const replaceUpDownArr = replaceText.match(/[<]up[>]|[<]down[>]*/g) || [];
+    if (skill.eff?.length > 0) {//데미지
+      replaceText = replaceText.replace('<dmg>', util.getSkillDmgLang({
+        eff:skill.eff[0].num[lv],
+        lang:lang,
+      }));
+    }
+    if (skill.buff?.length > 0) {//버프 이름 및 효과
+      let buffText = '';
+      skill.buff.forEach((data, idx) => {
+        buffText += util.getSkillBuffLang({
+          buff:skill.buff[idx].num[lv],
+          type:skill.buff[idx].type,
+          lang:lang,
+        });
+      });
+      replaceText = replaceText.replace('<buff>', buffText);
+    }
+    if (skill.buffCount?.length > 0) {//버프 유지 턴
+      replaceText = replaceText.replace('<turn>', util.getSkillBuffCountLang({
+        buffCount:skill.buffCount[lv],
+        lang:lang,
+      }));
+    }
+    if (skill.condition > 0) {//조건 버프
+      replaceText = replaceText.replace('<condition>', util.getSkillConditionBuffLang({
+        condition:skill.condition,
+        lang:lang,
+      }));
+    }
+    if (skill.buffChance?.length > 0) {//버프 확률
+      replaceText = replaceText.replace('<chance>', util.getSkillBuffChanceLang({
+        buffChance:skill.buffChance[lv],
+        lang:lang,
+      }));
+    }
+    if (skill.job > 0) {//직업 스킬
+      replaceText = replaceText.replace('<job>', util.getSkillJobLang({
+        jobIdx:skill.job,
+        lang:lang,
+      }));
+    }
+    // replaceUpDownArr.forEach((data, idx) => {//효과 up, down 아이콘
+    //   if (data.indexOf('up') >= 0) {
+    //     replaceText = replaceText.replace(data, util.getSkillUpDownLang({
+    //       type:'up',
+    //       lang:lang,
+    //     }));
+    //   } else {
+    //     replaceText = replaceText.replace(data, util.getSkillUpDownLang({
+    //       type:'down',
+    //       lang:lang,
+    //     }));
+    //   }
+    // });
+    replaceText = replaceText.replace('<area>', util.getSkillAreaLang({//이펙트 범위
+      isAlly:skill.ta_,
+      areaIdx:skill.ta[lv],
+      cate:skill.cate[0],
+      lang:lang,
+    }));
+    if (replaceText.match('<el>')?.index > -1) {//기술 속성
+      replaceText = replaceText.replace('<el>', util.getSkillElementLang({
+        element:skill.element_type,
+        cate:skill.cate[0],
+        atkCount:skill.atkCount[0],
+        lang:lang,
+      }));
+    }
+    if (replaceText.match('<possible>')?.index > -1) {//기술 사용가능 텍스트
+      replaceText = replaceText.replace('<possible>', util.getSkillPossibleLang({
+        element:skill.element_type,
+        lang:lang,
+      }));
+    }
     return {
       skillText: replaceText,
       skillType: skillType,

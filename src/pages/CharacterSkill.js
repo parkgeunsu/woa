@@ -35,7 +35,26 @@ const Skill = styled.div`
     border-color: var(--color-magic);
     opacity: 1;
   ` : ''}
-  .txt{flex:1;min-height:30px;line-height:1.2;font-size:0.75rem;}
+  .txt{
+    flex:1;
+    min-height: 30px;
+    line-height: 1.4;
+    font-size: 0.75rem;
+    text-align: center;
+    span[ally]{
+      color: var(--color-green);
+    }
+    span[enemy]{
+      color: var(--color-purple);
+    }
+    > * {
+      line-height: 1;
+      vertical-align: middle;
+    }
+    span[chance]{
+      color: var(--color-yellow);
+    }
+  }
   .lv{margin:0 10px 0 0;}
   &:after {
     content: '';

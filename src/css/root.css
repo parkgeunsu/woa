@@ -307,84 +307,72 @@ i[down] {
 }
 i[el], i[ac] {
   display: inline-block;
-  margin-top: -4px;
-  padding: 0 2px;
-  height: 16px;
+  padding: 2px;
   vertical-align: middle;
   line-height: 16px;
   border-radius: 12px;
   font-weight: 600;
+  font-size: 0.65rem;
   text-align: center;
 }
 i[el0] {
   background: #fff;
   color: #000;
-  text-shadow: -1px -1px 0px #fff, 1px 1px 0px #333;
 }
 i[el1] {
   background: rgb(146, 0, 146);
   color: #fff;
-  text-shadow: -1px -1px 0px #ff0, 1px 1px 0px #000;
 }
 i[el2] {
   background: rgb(255, 250, 181);
   color: #000;
-  text-shadow: -1px -1px 0px #fff, 1px 1px 0px #000;
 }
 i[el3] {
   background: rgb(82, 82, 82);
   color: #fff;
-  text-shadow: -1px -1px 0px #fff, 1px 1px 0px #000;
 }
 i[el4] {
   background: #00f;
   color: #fff;
-  text-shadow: -1px -1px 0px #fff, 1px 1px 0px #000;
 }
 i[el5] {
   background: #f00;
   color: #fff;
-  text-shadow: -1px -1px 0px #fff, 1px 1px 0px #000;
 }
 i[el6] {
   background: #0ff;
   color: #000;
-  text-shadow: -1px -1px 0px #fff, 1px 1px 0px #000;
 }
 i[el7] {
   background: #f90;
   color: #000;
-  text-shadow: -1px -1px 0px #fff, 1px 1px 0px #000;
+}
+i[ac0] {
+  font-size: 0.75rem;
 }
 i[ac1] {
   background: #f90;
   color: #000;
-  text-shadow: -1px -1px 0px #fff, 1px 1px 0px #000;
 }
 i[ac2] {
   background: #f00;
   color: #fff;
-  text-shadow: -1px -1px 0px #fff, 1px 1px 0px #000;
 }
 i[ac3] {
   background: rgb(82, 82, 82);
   color: #fff;
-  text-shadow: -1px -1px 0px #fff, 1px 1px 0px #000;
 }
 i[ac4] {
   background: #fff;
   color: #000;
-  text-shadow: -1px -1px 0px #fff, 1px 1px 0px #333;
 }
 i[ac5] {
   background: #00f;
   color: #fff;
-  text-shadow: -1px -1px 0px #fff, 1px 1px 0px #000;
 }
 i[ac6] {
   background: #0ff;
   color: #000;
-  text-shadow: -1px -1px 0px #fff, 1px 1px 0px #000;
 }
 
 b {
