@@ -92,6 +92,7 @@ const GameMainFooter = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
+  console.log(gameData, stay, gameMode);
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
   const currentStep = React.useMemo(() => {
@@ -108,7 +109,7 @@ const GameMainFooter = ({
   return (
     <>
       <Wrapper className="footer">
-        <ButtonWrap gameMode={gameMode === ''} isRoot={true}>
+        {gameMode === '' && <ButtonWrap gameMode={gameMode === ''} isRoot={true}>
           <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
             setGameMode('roulette');
           }}>{gameData.msg.button['exploreRegions'][lang]}</StyledButton>
@@ -118,8 +119,8 @@ const GameMainFooter = ({
           <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
             setGameMode('moveRegion');
           }}>{gameData.msg.button['moveRegion'][lang]}</StyledButton>
-        </ButtonWrap>
-        <ButtonWrap alignItems="self-end" gameMode={gameMode === 'roulette'}>
+        </ButtonWrap>}
+        {gameMode === 'roulette' && <ButtonWrap alignItems="self-end" gameMode={gameMode === 'roulette'}>
           {rouletteIdx === 0 && <StyledButton className="backBtn" btnImg={imgSet.button.btnSD} onClick={() => {
             setRouletteIdx(0);
             setGameMode('');
@@ -213,8 +214,8 @@ const GameMainFooter = ({
               sec.current = 0;
             }
           }}>{pickMsg}</StyledButton>
-        </ButtonWrap>
-        <ButtonWrap alignItems="self-end" gameMode={gameMode === 'scenario'}>
+        </ButtonWrap>}
+        {gameMode === 'scenario' && <ButtonWrap alignItems="self-end" gameMode={gameMode === 'scenario'}>
           <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="backBtn"  onClick={() => {
             setGameMode('');
           }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
@@ -252,10 +253,10 @@ const GameMainFooter = ({
                 },
                 isNavigate: true,
               });
-            }}>{gameData.scenario[stay][selectScenario.dynastyIdx]?.scenarioList[selectScenario.dynastyScenarioIdx].stage[selectScenario.stageIdx].title[lang]} {gameData.msg.button['startBattle'][lang]}</StyledButton>
+            }}>{gameData?.scenario[stay][selectScenario.dynastyIdx]?.scenarioList[selectScenario.dynastyScenarioIdx].stage[selectScenario.stageIdx].title[lang]} {gameData.msg.button['startBattle'][lang] || ''}</StyledButton>
           }
-        </ButtonWrap>
-        <ButtonWrap alignItems="self-end" gameMode={gameMode === 'moveRegion'}>
+        </ButtonWrap>}
+        {gameMode === 'moveRegion' && <ButtonWrap alignItems="self-end" gameMode={gameMode === 'moveRegion'}>
           <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="backBtn"  onClick={() => {
             setGameMode('');
           }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
@@ -301,7 +302,7 @@ const GameMainFooter = ({
               }
             </FlexBox>
           </StyledButton>
-        </ButtonWrap>
+        </ButtonWrap>}
       </Wrapper>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}

@@ -109,30 +109,6 @@ const BattleEffect = styled.div`
   pointer-events: none;
   overflow: hidden;
 	transition: all ${({ gameSpd }) => 1.125 / gameSpd}s;
-	.land_ally {
-		position: relative;
-		margin: 0 auto;
-		&.allEff .effect_land {
-			display: none;
-			&:nth-of-type(13) {
-				display: block;
-				transform: scale(5) !important;
-				z-index: 1;
-			}
-		}
-	}
-	.land_enemy {
-		position: relative;
-		margin: 0 auto;
-		&.allEff .effect_land {
-			display: none;
-			&:nth-of-type(13) {
-				display: block;
-				transform: scale(5) !important;
-				z-index: 1;
-			}
-		}
-	}
 	& > div {
 		position: relative;
 		margin: 0 auto;
@@ -141,6 +117,20 @@ const BattleEffect = styled.div`
 	&.ready .land {
 		outline-width: 2px;
 	}
+`;
+const BattleEffectLand = styled.div`
+	position: relative;
+	margin: 0 auto;
+	${({allEff}) => allEff ? `
+		.effect_land {
+			display: none;
+			&:nth-of-type(13) {
+				display: block;
+				transform: scale(5) !important;
+				z-index: 1;
+			}
+		}
+	` : ''}
 `;
 const EffLand = styled.div.attrs(
 	props => ({
@@ -1099,7 +1089,7 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
                 customSkill ? customSkill.ta[timeLine[turnIdx].order.skLv - 1] : gameData.skill[skillIdx].ta[timeLine[turnIdx].order.skLv - 1],
                 timeLine[turnIdx].order.target);
 							let targetIdx = [],
-								targetArr = {allEff:false,targets:[]},
+								targetArr = {skillIdx:0,allEff:0,effSize:1,effAnimation:'',effRotate:'',effFilter:'',targets:[]},
 								targetCount = 0;
 							if (timeLine[turnIdx].order.team === 'ally') {//아군 공격경우
 								if (skillCate === 5) {//버프
@@ -1148,9 +1138,16 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 							// 	targetArr[12].posIdx = 12;
 							// 	targetArr[12].animation = customSkill ? customSkill.effAnimation : gameData.skill[skillIdx].effAnimation;
 							// } else {
-								if (customSkill ? customSkill.allEff[timeLine[turnIdx].order.skLv - 1] : skill[skillIdx].allEff[timeLine[turnIdx].order.skLv - 1]) {
-									targetArr.allEff = true;
-								}
+								targetArr.allEff = customSkill ? 
+									customSkill.effSize[timeLine[turnIdx].order.skLv - 1] >= 5 ? 
+										customSkill.effSize[timeLine[turnIdx].order.skLv - 1] : 
+											0 : 
+									skill[skillIdx].effSize[timeLine[turnIdx].order.skLv - 1] >= 5 ? 
+										skill[skillIdx].effSize[timeLine[turnIdx].order.skLv - 1] : 
+											0;
+								targetArr.effSize = customSkill ? customSkill.effSize[timeLine[turnIdx].order.skLv - 1] : gameData.skill[skillIdx].effSize[timeLine[turnIdx].order.skLv - 1];
+								targetArr.effAnimation = customSkill ? customSkill.effAnimation : gameData.skill[skillIdx].effAnimation;
+								targetArr.skillIdx = skillIdx;
 								targets.forEach((data, idx) => {
 									let chk = false;
 									targetIdx.forEach((taIdx) => {
@@ -1161,16 +1158,12 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 									if (chk) { //스킬 맞는 위치와 범위값중 일치하는지 확인
 										targetArr.targets[idx] = {
 											posIdx:data,
-											animation:customSkill ? customSkill.effAnimation : gameData.skill[skillIdx].effAnimation,
 											dmg:Math.floor(dmg[targetCount]),
-											size:customSkill ? customSkill.effSize : gameData.skill[skillIdx].effSize,
 										};
 										targetCount ++;
 									} else {
 										targetArr.targets[idx] = {
 											posIdx:data,
-											animation:customSkill ? customSkill.effAnimation : gameData.skill[skillIdx].effAnimation,
-											size:customSkill ? customSkill.effSize : gameData.skill[skillIdx].effSize,
 										};
 									}
 								});
@@ -1242,18 +1235,18 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 								setLandCriticalEffect(false);
 								if (timeLine[turnIdx].order.team === 'ally') {
 									if (skillCate === 5) {//버프
-										setAllyEffect({allEff:false,targets:[]});
+										setAllyEffect({skillIdx:0,allEff:0,effSize:1,effAnimation:'',effRotate:'',effFilter:'',targets:[]});
 										setAllyAction([]);
 									} else {
-										setEnemyEffect({allEff:false,targets:[]});
+										setEnemyEffect({skillIdx:0,allEff:0,effSize:1,effAnimation:'',effRotate:'',effFilter:'',targets:[]});
 										setEnemyAction([]);
 									}
 								} else {
 									if (skillCate === 5) {//버프
-										setEnemyEffect({allEff:false,targets:[]});
+										setEnemyEffect({skillIdx:0,allEff:0,effSize:1,effAnimation:'',effRotate:'',effFilter:'',targets:[]});
 										setEnemyAction([]);
 									} else {
-										setAllyEffect({allEff:false,targets:[]});
+										setAllyEffect({skillIdx:0,allEff:0,effSize:1,effAnimation:'',effRotate:'',effFilter:'',targets:[]});
 										setAllyAction([]);
 									}
 								}
@@ -1293,7 +1286,7 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
                     atkStay: atkS,
                   }
                 });
-							}, ((skillEffect[targetArr.targets[0].animation.split('(')[0]].frame / 10) * 1125 * (customSkill.effAnimationRepeat || 1)) / gameSpd);//공격 이펙트 효과시간
+							}, ((skillEffect[targetArr.effAnimation.split('(')[0]].frame / 10) * 1125 * (customSkill.effAnimationRepeat || 1)) / gameSpd);//공격 이펙트 효과시간
 						}, 150 / gameSpd);
 					}, 600 / gameSpd);//메시지창 사라짐
 				}, 150 / gameSpd);//메시지 오픈
@@ -1311,7 +1304,6 @@ const StyleSelect = styled(Select)`
 const speedList = [1,1.5,2,3];
 // const skillCateList = ['none','passive','active(emeny)','active(self)','buff','debuff','active(debuff)','active(buff)','weather','job'];//1부터
 const skillFilterList = ['none','hue(90deg)','hue(180deg)','invert(100%)'];
-const skillAllList = ['false', 'true']
 const taList = [
   '단일','가로2','가로3','세로2','세로3','가로행','세로열','십자5','십자9','대각선',
   '반대 대각선','고정 세로2열','고정 세로3열','⏊4','└┐9','┌┘9','卍17','고정 가로2행','고정 가로3행','전체',
@@ -1320,7 +1312,7 @@ const taList = [
 ];//1부터
 //var a = '';for(var i = 195; i < 221; i++){a += `'thaumaturgy${i}',`}
 // const skillRepeatList = [1,2,3,4];
-const skillSizeList = [1,1.5,2,3,4,5];
+const skillSizeList = [1,2,3,5];
 const skillRotateList = [0,90,180,270];
 const TestSkill = ({
   saveData,
@@ -1353,7 +1345,6 @@ const TestSkill = ({
   const [selectEffectAnimation, setSelectEffectAnimation] = useState(0);
   const [selectEffectSize, setSelectEffectSize] = useState(0);
   const [selectEffectRotate, setSelectEffectRotate] = useState(0);
-  const [selectEffectAll, setSelectEffectAll] = useState(0);
 	const sData = React.useMemo(() => saveData && Object.keys(saveData).length !== 0 ? saveData : util.loadData('saveData'), [saveData]);
 	const [msgOn, setMsgOn] = useState(false); 
 	const [msg, setMsg] = useState("");
@@ -1375,10 +1366,9 @@ const TestSkill = ({
     ta:[selectSkillTaget + 1],
     effAnimation:skillEffectList[selectEffectAnimation],
     effAnimationRepeat:1,
-		effSize: skillSizeList[selectEffectSize],
+		effSize: [skillSizeList[selectEffectSize]],
 		effRotate: skillRotateList[selectEffectRotate],
 		effFilter: '',
-		allEff: [0],
     buffAnimation:0,
     skillClass:1,
     buff:[{type:2.0,num:['70%','75%','80%','85%','90%']}],
@@ -1455,8 +1445,8 @@ const TestSkill = ({
 	const [effectAllyArea, setEffectAllyArea] = useState([]); //아군스킬 영역
 	const [effectEnemyArea, setEffectEnemyArea] = useState([]); //적군스킬 영역
 	const [showSkillMsg, setShowSkillMsg] = useState(false); //메시지창 on/off
-	const [allyEffect, setAllyEffect] = useState({allEff:false,targets:[]});//아군 데미지효과
-	const [enemyEffect, setEnemyEffect] = useState({allEff:false,targets:[]});//적군 데미지효과
+	const [allyEffect, setAllyEffect] = useState({skillIdx:0,allEff:0,effSize:1,effAnimation:'',effRotate:'',effFilter:'',targets:[]});//아군 데미지효과
+	const [enemyEffect, setEnemyEffect] = useState({skillIdx:0,allEff:0,effSize:1,effAnimation:'',effRotate:'',effFilter:'',targets:[]});//적군 데미지효과
   const map = Array.from({length: 25}, (undefined, i) => {
 		return {idx: i}
 	});
@@ -2020,8 +2010,8 @@ const TestSkill = ({
 			// 	}
 			// }
 			setTimeout(() => {
-				setAllyEffect({allEff:false,targets:[]});
-				setEnemyEffect({allEff:false,targets:[]});
+				setAllyEffect({skillIdx:0,allEff:0,effSize:1,effAnimation:'',effRotate:'',effFilter:'',targets:[]});
+				setEnemyEffect({skillIdx:0,allEff:0,effSize:1,effAnimation:'',effRotate:'',effFilter:'',targets:[]});
 				timeLineSet();//타임라인 구성
 				setTurnIdx(0);
 				actionAnimation({
@@ -2101,7 +2091,7 @@ const TestSkill = ({
             setSkill((prev) => {
               return {
                 ...prev,
-                ta: idx + 1,
+                ta: [idx + 1],
               }
             });
           }} selectOption={taList} title={'대상'}></StyleSelect>
@@ -2119,7 +2109,7 @@ const TestSkill = ({
             setSkill((prev) => {
               return {
                 ...prev,
-                effSize: skillSizeList[idx],
+                effSize: [skillSizeList[idx]],
               }
             });
           }} selectOption={skillSizeList} title={'크기'}></StyleSelect>
@@ -2132,15 +2122,6 @@ const TestSkill = ({
               }
             });
           }} selectOption={skillRotateList} title={'각도'}></StyleSelect>
-          <StyleSelect selectIdx={selectEffectAll} setSelectIdx={setSelectEffectAll} onClick={(idx) => {
-            setSelectEffectAll(idx);
-            setSkill((prev) => {
-              return {
-                ...prev,
-                allEff: idx === 0 ? [0] : [1],
-              }
-            });
-          }} selectOption={skillAllList} title={'전체이펙트'}></StyleSelect>
         </BattleTitle>
       </BattleHeader>
       <BattleWarp className={`battle_wrap ${mode}`} backImg={imgSet.back[1]}>
@@ -2164,17 +2145,21 @@ const TestSkill = ({
           }
         }} className={`battle_area ${mode === "action" ? "action" : ""}`} mode={mode} frameLeft={imgSet.etc.frameLeft} frameRight={imgSet.etc.frameRight}>
           <BattleEffect ref={battleEffectRef} className="battle_effect">
-            <div className={`land_enemy ${enemyEffect.allEff ? "allEff" : ""}`}>
+            <BattleEffectLand allEff={enemyEffect.allEff >= 5 ? enemyEffect.allEff : 0} className={`land_enemy`}>
             {map.map((data, idx) => {
               const left = idx % 5 * mapSize,
                 top = Math.floor(idx / 5) * mapSize;
+							const effAnimation = enemyEffect.effAnimation.split('(')[0];
               let effectChk = false,
-                effAnimation = '',
                 effNum = '';
+							if (enemyEffect.allEff >= 5) {
+								if (idx === 12) {
+									effectChk = true;
+								}
+							}
               enemyEffect.targets.forEach((effData) => {
                 if (effData.posIdx === idx) {
                   effectChk = true;
-                  effAnimation = effData.animation.split('(')[0];
                   effNum = effData.dmg;
                 }
               });
@@ -2190,8 +2175,8 @@ const TestSkill = ({
                 </EffLand>
               );
             })}
-            </div>
-            <div className={`land_ally ${allyEffect.allEff ? "allEff" : ""}`}>
+            </BattleEffectLand>
+            <BattleEffectLand allEff={allyEffect.allEff >= 5 ? allyEffect.allEff : 0} className={`land_ally`}>
             {map.map((data, idx) => {
               const left = idx % 5 * mapSize,
                 top = Math.floor(idx / 5) * mapSize;
@@ -2217,7 +2202,7 @@ const TestSkill = ({
                 </EffLand>
               )
             })}
-            </div>
+            </BattleEffectLand>
           </BattleEffect>
           <BattleUnit ref={battleUnitRef} className="battle_units">
             <div className="units_enemy">
