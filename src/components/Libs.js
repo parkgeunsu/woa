@@ -618,9 +618,9 @@ export const util = { //this.loadImage();
   },
   getEnemySkill: (data, gameData) => {
     const chData = gameData.ch[data.idx],
-      animalSkill = gameData.animal_type[chData.animal_type].skill0,
+      animalSkill = gameData.animal_type[chData.animal_type].skill,
       jobSkill = gameData.job[chData.job[0]].skill,
-      skillArr = [2, ...animalSkill, ...jobSkill.lv0];//lv0 수정해야함
+      skillArr = [1, 2, ...animalSkill.lv0, ...jobSkill.lv0];//lv0 수정해야함
     const skillNums = [3,6,9,12,15],
       skillLength = skillNums[Math.floor(data.lv / 10) - 1];
     let skill = [{idx:1,lv:1,},{idx:2,lv:1,}]; //공격, 방어 기본 장착
@@ -812,295 +812,314 @@ export const util = { //this.loadImage();
       return nowNum + plusNum;
     }
   },
-  getEffectArea: (type, n) => {//type: 효과타입, n: 사용위치(0~24)
-    let num = [];
-    switch(type){
-      case 1: // 1 단일
-        return [n];
-      case 2: // 2 가로2
-        if (n%5 === 4) {
-          return [n,n-1];
-        } else {
-          return  [n,n+1];
+  getEffectArea: ({
+    isEnemy,
+    type,
+    n,
+    allyPos,
+    battleAlly,
+    enemyPos,
+    battleEnemy,
+  }) => {//type: 효과타입, n: 사용위치(0~24)
+    if (type > 100) {
+      const unit = isEnemy ? battleEnemy : battleAlly,
+        unitPos = isEnemy ? enemyPos : allyPos;
+      let unitArr = [];
+      unit.forEach((unitData, idx) => {
+        if (unitData.animalType === (type - 100)) {
+          unitArr.push(unitPos[idx].pos);
         }
-      case 3:// 3 가로3
-        if (n%5 === 3) {
-          return [n,n+1,n-1];
-        } else if (n%5 === 4){
-          return [n,n-1,n-2];
-        } else {
-          return [n,n+1,n+2];
-        }
-      case 4: // 2 세로2
-        if (n > 19) {
-          return [n,n-5];
-        } else {
-          return [n,n+5];
-        }
-      case 5:// 3 세로3
-        if (n > 19) {
-          return [n,n-5,n-10];
-        } else if (n > 14){
-          return [n,n+5,n-5];
-        } else {
-          return [n,n+5,n+10];
-        }
-      case 6: // 5 가로행
-        if (n < 5) {
-          return [0,1,2,3,4];
-        } else if (n < 10){
-          return [5,6,7,8,9];
-        } else if (n < 15){
-          return [10,11,12,13,14];
-        } else if (n < 20){
-          return [15,16,17,18,19];
-        } else {
-          return [20,21,22,23,24];
-        }
-      case 7: // 5 세로열
-        if (n%5 === 0) {
-          return [0,5,10,15,20];
-        } else if (n%5 === 1){
-          return [1,6,11,16,21];
-        } else if (n%5 === 2){
-          return [2,7,12,17,22];
-        } else if (n%5 === 3){
-          return [3,8,13,18,23];
-        } else {
-          return [4,9,14,19,24];
-        }
-      case 8: // ┼5 십자5
-        if (n<5) {
-          if (n === 0) {
-            return [n,n+1,n+5];
-          } else if (n === 4){
-            return [n,n-1,n+5];
+      });
+      return unitArr.length === 0 ? [12] : unitArr;
+    } else {
+      switch (type) {
+        case 1: // 1 단일
+          return [n];
+        case 2: // 2 가로2
+          if (n%5 === 4) {
+            return [n,n-1];
           } else {
-            return [n,n-1,n+1,n+5];
+            return  [n,n+1];
           }
-        } else if (n>19) {
-          if (n === 20) {
-            return [n,n+1,n-5];
-          } else if (n === 24){
-            return [n,n-1,n-5];
-          } else {
-            return [n,n-1,n+1,n-5];
-          }
-        } else {
-          if (n%5 === 0) {
-            return [n,n-5,n+5,n+1];
+        case 3:// 3 가로3
+          if (n%5 === 3) {
+            return [n,n+1,n-1];
           } else if (n%5 === 4){
-            return [n,n-5,n+5,n-1];
+            return [n,n-1,n-2];
           } else {
-            return [n,n-5,n+5,n+1,n-1];
+            return [n,n+1,n+2];
           }
-        }
-      case 9: // ┼9 십자9
-        return [12,2,7,10,11,13,14,17,22];
-      case 10: // /5 대각선
-        if (n === 0 || n === 6 || n === 12 || n === 18 || n === 24) {
-          return [0,6,12,18,24];
-        } else if (n === 1 || n === 7 || n === 13 || n === 19) {
-          return [1,7,13,19];
-        } else if (n === 5 || n === 11 || n === 17 || n === 23) {
-          return [5,11,17,23];
-        } else if (n === 2 || n === 8 || n === 14) {
-          return [2,8,14];
-        } else if (n === 10 || n === 16 || n === 22) {
-          return [10,16,22];
-        } else if (n === 3 || n === 9) {
-          return [3,9];
-        } else if (n === 15 || n === 21) {
-          return [15,21];
-        } else if (n === 4) {
-          return [4];
-        } else {
-          return [20];
-        }
-      case 11: // \5 역 대각선
-        if (n === 4 || n === 8 || n === 12 || n === 16 || n === 20) {
-          return [4,8,12,16,20];
-        } else if (n === 3 || n === 7 || n === 11 || n === 15) {
-          return [3,7,11,15];
-        } else if (n === 9 || n === 13 || n === 17 || n === 21) {
-          return [9,13,17,21];
-        } else if (n === 2 || n === 6 || n === 10) {
-          return [2,6,10];
-        } else if (n === 14 || n === 18 || n === 22) {
-          return [14,18,22];
-        } else if (n === 1 || n === 5) {
-          return [1,5];
-        } else if (n === 19 || n === 23) {
-          return [19,23];
-        } else if (n === 0) {
-          return [0];
-        } else {
-          return [24];
-        }
-      case 12: //고정 세로2열
-        return [1,3,6,8,11,13,16,18,21,23];
-      case 13: //고정 세로3열
-        return [0,2,4,5,7,9,10,12,14,15,17,19,20,22,24];
-      case 14: //⏊ 4
-        if (n === 0) {
-          return [0,1,2];
-        } else if (n === 4) {
-          return [2,3,4];
-        } else if (n === 20) {
-          return [16,20,21,22];
-        } else if (n === 24) {
-          return [18,22,23,24];
-        } else if (n === 1 || n === 2 || n === 3) {
-          return [n-1,n,n+1];
-        } else if (n === 5 || n === 10 || n === 15) {
-          return [n-5,n,n+1];
-        } else if (n === 9 || n === 14 || n === 19) {
-          return [n-5,n-1,n];
-        } else {
-          return [n-5,n-1,n,n+1];
-        }
-      case 15: //└┐9
-        return [0,5,10,11,12,13,14,19,24];
-      case 16: //┌┘9
-        return [4,9,14,13,12,11,10,15,20];
-      case 17: //卍17
-        return [0,1,2,4,7,9,10,11,12,13,14,15,17,20,22,23,24];
-      case 18: //고정 가로2행
-        return [5,6,7,8,9,15,16,17,18,19];
-      case 19: //고정 가로3행
-        return [0,1,2,3,4,10,11,12,13,14,20,21,22,23,24];
-      case 20: //▦25 전체
-        return [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
-      case 21: //□9 정사각형9
-        if (n === 0 || n === 1 || n === 2 || n === 5 || n === 10) {
-          return [0,1,2,5,6,7,10,11,12];
-        } else if (n === 3 || n === 4 || n === 9 || n === 14) {
-          return [2,3,4,7,8,9,12,13,14];
-        } else if (n === 6 || n === 7 || n === 8 || n === 11 || n === 12 || n === 13 || n === 16 || n === 17 || n === 18) {
-          return [6,7,8,11,12,13,16,17,18];
-        } else if (n === 15 || n === 20 || n === 21 || n === 22) {
-          return [10,11,12,15,16,17,20,21,22];
-        } else {
-          return [12,13,14,17,18,19,22,23,24];
-        }
-      case 22: //ㅁ4 정사각형4
-        if (n === 0 || n === 1 || n === 5 || n === 6) {
-          return [0,1,5,6];
-        } else if (n === 2 || n === 7) {
-          return [1,2,6,7];
-        } else if (n === 3 || n === 8) {
-          return [2,3,7,8];
-        } else if (n === 4 || n === 9) {
-          return [3,4,8,9];
-        } else if (n === 10 || n === 11) {
-          return [5,6,10,11];
-        } else if (n === 12) {
-          return [6,7,11,12];
-        } else if (n === 13) {
-          return [7,8,12,13];
-        } else if (n === 14) {
-          return [8,9,13,14];
-        } else if (n === 15 || n === 16) {
-          return [10,11,15,16];
-        } else if (n === 17) {
-          return [11,12,16,17];
-        } else if (n === 18) {
-          return [12,13,17,18];
-        } else if (n === 19) {
-          return [13,14,18,19];
-        } else if (n === 20 || n === 21) {
-          return [15,16,20,21];
-        } else if (n === 22) {
-          return [16,17,21,22];
-        } else if (n === 23) {
-          return [17,18,22,23];
-        } else {
-          return [18,19,23,24];
-        }
-      case 23: //자신
-        return [n];
-      case 24: //원
-        return [1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21,22,23];
-      case 25: //랜덤 5
-        return util.getNonOverlappingNumber([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24], 5);
-      case 26: //랜덤 10
-        return util.getNonOverlappingNumber([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24], 10);
-      case 27: //랜덤 15
-        return util.getNonOverlappingNumber([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24], 15);
-      case 28: //작은 마름모
-        if (n === 0) {
-          return [0,1,5];
-        } else if (n === 4) {
-          return [3,4,9];
-        } else if (n === 20) {
-          return [15,20,21];
-        } else if (n === 24) {
-          return [19,23,24];
-        } else if (n === 1 || n === 2 || n === 3) {
-          return [n-1,n,n+1,n+5];
-        } else if (n === 5 || n === 10 || n === 15) {
-          return [n-5,n,n+1,n+5];
-        } else if (n === 9 || n === 14 || n === 19) {
-          return [n-5,n-1,n,n+5];
-        } else if (n === 21 || n === 22 || n === 23) {
-          return [n-5,n-1,n,n+1];
-        } else {
-          return [n-5,n-1,n,n+1,n+5];
-        }
-      case 29: //큰 마름모
-        return [2,6,7,8,10,11,12,13,14,16,17,18,22];
-      case 30: //큰 링
-        return [1,2,3,5,9,10,14,15,19,21,22,23];
-      case 31: //랜덤 세로 2열
-        return util.getLineNumber(true, 2);
-      case 32: //랜덤 세로 3열
-        return util.getLineNumber(true, 3);
-      case 33: //랜덤 가로 2행
-        return util.getLineNumber(false, 2);
-      case 34: //랜덤 가로 3행
-        return util.getLineNumber(false, 3);
-      case 35: //x 5
-        if (n === 0 || n === 2) {
-          return [0,2,6,10,12];
-        } else if (n === 4 || n === 14) {
-          return [2,4,8,12,14];
-        } else if (n === 20 || n === 10) {
-          return [10,12,16,20,22];
-        } else if (n === 24 || n === 22) {
-          return [12,14,18,22,24];
-        } else if (n === 1 || n === 3) {
-          return [1,3,7,11,13];
-        } else if (n === 5 || n === 15) {
-          return [5,7,11,15,17];
-        } else if (n === 9 || n === 19) {
-          return [7,9,13,17,19];
-        } else if (n === 21 || n === 23) {
-          return [11,13,17,21,23];
-        } else {
-          return [n-6,n-4,n,n+4,n+6];
-        }
-      case 36: //x 9
-        return [0,4,6,8,12,16,18,20,24];
-      case 37: //ㅜ 4
-      if (n === 0) {
-        return [0,1,2,6];
-      } else if (n === 4) {
-        return [2,3,4,8];
-      } else if (n === 20) {
-        return [20,21,22];
-      } else if (n === 24) {
-        return [22,23,24];
-      } else if (n === 1 || n === 2 || n === 3) {
-        return [n-1,n,n+1,n+5];
-      } else if (n === 5 || n === 10 || n === 15) {
-        return [n,n+1,n+5];
-      } else if (n === 9 || n === 14 || n === 19) {
-        return [n-1,n,n+5];
-      } else {
-        return [n-1,n,n+1,n+5];
+        case 4: // 2 세로2
+          if (n > 19) {
+            return [n,n-5];
+          } else {
+            return [n,n+5];
+          }
+        case 5:// 3 세로3
+          if (n > 19) {
+            return [n,n-5,n-10];
+          } else if (n > 14){
+            return [n,n+5,n-5];
+          } else {
+            return [n,n+5,n+10];
+          }
+        case 6: // 5 가로행
+          if (n < 5) {
+            return [0,1,2,3,4];
+          } else if (n < 10){
+            return [5,6,7,8,9];
+          } else if (n < 15){
+            return [10,11,12,13,14];
+          } else if (n < 20){
+            return [15,16,17,18,19];
+          } else {
+            return [20,21,22,23,24];
+          }
+        case 7: // 5 세로열
+          if (n%5 === 0) {
+            return [0,5,10,15,20];
+          } else if (n%5 === 1){
+            return [1,6,11,16,21];
+          } else if (n%5 === 2){
+            return [2,7,12,17,22];
+          } else if (n%5 === 3){
+            return [3,8,13,18,23];
+          } else {
+            return [4,9,14,19,24];
+          }
+        case 8: // ┼5 십자5
+          if (n<5) {
+            if (n === 0) {
+              return [n,n+1,n+5];
+            } else if (n === 4){
+              return [n,n-1,n+5];
+            } else {
+              return [n,n-1,n+1,n+5];
+            }
+          } else if (n>19) {
+            if (n === 20) {
+              return [n,n+1,n-5];
+            } else if (n === 24){
+              return [n,n-1,n-5];
+            } else {
+              return [n,n-1,n+1,n-5];
+            }
+          } else {
+            if (n%5 === 0) {
+              return [n,n-5,n+5,n+1];
+            } else if (n%5 === 4){
+              return [n,n-5,n+5,n-1];
+            } else {
+              return [n,n-5,n+5,n+1,n-1];
+            }
+          }
+        case 9: // ┼9 십자9
+          return [12,2,7,10,11,13,14,17,22];
+        case 10: // /5 대각선
+          if (n === 0 || n === 6 || n === 12 || n === 18 || n === 24) {
+            return [0,6,12,18,24];
+          } else if (n === 1 || n === 7 || n === 13 || n === 19) {
+            return [1,7,13,19];
+          } else if (n === 5 || n === 11 || n === 17 || n === 23) {
+            return [5,11,17,23];
+          } else if (n === 2 || n === 8 || n === 14) {
+            return [2,8,14];
+          } else if (n === 10 || n === 16 || n === 22) {
+            return [10,16,22];
+          } else if (n === 3 || n === 9) {
+            return [3,9];
+          } else if (n === 15 || n === 21) {
+            return [15,21];
+          } else if (n === 4) {
+            return [4];
+          } else {
+            return [20];
+          }
+        case 11: // \5 역 대각선
+          if (n === 4 || n === 8 || n === 12 || n === 16 || n === 20) {
+            return [4,8,12,16,20];
+          } else if (n === 3 || n === 7 || n === 11 || n === 15) {
+            return [3,7,11,15];
+          } else if (n === 9 || n === 13 || n === 17 || n === 21) {
+            return [9,13,17,21];
+          } else if (n === 2 || n === 6 || n === 10) {
+            return [2,6,10];
+          } else if (n === 14 || n === 18 || n === 22) {
+            return [14,18,22];
+          } else if (n === 1 || n === 5) {
+            return [1,5];
+          } else if (n === 19 || n === 23) {
+            return [19,23];
+          } else if (n === 0) {
+            return [0];
+          } else {
+            return [24];
+          }
+        case 12: //고정 세로2열
+          return [1,3,6,8,11,13,16,18,21,23];
+        case 13: //고정 세로3열
+          return [0,2,4,5,7,9,10,12,14,15,17,19,20,22,24];
+        case 14: //⏊ 4
+          if (n === 0) {
+            return [0,1,2];
+          } else if (n === 4) {
+            return [2,3,4];
+          } else if (n === 20) {
+            return [16,20,21,22];
+          } else if (n === 24) {
+            return [18,22,23,24];
+          } else if (n === 1 || n === 2 || n === 3) {
+            return [n-1,n,n+1];
+          } else if (n === 5 || n === 10 || n === 15) {
+            return [n-5,n,n+1];
+          } else if (n === 9 || n === 14 || n === 19) {
+            return [n-5,n-1,n];
+          } else {
+            return [n-5,n-1,n,n+1];
+          }
+        case 15: //└┐9
+          return [0,5,10,11,12,13,14,19,24];
+        case 16: //┌┘9
+          return [4,9,14,13,12,11,10,15,20];
+        case 17: //卍17
+          return [0,1,2,4,7,9,10,11,12,13,14,15,17,20,22,23,24];
+        case 18: //고정 가로2행
+          return [5,6,7,8,9,15,16,17,18,19];
+        case 19: //고정 가로3행
+          return [0,1,2,3,4,10,11,12,13,14,20,21,22,23,24];
+        case 20: //▦25 전체
+          return [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
+        case 21: //□9 정사각형9
+          if (n === 0 || n === 1 || n === 2 || n === 5 || n === 10) {
+            return [0,1,2,5,6,7,10,11,12];
+          } else if (n === 3 || n === 4 || n === 9 || n === 14) {
+            return [2,3,4,7,8,9,12,13,14];
+          } else if (n === 6 || n === 7 || n === 8 || n === 11 || n === 12 || n === 13 || n === 16 || n === 17 || n === 18) {
+            return [6,7,8,11,12,13,16,17,18];
+          } else if (n === 15 || n === 20 || n === 21 || n === 22) {
+            return [10,11,12,15,16,17,20,21,22];
+          } else {
+            return [12,13,14,17,18,19,22,23,24];
+          }
+        case 22: //ㅁ4 정사각형4
+          if (n === 0 || n === 1 || n === 5 || n === 6) {
+            return [0,1,5,6];
+          } else if (n === 2 || n === 7) {
+            return [1,2,6,7];
+          } else if (n === 3 || n === 8) {
+            return [2,3,7,8];
+          } else if (n === 4 || n === 9) {
+            return [3,4,8,9];
+          } else if (n === 10 || n === 11) {
+            return [5,6,10,11];
+          } else if (n === 12) {
+            return [6,7,11,12];
+          } else if (n === 13) {
+            return [7,8,12,13];
+          } else if (n === 14) {
+            return [8,9,13,14];
+          } else if (n === 15 || n === 16) {
+            return [10,11,15,16];
+          } else if (n === 17) {
+            return [11,12,16,17];
+          } else if (n === 18) {
+            return [12,13,17,18];
+          } else if (n === 19) {
+            return [13,14,18,19];
+          } else if (n === 20 || n === 21) {
+            return [15,16,20,21];
+          } else if (n === 22) {
+            return [16,17,21,22];
+          } else if (n === 23) {
+            return [17,18,22,23];
+          } else {
+            return [18,19,23,24];
+          }
+        case 23: //자신
+          return [n];
+        case 24: //원
+          return [1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,21,22,23];
+        case 25: //랜덤 5
+          return util.getNonOverlappingNumber([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24], 5);
+        case 26: //랜덤 10
+          return util.getNonOverlappingNumber([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24], 10);
+        case 27: //랜덤 15
+          return util.getNonOverlappingNumber([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24], 15);
+        case 28: //작은 마름모
+          if (n === 0) {
+            return [0,1,5];
+          } else if (n === 4) {
+            return [3,4,9];
+          } else if (n === 20) {
+            return [15,20,21];
+          } else if (n === 24) {
+            return [19,23,24];
+          } else if (n === 1 || n === 2 || n === 3) {
+            return [n-1,n,n+1,n+5];
+          } else if (n === 5 || n === 10 || n === 15) {
+            return [n-5,n,n+1,n+5];
+          } else if (n === 9 || n === 14 || n === 19) {
+            return [n-5,n-1,n,n+5];
+          } else if (n === 21 || n === 22 || n === 23) {
+            return [n-5,n-1,n,n+1];
+          } else {
+            return [n-5,n-1,n,n+1,n+5];
+          }
+        case 29: //큰 마름모
+          return [2,6,7,8,10,11,12,13,14,16,17,18,22];
+        case 30: //큰 링
+          return [1,2,3,5,9,10,14,15,19,21,22,23];
+        case 31: //랜덤 세로 2열
+          return util.getLineNumber(true, 2);
+        case 32: //랜덤 세로 3열
+          return util.getLineNumber(true, 3);
+        case 33: //랜덤 가로 2행
+          return util.getLineNumber(false, 2);
+        case 34: //랜덤 가로 3행
+          return util.getLineNumber(false, 3);
+        case 35: //x 5
+          if (n === 0 || n === 2) {
+            return [0,2,6,10,12];
+          } else if (n === 4 || n === 14) {
+            return [2,4,8,12,14];
+          } else if (n === 20 || n === 10) {
+            return [10,12,16,20,22];
+          } else if (n === 24 || n === 22) {
+            return [12,14,18,22,24];
+          } else if (n === 1 || n === 3) {
+            return [1,3,7,11,13];
+          } else if (n === 5 || n === 15) {
+            return [5,7,11,15,17];
+          } else if (n === 9 || n === 19) {
+            return [7,9,13,17,19];
+          } else if (n === 21 || n === 23) {
+            return [11,13,17,21,23];
+          } else {
+            return [n-6,n-4,n,n+4,n+6];
+          }
+        case 36: //x 9
+          return [0,4,6,8,12,16,18,20,24];
+        case 37: //ㅜ 4
+          if (n === 0) {
+            return [0,1,2,6];
+          } else if (n === 4) {
+            return [2,3,4,8];
+          } else if (n === 20) {
+            return [20,21,22];
+          } else if (n === 24) {
+            return [22,23,24];
+          } else if (n === 1 || n === 2 || n === 3) {
+            return [n-1,n,n+1,n+5];
+          } else if (n === 5 || n === 10 || n === 15) {
+            return [n,n+1,n+5];
+          } else if (n === 9 || n === 14 || n === 19) {
+            return [n-1,n,n+5];
+          } else {
+            return [n-1,n,n+1,n+5];
+          }
+        default:
+          break;
       }
-      default:
-        break;
     }
   },
   setItemColor: (svgData, colorSet, id) => {
@@ -2049,7 +2068,7 @@ export const util = { //this.loadImage();
       {ko:'회복(RCV)',en:'Recovery(RCV)',jp:'回復(RCV)'},
       {ko:'속도(SPD)',en:'Speed(SPD)',jp:'速度(SPD)'},
       {ko:'행운(LUK)',en:'Lucky(LUK)',jp:'幸運(LUK)'},
-      {},
+      {ko:'반격',en:'Counterattack',jp:'反撃'},
       {ko:'쪼기',en:'Peck',jp:'ピグテール'},
       {ko:'할퀴기',en:'Claw',jp:'掻き分け'},
       {ko:'물기',en:'Bite',jp:'噛むこと'},
@@ -2091,11 +2110,12 @@ export const util = { //this.loadImage();
       {},
       {ko:'밤',en:'Night',jp:'夜',tag:'night'},
     ];
-    return `<span ${conditionType[condition].tag}>${conditionType[condition][lang]}</span>,`;
+    return `<span ${conditionType[condition].tag}>${conditionType[condition][lang]}</span>`;
   },
   getSkillBuffCountLang: ({buffCount, lang}) => {
-    const turnText = {ko:'턴',en:'turn',jp:'ターン'};
-    return `${buffCount}${turnText[lang]}`;
+    const turnText = {ko:'턴',en:'turn',jp:'ターン'},
+      immediateText = {ko:'즉시',en:'Immediate',jp:'すぐに'};
+    return buffCount === 0 ? immediateText[lang] : `${buffCount}${turnText[lang]}`;
   },
   getSkillBuffChanceLang: ({buffChance, lang}) => {
     const chanceText = {ko:'확률',en:'chance',jp:'確率'};

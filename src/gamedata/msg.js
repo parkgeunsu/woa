@@ -316,6 +316,16 @@ export const msg = {
 			ko:'도시',
 			en:'City',
 			jp:'都市',
+		},
+		forest:{
+			ko:'숲',
+			en:'Forest',
+			jp:'森',
+		},
+		land:{
+			ko:'숲',
+			en:'Forest',
+			jp:'森',
 		}
 	},
 	info:{

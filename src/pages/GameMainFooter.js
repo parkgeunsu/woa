@@ -92,7 +92,6 @@ const GameMainFooter = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  console.log(gameData, stay, gameMode);
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
   const currentStep = React.useMemo(() => {

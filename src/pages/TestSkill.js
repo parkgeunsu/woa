@@ -310,9 +310,9 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 		})
 	}
 	if (turnIdx <= timeLine.length - 1) {
-		let counterAtk = false; //카운터 어택인지
 		const skillIdx = customSkill ? 0 : timeLine[turnIdx].order.skIdx;
 		const skill = customSkill ? customSkill : gameData.skill[skillIdx];
+		let isCounterAtk = false; //카운터 어택인지
 		let skillCate = skill.cate[0];
 		let atkC = [0, false], //공격 횟수
 			atkS = atkOption?.atkStay || 0; //한캐릭이 공격한 횟수 체크
@@ -367,7 +367,8 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
         atkOption: {
           atkCount: atkC,
           atkStay: atkS,
-        }
+        },
+				customSkill: customSkill,
       });
 		} else { //액티브 스킬
 			let attacker = {},
@@ -916,7 +917,8 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 										avoid = true;
 										team[defData.idx] = 'avoid' + avoidNum;
 									}
-									const counterChance = Math.random() < .1; //반격 확률
+									console.log(skill.counterAttack);
+									const counterChance = Math.random() < .1 + skill.counterAttack; //반격 확률
 									if (counterChance && atkS === 0 && timeLine[turnIdx].order.skIdx !== 17 && timeLine[turnIdx].order.targetIdx.length === 1) {//반격 확률 계산, 연속공격중 마지막일때만, 반격이 아닐경우, 광역기가 아닐경우
 										timeLine.splice(turnIdx + 1, 0, {
 											order:{
@@ -1085,9 +1087,11 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 					setTimeout(() => {
 						setShowSkillMsg(false);
 						setTimeout(() => {
-							const targets = util.getEffectArea(
-                customSkill ? customSkill.ta[timeLine[turnIdx].order.skLv - 1] : gameData.skill[skillIdx].ta[timeLine[turnIdx].order.skLv - 1],
-                timeLine[turnIdx].order.target);
+							//console.log(gameData.ch[attacker.idx].animal_type, battleEnemy, timeLine[turnIdx]);
+							const targets = util.getEffectArea({
+								type: customSkill ? customSkill.ta[timeLine[turnIdx].order.skLv - 1] : gameData.skill[skillIdx].ta[timeLine[turnIdx].order.skLv - 1],
+								n: timeLine[turnIdx].order.target,
+							});
 							let targetIdx = [],
 								targetArr = {skillIdx:0,allEff:0,effSize:1,effAnimation:'',effRotate:'',effFilter:'',targets:[]},
 								targetCount = 0;
@@ -1284,7 +1288,8 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
                   atkOption: {
                     atkCount: atkC,
                     atkStay: atkS,
-                  }
+                  },
+									customSkill: customSkill,
                 });
 							}, ((skillEffect[targetArr.effAnimation.split('(')[0]].frame / 10) * 1125 * (customSkill.effAnimationRepeat || 1)) / gameSpd);//공격 이펙트 효과시간
 						}, 150 / gameSpd);
@@ -1305,14 +1310,14 @@ const speedList = [1,1.5,2,3];
 // const skillCateList = ['none','passive','active(emeny)','active(self)','buff','debuff','active(debuff)','active(buff)','weather','job'];//1부터
 const skillFilterList = ['none','hue(90deg)','hue(180deg)','invert(100%)'];
 const taList = [
-  '단일','가로2','가로3','세로2','세로3','가로행','세로열','십자5','십자9','대각선',
-  '반대 대각선','고정 세로2열','고정 세로3열','⏊4','└┐9','┌┘9','卍17','고정 가로2행','고정 가로3행','전체',
-  '사각9','사각4','자신','원','랜덤5','랜덤10','랜덤15','작은 마름모','큰 마름모','큰 링',
-  '랜덤 세로2열','랜덤 세로3열','랜덤 가로2행','랜덤 가로3행','x5','x9','ㅜ4'
+  '1 단일','2 가로2','3 가로3','4 세로2','5 세로3','6 가로행','7 세로열','8 십자5','9 십자9','10 대각선',
+  '11 반대 대각선','12 고정 세로2열','13 고정 세로3열','14 ⏊4','15 └┐9','16 ┌┘9','17 卍17','18 고정 가로2행','19 고정 가로3행','20 전체',
+  '21 사각9','22 사각4','23 자신','24 원','25 랜덤5','26 랜덤10','27 랜덤15','28 작은 마름모','29 큰 마름모','30 큰 링',
+  '31 랜덤 세로2열','32 랜덤 세로3열','33 랜덤 가로2행','34 랜덤 가로3행','35 x5','36 x9','37 ㅜ4'
 ];//1부터
 //var a = '';for(var i = 195; i < 221; i++){a += `'thaumaturgy${i}',`}
 // const skillRepeatList = [1,2,3,4];
-const skillSizeList = [1,2,3,5];
+const skillSizeList = [1,1.5,2,2.5,5];
 const skillRotateList = [0,90,180,270];
 const TestSkill = ({
   saveData,
@@ -1343,7 +1348,7 @@ const TestSkill = ({
   const [selectSkillFilter, setSelectSkillFilter] = useState(0);
   const [selectSkillTaget, setSelectSkillTaget] = useState(0);
   const [selectEffectAnimation, setSelectEffectAnimation] = useState(0);
-  const [selectEffectSize, setSelectEffectSize] = useState(0);
+  const [selectEffectSize, setSelectEffectSize] = useState(1);
   const [selectEffectRotate, setSelectEffectRotate] = useState(0);
 	const sData = React.useMemo(() => saveData && Object.keys(saveData).length !== 0 ? saveData : util.loadData('saveData'), [saveData]);
 	const [msgOn, setMsgOn] = useState(false); 
@@ -1374,8 +1379,7 @@ const TestSkill = ({
     buff:[{type:2.0,num:['70%','75%','80%','85%','90%']}],
     buffCount:[4,4,4,4,4],
     buffChance:['70%','75%','80%','85%','90%'],
-    atkCount:[1],
-    turn:2,
+    atkCount:[2],
     sp:0
   });
   const [speed, setSpeed] = useState(speedList[selectSpeed]);
@@ -1674,7 +1678,10 @@ const TestSkill = ({
 			return;
 		}
 		if (mode === 'area') {
-			const areaArr = util.getEffectArea(currentSkill.current.sk.ta[currentSkill.current.skLv - 1], pos);
+			const areaArr = util.getEffectArea({
+				type: currentSkill.current.sk.ta[currentSkill.current.skLv - 1],
+				n: pos
+			});
 			let targetIdx = [];
 			allyPos.current.forEach((posIdx, idx) => {
 				areaArr.forEach((actionIdx) => {
@@ -1717,7 +1724,10 @@ const TestSkill = ({
 			return;
 		}
 		if (mode === 'area') {
-			const areaArr = util.getEffectArea(currentSkill.current.sk.ta[currentSkill.current.skLv - 1], pos);
+			const areaArr = util.getEffectArea({
+				type: currentSkill.current.sk.ta[currentSkill.current.skLv - 1],
+				n: pos
+			});
 			let targetIdx = [];
 			enemyPos.current.forEach((posIdx, idx) => {
 				areaArr.forEach((actionIdx) => {
@@ -1787,7 +1797,10 @@ const TestSkill = ({
 					case 8:
 					case 9:
 					case 3: //active
-						setEffectEnemyArea(util.getEffectArea(skill.ta[skLv - 1], 12));
+						setEffectEnemyArea(util.getEffectArea({
+							type: skill.ta[skLv - 1],
+							n: 12
+						}));
 						setMode('area');
 						break;
 					case 10: //날씨 변경
@@ -1804,7 +1817,10 @@ const TestSkill = ({
 							skIdx: skill.idx,
 							skLv: skLv,
 							enemyTarget: false,
-							targetIdx: util.getEffectArea(20, 13),
+							targetIdx: util.getEffectArea({
+								type: 20,
+								n: 13
+							}),
 							target: allyPos.current[orderIdx].pos,
 							sp: -skill.sp,
 						});
@@ -1827,11 +1843,17 @@ const TestSkill = ({
 						});
 						break;
 					case 5: //buff
-						setEffectAllyArea(util.getEffectArea(skill.ta[skLv - 1], 12));
+						setEffectAllyArea(util.getEffectArea({
+							type: skill.ta[skLv - 1],
+							n: 12
+						}));
 						setMode('area');
 						break;
 					case 6: //debuff
-						setEffectEnemyArea(util.getEffectArea(skill.ta[skLv - 1], 12));
+						setEffectEnemyArea(util.getEffectArea({
+							type: skill.ta[skLv - 1],
+							n: 12
+						}));
 						setMode('area');
 						break;
 					default:
@@ -1899,7 +1921,10 @@ const TestSkill = ({
       const target = Math.random() <= weakAttackChance[enemyAi] ? hpArray[0].idx : attackTarget;
       const skillType = ranCount > activeChance[enemyAi] ? skillList.buff : skillList.active;
       const skIdx = Math.random() > normalAttackChance[enemyAi] ? skillType[Math.floor(Math.random() * skillType.length)]?.idx || 1 : 1;
-      const targetArea = util.getEffectArea(gameData.skill[skIdx].ta[4], allyPos[target].pos);
+      const targetArea = util.getEffectArea({
+				type: gameData.skill[skIdx].ta[4],
+				n: allyPos[target].pos,
+			});
       let targetIdx = [];
       allyPos.forEach((posIdx, idx) => {
         targetArea.forEach((actionIdx) => {

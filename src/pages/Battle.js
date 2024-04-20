@@ -1,7 +1,7 @@
 import { AppContext } from 'App';
+import { FlexBox } from 'components/Container';
 import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
-import { FlexBox } from 'components/Container';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import 'css/battle.css';
@@ -518,7 +518,8 @@ const chkString = (arr, index) => {
 	});
 	return chk;
 }
-const enemyPattern = (ai, battleAlly, allyPos, enemy, gameData) => {
+const enemyPattern = ({ai, battleAlly, allyPos, battleEnemy, enemyPos, gameData}) => {
+	console.log(battleAlly[0].state);
 	let enemySkill = [];
 	const activeSkillSorting = (skill) => {
 		let active = [],
@@ -560,7 +561,7 @@ const enemyPattern = (ai, battleAlly, allyPos, enemy, gameData) => {
 			aliveAlly.push(idx);
 		}
 	});
-	enemy.forEach((data, idx) => {
+	battleEnemy.forEach((data, idx) => {
 		const enemyAi = ai[idx];
 		const skillList = activeSkillSorting(data.hasSkill);
 		const activeChance = [0.75, 0.8, 0.85, 0.9, 0.9]; //active스킬 확률
@@ -572,7 +573,15 @@ const enemyPattern = (ai, battleAlly, allyPos, enemy, gameData) => {
 		const target = Math.random() <= weakAttackChance[enemyAi] ? hpArray[0].idx : attackTarget;
 		const skillType = ranCount > activeChance[enemyAi] ? skillList.buff : skillList.active;
 		const skIdx = Math.random() > normalAttackChance[enemyAi] ? skillType[Math.floor(Math.random() * skillType.length)]?.idx || 1 : 1;
-		const targetArea = util.getEffectArea(gameData.skill[skIdx].ta[4], allyPos[target].pos);
+		const targetArea = util.getEffectArea({
+			isEnemy: gameData.skill[skIdx].ta_,
+			type: gameData.skill[skIdx].ta[4],
+			n: allyPos[target].pos,
+			allyPos: allyPos.current,
+			battleAlly: battleAlly.current,
+			enemyPos: enemyPos.current,
+			battleEnemy: battleEnemy.current,
+		});
 		let targetIdx = [];
 		allyPos.forEach((posIdx, idx) => {
 			targetArea.forEach((actionIdx) => {
@@ -652,9 +661,9 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 		}
 	}
 	if (turnIdx <= timeLine.length - 1) {
-		let counterAtk = false; //카운터 어택인지
 		const skillIdx = timeLine[turnIdx].order.skIdx;
 		const skill = gameData.skill[skillIdx];
+		let isCounterAtk = false; //카운터 어택인지
 		let skillCate = skill.cate[0];
 		let atkC = [0, false], //공격 횟수
 			atkS = atkOption?.atkStay || 0; //한캐릭이 공격한 횟수 체크
@@ -744,7 +753,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
 							buffDebuff[defData.idx][data_.type].type = data_.type;
 							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
-							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
+							buffDebuff[defData.idx][data_.type].animation = skill.effAnimation;
 						});
 					});
 				} else if (skillCate === 6) {//적군 디버프 방어자 셋팅
@@ -769,7 +778,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
 							buffDebuff[defData.idx][data_.type].type = data_.type;
 							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
-							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
+							buffDebuff[defData.idx][data_.type].animation = skill.effAnimation;
 						});
 					});
 				} else if (skillCate === 7){ //액티브스킬 디버프추가
@@ -798,7 +807,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 								buffDebuff[defData.idx][data_.type].maxCount = maxCount;
 								buffDebuff[defData.idx][data_.type].type = data_.type;
 								buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
-								buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
+								buffDebuff[defData.idx][data_.type].animation = skill.effAnimation;
 							});
 						}
 					});
@@ -824,30 +833,30 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							});
 						}
 					});
-				} else if (skillCate === 8 ){ //액티브스킬 버프추가
+				} else if (skillCate === 8){ //액티브스킬 버프추가
 					defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
 						return {
-							ch: battleAlly[data],
+							ch: battleEnemy[data],
 							idx: data,
 						}
 					});
-					defencer.forEach((defData) => {
-						if (buffDebuff[defData.idx]) {
-							buffDebuff[defData.idx] = [];
+					const attackerIdx = timeLine[turnIdx].order.idx;
+					if (buffDebuff[attackerIdx]) {
+						buffDebuff[attackerIdx] = [];
+					}
+					buffDebuff[attackerIdx] = [...battleAlly[attackerIdx].buffDebuff];
+					console.log(battleAlly, attackerIdx, skill)
+					skill.buff.forEach((data_) => {
+						const skLvIdx = timeLine[turnIdx].order.skLv - 1;
+						const maxCount = skill.buffCount[skLvIdx];
+						if (buffDebuff[attackerIdx][data_.type] === undefined) {
+							buffDebuff[attackerIdx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 						}
-						buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
-						skill.buff.forEach((data_) => {
-							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
-							const maxCount = skill.buffCount[skLvIdx];
-							if (buffDebuff[defData.idx][data_.type] === undefined) {
-								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
-							}
-							buffDebuff[defData.idx][data_.type].count = maxCount;
-							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
-							buffDebuff[defData.idx][data_.type].type = data_.type;
-							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
-							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
-						});
+						buffDebuff[attackerIdx][data_.type].count = maxCount;
+						buffDebuff[attackerIdx][data_.type].maxCount = maxCount;
+						buffDebuff[attackerIdx][data_.type].type = data_.type;
+						buffDebuff[attackerIdx][data_.type].num = data_.num[skLvIdx];
+						buffDebuff[attackerIdx][data_.type].animation = skill.effAnimation;
 					});
 					timeLine.forEach((data) => { //방어중 체크
 						if (data.order.team === 'enemy'){
@@ -893,7 +902,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
 							buffDebuff[defData.idx][data_.type].type = data_.type;
 							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
-							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
+							buffDebuff[defData.idx][data_.type].animation = skill.effAnimation;
 						});
 					});
 					timeLine.forEach((data) => { //방어중 체크
@@ -1006,7 +1015,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
 							buffDebuff[defData.idx][data_.type].type = data_.type;
 							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
-							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
+							buffDebuff[defData.idx][data_.type].animation = skill.effAnimation;
 						});
 					});
 				} else if (skillCate === 6) {//아군 디버프 방어자 셋팅
@@ -1031,7 +1040,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
 							buffDebuff[defData.idx][data_.type].type = data_.type;
 							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
-							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
+							buffDebuff[defData.idx][data_.type].animation = skill.effAnimation;
 						});
 					});
 				} else if (skillCate === 7) { //액티브스킬 디버프추가
@@ -1059,7 +1068,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 								buffDebuff[defData.idx][data_.type].maxCount = maxCount;
 								buffDebuff[defData.idx][data_.type].type = data_.type;
 								buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
-								buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
+								buffDebuff[defData.idx][data_.type].animation = skill.effAnimation;
 							});
 						}
 					});
@@ -1086,6 +1095,51 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						}
 					});
 				} else if (skillCate === 8) { //액티브스킬 버프추가
+					defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
+						return {
+							ch: battleAlly[data],
+							idx: data,
+						}
+					});
+					const attackerIdx = timeLine[turnIdx].order.idx;
+					if (buffDebuff[attackerIdx]) {
+						buffDebuff[attackerIdx] = [];
+					}
+					buffDebuff[attackerIdx] = [...battleAlly[attackerIdx].buffDebuff];
+					skill.buff.forEach((data_) => {
+						const skLvIdx = timeLine[turnIdx].order.skLv - 1;
+						const maxCount = skill.buffCount[skLvIdx];
+						if (buffDebuff[attackerIdx][data_.type] === undefined) {
+							buffDebuff[attackerIdx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
+						}
+						buffDebuff[attackerIdx][data_.type].count = maxCount;
+						buffDebuff[attackerIdx][data_.type].maxCount = maxCount;
+						buffDebuff[attackerIdx][data_.type].type = data_.type;
+						buffDebuff[attackerIdx][data_.type].num = data_.num[skLvIdx];
+						buffDebuff[attackerIdx][data_.type].animation = skill.effAnimation;
+					});
+					timeLine.forEach((data) => { //방어중 체크
+						if (data.order.team === 'ally'){
+							//console.log(dIdx + '적군 방어중');
+							timeLine[turnIdx].order.targetIdx.forEach((tarIdx) => {
+								if (tarIdx === data.order.idx) {
+									defendSkillEnemy[data.order.idx] = {
+										idx: data.order.idx,
+										type: data.order.skIdx,
+									}
+									if (data.order.skIdx === 2) { //방어
+										allyAction[data.order.idx] = 'defence0';
+									} else if (data.order.skIdx === 14) { //마법방어
+										allyAction[data.order.idx] = 'defence1'; 
+									} else if (data.order.skIdx === 13) { //철벽방어
+										allyAction[data.order.idx] = 'defence2'; 
+									} else if (data.order.skIdx === 15) { //나무뒤에 숨기
+										allyAction[data.order.idx] = 'defenceTree'; 
+									}
+								}
+							});
+						}
+					});
 				} else if (skillCate === 9) { //액티브스킬 상태이상추가
 					defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
 						return {
@@ -1108,7 +1162,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
 							buffDebuff[defData.idx][data_.type].type = data_.type;
 							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
-							buffDebuff[defData.idx][data_.type].animation = skill.buffAnimation;
+							buffDebuff[defData.idx][data_.type].animation = skill.effAnimation;
 						});
 					});
 					timeLine.forEach((data) => {//방어중 체크
@@ -1231,7 +1285,6 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						if (skType < 7) {//물리공격인지
 							const hitChance =  Math.min((80 + 30 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100) / 100, 0.95); //물리 적중 확률
 							if (team[defData.idx] === undefined || team[defData.idx].indexOf('defence0') < 0) { //방어를 안했으면
-								// console.log("pgs", chance, hitChance);
 								if (defEnemy.state.indexOf('petrification') >= 0) { //석화 상태면
 									const criticalChance = Math.random();
 									const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100, 0.1);//치명타 확률 계산
@@ -1243,7 +1296,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 										team[defData.idx] = team[defData.idx] + ' dmg'
 									}
 								} else {
-									if (chance < hitChance) {
+									if (chance < hitChance) {// 공격 적중
 										const criticalChance = Math.random();
 										const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100, 0.1);//치명타 확률 계산
 										if (criticalChance < critical) {
@@ -1253,23 +1306,25 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 										} else {
 											team[defData.idx] = team[defData.idx] + ' dmg'
 										}
-									} else {
+									} else {//공격 회피
 										const avoidNum = Math.floor(Math.random()*4);//회피 종류
 										avoid = true;
 										team[defData.idx] = 'avoid' + avoidNum;
 									}
-									const counterChance = Math.random() < .1; //반격 확률
+									const counterChance = Math.random() < .1+ (defData.ch.counterAttack ? parseInt(defData.ch.counterAttack.num) * 0.01 : 0); //반격 확률
+									console.log(defData.ch.na1, .1 + (defData.ch.counterAttack ? parseInt(defData.ch.counterAttack.num) * 0.01 : 0)+'확률 반격');
 									if (counterChance && atkS === 0 && timeLine[turnIdx].order.skIdx !== 17 && timeLine[turnIdx].order.targetIdx.length === 1) {//반격 확률 계산, 연속공격중 마지막일때만, 반격이 아닐경우, 광역기가 아닐경우
 										timeLine.splice(turnIdx + 1, 0, {
 											order:{
 												team: timeLine[turnIdx].order.team === 'ally' ? 'enemy' : 'ally',
 												idx: timeLine[turnIdx].order.targetIdx[0],
-												skIdx: 17,
+												skIdx: 1,
 												skLv: 1,
 												enemyTarget: true,
 												target: timeLine[turnIdx].order.team === 'ally' ? allyPos[timeLine[turnIdx].order.idx].pos : enemyPos[timeLine[turnIdx].order.idx],
 												targetIdx: [timeLine[turnIdx].order.idx],
 												sp: 0,
+												counterAttack: true,
 											},
 											state:defencer[0].ch.state,
 										});
@@ -1427,7 +1482,16 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 					setTimeout(() => {
 						setSkillMsg(false);
 						setTimeout(() => {
-							const targets = util.getEffectArea(gameData.skill[skillIdx].ta[timeLine[turnIdx].order.skLv - 1], timeLine[turnIdx].order.target);
+							//console.log(gameData.ch[attacker.idx].animal_type, defencer, timeLine[turnIdx]); //같은 동물유형 패시브 구현중
+							const targets = timeLine[turnIdx].order.counterAttack ? [timeLine[turnIdx].order.target] : util.getEffectArea({
+								isEnemy: gameData.skill[skillIdx].ta_,
+								type: gameData.skill[skillIdx].ta[timeLine[turnIdx].order.skLv - 1],
+								n: timeLine[turnIdx].order.target,
+								allyPos: allyPos,
+								battleAlly: battleAlly,
+								enemyPos: enemyPos,
+								battleEnemy: battleEnemy,
+							});
 							let targetIdx = [],
 								targetArr = {skillIdx:0,allEff:0,effSize:1,effAnimation:'',effRotate:'',effFilter:'',targets:[]},
 								targetCount = 0;
@@ -1452,63 +1516,49 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 									});
 								}
 							}
-							// if (targets.length === 25){
-							// 	targets.forEach((data, idx) => {
-							// 		let chk = false;
-							// 		targetIdx.forEach((taIdx) => {
-							// 			if (taIdx === data) {
-							// 				chk = true;
-							// 				return;
-							// 			}
-							// 		});
-							// 		if (chk) { //스킬 맞는 위치와 범위값중 일치하는지 확인
-							// 			targetArr[idx] = {
-							// 				posIdx:data,
-							// 				animation:0,
-							// 				dmg:Math.floor(dmg[targetCount]),
-							// 			};
-							// 			targetCount ++;
-							// 		} else {
-							// 			targetArr[idx] = {
-							// 				posIdx:data,
-							// 				animation:0,
-							// 			};
-							// 		}
-							// 	});
-							// 	targetArr[12].posIdx = 12;
-							// 	targetArr[12].animation = gameData.skill[skillIdx].effAnimation;
-							// } else {
-								targetArr.allEff = skill.effSize[timeLine[turnIdx].order.skLv - 1] >= 5 ? skill.effSize[timeLine[turnIdx].order.skLv - 1] : 0;
-								targetArr.effSize = gameData.skill[skillIdx].effSize[timeLine[turnIdx].order.skLv - 1];
-								targetArr.effAnimation = gameData.skill[skillIdx].effAnimation;
-								targetArr.effRotate = gameData.skill[skillIdx].effRotate;
-								targetArr.effFilter = gameData.skill[skillIdx].effFilter;
-								targetArr.skillIdx = skillIdx;
-								targets.forEach((data, idx) => {
-									let chk = false;
-									targetIdx.forEach((taIdx) => {
-										if (taIdx === data) {
-											chk = true;
-										}
-									});
-									if (chk) { //스킬 맞는 위치와 범위값중 일치하는지 확인
-										targetArr.targets[idx] = {
-											posIdx:data,
-											dmg:Math.floor(dmg[targetCount]),
-										};
-										targetCount ++;
-									} else {
-										targetArr.targets[idx] = {
-											posIdx:data,
-										};
+							targetArr.allEff = skill.effSize[timeLine[turnIdx].order.skLv - 1] >= 5 ? skill.effSize[timeLine[turnIdx].order.skLv - 1] : 0;
+							targetArr.effSize = gameData.skill[skillIdx].effSize[timeLine[turnIdx].order.skLv - 1];
+							targetArr.effAnimation = gameData.skill[skillIdx].effAnimation;
+							targetArr.effRotate = gameData.skill[skillIdx].effRotate;
+							targetArr.effFilter = gameData.skill[skillIdx].effFilter;
+							targetArr.skillIdx = skillIdx;
+							targets.forEach((data, idx) => {
+								let chk = false;
+								targetIdx.forEach((taIdx) => {
+									if (taIdx === data) {
+										chk = true;
 									}
 								});
-							// }
-							if (timeLine[turnIdx].order.team === 'ally') { //적군 영역 effect효과
+								if (chk) { //스킬 맞는 위치와 범위값중 일치하는지 확인
+									targetArr.targets[idx] = {
+										posIdx:data,
+										dmg:Math.floor(dmg[targetCount]),
+									};
+									targetCount ++;
+								} else {
+									targetArr.targets[idx] = {
+										posIdx:data,
+									};
+								}
+							});
+							if (timeLine[turnIdx].order.team === 'ally') { //아군 영역 effect효과
 								if (skillCate === 5) {//버프
 									setAllyEffect({
 										...targetArr,
 									});
+								} else if (skillCate === 8) {//액티브 버프
+									setAllyEffect({
+										...targetArr,
+									});
+									setEnemyEffect({
+										...targetArr,
+										effAnimation: 'slash0',
+										skillIdx: 1,
+									});
+									//카운터 어텍
+									if (buffDebuff[timeLine[turnIdx].order.idx][10]) {
+										battleAlly[timeLine[turnIdx].order.idx].counterAttack = {...buffDebuff[timeLine[turnIdx].order.idx][10]};
+									}
 								} else {
 									setEnemyEffect({
 										...targetArr,
@@ -1548,12 +1598,25 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 										endGameCheck();
 									}, 2000);
 								}
-							} else { //아군 영역 effect효과
+							} else { //적군 영역 effect효과
 								if (skillCate === 5) {//버프
 									setEnemyEffect({
 										...targetArr
 									});
-								} else{
+								} else if (skillCate === 8) {//액티브 버프
+									setEnemyEffect({
+										...targetArr
+									});
+									setAllyEffect({
+										...targetArr,
+										effAnimation: 'slash0',
+										skillIdx: 1,
+									});
+									//카운터 어텍
+									if (buffDebuff[timeLine[turnIdx].order.idx][10]) {
+										battleEnemy[timeLine[turnIdx].order.idx].counterAttack = {...buffDebuff[timeLine[turnIdx].order.idx][10]};
+									}
+								} else {
 									setAllyEffect({
 										...targetArr
 									});
@@ -1658,7 +1721,18 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 				}, 150 / gameSpd);//메시지 오픈
 			}, 600 / gameSpd);
 		}
-	} else {
+	} else {//턴 종료시
+		//카운터 어텍 제거
+		battleAlly.forEach((ally) => {
+			if (ally.counterAttack) {
+				delete ally.counterAttack;
+			}
+		});
+		battleEnemy.forEach((enemy) => {
+			if (enemy.counterAttack) {
+				delete enemy.counterAttack;
+			}
+		});
 		resetOrder('order');
 	}
 }
@@ -2462,7 +2536,7 @@ const Battle = ({
 					land = num % 3;
 				return (5 * landType) + land;
 			}),
-			entry:[
+			entry:[// 적군 데이터
 				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
 				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
 				{idx:'', lv:1, },{idx:'', lv:1, },{pos:0,idx:27, lv:1, grade:4, items: [
@@ -2657,9 +2731,11 @@ const Battle = ({
 				rcv = saveCh.bSt7 + saveCh.iSt7 + (effData?.rtSt7 || 0),
 				spd = saveCh.bSt8 + saveCh.iSt8 + (effData?.rtSt8 || 0),
 				luk = saveCh.bSt9 + saveCh.iSt9 + (effData?.rtSt9 || 0);
+			saveCh.hasSkill.push({idx:271,lv:1,exp:1});//삭제 해야됨
 			battleAlly.current.push({
 				...saveCh,
-				na: gameData.ch[saveCh.idx].na1,
+				na1: gameData.ch[saveCh.idx].na1,
+				animalType: gameData.ch[saveCh.idx].animal_type,
 				hasExp:saveCh.hasExp,
 				state: '',
 				buffDebuff:[],
@@ -2980,7 +3056,15 @@ const Battle = ({
 			return;
 		}
 		if (mode === 'area') {
-			const areaArr = util.getEffectArea(currentSkill.current.sk.ta[currentSkill.current.skLv - 1], pos);
+			const areaArr = util.getEffectArea({
+				isEnemy: currentSkill.current.sk.ta_,
+				type: currentSkill.current.sk.ta[currentSkill.current.skLv - 1],
+				n: pos,
+				allyPos: allyPos.current,
+				battleAlly: battleAlly.current,
+				enemyPos: enemyPos.current,
+				battleEnemy: battleEnemy.current,
+			});
 			let targetIdx = [];
 			allyPos.current.forEach((posIdx, idx) => {
 				areaArr.forEach((actionIdx) => {
@@ -3022,7 +3106,15 @@ const Battle = ({
 			return;
 		}
 		if (mode === 'area') {
-			const areaArr = util.getEffectArea(currentSkill.current.sk.ta[currentSkill.current.skLv - 1], pos);
+			const areaArr = util.getEffectArea({
+				isEnemy: currentSkill.current.sk.ta_,
+				type: currentSkill.current.sk.ta[currentSkill.current.skLv - 1],
+				n: pos,
+				allyPos: allyPos.current,
+				battleAlly: battleAlly.current,
+				enemyPos: enemyPos.current,
+				battleEnemy: battleEnemy.current,
+			});
 			let targetIdx = [];
 			enemyPos.current.forEach((posIdx, idx) => {
 				areaArr.forEach((actionIdx) => {
@@ -3100,7 +3192,15 @@ const Battle = ({
 					case 8:
 					case 9:
 					case 3: //active
-						setEffectEnemyArea(util.getEffectArea(skill.ta[skLv - 1], 12));
+						setEffectEnemyArea(util.getEffectArea({
+							isEnemy: skill.ta_,
+							type: skill.ta[skLv - 1],
+							n: 12,
+							allyPos: allyPos.current,
+							battleAlly: battleAlly.current,
+							enemyPos: enemyPos.current,
+							battleEnemy: battleEnemy.current,
+						}));
 						setMode('area');
 						break;
 					case 10: //날씨 변경
@@ -3116,7 +3216,15 @@ const Battle = ({
 							skIdx: skill.idx,
 							skLv: skLv,
 							enemyTarget: false,
-							targetIdx: util.getEffectArea(20, 13),
+							targetIdx: util.getEffectArea({
+								isEnemy: 0,
+								type: 20,
+								n: 13,
+								allyPos: allyPos.current,
+								battleAlly: battleAlly.current,
+								enemyPos: enemyPos.current,
+								battleEnemy: battleEnemy.current,
+							}),
 							target: allyPos.current[orderIdx].pos,
 							sp: -skill.sp,
 						});
@@ -3139,11 +3247,27 @@ const Battle = ({
 						});
 						break;
 					case 5: //buff
-						setEffectAllyArea(util.getEffectArea(skill.ta[skLv - 1], 12));
+						setEffectAllyArea(util.getEffectArea({
+							isEnemy: skill.ta_,
+							type: skill.ta[skLv - 1],
+							n: 12,
+							allyPos: allyPos.current,
+							battleAlly: battleAlly.current,
+							enemyPos: enemyPos.current,
+							battleEnemy: battleEnemy.current,
+						}));
 						setMode('area');
 						break;
 					case 6: //debuff
-						setEffectEnemyArea(util.getEffectArea(skill.ta[skLv - 1], 12));
+						setEffectEnemyArea(util.getEffectArea({
+							isEnemy: skill.ta_,
+							type: skill.ta[skLv - 1],
+							n: 12,
+							allyPos: allyPos.current,
+							battleAlly: battleAlly.current,
+							enemyPos: enemyPos.current,
+							battleEnemy: battleEnemy.current,
+						}));
 						setMode('area');
 						break;
 					default:
@@ -3391,7 +3515,14 @@ const Battle = ({
 		}
 	}, [orderIdx]);
 	const timeLineSet = useCallback(() => {
-		enemyOrders.current = enemyPattern(enemyAi.current, battleAlly.current, allyPos.current, battleEnemy.current, gameData);
+		enemyOrders.current = enemyPattern({
+			ai: enemyAi.current,
+			battleAlly: battleAlly.current,
+			allyPos: allyPos.current,
+			enemyPos: enemyPos.current,
+			battleEnemy: battleEnemy.current,
+			gameData: gameData,
+		});
 		let allyEnemy = [];
 		battleAlly.current.forEach((data, idx) => {
 			allyEnemy.push({

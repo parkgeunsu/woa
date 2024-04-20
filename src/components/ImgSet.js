@@ -431,6 +431,8 @@ import aniPack4_5 from 'images/effect/animationPack4/6.png';
 import aniPack4_6 from 'images/effect/animationPack4/7.png';
 import aniPack4_7 from 'images/effect/animationPack4/8.png';
 import aniPack4_8 from 'images/effect/animationPack4/9.png';
+
+import custom01 from 'images/effect/custom/30FPS_custom01.png';
 // import effect109 from 'images/effect/pack1/15_Absorb.png';
 // import effect110 from 'images/effect/pack1/15_Bersek.png';
 // import effect111 from 'images/effect/pack1/15_Blind.png';
@@ -622,10 +624,10 @@ export const effect = {
   shoot10:{img:shoot10,frame:20},shoot11:{img:shoot11,frame:13},shoot12:{img:aniPack4_0,frame:9},shoot13:{img:aniPack4_1,frame:9},shoot14:{img:aniPack4_14,frame:11},
   pick0:{img:pick0,frame:13},pick1:{img:pick1,frame:30},pick2:{img:aniPack4_5,frame:6},
   press0:{img:press0,frame:10},press1:{img:press1,frame:15},press2:{img:aniPack4_17,frame:21},
-  bite0:{img:bite0,frame:15,used:'송곳니뚫기'},bite1:{img:bite1,frame:30},
-  claw0:{img:claw0,frame:15,used:'양손타격'},claw1:{img:claw1,frame:15,used:'한손타격'},claw2:{img:claw2,frame:10},claw3:{img:aniPack4_4,frame:5,used:'화염 발톱'},
-  blood0:{img:blood0,frame:15},blood1:{img:blood1,frame:30,used:'구토'},blood2:{img:blood2,frame:45,used:'삼키기'},blood3:{img:blood3,frame:30},blood4:{img:blood4,frame:15},blood5:{img:blood5,frame:15},blood6:{img:blood6,frame:30},blood7:{img:blood7,frame:30},blood8:{img:blood8,frame:23},blood9:{img:blood9,frame:30},
-  blood10:{img:blood10,frame:30},blood11:{img:blood11,frame:45},blood12:{img:blood12,frame:30},blood13:{img:blood13,frame:45},blood14:{img:blood14,frame:60},blood15:{img:blood15,frame:26},blood16:{img:blood16,frame:27},
+  bite0:{img:bite0,frame:15,used:'송곳니뚫기'},bite1:{img:bite1,frame:30,used:'물어뜯기'},
+  claw0:{img:claw0,frame:15,used:'양손타격'},claw1:{img:claw1,frame:15,used:'한손타격'},claw2:{img:claw2,frame:10,used:'앞발휘두르기'},claw3:{img:aniPack4_4,frame:5,used:'화염 발톱'},
+  blood0:{img:blood0,frame:15},blood1:{img:blood1,frame:30,used:'구토'},blood2:{img:blood2,frame:45,used:'삼키기'},blood3:{img:blood3,frame:30},blood4:{img:blood4,frame:15,used:'피의서약'},blood5:{img:blood5,frame:15},blood6:{img:blood6,frame:30},blood7:{img:blood7,frame:30},blood8:{img:blood8,frame:23},blood9:{img:blood9,frame:30},
+  blood10:{img:blood10,frame:30},blood11:{img:blood11,frame:45},blood12:{img:blood12,frame:30},blood13:{img:blood13,frame:45,used:'하울링'},blood14:{img:blood14,frame:60},blood15:{img:blood15,frame:26},blood16:{img:blood16,frame:27,used:'추격하기'},
   fire0:{img:fire0,frame:14},fire1:{img:fire1,frame:22},fire2:{img:fire2,frame:15},fire3:{img:fire3,frame:15},fire4:{img:fire4,frame:30},fire5:{img:fire5,frame:37},fire6:{img:fire6,frame:30},fire7:{img:fire7,frame:45},fire8:{img:fire8,frame:45},fire9:{img:fire9,frame:90},
   fire10:{img:fire10,frame:50},fire11:{img:fire11,frame:30},fire12:{img:fire12,frame:44},fire13:{img:fire13,frame:90},fire14:{img:fire14,frame:48},fire15:{img:aniPack4_12,frame:5},
   water0:{img:water0,frame:14},water1:{img:water1,frame:23},water2:{img:water2,frame:15},water3:{img:water3,frame:15},water4:{img:water4,frame:30},water5:{img:water5,frame:30},water6:{img:water6,frame:40},water7:{img:water7,frame:45},water8:{img:water8,frame:45},water9:{img:water9,frame:90},
@@ -634,23 +636,23 @@ export const effect = {
   wind10:{img:wind10,frame:50},wind11:{img:wind11,frame:90},
   ice0:{img:ice0,frame:15},ice1:{img:ice1,frame:23},ice2:{img:ice2,frame:15},ice3:{img:ice3,frame:15},ice4:{img:ice4,frame:30},ice5:{img:ice5,frame:29},ice6:{img:ice6,frame:38},ice7:{img:ice7,frame:45},ice8:{img:ice8,frame:45},ice9:{img:ice9,frame:90},
   ice10:{img:ice10,frame:50},ice11:{img:ice11,frame:37},
-  earth0:{img:earth0,frame:15},earth1:{img:earth1,frame:22},earth2:{img:earth2,frame:14},earth3:{img:earth3,frame:15},earth4:{img:earth4,frame:30},earth5:{img:earth5,frame:30},earth6:{img:earth6,frame:38},earth7:{img:earth7,frame:45},earth8:{img:earth8,frame:45},earth9:{img:earth9,frame:90},
+  earth0:{img:earth0,frame:15},earth1:{img:earth1,frame:22},earth2:{img:earth2,frame:14},earth3:{img:earth3,frame:15},earth4:{img:earth4,frame:30,used:'무리사냥'},earth5:{img:earth5,frame:30},earth6:{img:earth6,frame:38},earth7:{img:earth7,frame:45},earth8:{img:earth8,frame:45},earth9:{img:earth9,frame:90},
   earth10:{img:earth10,frame:46},earth11:{img:earth11,frame:90},
   thunder0:{img:thunder0,frame:15},thunder1:{img:thunder1,frame:23},thunder2:{img:thunder2,frame:15},thunder3:{img:thunder3,frame:15},thunder4:{img:thunder4,frame:28},thunder5:{img:thunder5,frame:28},thunder6:{img:thunder6,frame:38},thunder7:{img:thunder7,frame:45},thunder8:{img:thunder8,frame:45},thunder9:{img:thunder9,frame:90},
   thunder10:{img:thunder10,frame:48},thunder11:{img:thunder11,frame:48},thunder12:{img:thunder12,frame:49},thunder13:{img:thunder13,frame:49},thunder14:{img:thunder14,frame:90},thunder15:{img:thunder15,frame:90},thunder16:{img:thunder16,frame:40},thunder17:{img:thunder17,frame:50},thunder18:{img:thunder18,frame:44},thunder19:{img:thunder19,frame:21},
   thunder20:{img:thunder20,frame:26},thunder21:{img:aniPack4_8,frame:6},thunder22:{img:aniPack4_13,frame:11},
   mental0:{img:mental0,frame:30},mental1:{img:mental1,frame:45},mental2:{img:mental2,frame:30},mental3:{img:mental3,frame:23},mental4:{img:mental4,frame:75},
   poison0:{img:poison0,frame:30},poison1:{img:poison1,frame:30},poison2:{img:poison2,frame:23},poison3:{img:poison3,frame:45,used:'광견병'},poision4:{img:poision4,frame:30},
-  dark0:{img:dark0,frame:14},dark1:{img:dark1,frame:23},dark2:{img:dark2,frame:15},dark3:{img:dark3,frame:30},dark4:{img:dark4,frame:30},dark5:{img:dark5,frame:38},dark6:{img:dark6,frame:43},dark7:{img:dark7,frame:45},dark8:{img:dark8,frame:90},dark9:{img:dark9,frame:30},
+  dark0:{img:dark0,frame:14},dark1:{img:dark1,frame:23},dark2:{img:dark2,frame:15},dark3:{img:dark3,frame:30},dark4:{img:dark4,frame:30},dark5:{img:dark5,frame:38},dark6:{img:dark6,frame:43,used:'야습'},dark7:{img:dark7,frame:45},dark8:{img:dark8,frame:90},dark9:{img:dark9,frame:30},
   dark10:{img:dark10,frame:30},dark11:{img:dark11,frame:30},dark12:{img:dark12,frame:45},dark13:{img:dark13,frame:30},dark14:{img:dark14,frame:45},dark15:{img:dark15,frame:40},dark16:{img:dark16,frame:30},dark17:{img:dark17,frame:45},dark18:{img:dark18,frame:50},dark19:{img:dark19,frame:90},
   dark20:{img:dark20,frame:50},dark21:{img:dark21,frame:50},dark22:{img:dark22,frame:30},dark23:{img:dark23,frame:30},dark24:{img:dark24,frame:50},dark25:{img:dark25,frame:41},dark26:{img:dark26,frame:28},dark27:{img:dark27,frame:90},
   light0:{img:light0,frame:14},light1:{img:light1,frame:22},light2:{img:light2,frame:15},light3:{img:light3,frame:40},light4:{img:light4,frame:45},light5:{img:light5,frame:90},light6:{img:light6,frame:50},light7:{img:light7,frame:50},light8:{img:light8,frame:48},light9:{img:light9,frame:40},
   light10:{img:light10,frame:36},light11:{img:light11,frame:90},light12:{img:light12,frame:90},light13:{img:light13,frame:100},light14:{img:light14,frame:30},
-  buff0:{img:buff0,frame:30},buff1:{img:buff1,frame:30},buff2:{img:buff2,frame:30},buff3:{img:buff3,frame:45},buff4:{img:buff4,frame:30},buff5:{img:buff5,frame:30,used:'꾹꾹이'},buff6:{img:buff6,frame:40},buff7:{img:buff7,frame:30},buff8:{img:buff8,frame:45},buff9:{img:buff9,frame:50},
+  buff0:{img:buff0,frame:30},buff1:{img:buff1,frame:30},buff2:{img:buff2,frame:30},buff3:{img:buff3,frame:45,used:'냄새맡기'},buff4:{img:buff4,frame:30},buff5:{img:buff5,frame:30,used:'꾹꾹이'},buff6:{img:buff6,frame:40,usef:'금빛갈기'},buff7:{img:buff7,frame:30},buff8:{img:buff8,frame:45},buff9:{img:buff9,frame:50},
   buff10:{img:buff10,frame:90},buff11:{img:buff11,frame:90},buff12:{img:buff12,frame:45},buff13:{img:buff13,frame:45},buff14:{img:buff14,frame:45},buff15:{img:buff15,frame:45},buff16:{img:buff16,frame:30},buff17:{img:buff17,frame:26,used:'하악질'},buff18:{img:buff18,frame:50},buff19:{img:buff19,frame:30},
   buff20:{img:buff20,frame:30},buff21:{img:buff21,frame:30},buff22:{img:buff22,frame:37},buff23:{img:buff23,frame:45},buff24:{img:buff24,frame:50},buff25:{img:buff25,frame:50},buff26:{img:buff26,frame:41},buff27:{img:buff27,frame:47},buff28:{img:buff28,frame:30,used:'그루밍'},buff29:{img:buff29,frame:30},
   buff30:{img:buff30,frame:30,used:'빵굽기1'},buff31:{img:buff31,frame:30,used:'포효'},buff32:{img:buff32,frame:30},buff33:{img:buff33,frame:30,used:'몸집키우기'},buff34:{img:buff34,frame:50},buff35:{img:buff35,frame:30,used:'손톱갈기'},buff36:{img:buff36,frame:30},buff37:{img:buff37,frame:30,used:'영역표시'},buff38:{img:buff38,frame:26},buff39:{img:buff39,frame:30},
-  buff40:{img:buff40,frame:30},buff41:{img:buff41,frame:30},buff42:{img:aniPack4_6,frame:15},
+  buff40:{img:buff40,frame:30},buff41:{img:buff41,frame:30},buff42:{img:aniPack4_6,frame:15},custom01:{img:custom01,frame:24},
 };
 export const images = {
   ch:ch,ch_s:ch_s,card:card,card_s:card_s,cardRing:cardRing,cardRing_s:cardRing_s,skill:skill,icon100:icon100,icon150:icon150,icon200:icon200,moveEvent:moveEvent,moveEventCountry:moveEventCountry,itemTicket:itemTicket,itemEtc:itemEtc,animalType:animalType,

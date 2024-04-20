@@ -70,7 +70,7 @@ export const gameData = {
       {idx: 12, cardIdx: 0, type: 'map', amount: 'fire'},
       {idx: 13, cardIdx: 1, type: 'map', amount: 'city'},
       {idx: 14, cardIdx: 2, type: 'map', amount: 'water'},
-      {idx: 15, cardIdx: 3, type: 'map', amount: 'land'},
+      {idx: 15, cardIdx: 3, type: 'map', amount: 'forest'},
     ],
     lineup:lineup,
     skill:skill,
