@@ -652,7 +652,7 @@ export const effect = {
   buff10:{img:buff10,frame:90},buff11:{img:buff11,frame:90},buff12:{img:buff12,frame:45},buff13:{img:buff13,frame:45},buff14:{img:buff14,frame:45},buff15:{img:buff15,frame:45},buff16:{img:buff16,frame:30},buff17:{img:buff17,frame:26,used:'하악질'},buff18:{img:buff18,frame:50},buff19:{img:buff19,frame:30},
   buff20:{img:buff20,frame:30},buff21:{img:buff21,frame:30},buff22:{img:buff22,frame:37},buff23:{img:buff23,frame:45},buff24:{img:buff24,frame:50},buff25:{img:buff25,frame:50},buff26:{img:buff26,frame:41},buff27:{img:buff27,frame:47},buff28:{img:buff28,frame:30,used:'그루밍'},buff29:{img:buff29,frame:30},
   buff30:{img:buff30,frame:30,used:'빵굽기1'},buff31:{img:buff31,frame:30,used:'포효'},buff32:{img:buff32,frame:30},buff33:{img:buff33,frame:30,used:'몸집키우기'},buff34:{img:buff34,frame:50},buff35:{img:buff35,frame:30,used:'손톱갈기'},buff36:{img:buff36,frame:30},buff37:{img:buff37,frame:30,used:'영역표시'},buff38:{img:buff38,frame:26},buff39:{img:buff39,frame:30},
-  buff40:{img:buff40,frame:30},buff41:{img:buff41,frame:30},buff42:{img:aniPack4_6,frame:15},custom01:{img:custom01,frame:24},
+  buff40:{img:buff40,frame:30},buff41:{img:buff41,frame:30},buff42:{img:aniPack4_6,frame:15},custom01:{img:custom01,frame:24,used:'무거운한방'},
 };
 export const images = {
   ch:ch,ch_s:ch_s,card:card,card_s:card_s,cardRing:cardRing,cardRing_s:cardRing_s,skill:skill,icon100:icon100,icon150:icon150,icon200:icon200,moveEvent:moveEvent,moveEventCountry:moveEventCountry,itemTicket:itemTicket,itemEtc:itemEtc,animalType:animalType,

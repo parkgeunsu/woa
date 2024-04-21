@@ -830,7 +830,7 @@ export const util = { //this.loadImage();
           unitArr.push(unitPos[idx].pos);
         }
       });
-      return unitArr.length === 0 ? [12] : unitArr;
+      return unitArr.length === 0 ? [n] : unitArr;
     } else {
       switch (type) {
         case 1: // 1 단일
@@ -1117,6 +1117,8 @@ export const util = { //this.loadImage();
           } else {
             return [n-1,n,n+1,n+5];
           }
+        case 38: //랜덤 20
+          return util.getNonOverlappingNumber([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24], 20);
         default:
           break;
       }
