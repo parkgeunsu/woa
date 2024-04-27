@@ -4,8 +4,6 @@ import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
-import 'css/battle.css';
-import 'css/battleAnimation.css';
 import CharacterCard from 'pages/CharacterCard';
 import React, { useCallback, useContext, useLayoutEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -96,20 +94,113 @@ const BattleWarp = styled.div`
 	height: calc(100% - 50px);
 	background: url(${({backImg}) => backImg});
 	background-size: cover;
+	&.order .bgEffect .bg_light.lightning, &.action .bgEffect .bg_light.lightning {
+		transition: unset;
+		animation: onoff 8s infinite;
+	}
 `;
 const BattleArea = styled.div`
+	position: relative;
+	background: #3e2c00;
+	transition: height 1s;
 	height: calc(100% - 50px);
 	.units_enemy, .units_ally, .land_ally, .land_enemy{
 		height: 50%;
 	}
-	&:before{left:${({mode}) => {
-		return !mode ? "-50px" : 0;
-	}};background:url(${({frameLeft}) => frameLeft}) no-repeat -15px center;}
-	&:after{right:${({mode}) => {
-		return !mode ? "-50px" : 0;
-	}};background:url(${({frameRight}) => frameRight}) no-repeat 13px center;}
+	&:before {
+		content: "";
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 50px;
+		z-index: 1;
+		pointer-events: none;
+		transition: left 1s;
+		left: ${({mode}) => {
+			return !mode ? "-50px" : 0;
+		}};
+		background: url(${({frameLeft}) => frameLeft}) no-repeat -15px center;
+	}
+	&:after {
+		content: "";
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 50px;
+		z-index: 1;
+		pointer-events: none;
+		transition: right 1s;
+		right: ${({mode}) => {
+			return !mode ? "-50px" : 0;
+		}};
+		background: url(${({frameRight}) => frameRight}) no-repeat 13px center;
+	}
 `;
 const BattleUnit = styled.div`
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 2;
+	& > div {
+		position: relative;
+		margin: 0 auto;
+		box-sizing: border-box;
+		transition: all 1s;
+		.effect:before {
+			content: "";
+			position: absolute;
+			left: 10%;
+			right: 10%;
+			top: 10%;
+			bottom: 10%;
+			background-color: transparent;
+			z-index: 10;
+			opacity: 1;
+		}
+		.effect0:before {
+  		box-shadow: 0 0 5px 5px var(--color-w), inset 0 0 5px 5px var(--color-w);
+		}
+		.effect1:before {
+  		box-shadow: 0 0 5px 5px var(--color-w), inset 0 0 5px 5px var(--color-w);
+		}
+		.effect2:before {
+  		box-shadow: 0 0 5px 5px var(--color-w), inset 0 0 5px 5px var(--color-w);
+		}
+		.effect3:before {
+  		box-shadow: 0 0 5px 5px var(--color-w), inset 0 0 5px 5px var(--color-w);
+		}
+		.effect4:before {
+  		box-shadow: 0 0 5px 5px var(--color-w), inset 0 0 5px 5px var(--color-w);
+		}
+		.effect5:before {
+  		box-shadow: 0 0 5px 5px var(--color-w), inset 0 0 5px 5px var(--color-w);
+		}
+		.effect6:before {
+  		box-shadow: 0 0 5px 5px var(--color-w), inset 0 0 5px 5px var(--color-w);
+		}
+		.effect7:before {
+  		box-shadow: 0 0 5px 5px var(--color-yellow), inset 0 0 5px 5px var(--color-yellow);
+		}
+		.effect8:before {
+  		box-shadow: 0 0 5px 5px var(--color-b), inset 0 0 5px 5px var(--color-b);
+		}
+		.effect9:before {
+  		box-shadow: 0 0 5px 5px var(--color-blue), inset 0 0 5px 5px var(--color-blue);
+		}
+		.effect10:before {
+  		box-shadow: 0 0 5px 5px var(--color-red), inset 0 0 5px 5px var(--color-red);
+		}
+		.effect11:before {
+  		box-shadow: 0 0 5px 5px var(--color-lightblue), inset 0 0 5px 5px var(--color-lightblue);
+		}
+		.effect12:before {
+  		box-shadow: 0 0 5px 5px var(--color-green), inset 0 0 5px 5px var(--color-green);
+		}
+	}
 `;
 const BattleLand = styled.div`
 	display: flex;
@@ -133,9 +224,9 @@ const BattleLand = styled.div`
 		margin: 0 auto;
 		box-sizing: border-box;
 	}
-	&.ready .land {
+	${'' /* &.ready .land {
 		outline-width: 2px;
-	}
+	} */}
 	&.critical {
 		animation: landCritical 0.2s ease-in-out;
 	}
@@ -169,21 +260,23 @@ const BattleEffect = styled.div`
 		margin: 0 auto;
 		box-sizing: border-box;
 	}
-	&.ready .land {
+	${'' /* &.ready .land {
 		outline-width: 2px;
-	}
+	} */}
 `;
 const BattleEffectLand = styled.div`
 	position: relative;
 	margin: 0 auto;
-	${({allEff}) => allEff ? `
-		.effect_land {
+	
+	${({allEff, rotate, size, filter}) => allEff ? `
+		.effect_land .eff_area {
 			display: none;
-			&:nth-of-type(13) {
-				display: block;
-				transform: scale(5) !important;
-				z-index: 1;
-			}
+		}
+		.effect_land:nth-of-type(13) .eff_area {
+			display: block;
+			transform: rotate(${rotate}deg) scale(${size}) !important;
+			filter: ${filter};
+			z-index: 1;
 		}
 	` : ''}
 `;
@@ -239,58 +332,183 @@ const BattleCh = styled.div`
 	padding-top: ${({size}) => size}%;
 	left: ${({left}) => left}%;
 	top: ${({top}) => top}%;
-	transition:all ${({ gameSpd }) => 0.75 / gameSpd}s;
-	&.relation:after{box-shadow:0 0 15px 5px ${({rtColor}) => rtColor};background:${({rtColor}) => rtColor};animation:rtAnimation ${({ gameSpd }) => 3 / gameSpd}s linear;}
-	.ch_box{transition:all ${({ gameSpd }) => 0.225/ gameSpd}s;}
-	.ch_box .hpsp{
-		span {
-			&.hp{
-				em{transition:all ${({ gameSpd }) => 0.375/ gameSpd}s;}
-			}
-			&.sp{
-				em{transition:all ${({ gameSpd }) => 0.375/ gameSpd}s;}
+	transition: all ${({ gameSpd }) => 0.75 / gameSpd}s;
+	.ch_box {
+		position: absolute;
+		left: 5%;
+		top: 5%;
+		width: 90%;
+		height: 90%;
+		transform-origin: 50% 100%;
+		transform-style: preserve-3d;
+		pointer-events: none;
+		transition: all ${({ gameSpd }) => 0.225/ gameSpd}s;
+		.hpsp {
+			display: flex;
+			position: absolute;
+			height: 25%;
+			width: 100%;
+			top: -30%;
+			flex-direction: column;
+			justify-content: space-between;
+			span {
+				display: flex;
+				height: 45%;
+				background-color: #fff;
+				border-radius: 10px;
+				overflow: hidden;
+				box-shadow: inset 0 0 2px #000;
+				&.hp {
+					em {
+						display: inline-block;
+						height: 100%;
+						width: 100%;
+						background-color: var(--color-red);
+						border-radius: 10px;
+						transition: all ${({ gameSpd }) => 0.375/ gameSpd}s;
+					}
+				}
+				&.sp {
+					em {
+						display: inline-block;
+						height: 100%;
+						width: 100%;
+						background-color: var(--color-blue);
+						border-radius: 10px;
+						transition: all ${({ gameSpd }) => 0.375/ gameSpd}s;
+					}
+				}
 			}
 		}
+	}
+	.dmg {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		filter: blur(7px);
+		transform: scale(1.3);
+		pointer-events: none;
+		z-index: 3;
+	}
+	.ch_buff {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		pointer-events: none;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		z-index: 1;
+		.buff_effect {
+			position: absolute;
+			width: 500%;
+		}
+	}
+	&:after {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		pointer-events: none;
+	}
+	&.on {
+  	z-index: 2;
+		.ch_box {
+			transform: scale(1.5) translate(0, 20%);
+			.hpsp {
+				top: -40%;
+			}
+		}
+		.ring_back {
+			box-shadow: 0 0 30px #fff, 0 0 10px #ff0, 0 0 5px #f40;
+		}
+	}
+	&.relation:after {
+		content: "";
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: 100%;
+		height: 100%;
+		transform: translate(-50%, -50%);
+		z-index: 1;
+		filter: blur(5px);
+		opacity: 0;
+		pointer-events: none;
+		box-shadow: 0 0 15px 5px ${({rtColor}) => rtColor};
+		background: ${({rtColor}) => rtColor};
+		animation: rtAnimation ${({ gameSpd }) => 3 / gameSpd}s linear;
 	}
 	&.action {
 		left: 50%;
 		top: 50%;
 		transform: translate(-50%,-50%) scale(2);
 		z-index: 30;
+		.ch_box .ring_back {
+			box-shadow: 0 0 30px 10px #000;
+		}
 	}
-	&.defence0:after{
-		background:url(${({defenceIcon0}) => defenceIcon0}) no-repeat center center;background-size:60%;
-		animation:defence ${({ gameSpd }) => 0.75 / gameSpd}s;opacity:0;
+	&.defence0:after {
+		background: url(${({defenceIcon0}) => defenceIcon0}) no-repeat center center;background-size: 60%;
+		animation: defence ${({ gameSpd }) => 0.75 / gameSpd}s;opacity:0;
 	}
-	&.defence1:after{
-		background:url(${({defenceIcon1}) => defenceIcon1}) no-repeat center center;background-size:60%;
-		animation:defence ${({ gameSpd }) => 0.75 / gameSpd}s;opacity:0;
+	&.defence1:after {
+		background: url(${({defenceIcon1}) => defenceIcon1}) no-repeat center center;background-size: 60%;
+		animation: defence ${({ gameSpd }) => 0.75 / gameSpd}s;opacity:0;
 	}
-	&.defence2:after{
-		background:url(${({defenceIcon2}) => defenceIcon2}) no-repeat center center;background-size:60%;
-		animation:defence ${({ gameSpd }) => 0.75 / gameSpd}s;opacity:0;
+	&.defence2:after {
+		background: url(${({defenceIcon2}) => defenceIcon2}) no-repeat center center;background-size: 60%;
+		animation: defence ${({ gameSpd }) => 0.75 / gameSpd}s;opacity:0;
 	}
-	&.avoid0{
-		animation:avoid0 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
+	&.avoid0 {
+		animation: avoid0 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
 	}
-	&.avoid1{
-		animation:avoid1 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
+	&.avoid1 {
+		animation: avoid1 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
 	}
-	&.avoid2{
-		animation:avoid2 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
+	&.avoid2 {
+		animation: avoid2 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
 	}
-	&.avoid3{
-		animation:avoid3 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
+	&.avoid3 {
+		animation: avoid3 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
 	}
 	${'' /* &.dmg .dmg{
 		animation:dmgAnimation ${({gameSpd}) => 0.375 / gameSpd}s steps(1) infinite;
 	} */}
-	&.dmgCri .dmg{
-		animation:dmgCriticalAnimation ${({gameSpd}) => 0.375 / gameSpd}s steps(4) infinite;
+	&.dmgCri .dmg {
+		animation: dmgCriticalAnimation ${({gameSpd}) => 0.375 / gameSpd}s steps(4) infinite;
 	}
-	&.die:after{
-		background:url(${({tombstone}) => tombstone}) no-repeat center center;background-size:80%;
-		animation:tombstone ${({ gameSpd }) => 1.125 / gameSpd}s;opacity:0;animation-fill-mode:forwards;transform-origin:50% 100%;
+	&.die {
+		.ch_box {
+			opacity: 0;
+			transform: scale(0.1);
+		}
+		&:after {
+			background: url(${({tombstone}) => tombstone}) no-repeat center center;background-size: 80%;
+			animation: tombstone ${({ gameSpd }) => 1.125 / gameSpd}s;opacity:0;animation-fill-mode: forwards;transform-origin:50% 100%;
+		}
+	}
+	/*상태이상*/
+	&.bleeding .ch_box .ch_style {
+		filter: grayscale(1) brightness(0.5);
+	}
+	&.addicted .ch_box .ch_style {
+		filter: blur(1px);
+	}
+	&.bleeding.addicted .ch_box .ch_style {
+		filter: grayscale(1) brightness(0.5) blur(1px);
+	}
+	&.petrification .ch_box {
+		filter: grayscale(1) brightness(2);
+	}
+	&.petrification .ch_ring {
+		animation-play-state: paused;
 	}
 `;
 const Buff = styled.div`
@@ -304,24 +522,93 @@ const Buff = styled.div`
 	}
 `;
 const Passive = styled.div`
-	left:${({idx}) => idx % 2 === 0 ? -30 : -40}%;
-	top:${({idx}) => idx*20 - 25}%;background:url(${({effImg}) => effImg}) no-repeat center center;background-size:100%;
+	position: absolute;
+	pointer-events: none;
+	width: 30%;
+	padding-top: 30%;
+	z-index: 1;
+	opacity: 0;
+	left: ${({idx}) => idx % 2 === 0 ? -30 : -40}%;
+	top: ${({idx}) => idx*20 - 25}%;
+	background: url(${({effImg}) => effImg}) no-repeat center center;
+	background-size: 100%;
+	&.passive0 {
+		animation: fadeIn 0.5s linear;
+  	animation-fill-mode: forwards;
+	}
+	&.passive1 {
+		animation: fadeIn 0.5s 0.3s linear;
+		animation-fill-mode: forwards;
+	}
+	&.passive2 {
+		animation: fadeIn 0.5s 0.6s linear;
+		animation-fill-mode: forwards;
+	}
+	&.passive3 {
+		animation: fadeIn 0.5s 0.9s linear;
+		animation-fill-mode: forwards;
+	}
+	&.passive4 {
+		animation: fadeIn 0.5s 1.2s linear;
+		animation-fill-mode: forwards;
+	}
+	&.passive5 {
+		animation: fadeIn 0.5s 1.5s linear;
+		animation-fill-mode: forwards;
+	}
+	&.remove {
+  	animation: fadeOut 0.5s linear;
+	}
 `;
-const EffLand = styled.div.attrs(
-	props => ({
-		style: {
-			left: `${props.left}%`,
-			top:`${props.top}%`,
-			filter:`${props.filter}`,
-			transform:`rotate(${props.rotate}deg) scale(${props.size})`,
-		},
-	})
-)`
-	.dmgNum{
+const EffLand = styled.div`
+	position: absolute;
+	${({left, top}) => `
+		left: ${left}%;
+		top: ${top}%;
+	`}
+	width: 20%;
+	padding-top: 20%;
+	box-sizing: border-box;
+	border-radius: 0;
+	&.dmg .dmgNum {
+		opacity: 0;
+		transform: translate(-50%, -200%) scale(2.5);
+	}
+	.dmgNum {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		color: var(--color-red);
+		font-size: 0.938rem;
+		font-weight: 600;
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+		text-shadow: 0 0 1px #fff, 0 0 1px #fff, 0 0 2px #fff, 0 0 2px #fff,
+			0 0 3px #fff;
+		z-index: 12;
 		transition:all ${({gameSpd}) => 1.125 / gameSpd}s ease-in;
 	}
 `;
+const EffArea = styled.div`
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 11;
+	overflow: hidden;
+	transition: unset;
+	${({filter, rotate, size}) => `
+		filter: ${filter};
+		transform: rotate(${rotate}deg) scale(${size});
+	`}
+`;
 const Eff = styled.img`
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 500%;
 	height:${({frame}) => {
 		return Math.ceil(frame / 5) * 100;
 	}}%;
@@ -338,6 +625,16 @@ const Land = styled.div`
 	outline: 3px solid rgba(255,255,255,0.5);
 	left:${({left}) => left}%;
 	top:${({top}) => top}%;
+	&:before {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		background: #000;
+		opacity: 0.1;
+	}
 	& > .back {
 		position: absolute;
 		left: 0;
@@ -349,16 +646,228 @@ const Land = styled.div`
 		z-index: 1;
 	}
 `;
-const BattleMsg = styled.div`
-	transition:all ${({gameSpd}) => 0.375 / gameSpd}s;opacity:0;
+const BattleScenario = styled.div`
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	padding: 20px;
+	box-sizing: border-box;
+	z-index: 10;
+	background-color: rgba(0, 0, 0, 0.85);
 `;
-const WeatherIcon = styled.div`
-	position:absolute;left:${({idx}) => 50 * idx}px;background-image:url(${({src}) => src});background-size:80%;background-position:center center;background-repeat:no-repeat;width:46px;height:46px;
-`;
-const WeatherWind = styled.div`
-	.weather_arrow{background-image:url(${({src}) => src});background-size:100%;background-repeat:no-repeat;background-position:center center;transform:rotate(${({weatherInfo}) => weatherInfo.wind}deg);
+const ScenarioBox = styled.div`
+	margin: 15px 0;
+	align-items: center;
+	.scenario_ch {
+		position: relative;
+		width: 100px;
+		height: 100px;
+		.ch_name {
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			text-align: center;
+			word-break: keep-all;
+			line-height: 1.3;
+			font-weight: 600;
+			font-size: 0.875rem;
+		}
+		.ring_back {
+			display: block;
+			position: absolute;
+			left: 10%;
+			top: 10%;
+			width: 80%;
+			height: 80%;
+			border-radius: 40px;
+			overflow: hidden;
+			box-shadow: 0 0 10px #fff;
+		}
+		.ch_style {
+			display: block;
+			position: absolute;
+			left: -10%;
+			top: -20%;
+			width: 120%;
+			height: 120%;
+			background-repeat: no-repeat;
+		}
+	}
+	.scenario_talk {
+		position: relative;
+		padding: 10px;
+		border: 4px solid #fff;
+		background: rgba(255, 255, 255, 0.7);
+		box-sizing: border-box;
+		border-radius: 10px;
+		color: #000;
+		flex: 1;
+		line-height: 1.5;
+		font-size: 0.875rem;
+	}
+	&.left {
+		.scenario_ch {
+			margin: 0 10px 0 0;
+			order: 1;
+		}
+		.scenario_talk {
+			order: 2;
+			&:after {
+				content: "";
+				position: absolute;
+				top: 50%;
+				left: -14px;
+				transform: translate(0, -50%);
+				border-right: 10px solid #fff;
+				border-top: 10px solid transparent;
+				border-bottom: 10px solid transparent;
+			}
+		}
+	}
+	&.right {
+		.scenario_ch {
+			margin: 0 0 0 10px;
+			order: 2;
+		}
+		.scenario_talk {
+			order: 1;
+			&:after {
+				content: "";
+				position: absolute;
+				top: 50%;
+				right: -14px;
+				transform: translate(0, -50%);
+				border-left: 10px solid #fff;
+				border-top: 10px solid transparent;
+				border-bottom: 10px solid transparent;
+			}
+		}
+	}
+	&.ally .scenario_ch .ch_name {
+		text-shadow: 0 0 3px #00f, 0 0 3px #00f, 0 0 3px #00f;
+	}
+	&.enemy .scenario_ch .ch_name {
+		text-shadow: 0 0 3px #f00, 0 0 3px #f00, 0 0 3px #f00;
 	}
 `;
+const BattleMsg = styled.div`
+	position: absolute;
+	left: 0;
+	right: 0;
+	transform: translate(0, -50%);
+	z-index: 30;
+	pointer-events: none;
+	transition: all ${({gameSpd}) => 0.375 / gameSpd}s;
+	opacity: 0;
+	&.ally {
+		bottom: 35%;
+		&:after {
+			content: "";
+			position: absolute;
+			bottom: -10px;
+			border-top: 10px solid #333;
+			border-left: 10px solid transparent;
+			border-right: 10px solid transparent;
+			border-bottom: 0 solid transparent;
+		}
+	}
+	&.enemy {
+		top: 35%;
+		&:after {
+			content: "";
+			position: absolute;
+			top: -10px;
+			border-bottom: 10px solid #333;
+			border-left: 10px solid transparent;
+			border-right: 10px solid transparent;
+			border-top: 0 solid transparent;
+		}
+	}
+	&.on {
+		opacity: 1;
+	}
+	&.left:after {
+		left: 30%;
+	}
+	&.center:after {
+		left: 50%;
+	}
+	&.right:after {
+		right: 30%;
+	}
+	.battle_msg {
+		margin: 0 auto;
+		padding: 10px;
+		width: 50%;
+		height: 100%;
+		border-radius: 10px;
+		background: #333;
+		box-sizing: border-box;
+		text-align: center;
+		line-height: 1.2;
+		font-size: 0.938rem;
+		font-weight: 600;
+		color: #fff;
+	}
+`;
+const BattleWeater = styled.div`
+	position: absolute;
+  right: 5px;
+  bottom: 0;
+  width: 50px;
+  height: 115px;
+  transition: all 0.5s;
+  border-radius: 10px 0 0 0;
+  z-index: 51;
+`;
+const WeatherIconBox = styled.div`
+  position: relative;
+  margin: 0 0 5px 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  box-shadow: 0 0 10px #000;
+  border: 2px solid #ddd;
+  box-sizing: border-box;
+  background: radial-gradient(at 30% 30%, rgba(200, 200, 200, 1) 0%, rgba(0, 0, 0, 1) 60%);
+  overflow: hidden;
+	&.day {
+  	background: radial-gradient(at 30% 30%, rgba(200, 200, 200, 1) 0%,rgba(50, 50, 0, 1) 60%);
+	}
+	&.night {
+		background: radial-gradient(at 30% 30%, rgba(100, 100, 100, 1) 0%, rgba(0, 0, 0, 1) 60%);
+	}
+	.weather_typeIcon {
+		position: absolute;
+		left: 0;
+		top: 0;
+		transition: all 0.5s;
+	}
+`;
+const WeatherIcon = styled.div`
+	position: absolute;
+	left: ${({idx}) => 50 * idx}px;
+	width: 46px;
+	height: 46px;
+	background-image: url(${({src}) => src});
+	background-size: 80%;
+	background-position: center center;
+	background-repeat: no-repeat;
+`;
+const WeatherArrow = styled.div`
+	position: absolute;
+  width: 46px;
+  height: 46px;
+  transition: all 0.5s;
+	background-image: url(${({src}) => src});
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: center center;
+	transform: rotate(${({weatherInfo}) => weatherInfo.wind}deg);
+`;
+
 const BattleOrder = styled.div`
 	position: relative;
 	height: 50px;
@@ -434,21 +943,167 @@ const BattleTurn = styled.div`
 	}
 `;
 const RelationArea = styled.div`
-	&:after{transition:all ${({gameSpd}) => 0.375 / gameSpd}s ${({gameSpd}) => 0.5 / gameSpd}s ease-in-out;}
-	&.on:after{height:${({rtHeight}) => rtHeight}px;box-shadow:0 0 20px 10px rgba(0,0,0,.7);}
-	.relationTitle span:first-of-type{transition:opacity ${({gameSpd}) => 0.375 / gameSpd}s 0s;text-shadow:0 0 10px #ff0,0 0 10px #ff0;}
-	.relationTitle span:nth-of-type(2){transition:opacity ${({gameSpd}) => 0.375 / gameSpd}s .2s;text-shadow:0 0 10px #fb0,0 0 10px #fb0;}
-	.relationTitle span:nth-of-type(3){transition:opacity ${({gameSpd}) => 0.375 / gameSpd}s .4s;text-shadow:0 0 10px #f60,0 0 10px #f60;}
-	.relationTitle span:last-of-type{transition:opacity ${({gameSpd}) => 0.375 / gameSpd}s .6s;text-shadow:0 0 10px #f00,0 0 10px #f00;}
+	display: flex;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	flex-direction: column;
+	z-index: 50;
+	align-items: center;
+	justify-content: center;
+	pointer-events: none;
+	&:after {
+		content: "";
+		position: absolute;
+		width: 100%;
+		height: 0;
+		box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0);
+		background: rgba(0, 0, 0, 0.7);
+		transition: all ${({gameSpd}) => 0.375 / gameSpd}s ${({gameSpd}) => 0.5 / gameSpd}s ease-in-out;
+	}
+	&.on{
+		.relationTitle span {
+			opacity: 1;
+		}
+		.relationName {
+			filter: blur(0);
+		}
+		&:after {
+			height: ${({rtHeight}) => rtHeight}px;
+			box-shadow: 0 0 20px 10px rgba(0,0,0,.7);
+		}
+	}
+	.relationTitle {
+		margin: 0 0 10px 0;
+		z-index: 1;
+		span {
+			display: inline-block;
+			margin: 0 2px;
+			font-size: 2.1rem;
+			font-weight: 600;
+			opacity: 0;
+			color: #fff;
+		}
+		span:first-of-type{
+			transition: opacity ${({gameSpd}) => 0.375 / gameSpd}s 0s;text-shadow:0 0 10px #ff0,0 0 10px #ff0;
+		}
+		span:nth-of-type(2){
+			transition: opacity ${({gameSpd}) => 0.375 / gameSpd}s .2s;text-shadow:0 0 10px #fb0,0 0 10px #fb0;
+		}
+		span:nth-of-type(3){
+			transition: opacity ${({gameSpd}) => 0.375 / gameSpd}s .4s;text-shadow:0 0 10px #f60,0 0 10px #f60;
+		}
+		span:last-of-type{
+			transition: opacity ${({gameSpd}) => 0.375 / gameSpd}s .6s;text-shadow:0 0 10px #f00,0 0 10px #f00;
+		}
+	}
 `;
 const RelationName = styled.div`
 	position:relative;margin:5px 0;padding:0 0 0 13px;color:#fff;z-index:1;filter:blur(5px);transition:all ${({gameSpd}) => 0.375 / gameSpd}s ${({idx}) => 0.5 + idx * 0.3}s;
 	&:after{content:'';position:absolute;left:0;top:50%;transform:translate(0, -50%);width:5px;height:5px;background:${({color}) => color};box-shadow:0 0 8px 5px ${({color}) => color};}
 `;
 const BgEffect = styled.div`
-	.cloud{transition:all ${({gameSpd}) => 1.5 / gameSpd}s;}
-	.cloud1{top:0;animation:cloudAnimation ${({gameSpd}) => 157 / gameSpd}s linear infinite;background-image:url(${({img1}) => img1});background-size:100%;}
-	.cloud2{top:30%;animation:cloudAnimationReverse ${({gameSpd}) => 97 / gameSpd}s linear infinite;background-image:url(${({img2}) => img2});background-size:100%;opacity:1;}
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 50px;
+	pointer-events: none;
+	.cloud{
+		position: absolute;
+		width: 1000px;
+		height: 400px;
+		z-index: 40;
+		animation-play-state: running;
+		transition: all ${({gameSpd}) => 1.5 / gameSpd}s;
+	}
+	.cloud1{
+		top: 0;
+		animation: cloudAnimation ${({gameSpd}) => 157 / gameSpd}s linear infinite;background-image: url(${({img1}) => img1});
+		background-size: 100%;
+	}
+	.cloud2{
+		top: 30%;
+		animation: cloudAnimationReverse ${({gameSpd}) => 97 / gameSpd}s linear infinite;background-image: url(${({img2}) => img2});
+		background-size: 100%;
+		opacity: 1;
+	}
+	.bg_light {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		z-index: 39;
+		transition: all 0.5s;
+		overflow: hidden;
+		.circle {
+			position: absolute;
+			border-radius: 50%;
+			&:first-of-type {
+				left: 65%;
+				top: 3%;
+				width: 10px;
+				height: 10px;
+				background: #fff;
+				opacity: 0.5;
+				filter: blur(2px);
+			}
+			&:nth-of-type(2) {
+				left: 37%;
+				top: 6%;
+				width: 60px;
+				height: 60px;
+				background: #fff;
+				opacity: 0.5;
+				filter: blur(3px);
+			}
+			&:nth-of-type(3) {
+				left: 47%;
+				top: 28%;
+				width: 20px;
+				height: 20px;
+				background: #fff;
+				opacity: 0.5;
+				filter: blur(2px);
+			}
+			&:nth-of-type(4) {
+				left: 23%;
+				top: 18%;
+				width: 30px;
+				height: 30px;
+				background: #fff;
+				opacity: 0.5;
+				filter: blur(3px);
+			}
+			&:nth-of-type(5) {
+				left: 8%;
+				top: 3%;
+				width: 20px;
+				height: 20px;
+				background: #fff;
+			}
+		}
+	}
+	canvas {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		z-index: 40;
+	}
+	&.action {
+		.cloud {
+			animation-play-state: paused;
+			opacity: 0;
+		}
+		.cloud2 {
+			left: -1000px;
+			animation-play-state: paused;
+		}
+	}
 `;
 const BgLight = styled.div`
 	&:after{
@@ -519,7 +1174,6 @@ const chkString = (arr, index) => {
 	return chk;
 }
 const enemyPattern = ({ai, battleAlly, allyPos, battleEnemy, enemyPos, gameData}) => {
-	console.log(battleAlly[0].state);
 	let enemySkill = [];
 	const activeSkillSorting = (skill) => {
 		let active = [],
@@ -573,18 +1227,18 @@ const enemyPattern = ({ai, battleAlly, allyPos, battleEnemy, enemyPos, gameData}
 		const target = Math.random() <= weakAttackChance[enemyAi] ? hpArray[0].idx : attackTarget;
 		const skillType = ranCount > activeChance[enemyAi] ? skillList.buff : skillList.active;
 		const skIdx = Math.random() > normalAttackChance[enemyAi] ? skillType[Math.floor(Math.random() * skillType.length)]?.idx || 1 : 1;
-		const targetArea = util.getEffectArea({
+		const areaArr = util.getEffectArea({
 			isEnemy: gameData.skill[skIdx].ta_,
 			type: gameData.skill[skIdx].ta[4],
 			n: allyPos[target].pos,
-			allyPos: allyPos.current,
+			allyPos: allyPos,
 			battleAlly: battleAlly.current,
 			enemyPos: enemyPos.current,
 			battleEnemy: battleEnemy.current,
 		});
 		let targetIdx = [];
 		allyPos.forEach((posIdx, idx) => {
-			targetArea.forEach((actionIdx) => {
+			areaArr.forEach((actionIdx) => {
 				if (posIdx.pos === actionIdx) {
 					targetIdx.push(idx);
 				}
@@ -601,6 +1255,7 @@ const enemyPattern = ({ai, battleAlly, allyPos, battleEnemy, enemyPos, gameData}
 			skIdx: skIdx,
 			skLv: currentSk[0].lv,
 			targetIdx: targetIdx,
+			effectArea: areaArr,
 			target: allyPos[target].pos,
 		});
 	});
@@ -635,6 +1290,7 @@ const activeSk = (timeLineData) => { //타임라인에 처리되는 방어등.. 
 	}
 }
 const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, bgm, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, atkOption}) => {
+	console.log('타임라인', timeLine);
 	if (modeRef.indexOf('battle') >= 0){ //battleLose, battleWin시 
 		return;
 	}
@@ -845,7 +1501,6 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						buffDebuff[attackerIdx] = [];
 					}
 					buffDebuff[attackerIdx] = [...battleAlly[attackerIdx].buffDebuff];
-					console.log(battleAlly, attackerIdx, skill)
 					skill.buff.forEach((data_) => {
 						const skLvIdx = timeLine[turnIdx].order.skLv - 1;
 						const maxCount = skill.buffCount[skLvIdx];
@@ -1274,45 +1929,53 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 				attacker.totalDmg = 0;
 			} else {//액티브 스킬 데미지 공식
 				const skType = gameData.skill[timeLine[turnIdx].order.skIdx].element_type;//스킬 속성종류
-				const chance = Math.random();
-				const team = timeLine[turnIdx].order.team === 'ally' ? enemyAction : allyAction;
-				let criticalAtk = false;
-				let avoid = false;
+				const teamAction = timeLine[turnIdx].order.team === 'ally' ? enemyAction : allyAction;
 				defencer.forEach((defData, dIdx) => {
 					const defEnemy = defData.ch;
+					let criticalAtk = false,
+						avoid = false;
 					if (defEnemy.state !== 'die') { //적이 살았을 경우
+						const addHitEff = gameData.skill[skillIdx].attackEff[0]?.type === 0 ? parseInt(gameData.skill[skillIdx].attackEff[0].num[timeLine[turnIdx].order.skLv - 1]) * 0.01 : 0,//atkEff 적중률 효과 적용
+							addCriticalEff = gameData.skill[skillIdx].attackEff[0]?.type === 1 ? parseInt(gameData.skill[skillIdx].attackEff[0].num[timeLine[turnIdx].order.skLv - 1]) * 0.01 : 0,//atkEff 치명타 효과 적용
+							addKgEff = 0.15 - 1/(gameData.animal_size.kg[defEnemy.animal_type][1] - gameData.animal_size.kg[defEnemy.animal_type][0]) * (defEnemy.kg - gameData.animal_size.kg[defEnemy.animal_type][0]) * 0.15;
 						//마법 방어와 방어 분기 처리
 						if (skType < 7) {//물리공격인지
-							const hitChance =  Math.min((80 + 30 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100) / 100, 0.95); //물리 적중 확률
-							if (team[defData.idx] === undefined || team[defData.idx].indexOf('defence0') < 0) { //방어를 안했으면
+							if (teamAction[defData.idx] === undefined || teamAction[defData.idx].indexOf('defence0') < 0) { //방어를 안했으면
 								if (defEnemy.state.indexOf('petrification') >= 0) { //석화 상태면
 									const criticalChance = Math.random();
 									const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100, 0.1);//치명타 확률 계산
 									if (criticalChance < critical) {
 										criticalAtk = true;
 										landCritical = true;
-										team[defData.idx] = team[defData.idx] + ' dmgCri'
+										teamAction[defData.idx] = teamAction[defData.idx] + ' dmgCri'
 									} else {
-										team[defData.idx] = team[defData.idx] + ' dmg'
+										teamAction[defData.idx] = teamAction[defData.idx] + ' dmg'
 									}
 								} else {
+									const chance = Math.random();
+									const hitChance =  Math.min(
+										(0.15 * (attacker.spd - defEnemy.spd) + 0.1 * (attacker.luk - defEnemy.luk)) / 100 + 0.7 + addKgEff + addHitEff,
+										0.95
+									); //물리 적중 확률, 기본0.7 어드벤티지
+									console.log('물리공격', chance, hitChance, chance < hitChance);
+									console.log((attacker.spd - defEnemy.spd), (attacker.luk - defEnemy.luk), addKgEff, addHitEff);
 									if (chance < hitChance) {// 공격 적중
 										const criticalChance = Math.random();
-										const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100, 0.1);//치명타 확률 계산
+										const critical = Math.max(Math.min((0.6 * (attacker.spd - defEnemy.spd) + 0.4 * (attacker.luk - defEnemy.luk)) / 100 + addCriticalEff, 0.9), 0.1);//치명타 확률 계산
 										if (criticalChance < critical) {
 											criticalAtk = true;
 											landCritical = true;
-											team[defData.idx] = team[defData.idx] + ' dmgCri'
+											teamAction[defData.idx] = teamAction[defData.idx] + ' dmgCri';
 										} else {
-											team[defData.idx] = team[defData.idx] + ' dmg'
+											teamAction[defData.idx] = teamAction[defData.idx] + ' dmg';
 										}
 									} else {//공격 회피
 										const avoidNum = Math.floor(Math.random()*4);//회피 종류
 										avoid = true;
-										team[defData.idx] = 'avoid' + avoidNum;
+										teamAction[defData.idx] = 'avoid' + avoidNum;
 									}
 									const counterChance = Math.random() < .1+ (defData.ch.counterAttack ? parseInt(defData.ch.counterAttack.num) * 0.01 : 0); //반격 확률
-									console.log(defData.ch.na1, .1 + (defData.ch.counterAttack ? parseInt(defData.ch.counterAttack.num) * 0.01 : 0)+'확률 반격');
+									//console.log(defData.ch.na1, .1 + (defData.ch.counterAttack ? parseInt(defData.ch.counterAttack.num) * 0.01 : 0)+'확률 반격');
 									if (counterChance && atkS === 0 && timeLine[turnIdx].order.skIdx !== 17 && timeLine[turnIdx].order.targetIdx.length === 1) {//반격 확률 계산, 연속공격중 마지막일때만, 반격이 아닐경우, 광역기가 아닐경우
 										timeLine.splice(turnIdx + 1, 0, {
 											order:{
@@ -1336,39 +1999,44 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 								if (criticalChance < critical) {
 									criticalAtk = true;
 									landCritical = true;
-									team[defData.idx] = team[defData.idx] + ' dmgCri'
+									teamAction[defData.idx] = teamAction[defData.idx] + ' dmgCri'
 								} else {
-									team[defData.idx] = team[defData.idx] + ' dmg'
+									teamAction[defData.idx] = teamAction[defData.idx] + ' dmg'
 								}
 							}
-						} else {
-							const magicChance = Math.min((60 + 20 * (attacker.spd - defEnemy.spd) / 100) /100, 0.9); //마법 적중 확률
-							if (team[defData.idx] === undefined || team[defData.idx].indexOf('defence2') < 0) { //마법방어를 안했으면
+						} else {//마법공격인지
+							if (teamAction[defData.idx] === undefined || teamAction[defData.idx].indexOf('defence2') < 0) { //마법방어를 안했으면
 								if (defEnemy.state.indexOf('petrification') >= 0) { //석화 상태면
 									const criticalChance = Math.random();
-									const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100, 0.1);//치명타 확률 계산
+									const critical = Math.max(Math.min((0.4 * (attacker.spd - defEnemy.spd) + 0.6 * (attacker.luk - defEnemy.luk)) / 100 + addCriticalEff, 1), 0.1);//치명타 확률 계산
 									if (criticalChance < critical) {
 										criticalAtk = true;
 										landCritical = true;
-										team[defData.idx] = team[defData.idx] + ' dmgCri'
+										teamAction[defData.idx] = teamAction[defData.idx] + ' dmgCri';
 									} else {
-										team[defData.idx] = team[defData.idx] + ' dmg';
+										teamAction[defData.idx] = teamAction[defData.idx] + ' dmg';
 									}
 								} else {
-									if (chance < magicChance) {
+									const chance = Math.random();
+									const magicChance = Math.min(
+										(0.1 * (attacker.spd - defEnemy.spd) + 0.15 * (attacker.luk - defEnemy.luk)) / 100 + 0.7 + addKgEff + addHitEff, 
+										0.9
+									); //마법 적중 확률, 기본0.7 어드벤티지
+									console.log('마법공격', chance, magicChance, chance < magicChance);
+									if (chance < magicChance) {//술법 공격 적중
 										const criticalChance = Math.random();
 										const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100, 0.1);//치명타 확률 계산
 										if (criticalChance < critical) {
 											criticalAtk = true;
 											landCritical = true;
-											team[defData.idx] = team[defData.idx] + ' dmgCri'
+											teamAction[defData.idx] = teamAction[defData.idx] + ' dmgCri';
 										} else {
-											team[defData.idx] = team[defData.idx] + ' dmg';
+											teamAction[defData.idx] = teamAction[defData.idx] + ' dmg';
 										}
 									} else {
 										const avoidNum = Math.floor(Math.random()*4);//회피 종류
 										avoid = true;
-										team[defData.idx] = 'avoid' + avoidNum;
+										teamAction[defData.idx] = 'avoid' + avoidNum;
 									}
 								}
 							} else { //마법방어를 했으면
@@ -1377,23 +2045,25 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 								if (criticalChance < critical) {
 									criticalAtk = true;
 									landCritical = true;
-									team[defData.idx] = team[defData.idx] + ' dmgCri'
+									teamAction[defData.idx] = teamAction[defData.idx] + ' dmgCri'
 								} else {
-									team[defData.idx] = team[defData.idx] + ' dmg';
+									teamAction[defData.idx] = teamAction[defData.idx] + ' dmg';
 								}
 							}
 						}
 
+						//데미지 계산
 						//쪼기(0),할퀴기(1),물기(2),치기(3),누르기(4),던지기(5),빛(6),어둠(7),물(8),불(9),바람(10),땅(11)
-						elementDefencePercent = skType > 0 ? (defEnemy[`el${skType - 1}`] + defEnemy[`iSt${skType + 15}`]) / 100 : 1; //속성치에 따른 방어적용치
+						elementDefencePercent = skType > 0 ? (defEnemy[`el${skType - 1}`] + defEnemy[`iSt${skType + 15}`]) / 100 + 1 : 1; //속성치에 따른 방어적용치
 						//스킬 공격치 적용
 						//skill dmg
 						let dmg_ = 0,
 							atkNum = {},
 							defNum = {},
-							sk = {},
+							defActionSkill = {},
 							attackType = 0,
-							defenceType = 0;
+							defenceType = 0,
+							multiplesAttackNum = 1;
 						if (skType < 7) {//물리공격
 							attackType = 'atk';
 							defenceType = 'def';
@@ -1404,51 +2074,53 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						defendSkillEnemy.forEach((defEnemy_, idx) => {
 							const chkIdx = defEnemy_.idx;
 							if (chkIdx === 2) { //방어
-								sk = defEnemy.hasSkill.filter((skData) => {
+								defActionSkill = defEnemy.hasSkill.filter((skData) => {
 									if (skData.idx === 2) {
 										return skData;
 									};
 								});
 							} else if (chkIdx === 13) { //철벽방어
-								sk = defEnemy.hasSkill.filter((skData) => {
+								defActionSkill = defEnemy.hasSkill.filter((skData) => {
 									if (skData.idx === 13) {
 										return skData;
 									};
 								});	
 							} else if (chkIdx === 14) { //마법방어
-								sk = defEnemy.hasSkill.filter((skData) => {
+								defActionSkill = defEnemy.hasSkill.filter((skData) => {
 									if (skData.idx === 14) {
 										return skData;
 									};
 								});	
 							} else if (chkIdx === 15) { //나무뒤에 숨기
-								sk = defEnemy.hasSkill.filter((skData) => {
+								defActionSkill = defEnemy.hasSkill.filter((skData) => {
 									if (skData.idx === 15) {
 										return skData;
 									};
 								});	
 							}
 						});
-						if (Object.keys(sk).length !== 0) {
-							gameData.skill[sk[0].idx].eff.forEach((skData) => {
+						console.log('방어동작 스킬', defActionSkill);
+						if (Object.keys(defActionSkill).length !== 0) {
+							gameData.skill[defActionSkill[0].idx].buff.forEach((skData) => {
 								const stateName = util.getStateName(skData.type);
-								const skill = sk[0].lv > 5 ? 5 : sk[0].lv;
+								const skill = defActionSkill[0].lv > 5 ? 5 : defActionSkill[0].lv;
 								defNum[stateName] = util.getPercentNumber(skData.num[skill - 1], defEnemy[stateName]);
 							})
 						} else {
 							defNum = defEnemy;
 						}
-						let attackerSkill = [];
-						if (timeLine[turnIdx].order.skIdx === 17) {
-							attackerSkill = [{
-								idx: 17,
-								lv: 1,
-							}];
-						} else {
-							attackerSkill = attacker.hasSkill.filter((skData) => {
+						// 반격인지?
+						// let attackerSkill = [];
+						// if (timeLine[turnIdx].order.skIdx === 17) {
+						// 	attackerSkill = [{
+						// 		idx: 17,
+						// 		lv: 1,
+						// 	}];
+						// } else {
+						const	attackerSkill = attacker.hasSkill.filter((skData) => {
 								return skData.idx === timeLine[turnIdx].order.skIdx;
 							});
-						}
+						// }
 						gameData.skill[attackerSkill[0].idx].eff.forEach((skData) => {
 							const stateName = util.getStateName(skData.type);
 							const skill = attackerSkill[0].lv > 5 ? 5 : attackerSkill[0].lv;
@@ -1456,20 +2128,45 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						});
 						// dmg_ = (criticalAtk ? atkNum[attackType] * elementDmg * 2 : atkNum[attackType] * elementDmg) - (defNum[defenceType] || defEnemy[defenceType]);
 						const defCount = (defNum[defenceType] || defEnemy[defenceType]) * elementDefencePercent;
-						dmg_ = atkNum[attackType] - (criticalAtk ? defCount * .33 : defCount);//크리티컬이면 방어 1/3로 줄임
-						//console.log(atkNum[attackType], defCount);
-						//console.log(criticalAtk, dmg_);
+						//console.log('방어 수치', defNum.def, defNum.mdf, defenceType, defCount);
+						//console.log('공격 수치', atkNum.atk, atkNum.mak);
+
+						//배수 공격 연산 multiplesAttack
+						const multiplesAttack = gameData.skill[attackerSkill[0].idx].multiplesAttack;
+						if (multiplesAttack[0]?.type > 40 && multiplesAttack[0]?.type < 50) {
+							if (multiplesAttack[0]?.type === 44 && defEnemy.kg <= gameData.animal_size.size[0]) {//소형동물이면
+								multiplesAttackNum = parseInt(gameData.skill[attackerSkill[0].idx].multiplesAttack[0].num[attackerSkill[0].lv - 1]) / 100 + 1;
+							} else if (multiplesAttack[0]?.type === 45 && (defEnemy.kg > gameData.animal_size.size[0] && defEnemy.kg <= gameData.animal_size.size[1])) {//중형동물이면
+								multiplesAttackNum = parseInt(gameData.skill[attackerSkill[0].idx].multiplesAttack[0].num[attackerSkill[0].lv - 1]) / 100 + 1;
+							} else if (multiplesAttack[0]?.type === 46 && defEnemy.kg > gameData.animal_size.size[1]) {//대형동물이면
+								multiplesAttackNum = parseInt(gameData.skill[attackerSkill[0].idx].multiplesAttack[0].num[attackerSkill[0].lv - 1]) / 100 + 1;
+							} else if (multiplesAttack[0]?.type === 47 && defEnemy.kg <= gameData.animal_size.size[1]) {//소,중형동물이면
+								multiplesAttackNum = parseInt(gameData.skill[attackerSkill[0].idx].multiplesAttack[0].num[attackerSkill[0].lv - 1]) / 100 + 1;
+							} else if (multiplesAttack[0]?.type === 48 && (defEnemy.kg <= gameData.animal_size.size[0] && defEnemy.kg > gameData.animal_size.size[1])) {//소,대형동물이면
+								multiplesAttackNum = parseInt(gameData.skill[attackerSkill[0].idx].multiplesAttack[0].num[attackerSkill[0].lv - 1]) / 100 + 1;
+							} else if (multiplesAttack[0]?.type === 49 && defEnemy.kg > gameData.animal_size.size[0]) {//중,대형동물이면
+								multiplesAttackNum = parseInt(gameData.skill[attackerSkill[0].idx].multiplesAttack[0].num[attackerSkill[0].lv - 1]) / 100 + 1;
+							}
+						} else {
+							if (defEnemy.animal_type === multiplesAttack[0]?.type || multiplesAttack[0]?.type === 50) {//동물타입이 만족하면, 모든동물이면
+								multiplesAttackNum = parseInt(gameData.skill[attackerSkill[0].idx].multiplesAttack[0].num[attackerSkill[0].lv - 1]) / 100 + 1;
+							}
+						}
+						//크리티컬 공격이면 방어 1/3로 줄임
+						dmg_ = Math.max(1, (atkNum[attackType] * multiplesAttackNum) - (criticalAtk ? defCount * .33 : defCount));
 						if (avoid) {
 							dmg.push('');
 						} else {
-							dmg.push(dmg_ < 1 ? 1 : dmg_);
-							totalDmg += dmg_ < 1 ? 1 : dmg_;
+							dmg.push(dmg_);
+							totalDmg += dmg_;
 						}
+						console.log(`${attacker.na1} -> ${defEnemy.na1},`, `데미지: ${Math.floor(dmg_)},`, `공격: ${Math.floor(atkNum[attackType] * multiplesAttackNum)},`, `방어: ${Math.floor(criticalAtk ? defCount * .33 : defCount)}`);
+						console.log('------------------------------');
 					} else { //적이 죽었을 경우
 						dmg.push('');
 					}
 				});
-				if (typeof attacker.totalDmg === "number") {
+				if (typeof attacker.totalDmg === "number") {// 전투 랭크 기여도에 사용
 					attacker.totalDmg += totalDmg;
 				} else {
 					attacker.totalDmg = totalDmg;
@@ -1483,15 +2180,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						setSkillMsg(false);
 						setTimeout(() => {
 							//console.log(gameData.ch[attacker.idx].animal_type, defencer, timeLine[turnIdx]); //같은 동물유형 패시브 구현중
-							const targets = timeLine[turnIdx].order.counterAttack ? [timeLine[turnIdx].order.target] : util.getEffectArea({
-								isEnemy: gameData.skill[skillIdx].ta_,
-								type: gameData.skill[skillIdx].ta[timeLine[turnIdx].order.skLv - 1],
-								n: timeLine[turnIdx].order.target,
-								allyPos: allyPos,
-								battleAlly: battleAlly,
-								enemyPos: enemyPos,
-								battleEnemy: battleEnemy,
-							});
+							const targets = timeLine[turnIdx].order.counterAttack ? [timeLine[turnIdx].order.target] : timeLine[turnIdx].order.effectArea;
 							let targetIdx = [],
 								targetArr = {skillIdx:0,allEff:0,effSize:1,effAnimation:'',effRotate:'',effFilter:'',targets:[]},
 								targetCount = 0;
@@ -1924,8 +2613,8 @@ const passiveBuff = ({gameData, battleAlly, battleEnemy, allyEnemyPassive, allyP
 		}
 		ally.sk.forEach((allySkill) => {//살아있는 캐릭 스킬
 			const gameDataSkill = gameData.skill[allySkill.idx],
-				passiveType = gameDataSkill.eff[0].type,
-				passiveNum = gameDataSkill.eff[0].num[allySkill.lv - 1],
+				passiveType = gameDataSkill.eff ? gameDataSkill.eff[0].type : gameDataSkill.buff[0].type,
+				passiveNum = gameDataSkill.eff ? gameDataSkill.eff[0].num[allySkill.lv - 1] : gameDataSkill.buff[0].num[allySkill.lv - 1],
 				passiveEff = gameDataSkill.effAnimation;
 			const state = util.getStateName(passiveType);
 			if (gameDataSkill.ta === 10) {//전체 캐릭 패시브 적용
@@ -2536,20 +3225,47 @@ const Battle = ({
 					land = num % 3;
 				return (5 * landType) + land;
 			}),
-			entry:[// 적군 데이터
+			entry:[// 적군 생성
 				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
 				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
-				{idx:'', lv:1, },{idx:'', lv:1, },{pos:0,idx:27, lv:1, grade:4, items: [
-					{idx:0, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
-					{idx:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
-					{idx:2, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
-					{idx:4, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
+				{pos:2,idx:2, lv:1, grade:4, items: [
+					{idx:0, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+					{idx:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+					{idx:2, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+					{idx:4, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
 					{},
 					{},
 					{},
 					{},
-				]},{idx:'', lv:1, },{idx:'', lv:1, },
-				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+				]},{idx:'', lv:1, },{pos:0,idx:27, lv:1, grade:4, items: [
+					{idx:0, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+					{idx:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+					{idx:2, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+					{idx:4, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+					{},
+					{},
+					{},
+					{},
+				]},{pos:1,idx:3, lv:1, grade:4, items: [
+					{idx:0, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+					{idx:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+					{idx:2, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+					{idx:4, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+					{},
+					{},
+					{},
+					{},
+				]},{idx:'', lv:1, },
+				{idx:'', lv:1, },{pos:3,idx:5, lv:1, grade:4, items: [
+					{idx:0, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+					{idx:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+					{idx:2, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+					{idx:4, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+					{},
+					{},
+					{},
+					{},
+				]},{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
 				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
 			],
 		};
@@ -2623,6 +3339,8 @@ const Battle = ({
 	const [skillMsg, setSkillMsg] = useState(false); //메시지창 on/off
 	const [allyEffect, setAllyEffect] = useState({skillIdx:0,allEff:0,effSize:1,effAnimation:'',effRotate:'',effFilter:'',targets:[]});//아군 데미지효과
 	const [enemyEffect, setEnemyEffect] = useState({skillIdx:0,allEff:0,effSize:1,effAnimation:'',effRotate:'',effFilter:'',targets:[]});//적군 데미지효과
+	const targetIdx = useRef([]);//타겟 지정 임시저장
+	const targetAreaArr = useRef([]);//이펙트 영역 임시저장
 
 	const [orderIdx, setOrderIdx] = useState(); //명령 지시 순서
 	const [mode, setMode] = useState();
@@ -2710,8 +3428,9 @@ const Battle = ({
 				setMode('relation');
 			}, 75 / speed);
 		}
+		battleAlly.current = [];
 		ally.forEach((data, idx) => {//능력치 셋팅
-			const saveCh = sData.ch[data];
+			const saveCh = {...sData.ch[data]};
 			let effData;
 			//인연 체크
 			allyRelation.forEach((rtData) => {
@@ -2731,11 +3450,11 @@ const Battle = ({
 				rcv = saveCh.bSt7 + saveCh.iSt7 + (effData?.rtSt7 || 0),
 				spd = saveCh.bSt8 + saveCh.iSt8 + (effData?.rtSt8 || 0),
 				luk = saveCh.bSt9 + saveCh.iSt9 + (effData?.rtSt9 || 0);
-			saveCh.hasSkill.push({idx:271,lv:1,exp:1});//삭제 해야됨
+			saveCh.hasSkill[2] = {idx:275,lv:1,exp:1};//삭제 해야됨
 			battleAlly.current.push({
 				...saveCh,
 				na1: gameData.ch[saveCh.idx].na1,
-				animalType: gameData.ch[saveCh.idx].animal_type,
+				animal_type: gameData.ch[saveCh.idx].animal_type,
 				hasExp:saveCh.hasExp,
 				state: '',
 				buffDebuff:[],
@@ -2780,6 +3499,8 @@ const Battle = ({
 					}
 				});
 			});
+			const kgData = gameData.animal_size.kg[gameData.ch[data.idx].animal_type],
+				kg = Math.round((Math.random() < 0.1 ? Math.random()*(kgData[2] - kgData[0]) + kgData[0] : Math.random()*(kgData[1] - kgData[0]) + kgData[0]) * 10) / 10;
 			const hp = enemyData.bSt0 + enemyData.iSt0 + (effData?.rtSt0 || 0),
 				rsp = enemyData.bSt2 + enemyData.iSt2 + (effData?.rtSt2 || 0),
 				atk = enemyData.bSt3 + enemyData.iSt3 + (effData?.rtSt3 || 0),
@@ -2796,6 +3517,7 @@ const Battle = ({
 				...enemyData,
 				lv: data.lv,
 				hasSkill: enemySkill,
+				kg: kg,
 				currenthp: hp,
 				hp: hp,
 				currenthp_: hp,
@@ -3056,48 +3778,46 @@ const Battle = ({
 			return;
 		}
 		if (mode === 'area') {
-			const areaArr = util.getEffectArea({
-				isEnemy: currentSkill.current.sk.ta_,
-				type: currentSkill.current.sk.ta[currentSkill.current.skLv - 1],
-				n: pos,
-				allyPos: allyPos.current,
-				battleAlly: battleAlly.current,
-				enemyPos: enemyPos.current,
-				battleEnemy: battleEnemy.current,
-			});
-			let targetIdx = [];
-			allyPos.current.forEach((posIdx, idx) => {
-				areaArr.forEach((actionIdx) => {
-					if (posIdx.pos === actionIdx) {
-						targetIdx.push(idx);
-					}
-				});
-			});
-			setEffectAllyArea(areaArr);
 			if (e.target.classList.contains('effect')) {
 				if (orderIdx < battleAlly.current.length - 1) {
 					setOrderIdx((prev) => ++prev);
+					setMode('order');
 				} else {
+					setOrderIdx('');
 					setMode('action');
-				}
+					}
 				allyOrders.current.push({
 					team: 'ally',
 					idx: orderIdx,
 					skIdx: currentSkill.current.sk.idx,
 					skLv: currentSkill.current.skLv,
 					enemyTarget: true,
-					targetIdx: targetIdx,
+					targetIdx: targetIdx.current,
+					effectArea: targetAreaArr.current,
 					target: pos,
 					sp: -gameData.skill[currentSkill.current.sk.idx].sp,
 				});
 				setEffectEnemyArea([]);
 				setEffectAllyArea([]);
-				if (orderIdx < battleAlly.current.length - 1) {
-					setMode('order');
-				} else {
-					setMode('action');
-					setOrderIdx('');
-				}
+			} else {
+				targetAreaArr.current = util.getEffectArea({
+					isEnemy: currentSkill.current.sk.ta_,
+					type: currentSkill.current.sk.ta[currentSkill.current.skLv - 1],
+					n: pos,
+					allyPos: allyPos.current,
+					battleAlly: battleAlly.current,
+					enemyPos: enemyPos.current,
+					battleEnemy: battleEnemy.current,
+				});
+				targetIdx.current = [];
+				allyPos.current.forEach((posIdx, idx) => {
+					targetAreaArr.current.forEach((actionIdx) => {
+						if (posIdx.pos === actionIdx) {
+							targetIdx.current.push(idx);
+						}
+					});
+				});
+				setEffectAllyArea(targetAreaArr.current);
 			}
 		}
 	}
@@ -3106,28 +3826,12 @@ const Battle = ({
 			return;
 		}
 		if (mode === 'area') {
-			const areaArr = util.getEffectArea({
-				isEnemy: currentSkill.current.sk.ta_,
-				type: currentSkill.current.sk.ta[currentSkill.current.skLv - 1],
-				n: pos,
-				allyPos: allyPos.current,
-				battleAlly: battleAlly.current,
-				enemyPos: enemyPos.current,
-				battleEnemy: battleEnemy.current,
-			});
-			let targetIdx = [];
-			enemyPos.current.forEach((posIdx, idx) => {
-				areaArr.forEach((actionIdx) => {
-					if (posIdx === actionIdx) {
-						targetIdx.push(idx);
-					}
-				});
-			});
-			setEffectEnemyArea(areaArr);
 			if (e.target.classList.contains('effect')) {
 				if (orderIdx < battleAlly.current.length - 1) {
 					setOrderIdx((prev) => ++prev);
+					setMode('order');
 				} else {
+					setOrderIdx('');
 					setMode('action');
 				}
 				allyOrders.current.push({
@@ -3136,18 +3840,32 @@ const Battle = ({
 					skIdx: currentSkill.current.sk.idx,
 					skLv: currentSkill.current.skLv,
 					enemyTarget: true,
-					targetIdx: targetIdx,
+					targetIdx: targetIdx.current,
+					effectArea: targetAreaArr.current,
 					target: pos,
 					sp: -gameData.skill[currentSkill.current.sk.idx].sp,
 				});
 				setEffectEnemyArea([]);
 				setEffectAllyArea([]);
-				if (orderIdx < battleAlly.current.length - 1) {
-					setMode('order');
-				} else {
-					setMode('action');
-					setOrderIdx('');
-				}
+			} else {
+				targetAreaArr.current = util.getEffectArea({
+					isEnemy: currentSkill.current.sk.ta_,
+					type: currentSkill.current.sk.ta[currentSkill.current.skLv - 1],
+					n: pos,
+					allyPos: allyPos.current,
+					battleAlly: battleAlly.current,
+					enemyPos: enemyPos.current,
+					battleEnemy: battleEnemy.current,
+				});
+				targetIdx.current = [];
+				enemyPos.current.forEach((posIdx, idx) => {
+					targetAreaArr.current.forEach((actionIdx) => {
+						if (posIdx === actionIdx) {
+							targetIdx.current.push(idx);
+						}
+					});
+				});
+				setEffectEnemyArea(targetAreaArr.current);
 			}
 		}
 	};
@@ -3186,21 +3904,22 @@ const Battle = ({
 					setMsg(gameData.msg.sentence.lackSkillPoint[lang]);
 					return;
 				}
+				const areaArr = util.getEffectArea({
+					isEnemy: skill.ta_,
+					type: skill.ta[skLv - 1],
+					n: 12,
+					allyPos: allyPos.current,
+					battleAlly: battleAlly.current,
+					enemyPos: enemyPos.current,
+					battleEnemy: battleEnemy.current,
+				});
 				const skType = skill.cate[0];
 				switch (skType){
 					case 7:
 					case 8:
 					case 9:
 					case 3: //active
-						setEffectEnemyArea(util.getEffectArea({
-							isEnemy: skill.ta_,
-							type: skill.ta[skLv - 1],
-							n: 12,
-							allyPos: allyPos.current,
-							battleAlly: battleAlly.current,
-							enemyPos: enemyPos.current,
-							battleEnemy: battleEnemy.current,
-						}));
+						setEffectEnemyArea(areaArr);
 						setMode('area');
 						break;
 					case 10: //날씨 변경
@@ -3219,12 +3938,13 @@ const Battle = ({
 							targetIdx: util.getEffectArea({
 								isEnemy: 0,
 								type: 20,
-								n: 13,
+								n: 12,
 								allyPos: allyPos.current,
 								battleAlly: battleAlly.current,
 								enemyPos: enemyPos.current,
 								battleEnemy: battleEnemy.current,
 							}),
+							effectArea: areaArr,
 							target: allyPos.current[orderIdx].pos,
 							sp: -skill.sp,
 						});
@@ -3247,27 +3967,11 @@ const Battle = ({
 						});
 						break;
 					case 5: //buff
-						setEffectAllyArea(util.getEffectArea({
-							isEnemy: skill.ta_,
-							type: skill.ta[skLv - 1],
-							n: 12,
-							allyPos: allyPos.current,
-							battleAlly: battleAlly.current,
-							enemyPos: enemyPos.current,
-							battleEnemy: battleEnemy.current,
-						}));
+						setEffectAllyArea(areaArr);
 						setMode('area');
 						break;
 					case 6: //debuff
-						setEffectEnemyArea(util.getEffectArea({
-							isEnemy: skill.ta_,
-							type: skill.ta[skLv - 1],
-							n: 12,
-							allyPos: allyPos.current,
-							battleAlly: battleAlly.current,
-							enemyPos: enemyPos.current,
-							battleEnemy: battleEnemy.current,
-						}));
+						setEffectEnemyArea(areaArr);
 						setMode('area');
 						break;
 					default:
@@ -3586,7 +4290,7 @@ const Battle = ({
 				</BattleTitle>
 			</BattleHeader>
 			{mode === "scenario" && (
-				<div ref={conversationScrollContainer} className="battle_scenario scroll-y" onClick={() => {
+				<BattleScenario ref={conversationScrollContainer} className="scroll-y" onClick={() => {
 					setTimeout(() => {
 						if (conversationScrollContainer.current) {
 							conversationScrollContainer.current.scrollTo(0,10000);
@@ -3610,25 +4314,25 @@ const Battle = ({
 					{conversationList.current.map((data, idx) => {
 						const chData = gameData.ch[data.idx || 0];
 						return idx <= conversationStepRef.current && (
-						<div key={idx} className={`scenario_box ${data.pos} ${data.team}`} flex-center="true">
-								<div className="scenario_ch">
-									{/* <CardChRing>
-                    <ChPic isThumb={true} type="cardBack" pic="card" idx={0} />
-									</CardChRing>
-									<CardCh isThumb={true} pic="ch" idx={chData?.display} /> */}
-									<CharacterCard usedType="conversation" saveData={saveData} gameData={gameData} saveCharacter={data} gameSpd={speed} />
-									<div className="ch_name">{chData?.na1}</div>
-								</div>
-								{idx === conversationStepRef.current - 1 && (
-									<div className="scenario_talk" dangerouslySetInnerHTML={{__html: conversationMsg}} />
-								)}
-								{idx < conversationStepRef.current - 1 && (
-									<div className="scenario_talk" dangerouslySetInnerHTML={{__html: conversationList.current[idx].txt[lang]}} />
-								)}
-						</div>
+						<ScenarioBox key={idx} className={`${data.pos} ${data.team}`} flex-center="true">
+							<div className="scenario_ch">
+								{/* <CardChRing>
+									<ChPic isThumb={true} type="cardBack" pic="card" idx={0} />
+								</CardChRing>
+								<CardCh isThumb={true} pic="ch" idx={chData?.display} /> */}
+								<CharacterCard usedType="conversation" saveData={saveData} gameData={gameData} saveCharacter={data} gameSpd={speed} />
+								<div className="ch_name">{chData?.na1}</div>
+							</div>
+							{idx === conversationStepRef.current - 1 && (
+								<div className="scenario_talk" dangerouslySetInnerHTML={{__html: conversationMsg}} />
+							)}
+							{idx < conversationStepRef.current - 1 && (
+								<div className="scenario_talk" dangerouslySetInnerHTML={{__html: conversationList.current[idx].txt[lang]}} />
+							)}
+						</ScenarioBox>
 						)
 					})}
-				</div>
+				</BattleScenario>
 			)}
 			{mode === "battleWin" && (
 				<BattleEnd className="battle_end" onClick={() => {
@@ -3755,7 +4459,7 @@ const Battle = ({
 					}
 				}} className={`battle_area ${mode === "action" ? "action" : ""}`} mode={mode} frameLeft={imgSet.etc.frameLeft} frameRight={imgSet.etc.frameRight}>
 					<BattleEffect ref={battleEffectRef} className="battle_effect">
-						<BattleEffectLand allEff={enemyEffect.allEff >= 5 ? enemyEffect.allEff : 0} className={`land_enemy`}>
+						<BattleEffectLand allEff={enemyEffect.allEff >= 5 ? enemyEffect.allEff : 0} className={`land_enemy`} size={enemyEffect.effSize} rotate={enemyEffect.effRotate} filter={enemyEffect.effFilter}>
 						{map.map((data, idx) => {
 							const left = idx % 5 * mapSize,
 								top = Math.floor(idx / 5) * mapSize;
@@ -3774,18 +4478,18 @@ const Battle = ({
 							});
 							const effChk = effNum && effNum !== 0;
 							return (
-								<EffLand key={idx} className={`effect_land ${effChk ? 'dmg' : ''}`} size={enemyEffect.effSize} rotate={enemyEffect.effRotate} filter={enemyEffect.effFilter} left={left} top={top} gameSpd={speed}>
+								<EffLand key={idx} className={`effect_land ${effChk ? 'dmg' : ''}`} left={left} top={top} gameSpd={speed}>
 									{effectChk && (
-										<>
-											<Eff className="effect_eff" src={imgSet.effect[enemyEffect.effAnimation].img} frame={imgSet.effect[enemyEffect.effAnimation].frame} repeat={gameData.skill[enemyEffect.skillIdx].effAnimationRepeat} gameSpd={speed}/>
-										</>
+										<EffArea className="eff_area" size={enemyEffect.effSize} rotate={enemyEffect.effRotate} filter={enemyEffect.effFilter}>
+											<Eff src={imgSet.effect[enemyEffect.effAnimation].img} frame={imgSet.effect[enemyEffect.effAnimation].frame} repeat={gameData.skill[enemyEffect.skillIdx].effAnimationRepeat} gameSpd={speed}/>
+										</EffArea>
 									)}
 									<span className="dmgNum">{effChk ? effNum : ''}</span>
 								</EffLand>
 							);
 						})}
 						</BattleEffectLand>
-						<BattleEffectLand allEff={allyEffect.allEff >= 5 ? allyEffect.allEff : 0} className={`land_ally`}>
+						<BattleEffectLand allEff={allyEffect.allEff >= 5 ? allyEffect.allEff : 0} className={`land_ally`} size={allyEffect.effSize} rotate={allyEffect.effRotate} filter={allyEffect.effFilter}>
 						{map.map((data, idx) => {
 							const left = idx % 5 * mapSize,
 								top = Math.floor(idx / 5) * mapSize;
@@ -3799,11 +4503,11 @@ const Battle = ({
 							});
 							const effChk = effNum && effNum !== 0;
 							return (
-								<EffLand className={`effect_land ${effChk ? 'dmg' : ''}`} size={allyEffect.effSize} rotate={allyEffect.effRotate} filter={allyEffect.effFilter} key={idx} left={left} top={top} gameSpd={speed}>
+								<EffLand key={idx} className={`effect_land ${effChk ? 'dmg' : ''}`} left={left} top={top} gameSpd={speed}>
 									{effectChk && (
-										<>
-											<Eff className="effect_eff" src={imgSet.effect[allyEffect.effAnimation].img} frame={imgSet.effect[allyEffect.effAnimation].frame} repeat={gameData.skill[allyEffect.skillIdx].effAnimationRepeat} gameSpd={speed}/>
-										</>
+										<EffArea className="eff_area" size={allyEffect.effSize} rotate={allyEffect.effRotate} filter={allyEffect.effFilter}>
+											<Eff src={imgSet.effect[allyEffect.effAnimation].img} frame={imgSet.effect[allyEffect.effAnimation].frame} repeat={gameData.skill[allyEffect.skillIdx].effAnimationRepeat} gameSpd={speed}/>
+										</EffArea>
 									)}
 									<span className="dmgNum">{effChk ? effNum : ''}</span>
 								</EffLand>
@@ -3971,18 +4675,18 @@ const Battle = ({
 							{typeof turnIdx === 'number' && gameData.skill[timeLine.current[turnIdx]?.order.skIdx]?.na[lang]}
 						</div>
 					</BattleMsg>
-					<div className="battle_weather" src={[imgSet.weather]} >
-						<div className={`weather_icon weather_type ${weather.day ? "day" : "night"}`}>
+					<BattleWeater className="battle_weather" src={[imgSet.weather]} >
+						<WeatherIconBox className={`weather_type ${weather.day ? "day" : "night"}`}>
 							<div className="weather_typeIcon" style={{left:`${getWeather(weather) * -50}px`}}>
 								{imgSet.weather.map((data, idx) => {
 									return <WeatherIcon src={data} idx={idx} key={idx}></WeatherIcon>;
 								})}
 							</div>
-						</div>
-						<WeatherWind className="weather_icon weather_wind" src={imgSet.etc.wind} weatherInfo={weather}>
-							<div className="weather_arrow"></div>
-						</WeatherWind>
-					</div>
+						</WeatherIconBox>
+						<WeatherIconBox className="weather_wind">
+							<WeatherArrow className="weather_arrow" src={imgSet.etc.wind} weatherInfo={weather} />
+						</WeatherIconBox>
+					</BattleWeater>
 				</BattleArea>
 				<BattleOrder>
 					{battleAlly.current && <BattleMenu className="battle_menu" mode={mode} gameSpd={speed}>

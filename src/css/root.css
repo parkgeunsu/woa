@@ -386,6 +386,13 @@ b[buff] {
   color: #02f;
   text-shadow: -1px -1px 0px #0df, 1px 1px 0px #000;
 }
+b[multi] {
+  color: #00a90c;
+  text-shadow: -1px -1px 0px #d6ffd8, 1px 1px 0px #000;
+}
+span[small] {
+  font-size: 0.65rem;
+}
 
 [flex] {
   display: flex !important;

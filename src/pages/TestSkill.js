@@ -43,18 +43,107 @@ const BattleWarp = styled.div`
   background-size: cover;
 `;
 const BattleArea = styled.div`
+	position: relative;
+	background: #3e2c00;
+	transition: height 1s;
   height: calc(100% - 50px);
   .units_enemy, .units_ally, .land_ally, .land_enemy{
     height: 50%;
   }
-  &:before{left:${({mode}) => {
-    return !mode ? "-50px" : 0;
-  }};background:url(${({frameLeft}) => frameLeft}) no-repeat -15px center;}
-  &:after{right:${({mode}) => {
-    return !mode ? "-50px" : 0;
-  }};background:url(${({frameRight}) => frameRight}) no-repeat 13px center;}
+  &:before {
+		content: "";
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 50px;
+		z-index: 1;
+		pointer-events: none;
+		transition: left 1s;
+		left: ${({mode}) => {
+			return !mode ? "-50px" : 0;
+		}};
+		background: url(${({frameLeft}) => frameLeft}) no-repeat -15px center;
+	}
+  &:after {
+		content: "";
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 50px;
+		z-index: 1;
+		pointer-events: none;
+		transition: right 1s;
+		right: ${({mode}) => {
+			return !mode ? "-50px" : 0;
+		}};
+		background: url(${({frameRight}) => frameRight}) no-repeat 13px center;
+	}
 `;
 const BattleUnit = styled.div`
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 2;
+	& > div {
+		position: relative;
+		margin: 0 auto;
+		box-sizing: border-box;
+		transition: all 1s;
+		.effect:before {
+			content: "";
+			position: absolute;
+			left: 10%;
+			right: 10%;
+			top: 10%;
+			bottom: 10%;
+			background-color: transparent;
+			z-index: 10;
+			opacity: 1;
+		}
+		.effect0:before {
+  		box-shadow: 0 0 5px 5px var(--color-w), inset 0 0 5px 5px var(--color-w);
+		}
+		.effect1:before {
+  		box-shadow: 0 0 5px 5px var(--color-w), inset 0 0 5px 5px var(--color-w);
+		}
+		.effect2:before {
+  		box-shadow: 0 0 5px 5px var(--color-w), inset 0 0 5px 5px var(--color-w);
+		}
+		.effect3:before {
+  		box-shadow: 0 0 5px 5px var(--color-w), inset 0 0 5px 5px var(--color-w);
+		}
+		.effect4:before {
+  		box-shadow: 0 0 5px 5px var(--color-w), inset 0 0 5px 5px var(--color-w);
+		}
+		.effect5:before {
+  		box-shadow: 0 0 5px 5px var(--color-w), inset 0 0 5px 5px var(--color-w);
+		}
+		.effect6:before {
+  		box-shadow: 0 0 5px 5px var(--color-w), inset 0 0 5px 5px var(--color-w);
+		}
+		.effect7:before {
+  		box-shadow: 0 0 5px 5px var(--color-yellow), inset 0 0 5px 5px var(--color-yellow);
+		}
+		.effect8:before {
+  		box-shadow: 0 0 5px 5px var(--color-b), inset 0 0 5px 5px var(--color-b);
+		}
+		.effect9:before {
+  		box-shadow: 0 0 5px 5px var(--color-blue), inset 0 0 5px 5px var(--color-blue);
+		}
+		.effect10:before {
+  		box-shadow: 0 0 5px 5px var(--color-red), inset 0 0 5px 5px var(--color-red);
+		}
+		.effect11:before {
+  		box-shadow: 0 0 5px 5px var(--color-lightblue), inset 0 0 5px 5px var(--color-lightblue);
+		}
+		.effect12:before {
+  		box-shadow: 0 0 5px 5px var(--color-green), inset 0 0 5px 5px var(--color-green);
+		}
+	}
 `;
 const BattleLand = styled.div`
   display: flex;
@@ -78,9 +167,9 @@ const BattleLand = styled.div`
 		margin: 0 auto;
 		box-sizing: border-box;
 	}
-	&.ready .land {
+	${'' /* &.ready .land {
 		outline-width: 2px;
-	}
+	} */}
 	&.critical {
 		animation: landCritical 0.2s ease-in-out;
 	}
@@ -114,39 +203,74 @@ const BattleEffect = styled.div`
 		margin: 0 auto;
 		box-sizing: border-box;
 	}
-	&.ready .land {
+	${'' /* &.ready .land {
 		outline-width: 2px;
-	}
+	} */}
 `;
 const BattleEffectLand = styled.div`
 	position: relative;
 	margin: 0 auto;
-	${({allEff}) => allEff ? `
-		.effect_land {
+	${({allEff, rotate, size, filter}) => allEff ? `
+		.effect_land .eff_area {
 			display: none;
-			&:nth-of-type(13) {
-				display: block;
-				transform: scale(5) !important;
-				z-index: 1;
-			}
+		}
+		.effect_land:nth-of-type(13) .eff_area {
+			display: block;
+			transform: rotate(${rotate}deg) scale(${size}) !important;
+			filter: ${filter};
+			z-index: 1;
 		}
 	` : ''}
 `;
-const EffLand = styled.div.attrs(
-	props => ({
-		style: {
-			left: `${props.left}%`,
-			top:`${props.top}%`,
-			filter:`${props.filter}`,
-			transform:`rotate(${props.rotate}deg) scale(${props.size})`,
-		},
-	})
-)`
-	.dmgNum{
+const EffLand = styled.div`
+	position: absolute;
+	${({left, top}) => `
+		left: ${left}%;
+		top: ${top}%;
+	`}
+	width: 20%;
+	padding-top: 20%;
+	box-sizing: border-box;
+	border-radius: 0;
+	&.dmg .dmgNum {
+		opacity: 0;
+		transform: translate(-50%, -20%) scale(2.5);
+	}
+	.dmgNum {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		color: var(--color-red);
+		font-size: 0.938rem;
+		font-weight: 600;
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+		text-shadow: 0 0 1px #fff, 0 0 1px #fff, 0 0 2px #fff, 0 0 2px #fff,
+			0 0 3px #fff;
+		z-index: 12;
 		transition:all ${({gameSpd}) => 1.125 / gameSpd}s ease-in;
 	}
 `;
+const EffArea = styled.div`
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 11;
+	overflow: hidden;
+	transition: unset;
+	${({filter, rotate, size}) => `
+		filter: ${filter};
+		transform: rotate(${rotate}deg) scale(${size});
+	`}
+`;
 const Eff = styled.img`
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 500%;
 	height:${({frame}) => {
 		return Math.ceil(frame / 5) * 100;
 	}}%;
@@ -163,58 +287,183 @@ const BattleCh = styled.div`
 	padding-top: ${({size}) => size}%;
 	left: ${({left}) => left}%;
 	top: ${({top}) => top}%;
-	transition:all ${({ gameSpd }) => 0.75 / gameSpd}s;
-	&.relation:after{box-shadow:0 0 15px 5px ${({rtColor}) => rtColor};background:${({rtColor}) => rtColor};animation:rtAnimation ${({ gameSpd }) => 3 / gameSpd}s linear;}
-	.ch_box{transition:all ${({ gameSpd }) => 0.225/ gameSpd}s;}
-	.ch_box .hpsp{
-		span {
-			&.hp{
-				em{transition:all ${({ gameSpd }) => 0.375/ gameSpd}s;}
-			}
-			&.sp{
-				em{transition:all ${({ gameSpd }) => 0.375/ gameSpd}s;}
+	transition: all ${({ gameSpd }) => 0.75 / gameSpd}s;
+	.ch_box {
+		position: absolute;
+		left: 5%;
+		top: 5%;
+		width: 90%;
+		height: 90%;
+		transform-origin: 50% 100%;
+		transform-style: preserve-3d;
+		pointer-events: none;
+		transition:all ${({ gameSpd }) => 0.225/ gameSpd}s;
+		.hpsp {
+			display: flex;
+			position: absolute;
+			height: 25%;
+			width: 100%;
+			top: -30%;
+			flex-direction: column;
+			justify-content: space-between;
+			span {
+				display: flex;
+				height: 45%;
+				background-color: #fff;
+				border-radius: 10px;
+				overflow: hidden;
+				box-shadow: inset 0 0 2px #000;
+				&.hp {
+					em {
+						display: inline-block;
+						height: 100%;
+						width: 100%;
+						background-color: var(--color-red);
+						border-radius: 10px;
+						transition: all ${({ gameSpd }) => 0.375/ gameSpd}s;
+					}
+				}
+				&.sp {
+					em {
+						display: inline-block;
+						height: 100%;
+						width: 100%;
+						background-color: var(--color-blue);
+						border-radius: 10px;
+						transition: all ${({ gameSpd }) => 0.375/ gameSpd}s;
+					}
+				}
 			}
 		}
+	}
+	.dmg {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		filter: blur(7px);
+		transform: scale(1.3);
+		pointer-events: none;
+		z-index: 3;
+	}
+	.ch_buff {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		pointer-events: none;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		z-index: 1;
+		.buff_effect {
+			position: absolute;
+			width: 500%;
+		}
+	}
+	&:after {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		pointer-events: none;
+	}
+	&.on {
+  	z-index: 2;
+		.ch_box {
+			transform: scale(1.5) translate(0, 20%);
+			.hpsp {
+				top: -40%;
+			}
+		}
+		.ring_back {
+			box-shadow: 0 0 30px #fff, 0 0 10px #ff0, 0 0 5px #f40;
+		}
+	}
+	&.relation:after {
+		content: "";
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: 100%;
+		height: 100%;
+		transform: translate(-50%, -50%);
+		z-index: 1;
+		filter: blur(5px);
+		opacity: 0;
+		pointer-events: none;
+		box-shadow: 0 0 15px 5px ${({rtColor}) => rtColor};
+		background: ${({rtColor}) => rtColor};
+		animation: rtAnimation ${({ gameSpd }) => 3 / gameSpd}s linear;
 	}
 	&.action {
 		left: 50%;
 		top: 50%;
 		transform: translate(-50%,-50%) scale(2);
 		z-index: 30;
+		.ch_box .ring_back {
+			box-shadow: 0 0 30px 10px #000;
+		}
 	}
-	&.defence0:after{
-		background:url(${({defenceIcon0}) => defenceIcon0}) no-repeat center center;background-size:60%;
-		animation:defence ${({ gameSpd }) => 0.75 / gameSpd}s;opacity:0;
+	&.defence0:after {
+		background: url(${({defenceIcon0}) => defenceIcon0}) no-repeat center center;background-size: 60%;
+		animation: defence ${({ gameSpd }) => 0.75 / gameSpd}s;opacity:0;
 	}
-	&.defence1:after{
-		background:url(${({defenceIcon1}) => defenceIcon1}) no-repeat center center;background-size:60%;
-		animation:defence ${({ gameSpd }) => 0.75 / gameSpd}s;opacity:0;
+	&.defence1:after {
+		background: url(${({defenceIcon1}) => defenceIcon1}) no-repeat center center;background-size: 60%;
+		animation: defence ${({ gameSpd }) => 0.75 / gameSpd}s;opacity:0;
 	}
-	&.defence2:after{
-		background:url(${({defenceIcon2}) => defenceIcon2}) no-repeat center center;background-size:60%;
-		animation:defence ${({ gameSpd }) => 0.75 / gameSpd}s;opacity:0;
+	&.defence2:after {
+		background: url(${({defenceIcon2}) => defenceIcon2}) no-repeat center center;background-size: 60%;
+		animation: defence ${({ gameSpd }) => 0.75 / gameSpd}s;opacity:0;
 	}
 	&.avoid0{
-		animation:avoid0 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
+		animation: avoid0 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
 	}
 	&.avoid1{
-		animation:avoid1 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
+		animation: avoid1 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
 	}
 	&.avoid2{
-		animation:avoid2 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
+		animation: avoid2 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
 	}
 	&.avoid3{
-		animation:avoid3 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
+		animation: avoid3 ${({ gameSpd }) => 0.75 / gameSpd}s ease-out;
 	}
 	${'' /* &.dmg .dmg{
 		animation:dmgAnimation ${({gameSpd}) => 0.375 / gameSpd}s steps(1) infinite;
 	} */}
-	&.dmgCri .dmg{
-		animation:dmgCriticalAnimation ${({gameSpd}) => 0.375 / gameSpd}s steps(4) infinite;
+	&.dmgCri .dmg {
+		animation: dmgCriticalAnimation ${({gameSpd}) => 0.375 / gameSpd}s steps(4) infinite;
 	}
-	&.die:after{
-		background:url(${({tombstone}) => tombstone}) no-repeat center center;background-size:80%;
-		animation:tombstone ${({ gameSpd }) => 1.125 / gameSpd}s;opacity:0;animation-fill-mode:forwards;transform-origin:50% 100%;
+	&.die {
+		.ch_box {
+			opacity: 0;
+			transform: scale(0.1);
+		}
+		&:after {
+			background: url(${({tombstone}) => tombstone}) no-repeat center center;background-size: 80%;
+			animation: tombstone ${({ gameSpd }) => 1.125 / gameSpd}s;opacity:0;animation-fill-mode: forwards;transform-origin:50% 100%;
+		}
+	}
+	/*상태이상*/
+	&.bleeding .ch_box .ch_style {
+		filter: grayscale(1) brightness(0.5);
+	}
+	&.addicted .ch_box .ch_style {
+		filter: blur(1px);
+	}
+	&.bleeding.addicted .ch_box .ch_style {
+		filter: grayscale(1) brightness(0.5) blur(1px);
+	}
+	&.petrification .ch_box {
+		filter: grayscale(1) brightness(2);
+	}
+	&.petrification .ch_ring {
+		animation-play-state: paused;
 	}
 `;
 const Buff = styled.div`
@@ -228,8 +477,43 @@ const Buff = styled.div`
 	}
 `;
 const Passive = styled.div`
-	left:${({idx}) => idx % 2 === 0 ? -30 : -40}%;
-	top:${({idx}) => idx*20 - 25}%;background:url(${({effImg}) => effImg}) no-repeat center center;background-size:100%;
+	position: absolute;
+	pointer-events: none;
+	width: 30%;
+	padding-top: 30%;
+	z-index: 1;
+	opacity: 0;
+	left: ${({idx}) => idx % 2 === 0 ? -30 : -40}%;
+	top: ${({idx}) => idx*20 - 25}%;
+	background: url(${({effImg}) => effImg}) no-repeat center center;
+	background-size: 100%;
+	&.passive0 {
+		animation: fadeIn 0.5s linear;
+  	animation-fill-mode: forwards;
+	}
+	&.passive1 {
+		animation: fadeIn 0.5s 0.3s linear;
+		animation-fill-mode: forwards;
+	}
+	&.passive2 {
+		animation: fadeIn 0.5s 0.6s linear;
+		animation-fill-mode: forwards;
+	}
+	&.passive3 {
+		animation: fadeIn 0.5s 0.9s linear;
+		animation-fill-mode: forwards;
+	}
+	&.passive4 {
+		animation: fadeIn 0.5s 1.2s linear;
+		animation-fill-mode: forwards;
+	}
+	&.passive5 {
+		animation: fadeIn 0.5s 1.5s linear;
+		animation-fill-mode: forwards;
+	}
+	&.remove {
+  	animation: fadeOut 0.5s linear;
+	}
 `;
 const BattleOrder = styled.div`
 	position: relative;
@@ -280,6 +564,16 @@ const Land = styled.div`
 	outline: 3px solid rgba(255,255,255,0.5);
 	left:${({left}) => left}%;
 	top:${({top}) => top}%;
+	&:before {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		background: #000;
+		opacity: 0.1;
+	}
 	& > .back {
 		position: absolute;
 		left: 0;
@@ -292,7 +586,64 @@ const Land = styled.div`
 	}
 `;
 const BattleMsg = styled.div`
-	transition:all ${({gameSpd}) => 0.375 / gameSpd}s;opacity:0;
+	position: absolute;
+	left: 0;
+	right: 0;
+	transform: translate(0, -50%);
+	z-index: 30;
+	pointer-events: none;
+	transition: all ${({gameSpd}) => 0.375 / gameSpd}s;
+	opacity: 0;
+	&.ally {
+		bottom: 35%;
+		&:after {
+			content: "";
+			position: absolute;
+			bottom: -10px;
+			border-top: 10px solid #333;
+			border-left: 10px solid transparent;
+			border-right: 10px solid transparent;
+			border-bottom: 0 solid transparent;
+		}
+	}
+	&.enemy {
+		top: 35%;
+		&:after {
+			content: "";
+			position: absolute;
+			top: -10px;
+			border-bottom: 10px solid #333;
+			border-left: 10px solid transparent;
+			border-right: 10px solid transparent;
+			border-top: 0 solid transparent;
+		}
+	}
+	&.on {
+		opacity: 1;
+	}
+	&.left:after {
+		left: 30%;
+	}
+	&.center:after {
+		left: 50%;
+	}
+	&.right:after {
+		right: 30%;
+	}
+	.battle_msg {
+		margin: 0 auto;
+		padding: 10px;
+		width: 50%;
+		height: 100%;
+		border-radius: 10px;
+		background: #333;
+		box-sizing: border-box;
+		text-align: center;
+		line-height: 1.2;
+		font-size: 0.938rem;
+		font-weight: 600;
+		color: #fff;
+	}
 `;
 const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, bgm, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, atkOption, customSkill}) => {
 	const endGameCheck = () => {//게임 종료 체크
@@ -880,7 +1231,7 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 			} else {//액티브 스킬 데미지 공식
 				const skType = gameData.skill[timeLine[turnIdx].order.skIdx].element_type;//스킬 속성종류
 				const chance = Math.random();
-				const team = timeLine[turnIdx].order.team === 'ally' ? enemyAction : allyAction;
+				const teamAction = timeLine[turnIdx].order.team === 'ally' ? enemyAction : allyAction;
 				let criticalAtk = false;
 				let avoid = false;
 				defencer.forEach((defData, dIdx) => {
@@ -889,7 +1240,7 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 						//마법 방어와 방어 분기 처리
 						if (skType < 7) {//물리공격인지
 							const hitChance =  Math.min((80 + 30 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100) / 100, 0.95); //물리 적중 확률
-							if (team[defData.idx] === undefined || team[defData.idx].indexOf('defence0') < 0) { //방어를 안했으면
+							if (teamAction[defData.idx] === undefined || teamAction[defData.idx].indexOf('defence0') < 0) { //방어를 안했으면
 								// console.log("pgs", chance, hitChance);
 								if (defEnemy.state.indexOf('petrification') >= 0) { //석화 상태면
 									const criticalChance = Math.random();
@@ -897,9 +1248,9 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 									if (criticalChance < critical) {
 										criticalAtk = true;
 										landCritical = true;
-										team[defData.idx] = team[defData.idx] + ' dmgCri'
+										teamAction[defData.idx] = teamAction[defData.idx] + ' dmgCri'
 									} else {
-										team[defData.idx] = team[defData.idx] + ' dmg'
+										teamAction[defData.idx] = teamAction[defData.idx] + ' dmg'
 									}
 								} else {
 									if (chance < hitChance) {
@@ -908,14 +1259,14 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 										if (criticalChance < critical) {
 											criticalAtk = true;
 											landCritical = true;
-											team[defData.idx] = team[defData.idx] + ' dmgCri'
+											teamAction[defData.idx] = teamAction[defData.idx] + ' dmgCri'
 										} else {
-											team[defData.idx] = team[defData.idx] + ' dmg'
+											teamAction[defData.idx] = teamAction[defData.idx] + ' dmg'
 										}
 									} else {
 										const avoidNum = Math.floor(Math.random()*4);//회피 종류
 										avoid = true;
-										team[defData.idx] = 'avoid' + avoidNum;
+										teamAction[defData.idx] = 'avoid' + avoidNum;
 									}
 									console.log(skill.counterAttack);
 									const counterChance = Math.random() < .1 + skill.counterAttack; //반격 확률
@@ -941,23 +1292,23 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 								if (criticalChance < critical) {
 									criticalAtk = true;
 									landCritical = true;
-									team[defData.idx] = team[defData.idx] + ' dmgCri'
+									teamAction[defData.idx] = teamAction[defData.idx] + ' dmgCri'
 								} else {
-									team[defData.idx] = team[defData.idx] + ' dmg'
+									teamAction[defData.idx] = teamAction[defData.idx] + ' dmg'
 								}
 							}
 						} else {
 							const magicChance = Math.min((60 + 20 * (attacker.spd - defEnemy.spd) / 100) /100, 0.9); //마법 적중 확률
-							if (team[defData.idx] === undefined || team[defData.idx].indexOf('defence2') < 0) { //마법방어를 안했으면
+							if (teamAction[defData.idx] === undefined || teamAction[defData.idx].indexOf('defence2') < 0) { //마법방어를 안했으면
 								if (defEnemy.state.indexOf('petrification') >= 0) { //석화 상태면
 									const criticalChance = Math.random();
 									const critical = Math.max(15 * (attacker.spd - defEnemy.spd) / 100 + 20 * (attacker.luk - defEnemy.luk) / 100, 0.1);//치명타 확률 계산
 									if (criticalChance < critical) {
 										criticalAtk = true;
 										landCritical = true;
-										team[defData.idx] = team[defData.idx] + ' dmgCri'
+										teamAction[defData.idx] = teamAction[defData.idx] + ' dmgCri'
 									} else {
-										team[defData.idx] = team[defData.idx] + ' dmg';
+										teamAction[defData.idx] = teamAction[defData.idx] + ' dmg';
 									}
 								} else {
 									if (chance < magicChance) {
@@ -966,14 +1317,14 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 										if (criticalChance < critical) {
 											criticalAtk = true;
 											landCritical = true;
-											team[defData.idx] = team[defData.idx] + ' dmgCri'
+											teamAction[defData.idx] = teamAction[defData.idx] + ' dmgCri'
 										} else {
-											team[defData.idx] = team[defData.idx] + ' dmg';
+											teamAction[defData.idx] = teamAction[defData.idx] + ' dmg';
 										}
 									} else {
 										const avoidNum = Math.floor(Math.random()*4);//회피 종류
 										avoid = true;
-										team[defData.idx] = 'avoid' + avoidNum;
+										teamAction[defData.idx] = 'avoid' + avoidNum;
 									}
 								}
 							} else { //마법방어를 했으면
@@ -982,9 +1333,9 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 								if (criticalChance < critical) {
 									criticalAtk = true;
 									landCritical = true;
-									team[defData.idx] = team[defData.idx] + ' dmgCri'
+									teamAction[defData.idx] = teamAction[defData.idx] + ' dmgCri'
 								} else {
-									team[defData.idx] = team[defData.idx] + ' dmg';
+									teamAction[defData.idx] = teamAction[defData.idx] + ' dmg';
 								}
 							}
 						}
@@ -1088,10 +1439,7 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 						setShowSkillMsg(false);
 						setTimeout(() => {
 							//console.log(gameData.ch[attacker.idx].animal_type, battleEnemy, timeLine[turnIdx]);
-							const targets = util.getEffectArea({
-								type: customSkill ? customSkill.ta[timeLine[turnIdx].order.skLv - 1] : gameData.skill[skillIdx].ta[timeLine[turnIdx].order.skLv - 1],
-								n: timeLine[turnIdx].order.target,
-							});
+							const targets = timeLine[turnIdx].order.effectArea;
 							let targetIdx = [],
 								targetArr = {skillIdx:0,allEff:0,effSize:1,effAnimation:'',effRotate:'',effFilter:'',targets:[]},
 								targetCount = 0;
@@ -1151,6 +1499,8 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 											0;
 								targetArr.effSize = customSkill ? customSkill.effSize[timeLine[turnIdx].order.skLv - 1] : gameData.skill[skillIdx].effSize[timeLine[turnIdx].order.skLv - 1];
 								targetArr.effAnimation = customSkill ? customSkill.effAnimation : gameData.skill[skillIdx].effAnimation;
+								targetArr.effRotate = customSkill ? customSkill.effRotate : gameData.skill[skillIdx].effRotate;
+								targetArr.effFilter = customSkill ? customSkill.effFilter : gameData.skill[skillIdx].effFilter;
 								targetArr.skillIdx = skillIdx;
 								targets.forEach((data, idx) => {
 									let chk = false;
@@ -1308,12 +1658,12 @@ const StyleSelect = styled(Select)`
 `;
 const speedList = [1,1.5,2,3];
 // const skillCateList = ['none','passive','active(emeny)','active(self)','buff','debuff','active(debuff)','active(buff)','weather','job'];//1부터
-const skillFilterList = ['none','hue(90deg)','hue(180deg)','invert(100%)'];
+const skillFilterList = ['none','hue(90deg)','hue(180deg)','saturate(3)','invert(100%)'];
 const taList = [
   '1 단일','2 가로2','3 가로3','4 세로2','5 세로3','6 가로행','7 세로열','8 십자5','9 십자9','10 대각선',
   '11 반대 대각선','12 고정 세로2열','13 고정 세로3열','14 ⏊4','15 └┐9','16 ┌┘9','17 卍17','18 고정 가로2행','19 고정 가로3행','20 전체',
   '21 사각9','22 사각4','23 자신','24 원','25 랜덤5','26 랜덤10','27 랜덤15','28 작은 마름모','29 큰 마름모','30 큰 링',
-  '31 랜덤 세로2열','32 랜덤 세로3열','33 랜덤 가로2행','34 랜덤 가로3행','35 x5','36 x9','37 ㅜ4'
+  '31 랜덤 세로2열','32 랜덤 세로3열','33 랜덤 가로2행','34 랜덤 가로3행','35 x5','36 x9','37 ㅜ4','38 랜덤20', '39 바깥1줄', '40 바깥2줄', '41 바깥3줄', '42 n포함 랜덤 5', '43 n포함 랜덤 10', '44 n포함 랜덤 15', '45 n포함 랜덤 20', '46 가로4', '47 세로4', '48 가로3x2', '49 세로2x3', '50 가로4x2', '51 세로2x4', '52 가로행2줄 20', '53 세로열2줄 20'
 ];//1부터
 //var a = '';for(var i = 195; i < 221; i++){a += `'thaumaturgy${i}',`}
 // const skillRepeatList = [1,2,3,4];
@@ -1365,7 +1715,7 @@ const TestSkill = ({
     idx:233,
 		na:{ko:'테스트',en:'test',jp:'test'},
     element_type:0,
-    cate:[6],//[selectSkillCate + 1],
+    cate:[3],//[selectSkillCate + 1],
     txt:{ko:'<u>날씨</u>, 비오는 날씨로 밤으로 변환',en:'<u>Weather</u>, Convert to rainy weather',jp:'<u>天気</u>, 雨天で夜に変換'},
     ta_:1,
     ta:[selectSkillTaget + 1],
@@ -1379,7 +1729,7 @@ const TestSkill = ({
     buff:[{type:2.0,num:['70%','75%','80%','85%','90%']}],
     buffCount:[4,4,4,4,4],
     buffChance:['70%','75%','80%','85%','90%'],
-    atkCount:[2],
+    atkCount:[1],
     sp:0
   });
   const [speed, setSpeed] = useState(speedList[selectSpeed]);
@@ -1451,6 +1801,8 @@ const TestSkill = ({
 	const [showSkillMsg, setShowSkillMsg] = useState(false); //메시지창 on/off
 	const [allyEffect, setAllyEffect] = useState({skillIdx:0,allEff:0,effSize:1,effAnimation:'',effRotate:'',effFilter:'',targets:[]});//아군 데미지효과
 	const [enemyEffect, setEnemyEffect] = useState({skillIdx:0,allEff:0,effSize:1,effAnimation:'',effRotate:'',effFilter:'',targets:[]});//적군 데미지효과
+	const targetIdx = useRef([]);//타겟 지정 임시저장
+	const targetAreaArr = useRef([]);//이펙트 영역 임시저장
   const map = Array.from({length: 25}, (undefined, i) => {
 		return {idx: i}
 	});
@@ -1678,25 +2030,14 @@ const TestSkill = ({
 			return;
 		}
 		if (mode === 'area') {
-			const areaArr = util.getEffectArea({
-				type: currentSkill.current.sk.ta[currentSkill.current.skLv - 1],
-				n: pos
-			});
-			let targetIdx = [];
-			allyPos.current.forEach((posIdx, idx) => {
-				areaArr.forEach((actionIdx) => {
-					if (posIdx.pos === actionIdx) {
-						targetIdx.push(idx);
-					}
-				});
-			});
-			setEffectAllyArea(areaArr);
 			if (e.target.classList.contains('effect')) {
 				if (orderIdx < battleAlly.current.length - 1) {
 					setOrderIdx((prev) => ++prev);
+					setMode('order');
 				} else {
+					setOrderIdx('');
 					setMode('action');
-				}
+					}
 				allyOrders.current.push({
 					team: 'ally',
 					idx: orderIdx,
@@ -1704,18 +2045,27 @@ const TestSkill = ({
 					// skFrame: imgSet.effect[]
 					skLv: currentSkill.current.skLv,
 					enemyTarget: true,
-					targetIdx: targetIdx,
+					targetIdx: targetIdx.current,
+					effectArea: targetAreaArr.current,
 					target: pos,
 					sp: -gameData.skill[currentSkill.current.sk.idx].sp,
 				});
 				setEffectEnemyArea([]);
 				setEffectAllyArea([]);
-				if (orderIdx < battleAlly.current.length - 1) {
-					setMode('order');
-				} else {
-					setMode('action');
-					setOrderIdx('');
-				}
+			} else {
+				targetAreaArr.current = util.getEffectArea({
+					type: currentSkill.current.sk.ta[currentSkill.current.skLv - 1],
+					n: pos
+				});
+				targetIdx.current = [];
+				allyPos.current.forEach((posIdx, idx) => {
+					targetAreaArr.current.forEach((actionIdx) => {
+						if (posIdx.pos === actionIdx) {
+							targetIdx.current.push(idx);
+						}
+					});
+				});
+				setEffectAllyArea(targetAreaArr.current);
 			}
 		}
 	}
@@ -1724,23 +2074,12 @@ const TestSkill = ({
 			return;
 		}
 		if (mode === 'area') {
-			const areaArr = util.getEffectArea({
-				type: currentSkill.current.sk.ta[currentSkill.current.skLv - 1],
-				n: pos
-			});
-			let targetIdx = [];
-			enemyPos.current.forEach((posIdx, idx) => {
-				areaArr.forEach((actionIdx) => {
-					if (posIdx === actionIdx) {
-						targetIdx.push(idx);
-					}
-				});
-			});
-			setEffectEnemyArea(areaArr);
 			if (e.target.classList.contains('effect')) {
 				if (orderIdx < battleAlly.current.length - 1) {
 					setOrderIdx((prev) => ++prev);
+					setMode('order');
 				} else {
+					setOrderIdx('');
 					setMode('action');
 				}
 				allyOrders.current.push({
@@ -1749,18 +2088,27 @@ const TestSkill = ({
 					skIdx: currentSkill.current.sk.idx,
 					skLv: currentSkill.current.skLv,
 					enemyTarget: true,
-					targetIdx: targetIdx,
+					targetIdx: targetIdx.current,
+					effectArea: targetAreaArr.current,
 					target: pos,
 					sp: -gameData.skill[currentSkill.current.sk.idx].sp,
 				});
 				setEffectEnemyArea([]);
 				setEffectAllyArea([]);
-				if (orderIdx < battleAlly.current.length - 1) {
-					setMode('order');
-				} else {
-					setMode('action');
-					setOrderIdx('');
-				}
+			} else {
+				targetAreaArr.current = util.getEffectArea({
+					type: currentSkill.current.sk.ta[currentSkill.current.skLv - 1],
+					n: pos
+				});
+				targetIdx.current = [];
+				enemyPos.current.forEach((posIdx, idx) => {
+					targetAreaArr.current.forEach((actionIdx) => {
+						if (posIdx === actionIdx) {
+							targetIdx.current.push(idx);
+						}
+					});
+				});
+				setEffectEnemyArea(targetAreaArr.current);
 			}
 		}
 	};
@@ -1792,15 +2140,16 @@ const TestSkill = ({
 				});
 			} else { //스킬 실행
 				const skType = skill.cate[0];
+				const areaArr = util.getEffectArea({
+					type: skill.ta[skLv - 1],
+					n: 12
+				});
 				switch (skType){
 					case 7:
 					case 8:
 					case 9:
 					case 3: //active
-						setEffectEnemyArea(util.getEffectArea({
-							type: skill.ta[skLv - 1],
-							n: 12
-						}));
+						setEffectEnemyArea(areaArr);
 						setMode('area');
 						break;
 					case 10: //날씨 변경
@@ -1843,17 +2192,11 @@ const TestSkill = ({
 						});
 						break;
 					case 5: //buff
-						setEffectAllyArea(util.getEffectArea({
-							type: skill.ta[skLv - 1],
-							n: 12
-						}));
+						setEffectAllyArea(areaArr);
 						setMode('area');
 						break;
 					case 6: //debuff
-						setEffectEnemyArea(util.getEffectArea({
-							type: skill.ta[skLv - 1],
-							n: 12
-						}));
+						setEffectEnemyArea(areaArr);
 						setMode('area');
 						break;
 					default:
@@ -2100,6 +2443,8 @@ const TestSkill = ({
 									case 2:
 										return 'hue-rotate(180deg)';
 									case 3:
+										return 'saturate(3)';
+									case 4:
 										return 'invert(100%)';
 									default:
 										return '';
@@ -2170,7 +2515,7 @@ const TestSkill = ({
           }
         }} className={`battle_area ${mode === "action" ? "action" : ""}`} mode={mode} frameLeft={imgSet.etc.frameLeft} frameRight={imgSet.etc.frameRight}>
           <BattleEffect ref={battleEffectRef} className="battle_effect">
-            <BattleEffectLand allEff={enemyEffect.allEff >= 5 ? enemyEffect.allEff : 0} className={`land_enemy`}>
+            <BattleEffectLand allEff={enemyEffect.allEff >= 5 ? enemyEffect.allEff : 0} className={`land_enemy`} size={enemyEffect.effSize} rotate={enemyEffect.effRotate} filter={enemyEffect.effFilter}>
             {map.map((data, idx) => {
               const left = idx % 5 * mapSize,
                 top = Math.floor(idx / 5) * mapSize;
@@ -2190,38 +2535,42 @@ const TestSkill = ({
               });
               const effChk = effNum && effNum !== 0;
               return (
-                <EffLand key={`effect${idx}`} className={`effect_land ${effChk ? 'dmg' : ''}`} filter={skill.effFilter} rotate={skill.effRotate} size={skill.effSize} left={left} top={top} gameSpd={speed}>
+                <EffLand key={`effect${idx}`} className={`effect_land ${effChk ? 'dmg' : ''}`} left={left} top={top} gameSpd={speed}>
                   {effectChk && (
-                    <>
-                      <Eff className="effect_eff" src={imgSet.effect[effAnimation].img} frame={imgSet.effect[effAnimation].frame} repeat={skill.effAnimationRepeat} gameSpd={speed}/>
-                    </>
+                    <EffArea className="eff_area" size={enemyEffect.effSize} rotate={enemyEffect.effRotate} filter={enemyEffect.effFilter} >
+                      <Eff src={imgSet.effect[effAnimation].img} frame={imgSet.effect[effAnimation].frame} repeat={skill.effAnimationRepeat} gameSpd={speed}/>
+                    </EffArea>
                   )}
                   <span className="dmgNum">{effChk ? effNum : ''}</span>
                 </EffLand>
               );
             })}
             </BattleEffectLand>
-            <BattleEffectLand allEff={allyEffect.allEff >= 5 ? allyEffect.allEff : 0} className={`land_ally`}>
+            <BattleEffectLand allEff={allyEffect.allEff >= 5 ? allyEffect.allEff : 0} className={`land_ally`} size={allyEffect.effSize} rotate={allyEffect.effRotate} filter={allyEffect.effFilter}>
             {map.map((data, idx) => {
               const left = idx % 5 * mapSize,
                 top = Math.floor(idx / 5) * mapSize;
+							const effAnimation = allyEffect.effAnimation.split('(')[0];
               let effectChk = false,
-                effAnimation = '',
                 effNum = '';
+							if (allyEffect.allEff >= 5) {
+								if (idx === 12) {
+									effectChk = true;
+								}
+							}
               allyEffect.targets.forEach((effData) => {
                 if (effData.posIdx === idx) {
                   effectChk = true;
-                  effAnimation = effData.animation.split('(')[0];
                   effNum = effData.dmg;
                 }
               });
               const effChk = effNum && effNum !== 0;
               return (
-                <EffLand className={`effect_land ${effChk ? 'dmg' : ''} `} rotate={skill.effRotate} size={skill.effSize} key={idx} left={left} top={top} gameSpd={speed}>
+                <EffLand key={idx} className={`effect_land ${effChk ? 'dmg' : ''} `} left={left} top={top} gameSpd={speed}>
                   {effectChk && (
-                    <>
-                      <Eff className="effect_eff" src={imgSet.effect[effAnimation].img} frame={imgSet.effect[effAnimation].frame} repeat={skill.effAnimationRepeat} gameSpd={speed}/>
-                    </>
+                    <EffArea className="eff_area" size={allyEffect.effSize} rotate={allyEffect.effRotate} filter={allyEffect.effFilter} >
+                      <Eff src={imgSet.effect[effAnimation].img} frame={imgSet.effect[effAnimation].frame} repeat={skill.effAnimationRepeat} gameSpd={speed}/>
+                    </EffArea>
                   )}
                   <span className="dmgNum">{effChk ? effNum : ''}</span>
                 </EffLand>

@@ -162,39 +162,6 @@ const AnimalItemPic = styled(IconPic)`
   padding-top: 70%;
   width: 70%;
   height: 0;
-  ${
-    "" /* &:before{
-    content:'';
-    position:absolute;
-    left:0;
-    top:0;
-    width:100%;
-    height:100%;
-    ${({pic, size, idx}) => {
-      return `
-        background: url(${pic}) no-repeat -${(idx % 10) * size}px -${Math.floor(idx / 10) * size}px;
-        background-size: ${size * 10}px;
-      `;
-    }}
-    filter:brightness(0.3);
-    z-index:1;
-  }
-  &:after{
-    content:'';
-    position:absolute;
-    left:3px;
-    top:3px;
-    width:100%;
-    height:100%;
-    ${({pic, size, idx}) => {
-      return `
-        background: url(${pic}) no-repeat -${(idx % 10) * size}px -${Math.floor(idx / 10) * size}px;
-        background-size: ${size * 10}px;
-      `;
-    }}
-    filter:brightness(.1);
-  } */
-  }
 `;
 const PossibleKg = styled(FlexBox)`
   position: absolute;
@@ -276,7 +243,7 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
             : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx].kg;
       }
     });
-    return [kg.toFixed(1), Math.floor(chData.st1 / 0.3) / 10];
+    return [kg.toFixed(1), Math.floor(chData.st1 / 0.3 + (saveCh.kg / gameData.animal_size.kg[chData.animal_type][1] - 1) * 100) / 10];
   }, [saveCh, chData, gameItem, saveItems]);
   const animalPic = useCallback((node) => {
     if (node !== null) {
@@ -349,7 +316,6 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
             ref={animalPic}
             pic="animalType"
             idx={animalIdx}
-            className={`animal_item_pic animal_type${animalIdx}`}
           />
           <ActionType>
             <IconPic

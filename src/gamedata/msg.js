@@ -224,7 +224,7 @@ export const msg = {
 		},
 		atk:{
 			ko:'공격',
-			en:'ARK',
+			en:'ATK',
 			jp:'攻撃',
 		},
 		def:{

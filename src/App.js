@@ -1,6 +1,7 @@
 import { FlexBox } from 'components/Container';
 import { util } from 'components/Libs';
 import { ColorSet, FontSet } from 'components/Theme';
+import 'css/keyFrameAnimation.css';
 import 'css/root.css';
 import { gameData, version } from 'gamedata/data';
 import { saveNew } from 'gamedata/savedata';
@@ -275,7 +276,7 @@ const App = ({
         bgm: true,
         efm: true,
         resolution: 1,
-        speed: 1,
+        speed: 2,
       });
       util.saveData('history',[]);
       setSaveData(saveNew);

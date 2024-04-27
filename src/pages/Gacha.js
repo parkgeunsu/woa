@@ -323,9 +323,12 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 		}
 		const cardG = cardGrade.arr[i] + luckyGradePoint;
 		const animalAction = gameData.animal_type[gameData.ch[newIdx].animal_type].actionType,
-			actionType = animalAction[Math.floor(Math.random() * animalAction.length)];
+			actionType = animalAction[Math.floor(Math.random() * animalAction.length)];//공격타입
 		const jobs = gameData.ch[newIdx].job,
-			job = jobs[Math.floor(Math.random() * jobs.length)];
+			job = jobs[Math.floor(Math.random() * jobs.length)];//직업
+		
+		const kgData = gameData.animal_size.kg[gameData.ch[newIdx].animal_type],
+			kg = Math.round((Math.random() < 0.1 ? Math.random() * (kgData[2] - kgData[0]) + kgData[0] : Math.random() * (kgData[1] - kgData[0]) + kgData[0]) * 10) / 10;
 		chArr.push({
 			idx: newIdx,
 			grade: cardG,
@@ -343,6 +346,7 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 				actionType: actionType,
 				newActionType : [actionType],
 				job: job,
+				kg: kg,
 				exp: 0,
 				hasExp: 0,
 				battleBeige:[0,0,0,0],

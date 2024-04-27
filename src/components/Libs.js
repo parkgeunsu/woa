@@ -272,13 +272,16 @@ export const util = { //this.loadImage();
       ch: saveCh,
     }
   },
-  getNonOverlappingNumber: (arr, num) => {
+  getNonOverlappingNumber: (arr, num, n) => {
     let newArr = [],
       numArr = [...arr];
     for (let i = 0; i < num; ++i) {
       const newCount = Math.floor(Math.random() * numArr.length);
       newArr.push(numArr[newCount]);
       numArr.splice(newCount, 1);
+    }
+    if (typeof n === 'number') {
+      newArr.push(n);
     }
     newArr.sort((a,b) => a-b);
     return newArr;
@@ -826,44 +829,44 @@ export const util = { //this.loadImage();
         unitPos = isEnemy ? enemyPos : allyPos;
       let unitArr = [];
       unit.forEach((unitData, idx) => {
-        if (unitData.animalType === (type - 100)) {
+        if (unitData.animal_type === (type - 100)) {
           unitArr.push(unitPos[idx].pos);
         }
       });
       return unitArr.length === 0 ? [n] : unitArr;
     } else {
       switch (type) {
-        case 1: // 1 단일
+        case 1: // 단일
           return [n];
-        case 2: // 2 가로2
+        case 2: // 가로2
           if (n%5 === 4) {
             return [n,n-1];
           } else {
             return  [n,n+1];
           }
-        case 3:// 3 가로3
-          if (n%5 === 3) {
-            return [n,n+1,n-1];
+        case 3:// 가로3
+          if (n%5 === 0) {
+            return [n,n+1,n+2];
           } else if (n%5 === 4){
             return [n,n-1,n-2];
           } else {
-            return [n,n+1,n+2];
+            return [n-1,n,n+1];
           }
-        case 4: // 2 세로2
+        case 4: // 세로2
           if (n > 19) {
             return [n,n-5];
           } else {
             return [n,n+5];
           }
-        case 5:// 3 세로3
-          if (n > 19) {
-            return [n,n-5,n-10];
-          } else if (n > 14){
-            return [n,n+5,n-5];
-          } else {
+        case 5:// 세로3
+          if (n < 5) {
             return [n,n+5,n+10];
+          } else if (n > 19){
+            return [n,n-5,n-10];
+          } else {
+            return [n-5,n,n+5];
           }
-        case 6: // 5 가로행
+        case 6: // 가로행
           if (n < 5) {
             return [0,1,2,3,4];
           } else if (n < 10){
@@ -875,7 +878,7 @@ export const util = { //this.loadImage();
           } else {
             return [20,21,22,23,24];
           }
-        case 7: // 5 세로열
+        case 7: // 세로열
           if (n%5 === 0) {
             return [0,5,10,15,20];
           } else if (n%5 === 1){
@@ -887,7 +890,7 @@ export const util = { //this.loadImage();
           } else {
             return [4,9,14,19,24];
           }
-        case 8: // ┼5 십자5
+        case 8: // ┼ 십자5
           if (n<5) {
             if (n === 0) {
               return [n,n+1,n+5];
@@ -913,7 +916,7 @@ export const util = { //this.loadImage();
               return [n,n-5,n+5,n+1,n-1];
             }
           }
-        case 9: // ┼9 십자9
+        case 9: // ┼ 십자9
           return [12,2,7,10,11,13,14,17,22];
         case 10: // /5 대각선
           if (n === 0 || n === 6 || n === 12 || n === 18 || n === 24) {
@@ -935,7 +938,7 @@ export const util = { //this.loadImage();
           } else {
             return [20];
           }
-        case 11: // \5 역 대각선
+        case 11: // \ 역 대각선5
           if (n === 4 || n === 8 || n === 12 || n === 16 || n === 20) {
             return [4,8,12,16,20];
           } else if (n === 3 || n === 7 || n === 11 || n === 15) {
@@ -1066,7 +1069,17 @@ export const util = { //this.loadImage();
             return [n-5,n-1,n,n+1,n+5];
           }
         case 29: //큰 마름모
-          return [2,6,7,8,10,11,12,13,14,16,17,18,22];
+          if (n === 0 || n === 1 || n === 5) {
+            return [0,1,2,5,6,7,8,10,11,12,16];
+          } else if (n === 3 || n === 4 || n === 9) {
+            return [2,3,4,6,7,8,9,12,13,14,18];
+          } else if (n === 15 || n === 16 || n === 20) {
+            return [6,10,11,12,15,16,17,18,20,21,22];
+          } else if (n === 19 || n === 23 || n === 24) {
+            return [8,12,13,14,16,17,18,19,22,23,24];
+          } else {
+            return [2,6,7,8,10,11,12,13,14,16,17,18,22];
+          }
         case 30: //큰 링
           return [1,2,3,5,9,10,14,15,19,21,22,23];
         case 31: //랜덤 세로 2열
@@ -1119,6 +1132,206 @@ export const util = { //this.loadImage();
           }
         case 38: //랜덤 20
           return util.getNonOverlappingNumber([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24], 20);
+        case 39: //바깥 1줄
+          if (n === 10 || n === 11 || n === 15 || n === 16 || n === 20 || n  === 21) {
+            return [0,5,10,15,20];
+          } else if (n === 17 || n === 18 || n === 19 || n === 22 || n === 23 || n === 24) {
+            return [20,21,22,23,24];
+          } else if (n === 3 || n === 4 || n === 8 || n === 9 || n === 13 || n === 14) {
+            return [4,9,14,19,24];
+          } else {
+            return [0,1,2,3,4];
+          }
+        case 40: //바깥 2줄
+          if (n === 10 || n === 11 || n === 15 || n === 16 || n === 20 || n  === 21) {
+            return [0,1,5,6,10,11,15,16,20,21];
+          } else if (n === 17 || n === 18 || n === 19 || n === 22 || n === 23 || n === 24) {
+            return [15,16,17,18,19,20,21,22,23,24];
+          } else if (n === 3 || n === 4 || n === 8 || n === 9 || n === 13 || n === 14) {
+            return [3,4,8,9,13,14,18,19,23,24];
+          } else {
+            return [0,1,2,3,4,5,6,7,8,9];
+          }
+        case 41: //바깥 3줄
+          if (n === 10 || n === 11 || n === 15 || n === 16 || n === 20 || n  === 21) {
+            return [0,1,2,5,6,7,10,11,12,15,16,17,20,21,22];
+          } else if (n === 17 || n === 18 || n === 19 || n === 22 || n === 23 || n === 24) {
+            return [10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
+          } else if (n === 3 || n === 4 || n === 8 || n === 9 || n === 13 || n === 14) {
+            return [2,3,4,7,8,9,12,13,14,17,18,19,22,23,24];
+          } else {
+            return [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
+          }
+        case 42: //n포함 랜덤 5
+          return util.getNonOverlappingNumber([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24], 4, n);
+        case 43: //n포함 랜덤 10
+          return util.getNonOverlappingNumber([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24], 9, n);
+        case 44: //n포함 랜덤 15
+          return util.getNonOverlappingNumber([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24], 14, n);
+        case 45: //n포함 랜덤 20
+          return util.getNonOverlappingNumber([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24], 19, n);
+        case 46:// 가로4
+          if (n%5 === 3 || n%5 === 4) {
+            if (n < 5) {
+              return [1,2,3,4];
+            } else if (n < 10) {
+              return [6,7,8,9];
+            } else if (n < 15) {
+              return [11,12,13,14];
+            } else if (n < 20) {
+              return [16,17,18,19];
+            } else {
+              return [21,22,23,24];
+            }
+          } else {
+            if (n < 5) {
+              return [0,1,2,3];
+            } else if (n < 10) {
+              return [5,6,7,8];
+            } else if (n < 15) {
+              return [10,11,12,13];
+            } else if (n < 20) {
+              return [15,16,17,18];
+            } else {
+              return [20,21,22,23];
+            }
+          }
+        case 47:// 세로4
+          if (n%5 === 0) {
+            if (n < 15) {
+              return [0,5,10,15];
+            } else {
+              return [5,10,15,20];
+            }
+          } else if (n%5 === 1) {
+            if (n < 15) {
+              return [1,6,11,16];
+            } else {
+              return [6,11,16,21];
+            }
+          } else if (n%5 === 2) {
+            if (n < 15) {
+              return [2,7,12,17];
+            } else {
+              return [7,12,17,22];
+            }
+          } else if (n%5 === 3) {
+            if (n < 15) {
+              return [3,8,13,18];
+            } else {
+              return [8,13,18,23];
+            }
+          } else {
+            if (n < 15) {
+              return [4,9,14,19];
+            } else {
+              return [9,14,19,24];
+            }
+          }
+        case 48:// 가로3x2
+          if (n%5 === 0) {
+            if (n < 5) {
+              return [n,n+1,n+2,n+5,n+6,n+7];
+            } else {
+              return [n-5,n-4,n-3,n,n+1,n+2];
+            }
+          } else if (n%5 === 4){
+            if (n < 5) {
+              return [n,n-1,n-2,n+3,n+4,n+5];
+            } else {
+              return [n,n-1,n-2,n-5,n-6,n-7];
+            }
+          } else {
+            if (n < 5) {
+              return [n-1,n,n+1,n+4,n+5,n+6];
+            } else {
+              return [n-6,n-5,n-4,n-1,n,n+1];
+            }
+          }
+        case 49:// 세로2x3
+          if (n < 5) {
+            if (n === 4) {
+              return [3,4,8,9,13,14];
+            } else {
+              return [n,n+1,n+5,n+6,n+10,n+11];
+            }
+          } else if (n > 19){
+            if (n === 24) {
+              return [13,14,18,19,23,24];
+            } else {
+              return [n,n+1,n-4,n-5,n-9,n-10];
+            }
+          } else {
+            if (n%5 === 4) {
+              return [n-6,n-5,n-1,n,n+4,n+5];
+            } else {
+              return [n-5,n-4,n,n+1,n+5,n+6];
+            }
+          }
+        case 50:// 가로4x2
+          if (n%5 > 2) {
+            if (n < 5) {
+              return [1,2,3,4,6,7,8,9];
+            } else if (n < 10) {
+              return [6,7,8,9,11,12,13,14];
+            } else if (n < 15) {
+              return [11,12,13,14,16,17,18,19];
+            } else {
+              return [16,17,18,19,21,22,23,24];
+            }
+          } else {
+            if (n < 5) {
+              return [0,1,2,3,5,6,7,8];
+            } else if (n < 10) {
+              return [5,6,7,8,10,11,12,13];
+            } else if (n < 15) {
+              return [10,11,12,13,15,16,17,18];
+            } else {
+              return [15,16,17,18,20,21,22,23];
+            }
+          }
+        case 51:// 세로2x4
+          if (n < 5) {
+            if (n%5 === 0) {
+              return [0,1,5,6,10,11,15,16];
+            } else if (n%5 === 1) {
+              return [1,2,6,7,11,12,16,17];
+            } else if (n%5 === 2) {
+              return [2,3,7,8,12,13,17,18];
+            } else {
+              return [3,4,8,9,13,14,18,19];
+            }
+          } else {
+            if (n%5 === 0) {
+              return [5,6,10,11,15,16,20,21];
+            } else if (n%5 === 1) {
+              return [6,7,11,12,16,17,21,22];
+            } else if (n%5 === 2) {
+              return [7,8,12,13,17,18,22,23];
+            } else {
+              return [8,9,13,14,18,19,23,24];
+            }
+          }
+        case 52: //가로행2줄 20
+          if (n < 5) {
+            return [0,1,2,3,4,5,6,7,8,9];
+          } else if (n < 10){
+            return [5,6,7,8,9,10,11,12,13,14];
+          } else if (n < 15){
+            return [10,11,12,13,14,15,16,17,18,19];
+          } else {
+            return [15,16,17,18,19,20,21,22,23,24];
+          }
+        case 53: //세로열2줄 20
+          if (n%5 === 0) {
+            return [0,1,5,6,10,11,15,16,20,21];
+          } else if (n%5 === 1){
+            return [1,2,6,7,11,12,16,17,21,22];
+          } else if (n%5 === 2){
+            return [2,3,7,8,12,13,17,18,22,23];
+          } else {
+            return [3,4,8,9,13,14,18,19,23,24];
+          }
         default:
           break;
       }
@@ -1964,6 +2177,54 @@ export const util = { //this.loadImage();
     });
     return blockPercent.filter((block) => percent < block.num)[0].idx;
   },
+  getSkillMultiplesLang: ({buff, type, lang}) => {
+    const textFor = {ko:'에 대한 데미지',en:'Damage to',jp:'へのダメージ'}
+    const updownText = [
+      {ko:'증가',en:'increase',jp:'増加',tag:'up'},
+      {ko:'감소',en:'reduction',jp:'減少',tag:'down'},
+    ];
+    const animalType = [
+      {ko:'고양이',en:'Cat',jp:'猫'},
+      {ko:'사자',en:'Lion',jp:'ライオン'},
+      {ko:'호랑이',en:'Tiger',jp:'タイガー'},
+      {ko:'개',en:'Dog',jp:'犬'},
+      {ko:'늑대',en:'Wolf',jp:'オオカミ'},
+      {ko:'물개',en:'Seal',jp:'シール'},
+      {ko:'너구리',en:'Raccoon',jp:'アライグマ'},
+      {ko:'쥐',en:'Rat',jp:'ラット'},
+      {ko:'토끼',en:'Rabbit',jp:'ウサギ'},
+      {ko:'원숭이',en:'Monkey',jp:'サル'},
+      {ko:'고릴라',en:'Gorilla',jp:'ゴリラ'},
+      {ko:'캥거루',en:'Kangaroo',jp:'カンガルー'},
+      {ko:'소',en:'Cow',jp:'牛'},
+      {ko:'곰',en:'Bear',jp:'クマ'},
+      {ko:'말',en:'Horse',jp:'馬'},
+      {ko:'사슴',en:'Deer',jp:'鹿'},
+      {ko:'코뿔소',en:'Rhinoceros',jp:'サイ'},
+      {ko:'코끼리',en:'Elephant',jp:'象'},
+      {ko:'기린',en:'Giraffe',jp:'キリン'},
+      {ko:'새',en:'Bird',jp:'鳥'},
+      {ko:'독수리',en:'Eagle',jp:'イーグル'},
+      {ko:'뱀',en:'Snake',jp:'ヘビ'},
+      {ko:'도마뱀',en:'Lizard',jp:'トカゲ'},
+      {ko:'거북이',en:'Turtle',jp:'カメ'},
+      {ko:'개구리',en:'Frog',jp:'カエル'},
+      {ko:'돼지',en:'Pig',jp:'豚'},
+      {},{},{},{},{},
+      {},{},{},{},{},{},{},{},{},{},
+      {},{},{},
+      {ko:'소형동물',en:'Small Animals',jp:'小型動物'},
+      {ko:'중형동물',en:'Medium Animals',jp:'中型動物'},
+      {ko:'대형동물',en:'Large Animals',jp:'大型動物'},
+      {ko:'소,중형동물',en:'Small and medium Animals',jp:'小・中型動物'},
+      {ko:'소,대형동물',en:'Small and large Animals',jp:'小・大型動物'},
+      {ko:'중,대형동물',en:'Medium and large Animals',jp:'中・大型動物'},
+      {ko:'모든동물',en:'All Animals',jp:'すべての動物'},
+    ];
+    const upDown = buff.indexOf('-') >= 0 ? 1 : 0;
+    const muliplesText = `<br/><span small>${lang === 'en' ? textFor[lang] + ' ' + animalType[type][lang] : animalType[type][lang] + textFor[lang]}</span> <b dmg>${buff}</b> <i icon ${updownText[upDown].tag}></i>`;//${updownText[upDown][lang]}
+    return muliplesText;
+  },
   getSkillElementLang: ({element, cate, atkCount, lang}) => {
     const attack = [
       {},
@@ -2054,6 +2315,19 @@ export const util = { //this.loadImage();
     const areaText = areaIdx !== 23 ? `<span ${isAlly === 0 ? 'ally' : 'enemy'}>${teamArr[isAlly][lang]}</span> ${areaArr[areaIdx][lang]}` : areaArr[areaIdx][lang];
     return cate === 2 ? `<u>${inBattle[lang]}</u> ${areaText}` : areaText;
   },
+  getSkillAtkEffLang: ({eff, type, lang}) => {
+    const isAttack = {ko:'공격시',en:'On attack',jp:'攻撃時'}
+    const effType = [
+      {ko:'치명타',en:'Critical',jp:'クリティカル'},
+      {ko:'적중율',en:'Hit rate',jp:'命中率'},
+    ];
+    const updownText = [
+      {ko:'증가',en:'increase',jp:'増加',tag:'up'},
+      {ko:'감소',en:'reduction',jp:'減少',tag:'down'},
+    ];
+    const upDown = eff.indexOf('-') >= 0 ? 1 : 0;
+    return `<br/>(${isAttack[lang]} ${effType[type][lang]} <b buff>${eff}</b> <i icon ${updownText[upDown].tag}></i>)`;//${updownText[upDown][lang]}
+  },
   getSkillDmgLang: ({eff, lang}) => {
     const dmg = {ko:'데미지',en:'damage',jp:'ダメージ'};
     return `<br/><b dmg>${eff}</b> ${dmg[lang]}`;
@@ -2084,7 +2358,10 @@ export const util = { //this.loadImage();
       {ko:'바람속성',en:'Wind Element',jp:'風属性'},
       {ko:'땅속성',en:'Earth Element',jp:'地属性'},
       {},{},{},{},{},{},{},{},
-      {},{},{},{},{},{},{},{},{},{},
+      {ko:'치명타',en:'Critical',jp:'クリティカル'},
+      {ko:'회피',en:'Avoidance rate',jp:'回避率'},
+      {ko:'적중율',en:'Hit rate',jp:'命中率'},
+      {},{},{},{},{},{},{},
       {},{},{},{},{},{},{},{},{},
       {ko:'출혈',en:'Bleeding',jp:'出血'},
       {ko:'중독',en:'Addiction',jp:'中毒'},
@@ -2105,7 +2382,7 @@ export const util = { //this.loadImage();
       {ko:'감소',en:'reduction',jp:'減少',tag:'down'},
     ];
     const upDown = buff.indexOf('-') >= 0 ? 1 : 0;
-    return buff ? `<br/>${buffType[type][lang]} <b buff>${buff}</b>, <i icon ${updownText[upDown].tag}></i> ${updownText[upDown][lang]}` : buffType[type][lang];
+    return buff ? `<br/>${buffType[type][lang]} <b buff>${buff}</b> <i icon ${updownText[upDown].tag}></i>` : buffType[type][lang];//${updownText[upDown][lang]}
   },
   getSkillConditionBuffLang: ({condition, lang}) => {
     const conditionType = [
@@ -2162,6 +2439,17 @@ export const util = { //this.loadImage();
     const skillType = skill.element_type;
     let replaceText = skill.txt;
     // const replaceUpDownArr = replaceText.match(/[<]up[>]|[<]down[>]*/g) || [];
+    if (skill.attackEff?.length > 0) {//공격 버프(크리티컬, 적중율)
+      let effText = '';
+      skill.attackEff.forEach((data, idx) => {
+        effText += util.getSkillAtkEffLang({
+          eff:skill.attackEff[idx].num[lv],
+          type:skill.attackEff[idx].type,
+          lang:lang,
+        });
+      });
+      replaceText = replaceText.replace('<atkEff>', effText);
+    }
     if (skill.eff?.length > 0) {//데미지
       replaceText = replaceText.replace('<dmg>', util.getSkillDmgLang({
         eff:skill.eff[0].num[lv],
@@ -2222,6 +2510,17 @@ export const util = { //this.loadImage();
       cate:skill.cate[0],
       lang:lang,
     }));
+    if (skill.multiplesAttack?.length > 0) {//배수 공격
+      let multiplesText = '';
+      skill.multiplesAttack.forEach((data, idx) => {
+        multiplesText += util.getSkillMultiplesLang({
+          buff:skill.multiplesAttack[idx].num[lv],
+          type:skill.multiplesAttack[idx].type,
+          lang:lang,
+        });
+      });
+      replaceText = replaceText.replace('<multiples>', multiplesText);
+    }
     if (replaceText.match('<el>')?.index > -1) {//기술 속성
       replaceText = replaceText.replace('<el>', util.getSkillElementLang({
         element:skill.element_type,

@@ -7,7 +7,7 @@ import InfoGroup from 'components/InfoGroup';
 import { util } from 'components/Libs';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
@@ -93,7 +93,28 @@ const TextTotal = styled(Text)`
   width: 30px;
   line-height: 1 !important;
 `;
-
+const BodyKg = styled(FlexBox)`
+  position: relative;
+  margin: 5px 0 0 0;
+  height: 40px;
+  .overlayBox {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 40px;
+    height: ${({animalKg}) => 40 - 40 * animalKg}px;
+    filter: invert(70%);
+    overflow: hidden;
+  }
+`;
+const BodyKgText = styled(Text)`
+  margin: 0 0 0 5px;
+`;
+const AnimalItemPic = styled(IconPic)`
+  position: relative;
+  width: 40px;
+  height: 40px;
+`;
 const ElementContainer = styled(FlexBox)`
   margin: 0 0 0 10px;
   width: calc(60% - 10px);
@@ -170,6 +191,10 @@ const CharacterState = ({
     return context.gameData;
   }, [context]);
   const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
+  const chData = React.useMemo(
+    () => gameData.ch[saveCh.idx],
+    [gameData, saveCh]
+  );
   const chName = React.useMemo(() => gameData.ch[saveCh.idx].na1, [saveData, slotIdx]);
   const saveExp = React.useMemo(() => {
     return Object.keys(saveCh).length > 0 ? {
@@ -189,6 +214,13 @@ const CharacterState = ({
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
+  const animalIdx = React.useMemo(() => chData.animal_type, [chData]);
+  const animalPic = useCallback((node) => {
+    if (node !== null) {
+      node.setAttribute("size", node.getBoundingClientRect().width);
+    }
+  }, []);
+  const animalKg = React.useMemo(() => Math.min(1, saveCh.kg / gameData.animal_size.kg[chData.animal_type][1]), [gameData, chData]);
   // const chIdx = saveCh.idx;
   // util.saveLvState(0);
   return (
@@ -251,6 +283,21 @@ const CharacterState = ({
                   </StateGroup>
                 )
               })}
+              <BodyKg justifyContent="flex-start" alignItems="flex-end" animalKg={animalKg}>
+                <AnimalItemPic
+                  ref={animalPic}
+                  pic="animalType"
+                  idx={animalIdx}
+                />
+                <div className="overlayBox">
+                  <AnimalItemPic
+                    ref={animalPic}
+                    pic="animalType"
+                    idx={animalIdx}
+                  />
+                </div>
+                <BodyKgText code="t3" color={saveCh.kg <= gameData.animal_size.size[0] ? saveCh.kg > gameData.animal_size.size[1] ? "red" : "main": "yellow"}>{`${saveCh.kg} kg`}</BodyKgText>
+              </BodyKg>
             </StateContainer>
             <ElementContainer direction="column" justifyContent="flex-start">
               {gameData.element.map((data, idx) => {

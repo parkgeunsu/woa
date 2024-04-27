@@ -44,20 +44,3 @@
 
 .gacha_ch_graph{position:absolute;left:35%;top:2.5%;width:60%;padding-top:60%;font-size:0;z-index:1;}
 .gacha_ch_graph canvas{position:absolute;left:0;top:0;width:100%;}
-
-
-@keyframes sp_eff1{
-  0%{transform:translate(-50%,-50%) scale(0);}
-  30%{transform:translate(-50%,-50%) scale(0.85);}
-  50%{transform:translate(-50%,-50%) scale(.2);}
-  50%{transform:translate(-50%,-50%) scale(.7);}
-  100%{transform:translate(-50%,-50%) scale(0);}
-}
-@keyframes sp_eff2{
-  0%{transform:translate(-50%,-50%) scale(0);}
-  10%{transform:translate(-50%,-50%) scale(.2);}
-  30%{transform:translate(-50%,-50%) scale(.8);}
-  70%{transform:translate(-50%,-50%) scale(.1);}
-  85%{transform:translate(-50%,-50%) scale(.5);}
-  100%{transform:translate(-50%,-50%) scale(0);}
-}

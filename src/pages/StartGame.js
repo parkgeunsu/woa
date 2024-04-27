@@ -155,7 +155,7 @@ const StartGame = ({
                 sData.ch = [];
                 changeSaveData(sData);
               }} justifyContent={selectGradeArr.length === 1 ? 'center' : 'space-between'} >
-                {selectCard && selectCard[0].idx ? selectCard.map((cardData, idx) => {
+                {selectCard && selectCard[0]?.idx ? selectCard.map((cardData, idx) => {
                   const name = gameData.ch[cardData.idx].na1;
                   return (
                     <ChCard key={`chCard${idx}`} direction="column">
