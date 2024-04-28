@@ -612,7 +612,7 @@ const Eff = styled.img`
 	height:${({frame}) => {
 		return Math.ceil(frame / 5) * 100;
 	}}%;
-	animation:${({frame, gameSpd}) => `frame${frame} ${(frame / 10) * 1.125 / gameSpd}s steps(1)`};
+	animation:${({frame, repeat, gameSpd}) => `frame${frame} ${(frame / 10) * 1.125 / repeat / gameSpd}s steps(1)`};
 	animation-iteration-count: ${({repeat}) => repeat || "infinite"};
 `;
 const Land = styled.div`
@@ -2415,7 +2415,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
                     atkStay: atkS,
                   }
                 });
-							}, ((skillEffect[targetArr.effAnimation].frame / 10) * 1125 * (gameData.skill[targetArr.skillIdx].effAnimationRepeat || 1)) / gameSpd);//공격 이펙트 효과시간
+							}, ((skillEffect[targetArr.effAnimation].frame / 10) * 1125) / gameSpd);//공격 이펙트 효과시간 * (gameData.skill[targetArr.skillIdx].effAnimationRepeat || 1)
 						}, 150 / gameSpd);
 					}, 600 / gameSpd);//메시지창 사라짐
 				}, 150 / gameSpd);//메시지 오픈

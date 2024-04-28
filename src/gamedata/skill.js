@@ -711,23 +711,41 @@ export const skill = [
 		eff:[{type:5,num:['150%','160%','170%','170%','180%']}],buff:[{type:51,num:['5%','5%','5%','10%','10%']}],buffCount:[2,2,2,2,2],buffChance:['30%','40%','50%','60%','70%'],atkCount:[1],sp:17},
 	{idx:281,
 		na:{ko:'돌진1',en:'Rush1',jp:'突進1'},element_type:4,cate:[7],
-		txt:'<area>, <dmg>, <el>',
+		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[4,5,5,47,47],effAnimation:'slash6',effAnimationRepeat:1,effSize:[2,2.5,3,3.5,5],effRotate:180,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		eff:[{type:5,num:['130%','140%','150%','160%','170%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','12.5%','15%','17.5%','20%'],atkCount:[1],sp:14},
 	{idx:282,
 		na:{ko:'돌진2',en:'Rush2',jp:'突進2'},element_type:4,cate:[7],
-		txt:'<area>, <dmg>, <el>',
+		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[5,47,47,7,7],effAnimation:'slash6',effAnimationRepeat:1,effSize:[2,2.5,3,3.5,5],effRotate:180,effFilter:'saturate(3)',
 		attackEff:[],multiplesAttack:[],
 		eff:[{type:5,num:['130%','140%','150%','160%','170%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','12.5%','15%','17.5%','20%'],atkCount:[1],sp:19},
 	{idx:283,
 		na:{ko:'돌진3',en:'Rush3',jp:'突進3'},element_type:4,cate:[7],
-		txt:'<area>, <dmg>, <el>',
+		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[22,49,49,51,53],effAnimation:'slash6',effAnimationRepeat:1,effSize:[2,2.5,3,3.5,5],effRotate:180,effFilter:'invert(100%)',
 		attackEff:[],multiplesAttack:[],
 		eff:[{type:5,num:['120%','130%','140%','150%','160%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','12.5%','15%','17.5%','20%'],atkCount:[1],sp:25},
-		'','','','','','','',//290
+	{idx:284,
+		na:{ko:'회전 박치기',en:'Spin Smash',jp:'回転殴打機'},element_type:11,cate:[3],
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[2,5,5,47,47],effAnimation:'wind2',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:5,num:['135%','150%','165%','180%','195%']}],atkCount:[1],sp:20},
+	{idx:285,
+		na:{ko:'원투 펀치',en:'One-two punch',jp:'ワンツーパンチ'},element_type:4,cate:[3],
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[1,1,1,1,1],effAnimation:'hit5',effAnimationRepeat:2,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:3,num:['180%','190%','200%','210%','220%']}],atkCount:[1],sp:13},
+	{idx:286,
+		na:{ko:'마구때리기',en:'Wild Attack',jp:'殴打する'},element_type:4,cate:[3],
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[22,22,22,21,21],effAnimation:'hit2',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'saturate(3)',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:3,num:['140%','150%','160%','170%','180%']}],atkCount:[1],sp:20},
+		'','','','',//290
 	'','','','','','','','','','',//300
 	{idx:237,
 		na:{ko:'굶주림',en:'Hunger',jp:'飢餓'},element_type:2,cate:[3],txt:{ko:'<area>, <b dmg>$(0)</b>의 두번 공격을 한다.',en:'<area>, ',jp:'<area>, <b dmg>$(0)</b>의 두번 공격을 한다.'},skillClass:1,
@@ -821,7 +839,7 @@ export const skill = [
 
 // * 5물개 - 물개의 유연함(passive),
 // 치기, 누르기
-// 회전박치기(바람)(세로 일자영역), 물대포(수)●, 파도공격(수,광),
+// 회전박치기(바람)●, 물대포(수)●, 파도공격(수,광)●,
 // [송곳니뚫기(바다사자특정)],
 
 // * 6너구리 - 너구리의 영특한 계산(passive), 반격(passive),
@@ -832,13 +850,12 @@ export const skill = [
 // * 7쥐 - 쥐의 날쌘 행동력(passive) - 시작 두턴간 무적, 
 // 물기,
 // 가속2(buff),
-// 구토(독, 광역)●, 땅굴기습(땅), 
+// 구토(독, 광역)●, 땅굴기습(땅), 급소타격(물기),
 // 민접한 스틸(아이템획득), 쥐구멍숨기(회피),
 
 // * 8토끼 -  토끼의 뛰어난 점프력(spd, luk)(passive),
 // 물기, 치기
-// 구토(독, 광역)●, 
-// 뒷발차기1(치기)●,
+// 구토(독, 광역)●, 급소타격(물기), 뒷발차기1(치기)●,
 
 // * 9원숭이 - 원숭이의 영리한 지략(passive),
 // 물기, 치기, 던지기 
@@ -849,12 +866,12 @@ export const skill = [
 // * 10고릴라 - 고릴리의 막강한 파괴(atk)(passive), 
 // 치기, 누르기, 던지기
 // 몸집 키우기(buff)●, 포효(속도 debuff)●, 가슴치기(buff), 돌진2(광역, 치기)●
-// 허리접기(5), 모래뿌리기(땅), 1톤 펀치(치기), 돌던지기(땅)●, 바위던지기(땅)●, 눈덩이던지기(수)●, 고드름던지기(수)
+// 허리접기(5), 모래뿌리기(땅), 1톤 펀치(치기), 돌던지기(땅)●, 바위던지기(땅)●, 눈덩이던지기(수)●, 헤드락(누르기), 고드름던지기(수)
 
 // * 11캥거루 - 캥거루의 요술주머니(힐 기술)(passive), 매턴 10% 회복
 // 치기
 // 몸집 키우기(buff)●, 가속1(buff)
-// 침뱉기(수, 광)●, 후려치기(치기)●, 아웃복싱(치기), 원투타격(치기), 하이킥(치기), 꼬리치기2(치기), 만능주머니 랜덤 효과
+// 침뱉기(수, 광)●, 후려치기(치기)●, 아웃복싱(치기), 마구때리기(치기)●, 원투펀치(치기)●, 하이킥(치기), 꼬리치기2(치기), 꼬리채찍(바람), 헤드락(누르기), 만능주머니 랜덤 효과
 
 // * 12소 - 소의 우직한 전진(passive),
 // 쪼기, 누르기
@@ -898,11 +915,11 @@ export const skill = [
 	
 // * 20독수리 - 독수리의 영리한 전략(passive), 반격(passive), 조류과(passive)
 // 쪼기, 물기
-// 손톱&뿔 갈기●, 꽤뚫기(쪼기), 낙석(땅), 고공낙하(광역, 바람), 날개치기2(바람), 윈드커터(바람), 공중부양(회피)
+// 손톱&뿔 갈기●, 꽤뚫기(쪼기), 낙석(땅), 고공낙하(광역, 바람), 날개치기2(바람), 윈드커터(바람), 공중부양(회피), 사일런트 어택(바람, 치명타),
 
 // * 21뱀 - 뱀의 교활한 계략(passive), 파충류과(passive)
 // 물기
-// 독뿌리기(광역, 어둠), 감아쪼이기(누르기), 허물벗기(회복), 흡혈공격(물기), 삼키기(독, 단일)●
+// 독뿌리기(광역, 어둠), 감아쪼이기(누르기), 허물벗기(회복), 흡혈공격(물기), 삼키기(독, 단일)●, 
 	
 // * 22도마뱀 - 도마뱀의 뛰어난 은둔술(passive), 파충류과(passive)
 // 물기, 할퀴기

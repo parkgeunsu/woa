@@ -274,7 +274,7 @@ const Eff = styled.img`
 	height:${({frame}) => {
 		return Math.ceil(frame / 5) * 100;
 	}}%;
-	animation:${({frame, gameSpd}) => `frame${frame} ${(frame / 10) * 1.125 / gameSpd}s steps(1)`};
+	animation:${({frame, repeat, gameSpd}) => `frame${frame} ${(frame / 10) * 1.125 / repeat / gameSpd}s steps(1)`};
 	animation-iteration-count: ${({repeat}) => repeat || "infinite"};
 `;
 const BattleCh = styled.div`
@@ -1641,7 +1641,7 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
                   },
 									customSkill: customSkill,
                 });
-							}, ((skillEffect[targetArr.effAnimation.split('(')[0]].frame / 10) * 1125 * (customSkill.effAnimationRepeat || 1)) / gameSpd);//공격 이펙트 효과시간
+							}, ((skillEffect[targetArr.effAnimation.split('(')[0]].frame / 10) * 1125) / gameSpd);//공격 이펙트 효과시간
 						}, 150 / gameSpd);
 					}, 600 / gameSpd);//메시지창 사라짐
 				}, 150 / gameSpd);//메시지 오픈
@@ -2030,42 +2030,51 @@ const TestSkill = ({
 			return;
 		}
 		if (mode === 'area') {
-			if (e.target.classList.contains('effect')) {
-				if (orderIdx < battleAlly.current.length - 1) {
-					setOrderIdx((prev) => ++prev);
-					setMode('order');
-				} else {
-					setOrderIdx('');
-					setMode('action');
-					}
-				allyOrders.current.push({
-					team: 'ally',
-					idx: orderIdx,
-					skIdx: currentSkill.current.sk.idx,
-					// skFrame: imgSet.effect[]
-					skLv: currentSkill.current.skLv,
-					enemyTarget: true,
-					targetIdx: targetIdx.current,
-					effectArea: targetAreaArr.current,
-					target: pos,
-					sp: -gameData.skill[currentSkill.current.sk.idx].sp,
-				});
-				setEffectEnemyArea([]);
-				setEffectAllyArea([]);
+			if (battleAlly.current[orderIdx].sp < currentSkill.current.sp) {
+				setMsgOn(true);
+				setMsg(gameData.msg.sentence.lackSkillPoint[lang]);
 			} else {
-				targetAreaArr.current = util.getEffectArea({
-					type: currentSkill.current.sk.ta[currentSkill.current.skLv - 1],
-					n: pos
-				});
-				targetIdx.current = [];
-				allyPos.current.forEach((posIdx, idx) => {
-					targetAreaArr.current.forEach((actionIdx) => {
-						if (posIdx.pos === actionIdx) {
-							targetIdx.current.push(idx);
-						}
+				if (e.target.classList.contains('effect')) {
+					if (orderIdx < battleAlly.current.length - 1) {
+						setOrderIdx((prev) => ++prev);
+						setMode('order');
+					} else {
+						setOrderIdx('');
+						setMode('action');
+					}
+					targetIdx.current = [];
+					allyPos.current.forEach((posIdx, idx) => {
+						targetAreaArr.current.forEach((actionIdx) => {
+							if (posIdx.pos === actionIdx) {
+								targetIdx.current.push(idx);
+							}
+						});
 					});
-				});
-				setEffectAllyArea(targetAreaArr.current);
+					allyOrders.current.push({
+						team: 'ally',
+						idx: orderIdx,
+						skIdx: currentSkill.current.sk.idx,
+						skLv: currentSkill.current.skLv,
+						enemyTarget: true,
+						targetIdx: targetIdx.current,
+						effectArea: targetAreaArr.current,
+						target: pos,
+						sp: -gameData.skill[currentSkill.current.sk.idx].sp,
+					});
+					setEffectEnemyArea([]);
+					setEffectAllyArea([]);
+				} else {
+					if (battleAlly.current[orderIdx].sp < currentSkill.current.sp + 5) {
+						setMsgOn(true);
+						setMsg(gameData.msg.sentence.lackSkillPoint[lang]);
+					} else {
+						targetAreaArr.current = util.getEffectArea({
+							type: currentSkill.current.sk.ta[currentSkill.current.skLv - 1],
+							n: pos
+						});
+						setEffectAllyArea(targetAreaArr.current);
+					}
+				}
 			}
 		}
 	}
@@ -2074,41 +2083,46 @@ const TestSkill = ({
 			return;
 		}
 		if (mode === 'area') {
-			if (e.target.classList.contains('effect')) {
-				if (orderIdx < battleAlly.current.length - 1) {
-					setOrderIdx((prev) => ++prev);
-					setMode('order');
-				} else {
-					setOrderIdx('');
-					setMode('action');
-				}
-				allyOrders.current.push({
-					team: 'ally',
-					idx: orderIdx,
-					skIdx: currentSkill.current.sk.idx,
-					skLv: currentSkill.current.skLv,
-					enemyTarget: true,
-					targetIdx: targetIdx.current,
-					effectArea: targetAreaArr.current,
-					target: pos,
-					sp: -gameData.skill[currentSkill.current.sk.idx].sp,
-				});
-				setEffectEnemyArea([]);
-				setEffectAllyArea([]);
+			if (battleAlly.current[orderIdx].sp < currentSkill.current.sp) {
+				setMsgOn(true);
+				setMsg(gameData.msg.sentence.lackSkillPoint[lang]);
 			} else {
-				targetAreaArr.current = util.getEffectArea({
-					type: currentSkill.current.sk.ta[currentSkill.current.skLv - 1],
-					n: pos
-				});
-				targetIdx.current = [];
-				enemyPos.current.forEach((posIdx, idx) => {
-					targetAreaArr.current.forEach((actionIdx) => {
-						if (posIdx === actionIdx) {
-							targetIdx.current.push(idx);
-						}
+				if (e.target.classList.contains('effect')) {
+					if (orderIdx < battleAlly.current.length - 1) {
+						setOrderIdx((prev) => ++prev);
+						setMode('order');
+					} else {
+						setOrderIdx('');
+						setMode('action');
+					}
+					targetIdx.current = [];
+					enemyPos.current.forEach((posIdx, idx) => {
+						targetAreaArr.current.forEach((actionIdx) => {
+							if (posIdx === actionIdx) {
+								targetIdx.current.push(idx);
+							}
+						});
 					});
-				});
-				setEffectEnemyArea(targetAreaArr.current);
+					allyOrders.current.push({
+						team: 'ally',
+						idx: orderIdx,
+						skIdx: currentSkill.current.sk.idx,
+						skLv: currentSkill.current.skLv,
+						enemyTarget: true,
+						targetIdx: targetIdx.current,
+						effectArea: targetAreaArr.current,
+						target: pos,
+						sp: -gameData.skill[currentSkill.current.sk.idx].sp,
+					});
+					setEffectEnemyArea([]);
+					setEffectAllyArea([]);
+				} else {
+					targetAreaArr.current = util.getEffectArea({
+						type: currentSkill.current.sk.ta[currentSkill.current.skLv - 1],
+						n: pos
+					});
+					setEffectEnemyArea(targetAreaArr.current);
+				}
 			}
 		}
 	};
@@ -2139,17 +2153,22 @@ const TestSkill = ({
 					sp: battleAlly.current[orderIdx].bSt2,
 				});
 			} else { //스킬 실행
-				const skType = skill.cate[0];
-				const areaArr = util.getEffectArea({
+				targetAreaArr.current = util.getEffectArea({
 					type: skill.ta[skLv - 1],
 					n: 12
 				});
+				currentSkill.current = {
+					sk: skill,
+					skLv: skLv,
+					sp: skill.sp,
+				}
+				const skType = skill.cate[0];
 				switch (skType){
 					case 7:
 					case 8:
 					case 9:
 					case 3: //active
-						setEffectEnemyArea(areaArr);
+						setEffectEnemyArea(targetAreaArr.current);
 						setMode('area');
 						break;
 					case 10: //날씨 변경
@@ -2166,10 +2185,7 @@ const TestSkill = ({
 							skIdx: skill.idx,
 							skLv: skLv,
 							enemyTarget: false,
-							targetIdx: util.getEffectArea({
-								type: 20,
-								n: 13
-							}),
+							effectArea: targetAreaArr.current,
 							target: allyPos.current[orderIdx].pos,
 							sp: -skill.sp,
 						});
@@ -2187,25 +2203,21 @@ const TestSkill = ({
 							skIdx: skill.idx,
 							skLv: skLv,
 							enemyTarget: false,
+							effectArea: targetAreaArr.current,
 							target: allyPos.current[orderIdx].pos,
 							sp: -skill.sp,
 						});
 						break;
 					case 5: //buff
-						setEffectAllyArea(areaArr);
+						setEffectAllyArea(targetAreaArr.current);
 						setMode('area');
 						break;
 					case 6: //debuff
-						setEffectEnemyArea(areaArr);
+						setEffectEnemyArea(targetAreaArr.current);
 						setMode('area');
 						break;
 					default:
 						break;
-				}
-				currentSkill.current = {
-					sk: skill,
-					skLv: skLv,
-					skFrame: imgSet.effect[skill.effAnimation.split('(')[0]].frame,
 				}
 			}
 		}

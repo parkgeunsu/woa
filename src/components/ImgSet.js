@@ -619,7 +619,7 @@ export const map = {
 export const effect = {
   slash0:{img:slash0,frame:8,used:'공격'},slash1:{img:slash1,frame:25},slash2:{img:slash2,frame:25},slash3:{img:slash3,frame:13},slash4:{img:slash4,frame:14},slash5:{img:slash5,frame:10},slash6:{img:slash6,frame:14,used:'돌진'},slash7:{img:slash7,frame:11,used:'할퀴기'},slash8:{img:aniPack4_2,frame:8,used:'후려치기'},slash9:{img:aniPack4_3,frame:11},slash10:{img:aniPack4_11,frame:6},
   slash11:{img:aniPack4_15,frame:5,used:'물기'},
-  hit0:{img:hit0,frame:15},hit1:{img:hit1,frame:30},hit2:{img:hit2,frame:15},hit3:{img:hit3,frame:28},hit4:{img:hit4,frame:26,used:'뒷발차기'},hit5:{img:aniPack4_7,frame:6,used:'누르기'},hit6:{img:aniPack4_9,frame:5,used:'쪼기'},hit7:{img:aniPack4_10,frame:5,used:'치기'},hit8:{img:aniPack4_16,frame:5,used:'던지기'},
+  hit0:{img:hit0,frame:15},hit1:{img:hit1,frame:30},hit2:{img:hit2,frame:15,used:'마구때리기'},hit3:{img:hit3,frame:28},hit4:{img:hit4,frame:26,used:'뒷발차기'},hit5:{img:aniPack4_7,frame:6,used:'누르기'},hit6:{img:aniPack4_9,frame:5,used:'쪼기'},hit7:{img:aniPack4_10,frame:5,used:'치기'},hit8:{img:aniPack4_16,frame:5,used:'던지기'},
   shoot0:{img:shoot0,frame:15},shoot1:{img:shoot1,frame:35},shoot2:{img:shoot2,frame:15},shoot3:{img:shoot3,frame:15},shoot4:{img:shoot4,frame:30},shoot5:{img:shoot5,frame:30},shoot6:{img:shoot6,frame:45},shoot7:{img:shoot7,frame:14},shoot8:{img:shoot8,frame:15},shoot9:{img:shoot9,frame:14},
   shoot10:{img:shoot10,frame:20},shoot11:{img:shoot11,frame:13},shoot12:{img:aniPack4_0,frame:9},shoot13:{img:aniPack4_1,frame:9},shoot14:{img:aniPack4_14,frame:11},
   pick0:{img:pick0,frame:13},pick1:{img:pick1,frame:30},pick2:{img:aniPack4_5,frame:6},
@@ -632,7 +632,7 @@ export const effect = {
   fire10:{img:fire10,frame:50},fire11:{img:fire11,frame:30},fire12:{img:fire12,frame:44},fire13:{img:fire13,frame:90},fire14:{img:fire14,frame:48},fire15:{img:aniPack4_12,frame:5},
   water0:{img:water0,frame:14},water1:{img:water1,frame:23},water2:{img:water2,frame:15},water3:{img:water3,frame:15},water4:{img:water4,frame:30},water5:{img:water5,frame:30,used:'파도공격'},water6:{img:water6,frame:40},water7:{img:water7,frame:45},water8:{img:water8,frame:45},water9:{img:water9,frame:90},
   water10:{img:water10,frame:48},water11:{img:water11,frame:90},water12:{img:water12,frame:30,used:'물대포'},
-  wind0:{img:wind0,frame:14},wind1:{img:wind1,frame:23},wind2:{img:wind2,frame:15},wind3:{img:wind3,frame:15},wind4:{img:wind4,frame:30},wind5:{img:wind5,frame:30},wind6:{img:wind6,frame:40},wind7:{img:wind7,frame:45},wind8:{img:wind8,frame:45},wind9:{img:wind9,frame:90},
+  wind0:{img:wind0,frame:14},wind1:{img:wind1,frame:23},wind2:{img:wind2,frame:15,used:'회전박치기'},wind3:{img:wind3,frame:15},wind4:{img:wind4,frame:30},wind5:{img:wind5,frame:30},wind6:{img:wind6,frame:40},wind7:{img:wind7,frame:45},wind8:{img:wind8,frame:45},wind9:{img:wind9,frame:90},
   wind10:{img:wind10,frame:50},wind11:{img:wind11,frame:90},
   ice0:{img:ice0,frame:15},ice1:{img:ice1,frame:23},ice2:{img:ice2,frame:15},ice3:{img:ice3,frame:15},ice4:{img:ice4,frame:30},ice5:{img:ice5,frame:29},ice6:{img:ice6,frame:38},ice7:{img:ice7,frame:45},ice8:{img:ice8,frame:45},ice9:{img:ice9,frame:90},
   ice10:{img:ice10,frame:50},ice11:{img:ice11,frame:37},
