@@ -712,21 +712,21 @@ export const skill = [
 	{idx:281,
 		na:{ko:'돌진1',en:'Rush1',jp:'突進1'},element_type:4,cate:[7],
 		txt:'<area>, <dmg>, <el>',
-		ta_:1,ta:[4,5,5,7,7],effAnimation:'slash6',effAnimationRepeat:1,effSize:[2,2.5,3,3.5,5],effRotate:180,effFilter:'',
+		ta_:1,ta:[4,5,5,47,47],effAnimation:'slash6',effAnimationRepeat:1,effSize:[2,2.5,3,3.5,5],effRotate:180,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:5,num:['130%','140%','150%','160%','170%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','12.5%','15%','17.5%','20%'],atkCount:[1],sp:13},
+		eff:[{type:5,num:['130%','140%','150%','160%','170%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','12.5%','15%','17.5%','20%'],atkCount:[1],sp:14},
 	{idx:282,
 		na:{ko:'돌진2',en:'Rush2',jp:'突進2'},element_type:4,cate:[7],
 		txt:'<area>, <dmg>, <el>',
-		ta_:1,ta:[4,5,5,7,7],effAnimation:'slash6',effAnimationRepeat:1,effSize:[2,2.5,3,3.5,5],effRotate:180,effFilter:'saturate(3)',
+		ta_:1,ta:[5,47,47,7,7],effAnimation:'slash6',effAnimationRepeat:1,effSize:[2,2.5,3,3.5,5],effRotate:180,effFilter:'saturate(3)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:5,num:['130%','140%','150%','160%','170%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','12.5%','15%','17.5%','20%'],atkCount:[1],sp:13},
+		eff:[{type:5,num:['130%','140%','150%','160%','170%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','12.5%','15%','17.5%','20%'],atkCount:[1],sp:19},
 	{idx:283,
 		na:{ko:'돌진3',en:'Rush3',jp:'突進3'},element_type:4,cate:[7],
 		txt:'<area>, <dmg>, <el>',
-		ta_:1,ta:[5,5,5,7,49],effAnimation:'slash6',effAnimationRepeat:1,effSize:[2,2.5,3,3.5,5],effRotate:180,effFilter:'invert(100%)',
+		ta_:1,ta:[22,49,49,51,53],effAnimation:'slash6',effAnimationRepeat:1,effSize:[2,2.5,3,3.5,5],effRotate:180,effFilter:'invert(100%)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:5,num:['130%','140%','150%','160%','170%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','12.5%','15%','17.5%','20%'],atkCount:[1],sp:13},
+		eff:[{type:5,num:['120%','130%','140%','150%','160%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','12.5%','15%','17.5%','20%'],atkCount:[1],sp:25},
 		'','','','','','','',//290
 	'','','','','','','','','','',//300
 	{idx:237,
@@ -760,15 +760,22 @@ export const skill = [
 // weather10(날씨), 날씨 변환 (턴제로 실행)
 // job11(직업)
 // passive12(조건부 condition), (조건에 맞으면 실행)
+
 //   condition 1밤(날씨), 2낮(날씨), 3눈(날씨), 4비(날씨), 5해(날씨), 10평원(지형), 11숲(지형), 12물(지형), 21풀피(스텟), 22피20%이하(스텟)
+
 // [element_type] 무속성(0),쪼기(1),할퀴기(2),물기(3),치기(4),누르기(5),던지기(6),빛(7),어둠(8),물(9),불(10),바람(11),땅(12)
+
 // [eff], [buff] 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 행운LUK(9), 카운터Atk(10), 쪼기(11), 할퀴기(12), 물기(13), 치기(14), 누르기(15), 던지기(16), 빛(17), 어둠(18), 물(19), 불(20), 바람(21), 땅(22), 크리티컬(31), 회피(32), 적중률(33), 출혈(50), 중독(51), 석화(52), 혼란(53), 기절(54), 변이(55), 즉사(56), 57(냉동), 패시브(100)
 // [attackEff] 크리티컬(0), 적중률(1)
+
 // [ta_] 아군0, 적군1
 // [ta] getEffectArea 효과범위, passive일 경우 1:단일, 100:직업
 // 영역 1단일, 2가로2, 3가로3, 4세로2, 5세로3, 6가로행, 7세로열, 8십자5, 9십자9, 10대각선/, 11대각선\, 12고정세로2열, 13고정세로3열, 14⏊ 4, 15└┐, 16┌┘, 17卍, 18가로2행, 19가로3행, 20전체, 21정사각형9, 22정사각형4, 23자신, 24원, 25랜덤5, 26랜덤10, 27랜덤15, 28작은마름모, 29큰마름모, 30큰링, 31랜덤세로2열, 32랜덤세로3열, 33랜덤가로2행, 34랜덤가로3행, 35x자5, 36x자9, 37ㅜ 4, 38랜덤20, 39바깥1줄, 40바깥2줄, 41바깥3줄, 42n포함 랜덤 5, 43n포함 랜덤 10, 44n포함 랜덤 15, 45n포함 랜덤 20, 46가로4, 47세로4, 48가로3x2, 49세로2x3, 50가로4x2, 51세로2x4, 52가로행2줄 20, 53세로열2줄 20, 100고양이, 101사자, 102호랑이, 103개, 104늑대, 105물개, 106너구리, 107쥐, 108토끼, 109원숭이, 110고릴라, 111캥거루, 112소, 113곰, 114말, 115사슴, 116코뿔소, 117코끼리, 118기린, 119새, 120독수리, 121뱀, 122도마뱀, 123거북이, 124개구리, 125돼지
+
 // [multiplesAttack] 데미지 x배수 공격
+
 // type 0고양이, 1사자, 2호랑이, 3개, 4늑대, 5물개, 6너구리, 7쥐, 8토끼, 9원숭이, 10고릴라, 11캥거루, 12소, 13곰, 14말, 15사슴, 16코뿔소, 17코끼리, 18기린, 119새, 20독수리, 21뱀, 22도마뱀, 23거북이, 24개구리, 25돼지
+
 // [atkCount] 공격횟수
 // [buffCount] 유지되는 턴수
 // [effAnimation] effect종류
