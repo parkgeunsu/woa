@@ -1183,6 +1183,11 @@ export const msg = {
 			en:'Background Sound',
 			jp:'背景音',
 		},
+		bge:{
+			ko:'배경효과',
+			en:'Background Effects',
+			jp:'背景効果',
+		},
 		efm:{
 			ko:'효과음',
 			en:'Sound effects',

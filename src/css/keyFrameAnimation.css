@@ -2349,15 +2349,21 @@
 }
 @keyframes dmgAnimation{
   0%{background:transparent;}
-  33.3%{background:rgba(255,255,0,1);}
+  33.3%{background:rgba(255,255,0,0.5);}
   66.6%{background:transparent;}
-  100%{background:rgba(255,255,0,1);}
+  100%{background:rgba(255,255,0,0.5);}
 }
 @keyframes dmgCriticalAnimation{
   0%{background:transparent;}
   33.3%{background:rgba(255,0,0,.8);}
   66.6%{background:transparent;}
   100%{background:rgba(255,0,0,.8);}
+}
+@keyframes healCriticalAnimation{
+  0%{background:transparent;}
+  33.3%{background:rgba(0,100,200,.8);}
+  66.6%{background:transparent;}
+  100%{background:rgba(0,100,200,.8);}
 }
 @keyframes cloudAnimation{
   0%{left:100%;}
@@ -2627,4 +2633,8 @@
   70%{transform:translate(-50%,-50%) scale(.1);}
   85%{transform:translate(-50%,-50%) scale(.5);}
   100%{transform:translate(-50%,-50%) scale(0);}
+}
+@keyframes dmg_num{
+  0%{opacity:1;transform:translate(-50%, -50%) scale(1);}
+  100%{opacity:0;transform:translate(-50%, -200%) scale(2.5);}
 }

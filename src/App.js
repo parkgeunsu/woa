@@ -207,6 +207,7 @@ const App = ({
       bgm: true,
       efm: true,
       resolution: 1,
+      bge: false,
       speed: 1,
     }
   });
@@ -252,6 +253,14 @@ const App = ({
     util.saveData('setting', setting);
     let cloneConTextData = {...conTextData};
     cloneConTextData.setting.resolution = data;
+    setConTextData(cloneConTextData);
+  }
+  const setBge = (data) => {
+    const setting = util.loadData('setting');
+    setting.bgm = data;
+    util.saveData('setting', setting);
+    let cloneConTextData = {...conTextData};
+    cloneConTextData.setting.bge = data;
     setConTextData(cloneConTextData);
   }
   // useEffect(() => {
@@ -366,7 +375,7 @@ const App = ({
 
               <Route path="/start" element={<StartGame saveData={saveData} changeSaveData={changeSaveData} setLang={setLang} />} />
 
-              <Route path="/setup" element={<Setup setLang={setLang} setSpeed={setSpeed} setBgm={setBgm} setEfm={setEfm} setRes={setResolution} />} />
+              <Route path="/setup" element={<Setup setLang={setLang} setSpeed={setSpeed} setBgm={setBgm} setEfm={setEfm} setRes={setResolution} setBge={setBge} />} />
 
               <Route path="/gameMain" element={<GameMain saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} gameMode={gameMode} setGameMode={setGameMode} />} />
 

@@ -6,7 +6,9 @@
 //num 효과
 //sp 행동력
 export const scenario = {
-	korea:[
+	korea0:[],
+	korea1:[],
+	korea2:[
 		{name:'gojoseon',}, //단군(BC2333) period:0
 		{name:'threeBefore',}, //부여,옥저&동예,삼한 period:1
 		{name:'three',}, //신라(BC57)박혁거세, 고구려(BC37)주몽, 백제(BC18)온조 period:2
@@ -924,14 +926,16 @@ export const scenario = {
 			]
 		}
 	],
-	japan:[
+	japan0:[
 		{ // peroid 0
 			name:'junkuk',
 			scenarioList:[
 			]
 		}
 	],
-	china:[
+	japan1:[],
+	japan2:[],
+	china0:[
 		{name:'yin',}, //(BC1600) period:0
 		{name:'ju',}, //(BC10세기) period:1
 		{name:'chunchu',}, //공자 period:2
@@ -942,7 +946,7 @@ export const scenario = {
 		{name:'song',}, //수호지 period:7
 		{name:'ming',}, //금병매(1368) period:8
 	],
-	mongolia:[
+	mongolia0:[
 		{
 			name:'mongolia',
 			scenarioList:[//징기즈칸

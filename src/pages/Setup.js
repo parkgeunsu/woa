@@ -40,9 +40,10 @@ const Setup = ({
   setBgm,
   setEfm,
   setRes,
+  setBge,
 }) => {
   const context = useContext(AppContext);
-  const { lang, speed, bgm, efm, resolution } = React.useMemo(() => {
+  const { lang, speed, bgm, efm, resolution, bge } = React.useMemo(() => {
     return context.setting;
   }, [context]);
   // const imgSet = React.useMemo(() => {
@@ -54,6 +55,7 @@ const Setup = ({
   const [langageValue, setLanguageValue] = useState(langToIndex(lang));
   const [soundValue, setSoundValue] = useState(bgm ? 0 : 1);
   const [effectValue, setEffectValue] = useState(efm ? 0 : 1);
+  const [backEffectValue, setBackEffectValue] = useState(bge ? 0 : 1);
   const [resolutionValue, setResolutionValue] = useState(resolution);
   const [speedValue, setSpeedValue] = useState(speed);
   const [selectOnOff, setSelectOnOff] = useState([]); //onoff형태 글자
@@ -97,6 +99,10 @@ const Setup = ({
     setResolutionValue(v);
     setRes(v);
   }
+  const changeBackEffect = (v) => {
+    setBackEffectValue(v);
+    setBge(v);
+  }
   const changeSpeed = (v) => {
     setSpeedValue(v);
     setSpeed(v + 1);
@@ -123,6 +129,11 @@ const Setup = ({
           <ListItem title={gameData.msg.setup['resolution'][lang]}>
             {selectQuality.map((text, idx) => {
               return <RadioBox key={idx} change={changeResolution} idx={idx} selected={resolutionValue === idx} groupId="setupResolution">{text}</RadioBox>
+            })}
+          </ListItem>
+          <ListItem title={gameData.msg.setup['bge'][lang]}>
+            {selectOnOff.map((text, idx) => {
+              return <RadioBox key={idx} change={changeBackEffect} idx={idx} selected={backEffectValue === idx} groupId="setupBackEffect">{text}</RadioBox>
             })}
           </ListItem>
           <ListItem title={gameData.msg.setup['speed'][lang]}>

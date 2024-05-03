@@ -1232,12 +1232,12 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               return dataObj.sk.eff.map((eff, idx) => {
                 if(idx === 0) {
                   if (dataObj.sk.eff.length !== 1) {
-                    skill += `Lv.${skillIdx + 1}: ${dataObj.sk.cate[0] !== 3 ? util.getEffectType(eff.type, lang) : ''} ${dataObj.sk.eff[idx].num[skillIdx]}, `;
+                    skill += `Lv.${skillIdx + 1}: ${dataObj.sk.cate !== 3 ? util.getEffectType(eff.type, lang) : ''} ${dataObj.sk.eff[idx].num[skillIdx]}, `;
                   } else {
-                    skill += `Lv.${skillIdx + 1}: ${dataObj.sk.cate[0] !== 3 ? util.getEffectType(eff.type, lang) : ''} ${dataObj.sk.eff[idx].num[skillIdx]}`;
+                    skill += `Lv.${skillIdx + 1}: ${dataObj.sk.cate !== 3 ? util.getEffectType(eff.type, lang) : ''} ${dataObj.sk.eff[idx].num[skillIdx]}`;
                   }
                 } else {
-                  skill += `${dataObj.sk.cate[0] !== 3 ? util.getEffectType(eff.type, lang) : ''} ${dataObj.sk.eff[idx].num[skillIdx]}`;
+                  skill += `${dataObj.sk.cate !== 3 ? util.getEffectType(eff.type, lang) : ''} ${dataObj.sk.eff[idx].num[skillIdx]}`;
                 }
                 if(idx === dataObj.sk.eff.length - 1) {
                   if (dataObj.skData.lv === skillIdx + 1) {

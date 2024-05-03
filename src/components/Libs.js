@@ -775,7 +775,7 @@ export const util = { //this.loadImage();
       case 15:
         return 'press';
       case 16:
-        return 'throw';
+        return 'toss';
       case 17:
         return 'light';
       case 18:
@@ -788,6 +788,22 @@ export const util = { //this.loadImage();
         return 'wind';
       case 22:
         return 'earth';
+      case 31:
+        return 'critical';
+      case 32:
+        return 'avoid';
+      case 33:
+        return 'hit';
+      case 41:
+        return 'hp';//hp 회복
+      case 42:
+        return 'sp';//sp 회복
+      case 43:
+        return 'rhsp';//hp,sp 회복
+      case 44:
+        return 'hp';//부활
+      case 45:
+        return 'hp';//부활 회복
       case 50:
         return 'bleeding';//출혈
       case 51:
@@ -802,6 +818,8 @@ export const util = { //this.loadImage();
         return 'transform';//변이
       case 56:
         return 'immediateDeath';//즉사
+      case 57:
+        return 'frozen';//냉동
       case 100:
         return 'formation';//진형
       default:
@@ -2262,6 +2280,7 @@ export const util = { //this.loadImage();
       {ko:'불속성',en:'Fire Element',jp:'火属性'},
       {ko:'바람속성',en:'Wind Element',jp:'風属性'},
       {ko:'땅속성',en:'Earth Element',jp:'地属性'},
+      {},{},{},{},{},{},{},{},
     ];
     const elTag = elementTag[element];
     return cate !== 2 ? `<i ${elTag.type} ${elTag.type}${elTag.idx}>${elementArr[element][lang]}</i> ${attack[atkCount][lang]}` : `<i ${elTag.type} ${elTag.type}${elTag.idx}>${elementArr[element][lang]}</i>`;
@@ -2362,7 +2381,12 @@ export const util = { //this.loadImage();
       {ko:'회피',en:'Avoidance rate',jp:'回避率'},
       {ko:'적중율',en:'Hit rate',jp:'命中率'},
       {},{},{},{},{},{},{},
-      {},{},{},{},{},{},{},{},{},
+      {ko:'HP회복',en:'HP Recovery',jp:'HP回復'},
+      {ko:'SP회복',en:'SP Recovery',jp:'SP回復'},
+      {ko:'HP,SP회복',en:'HP,SP Recovery',jp:'HP,SP回復'},
+      {ko:'부활',en:'Revive',jp:'復活'},
+      {ko:'부활후 HP회복',en:'HP Recovery after Revive',jp:'復活後のHP回復'},
+      {},{},{},{},
       {ko:'출혈',en:'Bleeding',jp:'出血'},
       {ko:'중독',en:'Addiction',jp:'中毒'},
       {ko:'석화',en:'Petrification',jp:'石化'},
@@ -2435,7 +2459,7 @@ export const util = { //this.loadImage();
   },
   getSkillText: (skillObj) => { //스킬 텍스트 전환 $(0), $<0>
     const {skill, lv, lang} = skillObj;
-    const cate = skill.cate[0];
+    const cate = skill.cate;
     const skillType = skill.element_type;
     let replaceText = skill.txt;
     // const replaceUpDownArr = replaceText.match(/[<]up[>]|[<]down[>]*/g) || [];
@@ -2507,7 +2531,7 @@ export const util = { //this.loadImage();
     replaceText = replaceText.replace('<area>', util.getSkillAreaLang({//이펙트 범위
       isAlly:skill.ta_,
       areaIdx:skill.ta[lv],
-      cate:skill.cate[0],
+      cate:skill.cate,
       lang:lang,
     }));
     if (skill.multiplesAttack?.length > 0) {//배수 공격
@@ -2524,7 +2548,7 @@ export const util = { //this.loadImage();
     if (replaceText.match('<el>')?.index > -1) {//기술 속성
       replaceText = replaceText.replace('<el>', util.getSkillElementLang({
         element:skill.element_type,
-        cate:skill.cate[0],
+        cate:skill.cate,
         atkCount:skill.atkCount[0],
         lang:lang,
       }));
@@ -2579,6 +2603,8 @@ export const util = { //this.loadImage();
         return 5;
       case 'scenario':
         return 7;
+      case 'battleState':
+        return 8;
       case 'job':
       case 'skillBack':
         return 9;

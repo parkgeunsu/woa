@@ -210,7 +210,7 @@ const CharacterAnimalSkill = ({
                   {skGroup.map((skData, skIdx) => {
                     if (Object.keys(skData).length !== 0){
                       const sk = gameData.skill[skData.idx];
-                      const skillCate = sk.cate[0];
+                      const skillCate = sk.cate;
                       const skillIcon = (() => {
                         if (skillCate === 2 || skillCate === 11) {//passive, job
                           return imgSet.passive[sk.effAnimation];

@@ -664,7 +664,7 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 		const skillIdx = customSkill ? 0 : timeLine[turnIdx].order.skIdx;
 		const skill = customSkill ? customSkill : gameData.skill[skillIdx];
 		let isCounterAtk = false; //카운터 어택인지
-		let skillCate = skill.cate[0];
+		let skillCate = skill.cate;
 		let atkC = [0, false], //공격 횟수
 			atkS = atkOption?.atkStay || 0; //한캐릭이 공격한 횟수 체크
 		let buffDebuff = []; //버프 임시저장 변수
@@ -1715,7 +1715,7 @@ const TestSkill = ({
     idx:233,
 		na:{ko:'테스트',en:'test',jp:'test'},
     element_type:0,
-    cate:[3],//[selectSkillCate + 1],
+    cate:3,
     txt:{ko:'<u>날씨</u>, 비오는 날씨로 밤으로 변환',en:'<u>Weather</u>, Convert to rainy weather',jp:'<u>天気</u>, 雨天で夜に変換'},
     ta_:1,
     ta:[selectSkillTaget + 1],
@@ -1940,7 +1940,7 @@ const TestSkill = ({
 		//-----패시브 시작
 		battleAlly.current.forEach((ally, idx) => {
 			ally.sk.forEach((allySkill) => {
-				if (gameData.skill[allySkill.idx].cate[0] === 2) {
+				if (gameData.skill[allySkill.idx].cate === 2) {
 					const eff = gameData.skill[allySkill.idx].effAnimation;
 					if (gameData.skill[allySkill.idx].ta === 10) {//전체 캐릭 패시브 적용
 						battleAlly.current.forEach((ally_, chIdx) => {
@@ -1978,7 +1978,7 @@ const TestSkill = ({
 		});
 		battleEnemy.current.forEach((enemy, idx) => {
 			enemy.sk.forEach((enemySkill) => {
-				if (gameData.skill[enemySkill.idx].cate[0] === 2) {
+				if (gameData.skill[enemySkill.idx].cate === 2) {
 					const eff = gameData.skill[enemySkill.idx].effAnimation;
 					if (gameData.skill[enemySkill.idx].ta === 10) {//전체 캐릭 패시브 적용
 						battleEnemy.current.forEach((enemy_, chIdx) => {
@@ -2026,7 +2026,7 @@ const TestSkill = ({
 		setMode(mode);
 	};
   const areaAllySelect = (e, pos) => {
-		if (currentSkill.current?.sk?.cate[0] !== 5) {
+		if (currentSkill.current?.sk?.cate !== 5 && currentSkill.current?.sk?.cate !== 13) {
 			return;
 		}
 		if (mode === 'area') {
@@ -2079,7 +2079,7 @@ const TestSkill = ({
 		}
 	}
   const areaEnemySelect = (e, pos) => {
-		if (currentSkill.current?.sk?.cate[0] === 5) {
+		if (currentSkill.current?.sk?.cate === 5) {
 			return;
 		}
 		if (mode === 'area') {
@@ -2127,98 +2127,93 @@ const TestSkill = ({
 		}
 	};
   const battleCommand = ({skill, skLv}) => {
-		if (mode !== 'order') {
-			if (skill === 'cancel') { //취소 실행
+		if (mode === 'end') {//전투 종료시
+			return;
+		}
+		setEffectAllyArea([]);
+		setEffectEnemyArea([]);
+		if (skill === 'cancel') { //취소 실행
+			if (orderIdx > 0) {
 				setMode('order');
-				setEffectAllyArea([]);
-				setEffectEnemyArea([]);
+				setOrderIdx((prev) => --prev);
+				allyOrders.current.pop();
 			}
-		} else {
-			if (skill === 'cancel') { //취소 실행
-				if (orderIdx > 0) {
-					setOrderIdx((prev) => --prev);
-					allyOrders.current.pop();
-				}
-			} else if (skill === 'wait'){ //대기 실행 sp 증가
-				if (orderIdx < battleAlly.current.length - 1) {
-					setOrderIdx((prev) => ++prev);
-				} else {
-					setMode('action');
-					setOrderIdx('');
-				}
-				allyOrders.current.push({
-					team: 'ally',
-					idx: orderIdx,
-					skIdx: 0,
-					sp: battleAlly.current[orderIdx].bSt2,
-				});
-			} else { //스킬 실행
-				targetAreaArr.current = util.getEffectArea({
-					type: skill.ta[skLv - 1],
-					n: 12
-				});
-				currentSkill.current = {
-					sk: skill,
-					skLv: skLv,
-					sp: skill.sp,
-				}
-				const skType = skill.cate[0];
-				switch (skType){
-					case 7:
-					case 8:
-					case 9:
-					case 3: //active
-						setEffectEnemyArea(targetAreaArr.current);
-						setMode('area');
-						break;
-					case 10: //날씨 변경
-						if (orderIdx < battleAlly.current.length - 1) {
-							setOrderIdx((prev) => ++prev);
-						} else {
-							setMode('action');
-							setOrderIdx('');
-						}
-						console.log(skLv)
-						allyOrders.current.push({
-							team: 'ally',
-							idx: orderIdx,
-							skIdx: skill.idx,
-							skLv: skLv,
-							enemyTarget: false,
-							effectArea: targetAreaArr.current,
-							target: allyPos.current[orderIdx].pos,
-							sp: -skill.sp,
-						});
-						break;
-					case 4: //active(방어)
-						if (orderIdx < battleAlly.current.length - 1) {
-							setOrderIdx((prev) => ++prev);
-						} else {
-							setMode('action');
-							setOrderIdx('');
-						}
-						allyOrders.current.push({
-							team: 'ally',
-							idx: orderIdx,
-							skIdx: skill.idx,
-							skLv: skLv,
-							enemyTarget: false,
-							effectArea: targetAreaArr.current,
-							target: allyPos.current[orderIdx].pos,
-							sp: -skill.sp,
-						});
-						break;
-					case 5: //buff
-						setEffectAllyArea(targetAreaArr.current);
-						setMode('area');
-						break;
-					case 6: //debuff
-						setEffectEnemyArea(targetAreaArr.current);
-						setMode('area');
-						break;
-					default:
-						break;
-				}
+		} else if (skill === 'wait'){ //대기 실행 sp 증가
+			if (orderIdx < battleAlly.current.length - 1) {
+				setOrderIdx((prev) => ++prev);
+			} else {
+				setMode('action');
+				setOrderIdx('');
+			}
+			allyOrders.current.push({
+				team: 'ally',
+				idx: orderIdx,
+				skIdx: 0,
+				sp: battleAlly.current[orderIdx].bSt2,
+			});
+		} else { //스킬 실행
+			targetAreaArr.current = util.getEffectArea({
+				type: skill.ta[skLv - 1],
+				n: 12
+			});
+			currentSkill.current = {
+				sk: skill,
+				skLv: skLv,
+				sp: skill.sp,
+			}
+			const skType = skill.cate;
+			switch (skType){
+				case 3: //active
+				case 6: //debuff
+				case 7: //active debuff
+				case 8: //active buff
+				case 9: //active(적군)
+					setEffectEnemyArea(targetAreaArr.current);
+					setMode('area');
+					break;
+				case 10: //날씨 변경
+					if (orderIdx < battleAlly.current.length - 1) {
+						setOrderIdx((prev) => ++prev);
+					} else {
+						setMode('action');
+						setOrderIdx('');
+					}
+					allyOrders.current.push({
+						team: 'ally',
+						idx: orderIdx,
+						skIdx: skill.idx,
+						skLv: skLv,
+						enemyTarget: false,
+						effectArea: targetAreaArr.current,
+						target: allyPos.current[orderIdx].pos,
+						sp: -skill.sp,
+					});
+					break;
+				case 4: //active(방어)
+					if (orderIdx < battleAlly.current.length - 1) {
+						setOrderIdx((prev) => ++prev);
+					} else {
+						setMode('action');
+						setOrderIdx('');
+					}
+					allyOrders.current.push({
+						team: 'ally',
+						idx: orderIdx,
+						skIdx: skill.idx,
+						skLv: skLv,
+						enemyTarget: false,
+						effectArea: targetAreaArr.current,
+						target: allyPos.current[orderIdx].pos,
+						sp: -skill.sp,
+					});
+					break;
+				case 5: //buff
+				case 13: //debuff
+					setEffectAllyArea(targetAreaArr.current);
+					setMode('area');
+					break;
+				default:
+					break;
 			}
 		}
 	};
@@ -2230,13 +2225,13 @@ const TestSkill = ({
         debuff = [],
         special = [];
       skill.forEach((data, idx) => {
-        if (gameData.skill[data.idx].cate[0] === 3) {
+        if (gameData.skill[data.idx].cate === 3) {
           active.push(data);
-        } else if (gameData.skill[data.idx].cate[0] === 7 || gameData.skill[data.idx].cate[0] === 8 || gameData.skill[data.idx].cate[0] === 9) {
+        } else if (gameData.skill[data.idx].cate === 7 || gameData.skill[data.idx].cate === 8 || gameData.skill[data.idx].cate === 9) {
           special.push(data);
-        } else if (gameData.skill[data.idx].cate[0] === 5) {
+        } else if (gameData.skill[data.idx].cate === 5) {
           buff.push(data);
-        } else if (gameData.skill[data.idx].cate[0] === 6) {
+        } else if (gameData.skill[data.idx].cate === 6) {
           debuff.push(data);
         };
       });
@@ -2763,7 +2758,7 @@ const TestSkill = ({
                     });
                     //스킬 공격타입과 캐릭공격타입이 같은지 확인
                   }
-                  if (sk[data.idx].cate[0] !== 2 && actionType) {
+                  if (sk[data.idx].cate !== 2 && actionType) {
                     return (
                       <li key={idx}><button onClick={() => {
                         battleCommand({

@@ -355,7 +355,7 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 				mark: Math.round(Math.random()*2),//동물뱃지 추가보유여부(상점에서 exp로 구입가능)
 				idx: newIdx,
 				items: [{}, {}, {}, {}, {}, {}, {}, {}],
-				lv: 50,
+				lv: 20,
 				sk: [{idx: 1, lv: 1, exp: 0,},{idx: 2, lv: 1, exp: 0,},],
 				// animalSkill:[],
 				animalSkill:[
