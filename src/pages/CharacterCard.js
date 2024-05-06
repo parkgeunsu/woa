@@ -316,7 +316,7 @@ const ChracterCard = ({
             <ListChElement type="elementBack" isThumb={true} pic="card_s" idx={chData?.element} />
             {saveCh?.lv > 29 && <ListChElement1 isThumb={true} type="elementBack2" pic="card_s" idx={chData?.element} />}
           </ListElement>
-          {saveCh?.lv > 49 && <ListChElement2 style={{
+          {saveCh?.lv > 49 && <ListChElement2 className="card_ring" style={{
             left: '-10%',
             width: '120%',
             height: '120%',

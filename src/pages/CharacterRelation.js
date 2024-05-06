@@ -54,6 +54,10 @@ const ChDescription = styled(Text)`
 const ChRelation = styled(FlexBox)`
   flex: 1;
 `;
+const Releations = styled.div`
+  width: 100%;
+  box-sizing: border-box;
+`;
 const CharacterRelation = ({
   saveData,
   slotIdx,
@@ -91,11 +95,11 @@ const CharacterRelation = ({
             lang:lang,
           });
         }}>
-          <ChRelation>
+          <ChRelation direction="column">
             {chRelation && chRelation.map((rtData, idx) => {
               const relationData = gameData.relation[rtData];
               return (
-                <div key={idx} className="rt" flex-h="true">
+                <Releations key={idx} className="rt" flex-h="true">
                   <div className="relationInfo" flex="true">
                     <span className="name">{relationData.na[lang]}</span>
                     <span className="txt" dangerouslySetInnerHTML={{__html: relationData.txt[lang]}} />
@@ -136,7 +140,7 @@ const CharacterRelation = ({
                       )
                     })}
                   </div>
-                </div>
+                </Releations>
               )
             })}
           </ChRelation>

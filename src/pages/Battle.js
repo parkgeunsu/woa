@@ -515,19 +515,22 @@ const BattleCh = styled.div`
 		}
 	}
 	/*상태이상*/
-	&.bleeding .ch_box .ch_style {
-		filter: grayscale(1) brightness(0.5);
+	&.bleeding .ch_box {
+		filter: opacity(0.7) drop-shadow(0px 0px 5px #f00) drop-shadow(0px 0px 3px #f00) drop-shadow(0px 0px 1px #f00);
 	}
-	&.addicted .ch_box .ch_style {
-		filter: blur(1px);
+	&.addicted .ch_box {
+		filter: contrast(5) sepia(1) opacity(0.5) drop-shadow(0px 0px 5px #f0f) drop-shadow(0px 0px 3px #f0f) drop-shadow(0px 0px 1px #f0f);
 	}
-	&.bleeding.addicted .ch_box .ch_style {
-		filter: grayscale(1) brightness(0.5) blur(1px);
-	}
+	${'' /* &.bleeding.addicted .ch_box {
+		filter: saturate(1.5) sepia(0.7) contrast(5) opacity(0.8) drop-shadow(0px 0px 5px #F00);
+	} */}
 	&.petrification .ch_box {
-		filter: grayscale(1) brightness(2);
+		filter: contrast(0.5) grayscale(1) brightness(2) drop-shadow(0px 0px 3px #fff) drop-shadow(0px 0px 1px #fff);
 	}
-	&.petrification .ch_ring {
+	&.freezing .ch_box {
+		filter: brightness(3) opacity(0.7) drop-shadow(0 0 5px #0ff) drop-shadow(0 0 3px #0ff) drop-shadow(0 0 1px #0ff);
+	}
+	&.petrification .card_ring {
 		animation-play-state: paused;
 	}
 `;
@@ -1191,7 +1194,11 @@ const chkString = (arr, index) => {
 	});
 	return chk;
 }
-const enemyPattern = ({ai, battleAlly, allyPos, battleEnemy, enemyPos, gameData}) => {
+const enemyPattern = ({mode, ai, battleAlly, allyPos, battleEnemy, enemyPos, gameData}) => {
+	if (mode === 'end') {
+		console.log('전투 종료')
+		return;
+	}
 	let enemySkill = [];
 	const activeSkillSorting = (skill) => {
 		let active = [],
@@ -1199,7 +1206,7 @@ const enemyPattern = ({ai, battleAlly, allyPos, battleEnemy, enemyPos, gameData}
 			debuff = [],
 			special = [];
 		skill.forEach((data, idx) => {
-			if (gameData.skill[data.idx].cate === 3) {
+			if (gameData.skill[data.idx].cate === 3 || gameData.skill[data.idx].cate === 13) {
 				active.push(data);
 			} else if (gameData.skill[data.idx].cate === 7 || gameData.skill[data.idx].cate === 8 || gameData.skill[data.idx].cate === 9) {
 				special.push(data);
@@ -1337,16 +1344,16 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 		let buffDebuff = []; //버프 임시저장 변수
 		if (timeLine[turnIdx].order.team === 'ally') {//캐릭 상태이상으로 스킵 체크
 			const allyState = battleAlly[timeLine[turnIdx].order.idx].state;
-			if (allyState.indexOf('die') >= 0 || allyState.indexOf('petrification') >= 0 || allyState.indexOf('confusion') >= 0 || allyState.indexOf('stun') >= 0) {//죽은 상태, 석화, 혼란, 기절
+			if (allyState.indexOf('die') >= 0 || allyState.indexOf('petrification') >= 0 || allyState.indexOf('stun') >= 0 || allyState.indexOf('freezing') >= 0) {//죽은 상태, 석화, 기절, 빙결
 				skillCate = 1;
-			} else if (allyState.indexOf('bleeding') >= 0) {//출혈
+			} else if (allyState.indexOf('confusion') >= 0) {//혼란
 			} else if (allyState.indexOf('transform') >= 0) {//변이
 			}
 		} else {
 			const enemyState = battleEnemy[timeLine[turnIdx].order.idx].state;
-			if (enemyState.indexOf('die') >= 0 || enemyState.indexOf('petrification') >= 0 || enemyState.indexOf('confusion') >= 0 || enemyState.indexOf('stun') >= 0) {//죽은 상태, 석화, 혼란, 기절
+			if (enemyState.indexOf('die') >= 0 || enemyState.indexOf('petrification') >= 0 || enemyState.indexOf('stun') >= 0 || enemyState.indexOf('freezing') >= 0) {//죽은 상태, 석화, 기절, 빙결
 				skillCate = 1;
-			} else if (enemyState.indexOf('bleeding') >= 0) {//출혈
+			} else if (enemyState.indexOf('confusion') >= 0) {//혼란
 			} else if (enemyState.indexOf('transform') >= 0) {//변이
 			}
 		}
@@ -1942,6 +1949,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 			let dmg = [],
 				heal = [],
 				sp = [],
+				stateImpactDef = 1,//기절, 빙결, 석화 방어력 영향계수
 				elementDefencePercent = 0;
 			let totalBattleGrade = 0,
 				landCritical = false;
@@ -2051,6 +2059,8 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 									} else {
 										teamAction[defData.idx] = teamAction[defData.idx] ? `${teamAction[defData.idx]} dmg` : 'dmg';
 									}
+								} else if (defEnemy.state.indexOf('freezing') >= 0) { //빙결 상태면
+								} else if (defEnemy.state.indexOf('stun') >= 0) { //기절 상태면
 								} else {
 									const chance = Math.random();
 									const hitChance =  Math.min(
@@ -2112,6 +2122,8 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 									} else {
 										teamAction[defData.idx] = teamAction[defData.idx] ? `${teamAction[defData.idx]} dmg` : 'dmg';
 									}
+								} else if (defEnemy.state.indexOf('freezing') >= 0) { //빙결 상태면
+								} else if (defEnemy.state.indexOf('stun') >= 0) { //기절 상태면
 								} else {
 									const chance = Math.random();
 									const magicChance = Math.min(
@@ -2144,8 +2156,33 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							}
 						}
 						//데미지 계산
-						elementDefencePercent = skType > 0 ? (defEnemy[util.getStateName(skType + 10)] || 0) / 100 + 1 : 1; //속성치에 따른 방어적용치
 						//스킬 공격치 적용
+						elementDefencePercent = skType > 0 ? (defEnemy[util.getStateName(skType + 10)] || 0) / 100 + 1 : 1; //속성치에 따른 방어적용치
+						if (defEnemy.state.indexOf('freezing') >= 0) {//빙결일때 수속공 1.5배, 화속공 0.5배
+							if (skType >= 1 && skType <= 6) {
+								elementDefencePercent = elementDefencePercent * 1.5;
+							} else if (skType === 9) {
+								elementDefencePercent = elementDefencePercent * 0.5;
+							} else if (skType === 10) {
+								elementDefencePercent = elementDefencePercent * 1.5;
+							} else {
+								elementDefencePercent = elementDefencePercent * 1.2;
+							}
+						}
+						if (defEnemy.state.indexOf('stun') >= 0) {//기절일때 암속,빛속 0.5배
+							if (skType >= 1 && skType <= 6) {
+								elementDefencePercent = elementDefencePercent * 0.5;
+							} else if (skType === 7 || skType === 8) {
+								elementDefencePercent = elementDefencePercent * 1.5;
+							}
+						}
+						if (defEnemy.state.indexOf('petrification') >= 0) {//석화일때 마법 0.7배
+							if (skType >= 1 && skType <= 6) {
+								elementDefencePercent = elementDefencePercent * 1.5;
+							} else if (skType >= 7 && skType <= 12) {
+								elementDefencePercent = elementDefencePercent * 0.7;
+							}
+						}
 						//skill dmg
 						let dmg_ = 0,
 							atkNum = {},
@@ -2236,7 +2273,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							}
 						}
 						//크리티컬 공격이면 방어 1/3로 줄임
-						dmg_ = Math.max(1, (atkNum[attackType] * kgAtk * multiplesAttackNum) - (criticalAtk ? defCount * .33 : defCount));
+						dmg_ = Math.max(1, (atkNum[attackType] * kgAtk * multiplesAttackNum) - (criticalAtk ? defCount * stateImpactDef * .33 : defCount * stateImpactDef));
 						if (avoid) {
 							dmg.push('');
 						} else {
@@ -2893,33 +2930,38 @@ const passiveBuff = ({gameData, battleAlly, battleEnemy, allyEnemyPassive, allyP
 			let buff = {...buff_},
 				state = util.getStateName(buff.type);
 			switch(state) {
-				case 'bleeding':
+				case 'bleeding'://출혈
 					state = 'hp';
 					ccSingle = 'bleeding';
 					cc += ' bleeding';
 					break;
-				case 'addicted':
+				case 'addicted'://중독
 					state = 'hp';
 					ccSingle = 'addicted';
 					cc += ' addicted';
 					break;
-				case 'petrification':
+				case 'petrification'://석화
 					state = 'def';
 					priorityState = '2000';
 					ccSingle = 'petrification';
 					cc += ' petrification';
 					break;
-				case 'confusion':
+				case 'confusion'://혼란
 					state = '';
 					ccSingle = 'confusion';
 					cc += ' confusion';
 					break;
-				case 'stun':
+				case 'freezing'://빙결
+					state = '';
+					ccSingle = 'freezing';
+					cc += ' freezing';
+					break;
+				case ''://기절
 					state = '';
 					ccSingle = 'stun';
 					cc += ' stun';
 					break;
-				case 'transform':
+				case 'transform'://변이
 					state = '';
 					ccSingle = 'transform';
 					cc += ' transform';
@@ -3189,33 +3231,38 @@ const passiveBuff = ({gameData, battleAlly, battleEnemy, allyEnemyPassive, allyP
 			let buff = {...buff_},
 				state = util.getStateName(buff.type);
 			switch(state) {
-				case 'bleeding':
+				case 'bleeding'://출혈
 					state = 'hp';
 					ccSingle = 'bleeding';
 					cc += ' bleeding';
 					break;
-				case 'addicted':
+				case 'addicted'://중독
 					state = 'hp';
 					ccSingle = 'addicted';
 					cc += ' addicted';
 					break;
-				case 'petrification':
+				case 'petrification'://석화
 					state = 'def';
 					priorityState = '2000';
 					ccSingle = 'petrification';
 					cc += ' petrification';
 					break;
-				case 'confusion':
+				case 'confusion'://혼란
 					state = '';
 					ccSingle = 'confusion';
 					cc += ' confusion';
 					break;
-				case 'stun':
+				case 'stun'://기절
 					state = '';
 					ccSingle = 'stun';
 					cc += ' stun';
 					break;
-				case 'transform':
+				case 'freezing'://빙결
+					state = '';
+					ccSingle = 'freezing';
+					cc += ' freezing';
+					break;
+				case 'transform'://변이
 					state = '';
 					ccSingle = 'transform';
 					cc += ' transform';
@@ -4251,7 +4298,7 @@ const Battle = ({
 	};
 	useLayoutEffect(() => {
 		const state = battleAlly.current[orderIdx]?.state;
-		if (state && (state.indexOf('petrification') >= 0 || state.indexOf('confusion') >= 0 || state.indexOf('stun') >= 0)) { //상태 이상일 경우 다음 캐릭으로 이동
+		if (state && (state.indexOf('petrification') >= 0 || state.indexOf('confusion') >= 0 || state.indexOf('stun') >= 0 || state.indexOf('freezing') >= 0)) { //상태 이상일 경우 다음 캐릭으로 이동
 			setOrderIdx((prev) => ++prev);
 		}
 	}, [orderIdx]);
@@ -4486,6 +4533,7 @@ const Battle = ({
 	}, [orderIdx]);
 	const timeLineSet = useCallback(() => {
 		enemyOrders.current = enemyPattern({
+			mode: mode,
 			ai: enemyAi.current,
 			battleAlly: battleAlly.current,
 			allyPos: allyPos.current,
