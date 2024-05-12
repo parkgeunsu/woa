@@ -173,6 +173,7 @@ export const util = { //this.loadImage();
       itemEff: obj.itemEff,
       grade: obj.grade || gameData.ch[saveChSlot.idx].grade, //캐릭터 등급
     }
+    console.log('aaa', saveChSlot)
     return saveChSlot;
   },
   saveCharacter: (dataObj) => { //아이템 변경시 스텟저장

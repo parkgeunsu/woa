@@ -548,6 +548,10 @@ const BattleCh = styled.div`
 	&.petrification .card_ring {
 		animation-play-state: paused;
 	}
+	&.confusion .ch_box {
+		animation:confusion ${({ gameSpd }) => 2.25 / gameSpd}s infinite;
+		filter: saturate(7);
+	}
 `;
 const Buff = styled.div`
 	.buff_effect{
@@ -1351,10 +1355,8 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 		}
 	}
 	if (turnIdx <= timeLine.length - 1) {
-		const skillIdx = timeLine[turnIdx].order.skIdx;
-		const skill = gameData.skill[skillIdx];
 		let isCounterAtk = false; //카운터 어택인지
-		let skillCate = skill.cate;
+		let skillCate = 0;
 		let atkC = [0, false], //공격 횟수
 			atkS = atkOption?.atkStay || 0; //한캐릭이 공격한 횟수 체크
 		let buffDebuff = []; //버프 임시저장 변수
@@ -1363,16 +1365,80 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 			if (allyState.indexOf('die') >= 0 || allyState.indexOf('petrification') >= 0 || allyState.indexOf('stun') >= 0 || allyState.indexOf('freezing') >= 0 || allyState.indexOf('immunity') >= 0) {//죽은 상태, 석화, 기절, 빙결, 이뮨
 				skillCate = 1;
 			} else if (allyState.indexOf('confusion') >= 0) {//혼란
+				if (!timeLine[turnIdx].order.counterAttack) {//카운터가 아닐경우
+					if (Math.random() < 0.5) {
+						console.log('혼란1', 1)
+						skillCate = 3;
+						const attackIdx = Math.floor(Math.random() * enemyPos.length);
+						timeLine[turnIdx].order = {
+							...timeLine[turnIdx].order,
+							skIdx:1,
+							skLv:1,
+							sp:0,
+							effectArea:[enemyPos[attackIdx]],
+							target:enemyPos[attackIdx],
+							targetIdx:[attackIdx]
+						}
+					} else {
+						skillCate = 15;
+						const attackIdx = Math.floor(Math.random() * allyPos.length);
+						timeLine[turnIdx].order = {
+							...timeLine[turnIdx].order,
+							skIdx:1,
+							skLv:1,
+							sp:0,
+							effectArea:[allyPos[attackIdx].pos],
+							target:allyPos[attackIdx].pos,
+							targetIdx:[allyPos[attackIdx].idx]
+						}
+						console.log('혼란2', timeLine[turnIdx].order)
+					}
+				}
 			} else if (allyState.indexOf('transform') >= 0) {//변이
+				if (!timeLine[turnIdx].order.counterAttack) {//카운터가 아닐경우
+				}
 			}
 		} else {
 			const enemyState = battleEnemy[timeLine[turnIdx].order.idx].state;
 			if (enemyState.indexOf('die') >= 0 || enemyState.indexOf('petrification') >= 0 || enemyState.indexOf('stun') >= 0 || enemyState.indexOf('freezing') >= 0 || enemyState.indexOf('immunity') >= 0) {//죽은 상태, 석화, 기절, 빙결, 이뮨
 				skillCate = 1;
 			} else if (enemyState.indexOf('confusion') >= 0) {//혼란
+				if (!timeLine[turnIdx].order.counterAttack) {//카운터가 아닐경우
+					if (Math.random() < 0.5) {
+						skillCate = 3;
+						const attackIdx = Math.floor(Math.random() * allyPos.length);
+						timeLine[turnIdx].order = {
+							...timeLine[turnIdx].order,
+							skIdx:1,
+							skLv:1,
+							sp:0,
+							effectArea:[allyPos[attackIdx].pos],
+							target:allyPos[attackIdx].pos,
+							targetIdx:[allyPos[attackIdx].idx]
+						}
+					} else {
+						skillCate = 15;
+						const attackIdx = Math.floor(Math.random() * enemyPos.length);
+						timeLine[turnIdx].order = {
+							...timeLine[turnIdx].order,
+							skIdx:1,
+							skLv:1,
+							sp:0,
+							effectArea:[enemyPos[attackIdx]],
+							target:enemyPos[attackIdx],
+							targetIdx:[attackIdx]
+						}
+					}
+				}
 			} else if (enemyState.indexOf('transform') >= 0) {//변이
+				if (!timeLine[turnIdx].order.counterAttack) {//카운터가 아닐경우
+				}
 			}
 		}
+		const skillIdx = timeLine[turnIdx].order.skIdx,
+			skillLv = timeLine[turnIdx].order.skLv - 1;
+		const skill = gameData.skill[skillIdx];
+		skillCate = skillCate === 0 ? skill.cate : skillCate;
 		if (skillCate === 1 || skillCate === 4){ //대기, 방어, 철벽방어
 			setTurnIdx(turnIdx + 1);
 			actionAnimation({
@@ -1435,15 +1501,14 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						}
 						buffDebuff[defData.idx] = [...battleAlly[defData.idx].buffDebuff];
 						skill.buff.forEach((data_) => {
-							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
-							const maxCount = skill.buffCount[skLvIdx];
+							const maxCount = skill.buffCount[skillLv];
 							if (buffDebuff[defData.idx][data_.type] === undefined) {
 								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 							}
 							buffDebuff[defData.idx][data_.type].count = maxCount;
 							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
 							buffDebuff[defData.idx][data_.type].type = data_.type;
-							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].num = data_.num[skillLv];
 							buffDebuff[defData.idx][data_.type].animation = skill.effAnimation;
 						});
 					});
@@ -1460,15 +1525,14 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						}
 						buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
 						skill.buff.forEach((data_) => {
-							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
-							const maxCount = skill.buffCount[skLvIdx];
+							const maxCount = skill.buffCount[skillLv];
 							if (buffDebuff[defData.idx][data_.type] === undefined) {
 								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 							}
 							buffDebuff[defData.idx][data_.type].count = maxCount;
 							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
 							buffDebuff[defData.idx][data_.type].type = data_.type;
-							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].num = data_.num[skillLv];
 							buffDebuff[defData.idx][data_.type].animation = skill.effAnimation;
 						});
 					});
@@ -1484,20 +1548,19 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							buffDebuff[defData.idx] = [];
 						}
 						buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
-						const skLvIdx = timeLine[turnIdx].order.skLv - 1;
 						//상태이상 확률
-						const chance = parseInt(skill.buffChance[skLvIdx]) / 100;
+						const chance = parseInt(skill.buffChance[skillLv]) / 100;
 						const percent = Math.random();
 						if (percent < chance) {
 							skill.buff.forEach((data_) => {
-								const maxCount = skill.buffCount[skLvIdx];
+								const maxCount = skill.buffCount[skillLv];
 								if (buffDebuff[defData.idx][data_.type] === undefined) {
 									buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 								}
 								buffDebuff[defData.idx][data_.type].count = maxCount;
 								buffDebuff[defData.idx][data_.type].maxCount = maxCount;
 								buffDebuff[defData.idx][data_.type].type = data_.type;
-								buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+								buffDebuff[defData.idx][data_.type].num = data_.num[skillLv];
 								buffDebuff[defData.idx][data_.type].animation = skill.effAnimation;
 							});
 						}
@@ -1537,15 +1600,14 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 					}
 					buffDebuff[attackerIdx] = [...battleAlly[attackerIdx].buffDebuff];
 					skill.buff.forEach((data_) => {
-						const skLvIdx = timeLine[turnIdx].order.skLv - 1;
-						const maxCount = skill.buffCount[skLvIdx];
+						const maxCount = skill.buffCount[skillLv];
 						if (buffDebuff[attackerIdx][data_.type] === undefined) {
 							buffDebuff[attackerIdx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 						}
 						buffDebuff[attackerIdx][data_.type].count = maxCount;
 						buffDebuff[attackerIdx][data_.type].maxCount = maxCount;
 						buffDebuff[attackerIdx][data_.type].type = data_.type;
-						buffDebuff[attackerIdx][data_.type].num = data_.num[skLvIdx];
+						buffDebuff[attackerIdx][data_.type].num = data_.num[skillLv];
 						buffDebuff[attackerIdx][data_.type].animation = skill.effAnimation;
 					});
 					timeLine.forEach((data) => { //방어중 체크
@@ -1583,15 +1645,14 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						}
 						buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
 						skill.buff.forEach((data_) => {
-							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
-							const maxCount = skill.buffCount[skLvIdx];
+							const maxCount = skill.buffCount[skillLv];
 							if (buffDebuff[defData.idx][data_.type] === undefined) {
 								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 							}
 							buffDebuff[defData.idx][data_.type].count = maxCount;
 							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
 							buffDebuff[defData.idx][data_.type].type = data_.type;
-							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].num = data_.num[skillLv];
 							buffDebuff[defData.idx][data_.type].animation = skill.effAnimation;
 						});
 					});
@@ -1618,7 +1679,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						}
 					});
 				} else if (skillCate === 10) { //날씨 변경
-					if (Math.random() < skill.buff[0].num[timeLine[turnIdx].order.skLv - 1].split('%')[0] / 100) {
+					if (Math.random() < skill.buff[0].num[skillLv].split('%')[0] / 100) {
 						setTimeout(() => {
 							setWeather((prev) => {
 								return {
@@ -1637,6 +1698,35 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						return {
 							ch: battleAlly[data],
 							idx: data,
+						}
+					});
+				} else if (skillCate === 15) { //팀킬
+					defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
+						return {
+							ch: battleAlly[data],
+							idx: data,
+						}
+					});
+					timeLine.forEach((data) => {//방어중 체크
+						if (data.order.team === 'ally'){
+							//console.log(dIdx + '적군 방어중');
+							timeLine[turnIdx].order.targetIdx.forEach((tarIdx) => {
+								if (tarIdx === data.order.idx) {
+									defendSkillEnemy[data.order.idx] = {
+										idx: data.order.idx,
+										type: data.order.skIdx,
+									}
+									if (data.order.skIdx === 2) { //방어
+										allyAction[data.order.idx] = 'state2';
+									} else if (data.order.skIdx === 14) { //마법방어
+										allyAction[data.order.idx] = 'state3'; 
+									} else if (data.order.skIdx === 13) { //철벽방어
+										allyAction[data.order.idx] = 'state4'; 
+									} else if (data.order.skIdx === 15) { //나무뒤에 숨기
+										allyAction[data.order.idx] = 'state5'; 
+									}
+								}
+							});
 						}
 					});
 				} else {//액티브스킬 방어자 셋팅
@@ -1703,15 +1793,14 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						}
 						buffDebuff[defData.idx] = [...battleEnemy[defData.idx].buffDebuff];
 						skill.buff.forEach((data_) => {
-							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
-							const maxCount = skill.buffCount[skLvIdx];
+							const maxCount = skill.buffCount[skillLv];
 							if (buffDebuff[defData.idx][data_.type] === undefined) {
 								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 							}
 							buffDebuff[defData.idx][data_.type].count = maxCount;
 							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
 							buffDebuff[defData.idx][data_.type].type = data_.type;
-							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].num = data_.num[skillLv];
 							buffDebuff[defData.idx][data_.type].animation = skill.effAnimation;
 						});
 					});
@@ -1728,15 +1817,14 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						}
 						buffDebuff[defData.idx] = [...battleAlly[defData.idx].buffDebuff];
 						skill.buff.forEach((data_) => {
-							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
-							const maxCount = skill.buffCount[skLvIdx];
+							const maxCount = skill.buffCount[skillLv];
 							if (buffDebuff[defData.idx][data_.type] === undefined) {
 								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 							}
 							buffDebuff[defData.idx][data_.type].count = maxCount;
 							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
 							buffDebuff[defData.idx][data_.type].type = data_.type;
-							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].num = data_.num[skillLv];
 							buffDebuff[defData.idx][data_.type].animation = skill.effAnimation;
 						});
 					});
@@ -1752,19 +1840,18 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							buffDebuff[defData.idx] = [];
 						}
 						buffDebuff[defData.idx] = [...battleAlly[defData.idx].buffDebuff];
-						const skLvIdx = timeLine[turnIdx].order.skLv - 1;
 						//상태이상 확률
-						const chance = parseInt(skill.buffChance[skLvIdx]) / 100;
+						const chance = parseInt(skill.buffChance[skillLv]) / 100;
 						if (Math.random() < chance) {
 							skill.buff.forEach((data_) => {
-								const maxCount = skill.buffCount[skLvIdx];
+								const maxCount = skill.buffCount[skillLv];
 								if (buffDebuff[defData.idx][data_.type] === undefined) {
 									buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 								}
 								buffDebuff[defData.idx][data_.type].count = maxCount;
 								buffDebuff[defData.idx][data_.type].maxCount = maxCount;
 								buffDebuff[defData.idx][data_.type].type = data_.type;
-								buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+								buffDebuff[defData.idx][data_.type].num = data_.num[skillLv];
 								buffDebuff[defData.idx][data_.type].animation = skill.effAnimation;
 							});
 						}
@@ -1804,15 +1891,14 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 					}
 					buffDebuff[attackerIdx] = [...battleAlly[attackerIdx].buffDebuff];
 					skill.buff.forEach((data_) => {
-						const skLvIdx = timeLine[turnIdx].order.skLv - 1;
-						const maxCount = skill.buffCount[skLvIdx];
+						const maxCount = skill.buffCount[skillLv];
 						if (buffDebuff[attackerIdx][data_.type] === undefined) {
 							buffDebuff[attackerIdx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 						}
 						buffDebuff[attackerIdx][data_.type].count = maxCount;
 						buffDebuff[attackerIdx][data_.type].maxCount = maxCount;
 						buffDebuff[attackerIdx][data_.type].type = data_.type;
-						buffDebuff[attackerIdx][data_.type].num = data_.num[skLvIdx];
+						buffDebuff[attackerIdx][data_.type].num = data_.num[skillLv];
 						buffDebuff[attackerIdx][data_.type].animation = skill.effAnimation;
 					});
 					timeLine.forEach((data) => { //방어중 체크
@@ -1850,15 +1936,14 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						}
 						buffDebuff[defData.idx] = [...battleAlly[defData.idx].buffDebuff];
 						skill.buff.forEach((data_) => {
-							const skLvIdx = timeLine[turnIdx].order.skLv - 1;
-							const maxCount = skill.buffCount[skLvIdx];
+							const maxCount = skill.buffCount[skillLv];
 							if (buffDebuff[defData.idx][data_.type] === undefined) {
 								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
 							}
 							buffDebuff[defData.idx][data_.type].count = maxCount;
 							buffDebuff[defData.idx][data_.type].maxCount = maxCount;
 							buffDebuff[defData.idx][data_.type].type = data_.type;
-							buffDebuff[defData.idx][data_.type].num = data_.num[skLvIdx];
+							buffDebuff[defData.idx][data_.type].num = data_.num[skillLv];
 							buffDebuff[defData.idx][data_.type].animation = skill.effAnimation;
 						});
 					});
@@ -1885,7 +1970,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						}
 					});
 				} else if (skillCate === 10) { //날씨 변경
-					if (Math.random() < skill.buff[0].num[timeLine[turnIdx].order.skLv - 1].split('%')[0] / 100) {
+					if (Math.random() < skill.buff[0].num[skillLv].split('%')[0] / 100) {
 						setTimeout(() => {
 							setWeather((prev) => {
 								return {
@@ -1904,6 +1989,35 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						return {
 							ch: battleEnemy[data],
 							idx: data,
+						}
+					});
+				} else if (skillCate === 15) { //팀킬
+					defencer = timeLine[turnIdx].order.targetIdx.map((data) => {
+						return {
+							ch: battleEnemy[data],
+							idx: data,
+						}
+					});
+					timeLine.forEach((data) => { //방어중 체크
+						if (data.order.team === 'enemy'){
+							//console.log(dIdx + '적군 방어중');
+							timeLine[turnIdx].order.targetIdx.forEach((tarIdx) => {
+								if (tarIdx === data.order.idx) {
+									defendSkillEnemy[data.order.idx] = {
+										idx: data.order.idx,
+										type: data.order.skIdx,
+									}
+									if (data.order.skIdx === 2) { //방어
+										enemyAction[data.order.idx] = 'state2';
+									} else if (data.order.skIdx === 14) { //마법방어
+										enemyAction[data.order.idx] = 'state3'; 
+									} else if (data.order.skIdx === 13) { //철벽방어
+										enemyAction[data.order.idx] = 'state4'; 
+									} else if (data.order.skIdx === 15) { //나무뒤에 숨기
+										enemyAction[data.order.idx] = 'state5'; 
+									}
+								}
+							});
 						}
 					});
 				} else {//액티브스킬 방어자 셋팅
@@ -2055,14 +2169,18 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 				});
 			} else {//액티브 스킬 데미지 공식
 				const skType = gameData.skill[timeLine[turnIdx].order.skIdx].element_type;//스킬 속성종류
-				const teamAction = timeLine[turnIdx].order.team === 'ally' ? enemyAction : allyAction;
+				const teamAction = timeLine[turnIdx].order.team === 'ally' 
+					? skillCate === 15 ? allyAction : enemyAction 
+					: skillCate === 15 ? enemyAction : allyAction;
 				defencer.forEach((defData, dIdx) => {
 					const defEnemy = defData.ch;
 					let criticalAtk = false,
 						avoid = false;
 					if (defEnemy.state !== 'die') { //적이 살았을 경우
-						const addHitEff = (gameData.skill[skillIdx].attackEff[0]?.type === 0 ? parseInt(gameData.skill[skillIdx].attackEff[0].num[timeLine[turnIdx].order.skLv - 1]) * 0.01 : 0) + attacker.iSt40,//atkEff 적중률 효과 적용
-							addCriticalEff = (gameData.skill[skillIdx].attackEff[0]?.type === 1 ? parseInt(gameData.skill[skillIdx].attackEff[0].num[timeLine[turnIdx].order.skLv - 1]) * 0.01 : 0) + attacker.iSt38,//atkEff 치명타 효과 적용
+						const addHitEff = (gameData.skill[skillIdx].attackEff.length > 0 && gameData.skill[skillIdx].attackEff[0]?.type === 0 
+							? parseInt(gameData.skill[skillIdx].attackEff[0].num[skillLv]) * 0.01 
+							: 0) + attacker.iSt40,//atkEff 적중률 효과 적용
+							addCriticalEff = (gameData.skill[skillIdx].attackEff.length > 0 && gameData.skill[skillIdx].attackEff[0]?.type === 1 ? parseInt(gameData.skill[skillIdx].attackEff[0].num[skillLv]) * 0.01 : 0) + attacker.iSt38,//atkEff 치명타 효과 적용
 							addKgEff = 0.15 - 1/(gameData.animal_size.kg[defEnemy.animal_type][1] - gameData.animal_size.kg[defEnemy.animal_type][0]) * (defEnemy.kg - gameData.animal_size.kg[defEnemy.animal_type][0]) * 0.15;//무게 효과 적용
 						//마법 방어와 방어 분기 처리
 						if (skType < 7) {//물리공격인지
@@ -2089,7 +2207,6 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 										(0.15 * (attacker.spd - defEnemy.spd) + 0.1 * (attacker.luk - defEnemy.luk)) / 100 + 0.7 + addKgEff + addHitEff,
 										0.95
 									); //물리 적중 확률, 기본0.7 어드벤티지
-									console.log('hit', hitChance);
 									if (chance < hitChance) {// 공격 적중
 										if (Math.random() < criticalChance) {
 											criticalAtk = true;
@@ -2113,7 +2230,6 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 												idx: timeLine[turnIdx].order.targetIdx[0],
 												skIdx: 1,
 												skLv: 1,
-												enemyTarget: true,
 												target: effectTarget,
 												effectArea: [effectTarget],
 												targetIdx: [timeLine[turnIdx].order.idx],
@@ -2350,7 +2466,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 									});
 								}
 							}
-							if (skill.effSize[timeLine[turnIdx].order.skLv - 1] >= 5) {
+							if (skill.effSize[skillLv] >= 5 || skill.ta[skillLv] === 23) {
 								targetArr.effTargets[12] = true; //allEff일경우 12로 맞춤
 							} else {
 								timeLine[turnIdx].order.effectArea.forEach((eTarget) => {
@@ -2373,8 +2489,8 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						//effTargets 이펙트 적용위치
 						//targetIdx 데미지 적중 대상
 						//timeLine[turnIdx].order.effectArea 스킬 적용 범위
-						//console.log('targetIdx', targetIdx, timeLine[turnIdx].order.effectArea, targetArr.effTargets, targetArr.targets)
-						targetArr.effSize = skill.effSize[timeLine[turnIdx].order.skLv - 1];
+						// console.log('targetIdx', targetIdx, timeLine[turnIdx].order.effectArea, targetArr.effTargets, targetArr.targets)
+						targetArr.effSize = skill.effSize[skillLv];
 						targetArr.effAnimation = skill.effAnimation;
 						targetArr.effRotate = skill.effRotate;
 						targetArr.effFilter = skill.effFilter;
@@ -2385,8 +2501,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 								setEnemyEffect({
 									...targetArr,
 								});
-							} else if (skillCate === 5) {//버프
-								console.log('버프', targetArr)
+							} else if (skillCate === 5 || skillCate === 15) {//버프
 								setAllyEffect({
 									...targetArr,
 								});
@@ -2487,7 +2602,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 								setAllyEffect({
 									...targetArr
 								});
-							} else if (skillCate === 5) {//버프
+							} else if (skillCate === 5 || skillCate === 15) {//버프
 								setEnemyEffect({
 									...targetArr
 								});
@@ -2683,18 +2798,48 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 		if (pB.enemyDmgArr['bleeding'] || pB.allyDmgArr['bleeding']) {
 			//pB.timeDelay += 750 / gameSpd;
 			if (pB.allyDmgArr['bleeding']) {
+				let taObj = {
+					effTargets:[],
+					targets:[],
+				};
+				pB.allyDmgArr['bleeding'].forEach((effTa) => {
+					taObj.effTargets[effTa.posIdx.pos] = true;
+					taObj.targets[effTa.posIdx.pos] = {
+						dmg:Math.round(effTa.dmg),
+					}
+				});
 				setAllyEffect(prev => {
 					return {
 						...prev,
-						targets: pB.allyDmgArr['bleeding']
+						...taObj,
+						effAnimation: 'blood6',
+						effSize:1.5,
+						effRotate:'',
+						effFilter:'hue-rotate(260deg) contrast(2) saturate(6)',
+						skillIdx:0,
 					}
 				});
-			}
+			}//posion: blood6
 			if (pB.enemyDmgArr['bleeding']) {
+				let taObj = {
+					effTargets:[],
+					targets:[],
+				};
+				pB.enemyDmgArr['bleeding'].forEach((effTa) => {
+					taObj.effTargets[effTa.posIdx.pos] = true;
+					taObj.targets[effTa.posIdx.pos] = {
+						dmg:Math.round(effTa.dmg),
+					}
+				});
 				setEnemyEffect(prev => {
 					return {
 						...prev,
-						targets: pB.enemyDmgArr['bleeding']
+						...taObj,
+						effAnimation: 'blood6',
+						effSize:1.5,
+						effRotate:'',
+						effFilter:'hue-rotate(260deg) contrast(2) saturate(6)',
+						skillIdx:0,
 					}
 				});
 			}
@@ -2702,18 +2847,48 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 				//pB.timeDelay += 750 / gameSpd;
 				setTimeout(() => {
 					if (pB.allyDmgArr['addicted']) {
+						let taObj = {
+							effTargets:[],
+							targets:[],
+						};
+						pB.allyDmgArr['addicted'].forEach((effTa) => {
+							taObj.effTargets[effTa.posIdx.pos] = true;
+							taObj.targets[effTa.posIdx.pos] = {
+								dmg:Math.round(effTa.dmg),
+							}
+						});
 						setAllyEffect(prev => {
 							return {
 								...prev,
-								targets: pB.allyDmgArr['addicted']
+								...taObj,
+								effAnimation: 'blood6',
+								effSize:1.5,
+								effRotate:'',
+								effFilter:'saturate(3)',
+								skillIdx:0,
 							}
 						});
 					}
 					if (pB.enemyDmgArr['addicted']) {
+						let taObj = {
+							effTargets:[],
+							targets:[],
+						};
+						pB.enemyDmgArr['addicted'].forEach((effTa) => {
+							taObj.effTargets[effTa.posIdx.pos] = true;
+							taObj.targets[effTa.posIdx.pos] = {
+								dmg:Math.round(effTa.dmg),
+							}
+						})
 						setEnemyEffect(prev => {
 							return {
 								...prev,
-								targets: pB.enemyDmgArr['addicted']
+								...taObj,
+								effAnimation: 'blood6',
+								effSize:1.5,
+								effRotate:'',
+								effFilter:'saturate(3)',
+								skillIdx:0,
 							}
 						});
 					}
@@ -2722,18 +2897,48 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 		} else if (pB.enemyDmgArr['addicted'] || pB.allyDmgArr['addicted']) {
 			//pB.timeDelay += 750 / gameSpd;
 			if (pB.allyDmgArr['addicted']) {
+				let taObj = {
+					effTargets:[],
+					targets:[],
+				};
+				pB.allyDmgArr['addicted'].forEach((effTa) => {
+					taObj.effTargets[effTa.posIdx.pos] = true;
+					taObj.targets[effTa.posIdx.pos] = {
+						dmg:Math.round(effTa.dmg),
+					}
+				})
 				setAllyEffect(prev => {
 					return {
 						...prev,
-						targets: pB.allyDmgArr['addicted']
+						...taObj,
+						effAnimation: 'blood6',
+						effSize:1.5,
+						effRotate:'',
+						effFilter:'saturate(3)',
+						skillIdx:0,
 					}
 				});
 			}
 			if (pB.enemyDmgArr['addicted']) {
+				let taObj = {
+					effTargets:[],
+					targets:[],
+				};
+				pB.enemyDmgArr['addicted'].forEach((effTa) => {
+					taObj.effTargets[effTa.posIdx.pos] = true;
+					taObj.targets[effTa.posIdx.pos] = {
+						dmg:Math.round(effTa.dmg),
+					}
+				})
 				setEnemyEffect(prev => {
 					return {
 						...prev,
-						targets: pB.enemyDmgArr['addicted']
+						...taObj,
+						effAnimation: 'blood6',
+						effSize:1.5,
+						effRotate:'',
+						effFilter:'saturate(3)',
+						skillIdx:0,
 					}
 				});
 			}
@@ -3018,7 +3223,6 @@ const passiveBuff = ({gameData, battleAlly, battleEnemy, allyEnemyPassive, allyP
 							const percent = parseInt(passiveNum) / 100;
 							ally[state] = percent < 0 ? ally[state] - ally[state] * Math.abs(percent) : ally[state] + ally[state] * percent;
 							ally[state] = ally[state] < 0 ? 0 : ally[state];
-							console.log(passiveNum);
 						} else {
 							ally[state] = ally[state] + Number(passiveNum)  < 0 ? 0 : ally[state] + Number(passiveNum);
 						}
@@ -3080,7 +3284,7 @@ const passiveBuff = ({gameData, battleAlly, battleEnemy, allyEnemyPassive, allyP
 					cc += ' addicted';
 					break;
 				case 'petrification'://석화
-					state = 'def';
+					state = '';
 					ccSingle = 'petrification';
 					cc += ' petrification';
 					break;
@@ -3180,7 +3384,6 @@ const passiveBuff = ({gameData, battleAlly, battleEnemy, allyEnemyPassive, allyP
 					if (allyDmgArr[ccSingle] === undefined) {
 						allyDmgArr[ccSingle] = [];
 					}
-					console.log('buff', ally, buff);
 					allyDmgArr[ccSingle].push({
 						posIdx:allyPos[chIdx],
 						animation:buff.animation,
@@ -3820,7 +4023,7 @@ const Battle = ({
 				fireR = saveCh.el9 + saveCh.iSt32 + (effData?.rtSt32 || 0),
 				windR = saveCh.el10 + saveCh.iSt33 + (effData?.rtSt33 || 0),
 				earthR = saveCh.el11 + saveCh.iSt34 + (effData?.rtSt34 || 0);
-			saveCh.hasSkill[2] = {idx:296,lv:1,exp:1};//삭제 해야됨
+			saveCh.hasSkill[2] = {idx:298,lv:1,exp:1};//삭제 해야됨
 			battleAlly.current.push({
 				...saveCh,
 				na1: gameData.ch[saveCh.idx].na1,
@@ -4248,7 +4451,6 @@ const Battle = ({
 						idx: orderIdx,
 						skIdx: currentSkill.current.sk.idx,
 						skLv: currentSkill.current.skLv,
-						enemyTarget: true,
 						targetIdx: targetIdx.current,
 						effectArea: targetAreaArr.current,
 						target: pos,
@@ -4341,7 +4543,6 @@ const Battle = ({
 						idx: orderIdx,
 						skIdx: currentSkill.current.sk.idx,
 						skLv: currentSkill.current.skLv,
-						enemyTarget: true,
 						targetIdx: targetIdx.current,
 						effectArea: targetAreaArr.current,
 						target: pos,
@@ -4456,7 +4657,6 @@ const Battle = ({
 						idx: orderIdx,
 						skIdx: skill.idx,
 						skLv: skLv,
-						enemyTarget: false,
 						effectArea: targetAreaArr.current,
 						target: allyPos.current[orderIdx].pos,
 						sp: -skill.sp,
@@ -4474,7 +4674,6 @@ const Battle = ({
 						idx: orderIdx,
 						skIdx: skill.idx,
 						skLv: skLv,
-						enemyTarget: false,
 						effectArea: targetAreaArr.current,
 						target: allyPos.current[orderIdx].pos,
 						sp: -skill.sp,
@@ -4630,7 +4829,7 @@ const Battle = ({
 	useLayoutEffect(() => {
 		if (allyPos.current[orderIdx]) {
 			const allyState = battleAlly.current[allyPos.current[orderIdx].idx].state;
-			if (allyState.indexOf('die') >= 0 || allyState.indexOf('petrification') >= 0 || allyState.indexOf('freezing') >= 0 || allyState.indexOf('immunity') >= 0 || allyState.indexOf('stun') >= 0) {//상태 이상일 경우 다음 캐릭으로 이동
+			if (allyState.indexOf('die') >= 0 || allyState.indexOf('petrification') >= 0 || allyState.indexOf('freezing') >= 0 || allyState.indexOf('immunity') >= 0 || allyState.indexOf('stun') >= 0 || allyState.indexOf('confusion') >= 0) {//상태 이상일 경우 다음 캐릭으로 이동
 				allyOrders.current.push({
 					team: 'ally',
 					idx: orderIdx,
@@ -4644,8 +4843,6 @@ const Battle = ({
 						setOrderIdx('');
 					}
 				}
-			} else if (allyState.indexOf('confusion') >= 0) {
-				console.log('혼란 동작');
 			} else if (allyState.indexOf('transform') >= 0) {
 				console.log('변이 동작');
 			}
@@ -4991,6 +5188,7 @@ const Battle = ({
 													<span className="hp"><em className="gradient_light" style={{width: hasHp + '%'}}></em></span>
 												</div>
 											</div>
+											<div className="dmg"></div>
 											<IconPic className="state" type="battleState" isAbsolute={true} isThumb={true} pic="icon150" idx={iconIdx ? iconIdx[0] : 0} />
 											<IconPic className="stateDie" type="battleState" isAbsolute={true} isThumb={true} pic="icon150" idx={1} />
 										</BattleCh>
@@ -5033,9 +5231,6 @@ const Battle = ({
 									const isDie = allyCh?.state || '';
 									const actionState = allyAction[currentAllyIdx.current] || "";
 									const iconIdx = /[0-9]+/g.exec(actionState);
-									if (iconIdx) {
-										console.log('buff', actionState, iconIdx[0]);
-									}
 									const passive = allyEnemyPassive[0][currentAllyIdx.current];
 									{/* const buffEff = allyEnemyBuff[0][currentAllyIdx.current]; */}
 									currentAllyIdx.current ++;
