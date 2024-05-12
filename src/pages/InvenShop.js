@@ -242,7 +242,7 @@ const StyledButton = styled(Button)`
 `;
 const buttonType = (button, itemData) => {
 	if (itemData.sealed) {
-		button.push('evaluate');
+		button.unshift('evaluate');
 	} else {
 		if (itemData.slot) {
 			button.unshift('socket');
@@ -360,9 +360,28 @@ const ShopFooter = ({
 					<ItemList className="item_list">
 						<div className="item_title">{gameData.msg.itemInfo.itemEffect[lang]}</div>
 						{util.getTotalEff(selectedItem.saveItemData, gameData).map((eff, idx) => {
-							return (
-								<div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{selectedItem.saveItemData.sealed ? eff.base : eff.base + eff.add + eff.hole}</span></div>
-							)
+							if (eff.type === 100) {
+								return (
+									<div key={idx} className="item_effs">
+										<span className="cate">{util.getEffectType(eff.type, lang)}</span>
+										{eff.skList.map((sk, skIndex) => {
+											return (
+												<span key={`skIndex${skIndex}`} className="total">{`${gameData.skill[sk.idx].na[lang]} LV.${sk.lv}`}</span>
+											)
+										})}
+									</div>
+								)
+							} else {
+								return (
+									<div key={idx} className="item_effs">
+										<span className="cate">{util.getEffectType(eff.type, lang)}</span>
+										{eff.base > 0 && <span className="base">{eff.base}</span>}
+										{eff.add > 0 && <span className="add">{eff.add}</span>}
+										{eff.hole > 0 && <span className="hole">{eff.hole}</span>}
+										<span className="total">{selectedItem.saveItemData.sealed ? eff.base : eff.base + eff.add + eff.hole}</span>
+									</div>
+								)
+							}
 						})}
 					</ItemList>
 					<div style={{width:"100%"}} className="scroll-y">
@@ -382,9 +401,15 @@ const ShopFooter = ({
 								<div className="item_title">{gameData.msg.itemInfo.addEffect[lang]}</div>
 								{selectedItem.saveItemData.addEff.map((data, idx) => {
 									const grade = selectedItem.saveItemData.grade > 3 ? 3 : selectedItem.saveItemData.grade - 1;
-									return (
-										<div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
-									) 
+									if (data.type === 100) {
+										return (
+											<div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${gameData.skill[data.skIdx].na[lang]} LV.${data.skLv}`}</div>
+										)
+									} else {
+										return (
+											<div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
+										)
+									}
 								})}
 							</ItemList>
 						)}
@@ -483,7 +508,7 @@ const ShopFooter = ({
 					</em>
 				</> : <>
 					<span>{gameData.msg.itemInfo.sellPrice[lang]}</span>
-					<em>{`₩${util.comma(selectedItem.gameItem.price * (selectedItem.gameItem.grade || selectedItem.saveItemData.grade))}`}</em>
+					<em>{`₩${util.comma(selectedItem.gameItem?.price * (selectedItem.gameItem?.grade || selectedItem.saveItemData?.grade))}`}</em>
 				</>
 				}
 			</div> 
@@ -613,7 +638,7 @@ const ShopFooter = ({
 							<StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} key={`button${idx}`} onClick={(e) => {
 								if (shopType === 'shop') {
 									if (typeof selectedItem.gameItem?.part === 'number') { //장비면
-										if (selectedItem.gameItem?.part <= 3) { //무기이면
+										if (selectedItem.gameItem?.part <= 3) { //투구,갑옷,무기이면
 											// if (actionCh.idx === '') {
 											// 	setMsgOn(true);
 											// 	setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[201].na));
@@ -643,24 +668,22 @@ const ShopFooter = ({
 													const itemData = saveData.items.equip[selectedItem.itemSaveSlot],
 														itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5,
 														nextItem = itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx] : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx];
-													timeoutRef.current = setTimeout(() => {
-														util.saveHistory({
-															location: 'shop',
-															navigate: navigate,
-															callback: () => {},
-															state: {
-																dataObj: {
-																	saveItemData: saveData.items.equip[selectedItem.itemSaveSlot],
-																	gameItem: nextItem,
-																	itemSaveSlot: selectedItem.itemSaveSlot,
-																	selectTab: selectTab,
-																	type: 'equip',
-																	selectSlot: selectSlot,
-																}
-															},
-															isNavigate: true,
-														});
-													}, 1800);
+													util.saveHistory({
+														location: 'shop',
+														navigate: navigate,
+														callback: () => {},
+														state: {
+															dataObj: {
+																saveItemData: saveData.items.equip[selectedItem.itemSaveSlot],
+																gameItem: nextItem,
+																itemSaveSlot: selectedItem.itemSaveSlot,
+																selectTab: selectTab,
+																type: 'equip',
+																selectSlot: selectSlot,
+															}
+														},
+														isNavigate: true,
+													});
 												} else {
 													setSelectItem({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
 												}
@@ -715,7 +738,7 @@ const ShopFooter = ({
 									}
 								} else if (shopType === 'tool') {
 									if (typeof selectedItem.gameItem?.part === 'number') { //장비면
-										if (selectedItem.gameItem?.part <= 3) { //무기이면
+										if (selectedItem.gameItem?.part <= 3) { //투구,갑옷,무기이면
 											setMsgOn(true);
 											setMsg(gameData.msg.sentence.goShop[lang]);
 											timeoutRef.current = setTimeout(() => {
@@ -1004,24 +1027,22 @@ const ShopFooter = ({
 										showPopup: setPopupOn,
 										lang: lang,
 									}, () => {
-										timeoutRef.current = setTimeout(() => {
-											util.saveHistory({
-												location: 'inven',
-												navigate: navigate,
-												callback: () => {},
-												state: {
-													dataObj: {
-														saveItemData: saveData.items.equip[selectedItem.itemSaveSlot],
-														gameItem: selectedItem.gameItem,
-														itemSaveSlot: selectedItem.itemSaveSlot,
-														selectTab: selectTab,
-														type: typeList[selectTab].itemCate,
-														selectSlot: selectSlot,
-													}
-												},
-												isNavigate: true,
-											});
-										}, 1800);
+										util.saveHistory({
+											location: 'inven',
+											navigate: navigate,
+											callback: () => {},
+											state: {
+												dataObj: {
+													saveItemData: saveData.items.equip[selectedItem.itemSaveSlot],
+													gameItem: selectedItem.gameItem,
+													itemSaveSlot: selectedItem.itemSaveSlot,
+													selectTab: selectTab,
+													type: typeList[selectTab].itemCate,
+													selectSlot: selectSlot,
+												}
+											},
+											isNavigate: true,
+										});
 									});
 								} else {
 									setMsgOn(true);
@@ -1080,7 +1101,6 @@ const ShopFooter = ({
 }
 
 const selectTabFn = (state, shopType, typeList) => {
-	console.log(state);
 	if (!state || Object.keys(state).length <= 0) {
 		return 0;
 	}

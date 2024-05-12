@@ -619,7 +619,7 @@ export const map = {
 export const effect = {
   slash0:{img:slash0,frame:8,used:'공격'},slash1:{img:slash1,frame:25},slash2:{img:slash2,frame:25},slash3:{img:slash3,frame:13},slash4:{img:slash4,frame:14},slash5:{img:slash5,frame:10},slash6:{img:slash6,frame:14,used:'돌진'},slash7:{img:slash7,frame:11,used:'할퀴기'},slash8:{img:aniPack4_2,frame:8,used:'후려치기'},slash9:{img:aniPack4_3,frame:11},slash10:{img:aniPack4_11,frame:6},
   slash11:{img:aniPack4_15,frame:5,used:'물기'},
-  hit0:{img:hit0,frame:15},hit1:{img:hit1,frame:30},hit2:{img:hit2,frame:15,used:'마구때리기'},hit3:{img:hit3,frame:28},hit4:{img:hit4,frame:26,used:'뒷발차기'},hit5:{img:aniPack4_7,frame:6,used:'누르기'},hit6:{img:aniPack4_9,frame:5,used:'쪼기'},hit7:{img:aniPack4_10,frame:5,used:'치기'},hit8:{img:aniPack4_16,frame:5,used:'던지기'},
+  hit0:{img:hit0,frame:15},hit1:{img:hit1,frame:30},hit2:{img:hit2,frame:15,used:'마구때리기'},hit3:{img:hit3,frame:28,used:'급소타격'},hit4:{img:hit4,frame:26,used:'뒷발차기'},hit5:{img:aniPack4_7,frame:6,used:'누르기'},hit6:{img:aniPack4_9,frame:5,used:'쪼기'},hit7:{img:aniPack4_10,frame:5,used:'치기'},hit8:{img:aniPack4_16,frame:5,used:'던지기'},
   shoot0:{img:shoot0,frame:15},shoot1:{img:shoot1,frame:35},shoot2:{img:shoot2,frame:15},shoot3:{img:shoot3,frame:15},shoot4:{img:shoot4,frame:30},shoot5:{img:shoot5,frame:30},shoot6:{img:shoot6,frame:45},shoot7:{img:shoot7,frame:14},shoot8:{img:shoot8,frame:15},shoot9:{img:shoot9,frame:14},
   shoot10:{img:shoot10,frame:20},shoot11:{img:shoot11,frame:13},shoot12:{img:aniPack4_0,frame:9},shoot13:{img:aniPack4_1,frame:9},shoot14:{img:aniPack4_14,frame:11},
   pick0:{img:pick0,frame:13},pick1:{img:pick1,frame:30},pick2:{img:aniPack4_5,frame:6},
@@ -636,7 +636,7 @@ export const effect = {
   wind10:{img:wind10,frame:50},wind11:{img:wind11,frame:90},
   ice0:{img:ice0,frame:15},ice1:{img:ice1,frame:23},ice2:{img:ice2,frame:15},ice3:{img:ice3,frame:15},ice4:{img:ice4,frame:30},ice5:{img:ice5,frame:29},ice6:{img:ice6,frame:38},ice7:{img:ice7,frame:45},ice8:{img:ice8,frame:45},ice9:{img:ice9,frame:90},
   ice10:{img:ice10,frame:50},ice11:{img:ice11,frame:37},
-  earth0:{img:earth0,frame:15},earth1:{img:earth1,frame:22},earth2:{img:earth2,frame:14,used:'돌던지기'},earth3:{img:earth3,frame:15},earth4:{img:earth4,frame:30,used:'무리사냥'},earth5:{img:earth5,frame:30},earth6:{img:earth6,frame:38},earth7:{img:earth7,frame:45},earth8:{img:earth8,frame:45},earth9:{img:earth9,frame:90},
+  earth0:{img:earth0,frame:15,used:'땅굴기습'},earth1:{img:earth1,frame:22},earth2:{img:earth2,frame:14,used:'돌던지기'},earth3:{img:earth3,frame:15},earth4:{img:earth4,frame:30,used:'무리사냥'},earth5:{img:earth5,frame:30},earth6:{img:earth6,frame:38},earth7:{img:earth7,frame:45},earth8:{img:earth8,frame:45},earth9:{img:earth9,frame:90},
   earth10:{img:earth10,frame:46},earth11:{img:earth11,frame:90},
   thunder0:{img:thunder0,frame:15},thunder1:{img:thunder1,frame:23},thunder2:{img:thunder2,frame:15},thunder3:{img:thunder3,frame:15},thunder4:{img:thunder4,frame:28},thunder5:{img:thunder5,frame:28},thunder6:{img:thunder6,frame:38},thunder7:{img:thunder7,frame:45},thunder8:{img:thunder8,frame:45},thunder9:{img:thunder9,frame:90},
   thunder10:{img:thunder10,frame:48},thunder11:{img:thunder11,frame:48},thunder12:{img:thunder12,frame:49},thunder13:{img:thunder13,frame:49},thunder14:{img:thunder14,frame:90},thunder15:{img:thunder15,frame:90},thunder16:{img:thunder16,frame:40},thunder17:{img:thunder17,frame:50},thunder18:{img:thunder18,frame:44},thunder19:{img:thunder19,frame:21},
@@ -652,7 +652,7 @@ export const effect = {
   buff10:{img:buff10,frame:90},buff11:{img:buff11,frame:90},buff12:{img:buff12,frame:45},buff13:{img:buff13,frame:45},buff14:{img:buff14,frame:45},buff15:{img:buff15,frame:45},buff16:{img:buff16,frame:30},buff17:{img:buff17,frame:26,used:'하악질'},buff18:{img:buff18,frame:50},buff19:{img:buff19,frame:30},
   buff20:{img:buff20,frame:30},buff21:{img:buff21,frame:30},buff22:{img:buff22,frame:37},buff23:{img:buff23,frame:45},buff24:{img:buff24,frame:50},buff25:{img:buff25,frame:50},buff26:{img:buff26,frame:41},buff27:{img:buff27,frame:47},buff28:{img:buff28,frame:30,used:'그루밍'},buff29:{img:buff29,frame:30},
   buff30:{img:buff30,frame:30,used:'빵굽기1'},buff31:{img:buff31,frame:30,used:'포효'},buff32:{img:buff32,frame:30},buff33:{img:buff33,frame:30,used:'몸집키우기'},buff34:{img:buff34,frame:50},buff35:{img:buff35,frame:30,used:'손톱갈기'},buff36:{img:buff36,frame:30},buff37:{img:buff37,frame:30,used:'영역표시'},buff38:{img:buff38,frame:26},buff39:{img:buff39,frame:30},
-  buff40:{img:buff40,frame:30},buff41:{img:buff41,frame:30},buff42:{img:aniPack4_6,frame:15},custom01:{img:custom01,frame:24,used:'무거운한방'},
+  buff40:{img:buff40,frame:30,used:'조개선물'},buff41:{img:buff41,frame:30},buff42:{img:aniPack4_6,frame:15},custom01:{img:custom01,frame:24,used:'무거운한방'},
 };
 export const images = {
   ch:ch,ch_s:ch_s,card:card,card_s:card_s,cardRing:cardRing,cardRing_s:cardRing_s,skill:skill,icon100:icon100,icon150:icon150,icon200:icon200,moveEvent:moveEvent,moveEventCountry:moveEventCountry,itemTicket:itemTicket,itemEtc:itemEtc,animalType:animalType,

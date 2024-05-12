@@ -148,32 +148,38 @@ const setCity = (data, lang) => {
   ];
   let accessory = [];//도구상 악세사리 생성
   for (let i = 0; i < 20; i ++) {
-    accessory[i] = {...util.getItem(false, gameData, false, {
-      type:'equip',
-      items:Math.round(Math.random())+4,//악세사리만 해당
-      lv:Math.round(Math.random()*100),
-      sealed:false,
-      }, false, lang),
-    }
+    accessory[i] = {...util.getItem({
+      saveData: false,
+      gameData: gameData,
+      changeSaveData: false,
+      option: {
+        type:'equip',
+        items:Math.round(Math.random())+4,//악세사리만 해당
+        lv:Math.round(Math.random()*100),
+        sealed:false,
+      },
+      isSave: false,
+      lang:lang
+    })}
   }
   cityD[0].tool.accessory = accessory;
   let items = [[],[],[],[]];//장비상 아이템 생성
   for (let i = 0; i < 20; i ++) {
     for (let j = 1; j < 4; j ++) {
-      items[j - 1][i] = {...util.getItem(
-        false,
-        gameData,
-        false,
-        {
+      items[j - 1][i] = {...util.getItem({
+        saveData: false,
+        gameData: gameData,
+        changeSaveData: false,
+        option: {
           type:'equip',
           items:j,//장비만 해당
           //아이템종류, 세부종류(검,단검), 매직등급
           lv:Math.round(Math.random()*100),
           sealed:false,
         },
-        false,
-        lang
-      )};
+        isSave: false,
+        lang: lang,
+      })}
     }
   }
   cityD[0].shop.helm = items[0];

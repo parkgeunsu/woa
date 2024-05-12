@@ -341,7 +341,6 @@ const ChracterCard = ({
           }} isThumb={true} type="cardBack" pic="card_s" idx={0} />
           <ListChElement type="elementBack" isThumb={true} pic="card_s" idx={chData?.element} />
           {saveCh?.lv > 29 && <ListChElement1 isThumb={true} type="elementBack2" pic="card_s" idx={chData?.element} />}
-					<div className="ch_name">{chData?.na1}</div>
         </>
       )
     }

@@ -26,83 +26,83 @@ export const skill = [
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:17,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:0},
+		buff:[{type:23,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:0},
 	{idx:4,
 		na:{ko:'어둠의 하수인',en:'Minions of Darkness',jp:'暗の手先'},element_type:8,cate:11,
 		txt:'<possible><area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:18,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:0},
+		buff:[{type:24,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:0},
 	{idx:5,
 		na:{ko:'물의 하수인',en:'Minions of Water',jp:'水の手先'},element_type:9,cate:11,
 		txt:'<possible><area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:19,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:0},
+		buff:[{type:25,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:0},
 	{idx:6,
 		na:{ko:'불의 하수인',en:'Minions of Fire',jp:'火の手先'},element_type:10,cate:11,
 		txt:'<possible><area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:20,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:0},
+		buff:[{type:26,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:0},
 	{idx:7,
 		na:{ko:'바람의 하수인',en:'Minions of Wind',jp:'風の手先'},element_type:11,cate:11,
 		txt:'<possible><area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:21,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:0},
+		buff:[{type:27,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:0},
 	{idx:8,
 		na:{ko:'땅의 하수인',en:'Minions of Earth',jp:'地の手先'},element_type:12,cate:11,
 		txt:'<possible><area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:22,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:0},
+		buff:[{type:28,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:0},
 	{idx:9,
 		na:{ko:'빛의 정령',en:'Spirit of Light',jp:'光の精霊'},element_type:7,cate:2,
 		txt:'<area>, <el> <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:17,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:0},
+		buff:[{type:23,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:0},
 	{idx:10,
 		na:{ko:'어둠의 정령',en:'Spirit of Dark',jp:'暗の精霊'},element_type:8,cate:2,
 		txt:'<area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:18,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:0},
+		buff:[{type:24,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:0},
 	{idx:11,
 		na:{ko:'물의 정령',en:'Spirit of Water',jp:'水の精霊'},element_type:9,cate:2,
 		txt:'<area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:19,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:0},
+		buff:[{type:25,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:0},
 	{idx:12,
 		na:{ko:'불의 정령',en:'Spirit of Fire',jp:'火の精霊'},element_type:10,cate:2,
 		txt:'<area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:20,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:0},
+		buff:[{type:26,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:0},
 	{idx:13,
 		na:{ko:'바람의 정령',en:'Spirit of Wind',jp:'風の精霊'},element_type:11,cate:2,
 		txt:'<area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:21,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:0},
+		buff:[{type:27,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:0},
 	{idx:14,
 		na:{ko:'땅의 정령',en:'Spirit of Earth',jp:'地の精霊'},element_type:12,cate:2,
 		txt:'<area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:22,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:0},
+		buff:[{type:28,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:0},
 	{idx:15,
 		na:{ko:'언변',en:'Speech',jp:'言論'},element_type:0,cate:11,
 		txt:'<job>',
@@ -432,14 +432,14 @@ export const skill = [
 		txt:'<area>, <turn> <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'buff35',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:3,num:['30%','40%','50%','60%','70%']}],buffCount:[2,2,2,2,3],atkCount:[1],sp:6},
+		buff:[{type:3,num:['30%','40%','50%','60%','70%']}],buffCount:[2,2,2,2,3],atkCount:[1],sp:8},
 	{idx:235,
 		na:{ko:'영역표시',en:'Mark the Area',jp:'エリア表示'},element_type:0,cate:5,
 		txt:'<area>, <turn> <buff>',
 		skillClass:1,
 		ta_:0,ta:[20,20,20,20,20],effAnimation:'buff37',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:8,num:['3','6','9','12','15']}],buffCount:[2,2,2,2,3],atkCount:[1],sp:6},
+		buff:[{type:8,num:['3','6','9','12','15']}],buffCount:[2,2,2,2,3],atkCount:[1],sp:8},
 	{idx:236,
 		na:{ko:'몸집 키우기',en:'Grows in Size',jp:'身長を伸ばす'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
@@ -457,7 +457,7 @@ export const skill = [
 		txt:'<area>, <turn> <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'buff28',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:8,num:['10%','20%','30%','40%','50%']}],buffCount:[2,2,2,2,2],atkCount:[1],sp:6},
+		buff:[{type:8,num:['10%','20%','30%','40%','50%']}],buffCount:[2,2,2,2,2],atkCount:[1],sp:7},
 	{idx:239,
 		na:{ko:'포효',en:'Roar',jp:'轟音'},element_type:0,cate:6,
 		txt:'<area>, <turn> <buff>',
@@ -613,13 +613,13 @@ export const skill = [
 		txt:'<area>, <condition>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',condition:10,
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:17,num:['10','13','15','18','20']}],atkCount:[1],sp:0},
+		buff:[{type:23,num:['10','13','15','18','20']}],atkCount:[1],sp:0},
 	{idx:265,
 		na:{ko:'밀림의 지배자',en:'Lords of the Jungle',jp:'ジャングルの支配者'},element_type:0,cate:12,
 		txt:'<area>, <condition>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',condition:11,
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:19,num:['10','13','15','18','20']}],atkCount:[1],sp:0},
+		buff:[{type:25,num:['10','13','15','18','20']}],atkCount:[1],sp:0},
 	{idx:266,
 		na:{ko:'금빛 갈기',en:'Golden Mane',jp:'金色のたてがみ'},element_type:0,cate:5,
 		txt:'<area>, <turn> <buff>',
@@ -631,7 +631,7 @@ export const skill = [
 		txt:'<area>, <turn> <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'blood4',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:13,num:['10%','15%','20%','25%','30%']},{type:19,num:['10%','15%','20%','25%','30%']}],buffCount:[2,2,3,3,4],atkCount:[0],sp:30},
+		buff:[{type:13,num:['10%','15%','20%','25%','30%']},{type:25,num:['10%','15%','20%','25%','30%']}],buffCount:[2,2,3,3,4],atkCount:[0],sp:30},
 	{idx:268,
 		na:{ko:'야습',en:'Night Raids',jp:'夜の襲撃'},element_type:8,cate:3,
 		txt:'<area>, <condition>, <dmg>, <el>, ',
@@ -782,7 +782,32 @@ export const skill = [
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'buff23',effAnimationRepeat:1,effSize:[1.5,1.5,2,2,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		eff:[{type:43,num:['170%','180%','190%','200%','210%']}],atkCount:[1],sp:15},
-	'','','','','','','','','',//300
+	{idx:293,
+		na:{ko:'조개 선물',en:'Seashell Gifts',jp:'貝殻ギフト'},element_type:9,cate:13,
+		txt:'<area>, <dmg>, <el>',
+		ta_:0,ta:[43,43,43,43,43],effAnimation:'buff40',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:43,num:['200%','210%','220%','230%','250%']}],atkCount:[1],sp:12},
+	{idx:294,
+		na:{ko:'땅굴기습',en:'Burrow Attack',jp:'地雷掃討'},element_type:11,cate:3,
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[1,42,42,43,43],effAnimation:'earth0',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:5,num:['120%','130%','140%','150%','160%']}],atkCount:[1],sp:15},
+	{idx:295,
+		na:{ko:'급소타격',en:'Rapid Fire',jp:'急所打撃'},element_type:4,cate:7,
+		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
+		ta_:1,ta:[1,1,1,1,1],effAnimation:'hit3',effAnimationRepeat:1,effSize:[1.5,1.5,2,2,2.5],effRotate:270,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:3,num:['200%','210%','220%','230%','240%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,3,3],buffChance:['30%','35%','40%','45%','50%'],atkCount:[1],sp:18},
+	{idx:296,
+		na:{ko:'쥐구멍숨기',en:'Hide in a rat hole',jp:'ネズミの穴に隠れる'},element_type:11,cate:5,
+		txt:'<area>, <turn> <buff>',
+		skillClass:1,
+		ta_:0,ta:[23,23,23,23,23],effAnimation:'buff42',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		buff:[{type:50,num:['-10%','-10%']}],buffCount:[2,2,2,2,2],atkCount:[1],sp:10},
+	'','','','','','','',//300
 	{idx:239,
 		na:{ko:'개구리 기우제',en:'Frog Rainmaker',jp:'カエル祈雨祭'},element_type:0,cate:10,txt:{ko:'<u>날씨</u>, 비오는 날씨로 밤으로 변환',en:'<u>Weather</u>, Convert to rainy weather',jp:'<u>天気</u>, 雨天で夜に変換'},skillClass:1,
 		ta_:1,ta:20,effAnimation:7,effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,buffAnimation:0,
@@ -800,24 +825,25 @@ export const skill = [
 // active4(본인), 바로실행 (ex: defence)
 // buff5(아군) (턴제로 실행), 
 // debuff6(적군) (턴제로 실행),
-// active7(적군), 적군 디버프 추가 (턴제로 실행)
-// active8(적군), 아군 버프 추가 (턴제로 실행)
-// active9(적군), 상태이상 추가 (턴제로 실행) 삭제예정
+// active7(적군), 적군공격 디버프추가 (턴제로 실행)
+// active8(적군), 적군공격 아군버프 추가 (턴제로 실행)
 // weather10(날씨), 날씨 변환 (턴제로 실행)
 // job11(직업)
 // passive12(조건부 condition), (조건에 맞으면 실행)
 // active13(아군), (턴제로 실행)
+// active14(적군, 아군) 적군공격 아군힐 (턴제로 실행)
 
 //   condition 1밤(날씨), 2낮(날씨), 3눈(날씨), 4비(날씨), 5해(날씨), 10평원(지형), 11숲(지형), 12물(지형), 21풀피(스텟), 22피20%이하(스텟)
 
 // [element_type] 무속성(0),쪼기(1),할퀴기(2),물기(3),치기(4),누르기(5),던지기(6),빛(7),어둠(8),물(9),불(10),바람(11),땅(12)
 
-// [eff], [buff] 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 행운LUK(9), 카운터Atk(10), 쪼기(11), 할퀴기(12), 물기(13), 치기(14), 누르기(15), 던지기(16), 빛(17), 어둠(18), 물(19), 불(20), 바람(21), 땅(22), 치명타(31), 회피(32), 적중률(33), hp회복(41), sp회복(42), hp,sp회복(43), 부활(44), 부활hp회복(45), 출혈(50), 중독(51), 석화(52), 혼란(53), 기절(54), 변이(55), 즉사(56), 빙결(57), 패시브(100)
+// [eff], [buff] 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 행운LUK(9), 반격(10), 쪼기(11), 할퀴기(12), 물기(13), 치기(14), 누르기(15), 던지기(16), 빛(17), 어둠(18), 물(19), 불(20), 바람(21), 땅(22), 쪼기저항(23), 할퀴기저항(24), 물기저항(25), 치기저항(26), 누르기저항(27), 던지기저항(28), 빛저항(29), 어둠저항(30), 물저항(31), 불저항(32), 바람저항(33), 땅저항(34), 치명타(38), 회피(39), 적중률(40), hp회복(41), sp회복(42), hp,sp회복(43), 부활(44), 부활hp회복(45), 무적(48), 면역(49), 출혈(50), 중독(51), 석화(52), 혼란(53), 기절(54), 변이(55), 즉사(56), 빙결(57), 출혈저항(60), 중독저항(61), 석화저항(62), 혼란저항(63), 기절저항(64), 변이저항(65), 즉사저항(66), 빙결저항(67), 출혈면역(70), 중독면역(71), 석화면역(72), 혼란면역(73), 기절면역(74), 변이면역(75), 즉사면역(76), 면역저항(77), 스킬(100)
+
 // [attackEff] 크리티컬(0), 적중률(1)
 
 // [ta_] 아군0, 적군1
 // [ta] getEffectArea 효과범위, passive일 경우 1:단일, 100:직업
-// 영역 1단일, 2가로2, 3가로3, 4세로2, 5세로3, 6가로행, 7세로열, 8십자5, 9십자9, 10대각선/, 11대각선\, 12고정세로2열, 13고정세로3열, 14⏊ 4, 15└┐, 16┌┘, 17卍, 18가로2행, 19가로3행, 20전체, 21정사각형9, 22정사각형4, 23자신, 24원, 25랜덤5, 26랜덤10, 27랜덤15, 28작은마름모, 29큰마름모, 30큰링, 31랜덤세로2열, 32랜덤세로3열, 33랜덤가로2행, 34랜덤가로3행, 35x자5, 36x자9, 37ㅜ 4, 38랜덤20, 39바깥1줄, 40바깥2줄, 41바깥3줄, 42n포함 랜덤 5, 43n포함 랜덤 10, 44n포함 랜덤 15, 45n포함 랜덤 20, 46가로4, 47세로4, 48가로3x2, 49세로2x3, 50가로4x2, 51세로2x4, 52가로행2줄 20, 53세로열2줄 20, 100고양이, 101사자, 102호랑이, 103개, 104늑대, 105물개, 106너구리, 107쥐, 108토끼, 109원숭이, 110고릴라, 111캥거루, 112소, 113곰, 114말, 115사슴, 116코뿔소, 117코끼리, 118기린, 119새, 120독수리, 121뱀, 122도마뱀, 123거북이, 124개구리, 125돼지
+// 영역 1단일, 2가로2, 3가로3, 4세로2, 5세로3, 6가로행, 7세로열, 8십자5, 9십자9, 10대각선/, 11대각선\, 12고정세로2열, 13고정세로3열, 14⏊4, 15└┐7, 16┌┘7, 17卍, 18가로2행, 19가로3행, 20전체, 21정사각형9, 22정사각형4, 23자신, 24원, 25랜덤5, 26랜덤10, 27랜덤15, 28작은마름모, 29큰마름모, 30큰링, 31랜덤세로2열, 32랜덤세로3열, 33랜덤가로2행, 34랜덤가로3행, 35x자5, 36x자9, 37ㅜ4, 38랜덤20, 39바깥1줄, 40바깥2줄, 41바깥3줄, 42n포함 랜덤 5, 43n포함 랜덤 10, 44n포함 랜덤 15, 45n포함 랜덤 20, 46가로4, 47세로4, 48가로3x2, 49세로2x3, 50가로4x2, 51세로2x4, 52가로행2줄 20, 53세로열2줄 20, 54작은└┐4, 55작은┌┘4, 100고양이, 101사자, 102호랑이, 103개, 104늑대, 105물개, 106너구리, 107쥐, 108토끼, 109원숭이, 110고릴라, 111캥거루, 112소, 113곰, 114말, 115사슴, 116코뿔소, 117코끼리, 118기린, 119새, 120독수리, 121뱀, 122도마뱀, 123거북이, 124개구리, 125돼지
 
 // [multiplesAttack] 데미지 x배수 공격
 
@@ -870,17 +896,16 @@ export const skill = [
 // * 5물개 - 물개의 유연함(passive),
 // 치기, 누르기
 // 회전박치기(바람)●, 물대포(수)●, 파도공격(수,광)●, 바다의 축복(부활,힐)●, 응원의 박수(빛,힐)●, 몸통박치기1(치기)●,
-// [송곳니뚫기(바다사자특정)],
+// [송곳니뚫기(바다사자특정)]●,
 
 // * 6너구리 - 너구리의 영특한 계산(passive), 반격(passive),
 // 물기, 치기, 던지기
 // 돌던지기(땅)●, 눈덩이던지기(수)●, 훔쳐먹기(회복,자신)●, 응원의 박수(빛,힐)●,
-// [주머니털기(너구리한정)], [조개 선물(회복)(해달한정)],
+// [주머니털기(너구리한정)], [조개 선물(회복)(해달한정)]●,
 
 // * 7쥐 - 쥐의 날쌘 행동력(passive) - 시작 두턴간 무적, 
 // 물기,
-// 가속2(buff),
-// 구토(독, 광역)●, 땅굴기습(땅), 급소타격(물기), 훔쳐먹기(회복,자신)●,
+// 구토(독, 광역)●, 땅굴기습(땅)●, 급소타격(치기)●, 훔쳐먹기(회복,자신)●,
 // 민접한 스틸(아이템획득), 쥐구멍숨기(회피),
 
 // * 8토끼 -  토끼의 뛰어난 점프력(spd, luk)(passive),
@@ -900,7 +925,7 @@ export const skill = [
 
 // * 11캥거루 - 캥거루의 요술주머니(힐 기술)(passive), 매턴 10% 회복
 // 치기
-// 몸집 키우기(buff)●, 가속1(buff)
+// 몸집 키우기(buff)●,
 // 침뱉기(수, 광)●, 후려치기(치기)●, 아웃복싱(치기), 마구때리기(치기)●, 원투펀치(치기)●, 하이킥(치기), 꼬리치기2(치기), 꼬리채찍(바람), 헤드락(누르기), 몸통박치기1(치기)●, 만능주머니 랜덤 효과
 
 // * 12소 - 소의 우직한 전진(passive),
@@ -940,7 +965,6 @@ export const skill = [
 
 // * 19새 - 새의 청량한 노래(passive), 조류과(passive)
 // 쪼기, 물기
-// 가속2(buff), 
 // 손톱&뿔 갈기●, 낙석(땅), 날개치기1(바람), 고공낙하(광역, 바람), 치유의 노래(회복, 광역), 공중부양(회피), 훔쳐먹기(회복,자신)●,
 	
 // * 20독수리 - 독수리의 영리한 전략(passive), 반격(passive), 조류과(passive)

@@ -208,7 +208,14 @@ const Composite = ({
 															lv:Math.round(Math.random()*100),
 															sealed:true,
 														}
-														util.getItem(saveData, gameData, changeSaveData, option, true, lang);
+														util.getItem({
+															saveData: sData,
+															gameData: gameData,
+															changeSaveData: changeSaveData,
+															option: option,
+															isSave:	true,
+															lang: lang
+														});
 													}
 												};
 												changeSaveData(sData);

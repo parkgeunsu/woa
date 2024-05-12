@@ -480,9 +480,28 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         <PopupItemList className="item_list item_eff" type="eff">
           <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.itemEffect[lang]}</PopupItemTitle>
           {totalEff.map((eff, idx) => {
-            return (
-              <div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
-            )
+            if (eff.type === 100) {
+              return (
+                <div key={idx} className="item_effs">
+                  <span className="cate">{util.getEffectType(eff.type, lang)}</span>
+                  {eff.skList.map((sk, skIndex) => {
+                    return (
+                      <span key={`skIndex${skIndex}`} className="total">{`${gameData.skill[sk.idx].na[lang]} LV.${sk.lv}`}</span>
+                    )
+                  })}
+                </div>
+              )
+            } else {
+              return (
+                <div key={idx} className="item_effs">
+                  <span className="cate">{util.getEffectType(eff.type, lang)}</span>
+                  {eff.base > 0 && <span className="base">{eff.base}</span>}
+                  {eff.add > 0 && <span className="add">{eff.add}</span>}
+                  {eff.hole > 0 && <span className="hole">{eff.hole}</span>}
+                  <span className="total">{eff.base + eff.add + eff.hole}</span>
+                </div>
+              )
+            }
           })}
         </PopupItemList>
         <div style={{width:"100%"}} className="scroll-y">
@@ -502,9 +521,15 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.addEffect[lang]}</PopupItemTitle>
               {saveItems.addEff.map((data, idx) => {
                 const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
-                return (
-                  <div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
-                ) 
+                if (data.type === 100) {
+                  return (
+                    <div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${gameData.skill[data.skIdx].na[lang]} LV.${data.skLv}`}</div>
+                  )
+                } else {
+                  return (
+                    <div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
+                  )
+                } 
               })}
             </PopupItemList>
           )}
@@ -613,9 +638,28 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         <PopupItemList className="item_list item_eff" type="eff">
           <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.itemEffect[lang]}</PopupItemTitle>
           {totalEff.map((eff, idx) => {
-            return (
-              <div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{sealed ? eff.base : eff.base + eff.add + eff.hole}</span></div>
-            )
+            if (eff.type === 100) {
+              return (
+                <div key={idx} className="item_effs">
+                  <span className="cate">{util.getEffectType(eff.type, lang)}</span>
+                  {eff.skList.map((sk, skIndex) => {
+                    return (
+                      <span key={`skIndex${skIndex}`} className="total">{`${gameData.skill[sk.idx].na[lang]} LV.${sk.lv}`}</span>
+                    )
+                  })}
+                </div>
+              )
+            } else {
+              return (
+                <div key={idx} className="item_effs">
+                  <span className="cate">{util.getEffectType(eff.type, lang)}</span>
+                  {eff.base > 0 && <span className="base">{eff.base}</span>}
+                  {eff.add > 0 && <span className="add">{eff.add}</span>}
+                  {eff.hole > 0 && <span className="hole">{eff.hole}</span>}
+                  <span className="total">{sealed ? eff.base : eff.base + eff.add + eff.hole}</span>
+                </div>
+              )
+            }
           })}
         </PopupItemList>
         <div style={{width:"100%"}} className="scroll-y">
@@ -635,9 +679,15 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.addEffect[lang]}</PopupItemTitle>
               {saveItems.addEff.map((data, idx) => {
                 const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
-                return (
-                  <div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
-                ) 
+                if (data.type === 100) {
+										return (
+											<div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${gameData.skill[data.skIdx].na[lang]} LV.${data.skLv}`}</div>
+										)
+                } else {
+                  return (
+                    <div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
+                  )
+                }
               })}
             </PopupItemList>
           )}
@@ -771,7 +821,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   });
                 }, 1800);
               }} data-buttontype="enhancingStickers" />
-              {hasSocket && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:22}} onClick={(e) => {//소켓
+              {hasSocket > 0 && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:22}} onClick={(e) => {//소켓
                 showMsg(true);
                 msgText(gameData.msg.sentence.goForge[lang]);
                 timeoutRef.current = setTimeout(() => {

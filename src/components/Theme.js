@@ -45,6 +45,7 @@ const ColorSet = {
 	water: "#0d3167",
 }
 const FontSet = {
+	tSmall: "0.5625rem", //9
 	t0: "0.625rem", //10
   t1: "0.75rem", //12
   t2: "0.875rem", //14

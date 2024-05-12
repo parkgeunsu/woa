@@ -59,7 +59,7 @@ export const util = { //this.loadImage();
     let history = isNavigate ? util.loadData('history') || [] : [];
     setTimeout(() => {
       const prevLocation = history.length > 0 ? history[0] : '';
-      if (location !== prevLocation.pageName) {
+      if (location !== prevLocation.location) {
         history.unshift({
           location: location,
           state: state ? {
@@ -95,7 +95,7 @@ export const util = { //this.loadImage();
       battleState_[idx] = st;
     }
     battleState_[7] = gameData.ch[enemyData.idx].st3 + gameData.ch[enemyData.idx].st5 + gameData.ch[enemyData.idx].st6; //속도
-    battleState_[8] = Math.round(Math.random()*200); //행운
+    battleState_[8] = Math.round(Math.random() * 200); //행운
     const battleState = util.getTotalState(battleState_);
     //등급에 따른 추가 능력치
     let addGradePercent = 1;
@@ -103,59 +103,26 @@ export const util = { //this.loadImage();
       addGradePercent *= gameData.addGradeArr[i];
     }
     for (const [idx, bState] of battleState.entries()) {
-      const iStNum = util.compileState(bState, itemEff[idx]);
       enemy = {
         ...enemy,
-        ['iSt' + idx]: iStNum,
         ['bSt' + idx]: (idx !== 1 && idx !== 2 && idx !== 8 && idx !== 9) ? Math.round(bState * addGradePercent) : bState,
       }
     }
-    for (let i = 0; i < 12; ++i) {//아이템 능력치
-      const iStNum = util.compileState(enemy[`el${i}`], itemEff[i+11]);
-      enemy['iSt' + (i+11)] = iStNum;
+    for (let i = 0; i <= 100; ++i) {//아이템 능력치
+      if (i < 10) {
+        enemy['iSt' + i] = util.compileState(enemy['bSt' + i], itemEff[i]);
+      } else if (i > 10 && i < 35) {//물리 공격
+        enemy['iSt' + i] = util.compileState(0, itemEff[i]);
+      } else if ((i > 37 && i < 41) || (i > 49 && i < 58) || (i > 59 && i < 68) || (i > 69 && i < 78)) {
+        enemy['iSt' + i] = util.compileState(0, itemEff[i]);
+      } else if (i === 100) {
+        enemy['iSt' + i] = itemEff[i];
+      }
     }
     for (const idx of gameData.element.keys()) {
       enemy = {
         ...enemy,
         ['el' + idx]: gameData.animal_type[gameData.ch[enemyData.idx].animal_type].element[idx],
-      }
-    }
-    const element = enemyData.element || gameData.ch[enemyData.idx].element;
-    for (const elData of element) {
-      if (elData === 6) { //빛속성 경우
-        enemy = {
-          ...enemy,
-          el7: Math.round(enemy.el7 - 50 * (enemyData.grade / 5)),
-        }
-      } else if (elData === 7) { //암속성 경우
-        enemy = {
-          ...enemy,
-          el6: Math.round(enemy.el6 - 50 * (enemyData.grade / 5)),
-        }
-      } else if (elData === 8) { //수속성 경우
-        enemy = {
-          ...enemy,
-          el8: Math.round(enemy.el8 + 20 * (enemyData.grade / 5)),
-          el9: Math.round(enemy.el9 + 50 * (enemyData.grade / 5)),
-        }
-      } else if (elData === 9) { //화속성 경우
-        enemy = {
-          ...enemy,
-          el9: Math.round(enemy.el9 + 20 * (enemyData.grade / 5)),
-          el10: Math.round(enemy.el10 + 50 * (enemyData.grade / 5)),
-        }
-      } else if (elData === 10) { //바람속성 경우
-        enemy = {
-          ...enemy,
-          el10: Math.round(enemy.el10 + 20 * (enemyData.grade / 5)),
-          el11: Math.round(enemy.el11 + 50 * (enemyData.grade / 5)),
-        }
-      } else if (elData === 11) { //땅속성 경우
-        enemy = {
-          ...enemy,
-          el11: Math.round(enemy.el11 + 20 * (enemyData.grade / 5)),
-          el8: Math.round(enemy.el8 + 50 * (enemyData.grade / 5)),
-        }
       }
     }
     enemy = {
@@ -182,57 +149,23 @@ export const util = { //this.loadImage();
     }
     const battleState = util.getTotalState(battleState_);
     for (const [idx, bState] of battleState.entries()) {
-      const iStNum = util.compileState(bState, obj.itemEff[idx]);
-      saveChSlot['iSt' + idx] = iStNum;
       saveChSlot['bSt' + idx] = (idx !== 1 && idx !== 2 && idx !== 8 && idx !== 9) ? Math.round(bState * addGradePercent) : bState;
     }
-
-    for (let i = 0; i < 12; ++i) {//아이템 능력치
-      const iStNum = util.compileState(saveChSlot[`el${i}`], obj.itemEff[i+11]);
-      saveChSlot['iSt' + (i+11)] = iStNum;
+    for (let i = 0; i <= 100; ++i) {//아이템 능력치
+      if (i < 10) {
+        saveChSlot['iSt' + i] = util.compileState(saveChSlot['bSt' + i], obj.itemEff[i]);
+      } else if (i > 10 && i < 35) {//물리 공격
+        saveChSlot['iSt' + i] = util.compileState(0, obj.itemEff[i]);
+      } else if ((i > 37 && i < 41) || (i > 49 && i < 58) || (i > 59 && i < 68) || (i > 69 && i < 78)) {
+        saveChSlot['iSt' + i] = util.compileState(0, obj.itemEff[i]);
+      } else if (i === 100) {
+        saveChSlot['iSt' + i] = obj.itemEff[i];
+      }
     }
     for (const idx of gameData.element.keys()) {
       saveChSlot = {
         ...saveChSlot,
         ['el' + idx]: gameData.animal_type[gameData.ch[saveChSlot.idx].animal_type].element[idx],
-      }
-    }
-    const element = saveChSlot.element || gameData.ch[saveChSlot.idx].element;
-    for (const elData of element) {
-      if (elData === 6) { //빛속성 경우
-        saveChSlot = {
-          ...saveChSlot,
-          el7: Math.round(saveChSlot.el7 - 50 * (obj.grade / 5)),
-        }
-      } else if (elData === 7) { //암속성 경우
-        saveChSlot = {
-          ...saveChSlot,
-          el6: Math.round(saveChSlot.el6 - 50 * (obj.grade / 5)),
-        }
-      } else if (elData === 8) { //수속성 경우
-        saveChSlot = {
-          ...saveChSlot,
-          el8: Math.round(saveChSlot.el8 + 20 * (obj.grade / 5)),
-          el9: Math.round(saveChSlot.el9 + 50 * (obj.grade / 5)),
-        }
-      } else if (elData === 9) { //화속성 경우
-        saveChSlot = {
-          ...saveChSlot,
-          el9: Math.round(saveChSlot.el9 + 20 * (obj.grade / 5)),
-          el10: Math.round(saveChSlot.el10 + 50 * (obj.grade / 5)),
-        }
-      } else if (elData === 10) { //바람속성 경우
-        saveChSlot = {
-          ...saveChSlot,
-          el10: Math.round(saveChSlot.el10 + 20 * (obj.grade / 5)),
-          el11: Math.round(saveChSlot.el11 + 50 * (obj.grade / 5)),
-        }
-      } else if (elData === 11) { //땅속성 경우
-        saveChSlot = {
-          ...saveChSlot,
-          el11: Math.round(saveChSlot.el11 + 20 * (obj.grade / 5)),
-          el8: Math.round(saveChSlot.el8 + 50 * (obj.grade / 5)),
-        }
       }
     }
     saveChSlot = {
@@ -307,22 +240,36 @@ export const util = { //this.loadImage();
       if(Object.keys(item).length !== 0){
         for (const eff of item.baseEff) {
           if (effData[eff.type] === undefined) {
-            effData[eff.type] = {percent:0, number:0};
+            effData[eff.type] = eff.type === 100 ? {skList:[]} : {percent:0, number:0};
           }
-          if (eff.num[item.grade - 1].indexOf('%') > 0) {
-            effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num[item.grade - 1]);
+          if (eff.type === 100) {
+            effData[eff.type].skList.push({
+              skIdx: eff.skIsx,
+              skLv: eff.skLv,
+            });
           } else {
-            effData[eff.type].number = effData[eff.type].number + parseInt(eff.num[item.grade - 1]);
+            if (eff.num[item.grade - 1].indexOf('%') > 0) {
+              effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num[item.grade - 1]);
+            } else {
+              effData[eff.type].number = effData[eff.type].number + parseInt(eff.num[item.grade - 1]);
+            }
           }
         }
         for (const eff of item.addEff) {
           if (effData[eff.type] === undefined) {
-            effData[eff.type] = {percent:0, number:0};
+            effData[eff.type] = eff.type === 100 ? {skList:[]} : {percent:0, number:0};
           }
-          if (eff.num.indexOf('%') > 0) {
-            effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num);
+          if (eff.type === 100) {
+            effData[eff.type].skList.push({
+              skIdx: eff.skIsx,
+              skLv: eff.skLv,
+            });
           } else {
-            effData[eff.type].number = effData[eff.type].number + parseInt(eff.num);
+            if (eff.num.indexOf('%') > 0) {
+              effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num);
+            } else {
+              effData[eff.type].number = effData[eff.type].number + parseInt(eff.num);
+            }
           }
         }
       }
@@ -503,19 +450,45 @@ export const util = { //this.loadImage();
     changeSaveData(save);//라인업 캐릭 능력치 저장
   },
   compileState: (currentState, itemState) => {
+    let num = 0;
     if (itemState !== undefined && itemState !== null) {
-      if(itemState.percent !== 0){
-        return Math.round(currentState * (itemState.percent / 100));
-      }else{
-        return itemState.number;
+      if (itemState.percent !== 0) {
+        num = Math.round(currentState * (itemState.percent / 100));
       }
+      num += itemState.number;
+      return num;
     } else {
       return 0;
     }
   },
   getPercentColor: (max, num) => { //능력치 높고낮음 처리컬러
-    const co = (num / max) * 150;
-    return `hsl(${150 - co}deg 100% 50%)`;
+    const percent = num / max,
+      co = percent * 150;
+    const gradeText = [
+      {ko:'최저',en:'LT',jp:'最低'},
+      {ko:'저',en:'L',jp:'低'},
+      {ko:'중',en:'M',jp:'中'},
+      {ko:'고',en:'H',jp:'高'},
+      {ko:'최고',en:'HT',jp:'最高'},
+    ];
+    const percentNum = (() => {
+      const co = percent * 100;
+      if (co < 20) {
+        return 0;
+      } else if (co < 40) {
+        return 1;
+      } else if (co < 60) {
+        return 2;
+      } else if (co < 80) {
+        return 3;
+      } else {
+        return 4;
+      }
+    })();
+    return {
+      stateColor: `hsl(${150 - co}deg 100% 50%)`,
+      gradeText : gradeText[percentNum],
+    };
   },
   getPercent: (total, current) => { //퍼센트 계산
     if(current === 0){
@@ -539,9 +512,16 @@ export const util = { //this.loadImage();
     });
     saveItems.addEff.forEach((data, idx) => {
       if (totalEff[data.type] === undefined) {
-        totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
+        totalEff[data.type] = data.type === 100 ? {type: data.type, skList: []} : {type: data.type, base: 0, add:0, hole:0};
       }
-      totalEff[data.type].add += parseInt(data.num[0]);
+      if (data.type === 100) {
+        totalEff[data.type].skList.push({
+          lv: data.skLv[0],
+          idx: data.skIdx,
+        });
+      } else {
+        totalEff[data.type].add += parseInt(data.num[0]);
+      }
     });
     if (socketEff) {
       socketEff.save.forEach((data, idx) => {
@@ -578,7 +558,7 @@ export const util = { //this.loadImage();
     }
     return totalEff;
   },
-  getEffectType: (num, lang) => {
+  getEffectType: (type, lang) => {
     const nameLang = [
       {na:'HP',ko:'체력',en:'Health Point',jp:'体力'},
       {na:'SP',ko:'행동력',en:'Spcial Point',jp:'行動力'},
@@ -590,45 +570,73 @@ export const util = { //this.loadImage();
       {na:'RCV',ko:'회복력',en:'Recover HP',jp:'回復力'},
       {na:'SPD',ko:'속도',en:'Speed',jp:'速度'},
       {na:'LUK',ko:'행운',en:'Luck',jp:'幸運'},
-      {na:'CATK',ko:'카운터',en:'Counter ATK',jp:'カウンター'},
-      {na:'PEK',ko:'쪼기',en:'Peck',jp:'ピグテール'},
+      {na:'CATK',ko:'반격',en:'Counter ATK',jp:'カウンター'},
+      {na:'PEK',ko:'쪼기',en:'Peck',jp:'ピグテール'},//11
       {na:'CLW',ko:'할퀴기',en:'Claw',jp:'掻き分け'},
       {na:'BIT',ko:'물기',en:'Bite',jp:'噛むこと'},
       {na:'HIT',ko:'치기',en:'Hit',jp:'打撃'},
       {na:'CRH',ko:'누르기',en:'Crush',jp:'押す'},
       {na:'THW',ko:'던지기',en:'Throw',jp:'投げる'},
-      {na:'LT',ko:'빛속성',en:'Light Element',jp:'光属性'},
+      {na:'LT',ko:'빛속성',en:'Light Element',jp:'光属性'},//17
       {na:'DK',ko:'어둠속성',en:'Darkness Element',jp:'闇属性'},
       {na:'WT',ko:'물속성',en:'Water Element',jp:'水属性'},
       {na:'FR',ko:'불속성',en:'Fire Element',jp:'火属性'},
       {na:'WD',ko:'바람속성',en:'Wind Element',jp:'風属性'},
       {na:'EH',ko:'땅속성',en:'Earth Element',jp:'地属性'},
-      {na:'RLT',ko:'빛속성저항',en:'Light Element Resist',jp:'光属性抵抗'},
-      {na:'RDK',ko:'어둠속성저항',en:'Darkness Element Resist',jp:'闇属性抵抗'},
-      {na:'RWT',ko:'물속성저항',en:'Water Element Resist',jp:'水属性抵抗'},
-      {na:'RFR',ko:'불속성저항',en:'Fire Element Resist',jp:'火属性抵抗'},
-      {na:'RWD',ko:'바람속성저항',en:'Wind Element Resist',jp:'風属性抵抗'},
-      {na:'REH',ko:'땅속성저항',en:'Earth Element Resist',jp:'地属性抵抗'},
-      {},{},
+      {na:'ⓡPEK',ko:'쪼기저항',en:'Peck Resist',jp:'ピグテール抵抗'},//23
+      {na:'ⓡCLW',ko:'할퀴기저항',en:'Claw Resist',jp:'掻き分け抵抗'},
+      {na:'ⓡBIT',ko:'물기저항',en:'Bite Resist',jp:'噛むこと抵抗'},
+      {na:'ⓡHIT',ko:'치기저항',en:'Hit Resist',jp:'打撃抵抗'},
+      {na:'ⓡCRH',ko:'누르기저항',en:'Crush Resist',jp:'押す抵抗'},
+      {na:'ⓡTHW',ko:'던지기저항',en:'Throw Resist',jp:'投げる抵抗'},
+      {na:'ⓡLT',ko:'빛속성저항',en:'Light Element Resist',jp:'光属性抵抗'},//29
+      {na:'ⓡDK',ko:'어둠속성저항',en:'Darkness Element Resist',jp:'闇属性抵抗'},
+      {na:'ⓡWT',ko:'물속성저항',en:'Water Element Resist',jp:'水属性抵抗'},
+      {na:'ⓡFR',ko:'불속성저항',en:'Fire Element Resist',jp:'火属性抵抗'},
+      {na:'ⓡWD',ko:'바람속성저항',en:'Wind Element Resist',jp:'風属性抵抗'},
+      {na:'ⓡEH',ko:'땅속성저항',en:'Earth Element Resist',jp:'地属性抵抗'},
+      {},{},{},
       {na:'CRI',ko:'치명타',en:'Critical',jp:'クリティカル'},
       {na:'AVD',ko:'회피',en:'Avoidance rate',jp:'回避率'},
       {na:'HRT',ko:'적중율',en:'Hit rate',jp:'命中率'},
-      {na:'RBD',ko:'출혈저항',en:'Bleeding Resist',jp:'出血抵抗'},
-      {na:'RAC',ko:'중독저항',en:'Addicted Resist',jp:'中毒抵抗'},
-      {na:'RPF',ko:'석화저항',en:'Petrification Resist',jp:'石化抵抗'},
-      {na:'RCF',ko:'혼란저항',en:'Confusion Resist',jp:'混乱抵抗'},
-      {na:'RST',ko:'기절저항',en:'Stun Resist',jp:'気絶抵抗'},
-      {na:'RTF',ko:'변이저항',en:'Transform Resist',jp:'変異抵抗'},
-      {na:'RDT',ko:'즉사저항',en:'Immediate death Resist',jp:'即死抵抗'},
-      {na:'RFZ',ko:'빙결저항',en:'Freezing Resist',jp:'氷結抵抗'},
-      {na:'IBD',ko:'출혈면역',en:'Bleeding immunity',jp:'出血免疫'},
-      {na:'IAC',ko:'중독면역',en:'Addicted immunity',jp:'中毒免疫'},
-      {na:'IPF',ko:'석화면역',en:'Petrification immunity',jp:'石化免疫'},
-      {na:'ICF',ko:'혼란면역',en:'Confusion immunity',jp:'混乱免疫'},
-      {na:'IST',ko:'기절면역',en:'Stun immunity',jp:'気絶免疫'},
-      {na:'ITF',ko:'변이면역',en:'Transform immunity',jp:'変異免疫'},
-      {na:'IDT',ko:'즉사면역',en:'Immediate death',jp:'即死免疫'},
-      {na:'IFZ',ko:'빙결면역',en:'Freezing immunity',jp:'氷結免疫'},
+      {na:'RHP',ko:'HP회복',en:'HP Recovery',jp:'HP回復'},
+      {na:'RSP',ko:'SP회복',en:'SP Recovery',jp:'SP回復'},
+      {na:'RHSP', ko:'HP,SP회복',en:'HP,SP Recovery',jp:'HP,SP回復'},
+      {na:'REV',ko:'부활',en:'Revive',jp:'復活'},
+      {na:'REH',ko:'부활후 HP회복',en:'HP Recovery after Revive',jp:'復活後のHP回復'},
+      {},{},
+      {na:'IV',ko:'무적',en:'Invincible',jp:'無敵'},
+      {na:'IM',ko:'면역',en:'Immunity',jp:'免疫'},
+      {na:'BD',ko:'출혈',en:'Bleeding',jp:'出血'},
+      {na:'AC',ko:'중독',en:'Addicted',jp:'中毒'},
+      {na:'PF',ko:'석화',en:'Petrification',jp:'石化'},
+      {na:'CF',ko:'혼란',en:'Confusion',jp:'混乱'},
+      {na:'ST',ko:'기절',en:'Stun',jp:'気絶'},
+      {na:'TF',ko:'변이',en:'Transform',jp:'変異'},
+      {na:'DT',ko:'즉사',en:'Immediate death',jp:'即死'},
+      {na:'FZ',ko:'빙결',en:'Freezing',jp:'氷結'},
+      {},{},
+      {na:'ⓡBD',ko:'출혈저항',en:'Bleeding Resist',jp:'出血抵抗'},
+      {na:'ⓡAC',ko:'중독저항',en:'Addicted Resist',jp:'中毒抵抗'},
+      {na:'ⓡPF',ko:'석화저항',en:'Petrification Resist',jp:'石化抵抗'},
+      {na:'ⓡCF',ko:'혼란저항',en:'Confusion Resist',jp:'混乱抵抗'},
+      {na:'ⓡST',ko:'기절저항',en:'Stun Resist',jp:'気絶抵抗'},
+      {na:'ⓡTF',ko:'변이저항',en:'Transform Resist',jp:'変異抵抗'},
+      {na:'ⓡDT',ko:'즉사저항',en:'Immediate death Resist',jp:'即死抵抗'},
+      {na:'ⓡFZ',ko:'빙결저항',en:'Freezing Resist',jp:'氷結抵抗'},
+      {},{},
+      {na:'ⓘBD',ko:'출혈면역',en:'Bleeding immunity',jp:'出血免疫'},
+      {na:'ⓘAC',ko:'중독면역',en:'Addicted immunity',jp:'中毒免疫'},
+      {na:'ⓘPF',ko:'석화면역',en:'Petrification immunity',jp:'石化免疫'},
+      {na:'ⓘCF',ko:'혼란면역',en:'Confusion immunity',jp:'混乱免疫'},
+      {na:'ⓘST',ko:'기절면역',en:'Stun immunity',jp:'気絶免疫'},
+      {na:'ⓘTF',ko:'변이면역',en:'Transform immunity',jp:'変異免疫'},
+      {na:'ⓘDT',ko:'즉사면역',en:'Immediate death',jp:'即死免疫'},
+      {na:'ⓘFZ',ko:'빙결면역',en:'Freezing immunity',jp:'氷結免疫'},
+      {},{},{},
+      {},{},{},{},{},{},{},{},{},{},
+      {},{},{},{},{},{},{},{},{},
+      {na:'SK',ko:'스킬',en:'Skill',jp:'スキル'},
     ]
     // let arr = ['체력(HP)','행동력(SP)','행동회복력(RSP)','공격력(ATK)','방어력(DEF)','술법공격력(MAK)','술법방어력(MDF)','회복력(RCV)','속도(SPD)','행운(LUK)','쪼기','할퀴기','물기','치기','누르기','던지기','','','','','',
     // '빛','어둠','물','불','바람','땅','빛 강화','어둠 강화','물 강화','불 강화',
@@ -665,7 +673,7 @@ export const util = { //this.loadImage();
     // } else {
     //   return arr[num];
     // }
-    return nameLang[num].na;
+    return nameLang[type][lang ? lang : 'na'];
   },
   getEnemySkill: (data, gameData) => {
     const chData = gameData.ch[data.idx],
@@ -836,11 +844,35 @@ export const util = { //this.loadImage();
         return 'wind';
       case 22:
         return 'earth';
+      case 23:
+        return 'peckR';
+      case 24:
+        return 'clawR';
+      case 25:
+        return 'biteR';
+      case 26:
+        return 'hitR';
+      case 27:
+        return 'pressR';
+      case 28:
+        return 'tossR';
+      case 29:
+        return 'lightR';
+      case 30:
+        return 'darkR';
       case 31:
-        return 'critical';
+        return 'waterR';
       case 32:
-        return 'avoid';
+        return 'fireR';
       case 33:
+        return 'windR';
+      case 34:
+        return 'earthR';
+      case 38:
+        return 'critical';
+      case 39:
+        return 'avoid';
+      case 40:
         return 'hit';
       case 41:
         return 'hp';//hp 회복
@@ -852,6 +884,10 @@ export const util = { //this.loadImage();
         return 'hp';//부활
       case 45:
         return 'hp';//부활 회복
+      case 48:
+        return 'invincible';//무적
+      case 49:
+        return 'immunity';//면역
       case 50:
         return 'bleeding';//출혈
       case 51:
@@ -867,9 +903,41 @@ export const util = { //this.loadImage();
       case 56:
         return 'immediateDeath';//즉사
       case 57:
-        return 'frozen';//냉동
+        return 'freezing';//빙결
+      case 60:
+        return 'bleedingR';//출혈
+      case 61:
+        return 'addictedR';//중독
+      case 62:
+        return 'petrificationR';//석화
+      case 63:
+        return 'confusionR';//혼란
+      case 64:
+        return 'stunR';//기절
+      case 65:
+        return 'transformR';//변이
+      case 66:
+        return 'immediateDeathR';//즉사
+      case 67:
+        return 'freezingR';//빌결
+      case 70:
+        return 'bleedingI';//출혈
+      case 71:
+        return 'addictedI';//중독
+      case 72:
+        return 'petrificationI';//석화
+      case 73:
+        return 'confusionI';//혼란
+      case 74:
+        return 'stunI';//기절
+      case 75:
+        return 'transformI';//변이
+      case 76:
+        return 'immediateDeathI';//즉사
+      case 77:
+        return 'freezingI';//빙결
       case 100:
-        return 'formation';//진형
+        return 'skill';//진형
       default:
         return type;
     }
@@ -1046,10 +1114,70 @@ export const util = { //this.loadImage();
           } else {
             return [n-5,n-1,n,n+1];
           }
-        case 15: //└┐9
-          return [0,5,10,11,12,13,14,19,24];
-        case 16: //┌┘9
-          return [4,9,14,13,12,11,10,15,20];
+        case 15: //└┐7
+          if (n%5 === 0) {
+            if (n < 15) {
+              return [0,5,10,11,12,17,22];
+            } else {
+              return [10,15,20];
+            }
+          } else if (n%5 === 1) {
+            if (n < 15) {
+              return [1,6,11,12,13,18,23];
+            } else {
+              return [10,11,16,21];
+            }
+          } else if (n%5 === 2) {
+            if (n < 15) {
+              return [2,7,12,13,14,19,24];
+            } else {
+              return [0,5,10,11,12,17,22];
+            }
+          } else if (n%5 === 3) {
+            if (n < 15) {
+              return [3,8,13,14];
+            } else {
+              return [1,6,11,12,13,18,23];
+            }
+          } else {
+            if (n < 15) {
+              return [4,9,14];
+            } else {
+              return [2,7,12,13,14,19,24];
+            }
+          }
+        case 16: //┌┘7
+          if (n%5 === 0) {
+            if (n < 15) {
+              return [0,5,10];
+            } else {
+              return [2,7,10,11,12,15,20];
+            }
+          } else if (n%5 === 1) {
+            if (n < 15) {
+              return [1,6,10,11];
+            } else {
+              return [3,8,11,12,13,16,21];
+            }
+          } else if (n%5 === 2) {
+            if (n < 15) {
+              return [2,7,10,11,12,15,20];
+            } else {
+              return [4,9,12,13,14,17,22];
+            }
+          } else if (n%5 === 3) {
+            if (n < 15) {
+              return [3,8,11,12,13,16,21];
+            } else {
+              return [13,14,18,23];
+            }
+          } else {
+            if (n < 15) {
+              return [4,9,12,13,14,17,22];
+            } else {
+              return [14,19,24];
+            }
+          }
         case 17: //卍17
           return [0,1,2,4,7,9,10,11,12,13,14,15,17,20,22,23,24];
         case 18: //고정 가로2행
@@ -1398,6 +1526,18 @@ export const util = { //this.loadImage();
           } else {
             return [3,4,8,9,13,14,18,19,23,24];
           }
+        case 54: //작은└┐ 4
+          if (n%5 === 0) {
+            return [n,n+5,n+6,n+11];
+          } else {
+            return [n-6,n-1,n,n+5];
+          }
+        case 55: //작은┌┘ 4
+          if (n%5 === 4) {
+            return [n,n+4,n+5,n+9];
+          } else {
+            return [n-4,n,n+1,n+5];
+          }
         default:
           break;
       }
@@ -1589,7 +1729,7 @@ export const util = { //this.loadImage();
       return 4;
     } else if (gradeNum < 0.2) { //레어등급
       return 3;
-    } else if (gradeNum < 0.7) { //매직등급
+    } else if (gradeNum < 0.6) { //매직등급
       return 2;
     } else {
       return 1;
@@ -1724,7 +1864,10 @@ export const util = { //this.loadImage();
         return '';
     }
   },
-  getItem: (saveData, gameData, changeSaveData, option, Save, lang) => {
+  getItem: ({
+    saveData, gameData, changeSaveData, option, isSave, lang
+  }) => {
+    console.log('option', option);
     let save = {...saveData};//장비 아이템 복사
     let itemLv = option.lv;
     const type = option.type || 'equip';
@@ -1798,32 +1941,30 @@ export const util = { //this.loadImage();
     const grade = (option.grade > 1 ? option.grade : util.getItemGrade()) || util.getItemGrade();
     if (option.sealed) {
       const itemObj = {
-        id:id,
-        idx:selectItem.idx,
-        part:selectItem.part,
-        grade:grade,
-        itemLv:option.lv,
-        slot:0,//아이템 홀착용 갯수
-        hole:[],
-        color:selectItem.color,
-        baseEff:[{
-          type:selectItem.eff[0].type,
-          num:selectItem.eff[0].num[0] + ' ~ ' + selectItem.eff[0].num[1],
+        id: id,
+        idx: selectItem.idx,
+        part: selectItem.part,
+        grade: grade,
+        itemLv: itemLv,
+        slot: 0,//아이템 홀착용 갯수
+        hole: [],
+        color: selectItem.color,
+        baseEff: [{
+          type: selectItem.eff[0].type,
+          num: selectItem.eff[0].num[0] + ' ~ ' + selectItem.eff[0].num[1],
         }],
-        addEff:[],
-        mark:'',
-        markNum:0,
-        modifier:{ko:'미확인',en:'unSealed',jp:'未確認'},
-        weaponType:weaponType,
-        sealed:true,
-        favorite:0,
+        addEff: [],
+        mark: '',
+        markNum: 0,
+        modifier: {ko:'미확인',en:'unSealed',jp:'未確認'},
+        weaponType: weaponType,
+        sealed: true,
+        favorite: 0,
       }
       save.items[type].unshift(itemObj);
       changeSaveData(save);
       return;
     }
-    const slotNum = Math.round(Math.random() * selectItem.socket);
-    let hole = new Array(slotNum).fill(0);
     const darkColor = util.getHslColor('dark',1),
       lightColor = util.getHslColor('light',1);
     let colorArr = Math.random() < .5 ? [lightColor, darkColor] : [darkColor, lightColor];
@@ -1846,50 +1987,72 @@ export const util = { //this.loadImage();
       }
     });
     const addEff = [];
-    const getAddEff = (grade) => {
+    const getAddEff = (grade, itemPart) => {
       const effList = [// 레어, 에픽, 매직
         [[100,200],[200,400],[100,1000]], //체력
-        [[1,10],[10,20],[1,30]], //행동력
-        [[1,3],[3,6],[1,15]], //행동회복력
+        [[1,5],[5,10],[1,15]], //행동력
+        [[1,3],[3,6],[1,10]], //행동회복력
         [[50,100],[100,200],[50,400]], //공격력
         [[50,100],[100,200],[50,400]], //방어력
         [[50,100],[100,200],[50,400]], //술공
         [[50,100],[100,200],[50,400]], //술방
         [[10,30],[30,60],[10,100]], //회복력
-        [[1,10],[10,25],[1,40]], //속도
-        [[10,20],[20,50],[10,100]], //행운
-        [[1,10],[5,20],[1,30]], //카운터 10
-        [[1,15],[5,15],[1,20]], //쪼기
-        [[1,15],[5,15],[1,20]], //할퀴기
-        [[1,15],[5,15],[1,20]], //물기
-        [[1,15],[5,15],[1,20]], //치기
-        [[1,15],[5,15],[1,20]], //누르기
-        [[1,15],[5,15],[1,20]], //던지기
-        [[1,15],[5,15],[1,20]], //빛
-        [[1,15],[5,15],[1,20]], //어둠
-        [[1,15],[5,15],[1,20]], //물
-        [[1,15],[5,15],[1,20]], //불 20
-        [[1,15],[5,15],[1,20]], //바람
-        [[1,15],[5,15],[1,20]], //땅
-        [[1,10],[5,10],[1,15]], //빛 강화
-        [[1,10],[5,10],[1,15]], //어둠 강화
-        [[1,10],[5,10],[1,15]], //물 강화
-        [[1,10],[5,10],[1,15]], //불 강화
-        [[1,10],[5,10],[1,15]], //바람 강화
-        [[1,10],[5,10],[1,15]], //땅 강화 28
+        [[1,5],[5,10],[1,15]], //속도
+        [[10,20],[20,40],[10,60]], //행운
+        [[1,10],[5,20],[1,30]], //반격 10
+        //Math.round(Math.random() * 9) 일반능력치
+        [[1,3],[2,7],[1,10]], //쪼기
+        [[1,3],[2,7],[1,10]], //할퀴기
+        [[1,3],[2,7],[1,10]], //물기
+        [[1,3],[2,7],[1,10]], //치기
+        [[1,3],[2,7],[1,10]], //누르기
+        [[1,3],[2,7],[1,10]], //던지기
+        [[1,5],[3,10],[1,13]], //쪼기 저항
+        [[1,5],[3,10],[1,13]], //할퀴기 저항
+        [[1,5],[3,10],[1,13]], //물기 저항
+        [[1,5],[3,10],[1,13]], //치기 저항 20
+        [[1,5],[3,10],[1,13]], //누르기 저항
+        [[1,5],[3,10],[1,13]], //던지기 저항
+        [[1,3],[2,7],[1,10]], //빛
+        [[1,3],[2,7],[1,10]], //어둠
+        [[1,3],[2,7],[1,10]], //물
+        [[1,3],[2,7],[1,10]], //불
+        [[1,3],[2,7],[1,10]], //바람
+        [[1,3],[2,7],[1,10]], //땅
+        [[1,5],[3,10],[1,13]], //빛 저항
+        [[1,5],[3,10],[1,13]], //어둠 저항 30
+        [[1,5],[3,10],[1,13]], //물 저항
+        [[1,5],[3,10],[1,13]], //불 저항
+        [[1,5],[3,10],[1,13]], //바람 저항
+        [[1,5],[3,10],[1,13]], //땅 저항
+        //Math.round(Math.random() * 5) + 11, Math.round(Math.random() * 5) + 23 물리,마법 타입
+        //Math.round(Math.random() * 5) + 17, Math.round(Math.random() * 5) + 29 물리,마법 저항타입
+        [],[],[],
+        [[1,5],[3,10],[1,15]],//치명타 38
+        [[1,5],[3,10],[1,15]],//회피
+        [[1,5],[3,10],[1,15]],//적중률
+        //Math.round(Math.random() * 2) + 38 or 10 치,회,적,반격 타입 
+        [],[],[],[],[],[],[],[],[],
+        [[1,10],[5,10],[1,15]],//출혈 50
+        [[1,10],[5,10],[1,15]],//중독
+        [[1,10],[5,10],[1,15]],//석화
+        [[1,10],[5,10],[1,15]],//혼란
+        [[1,10],[5,10],[1,15]],//기절
+        [[1,10],[5,10],[1,15]],//변이
+        [[1,10],[5,10],[1,15]],//즉사
+        [[1,10],[5,10],[1,15]],//빙결
         [],[],
-        [[1,5],[5,10],[1,15]],//치명타 31
-        [[1,5],[5,10],[1,15]],//회피
-        [[1,5],[5,10],[1,15]],//적중률
-        [[1,10],[5,20],[1,30]],//출혈저항
-        [[1,10],[5,20],[1,30]],//중독저항
-        [[1,10],[5,20],[1,30]],//석화저항
-        [[1,10],[5,20],[1,30]],//혼란저항
-        [[1,10],[5,20],[1,30]],//기절저항
-        [[1,10],[5,20],[1,30]],//변이저항
-        [[1,10],[5,20],[1,30]],//즉사저항
-        [[1,10],[5,20],[1,30]],//빙결저항
-        [[0,1],[0,1],[0,1]],//출혈면역
+        [[1,10],[5,10],[1,15]],//출혈저항 60
+        [[1,10],[5,10],[1,15]],//중독저항
+        [[1,10],[5,10],[1,15]],//석화저항
+        [[1,10],[5,10],[1,15]],//혼란저항
+        [[1,10],[5,10],[1,15]],//기절저항
+        [[1,10],[5,10],[1,15]],//변이저항
+        [[1,10],[5,10],[1,15]],//즉사저항
+        [[1,10],[5,10],[1,15]],//빙결저항
+        //Math.round(Math.random() * 7) + 60 상태 저항타입
+        [],[],
+        [[0,1],[0,1],[0,1]],//출혈면역 70
         [[0,1],[0,1],[0,1]],//중독면역
         [[0,1],[0,1],[0,1]],//석화면역
         [[0,1],[0,1],[0,1]],//혼란면역
@@ -1897,10 +2060,124 @@ export const util = { //this.loadImage();
         [[0,1],[0,1],[0,1]],//변이면역
         [[0,1],[0,1],[0,1]],//즉사면역
         [[0,1],[0,1],[0,1]],//빙결면역
-        [],//스킬장착 42
-        [],
-      ]
-      const effType = Math.round(Math.random()*(Math.random() < .3 ? 27 : 21));//마법 강화 확률 30퍼센트 이하
+        //Math.round(Math.random() * 7) + 70 상태 면역타입
+        [],[],[],
+        [],[],[],[],[],[],[],[],[],[],
+        [],[],[],[],[],[],[],[],[],
+        [[1,2],[1,3],[1,1]],//스킬장착 100
+      ];
+
+      let effType = 0;
+      const chance1 = Math.random();
+      const armorEff = [0,4,6],
+        weaponEff = [3,5],
+        accEff = [1,2,7,8,9],
+        etcEff = [0,8,9],
+        skillEff = [278,279,280,281,287,289];
+      //Math.round(Math.random() * 9) 일반능력치
+      //Math.round(Math.random() * 7) + 60 상태 저항타입
+      //Math.round(Math.random() * 5) + 17, Math.round(Math.random() * 5) + 29 물리,마법 저항타입
+      //Math.round(Math.random() * 2) + 38 or 10 치,회,적,반격 타입
+      //Math.round(Math.random() * 7) + 70 상태 면역타입
+      //Math.round(Math.random() * 5) + 11, Math.round(Math.random() * 5) + 23 물리,마법 타입
+      if (itemPart === '1') {//1:투구
+        if (chance1 < 0.025) {//5% 물리,마법 공격 타입
+          effType = Math.round(Math.random() * 5) + 11;
+        } else if (chance1 < 0.05) {
+          effType = Math.round(Math.random() * 5) + 23;
+        } else if (chance1 < 0.12) {//10% 치,회,적,반격 타입
+          effType = Math.round(Math.random() * 2) + 38;
+        } else if (chance1 < 0.15){
+          effType = 10;
+        } else if (chance1 < 0.35) {//20% 상태 저항타입
+          effType = Math.round(Math.random() * 7) + 60;
+        } else if (chance1 < 0.55) {//40% 물리,마법 저항타입
+          effType = Math.round(Math.random() * 5) + 17;
+        } else if (chance1 < 0.75) {
+          effType = Math.round(Math.random() * 5) + 29;
+        } else if (chance1 < 0.995) {//20% 방어이펙트타입
+          const chanceIdx = Math.floor(Math.random() * armorEff.length);
+          effType = armorEff[chanceIdx];
+        } else {//0.5% 스킬 아이템
+          effType = 100;
+        }
+      } else if (itemPart === '2') {//2:갑옷
+        if (chance1 < 0.025) {//5% 물리,마법 공격 타입
+          effType = Math.round(Math.random() * 5) + 11;
+        } else if (chance1 < 0.05) {
+          effType = Math.round(Math.random() * 5) + 23;
+        } else if (chance1 < 0.25) {//20% 상태 저항타입
+          effType = Math.round(Math.random() * 7) + 60;
+        } else if (chance1 < 0.4) {//30% 물리,마법 저항타입
+          effType = Math.round(Math.random() * 5) + 17;
+        } else if (chance1 < 0.55) {
+          effType = Math.round(Math.random() * 5) + 29;
+        } else if (chance1 < 0.8) {//45% 방어이펙트타입
+          const chanceIdx = Math.floor(Math.random() * armorEff.length);
+          effType = armorEff[chanceIdx];
+        } else if (chance1 < 0.995) {
+          const chanceIdx = Math.floor(Math.random() * etcEff.length);
+          effType = etcEff[chanceIdx];
+        } else {//0.5% 스킬 아이템
+          effType = 100;
+        }
+      } else if (itemPart === '3') {//3:무기
+        if (chance1 < 0.2) {//40% 물리,마법 공격 타입
+          effType = Math.round(Math.random() * 5) + 11;
+        } else if (chance1 < 0.4) {
+          effType = Math.round(Math.random() * 5) + 23;
+        } else if (chance1 < 0.6) {//25% 치,회,적,반격 타입
+          effType = Math.round(Math.random() * 2) + 38;
+        } else if (chance1 < 0.65) {
+          effType = 10;
+        } else if (chance1 < 0.7) {//10% 물리,마법 저항타입
+          effType = Math.round(Math.random() * 5) + 17;
+        } else if (chance1 < 0.75) {
+          effType = Math.round(Math.random() * 5) + 29;
+        } else if (chance1 < 0.99) {//25% 무기이펙트타입
+          const chanceIdx = Math.floor(Math.random() * weaponEff.length);
+          effType = weaponEff[chanceIdx];
+        } else  {//1% 스킬 아이템
+          effType = 100;
+        }
+      } else if (itemPart === '4') {//4:반지
+        if (chance1 < 0.15) {//20% 치,회,적,반격 타입
+          effType = Math.round(Math.random() * 2) + 38;
+        } else if (chance1 < 0.2){
+          effType = 10;
+        } else if (chance1 < 0.35) {//15% 상태 저항타입
+          effType = Math.round(Math.random() * 7) + 60;
+        } else if (chance1 < 0.5) {//30% 물리,마법 저항타입
+          effType = Math.round(Math.random() * 5) + 17;
+        } else if (chance1 < 0.65) {
+          effType = Math.round(Math.random() * 5) + 29;
+        } else if (chance1 < 0.825) {//35% 악세사리이펙트타입
+          const chanceIdx = Math.floor(Math.random() * etcEff.length);
+          effType = etcEff[chanceIdx];
+        } else if (chance1 < 0.97) {
+          const chanceIdx = Math.floor(Math.random() * accEff.length);
+          effType = accEff[chanceIdx];
+        } else {//3% 스킬 아이템
+          effType = 100;
+        }
+      } else {//5:목걸이
+        if (chance1 < 0.1) {//10% 상태 면역타입
+          effType = Math.round(Math.random() * 7) + 70;
+        } else if (chance1 < 0.3) {//40% 물리,마법 저항타입
+          effType = Math.round(Math.random() * 5) + 17;
+        } else if (chance1 < 0.5) {
+          effType = Math.round(Math.random() * 5) + 29;
+        } else if (chance1 < 0.75) {//50% 악세사리이펙트타입
+          const chanceIdx = Math.floor(Math.random() * etcEff.length);
+          effType = etcEff[chanceIdx];
+        } else if (chance1 < 0.97) {
+          const chanceIdx = Math.floor(Math.random() * accEff.length);
+          effType = accEff[chanceIdx];
+        } else {//3% 스킬 아이템
+          effType = 100;
+        }
+      }
+
       let effRandomNum = [];
       if (grade === 2) {
         effRandomNum = effList[effType][2];
@@ -1910,42 +2187,69 @@ export const util = { //this.loadImage();
         effRandomNum = effList[effType][1];
       }
       const effNum = Math.floor(Math.random()*(effRandomNum[1] - effRandomNum[0])) + effRandomNum[0];
-      return {
-        type: effType > 15 ? effType + 5 : effType,
-        num: [String(effNum)],
-      }
-    }
-    if (grade === 2) {
-      const addEffLength = Math.floor(itemLv / 30);
-      for (let i = 0; i < addEffLength; ++i) {
-        if (itemLv > 30) {
-          itemLv -= 30;
-          addEff.push(getAddEff(grade));
-        } else {
-          break;
+      if (effType === 100) {
+        const skillIdx = Math.floor(Math.random() * skillEff.length);
+        return {
+          type: effType,
+          skIdx: skillEff[skillIdx],
+          skLv: [String(effNum)],
         }
-      }
-    } else if (grade === 3) {
-      const addEffLength = Math.floor(itemLv / 20);
-      for (let i = 0; i < addEffLength; ++i) {
-        if (itemLv > 20) {
-          itemLv -= 20;
-          addEff.push(getAddEff(grade));
-        } else {
-          break;
-        }
-      }
-    } else if (grade === 4) {
-      const addEffLength = Math.floor(itemLv / 15);
-      for (let i = 0; i < addEffLength; ++i) {
-        if (itemLv > 15) {
-          itemLv -= 15;
-          addEff.push(getAddEff(grade));
-        } else {
-          break;
+      } else {
+        return {
+          type: effType,//effType > 15 ? effType + 5 : effType,
+          num: [String(effNum)],
         }
       }
     }
+
+    //슬롯
+    const slotNum = (() => {
+      if (grade === 1) {
+        if (Math.random() < 0.3) {
+          return Math.round(Math.random() * (selectItem.socket - 1)) + 1;
+        } else {
+          return Math.round(Math.random() * selectItem.socket);
+        }
+      } else {
+        return Math.round(Math.random() * selectItem.socket);
+      }
+    })();
+    itemLv -= slotNum * 10;
+    if (itemLv > 0) {
+      const itemPart = String(option.items)[0];
+      if (grade === 2) {
+        const addEffLength = Math.floor(itemLv / 20);
+        for (let i = 0; i < addEffLength; ++i) {
+          if (itemLv > 20) {
+            itemLv -= 20;
+            addEff.push(getAddEff(grade, itemPart));
+          } else {
+            break;
+          }
+        }
+      } else if (grade === 3) {
+        const addEffLength = Math.floor(itemLv / 15);
+        for (let i = 0; i < addEffLength; ++i) {
+          if (itemLv > 15) {
+            itemLv -= 15;
+            addEff.push(getAddEff(grade, itemPart));
+          } else {
+            break;
+          }
+        }
+      } else if (grade === 4) {
+        const addEffLength = Math.floor(itemLv / 12);
+        for (let i = 0; i < addEffLength; ++i) {
+          if (itemLv > 12) {
+            itemLv -= 12;
+            addEff.push(getAddEff(grade, itemPart));
+          } else {
+            break;
+          }
+        }
+      }
+    }
+    //동물벳지
     const mark = Math.random() < .8 ? Math.round(Math.random() * 24) : '';
     const markNum = mark === '' ? 0 : (() => {
       const randomCount = Math.random();
@@ -1971,23 +2275,24 @@ export const util = { //this.loadImage();
     };
     itemLv -= slotNum * 5;
     const itemObj = {
-      id:id,
-      idx:selectItem.idx,
-      part:selectItem.part,
-      grade:grade,
-      slot:slotNum,//아이템 홀착용 갯수
-      hole:hole,
-      color:color,
-      baseEff:baseEff,
-      addEff:addEff,
-      mark:mark,
-      markNum:markNum,
-      modifier:modifier,
-      weaponType:weaponType,
-      sealed:false,
-      favorite:option.favorite || 0,
+      id: id,
+      idx: selectItem.idx,
+      part: selectItem.part,
+      grade: grade,
+      itemLv: option.lv,
+      slot: slotNum,//아이템 홀착용 갯수
+      hole: new Array(slotNum).fill(0),
+      color: color,
+      baseEff: baseEff,
+      addEff: addEff,
+      mark: mark,
+      markNum: markNum,
+      modifier: modifier,
+      weaponType: weaponType,
+      sealed: false,
+      favorite: option.favorite || 0,
     }
-    if (Save) {
+    if (isSave) {
       if (typeof option.evaluateSlot === 'number') {
         save.items[type].splice(option.evaluateSlot,1,itemObj);
       } else {
@@ -2235,7 +2540,14 @@ export const util = { //this.loadImage();
         evaluateSlot:dataObj.data.itemSaveSlot,
         favorite:dataObj.data.saveItemData.favorite
       }
-      util.getItem(sData, gameData, dataObj.changeSaveData, option, true, dataObj.lang);
+      util.getItem({
+        saveData: sData,
+        gameData: gameData,
+        changeSaveData: dataObj.changeSaveData,
+        option: option,
+        isSave: true,
+        lang: dataObj.lang
+      });
       //dataObj.changeSaveData(sData);//데이터 저장
       // dataObj.showPopup(false);
     } else if (dataObj.type === 'holeEquip') {
@@ -2423,62 +2735,12 @@ export const util = { //this.loadImage();
     return `<br/><b dmg>${eff}</b> ${dmg[lang]}`;
   },
   getSkillBuffLang: ({buff, type, lang}) => {
-    const buffType = [
-      {ko:'체력(HP)',en:'Heath Point(HP)',jp:'体力(HP)'},
-      {ko:'행동(SP)',en:'Stamina Point(SP)',jp:'行動(SP)'},
-      {ko:'SP 회복',en:'SP Recovery',jp:'SP 回復'},
-      {ko:'공격(ATK)',en:'Attack(ATK)',jp:'攻撃(ATK)'},
-      {ko:'방어(DEF)',en:'Defense(DEF)',jp:'攻撃(DEF)'},
-      {ko:'술법공격(MAK)',en:'Magic Attack(MAK)',jp:'術法攻撃(MAK)'},
-      {ko:'술법방어(MDF)',en:'Magic Defense(MDF)',jp:'術法防御(MDF)'},
-      {ko:'회복(RCV)',en:'Recovery(RCV)',jp:'回復(RCV)'},
-      {ko:'속도(SPD)',en:'Speed(SPD)',jp:'速度(SPD)'},
-      {ko:'행운(LUK)',en:'Lucky(LUK)',jp:'幸運(LUK)'},
-      {ko:'반격',en:'Counterattack',jp:'反撃'},
-      {ko:'쪼기',en:'Peck',jp:'ピグテール'},
-      {ko:'할퀴기',en:'Claw',jp:'掻き分け'},
-      {ko:'물기',en:'Bite',jp:'噛むこと'},
-      {ko:'치기',en:'Hit',jp:'打撃'},
-      {ko:'누르기',en:'Crush',jp:'押す'},
-      {ko:'던지기',en:'Throw',jp:'投げる'},
-      {ko:'빛속성',en:'Light Element',jp:'光属性'},
-      {ko:'어둠속성',en:'Darkness Element',jp:'闇属性'},
-      {ko:'물속성',en:'Water Element',jp:'水属性'},
-      {ko:'불속성',en:'Fire Element',jp:'火属性'},
-      {ko:'바람속성',en:'Wind Element',jp:'風属性'},
-      {ko:'땅속성',en:'Earth Element',jp:'地属性'},
-      {},{},{},{},{},{},{},{},
-      {ko:'치명타',en:'Critical',jp:'クリティカル'},
-      {ko:'회피',en:'Avoidance rate',jp:'回避率'},
-      {ko:'적중율',en:'Hit rate',jp:'命中率'},
-      {},{},{},{},{},{},{},
-      {ko:'HP회복',en:'HP Recovery',jp:'HP回復'},
-      {ko:'SP회복',en:'SP Recovery',jp:'SP回復'},
-      {ko:'HP,SP회복',en:'HP,SP Recovery',jp:'HP,SP回復'},
-      {ko:'부활',en:'Revive',jp:'復活'},
-      {ko:'부활후 HP회복',en:'HP Recovery after Revive',jp:'復活後のHP回復'},
-      {},{},{},{},
-      {ko:'출혈',en:'Bleeding',jp:'出血'},
-      {ko:'중독',en:'Addiction',jp:'中毒'},
-      {ko:'석화',en:'Petrification',jp:'石化'},
-      {ko:'혼란',en:'Confusion',jp:'混乱'},
-      {ko:'기절',en:'Stun',jp:'気絶'},
-      {ko:'변이',en:'Transform',jp:'変異'},
-      {ko:'즉사',en:'Immediate Death',jp:'即死'},
-      {ko:'빙결',en:'Freezing',jp:'氷結'},
-      {},{},{},
-      {},{},{},{},{},{},{},{},{},{},
-      {},{},{},{},{},{},{},{},{},{},
-      {},{},{},{},{},{},{},{},{},{},
-      {},{},{},{},{},{},{},{},{},
-      {ko:'패시브',en:'Passive',jp:'パッシブ'},
-    ];
     const updownText = [
       {ko:'증가',en:'increase',jp:'増加',tag:'up'},
       {ko:'감소',en:'reduction',jp:'減少',tag:'down'},
     ];
     const upDown = buff.indexOf('-') >= 0 ? 1 : 0;
-    return buff ? `<br/>${buffType[type][lang]} <b buff>${buff}</b> <i icon ${updownText[upDown].tag}></i>` : buffType[type][lang];//${updownText[upDown][lang]}
+    return buff ? `<br/>${util.getEffectType(type,lang)} <b buff>${buff}</b> <i icon ${updownText[upDown].tag}></i>` : util.getEffectType(type,lang);//${updownText[upDown][lang]}
   },
   getSkillConditionBuffLang: ({condition, lang}) => {
     const conditionType = [

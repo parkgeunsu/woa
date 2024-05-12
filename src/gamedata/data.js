@@ -19,6 +19,7 @@ import { scenario } from 'gamedata/scenario';
 import { cannonSvg, figureSvg, sailSvg, shipSvg } from 'gamedata/shipSvg';
 import { ships } from 'gamedata/ships';
 import { skill } from 'gamedata/skill';
+import { timeDelay } from 'gamedata/timeDelay';
 //etc 0, hole 100, colorance 200, upgrade 300, material 400
 export const version = "0.1";
 export const gameData = {
@@ -55,7 +56,7 @@ export const gameData = {
       color:['#999','#fff','#0090ff','#ffcc15','#a800ff','#00a90c','#ff8800','#ff2a00']
     },
     chGradeColor:['#999','#fff','#00a90c','#0090ff','#ffcc15','#a800ff','#ff8000','#ff2a00'],
-    stateMax:[150,240,240,120,240,120,120,200],//능력치 최대치(통,체,완,순,지,정,매,운) 150,200,200,100,200,100,100,200
+    stateMax:[150,200,200,100,200,100,100,200],//능력치 최대치(통,체,완,순,지,정,매,운) 150,200,200,100,200,100,100,200
     hasMaxExp:[0,50000,80000,120000,150000,200000,250000,300000],
     exp:exp,
     gradeUp:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,5,5,5,10,10,10,10,10,20,20,20,20,20,25,25,25,30,40],//인물 초월시재료
@@ -94,4 +95,5 @@ export const gameData = {
     recipe:recipe,
     msg:msg,
     city:city,
+    timeDelay:timeDelay,
   }

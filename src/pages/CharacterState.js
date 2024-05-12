@@ -65,6 +65,7 @@ const StateContainer = styled(FlexBox)`
   width: 40%;
 `;
 const StateGroup = styled(FlexBox)`
+  position: relative;
   margin: 0 0 2px 0;
   padding: 3px;
   background: ${({theme}) => `linear-gradient(${theme.color.land5}, ${theme.color.land5} 15%, ${theme.color.land4} 50%, ${theme.color.land3} 50%, ${theme.color.land3} 85%, ${theme.color.land5})`
@@ -83,6 +84,13 @@ const StateInner = styled(FlexBox)`
   border-radius: 15px;
   box-sizing: border-box;
   box-shadow: inset 0 0 10px ${({theme}) => theme.color.sub};
+`;
+const StateGrade = styled(FlexBox)`
+  position: absolute;
+  right: 5px;
+  top: 2px;
+  height: 20px;
+  width: auto;
 `;
 const StateText = styled(Text)`
   line-height: 1 !important;
@@ -123,52 +131,59 @@ const Element = styled.div`
   position: relative;
   margin: 0 0 4px 0;
   width: 100%;
-  height: 24px;
+  height: ${({actionPossibleElement}) => actionPossibleElement ? '32px' : '24px'};
   &:last-of-type{
     margin-bottom: 0;
   }
 `;
 const ElementIcon = styled.div`
   position: absolute;
-  width: 24px;
-  height: 24px;
   border-radius: 50%;
   right: 0;
   z-index: 1;
   ${({actionPossibleElement}) => actionPossibleElement ? `
+    width: 32px;
+    height: 32px;
     animation: horizontalMove infinite alternate 1s ease-in-out;
-  ` : ''}
+  ` : `
+    width: 24px;
+    height: 24px;
+  `}
 `;
 const ElementBar = styled.div`
   position: absolute;
-  top: 4px;
+  top: 1px;
   width: calc(100% - 40px);
-  height: 14px;
-  border: ${({actionPossibleElement, theme}) => actionPossibleElement ? `1px solid ${theme.color.red};` : `1px solid ${theme.color.grey1};`};
+  ${({actionPossibleElement, theme}) => actionPossibleElement ? `
+    height: 28px;
+    border: 2px solid ${theme.color.red};
+  ` : `
+    height: 20px;
+    border: 1px solid ${theme.color.grey1};
+  `}
   background: ${({theme}) => theme.color.grey3};
-  border-radius: 20px;
   white-space: nowrap;
-  overflow: ${({ percent }) => percent > 100 ? 'unset' : 'hidden'};
   right: 26px;
 `;
-const ElementCurrentBar = styled.span`
+const ElementCurrentBar = styled.div`
   display: inline-block;
   position: absolute;
-  height: 100%;
-  border-radius: 20px;
+  top: ${({isResist}) => isResist ? `50%` : `0%`};
+  right: 0;
+  height: 50%;
   width: ${({ percent }) => percent > 100 ? 100 : percent}%;
   transition: width linear 0.5s;
-  right: 0;
+  line-height: 1;
   text-align: left;
 `;
 
 const ElementNum = styled(Text)`
   position: absolute;
-  top: 1px;
   width: 20px;
-  line-height: 14px;
   text-align: center;
   left: -20px;
+  top: ${({actionPossibleElement, theme}) => actionPossibleElement ? '3px' : '1px'};
+  line-height: 1;
 `;
 const ApplyStateBtn = styled(Button)`
   position: fixed;
@@ -176,6 +191,29 @@ const ApplyStateBtn = styled(Button)`
   right: 20px;
   box-shadow: 0 0 10px ${({theme}) => theme.color.point1};
 `;
+const ElementList = ({
+  actionPossibleElement,
+  elementPercent,
+  idx,
+  num,
+  ...rest
+}) => {
+  return (
+    <Element actionPossibleElement={actionPossibleElement} {...rest}>
+      <ElementIcon actionPossibleElement={actionPossibleElement}>
+        <IconPic type="element" pic="icon100" idx={idx + 1} />
+      </ElementIcon>
+      <ElementBar actionPossibleElement={actionPossibleElement}>
+        <ElementCurrentBar className="gradient_dark_r" percent={elementPercent[0]}>
+          <ElementNum code="tSmall" color="main" actionPossibleElement={actionPossibleElement}>{num[0]}</ElementNum>
+        </ElementCurrentBar>
+        <ElementCurrentBar className="gradient_dark_b" percent={elementPercent[1]} isResist={true}>
+          <ElementNum code="tSmall" color="main" actionPossibleElement={actionPossibleElement}>{num[1]}</ElementNum>
+        </ElementCurrentBar>
+      </ElementBar>
+    </Element>
+  )
+}
 const CharacterState = ({
   saveData,
   slotIdx,
@@ -220,7 +258,7 @@ const CharacterState = ({
       node.setAttribute("size", node.getBoundingClientRect().width);
     }
   }, []);
-  const animalKg = React.useMemo(() => Math.min(1, saveCh.kg / gameData.animal_size.kg[chData.animal_type][1]), [gameData, chData]);
+  const animalKg = React.useMemo(() => Math.min(1, saveCh.kg / gameData.animal_size.kg[chData.animal_type][1]), [gameData, saveCh, chData]);
   // const chIdx = saveCh.idx;
   // util.saveLvState(0);
   return (
@@ -268,7 +306,7 @@ const CharacterState = ({
                 </li>
               </ChInfo>
               {gameData.stateName.map((data, idx) => {
-                const stateColor = util.getPercentColor(gameData.stateMax[idx] ,saveCh['st' + idx]);
+                const {stateColor, gradeText} = util.getPercentColor(gameData.stateMax[idx] ,saveCh['st' + idx]);
                 return (
                   <StateGroup key={`chst${idx}`} stateColor={stateColor} justifyContent="flex-start">
                     <StateInner>
@@ -280,6 +318,7 @@ const CharacterState = ({
                         {saveCh['st'+idx]}
                       </TextTotal>
                     </StateInner>
+                    <StateGrade><Text weight="bold" color="sub">{gradeText[lang]}</Text></StateGrade>
                   </StateGroup>
                 )
               })}
@@ -301,9 +340,9 @@ const CharacterState = ({
             </StateContainer>
             <ElementContainer direction="column" justifyContent="flex-start">
               {gameData.element.map((data, idx) => {
-                const num = saveCh['el' + idx] + saveCh['iSt' + (15 + idx)];
-                const elementPercent = num * .5;
-                let actionPossibleElement = 'possible';
+                const num = [saveCh['el' + idx] + saveCh['iSt' + (11 + idx)], saveCh['el' + idx] + saveCh['iSt' + (23 + idx)]];
+                const elementPercent = [num[0] * .5, num[1] * 0.5];//최대 200
+                let actionPossibleElement = false;
                 saveData.ch[slotIdx].newActionType.forEach((type) => {
                   actionPossibleElement = type === idx;
                   if (actionPossibleElement) {
@@ -311,16 +350,7 @@ const CharacterState = ({
                   }
                 });
                 return (
-                  <Element className={`el el${idx}`} key={`chst${idx}`}>
-                    <ElementIcon actionPossibleElement={actionPossibleElement}>
-                      <IconPic type="element" pic="icon100" idx={idx + 1} />
-                    </ElementIcon>
-                    <ElementBar actionPossibleElement={actionPossibleElement} percent={elementPercent}>
-                      <ElementCurrentBar className={actionPossibleElement ? 'gradient_dark_r' : 'gradient_dark_b'} percent={elementPercent}>
-                        <ElementNum code="t2" color="main">{num}</ElementNum>
-                      </ElementCurrentBar>
-                    </ElementBar>
-                  </Element>
+                  <ElementList className={`el el${idx}`} key={`chst${idx}`} actionPossibleElement={actionPossibleElement} elementPercent={elementPercent} idx={idx} num={num} />
                 )
               })}
             </ElementContainer>
