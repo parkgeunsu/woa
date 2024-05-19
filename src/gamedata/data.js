@@ -18,7 +18,7 @@ import { relation } from 'gamedata/relation';
 import { scenario } from 'gamedata/scenario';
 import { cannonSvg, figureSvg, sailSvg, shipSvg } from 'gamedata/shipSvg';
 import { ships } from 'gamedata/ships';
-import { skill } from 'gamedata/skill';
+import { mutateSkill, skill } from 'gamedata/skill';
 import { timeDelay } from 'gamedata/timeDelay';
 //etc 0, hole 100, colorance 200, upgrade 300, material 400
 export const version = "0.1";
@@ -81,6 +81,7 @@ export const gameData = {
     ],
     lineup:lineup,
     skill:skill,
+    mutateSkill:mutateSkill,
     relation:relation,
     scenario:scenario,
     itemsSvg:itemsSvg,

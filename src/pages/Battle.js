@@ -338,6 +338,12 @@ const TimeLineCh = styled.div`
 		filter: brightness(0.3);
 	}
 `;
+const CardMutate = styled(IconPic)`
+	display: none;
+  border-radius: 30%;
+  overflow: hidden;
+  z-index: 4;
+`;
 const BattleCh = styled.div`
 	position: absolute;
 	box-sizing: border-box;
@@ -359,43 +365,6 @@ const BattleCh = styled.div`
 		transform-style: preserve-3d;
 		pointer-events: none;
 		transition: all ${({ gameSpd }) => 0.225/ gameSpd}s;
-		.hpsp {
-			display: flex;
-			position: absolute;
-			height: 25%;
-			width: 100%;
-			top: -30%;
-			flex-direction: column;
-			justify-content: space-between;
-			span {
-				display: flex;
-				height: 45%;
-				background-color: #fff;
-				border-radius: 10px;
-				overflow: hidden;
-				box-shadow: inset 0 0 2px #000;
-				&.hp {
-					em {
-						display: inline-block;
-						height: 100%;
-						width: 100%;
-						background-color: var(--color-red);
-						border-radius: 10px;
-						transition: all ${({ gameSpd }) => 0.375/ gameSpd}s;
-					}
-				}
-				&.sp {
-					em {
-						display: inline-block;
-						height: 100%;
-						width: 100%;
-						background-color: var(--color-blue);
-						border-radius: 10px;
-						transition: all ${({ gameSpd }) => 0.375/ gameSpd}s;
-					}
-				}
-			}
-		}
 	}
 	.dmg {
 		position: absolute;
@@ -442,9 +411,9 @@ const BattleCh = styled.div`
   	z-index: 2;
 		.ch_box {
 			transform: scale(1.5) translate(0, 20%);
-			.hpsp {
-				top: -40%;
-			}
+		}
+		.ch_top {
+			transform: scale(1.5) translate(0, -60%);
 		}
 		.ring_back {
 			box-shadow: 0 0 30px #fff, 0 0 10px #ff0, 0 0 5px #f40;
@@ -551,6 +520,123 @@ const BattleCh = styled.div`
 	&.confusion .ch_box {
 		animation:confusion ${({ gameSpd }) => 2.25 / gameSpd}s infinite;
 		filter: saturate(7);
+	}
+	&.mutate {
+		.ch_box {
+			.card_ch {
+				display: none;
+			}
+			.card_mutate {
+				display: block;
+			}
+		}
+	}
+	&.elevation1 {
+		&:before{
+			content: '';
+			position: absolute;
+			left: 15%;
+			top: 15%;
+			width: 70%;
+			padding-top: 70%;
+			background: #fff;
+			filter: blur(10px);
+			z-index: 1;
+		}
+		.ch_box {
+			transform-origin: 50% 50%;
+			animation:elevationFly ${({ gameSpd }) => 15 / gameSpd}s linear infinite;
+		}
+	}
+	&.elevation2 .ch_box {
+		filter: opacity(0.6) blur(1px);
+	}
+	&.elevation3 .ch_box {
+		filter: opacity(0.8) brightness(0.4);
+	}
+	&.mutate0 .card_mutate {
+		background-position-x: 0% !important;
+	}
+	&.mutate1 .card_mutate {
+		background-position-x: 11.11% !important;
+	}
+	&.mutate2 .card_mutate {
+		background-position-x: 22.22% !important;
+	}
+	&.mutate3 .card_mutate {
+		background-position-x: 33.33% !important;
+	}
+	&.mutate4 .card_mutate {
+		background-position-x: 44.44% !important;
+	}
+	&.mutate5 .card_mutate {
+		background-position-x: 55.55% !important;
+	}
+	&.mutate6 .card_mutate {
+		background-position-x: 66.66% !important;
+	}
+	&.mutate7 .card_mutate {
+		background-position-x: 77.77% !important;
+	}
+	&.mutate8 .card_mutate {
+		background-position-x: 88.88% !important;
+	}
+	&.mutate9 .card_mutate {
+		background-position-x: 99.99% !important;
+	}
+	&.elevation1 .elevationIcon {
+		background-position-x: 11.1% !important;
+	}
+	&.elevation2 .elevationIcon {
+		background-position-x: 22.2% !important;
+	}
+	&.elevation3 .elevationIcon {
+		background-position-x: 33.3% !important;
+	}
+`;
+const BattleChTop = styled(FlexBox)`
+	position: absolute;
+	height: 25%;
+	width: 100%;
+	top: -30%;
+	z-index: 10;
+	.elevation {
+		position: relative;
+		padding-top: 25%;
+		width: 25%;
+		height: 0;
+	}
+	.hpsp {
+		width: 75%;
+		span {
+			display: flex;
+			width: 100%;
+			height: 45%;
+			background-color: #fff;
+			border-radius: 10px;
+			overflow: hidden;
+			box-shadow: inset 0 0 2px #000;
+			&.hp {
+				em {
+					display: inline-block;
+					height: 100%;
+					width: 100%;
+					background-color: var(--color-red);
+					border-radius: 10px;
+					transition: all ${({ gameSpd }) => 0.375/ gameSpd}s;
+				}
+			}
+			&.sp {
+				em {
+					display: inline-block;
+					height: 100%;
+					width: 100%;
+					background-color: var(--color-blue);
+					border-radius: 10px;
+					transition: all ${({ gameSpd }) => 0.375/ gameSpd}s;
+				}
+			}
+		}
 	}
 `;
 const Buff = styled.div`
@@ -1374,7 +1460,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							...timeLine[turnIdx].order,
 							skIdx:1,
 							skLv:1,
-							sp:0,
+							sp:[0,0,0,0,0],
 							effectArea:[enemyPos[attackIdx]],
 							target:enemyPos[attackIdx],
 							targetIdx:[attackIdx]
@@ -1386,7 +1472,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							...timeLine[turnIdx].order,
 							skIdx:1,
 							skLv:1,
-							sp:0,
+							sp:[0,0,0,0,0],
 							effectArea:[allyPos[attackIdx].pos],
 							target:allyPos[attackIdx].pos,
 							targetIdx:[allyPos[attackIdx].idx]
@@ -1394,7 +1480,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						console.log('혼란2', timeLine[turnIdx].order)
 					}
 				}
-			} else if (allyState.indexOf('transform') >= 0) {//변이
+			} else if (allyState.indexOf('mutate') >= 0) {//변이
 				if (!timeLine[turnIdx].order.counterAttack) {//카운터가 아닐경우
 				}
 			}
@@ -1411,7 +1497,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							...timeLine[turnIdx].order,
 							skIdx:1,
 							skLv:1,
-							sp:0,
+							sp:[0,0,0,0,0],
 							effectArea:[allyPos[attackIdx].pos],
 							target:allyPos[attackIdx].pos,
 							targetIdx:[allyPos[attackIdx].idx]
@@ -1423,14 +1509,14 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							...timeLine[turnIdx].order,
 							skIdx:1,
 							skLv:1,
-							sp:0,
+							sp:[0,0,0,0,0],
 							effectArea:[enemyPos[attackIdx]],
 							target:enemyPos[attackIdx],
 							targetIdx:[attackIdx]
 						}
 					}
 				}
-			} else if (enemyState.indexOf('transform') >= 0) {//변이
+			} else if (enemyState.indexOf('mutate') >= 0) {//변이
 				if (!timeLine[turnIdx].order.counterAttack) {//카운터가 아닐경우
 				}
 			}
@@ -2173,7 +2259,12 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 					? skillCate === 15 ? allyAction : enemyAction 
 					: skillCate === 15 ? enemyAction : allyAction;
 				defencer.forEach((defData, dIdx) => {
-					const defEnemy = defData.ch;
+					const defEnemy = defData.ch,
+						attackerElevation = /elevation[0-9]+/g.exec(attacker.state),
+						defEnemyElevation = /elevation[0-9]+/g.exec(defEnemy.state);
+					//방어자가 elevation3이면 적중률 30%감소
+					//방어자가 elevation2이거나 elevation1은 같을 경우만 공격가능 
+					console.log('elevation', attackerElevation, defEnemyElevation);
 					let criticalAtk = false,
 						avoid = false;
 					if (defEnemy.state !== 'die') { //적이 살았을 경우
@@ -2220,7 +2311,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 										avoid = true;
 										teamAction[defData.idx] = teamAction[defData.idx] ? `${teamAction[defData.idx]} avoid${avoidNum}` : `avoid${avoidNum}`;
 									}
-									const counterChance = Math.random() < .1+ (defData.ch.counterAttack ? parseInt(defData.ch.counterAttack.num) * 0.01 : 0); //반격 확률
+									const counterChance = Math.random() < (defData.ch.counterAttack ? parseInt(defData.ch.counterAttack.num) * 0.01 : 0); //반격 확률
 									//console.log(defData.ch.na1, .1 + (defData.ch.counterAttack ? parseInt(defData.ch.counterAttack.num) * 0.01 : 0)+'확률 반격');
 									if (counterChance && atkS === 0 && timeLine[turnIdx].order.skIdx !== 17 && timeLine[turnIdx].order.targetIdx.length === 1) {//반격 확률 계산, 연속공격중 마지막일때만, 반격이 아닐경우, 광역기가 아닐경우
 										const effectTarget = timeLine[turnIdx].order.team === 'ally' ? allyPos[timeLine[turnIdx].order.idx].pos : enemyPos[timeLine[turnIdx].order.idx];
@@ -2230,10 +2321,10 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 												idx: timeLine[turnIdx].order.targetIdx[0],
 												skIdx: 1,
 												skLv: 1,
+												sp: [0,0,0,0,0],
 												target: effectTarget,
 												effectArea: [effectTarget],
 												targetIdx: [timeLine[turnIdx].order.idx],
-												sp: 0,
 												counterAttack: true,
 											},
 											state:defencer[0].ch.state,
@@ -2379,7 +2470,9 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						} else {
 							defNum = defEnemy;
 						}
-						const	attackerSkill = attacker.hasSkill.filter((skData) => {
+						const	attackerSkill = battleAlly[timeLine[turnIdx].order.idx]?.mutate ? gameData.mutateSkill[battleAlly[timeLine[turnIdx].order.idx]?.mutate].filter((skData) => {
+							return skData.idx === timeLine[turnIdx].order.skIdx;
+						}) : attacker.hasSkill.filter((skData) => {
 							return skData.idx === timeLine[turnIdx].order.skIdx;
 						});
 						gameData.skill[attackerSkill[0].idx].eff.forEach((skData) => {
@@ -2769,11 +2862,21 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 	} else {//턴 종료시
 		//카운터 어텍 제거
 		battleAlly.forEach((ally) => {
+			ally.mutate = null;
+			const mutate = /mutate[0-9]+/g.exec(ally.state);
+			if (mutate) {
+				ally.mutate = mutate[0];
+			}
 			if (ally.counterAttack) {
 				delete ally.counterAttack;
 			}
 		});
 		battleEnemy.forEach((enemy) => {
+			enemy.mutate = null;
+			const mutate = /mutate[0-9]+/g.exec(enemy.state);
+			if (mutate) {
+				enemy.mutate = mutate[0];
+			}
 			if (enemy.counterAttack) {
 				delete enemy.counterAttack;
 			}
@@ -3263,6 +3366,11 @@ const passiveBuff = ({gameData, battleAlly, battleEnemy, allyEnemyPassive, allyP
 			let buff = {...buff_},
 				state = util.getStateName(buff.type);
 			switch(state) {
+				case 'elevation'://높이상태
+					state = '';
+					ccSingle = 'elevation';
+					cc += ` elevation${buff.num}`;
+					break;
 				case 'invincible'://무적
 					state = '';
 					ccSingle = 'invincible';
@@ -3303,10 +3411,10 @@ const passiveBuff = ({gameData, battleAlly, battleEnemy, allyEnemyPassive, allyP
 					ccSingle = 'stun';
 					cc += ' stun';
 					break;
-				case 'transform'://변이
+				case 'mutate'://변이
 					state = '';
-					ccSingle = 'transform';
-					cc += ' transform';
+					ccSingle = 'mutate';
+					cc += ` mutate mutate${buff.num}`;
 					//거북이 buffState['def'] = 1000;
 					//곰 buffState['atk'] = 1000;
 					//독수리 buffState['mak'] = 1000;
@@ -3573,6 +3681,11 @@ const passiveBuff = ({gameData, battleAlly, battleEnemy, allyEnemyPassive, allyP
 			let buff = {...buff_},
 				state = util.getStateName(buff.type);
 			switch(state) {
+				case 'elevation'://높이상태
+					state = '';
+					ccSingle = 'elevation';
+					cc += ` elevation${buff.num}`;
+					break;
 				case 'invincible'://무적
 					state = '';
 					ccSingle = 'invincible';
@@ -3613,10 +3726,10 @@ const passiveBuff = ({gameData, battleAlly, battleEnemy, allyEnemyPassive, allyP
 					ccSingle = 'freezing';
 					cc += ' freezing';
 					break;
-				case 'transform'://변이
+				case 'mutate'://변이
 					state = '';
-					ccSingle = 'transform';
-					cc += ' transform';
+					ccSingle = 'mutate';
+					cc += ` mutate mutate${buff.num}`;
 					//거북이 buffState['def'] = 1000;
 					//곰 buffState['atk'] = 1000;
 					//독수리 buffState['mak'] = 1000;
@@ -3764,7 +3877,7 @@ const Battle = ({
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
-	const isScenario = React.useMemo(() => typeof paramData.scenario.stageIdx === 'number', [paramData]);
+	const isScenario = React.useMemo(() => typeof paramData?.scenario?.stageIdx === 'number', [paramData]);
 	const scenarioDetail = React.useMemo(() => {
 		return isScenario ? gameData.scenario[paramData.scenario.stay][paramData.scenario.dynastyIdx].scenarioList[paramData.scenario.dynastyScenarioIdx].stage[paramData.scenario.stageIdx] : {
 			title: gameData.msg.button['startExploring'][lang],
@@ -3978,6 +4091,9 @@ const Battle = ({
 			}, 75 / speed);
 		}
 		battleAlly.current = [];
+		if (ally.length <= 0) {//캐릭이 없으면 이전 전화면으로
+			util.historyBack(navigate);
+		}
 		ally.forEach((data, idx) => {//능력치 셋팅
 			const saveCh = {...sData.ch[data]};
 			let effData;
@@ -4023,13 +4139,14 @@ const Battle = ({
 				fireR = saveCh.el9 + saveCh.iSt32 + (effData?.rtSt32 || 0),
 				windR = saveCh.el10 + saveCh.iSt33 + (effData?.rtSt33 || 0),
 				earthR = saveCh.el11 + saveCh.iSt34 + (effData?.rtSt34 || 0);
-			saveCh.hasSkill[2] = {idx:298,lv:1,exp:1};//삭제 해야됨
+			saveCh.hasSkill[2] = {idx:323,lv:1,exp:1};//삭제 해야됨
 			battleAlly.current.push({
 				...saveCh,
 				na1: gameData.ch[saveCh.idx].na1,
 				animal_type: gameData.ch[saveCh.idx].animal_type,
 				hasExp:saveCh.hasExp,
 				state: '', //idx !== 0 ? 'die' : '',죽음
+				elevation: 0,
 				buffDebuff:[],
 				currenthp: hp,
 				hp: hp, //idx !== 0 ? 0 : hp, 죽음
@@ -4133,6 +4250,7 @@ const Battle = ({
 				earthR = enemyData.el11 + enemyData.iSt34 + (effData?.rtSt34 || 0);
 			enemy.push({
 				state: '',
+				elevation: 0,
 				buffDebuff:[],
 				...gameCh,
 				...enemyData,
@@ -4426,7 +4544,7 @@ const Battle = ({
 			return;
 		}
 		if (mode === 'area') {
-			if (battleAlly.current[orderIdx].sp < currentSkill.current.sp) {
+			if (battleAlly.current[orderIdx].sp < currentSkill.current.sp[currentSkill.current.skLv - 1]) {
 				setMsgOn(true);
 				setMsg(gameData.msg.sentence.lackSkillPoint[lang]);
 			} else {
@@ -4454,7 +4572,7 @@ const Battle = ({
 						targetIdx: targetIdx.current,
 						effectArea: targetAreaArr.current,
 						target: pos,
-						sp: -gameData.skill[currentSkill.current.sk.idx].sp,
+						sp: -gameData.skill[currentSkill.current.sk.idx].sp[currentSkill.current.skLv - 1],
 					});
 					setEffectEnemyArea([]);
 					setEffectAllyArea([]);
@@ -4482,7 +4600,7 @@ const Battle = ({
 						skillAreaNum === 43 ||
 						skillAreaNum === 44 ||
 						skillAreaNum === 45) { //랜덤 범위시에 위치 재배치시 sp5 소모
-						if (battleAlly.current[orderIdx].sp < currentSkill.current.sp + 5) {
+						if (battleAlly.current[orderIdx].sp < currentSkill.current.sp[currentSkill.current.skLv - 1] + 5) {
 							setMsgOn(true);
 							setMsg(gameData.msg.sentence.lackSkillPoint[lang]);
 						} else {
@@ -4518,7 +4636,7 @@ const Battle = ({
 			return;
 		}
 		if (mode === 'area') {
-			if (battleAlly.current[orderIdx].sp < currentSkill.current.sp) {
+			if (battleAlly.current[orderIdx].sp < currentSkill.current.sp[currentSkill.current.skLv - 1]) {
 				setMsgOn(true);
 				setMsg(gameData.msg.sentence.lackSkillPoint[lang]);
 			} else {
@@ -4546,7 +4664,7 @@ const Battle = ({
 						targetIdx: targetIdx.current,
 						effectArea: targetAreaArr.current,
 						target: pos,
-						sp: -gameData.skill[currentSkill.current.sk.idx].sp,
+						sp: -gameData.skill[currentSkill.current.sk.idx].sp[currentSkill.current.skLv - 1],
 					});
 					setEffectEnemyArea([]);
 					setEffectAllyArea([]);
@@ -4563,7 +4681,7 @@ const Battle = ({
 						skillAreaNum === 43 ||
 						skillAreaNum === 44 ||
 						skillAreaNum === 45) { //랜덤 범위시에 위치 재배치시 sp5 소모
-						if (battleAlly.current[orderIdx].sp < currentSkill.current.sp + 5) {
+						if (battleAlly.current[orderIdx].sp < currentSkill.current.sp[currentSkill.current.skLv - 1] + 5) {
 							setMsgOn(true);
 							setMsg(gameData.msg.sentence.lackSkillPoint[lang]);
 						} else {
@@ -4659,7 +4777,7 @@ const Battle = ({
 						skLv: skLv,
 						effectArea: targetAreaArr.current,
 						target: allyPos.current[orderIdx].pos,
-						sp: -skill.sp,
+						sp: -skill.sp[skLv - 1],
 					});
 					break;
 				case 4: //active(방어)
@@ -4676,7 +4794,7 @@ const Battle = ({
 						skLv: skLv,
 						effectArea: targetAreaArr.current,
 						target: allyPos.current[orderIdx].pos,
-						sp: -skill.sp,
+						sp: -skill.sp[skLv - 1],
 					});
 					break;
 				case 5: //buff
@@ -4843,7 +4961,7 @@ const Battle = ({
 						setOrderIdx('');
 					}
 				}
-			} else if (allyState.indexOf('transform') >= 0) {
+			} else if (allyState.indexOf('mutate') >= 0) {
 				console.log('변이 동작');
 			}
 		}
@@ -5183,11 +5301,17 @@ const Battle = ({
 														<Passive key={idx} className={`ch_passive passive${idx}`} effImg={imgSet.passive[passiveData]} idx={idx} passive={passiveData}/>
 													);
 												})}
+												<CardMutate className="card_mutate" type="mutate" isAbsolute={true} isThumb={true} pic="icon150" idx={0} />
 												<CharacterCard usedType="battle" saveData={saveData} gameData={gameData} saveCharacter={enemyData} gameSpd={speed} />
-												<div className="hpsp">
-													<span className="hp"><em className="gradient_light" style={{width: hasHp + '%'}}></em></span>
-												</div>
 											</div>
+											<BattleChTop className="ch_top" alignItems="center" gameSpd={speed}>
+												<div className="elevation">
+													<IconPic className="elevationIcon" type="elevation" isAbsolute={true} isThumb={true} pic="icon100" idx={0} />
+												</div>
+												<FlexBox className="hpsp" direction="column" justifyContent="space-between">
+													<span className="hp"><em className="gradient_light" style={{width: hasHp + '%'}}></em></span>
+												</FlexBox>
+											</BattleChTop>
 											<div className="dmg"></div>
 											<IconPic className="state" type="battleState" isAbsolute={true} isThumb={true} pic="icon150" idx={iconIdx ? iconIdx[0] : 0} />
 											<IconPic className="stateDie" type="battleState" isAbsolute={true} isThumb={true} pic="icon150" idx={1} />
@@ -5251,12 +5375,18 @@ const Battle = ({
 														<Passive key={idx} className={`ch_passive passive${idx}`} effImg={imgSet.passive[passiveData]} idx={idx} passive={passiveData}/>
 													);
 												})}
+												<CardMutate className="card_mutate" type="mutate" isAbsolute={true} isThumb={true} pic="icon150" idx={0} />
               					<CharacterCard usedType="battle" saveData={saveData} gameData={gameData} saveCharacter={allyCh} gameSpd={speed} />
-												<div className="hpsp">
+											</div>
+											<BattleChTop className="ch_top" alignItems="center" gameSpd={speed}>
+												<div className="elevation">
+													<IconPic className="elevationIcon" type="elevation" isAbsolute={true} isThumb={true} pic="icon100" idx={0} />
+												</div>
+												<FlexBox className="hpsp" direction="column"  justifyContent="space-between">
 													<span className="hp"><em className="gradient_light" style={{width: hasHp + '%'}}></em></span>
 													<span className="sp"><em className="gradient_light" style={{width: hasSp + '%'}}></em></span>
-												</div>
-											</div>
+												</FlexBox>
+											</BattleChTop>
 											<div className="dmg"></div>
 											<IconPic className="state" type="battleState" isAbsolute={true} isThumb={true} pic="icon150" idx={iconIdx ? iconIdx[0] : 0} />
 											<IconPic className="stateDie" type="battleState" isAbsolute={true} isThumb={true} pic="icon150" idx={1} />
@@ -5335,28 +5465,38 @@ const Battle = ({
 									<li><button onClick={() => {
 										battleCommand('wait');
 									}}><span className="skSp">{battleAlly.current[orderIdx]?.bSt2}</span><span className="skName">{lang === 'ko' ? '대기' : 'Wait'}</span></button></li>
-									{battleAlly.current[orderIdx]?.hasSkill && battleAlly.current[orderIdx]?.hasSkill.map((data, idx) => {
-										const sk = gameData.skill;
-										const characterActionType = battleAlly.current[orderIdx].newActionType;//동물 actionType과 skill element간 속성싱크가 1차이가 남
-										const skillType = sk[data.idx].element_type;
-										let actionType = true;
-										if (skillType > 0 && skillType < 7) {
-											characterActionType.forEach((data) => {
-												actionType = (data + 1) === skillType;
-												if (actionType) {
-													return;
-												}
-											});
-											//스킬 공격타입과 캐릭공격타입이 같은지 확인
-										}
-										if (sk[data.idx].cate !== 2 && actionType) {
+									{battleAlly.current[orderIdx]?.mutate ? 
+										gameData.mutateSkill[battleAlly.current[orderIdx]?.mutate].map((data, idx) => {
+											const sk = gameData.skill;
 											return (
 												<li key={idx}><button onClick={() => {
 													battleCommand(sk[data.idx], data.lv);
-												}}><span className="skSp">{sk[data.idx].sp}</span><span className="skName">{sk[data.idx].na[lang]}</span></button></li>
+												}}><span className="skSp">{sk[data.idx].sp[data.lv - 1]}</span><span className="skName">{sk[data.idx].na[lang]}</span></button></li>
 											);
-										}
-									})}
+										})
+									:
+										battleAlly.current[orderIdx]?.hasSkill && battleAlly.current[orderIdx]?.hasSkill.map((data, idx) => {
+											const sk = gameData.skill;
+											const characterActionType = battleAlly.current[orderIdx].newActionType;//동물 actionType과 skill element간 속성싱크가 1차이가 남
+											const skillType = sk[data.idx].element_type;
+											let actionType = true;
+											if (skillType > 0 && skillType < 7) {
+												characterActionType.forEach((data) => {
+													actionType = (data + 1) === skillType;
+													if (actionType) {
+														return;
+													}
+												});
+												//스킬 공격타입과 캐릭공격타입이 같은지 확인
+											}
+											if (sk[data.idx].cate !== 2 && actionType) {
+												return (
+													<li key={idx}><button onClick={() => {
+														battleCommand(sk[data.idx], data.lv);
+													}}><span className="skSp">{sk[data.idx].sp[data.lv - 1]}</span><span className="skName">{sk[data.idx].na[lang]}</span></button></li>
+												);
+											}
+										})}
 								</ul>
 							</>
 						)}

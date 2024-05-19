@@ -137,7 +137,7 @@ const ListCh = styled(ChPic)`
 const ListChRing = styled(ChPic)`
   position: absolute;
   ${({usedType}) => usedType === 'battle' ? `
-    left: -5%;
+    left: -7.5%;
     top: 21%;
     width: 115%;
     height: 115%;
@@ -310,17 +310,17 @@ const ChracterCard = ({
     if (usedType === 'battle') { //battle 말판
       return (
         <>
-          <ListCh usedType={usedType} isThumb={true} pic="ch_s" idx={chData?.display} />
-          <ListChRing usedType={usedType} type="cardBack" pic="card_s" idx={0} />
-          <ListElement>
-            <ListChElement type="elementBack" isThumb={true} pic="card_s" idx={chData?.element} />
-            {saveCh?.lv > 29 && <ListChElement1 isThumb={true} type="elementBack2" pic="card_s" idx={chData?.element} />}
+          <ListCh className="card_ch" usedType={usedType} isThumb={true} pic="ch_s" idx={chData?.display} />
+          <ListChRing className="card_back" usedType={usedType} type="cardBack" pic="card_s" idx={0} />
+          <ListElement className="card_element">
+            <ListChElement type="elementBack" isThumb={true} pic="card_s" idx={chData?.element-6} />
+            {saveCh?.lv > 29 && <ListChElement1 isThumb={true} type="elementBack2" pic="card_s" idx={chData?.element-6} />}
           </ListElement>
           {saveCh?.lv > 49 && <ListChElement2 className="card_ring" style={{
             left: '-10%',
             width: '120%',
             height: '120%',
-          }} isThumb={true} wNum={5} hNum={5} pic="cardRing_s" idx={chData?.element} gameSpd={gameSpd} />}
+          }} isThumb={true} wNum={5} hNum={5} pic="cardRing_s" idx={chData?.element-6} gameSpd={gameSpd} />}
         </>
       )
     }
@@ -339,8 +339,8 @@ const ChracterCard = ({
           <ListChRing style={{
             borderRadius: '50%',
           }} isThumb={true} type="cardBack" pic="card_s" idx={0} />
-          <ListChElement type="elementBack" isThumb={true} pic="card_s" idx={chData?.element} />
-          {saveCh?.lv > 29 && <ListChElement1 isThumb={true} type="elementBack2" pic="card_s" idx={chData?.element} />}
+          <ListChElement type="elementBack" isThumb={true} pic="card_s" idx={chData?.element-6} />
+          {saveCh?.lv > 29 && <ListChElement1 isThumb={true} type="elementBack2" pic="card_s" idx={chData?.element-6} />}
         </>
       )
     }
@@ -361,7 +361,7 @@ const ChracterCard = ({
               )
             })}
           </ListJobActionListType>
-          <ListChElement type="elementBack" pic="card_s" idx={chData.element} />
+          <ListChElement type="elementBack" pic="card_s" idx={chData.element-6} />
           <ListChFrame type="cardBack" pic="card_s" idx={1} />
           <ListActionPoint>{`${saveCh.actionPoint} / ${saveCh.actionMax}`}</ListActionPoint>
         </>
@@ -395,7 +395,7 @@ const ChracterCard = ({
             <>
               <ListCh isThumb={true} pic="ch_s" idx={chData?.display} />
               <ListChRing isThumb={true} type="cardBack" pic="card_s" idx={0} />
-              <ListChElement type="elementBack" isThumb={true} pic="card_s" idx={chData?.element} />
+              <ListChElement type="elementBack" isThumb={true} pic="card_s" idx={chData?.element-6} />
               <ListChFrame type="cardBack" pic="card_s" idx={1} />
             </>
           ) : (
@@ -403,9 +403,9 @@ const ChracterCard = ({
               <ListNameLv isThumb={true} cardLv={imgSet.etc.imgCardLv} backColor={gameData.chGradeColor[saveCh?.grade]}>{saveCh?.lv}</ListNameLv>
               <ListCh isThumb={true} pic="ch_s" idx={chData?.display} />
               <ListChRing isThumb={true} type="cardBack" pic="card_s" idx={0} />
-              <ListChElement type="elementBack" isThumb={true} pic="card_s" idx={chData?.element} />
-              {saveCh?.lv > 29 && <ListChElement1 isThumb={true} type="elementBack2" pic="card_s" idx={chData?.element} />}
-              {saveCh?.lv > 49 && <ListChElement2 isThumb={true} wNum={5} hNum={5} pic="cardRing_s" idx={chData?.element} gameSpd={gameSpd} />}
+              <ListChElement type="elementBack" isThumb={true} pic="card_s" idx={chData?.element-6} />
+              {saveCh?.lv > 29 && <ListChElement1 isThumb={true} type="elementBack2" pic="card_s" idx={chData?.element-6} />}
+              {saveCh?.lv > 49 && <ListChElement2 isThumb={true} wNum={5} hNum={5} pic="cardRing_s" idx={chData?.element-6} gameSpd={gameSpd} />}
               {saveCh?.newActionType.map((data, idx) => {
                 return (
                   <ListChActionType className="list_action_type" isThumb={true} key={'action'+idx}>
@@ -463,9 +463,9 @@ const ChracterCard = ({
               )
             })}
           </ListJobAction>
-          <ListChElement type="elementBack" pic="card_s" idx={chData?.element} />
-          {saveCh?.lv > 29 && <ListChElement1 type="elementBack2" pic="card_s" idx={chData?.element} />}
-          {saveCh?.lv > 49 && <ListChElement2 wNum={5} hNum={5} pic="cardRing_s" idx={chData?.element} gameSpd={gameSpd} />}
+          <ListChElement type="elementBack" pic="card_s" idx={chData?.element-6} />
+          {saveCh?.lv > 29 && <ListChElement1 type="elementBack2" pic="card_s" idx={chData?.element-6} />}
+          {saveCh?.lv > 49 && <ListChElement2 wNum={5} hNum={5} pic="cardRing_s" idx={chData?.element-6} gameSpd={gameSpd} />}
           <ListChStar>
             {starArr.map((star, idx) => {
               return <Star idx={idx} type="star" pic="icon100" key={`start${idx}`} />;
@@ -494,9 +494,9 @@ const ChracterCard = ({
                 )
               })}
             </ListJobAction>
-            <ListChElement type="elementBack" pic="card_s" idx={chData?.element} />
-            {saveCh?.lv > 29 && <ListChElement1 type="elementBack2" pic="card_s" idx={chData?.element} />}
-            {saveCh?.lv > 49 && <ListChElement2 wNum={5} hNum={5} pic="cardRing_s" idx={chData?.element} gameSpd={gameSpd} />}
+            <ListChElement type="elementBack" pic="card_s" idx={chData?.element-6} />
+            {saveCh?.lv > 29 && <ListChElement1 type="elementBack2" pic="card_s" idx={chData?.element-6} />}
+            {saveCh?.lv > 49 && <ListChElement2 wNum={5} hNum={5} pic="cardRing_s" idx={chData?.element-6} gameSpd={gameSpd} />}
             <ListChStar usedType="gameMain">
               {starArr.map((star, idx) => {
                 return <Star idx={idx} type="star" pic="icon100" key={`start${idx}`} />;
@@ -527,9 +527,9 @@ const ChracterCard = ({
                   )
                 })}
               </ListJobAction>
-              <ListChElement type="elementBack" pic="card_s" idx={chData?.element} />
-              {saveCh?.lv > 29 && <ListChElement1 type="elementBack2" pic="card_s" idx={chData?.element} />}
-              {saveCh?.lv > 49 && <ListChElement2 wNum={5} hNum={5} pic="cardRing_s" idx={chData?.element} gameSpd={gameSpd} />}
+              <ListChElement type="elementBack" pic="card_s" idx={chData?.element-6} />
+              {saveCh?.lv > 29 && <ListChElement1 type="elementBack2" pic="card_s" idx={chData?.element-6} />}
+              {saveCh?.lv > 49 && <ListChElement2 wNum={5} hNum={5} pic="cardRing_s" idx={chData?.element-6} gameSpd={gameSpd} />}
               <ListChStar>
                 {starArr.map((star, idx) => {
                   return <Star idx={idx} type="star" pic="icon100" key={`start${idx}`} />;
@@ -560,9 +560,9 @@ const ChracterCard = ({
                 )
               })}
             </ListJobAction>
-            <ListChElement type="elementBack" pic="card" idx={chData?.element} />
-            {saveCh?.lv > 29 && <ListChElement1 type="elementBack2" pic="card" idx={chData?.element} />}
-            {saveCh?.lv > 49 && <ListChElement2 wNum={5} hNum={5} pic="cardRing" idx={chData?.element} gameSpd={gameSpd} />}
+            <ListChElement type="elementBack" pic="card" idx={chData?.element-6} />
+            {saveCh?.lv > 29 && <ListChElement1 type="elementBack2" pic="card" idx={chData?.element-6} />}
+            {saveCh?.lv > 49 && <ListChElement2 wNum={5} hNum={5} pic="cardRing" idx={chData?.element-6} gameSpd={gameSpd} />}
             <ListChStar>
               {starArr.map((star, idx) => {
                 return <Star idx={idx} type="star" pic="icon100" key={`start${idx}`} />;

@@ -363,6 +363,9 @@ const BattleCh = styled.div`
 			width: 500%;
 		}
 	}
+	.card_mutate {
+		display: none;
+	}
 	&:after {
 		content: "";
 		position: absolute;
@@ -449,21 +452,45 @@ const BattleCh = styled.div`
 			animation: tombstone ${({ gameSpd }) => 1.125 / gameSpd}s;opacity:0;animation-fill-mode: forwards;transform-origin:50% 100%;
 		}
 	}
+	
 	/*상태이상*/
-	&.bleeding .ch_box .ch_style {
-		filter: grayscale(1) brightness(0.5);
+	&.invincible .ch_box {
+		filter: opacity(0.7) drop-shadow(0px 0px 5px #fff) drop-shadow(0px 0px 3px #09f) drop-shadow(0px 0px 1px #00f);
 	}
-	&.addicted .ch_box .ch_style {
-		filter: blur(1px);
+	&.immunity .ch_box {
+		filter: opacity(0.7) drop-shadow(0px 0px 5px #fff) drop-shadow(0px 0px 3px #f90) drop-shadow(0px 0px 1px #f00);
 	}
-	&.bleeding.addicted .ch_box .ch_style {
-		filter: grayscale(1) brightness(0.5) blur(1px);
+	&.bleeding .ch_box {
+		filter: opacity(0.7) drop-shadow(0px 0px 5px #f00) drop-shadow(0px 0px 3px #f00) drop-shadow(0px 0px 1px #f00);
 	}
+	&.addicted .ch_box {
+		filter: contrast(5) sepia(1) opacity(0.5) drop-shadow(0px 0px 5px #f0f) drop-shadow(0px 0px 3px #f0f) drop-shadow(0px 0px 1px #f0f);
+	}
+	${'' /* &.bleeding.addicted .ch_box {
+		filter: saturate(1.5) sepia(0.7) contrast(5) opacity(0.8) drop-shadow(0px 0px 5px #F00);
+	} */}
 	&.petrification .ch_box {
-		filter: grayscale(1) brightness(2);
+		filter: contrast(0.5) grayscale(1) brightness(2) drop-shadow(0px 0px 3px #fff) drop-shadow(0px 0px 1px #fff);
 	}
-	&.petrification .ch_ring {
+	&.freezing .ch_box {
+		filter: brightness(3) opacity(0.7) drop-shadow(0 0 5px #0ff) drop-shadow(0 0 3px #0ff) drop-shadow(0 0 1px #0ff);
+	}
+	&.petrification .card_ring {
 		animation-play-state: paused;
+	}
+	&.confusion .ch_box {
+		animation:confusion ${({ gameSpd }) => 2.25 / gameSpd}s infinite;
+		filter: saturate(7);
+	}
+	&.mutate {
+		.ch_box {
+			.card_element, .card_back, .card_ch {
+				display: none;
+			}
+			.card_mutate {
+				display: block;
+			}
+		}
 	}
 `;
 const Buff = styled.div`
@@ -1657,7 +1684,7 @@ const StyleSelect = styled(Select)`
 `;
 const speedList = [1,1.5,2,3];
 // const skillCateList = ['none','passive','active(emeny)','active(self)','buff','debuff','active(debuff)','active(buff)','weather','job'];//1부터
-const skillFilterList = ['none','hue(90deg)','hue(180deg)','saturate(3)','invert(100%)'];
+const skillFilterList = ['none','hue(90deg)','hue(180deg)','saturate(3)','invert(100%)','brightness(2)'];
 const taList = [
   '1 단일','2 가로2','3 가로3','4 세로2','5 세로3','6 가로행','7 세로열','8 십자5','9 십자9','10 대각선',
   '11 반대 대각선','12 고정 세로2열','13 고정 세로3열','14 ⏊ 4','15 └┐ 7','16 ┌┘ 7','17 卍17','18 고정 가로2행','19 고정 가로3행','20 전체',
@@ -2448,6 +2475,8 @@ const TestSkill = ({
 										return 'saturate(3)';
 									case 4:
 										return 'invert(100%)';
+									case 5:
+										return 'brightness(2)';
 									default:
 										return '';
 								}

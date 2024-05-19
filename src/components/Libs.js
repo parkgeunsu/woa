@@ -74,7 +74,7 @@ export const util = { //this.loadImage();
   },
   historyBack: (navigate) => {
     const history = util.loadData('history');
-    if (history === null || history === undefined || Object.keys(history).length === 1 || history[1] === '') {
+    if (history === null || history === undefined || history.length === 0 || history[1] === '') {
       navigate('/');
     } else {
       navigate(`../${history[1].location}`, {
@@ -605,7 +605,8 @@ export const util = { //this.loadImage();
       {na:'RHSP', ko:'HP,SP회복',en:'HP,SP Recovery',jp:'HP,SP回復'},
       {na:'REV',ko:'부활',en:'Revive',jp:'復活'},
       {na:'REH',ko:'부활후 HP회복',en:'HP Recovery after Revive',jp:'復活後のHP回復'},
-      {},{},
+      {},
+      {na:'PS',ko:'위치상태',en:'Position State',jp:'位置状態'},
       {na:'IV',ko:'무적',en:'Invincible',jp:'無敵'},
       {na:'IM',ko:'면역',en:'Immunity',jp:'免疫'},
       {na:'BD',ko:'출혈',en:'Bleeding',jp:'出血'},
@@ -885,6 +886,8 @@ export const util = { //this.loadImage();
         return 'hp';//부활
       case 45:
         return 'hp';//부활 회복
+      case 47:
+        return 'elevation';//높이상태
       case 48:
         return 'invincible';//무적
       case 49:
@@ -900,7 +903,7 @@ export const util = { //this.loadImage();
       case 54:
         return 'stun';//기절
       case 55:
-        return 'transform';//변이
+        return 'mutate';//변이
       case 56:
         return 'immediateDeath';//즉사
       case 57:
@@ -916,7 +919,7 @@ export const util = { //this.loadImage();
       case 64:
         return 'stunR';//기절
       case 65:
-        return 'transformR';//변이
+        return 'mutateR';//변이
       case 66:
         return 'immediateDeathR';//즉사
       case 67:
@@ -932,7 +935,7 @@ export const util = { //this.loadImage();
       case 74:
         return 'stunI';//기절
       case 75:
-        return 'transformI';//변이
+        return 'mutateI';//변이
       case 76:
         return 'immediateDeathI';//즉사
       case 77:
@@ -1868,7 +1871,7 @@ export const util = { //this.loadImage();
   getItem: ({
     saveData, gameData, changeSaveData, option, isSave, lang
   }) => {
-    console.log('option', option);
+    // console.log('option', option);
     let save = {...saveData};//장비 아이템 복사
     let itemLv = option.lv;
     const type = option.type || 'equip';
@@ -2937,6 +2940,7 @@ export const util = { //this.loadImage();
       case 'item':
         return 5;
       case 'scenario':
+      case 'mutate':
         return 7;
       case 'battleState':
         return 8;
@@ -2945,6 +2949,8 @@ export const util = { //this.loadImage();
         return 9;
       case 'star':
         return 12;
+      case 'elevation':
+        return 13;
       default:
         return 0;
     }
