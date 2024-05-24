@@ -40,12 +40,15 @@ const CardPlacement = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-	const [saveSlot, setSaveSlot] = useState(saveData?.lineup?.select); // 저장된 슬롯
-	const [selectSave, setSelectSave] = useState(saveData?.lineup?.select); // 선택된 진형슬롯
-	const [selectLineup, setSelectLineup] = useState(saveData?.lineup?.save_slot[selectSave].no); // 저장된 슬롯에 선택된 진형
+	const sData = React.useMemo(() => {
+		return Object.keys(saveData).length !== 0 ? saveData : util.loadData('saveData');
+	}, [saveData]);
+	const [saveSlot, setSaveSlot] = useState(sData?.lineup?.select); // 저장된 슬롯
+	const [selectSave, setSelectSave] = useState(sData?.lineup?.select); // 선택된 진형슬롯
+	const [selectLineup, setSelectLineup] = useState(sData?.lineup?.save_slot[selectSave].no); // 저장된 슬롯에 선택된 진형
 	const [selectLineupList, setSelectLineupList] = useState(0); //선택된 라인업 리스트 순번
-	const [useList, setUseList] = useState(saveData?.lineup?.save_slot[selectSave].entry); // 라인업 맵 캐릭
-	const [noneUseList, setNoneUseList] = useState(saveData?.ch);
+	const [useList, setUseList] = useState(sData?.lineup?.save_slot[selectSave].entry); // 라인업 맵 캐릭
+	const [noneUseList, setNoneUseList] = useState(sData?.ch);
 	
 	const mapRef = useRef([]);
 	const lineupInfo = ["HP","SP","RSP","ATK","DEF","MAK","MDF","RCV","SPD","LUK"];
@@ -53,8 +56,8 @@ const CardPlacement = ({
 	const clickSelectSlot = (idx) => {//세이브 슬롯 선택
 		//console.log('saveslot' + idx);
 		setSelectSave(idx);
-		setSelectLineup(saveData.lineup.save_slot[idx].no);
-		setUseList(saveData.lineup.save_slot[idx].entry);
+		setSelectLineup(sData.lineup.save_slot[idx].no);
+		setUseList(sData.lineup.save_slot[idx].entry);
 		util.setLineupSt({
 			saveSlot: selectSave,
 			lineupType: selectLineup,
@@ -62,7 +65,7 @@ const CardPlacement = ({
 		}, gameData, saveData, changeSaveData);
 	}
 	const clickSaveSlot = () => {
-		let save = saveData;
+		let save = sData;
 		save.lineup.select = selectSave;
 		setSaveSlot(selectSave);
 		changeSaveData(save);
@@ -70,12 +73,12 @@ const CardPlacement = ({
 	const clickLineupSlot = (idx) => {//진형 타입 선택
 		//console.log('lineupslot' + idx);
 		setSelectLineup(idx);
-		setUseList(saveData.lineup.save_slot[selectSave].entry);
+		setUseList(sData.lineup.save_slot[selectSave].entry);
 		util.setLineupSt({
 			saveSlot: selectSave, 
 			lineupType: idx,
 			useList: useList,
-		}, gameData, saveData, changeSaveData);
+		}, gameData, sData, changeSaveData);
 	}
 	const clickLineupCh = (chIdx, idx) => {//캐릭 리스트 클릭
 		console.log('선택된 map순번', selectLineupList);//선택되어 있는 map칸
@@ -86,18 +89,16 @@ const CardPlacement = ({
 			saveSlot: selectSave, 
 			lineupType: selectLineup,
 			useList: saveUseList,
-		}, gameData, saveData, changeSaveData);
+		}, gameData, sData, changeSaveData);
 	}
 	useEffect(() => {
-		if (Object.keys(saveData).length !== 0) {
-			const listUsed = saveData.lineup.save_slot[selectSave].entry;
-			setUseList(listUsed);
-			util.setLineupSt({
-				saveSlot: selectSave, 
-				lineupType: selectLineup,
-				useList: listUsed,
-			}, gameData, saveData, changeSaveData);
-		}
+		const listUsed = sData.lineup.save_slot[selectSave].entry;
+		setUseList(listUsed);
+		util.setLineupSt({
+			saveSlot: selectSave, 
+			lineupType: selectLineup,
+			useList: listUsed,
+		}, gameData, sData, changeSaveData);
 	}, []);
   return (
     <>
@@ -204,7 +205,7 @@ const CardPlacement = ({
 							</li>
 						</ul>
 					</div>
-					{Object.keys(saveData).length !== 0 && <div className="lineup_area">
+					<div className="lineup_area">
 						<div className="lineup_info">
 							<div className="lineup_na">{gameData.lineup[selectLineup].na}</div>
 							<div className="lineup_cost">
@@ -213,12 +214,12 @@ const CardPlacement = ({
 								<span className="cost_total">0</span>
 							</div>
 						</div>
-						<ChLineup saveData={saveData} changeSaveData={changeSaveData} selectSave={selectSave} selectLineup={selectLineup} useList={useList} setUseList={setUseList} mapRef={mapRef.current} selectLineupList={selectLineupList} setSelectLineupList={setSelectLineupList} />
+						<ChLineup saveData={sData} changeSaveData={changeSaveData} selectSave={selectSave} selectLineup={selectLineup} useList={useList} setUseList={setUseList} mapRef={mapRef.current} selectLineupList={selectLineupList} setSelectLineupList={setSelectLineupList} />
 						<LineupChInfo className="lineup_chInfo scroll-y" arrowUpImg={iconArrowUp} arrowDownImg={iconArrowDown}>
 							<ul>
-								{lineupInfo && saveData.ch[useList[selectLineupList]] && lineupInfo.map((stateName, idx) => {
-									const saveCh = saveData.ch[useList[selectLineupList]];
-									const lineupEff = saveData.lineup.save_slot[selectSave].eff[selectLineupList];
+								{lineupInfo && sData.ch[useList[selectLineupList]] && lineupInfo.map((stateName, idx) => {
+									const saveCh = sData.ch[useList[selectLineupList]];
+									const lineupEff = sData.lineup.save_slot[selectSave].eff[selectLineupList];
 									return (
 										<li key={idx} className={lineupEff[idx][0] > 0 ? 'up' : ( lineupEff[idx][0] < 0 ?'down' : 'none')}>
 											<span className="na">{stateName}</span>
@@ -229,7 +230,7 @@ const CardPlacement = ({
 								})}
 							</ul>
 						</LineupChInfo>
-					</div>}
+					</div>
 				</div>
 				<div className="lineup_ch scroll-y">
 					<ul>
@@ -241,7 +242,7 @@ const CardPlacement = ({
 										clickLineupCh(saveCh.idx, idx);
 									}
 								}} key={idx} data-idx={idx}>
-									<CharacterCard usedType="thumb" saveData={saveData} gameData={gameData} slotIdx={idx} />
+									<CharacterCard usedType="thumb" saveData={sData} gameData={gameData} slotIdx={idx} />
 								</li>
 							);
 						})}

@@ -521,6 +521,10 @@ const BattleCh = styled.div`
 		animation:confusion ${({ gameSpd }) => 2.25 / gameSpd}s infinite;
 		filter: saturate(7);
 	}
+	&.stun .ch_box {
+		transform-origin: 50% 50%;
+		animation:stun ${({ gameSpd }) => 18 / gameSpd}s linear infinite;
+	}
 	&.mutate {
 		.ch_box {
 			.card_ch {
@@ -553,6 +557,28 @@ const BattleCh = styled.div`
 	}
 	&.elevation3 .ch_box {
 		filter: opacity(0.8) brightness(0.4);
+		&:before {
+			content: '';
+			position: absolute;
+			left: 10%;
+			top: 30%;
+			width: 25%;
+			padding-top: 5%;
+			background: #f00;
+			transform: rotate(20deg);
+			z-index: 10;
+		}
+		&:after {
+			content: '';
+			position: absolute;
+			right: 10%;
+			top: 30%;
+			width: 25%;
+			padding-top: 5%;
+			background: #f00;
+			transform: rotate(-20deg);
+			z-index: 10;
+		}
 	}
 	&.mutate0 .card_mutate {
 		background-position-x: 0% !important;
@@ -624,6 +650,8 @@ const BattleChTop = styled(FlexBox)`
 					background-color: var(--color-red);
 					border-radius: 10px;
 					transition: all ${({ gameSpd }) => 0.375/ gameSpd}s;
+					font-size: 0.4375rem;
+					text-indent: 2px;
 				}
 			}
 			&.sp {
@@ -634,6 +662,8 @@ const BattleChTop = styled(FlexBox)`
 					background-color: var(--color-blue);
 					border-radius: 10px;
 					transition: all ${({ gameSpd }) => 0.375/ gameSpd}s;
+					font-size: 0.4375rem;
+					text-indent: 2px;
 				}
 			}
 		}
@@ -1587,6 +1617,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						}
 						buffDebuff[defData.idx] = [...battleAlly[defData.idx].buffDebuff];
 						skill.buff.forEach((data_) => {
+							console.log('stun', data_.type, buffDebuff[defData.idx]);
 							const maxCount = skill.buffCount[skillLv];
 							if (buffDebuff[defData.idx][data_.type] === undefined) {
 								buffDebuff[defData.idx][data_.type] = {count:0,maxCount:0,type:'', num:0,animation:skill.buffAnimation};
@@ -2167,6 +2198,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 				heal = [],
 				sp = [],
 				stateImpactDef = 1,//기절, 빙결, 석화 방어력 영향계수
+				elevationNum = {dmg:1,cri:1,hit:1},//위치 영향계수
 				elementDefencePercent = 0;
 			let totalBattleGrade = 0,
 				landCritical = false;
@@ -2206,7 +2238,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							const skill = attackerSkill[0].lv > 5 ? 5 : attackerSkill[0].lv;
 							healNum = util.getPercentNumber(skData.num[skill - 1], attacker[stateName]);
 						});
-						heal_ = (criticalAtk ? healNum * 1.33 : healNum) / 100 * attacker.bSt5;
+						heal_ = Math.floor((1 + (criticalAtk ? healNum * 1.33 : healNum) / 100) * attacker.mak);
 						heal.push(heal_);
 						totalBattleGrade += heal_;
 						console.log(`${attacker.na1} -> ${defEnemy.na1},`, `힐: ${Math.floor(heal_)}`);
@@ -2226,7 +2258,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 								const skill = attackerSkill[0].lv > 5 ? 5 : attackerSkill[0].lv;
 								healNum = util.getPercentNumber(skData.num[skill - 1], attacker[stateName]);
 							});
-							heal_ = Math.floor((criticalAtk ? healNum * 1.33 : healNum) / 100 * attacker.bSt5);
+							heal_ = Math.floor((1 + (criticalAtk ? healNum * 1.33 : healNum) / 100) * attacker.mak);
 							heal.push(heal_);
 							totalBattleGrade += heal_;
 							console.log(`${attacker.na1} -> ${defEnemy.na1},`, `힐: ${Math.floor(heal_)}`);
@@ -2248,7 +2280,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 								const skill = attackerSkill[0].lv > 5 ? 5 : attackerSkill[0].lv;
 								spNum = util.getPercentNumber(skData.num[skill - 1], attacker[stateName]);
 							});
-							sp_ = Math.floor((criticalAtk ? spNum * 1.33 : spNum) / 100 * attacker.bSt5 * 0.05);
+							sp_ = Math.floor((1 + (criticalAtk ? spNum * 1.33 : spNum) / 100) * attacker.mak * 0.03);
 							sp.push(sp_);
 						}
 					}
@@ -2260,11 +2292,115 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 					: skillCate === 15 ? enemyAction : allyAction;
 				defencer.forEach((defData, dIdx) => {
 					const defEnemy = defData.ch,
-						attackerElevation = /elevation[0-9]+/g.exec(attacker.state),
-						defEnemyElevation = /elevation[0-9]+/g.exec(defEnemy.state);
-					//방어자가 elevation3이면 적중률 30%감소
-					//방어자가 elevation2이거나 elevation1은 같을 경우만 공격가능 
-					console.log('elevation', attackerElevation, defEnemyElevation);
+						attackerElevation = /elevation(\d+)/g.exec(attacker.state),
+						defEnemyElevation = /elevation(\d+)/g.exec(defEnemy.state);
+					//위치에 따른 공격 영향
+					if (!attackerElevation) {//지상
+						if (defEnemyElevation) {
+							if (defEnemyElevation[1] === '1') {//하늘
+								if (skType < 6) {
+									dmgCancel = true;
+								}
+							} else if (defEnemyElevation[1] === '2') {//물
+								if (skType === 7) {
+									elevationNum.dmg = 1.5;
+								} else if (skType > 7) {
+									dmgCancel = true;
+								} else {
+									elevationNum.dmg = 0.7;
+									elevationNum.hit = 0.9;
+								}
+							} else if (defEnemyElevation[1] === '3') {//숲
+								if (skType === 10) {
+									elevationNum.dmg = 1.5;
+								} else {
+									elevationNum.hit = 0.7;
+								}
+							}
+						}
+					} else {
+						if (attackerElevation[1] === '1') {//하늘
+							if (!defEnemyElevation) {//지상
+								elevationNum.dmg = 1.2;
+								elevationNum.cri = 1.2;
+							} else {
+								if (defEnemyElevation[1] === '2') {//물
+									if (skType === 7) {
+										elevationNum.dmg = 1.5;
+									} else if (skType > 7) {
+										dmgCancel = true;
+									} else {
+										elevationNum.dmg = 0.7;
+										elevationNum.hit = 0.8;
+									}
+								} else if (defEnemyElevation[1] === '3') {//숲
+									if (skType === 10) {
+										elevationNum.dmg = 1.5;
+									} else {
+										elevationNum.hit = 0.6;
+									}
+								}
+							}
+						} else if (attackerElevation[1] === '2') {//물
+							if (defEnemyElevation) {
+								if (defEnemyElevation[1] === '1') {//하늘
+									if (skType < 6) {
+										dmgCancel = true;
+									} else {
+										elevationNum.dmg = 0.9;
+										elevationNum.hit = 0.8;
+										elevationNum.cri = 0.8;
+									}
+								} else if (defEnemyElevation[1] === '2') {//물
+									if (skType === 7) {
+										elevationNum.dmg = 1.3;
+									} else if (skType > 7) {
+										dmgCancel = true;
+									} else {
+										elevationNum.dmg = 0.9;
+										elevationNum.cri = 0.8;
+									}
+								} else if (defEnemyElevation[1] === '3') {//숲
+									if (skType === 10) {
+										elevationNum.dmg = 1.5;
+									} else {
+										elevationNum.dmg = 0.9;
+										elevationNum.cri = 0.8;
+									}
+								}
+							}
+						} else if (attackerElevation[1] === '3'){//숲
+							if (!defEnemyElevation) {//지상
+								elevationNum.hit = 1.2;
+								elevationNum.cri = 1.5;
+							} else {
+								if (defEnemyElevation[1] === '1') {//하늘
+									if (skType < 6) {
+										dmgCancel = true;
+									} else {
+										elevationNum.hit = 0.8;
+										elevationNum.cri = 1.2;
+									}
+								} else if (defEnemyElevation[1] === '2') {//물
+									if (skType === 7) {
+										elevationNum.dmg = 1.5;
+									} else if (skType > 7) {
+										dmgCancel = true;
+									} else {
+										elevationNum.dmg = 0.8;
+										elevationNum.cri = 0.9;
+									}
+								} else if (defEnemyElevation[1] === '3') {//숲	
+									if (skType === 10) {
+										elevationNum.dmg = 1.3;
+										elevationNum.cri = 1.2;
+									} else {
+										elevationNum.cri = 1.2;
+									}
+								}
+							}
+						}
+					}
 					let criticalAtk = false,
 						avoid = false;
 					if (defEnemy.state !== 'die') { //적이 살았을 경우
@@ -2276,9 +2412,9 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						//마법 방어와 방어 분기 처리
 						if (skType < 7) {//물리공격인지
 							const criticalChance = Math.min(
-								Math.min(0.0015 * (attacker.atk - defEnemy.atk), 0.45) + 
+								(Math.min(0.0015 * (attacker.atk - defEnemy.atk), 0.45) + 
 								Math.min(0.003 * (attacker.luk - defEnemy.luk), 0.45) + 
-								addCriticalEff + addKgEff, 0.9);//치명타 확률 계산
+								addCriticalEff + addKgEff) * elevationNum.cri, 0.9);//치명타 확률 계산
 							if (teamAction[defData.idx] === undefined || teamAction[defData.idx].indexOf('state2') < 0) { //방어를 안했으면
 								if (defEnemy.state.indexOf('immunity') >= 0 || defEnemy.state.indexOf('invincible') >= 0) {
 									dmgCancel = true;
@@ -2295,7 +2431,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 								} else {
 									const chance = Math.random();
 									const hitChance =  Math.min(
-										(0.15 * (attacker.spd - defEnemy.spd) + 0.1 * (attacker.luk - defEnemy.luk)) / 100 + 0.7 + addKgEff + addHitEff,
+										((0.15 * (attacker.spd - defEnemy.spd) + 0.1 * (attacker.luk - defEnemy.luk)) / 100 + 0.7 + addKgEff + addHitEff) * elevationNum.hit,
 										0.95
 									); //물리 적중 확률, 기본0.7 어드벤티지
 									if (chance < hitChance) {// 공격 적중
@@ -2342,9 +2478,9 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							}
 						} else {//마법공격인지
 							const criticalChance = Math.min(
-								Math.min(0.0015 * (attacker.mak - defEnemy.mak), 0.45) + 
+								(Math.min(0.0015 * (attacker.mak - defEnemy.mak), 0.45) + 
 								Math.min(0.003 * (attacker.luk - defEnemy.luk), 0.45) + 
-								addCriticalEff + addKgEff, 0.9);//치명타 확률 계산
+								addCriticalEff + addKgEff) * elevationNum.cri, 0.9);//치명타 확률 계산
 							if (teamAction[defData.idx] === undefined || teamAction[defData.idx].indexOf('defence2') < 0) { //마법방어를 안했으면
 								if (defEnemy.state.indexOf('immunity') >= 0 || defEnemy.state.indexOf('invincible') >= 0) {
 									dmgCancel = true;
@@ -2361,7 +2497,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 								} else {
 									const chance = Math.random();
 									const magicChance = Math.min(
-										(0.1 * (attacker.spd - defEnemy.spd) + 0.15 * (attacker.luk - defEnemy.luk)) / 100 + 0.7 + addKgEff + addHitEff, 
+										((0.1 * (attacker.spd - defEnemy.spd) + 0.15 * (attacker.luk - defEnemy.luk)) / 100 + 0.7 + addKgEff + addHitEff) * elevationNum.hit, 
 										0.9
 									); //마법 적중 확률, 기본0.7 어드벤티지
 									if (chance < magicChance) {//술법 공격 적중
@@ -2506,7 +2642,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							}
 						}
 						//크리티컬 공격이면 방어 1/2로 줄임
-						dmg_ = dmgCancel ? '' : Math.max(1, (atkNum[attackType] * (kgAtk + multiplesAttackNum + elementAttackPercent + 1)) - (criticalAtk ? defCount * stateImpactDef * .5 : defCount * stateImpactDef));
+						dmg_ = dmgCancel ? '' : Math.max(1, ((atkNum[attackType] * (kgAtk + multiplesAttackNum + elementAttackPercent + 1)) - (criticalAtk ? defCount * stateImpactDef * .5 : defCount * stateImpactDef)) * elevationNum.dmg);
 						if (avoid) {
 							dmg.push('');
 						} else {
@@ -2659,6 +2795,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 									}
 									if (skillCate === 5 || skillCate === 8) {
 										battleAlly[defData.idx].buffDebuff = [...buffDebuff[defData.idx]];
+										console.log('버프', battleAlly[defData.idx].buffDebuff);
 									} else {
 										battleEnemy[defData.idx].buffDebuff = [...buffDebuff[defData.idx]];
 									}
@@ -2863,7 +3000,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 		//카운터 어텍 제거
 		battleAlly.forEach((ally) => {
 			ally.mutate = null;
-			const mutate = /mutate[0-9]+/g.exec(ally.state);
+			const mutate = /mutate[\d]+/g.exec(ally.state);
 			if (mutate) {
 				ally.mutate = mutate[0];
 			}
@@ -2873,7 +3010,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 		});
 		battleEnemy.forEach((enemy) => {
 			enemy.mutate = null;
-			const mutate = /mutate[0-9]+/g.exec(enemy.state);
+			const mutate = /mutate[\d]+/g.exec(enemy.state);
 			if (mutate) {
 				enemy.mutate = mutate[0];
 			}
@@ -3406,7 +3543,7 @@ const passiveBuff = ({gameData, battleAlly, battleEnemy, allyEnemyPassive, allyP
 					ccSingle = 'freezing';
 					cc += ' freezing';
 					break;
-				case ''://기절
+				case 'stun'://기절
 					state = '';
 					ccSingle = 'stun';
 					cc += ' stun';
@@ -3422,6 +3559,46 @@ const passiveBuff = ({gameData, battleAlly, battleEnemy, allyEnemyPassive, allyP
 					//말 buffState['spd'] = 50;
 					//코끼리 buffState['kg'] = 500;
 					//너구리 buffState['luk'] = 100;
+					break;
+				case 'bleedingR'://출혈해제
+					state = '';
+					ccSingle = '';
+					cc = cc.replace('bleeding', '');
+					break;
+				case 'addictedR'://중독해제
+					state = '';
+					ccSingle = '';
+					cc = cc.replace('addicted', '');
+					break;
+				case 'petrificationR'://석화해제
+					state = '';
+					ccSingle = '';
+					cc = cc.replace('petrification', '');
+					break;
+				case 'confusionR'://혼란해제
+					state = '';
+					ccSingle = '';
+					cc = cc.replace('confusion', '');
+					break;
+				case 'stunR'://기절해제
+					state = '';
+					ccSingle = '';
+					cc = cc.replace('stun', '');
+					break;
+				case 'mutateR'://변이해제
+					state = '';
+					ccSingle = '';
+					cc = cc.replace(/(mutate|mutate[\d]+)\b/g, '');
+					break;
+				case 'freezingR'://빙결해제
+					state = '';
+					ccSingle = '';
+					cc = cc.replace('freezing', '');
+					break;
+				case 'anomaliesR'://상태이상해제
+					state = '';
+					ccSingle = '';
+					cc = '';
 					break;
 				default:
 					break;
@@ -3738,6 +3915,46 @@ const passiveBuff = ({gameData, battleAlly, battleEnemy, allyEnemyPassive, allyP
 					//코끼리 buffState['kg'] = 500;
 					//너구리 buffState['luk'] = 100;
 					break;
+			case 'bleedingR'://출혈해제
+				state = '';
+				ccSingle = '';
+				cc = cc.replace('bleeding', '');
+				break;
+			case 'addictedR'://중독해제
+				state = '';
+				ccSingle = '';
+				cc = cc.replace('addicted', '');
+				break;
+			case 'petrificationR'://석화해제
+				state = '';
+				ccSingle = '';
+				cc = cc.replace('petrification', '');
+				break;
+			case 'confusionR'://혼란해제
+				state = '';
+				ccSingle = '';
+				cc = cc.replace('confusion', '');
+				break;
+			case 'stunR'://기절해제
+				state = '';
+				ccSingle = '';
+				cc = cc.replace('stun', '');
+				break;
+			case 'mutateR'://변이해제
+				state = '';
+				ccSingle = '';
+				cc = cc.replace(/(mutate|mutate[\d]+)\b/g, '');
+				break;
+			case 'freezingR'://빙결해제
+				state = '';
+				ccSingle = '';
+				cc = cc.replace('freezing', '');
+				break;
+			case 'anomaliesR'://상태이상해제
+				state = '';
+				ccSingle = '';
+				cc = '';
+				break;
 				default:
 					break;
 			}
@@ -3909,26 +4126,8 @@ const Battle = ({
 					{},
 					{},
 					{},
-				]},{pos:1,idx:3, lv:1, grade:4, items: [
-					{idx:0, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
-					{idx:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
-					{idx:2, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
-					{idx:4, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
-					{},
-					{},
-					{},
-					{},
-				]},{idx:'', lv:1, },
-				{idx:'', lv:1, },{pos:3,idx:5, lv:1, grade:4, items: [
-					{idx:0, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
-					{idx:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
-					{idx:2, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
-					{idx:4, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
-					{},
-					{},
-					{},
-					{},
-				]},{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+				]},{idx:'', lv:1, },{idx:'', lv:1, },
+				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
 				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
 			],
 		};
@@ -4139,17 +4338,18 @@ const Battle = ({
 				fireR = saveCh.el9 + saveCh.iSt32 + (effData?.rtSt32 || 0),
 				windR = saveCh.el10 + saveCh.iSt33 + (effData?.rtSt33 || 0),
 				earthR = saveCh.el11 + saveCh.iSt34 + (effData?.rtSt34 || 0);
-			saveCh.hasSkill[2] = {idx:323,lv:1,exp:1};//삭제 해야됨
+			saveCh.hasSkill[2] = {idx:338,lv:1,exp:1};//삭제 해야됨
+			saveCh.hasSkill[3] = {idx:339,lv:1,exp:1};//삭제 해야됨
 			battleAlly.current.push({
 				...saveCh,
 				na1: gameData.ch[saveCh.idx].na1,
 				animal_type: gameData.ch[saveCh.idx].animal_type,
 				hasExp:saveCh.hasExp,
-				state: '', //idx !== 0 ? 'die' : '',죽음
+				state: idx !== 0 ? 'die' : '',//죽음
 				elevation: 0,
 				buffDebuff:[],
 				currenthp: hp,
-				hp: hp, //idx !== 0 ? 0 : hp, 죽음
+				hp: idx !== 0 ? 0 : hp, //죽음
 				currenthp_: hp,
 				hp_: hp,
 				currentsp: saveCh.bSt1,
@@ -5309,7 +5509,7 @@ const Battle = ({
 													<IconPic className="elevationIcon" type="elevation" isAbsolute={true} isThumb={true} pic="icon100" idx={0} />
 												</div>
 												<FlexBox className="hpsp" direction="column" justifyContent="space-between">
-													<span className="hp"><em className="gradient_light" style={{width: hasHp + '%'}}></em></span>
+													<span className="hp"><em className="gradient_light" style={{width: hasHp + '%'}}>{enemyCh?.hp ? enemyCh?.hp : ''}</em></span>
 												</FlexBox>
 											</BattleChTop>
 											<div className="dmg"></div>
@@ -5383,8 +5583,8 @@ const Battle = ({
 													<IconPic className="elevationIcon" type="elevation" isAbsolute={true} isThumb={true} pic="icon100" idx={0} />
 												</div>
 												<FlexBox className="hpsp" direction="column"  justifyContent="space-between">
-													<span className="hp"><em className="gradient_light" style={{width: hasHp + '%'}}></em></span>
-													<span className="sp"><em className="gradient_light" style={{width: hasSp + '%'}}></em></span>
+													<span className="hp"><em className="gradient_light" style={{width: hasHp + '%'}}>{allyCh?.hp ? allyCh?.hp : ''}</em></span>
+													<span className="sp"><em className="gradient_light" style={{width: hasSp + '%'}}>{allyCh?.sp ? allyCh?.sp : ''}</em></span>
 												</FlexBox>
 											</BattleChTop>
 											<div className="dmg"></div>

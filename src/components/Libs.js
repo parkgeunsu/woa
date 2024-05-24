@@ -77,9 +77,9 @@ export const util = { //this.loadImage();
     if (history === null || history === undefined || history.length === 0 || history[1] === '') {
       navigate('/');
     } else {
-      navigate(`../${history[1].location}`, {
+      navigate(`../${history[0].location}`, {
         state: {
-          ...history[1].state,
+          ...history[0].state,
         }
       });
       history.shift();//첫 history 삭제
@@ -173,7 +173,6 @@ export const util = { //this.loadImage();
       itemEff: obj.itemEff,
       grade: obj.grade || gameData.ch[saveChSlot.idx].grade, //캐릭터 등급
     }
-    console.log('aaa', saveChSlot)
     return saveChSlot;
   },
   saveCharacter: (dataObj) => { //아이템 변경시 스텟저장
@@ -635,8 +634,17 @@ export const util = { //this.loadImage();
       {na:'ⓘTF',ko:'변이면역',en:'Transform immunity',jp:'変異免疫'},
       {na:'ⓘDT',ko:'즉사면역',en:'Immediate death',jp:'即死免疫'},
       {na:'ⓘFZ',ko:'빙결면역',en:'Freezing immunity',jp:'氷結免疫'},
-      {},{},{},
-      {},{},{},{},{},{},{},{},{},{},
+      {},{},
+      {na:'ⓤBD',ko:'출혈해제',en:'Unbleed',jp:'出血解除'},
+      {na:'ⓤAC',ko:'중독해제',en:'De-Addiction',jp:'中毒解除'},
+      {na:'ⓤPF',ko:'석화해제',en:'De-petrification immunity',jp:'石化解除'},
+      {na:'ⓤCF',ko:'혼란해제',en:'De-clutter',jp:'混乱解除'},
+      {na:'ⓤST',ko:'기절해제',en:'Unstun',jp:'気絶解除'},
+      {na:'ⓤTF',ko:'변이해제',en:'Unmutate',jp:'変異解除'},
+      {},
+      {na:'ⓤFZ',ko:'빙결해제',en:'Unfreeze',jp:'氷結解除'},
+      {na:'ⓤALL',ko:'상태이상해제',en:'Clear anomaly',jp:'状態異常解除'},
+      {},{},
       {},{},{},{},{},{},{},{},{},
       {na:'SK',ko:'스킬',en:'Skill',jp:'スキル'},
     ]
@@ -940,6 +948,22 @@ export const util = { //this.loadImage();
         return 'immediateDeathI';//즉사
       case 77:
         return 'freezingI';//빙결
+      case 80:
+        return 'bleedingR';//출혈해제
+      case 81:
+        return 'addictedR';//중독해제
+      case 82:
+        return 'petrificationR';//석화해제
+      case 83:
+        return 'confusionR';//혼란해제
+      case 84:
+        return 'stunR';//기절해제
+      case 85:
+        return 'mutateR';//변이해제
+      case 87:
+        return 'freezingR';//빙결해제
+      case 88:
+        return 'anomaliesR';//상태이상해제
       case 100:
         return 'skill';//진형
       default:
@@ -1096,10 +1120,24 @@ export const util = { //this.loadImage();
           } else {
             return [24];
           }
-        case 12: //고정 세로2열
-          return [1,3,6,8,11,13,16,18,21,23];
-        case 13: //고정 세로3열
-          return [0,2,4,5,7,9,10,12,14,15,17,19,20,22,24];
+        case 12: //세로열2줄 20
+          if (n%5 === 0) {
+            return [0,1,5,6,10,11,15,16,20,21];
+          } else if (n%5 === 1){
+            return [1,2,6,7,11,12,16,17,21,22];
+          } else if (n%5 === 2){
+            return [2,3,7,8,12,13,17,18,22,23];
+          } else {
+            return [3,4,8,9,13,14,18,19,23,24];
+          }
+        case 13: //세로열3줄 30
+          if (n%5 === 0 || n%5 === 1) {
+            return [0,1,2,5,6,7,10,11,12,15,16,17,20,21,22];
+          } else if (n%5 === 2 || n%5 === 3){
+            return [1,2,3,6,7,8,11,12,13,16,17,18,21,22,23];
+          } else {
+            return [2,3,4,7,8,9,12,13,14,17,18,19,22,23,24];
+          }
         case 14: //⏊ 4
           if (n === 0) {
             return [0,1,2];
@@ -1184,10 +1222,24 @@ export const util = { //this.loadImage();
           }
         case 17: //卍17
           return [0,1,2,4,7,9,10,11,12,13,14,15,17,20,22,23,24];
-        case 18: //고정 가로2행
-          return [5,6,7,8,9,15,16,17,18,19];
-        case 19: //고정 가로3행
-          return [0,1,2,3,4,10,11,12,13,14,20,21,22,23,24];
+        case 18: //가로행2줄 20
+          if (n < 5) {
+            return [0,1,2,3,4,5,6,7,8,9];
+          } else if (n < 10){
+            return [5,6,7,8,9,10,11,12,13,14];
+          } else if (n < 15){
+            return [10,11,12,13,14,15,16,17,18,19];
+          } else {
+            return [15,16,17,18,19,20,21,22,23,24];
+          }
+        case 19: //가로행3줄 30
+          if (n < 10) {
+            return [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
+          } else if (n < 20){
+            return [5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];
+          } else {
+            return [10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
+          }
         case 20: //▦25 전체
           return [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
         case 21: //□9 정사각형9
@@ -1510,26 +1562,10 @@ export const util = { //this.loadImage();
               return [8,9,13,14,18,19,23,24];
             }
           }
-        case 52: //가로행2줄 20
-          if (n < 5) {
-            return [0,1,2,3,4,5,6,7,8,9];
-          } else if (n < 10){
-            return [5,6,7,8,9,10,11,12,13,14];
-          } else if (n < 15){
-            return [10,11,12,13,14,15,16,17,18,19];
-          } else {
-            return [15,16,17,18,19,20,21,22,23,24];
-          }
-        case 53: //세로열2줄 20
-          if (n%5 === 0) {
-            return [0,1,5,6,10,11,15,16,20,21];
-          } else if (n%5 === 1){
-            return [1,2,6,7,11,12,16,17,21,22];
-          } else if (n%5 === 2){
-            return [2,3,7,8,12,13,17,18,22,23];
-          } else {
-            return [3,4,8,9,13,14,18,19,23,24];
-          }
+        case 52: //
+          return [12];
+        case 53: //
+          return [12];
         case 54: //작은└┐ 4
           if (n%5 === 0) {
             return [n,n+5,n+6,n+11];
@@ -1542,6 +1578,62 @@ export const util = { //this.loadImage();
           } else {
             return [n-4,n,n+1,n+5];
           }
+        case 56: //□9 정사각형16
+          if (n === 0 || n === 1 || n === 2 || n === 5 || n === 6 || n === 7 || n === 10 || n === 11 || n === 12) {
+            return [0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18];
+          } else if (n === 3 || n === 4 || n === 8 || n === 9 || n === 13 || n === 14) {
+            return [1,2,3,4,6,7,8,9,11,12,13,14,16,17,18,19];
+          } else if (n === 15 || n === 16 || n === 17 || n === 20 || n === 21 || n === 22) {
+            return [5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23];
+          } else {
+            return [6,7,8,9,11,12,13,14,16,17,18,19,21,22,23,24];
+          }
+        case 57: //마름모라인 4
+          if (n === 0) {
+            return [1,5];
+          } else if (n === 4) {
+            return [3,9];
+          } else if (n === 20) {
+            return [15,21];
+          } else if (n === 24) {
+            return [19,23];
+          } else if (n === 1 || n === 2 || n === 3) {
+            return [n-1,n+1,n+5];
+          } else if (n === 5 || n === 10 || n === 15) {
+            return [n-5,n+1,n+5];
+          } else if (n === 9 || n === 14 || n === 19) {
+            return [n-5,n-1,n+5];
+          } else if (n === 21 || n === 22 || n === 23) {
+            return [n-5,n-1,n+1];
+          } else {
+            return [n-5,n-1,n+1,n+5];
+          }
+        case 58: //작은사각형라인 8
+          if (n === 0 || n === 1 || n === 2 || n === 5 || n === 10) {
+            return [0,1,2,5,7,10,11,12];
+          } else if (n === 3 || n === 4 || n === 9 || n === 14) {
+            return [2,3,4,7,9,12,13,14];
+          } else if (n === 6 || n === 7 || n === 8 || n === 11 || n === 12 || n === 13 || n === 16 || n === 17 || n === 18) {
+            return [6,7,8,11,13,16,17,18];
+          } else if (n === 15 || n === 20 || n === 21 || n === 22) {
+            return [10,11,12,15,17,20,21,22];
+          } else {
+            return [12,13,14,17,19,22,23,24];
+          }
+        case 59: //큰사각형라인 12
+          if (n === 0 || n === 1 || n === 2 || n === 5 || n === 10 || n === 16 || n === 17) {
+            return [0,1,2,3,5,8,10,13,15,16,17,18];
+          } else if (n === 3 || n === 4 || n === 9 || n === 14 || n === 18) {
+            return [1,2,3,4,6,9,11,14,16,17,18,19];
+          } else if (n === 6 || n === 7 || n === 11 || n === 19 || n === 23 || n === 24) {
+            return [6,7,8,9,11,14,16,19,21,22,23,24];
+          } else if (n === 8 || n === 13 || n === 15 || n === 20 || n === 21 || n === 22) {
+            return [5,6,7,8,10,13,15,18,20,21,22,23];
+          } else {
+            return [0,1,2,7,12,15,16,17];
+          }
+        case 60: //원형라인 12
+          return [1,2,3,5,9,10,14,15,19,21,22,23];
         default:
           break;
       }
