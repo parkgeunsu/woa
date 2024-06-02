@@ -647,6 +647,9 @@ export const util = { //this.loadImage();
       {},{},
       {},{},{},{},{},{},{},{},{},
       {na:'SK',ko:'스킬',en:'Skill',jp:'スキル'},
+      {},{},{},{},{},{},{},{},{},
+      {na:'WT',ko:'날씨',en:'Weather',jp:'天気'},
+      {na:'WD',ko:'풍향',en:'Wind direction',jp:'風向き'},
     ]
     // let arr = ['체력(HP)','행동력(SP)','행동회복력(RSP)','공격력(ATK)','방어력(DEF)','술법공격력(MAK)','술법방어력(MDF)','회복력(RCV)','속도(SPD)','행운(LUK)','쪼기','할퀴기','물기','치기','누르기','던지기','','','','','',
     // '빛','어둠','물','불','바람','땅','빛 강화','어둠 강화','물 강화','불 강화',
@@ -965,7 +968,11 @@ export const util = { //this.loadImage();
       case 88:
         return 'anomaliesR';//상태이상해제
       case 100:
-        return 'skill';//진형
+        return 'skill';//스킬
+      case 110:
+        return 'weather';//날씨
+      case 111:
+        return 'windDirection';//풍향
       default:
         return type;
     }
@@ -1079,7 +1086,22 @@ export const util = { //this.loadImage();
             }
           }
         case 9: // ┼ 십자9
-          return [12,2,7,10,11,13,14,17,22];
+          if (n < 5) {
+            const line = [0,1,2,3,4];
+            return new Set(line.concat([n,n+5,n+10,n+15,n+20]));
+          } else if (n < 10) {
+            const line = [5,6,7,8,9];
+            return new Set(line.concat([n-5,n,n+5,n+10,n+15]));
+          } else if (n < 15) {
+            const line = [10,11,12,13,14];
+            return new Set(line.concat([n-10,n-5,n,n+5,n+10]));
+          } else if (n < 20) {
+            const line = [15,16,17,18,19];
+            return new Set(line.concat([n-15,n-10,n-5,n,n+5]));
+          } else {
+            const line = [20,21,22,23,24];
+            return new Set(line.concat([n-20,n-15,n-10,n-5,n]));
+          }
         case 10: // /5 대각선
           if (n === 0 || n === 6 || n === 12 || n === 18 || n === 24) {
             return [0,6,12,18,24];
@@ -1361,7 +1383,53 @@ export const util = { //this.loadImage();
             return [n-6,n-4,n,n+4,n+6];
           }
         case 36: //x 9
-          return [0,4,6,8,12,16,18,20,24];
+          if (n === 0 || n === 24) {
+            return [0,6,12,18,24];
+          } else if (n === 1) {
+            return [1,5,7,13,19];
+          } else if (n === 2) {
+            return [2,6,8,10,14];
+          } else if (n === 3) {
+            return [3,7,9,11,15];
+          } else if (n === 4 || n === 20) {
+            return [4,8,12,16,20];
+          } else if (n === 5) {
+            return [1,5,11,17,23];
+          } else if (n === 6) {
+            return [0,2,6,10,12,18,24];
+          } else if (n === 7) {
+            return [1,3,7,11,13,15,19];
+          } else if (n === 8) {
+            return [2,4,8,12,14,16,20];
+          } else if (n === 9) {
+            return [3,9,13,17,21];
+          } else if (n === 10) {
+            return [2,6,10,16,22];
+          } else if (n === 11) {
+            return [3,5,7,11,15,17,23];
+          } else if (n === 12) {
+            return [0,4,6,8,12,16,18,20,24];
+          } else if (n === 13) {
+            return [1,7,9,13,17,19,21];
+          } else if (n === 14) {
+            return [2,8,14,18,22];
+          } else if (n === 15) {
+            return [3,7,11,15,21];
+          } else if (n === 16) {
+            return [4,8,10,12,16,20,22];
+          } else if (n === 17) {
+            return [5,9,11,13,17,21,23];
+          } else if (n === 18) {
+            return [0,6,12,14,18,22,24];
+          } else if (n === 19) {
+            return [1,7,13,19,23];
+          } else if (n === 21) {
+            return [9,13,15,17,21];
+          } else if (n === 22) {
+            return [10,14,16,18,22];
+          } else {//23
+            return [5,11,17,19,23];
+          }
         case 37: //ㅜ 4
           if (n === 0) {
             return [0,1,2,6];
@@ -1562,10 +1630,10 @@ export const util = { //this.loadImage();
               return [8,9,13,14,18,19,23,24];
             }
           }
-        case 52: //
-          return [12];
-        case 53: //
-          return [12];
+        case 52: //n포함 랜덤 3
+          return util.getNonOverlappingNumber([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24], 2, n);
+        case 53: //n포함 랜덤 7
+          return util.getNonOverlappingNumber([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24], 6, n);
         case 54: //작은└┐ 4
           if (n%5 === 0) {
             return [n,n+5,n+6,n+11];
@@ -2764,10 +2832,11 @@ export const util = { //this.loadImage();
     const elTag = elementTag[element];
     return cate !== 2 ? `<i ${elTag.type} ${elTag.type}${elTag.idx}>${elementArr[element][lang]}</i> ${attack[atkCount][lang]}` : `<i ${elTag.type} ${elTag.type}${elTag.idx}>${elementArr[element][lang]}</i>`;
   },
-  getSkillAreaLang: ({isAlly, areaIdx, cate, lang}) => {
+  getSkillAreaLang: ({scope, areaIdx, cate, lang}) => {
     const teamArr = [
       {ko:'아군',en:'Ally',jp:'味方'},
-      {ko:'적군',en:'Enemy',jp:'敵軍'}
+      {ko:'적군',en:'Enemy',jp:'敵軍'},
+      {ko:'전지역',en:'All regions',jp:'全地域'},
     ];
     const inBattle = {ko:'전투 참여시',en:'in battle',jp:'戦闘参加時'};
     const areaArr = [
@@ -2810,7 +2879,7 @@ export const util = { //this.loadImage();
       {ko:'큰 x 형태',en:'Large X shape',jp:'大きいxの形'},
       {ko:'⏉ 형태',en:'⏉ Shape',jp:'形 ⏉形状'},
     ];
-    const areaText = areaIdx !== 23 ? `<span ${isAlly === 0 ? 'ally' : 'enemy'}>${teamArr[isAlly][lang]}</span> ${areaArr[areaIdx][lang]}` : areaArr[areaIdx][lang];
+    const areaText = areaIdx !== 23 ? `<span co${scope}>${teamArr[scope][lang]}</span> ${areaArr[areaIdx][lang]}` : areaArr[areaIdx][lang];
     return cate === 2 ? `<u>${inBattle[lang]}</u> ${areaText}` : areaText;
   },
   getSkillAtkEffLang: ({eff, type, lang}) => {
@@ -2818,6 +2887,8 @@ export const util = { //this.loadImage();
     const effType = [
       {ko:'치명타',en:'Critical',jp:'クリティカル'},
       {ko:'적중율',en:'Hit rate',jp:'命中率'},
+      {ko:'체력회복',en:'Recover HP',jp:'体力回復'},
+      {ko:'행동회복',en:'Recover SP',jp:'行動回復'},
     ];
     const updownText = [
       {ko:'증가',en:'increase',jp:'増加',tag:'up'},
@@ -2835,8 +2906,28 @@ export const util = { //this.loadImage();
       {ko:'증가',en:'increase',jp:'増加',tag:'up'},
       {ko:'감소',en:'reduction',jp:'減少',tag:'down'},
     ];
+    const weatherText = [
+      {ko:'맑은날의 밤',en:'Clear Night',jp:'晴れた日の夜'},
+      {ko:'흐린날의 밤',en:'Cloudy Night',jp:'曇りの日の夜'},
+      {ko:'비오는날의 밤',en:'Rainy Night',jp:'雨の日の夜'},
+      {ko:'천둥치는날의 밤',en:'Thunderstorm Night',jp:'雷雨の日の夜'},
+      {ko:'눈오는날의 밤',en:'Snowy Night',jp:'雪の日の夜'},
+      {ko:'맑은날의 낮',en:'Sunny Day',jp:'晴れた日の昼間'},
+      {ko:'흐린날의 낮',en:'Cloudy Day',jp:'曇りの日の昼間'},
+      {ko:'비오는날의 낮',en:'Rainy Day',jp:'雨の日の昼間'},
+      {ko:'천둥치는날의 낮',en:'Thunderstorm Day',jp:'雷雨の日の昼間'},
+      {ko:'눈오는날의 낮',en:'Snowy Day',jp:'雪の日の昼間'},
+    ]
+    const windText = [
+      {ko:'',en:'',jp:''},
+    ];
+    const changeText = {ko:'으로 변경',en:'Change to',jp:'に変更'}
     const upDown = buff.indexOf('-') >= 0 ? 1 : 0;
-    return buff ? `<br/>${util.getEffectType(type,lang)} <b buff>${buff}</b> <i icon ${updownText[upDown].tag}></i>` : util.getEffectType(type,lang);//${updownText[upDown][lang]}
+    return buff 
+      ? type !== 110 
+        ? `<br/>${util.getEffectType(type,lang)} <b buff>${buff}</b> <i icon ${updownText[upDown].tag}></i>`
+        : `<br/>${util.getEffectType(type,lang)} <b buff>${lang === 'en' ? changeText[lang] + ' ' + weatherText[buff][lang] : weatherText[buff][lang] + ' ' + changeText[lang]}</b>`
+      : util.getEffectType(type,lang);//${updownText[upDown][lang]}
   },
   getSkillConditionBuffLang: ({condition, lang}) => {
     const conditionType = [
@@ -2897,9 +2988,9 @@ export const util = { //this.loadImage();
       let effText = '';
       skill.attackEff.forEach((data, idx) => {
         effText += util.getSkillAtkEffLang({
-          eff:skill.attackEff[idx].num[lv],
-          type:skill.attackEff[idx].type,
-          lang:lang,
+          eff: data.num[lv],
+          type: data.type,
+          lang: lang,
         });
       });
       replaceText = replaceText.replace('<atkEff>', effText);
@@ -2914,9 +3005,9 @@ export const util = { //this.loadImage();
       let buffText = '';
       skill.buff.forEach((data, idx) => {
         buffText += util.getSkillBuffLang({
-          buff:skill.buff[idx].num[lv],
-          type:skill.buff[idx].type,
-          lang:lang,
+          buff: data.num[lv],
+          type: data.type,
+          lang: lang,
         });
       });
       replaceText = replaceText.replace('<buff>', buffText);
@@ -2959,7 +3050,7 @@ export const util = { //this.loadImage();
     //   }
     // });
     replaceText = replaceText.replace('<area>', util.getSkillAreaLang({//이펙트 범위
-      isAlly:skill.ta_,
+      scope:skill.ta_,
       areaIdx:skill.ta[lv],
       cate:skill.cate,
       lang:lang,
@@ -2968,9 +3059,9 @@ export const util = { //this.loadImage();
       let multiplesText = '';
       skill.multiplesAttack.forEach((data, idx) => {
         multiplesText += util.getSkillMultiplesLang({
-          buff:skill.multiplesAttack[idx].num[lv],
-          type:skill.multiplesAttack[idx].type,
-          lang:lang,
+          buff: data.num[lv],
+          type: data.type,
+          lang: lang,
         });
       });
       replaceText = replaceText.replace('<multiples>', multiplesText);

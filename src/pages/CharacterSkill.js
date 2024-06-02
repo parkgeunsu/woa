@@ -41,11 +41,14 @@ const Skill = styled.div`
     line-height: 1.4;
     font-size: 0.75rem;
     text-align: center;
-    span[ally]{
+    span[co0]{
       color: var(--color-green);
     }
-    span[enemy]{
+    span[co1]{
       color: var(--color-purple);
+    }
+    span[co2]{
+      color: var(--color-magic);
     }
     > * {
       line-height: 1;

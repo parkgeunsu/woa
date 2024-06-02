@@ -12,14 +12,14 @@ export const skill = [
 		skillClass:0,
 		ta_:1,ta:[1,1,1,1,1],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1.25,1.5,1.75,2],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['100%','110%','125%','135%','150%']}],atkCount:[1],sp:[0,1,2,3,3]},
+		eff:[{type:3,num:['100%','110%','120%','130%','140%']}],atkCount:[1],sp:[5,6,7,8,8]},
 	{idx:2,
 		na:{ko:'방어',en:'Defense',jp:'防衛'},element_type:0,cate:4,
 		txt:'<area>, <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:4,num:['100%','110%','125%','135%','150%']}],atkCount:[1],sp:[0,1,2,3,3]},
+		buff:[{type:4,num:['130%','135%','140%','145%','150%']}],atkCount:[1],sp:[5,6,7,8,8]},
 	{idx:3,
 		na:{ko:'빛의 하수인',en:'Minions of Light',jp:'光の手先'},element_type:7,cate:11,
 		txt:'<possible><area>, <el> <buff>',
@@ -156,46 +156,119 @@ export const skill = [
 		txt:'<job>',
 		skillClass:2,
 		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',job:9,
-		eff:[{type:'grade',num:['5','10','15','20','25']}],sp:[5,5,5,5,5]},	
-	// {idx:4,
-	// 	na:{ko:'학익진 강화',en:'Strengthening the formation of "Hakikjin"',jp:'学翼陣強化'},element_type:0,cate:2],txt:{ko:'전투 참여시 <area>, 학익진효과 <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <area>, "Hak Ik jin" Formation Effect <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <area>, 学翼陣効果 <b buff>$(0)</b> <i icon up></i> 増加'}
-	// 	,ta_:0,ta:10,effAnimation:1
-	// 	,eff:[{type:100,num:['20%','25%','30%','35%','40%']}],atkCount:[0],sp:[0,0,0,0,0]}, //이순신
-	// {idx:5,
-	// 	na:{ko:'격려',en:'Encouragement',jp:'激励'},element_type:0,cate:2],txt:{ko:'전투 참여시 <area>, 진형효과 <b buff>$(0)</b> <i icon up></i> 증가',en:'in battle <area>, The Formative Effect <b buff>$(0)</b> <i icon up></i> increase',jp:'戦闘参加時 <area>, 陣形効果 <b buff>$(0)</b> <i icon up></i> 増加'}
-	// 	,ta_:0,ta:10,effAnimation:1
-	// 	,eff:[{type:100,num:['10%','15%','20%','25%','30%']}],atkCount:[0],sp:[0,0,0,0,0]},
-	// {idx:9,
-	// 	na:{ko:'집중타격',en:'Concentrated Attack',jp:'集中攻撃'},element_type:0,cate:3],txt:{ko:'<area>, <b dmg>$(0)</b> 강한 공격',en:'<area>, <b dmg>$(0)</b> a strong attack',jp:'<area>, <b dmg>$(0)</b> 強い攻撃'}
-	// 	,ta_:1,ta:1,effAnimation:2
-	// 	,eff:[{type:3,num:['150%','175%','200%','225%','250%']}],atkCount:[1],sp:9},
-	// {idx:10,
-	// 	na:{ko:'때린데 또 까',en:'Hit again Hit',jp:'再びヒット'},element_type:0,cate:3],txt:{ko:'<area>, <b dmg>$(0)</b> 2회 공격',en:'<area>, <b dmg>$(0)</b> a two-time attacks',jp:'<area>, <b dmg>$(0)</b> 2回攻撃'}
-	// 	,ta_:1,ta:1,effAnimation:3
-	// 	,eff:[{type:3,num:['80%','90%','100%','110%','120%']}],atkCount:[2],sp:8},
-	// {idx:11,
-	// 	na:{ko:'연속 공격',en:'Series of Attacks',jp:'連続攻撃'},element_type:0,cate:3],txt:{ko:'<area>, <b dmg>$(0)</b> 2~4회 공격',en:'<area>, <b dmg>$(0)</b> 2 to 4 attacks',jp:'<area>, <b dmg>$(0)</b> 2～4回攻撃'}
-	// 	,ta_:1,ta:1,effAnimation:2
-	// 	,eff:[{type:3,num:['60%','65%','75%','80%','85%']}],atkCount:[3, "randomCount"],sp:10},
-	// {idx:12,
-	// 	na:{ko:'무차별 공격',en:'Indiscriminate Attack',jp:'無差別攻撃'},element_type:0,cate:3],txt:{ko:'<area>, <b dmg>$(0)</b> 3회 공격',en:'<area>, <b dmg>$(0)</b> a three-time attack',jp:'<area>, <b dmg>$(0)</b> 3回攻撃'}
-	// 	,ta_:1,ta:1,effAnimation:3
-	// 	,eff:[{type:3,num:['100%','110%','120%','130%','140%']}],atkCount:[3, "another"],sp:9},
-	// {idx:13,
-	// 	na:{ko:'철벽방어',en:'Iron Defense',jp:'鉄壁の防御'},element_type:0,cate:4],txt:{ko:'<area>, 방어(DEF) <b buff>$(0)</b>, 술법방어(MDF) <b buff>$(1)</b> <i icon up></i> 증가',en:'<area>, Defense(DEF) <b buff>$(0)</b>, Magic Defense(MDF) <b buff>$(1)</b> <i icon up></i> increase',jp:'<area>, 防衛(DEF) <b buff>$(0)</b>, 術法防御(MDF) <b buff>$(1)</b> <i icon up></i> 増加'}
-	// 	,ta_:0,ta:1,effAnimation:2
-	// 	,eff:[{type:4,num:['40%','60%','80%','100%','130%']},{type:6,num:['40%','60%','80%','100%','130%']}],atkCount:[1],sp:5},
-	// {idx:14,
-	// 	na:{ko:'마법방어',en:'Magic Defense',jp:'魔法防御'},element_type:0,cate:4],txt:{ko:'<area>, <b buff>$(0)</b> 술법방어(MDF) <i icon up></i> 증가',en:'<area>, Magic Defense(MDF) <b buff>$(0)</b> <i icon up></i> increase',jp:'<area>, <b buff>$(0)</b> 術法防御(MDF) <i icon up></i> 増加'}
-	// 	,ta_:0,ta:1,effAnimation:1
-	// 	,eff:[{type:6,num:['50%','70%','100%','120%','150%']}],atkCount:[1],sp:4},
-	// {idx:15,
-	// 	na:{ko:'나무뒤에 숨기',en:'Hiding Behind a Tree',jp:'木陰に隠れる'},element_type:0,cate:4],txt:{ko:'<area>, <b buff>$(0)</b> 방어(DEF) <i icon up>증가</i>',en:'<area>, Defense(MDF) <b buff>$(0)</b> <i icon up></i> increase',jp:'<area>, <b buff>$(0)</b> 防御(DEF) <i icon up>増加</i>'}
-	// 	,ta_:0,ta:1,effAnimation:4
-	// 	,eff:[{type:4,num:['300','400','650','800','1000']}],atkCount:[1],sp:5},
-	{},{},{},{},{},{},{},//30
-	{},{},{},{},{},{},{},{},{},{},//40
-	{},{},{},{},{},{},{},{},{},{},//50
+		eff:[{type:'grade',num:['5','10','15','20','25']}],sp:[5,5,5,5,5]},
+	{},{},{},{},{},{},{},
+	{idx:31,
+		na:{ko:'십자베기',en:'Cross Slash',jp:'十字刈り'},element_type:2,cate:3,
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[8,8,8,9,9],effAnimation:'slash2',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:-20,effFilter:'saturate(3)',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:3,num:['140%','150%','160%','160%','170%']}],atkCount:[1],sp:[11,12,13,13,13]},
+	{idx:32,
+		na:{ko:'엑스자베기',en:'XSlash',jp:'X字刈り'},element_type:2,cate:3,
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[35,35,35,36,36],effAnimation:'slash2',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:25,effFilter:'hue-rotate(90deg) saturate(3)',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:3,num:['140%','150%','160%','160%','170%']}],atkCount:[1],sp:[11,12,13,13,13]},
+	{idx:33,
+		na:{ko:'이단베기',en:'Double Slash',jp:'二度刈り'},element_type:2,cate:3,
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[1,2,2,3,3],effAnimation:'slash0',effAnimationRepeat:2,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'hue-rotate(90deg) saturate(3)',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:3,num:['80%','90%','90%','100%','110%']}],atkCount:[2],sp:[7,9,9,10,10]},
+	{idx:34,
+		na:{ko:'철벽방어',en:'Ironclad Defense',jp:'鉄壁防御'},element_type:0,cate:4,
+		txt:'<area>, <buff>',
+		skillClass:0,
+		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		buff:[{type:4,num:['130%','135%','140%','145%','150%']},{type:6,num:['130%','135%','140%','145%','150%']}],atkCount:[1],sp:[7,8,9,10,10]},
+	{idx:35,
+		na:{ko:'마법방어',en:'Magic Defense',jp:'術法防御'},element_type:0,cate:4,
+		txt:'<area>, <buff>',
+		skillClass:0,
+		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		buff:[{type:6,num:['130%','135%','140%','145%','150%']}],atkCount:[1],sp:[5,6,7,8,8]},
+	{idx:36,
+		na:{ko:'매직미사일(물)',en:'Magic Missile(Water)',jp:'マジックミサイル(水)'},element_type:9,cate:3,
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[1,52,52,53,53],effAnimation:'water0',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:5,num:['150%','150%','160%','160%','170%']}],atkCount:[1],sp:[10,11,12,13,13]},
+	{idx:37,
+		na:{ko:'매직미사일(불)',en:'Magic Missile(Fire)',jp:'マジックミサイル(火)'},element_type:10,cate:3,
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[1,52,52,53,53],effAnimation:'fire0',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:5,num:['150%','150%','160%','160%','170%']}],atkCount:[1],sp:[10,11,12,13,13]},
+	{idx:38,
+		na:{ko:'매직미사일(바람)',en:'Magic Missile(Wind)',jp:'マジックミサイル(風)'},element_type:11,cate:3,
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[1,52,52,53,53],effAnimation:'wind0',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:5,num:['150%','150%','160%','160%','170%']}],atkCount:[1],sp:[10,11,12,13,13]},
+	{idx:39,
+		na:{ko:'매직미사일(땅)',en:'Magic Missile(Earth)',jp:'マジックミサイル(地)'},element_type:12,cate:3,
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[1,52,52,53,53],effAnimation:'earth0',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:5,num:['150%','150%','160%','160%','170%']}],atkCount:[1],sp:[10,11,12,13,13]},
+	{idx:40,
+		na:{ko:'매직미사일(얼음)',en:'Magic Missile(Ice)',jp:'マジックミサイル(氷)'},element_type:9,cate:3,
+		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
+		ta_:1,ta:[1,52,52,53,53],effAnimation:'earth0',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:5,num:['150%','150%','160%','160%','170%']}],buff:[{type:57,num:[]}],buffCount:[2,2,2,2,2],buffChance:['20%','25%','30%','35%','40%'],atkCount:[1],sp:[13,14,15,16,16]},
+	{idx:41,
+		na:{ko:'매직미사일(빛)',en:'Magic Missile(Light)',jp:'マジックミサイル(光)'},element_type:7,cate:3,
+		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
+		ta_:1,ta:[1,52,52,53,53],effAnimation:'earth0',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:5,num:['150%','150%','160%','160%','170%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['20%','25%','30%','35%','40%'],atkCount:[1],sp:[13,14,15,16,16]},
+	{idx:42,
+		na:{ko:'매직미사일(어둠)',en:'Magic Missile(Dark)',jp:'マジックミサイル(暗)'},element_type:8,cate:3,
+		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
+		ta_:1,ta:[1,52,52,53,53],effAnimation:'earth0',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:5,num:['150%','150%','160%','160%','170%']}],buff:[{type:51,num:['-2%','-2%','-3%','-3%','-4%']}],buffCount:[4,4,4,5,5],buffChance:['10%','15%','20%','25%','25%'],atkCount:[1],sp:[13,14,15,16,16]},
+	{idx:43,
+		na:{ko:'이단찌르기',en:'Double Poking',jp:'二度刺し'},element_type:1,cate:7,
+		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
+		ta_:1,ta:[1,4,4,5,5],effAnimation:'pick0',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:3,num:['70%','80%','80%','90%','100%']}],buff:[{type:50,num:['-10%','-12%','-14%','-16%','-18%']}],buffCount:[4,4,4,5,5],buffChance:['15%','17%','20%','22%','25%'],atkCount:[2],sp:[9,10,10,11,11]},
+	{idx:44,
+		na:{ko:'이단사격',en:'Double Shot',jp:'二度射撃'},element_type:6,cate:7,
+		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
+		ta_:1,ta:[1,2,2,28,28],effAnimation:'shoot11',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:90,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:3,num:['70%','80%','80%','90%','100%']}],buff:[{type:50,num:['-10%','-12%','-14%','-16%','-18%']}],buffCount:[2,2,3,3,3],buffChance:['10%','15%','20%','25%','25%'],atkCount:[2],sp:[9,10,10,11,11]},
+	{idx:45,
+		na:{ko:'삼단사격',en:'Triple Shot',jp:'三度射撃'},element_type:6,cate:7,
+		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
+		ta_:1,ta:[1,2,2,28,28],effAnimation:'shoot11',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:90,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:3,num:['50%','60%','70%','80%','90%']}],buff:[{type:50,num:['-10%','-12%','-14%','-16%','-18%']}],buffCount:[2,2,3,3,3],buffChance:['10%','15%','20%','25%','25%'],atkCount:[3],sp:[10,11,12,12,12]},
+	{idx:46,
+		na:{ko:'조준사격',en:'Aimed Shot',jp:'照準射撃'},element_type:6,cate:7,
+		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
+		ta_:1,ta:[1,1,1,1,1],effAnimation:'shoot10',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'saturate(4)',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:3,num:['150%','160%','170%','190%','210%']}],buff:[{type:56,num:[]}],buffCount:[],buffChance:['10%','12.5%','15%','17.5%','20%'],atkCount:[1],sp:[13,14,15,16,16]},
+	{idx:47,
+		na:{ko:'할복',en:'Suicide',jp:'割腹'},element_type:2,cate:9,
+		txt:'<area>, <dmg>, <el>, <turn> <buff>',
+		ta_:1,ta:[20,20,20,20,20],effAnimation:'buff17',buffAnimation:'slash0',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'hue-rotate(90deg)',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:41,num:['-50%','-40%','-35%','-30%','-20%']}],buff:[{type:3,num:['-20%','-30%','-40%','-50%','-60%']}],buffCount:[2,3,4,5,6],atkCount:[1],sp:[6,6,6,6,6]},
+	{idx:48,
+		na:{ko:'죽음의 일격',en:'Death Strike',jp:'死の一撃'},element_type:4,cate:3,
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[1,22,22,21,21],effAnimation:'hit1',buffAnimation:'slash0',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:3,num:['200%','200%','220%','220%','240%']}],atkCount:[1],sp:[15,16,18,19,19]},
+	{},{},//50
 	{},{},{},{},{},{},{},{},{},{},//60
 	{},{},{},{},{},{},{},{},{},{},//70
 	{},{},{},{},{},{},{},{},{},{},//80
@@ -211,6 +284,22 @@ export const skill = [
 	{},{},{},{},{},{},{},{},{},{},//180
 	{},{},{},{},{},{},{},{},{},{},//190
 	{},{},{},{},{},{},{},{},{},{},//200
+	// {idx:9,
+// 	na:{ko:'집중타격',en:'Concentrated Attack',jp:'集中攻撃'},element_type:0,cate:3],txt:{ko:'<area>, <b dmg>$(0)</b> 강한 공격',en:'<area>, <b dmg>$(0)</b> a strong attack',jp:'<area>, <b dmg>$(0)</b> 強い攻撃'}
+// 	,ta_:1,ta:1,effAnimation:2
+// 	,eff:[{type:3,num:['150%','175%','200%','225%','250%']}],atkCount:[1],sp:9},
+// {idx:10,
+// 	na:{ko:'때린데 또 까',en:'Hit again Hit',jp:'再びヒット'},element_type:0,cate:3],txt:{ko:'<area>, <b dmg>$(0)</b> 2회 공격',en:'<area>, <b dmg>$(0)</b> a two-time attacks',jp:'<area>, <b dmg>$(0)</b> 2回攻撃'}
+// 	,ta_:1,ta:1,effAnimation:3
+// 	,eff:[{type:3,num:['80%','90%','100%','110%','120%']}],atkCount:[2],sp:8},
+// {idx:11,
+// 	na:{ko:'연속 공격',en:'Series of Attacks',jp:'連続攻撃'},element_type:0,cate:3],txt:{ko:'<area>, <b dmg>$(0)</b> 2~4회 공격',en:'<area>, <b dmg>$(0)</b> 2 to 4 attacks',jp:'<area>, <b dmg>$(0)</b> 2～4回攻撃'}
+// 	,ta_:1,ta:1,effAnimation:2
+// 	,eff:[{type:3,num:['60%','65%','75%','80%','85%']}],atkCount:[3, "randomCount"],sp:10},
+// {idx:12,
+// 	na:{ko:'무차별 공격',en:'Indiscriminate Attack',jp:'無差別攻撃'},element_type:0,cate:3],txt:{ko:'<area>, <b dmg>$(0)</b> 3회 공격',en:'<area>, <b dmg>$(0)</b> a three-time attack',jp:'<area>, <b dmg>$(0)</b> 3回攻撃'}
+// 	,ta_:1,ta:1,effAnimation:3
+// 	,eff:[{type:3,num:['100%','110%','120%','130%','140%']}],atkCount:[3, "another"],sp:9},
 	{idx:201,
 		na:{ko:'쪼기',en:'Peck',jp:'ピグテール'},element_type:1,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
@@ -431,7 +520,7 @@ export const skill = [
 		skillClass:1,
 		ta_:0,ta:[20,20,20,20,20],effAnimation:'buff37',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:8,num:['3','6','9','12','15']}],buffCount:[2,2,2,2,3],atkCount:[1],sp:[15,15,15,15,15]},
+		buff:[{type:8,num:['3','6','9','12','15']}],buffCount:[2,2,2,2,3],atkCount:[1],sp:[13,13,13,13,13]},
 	{idx:236,
 		na:{ko:'몸집 키우기',en:'Grows in Size',jp:'身長を伸ばす'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
@@ -443,7 +532,7 @@ export const skill = [
 		txt:'<area>, <turn> <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'buff30',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:3,num:['10%','15%','20%','25%','30%']},{type:4,num:['10%','15%','20%','25%','30%']}],buffCount:[3,3,3,3,3],atkCount:[0],sp:[8,8,8,8,8]},
+		buff:[{type:3,num:['10%','15%','20%','25%','30%']},{type:4,num:['10%','15%','20%','25%','30%']}],buffCount:[3,3,3,3,3],atkCount:[0],sp:[10,10,10,10,10]},
 	{idx:238,
 		na:{ko:'그루밍',en:'Grooming',jp:'グルーミング'},element_type:0,cate:5,
 		txt:'<area>, <turn> <buff>',
@@ -503,79 +592,79 @@ export const skill = [
 		txt:'<area>, <turn> <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'buff30',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'hue-rotate(90deg)',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:3,num:['20%','30%','40%','50%','60%']},{type:4,num:['20%','30%','40%','50%','60%']}],buffCount:[2,2,2,2,2],atkCount:[0],sp:[17,17,17,17,17]},
+		buff:[{type:3,num:['20%','30%','40%','50%','60%']},{type:4,num:['20%','30%','40%','50%','60%']}],buffCount:[2,2,2,2,2],atkCount:[0],sp:[10,10,10,10,10]},
 	{idx:248,
 		na:{ko:'한손타격',en:'One-handed Blow',jp:'片手打撃'},element_type:2,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[1,1,1,1,1],effAnimation:'claw1',effAnimationRepeat:1,effSize:[1,1.25,1.5,1.75,2],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['130%','140%','170%','180%','200%']}],buff:[{type:50,num:['-10%','-12.5%','-15%','-17.5%','-20%']}],buffCount:[2,2,2,2,2],buffChance:['10%','15%','20%','25%','25%'],atkCount:[1],sp:[9,10,13,14,14]},
+		eff:[{type:3,num:['130%','140%','170%','180%','200%']}],buff:[{type:50,num:['-10%','-12.5%','-15%','-17.5%','-20%']}],buffCount:[2,2,2,2,2],buffChance:['10%','15%','20%','25%','25%'],atkCount:[1],sp:[11,12,15,16,16]},
 	{idx:249,
 		na:{ko:'무거운 한손타격',en:'Heavy One-handed Blow',jp:'重い片手打撃'},element_type:2,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[1,1,1,1,1],effAnimation:'claw1',effAnimationRepeat:1,effSize:[1,1.25,1.5,1.75,2],effRotate:0,effFilter:'invert(100%)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['150%','170%','190%','220%','250%']}],buff:[{type:50,num:['-10%','-12.5%','-15%','-17.7%','-20%']}],buffCount:[2,2,2,2,2],buffChance:['10%','15%','20%','25%','25%'],atkCount:[1],sp:[11,13,15,18,18]},
+		eff:[{type:3,num:['150%','170%','190%','220%','250%']}],buff:[{type:50,num:['-10%','-12.5%','-15%','-17.7%','-20%']}],buffCount:[2,2,2,2,2],buffChance:['10%','15%','20%','25%','25%'],atkCount:[1],sp:[13,15,17,20,20]},
 	{idx:250,
 		na:{ko:'양손타격',en:'Double-handed Blow',jp:'両手打撃'},element_type:2,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[1,1,1,1,1],effAnimation:'claw0',effAnimationRepeat:1,effSize:[1,1.25,1.5,1.75,2],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['80%','90%','100%','120%','130%']}],buff:[{type:50,num:['-10%','-12.5%','-15%','-17.5%','-20%']}],buffCount:[2,2,2,2,2],buffChance:['20%','25%','30%','35%','40%'],atkCount:[2],sp:[11,12,13,15,15]},
+		eff:[{type:3,num:['80%','90%','100%','120%','130%']}],buff:[{type:50,num:['-10%','-12.5%','-15%','-17.5%','-20%']}],buffCount:[2,2,2,2,2],buffChance:['20%','25%','30%','35%','40%'],atkCount:[2],sp:[13,14,15,16,16]},
 	{idx:251,
 		na:{ko:'재빠른 양손타격',en:'Quick Double-handed Blow',jp:'素早い両手打撃'},element_type:2,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[1,1,1,1,1],effAnimation:'claw0',effAnimationRepeat:1,effSize:[1,1.25,1.5,1.75,2],effRotate:0,effFilter:'invert(100%)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['100%','120%','130%','140%','150%']}],buff:[{type:50,num:['-10%','-12.5%','-15%','-17.5%','-20%']}],buffCount:[2,2,2,2,2],buffChance:['20%','25%','30%','35%','40%'],atkCount:[2],sp:[14,16,17,18,18]},
+		eff:[{type:3,num:['100%','120%','130%','140%','150%']}],buff:[{type:50,num:['-10%','-12.5%','-15%','-17.5%','-20%']}],buffCount:[2,2,2,2,2],buffChance:['20%','25%','30%','35%','40%'],atkCount:[2],sp:[16,18,19,20,20]},
 	{idx:252,
 		na:{ko:'뒷발차기',en:'Back Kick',jp:'後ろ足蹴り'},element_type:4,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[2,2,2,3,3],effAnimation:'hit4',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'hue-rotate(180deg)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['120%','140%','160%','180%','200%']}],buff:[{type:54,num:[]}],buffCount:[3,3,3,3,3],buffChance:['5%','7%','10%','15%','20%'],atkCount:[1],sp:[9,11,13,15,15]},
+		eff:[{type:3,num:['120%','140%','160%','180%','200%']}],buff:[{type:54,num:[]}],buffCount:[3,3,3,3,3],buffChance:['5%','7%','10%','15%','20%'],atkCount:[1],sp:[11,13,15,17,17]},
 	{idx:253,
 		na:{ko:'강한 뒷발차기',en:'Strong Back Kick',jp:'強い後ろ足蹴り'},element_type:4,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[2,2,3,3,3],effAnimation:'hit4',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['130%','150%','170%','190%','230%']}],buff:[{type:54,num:[]}],buffCount:[3,3,3,3,3],buffChance:['5%','7%','10%','15%','20%'],atkCount:[1],sp:[10,12,14,16,16]},
+		eff:[{type:3,num:['130%','150%','170%','190%','230%']}],buff:[{type:54,num:[]}],buffCount:[3,3,3,3,3],buffChance:['5%','7%','10%','15%','20%'],atkCount:[1],sp:[12,14,16,18,18]},
 	{idx:254,
 		na:{ko:'강력한 뒷발차기',en:'Powerful Back Kick',jp:'強力な後ろ足蹴り'},element_type:4,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[2,3,3,3,3],effAnimation:'hit4',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'hue-rotate(90deg)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['150%','170%','190%','220%','250%']}],buff:[{type:54,num:[]}],buffCount:[3,3,3,3,3],buffChance:['5%','7%','10%','15%','20%'],atkCount:[1],sp:[12,14,16,19,19]},
+		eff:[{type:3,num:['150%','170%','190%','220%','250%']}],buff:[{type:54,num:[]}],buffCount:[3,3,3,3,3],buffChance:['5%','7%','10%','15%','20%'],atkCount:[1],sp:[14,16,18,20,20]},
 	{idx:255,
 		na:{ko:'후려치기',en:'Slap',jp:'叩きつけ'},element_type:4,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[1,1,4,4,22],effAnimation:'slash8',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['120%','130%','140%','150%','170%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['5%','10%','15%','20%','25%'],atkCount:[1],sp:[8,9,11,12,12]},
+		eff:[{type:3,num:['120%','130%','140%','150%','170%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['5%','10%','15%','20%','25%'],atkCount:[1],sp:[10,11,13,14,14]},
 	{idx:256,
 		na:{ko:'광견병',en:'Rabies',jp:'狂犬病'},element_type:3,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[20,20,20,20,20],effAnimation:'poison3',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['60%','70%','80%','90%','100%']}],buff:[{type:51,num:['-3%','-3.5%','-4%','-4.5%','-5%']}],buffCount:[3,4,5,6,7],buffChance:['35%','40%','45%','50%','60%'],atkCount:[1],sp:[9,9,10,10,10]},
+		eff:[{type:3,num:['60%','70%','80%','90%','100%']}],buff:[{type:51,num:['-3%','-3.5%','-4%','-4.5%','-5%']}],buffCount:[3,4,5,6,7],buffChance:['35%','40%','45%','50%','60%'],atkCount:[1],sp:[11,11,12,12,12]},
 	{idx:257,
 		na:{ko:'송곳니 뚫기',en:'Fang piercing',jp:'牙の穴あけ'},element_type:3,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[10,10,10,10,10],effAnimation:'bite0',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['110%','120%','140%','150%','170%']}],buff:[{type:56,num:[]}],buffCount:[],buffChance:['1%','2%','3%','4%','5%'],atkCount:[1],sp:[9,10,12,13,13]},
+		eff:[{type:3,num:['110%','120%','140%','150%','170%']}],buff:[{type:56,num:[]}],buffCount:[],buffChance:['1%','2%','3%','4%','5%'],atkCount:[1],sp:[11,12,14,15,15]},
 	{idx:258,
 		na:{ko:'구토',en:'Vomiting',jp:'嘔吐'},element_type:8,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[24,24,24,24,24],effAnimation:'blood1',effAnimationRepeat:1,effSize:[1,1.5,2,2.5,5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:5,num:['80%','90%','100%','110%','120%']}],buff:[{type:51,num:['-2%','-2.5%','-3%','-3.5%','-4%']}],buffCount:[2,3,4,5,6],buffChance:['50%','55%','60%','65%','70%'],atkCount:[1],sp:[10,10,11,12,12]},
+		eff:[{type:5,num:['80%','90%','100%','110%','120%']}],buff:[{type:51,num:['-2%','-2.5%','-3%','-3.5%','-4%']}],buffCount:[2,3,4,5,6],buffChance:['50%','55%','60%','65%','70%'],atkCount:[1],sp:[12,12,13,14,14]},
 	{idx:259,
 		na:{ko:'삼키기',en:'Swallow',jp:'飲み込む'},element_type:8,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <buff>',
 		ta_:1,ta:[1,1,1,2,3],effAnimation:'blood2',effAnimationRepeat:1,effSize:[1,1.5,2,2.5,5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:5,num:['70%','80%','90%','100%','110%']}],buff:[{type:56,num:[]}],buffCount:[],buffChance:['2%','4%','6%','8%','10%'],atkCount:[1],sp:[5,5,6,6,6]},
+		eff:[{type:5,num:['70%','80%','90%','100%','110%']}],buff:[{type:56,num:[]}],buffCount:[],buffChance:['2%','4%','6%','8%','10%'],atkCount:[1],sp:[7,7,8,8,8]},
 	{idx:260,
 		na:{ko:'무리사냥(땅)',en:'Herd Hunt(Earth)',jp:'群れ狩り(地)'},element_type:12,cate:3,
 		txt:'<area>, <dmg>, <el>',
@@ -597,7 +686,7 @@ export const skill = [
 	{idx:263,
 		na:{ko:'물어뜯기',en:'Bite off',jp:'噛むこと'},element_type:3,cate:3,
 		txt:'<area>, <dmg>, <el>',
-		ta_:1,ta:[1,1,1,1,1],effAnimation:'bite1',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		ta_:1,ta:[1,1,1,1,1],effAnimation:'bite1',effAnimationRepeat:2,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		eff:[{type:3,num:['160%','170%','180%','190%','200%']}],atkCount:[1],sp:[11,12,13,14,14]},
 	{idx:264,
@@ -615,15 +704,15 @@ export const skill = [
 	{idx:266,
 		na:{ko:'금빛 갈기',en:'Golden Mane',jp:'金色のたてがみ'},element_type:0,cate:5,
 		txt:'<area>, <turn> <buff>',
-		ta_:0,ta:[23,23,23,23,23],effAnimation:'buff6',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		ta_:0,ta:[23,23,23,23,23],effAnimation:'buff6',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'saturate(6)',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:17,num:['10%','15%','20%','25%','30%']},{type:22,num:['10%','15%','20%','25%','30%']}],buffCount:[2,2,3,3,4],atkCount:[0],sp:[15,15,15,15,15]},
+		buff:[{type:17,num:['10%','15%','20%','25%','30%']},{type:22,num:['10%','15%','20%','25%','30%']}],buffCount:[2,2,3,3,4],atkCount:[0],sp:[10,10,10,10,10]},
 	{idx:267,
 		na:{ko:'피의 서약',en:'Blood Oath',jp:'血の誓い'},element_type:0,cate:5,
 		txt:'<area>, <turn> <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'blood4',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:13,num:['10%','15%','20%','25%','30%']},{type:25,num:['10%','15%','20%','25%','30%']}],buffCount:[2,2,3,3,4],atkCount:[0],sp:[15,15,15,15,15]},
+		buff:[{type:13,num:['10%','15%','20%','25%','30%']},{type:25,num:['10%','15%','20%','25%','30%']}],buffCount:[2,2,3,3,4],atkCount:[0],sp:[10,10,10,10,10]},
 	{idx:268,
 		na:{ko:'야습',en:'Night Raids',jp:'夜の襲撃'},element_type:8,cate:3,
 		txt:'<area>, <condition>, <dmg>, <el>, ',
@@ -639,21 +728,21 @@ export const skill = [
 	{idx:270,
 		na:{ko:'추격하기',en:'Catch up',jp:'追いかける'},element_type:3,cate:8,
 		txt:'<area>, <dmg>, <el>, <turn> <buff>',
-		ta_:0,ta:[23,23,23,23,23],effAnimation:'blood16',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		ta_:1,ta:[1,1,1,1,1],effAnimation:'slash0',buffAnimation:'blood16',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		eff:[{type:3,num:['50%','60%','70%','80%','90%']}],buff:[{type:10,num:['50%','60%','70%','80%','90%']}],buffCount:[0,0,0,0,0],atkCount:[0],sp:[6,6,6,6,6]},
 	{idx:271,
-		na:{ko:'맹렬히 추격하기',en:'Catch up like crazy',jp:'猛烈に追いかける'},element_type:1,cate:8,
+		na:{ko:'맹렬히 추격하기',en:'Catch up like crazy',jp:'猛烈に追いかける'},element_type:3,cate:8,
 		txt:'<area>, <dmg>, <el>, <turn> <buff>',
-		ta_:0,ta:[23,23,23,23,23],effAnimation:'blood16',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'invert(100%)',
+		ta_:1,ta:[1,1,1,1,1],effAnimation:'slash0',buffAnimation:'blood16',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'invert(100%)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['80%','90%','100%','120%','130%']}],buff:[{type:10,num:['30%','40%','50%','60%','70%']}],buffCount:[0,0,0,0,0],atkCount:[0],sp:[6,6,6,8,8]},
+		eff:[{type:3,num:['80%','90%','100%','120%','130%']}],buff:[{type:10,num:['30%','40%','50%','60%','70%']}],buffCount:[0,0,0,0,0],atkCount:[0],sp:[7,7,7,8,8]},
 	{idx:272,
 		na:{ko:'하울링',en:'Howling',jp:'ハウリング'},element_type:0,cate:5,
 		txt:'<area>, <turn> <buff>',
 		ta_:0,ta:[105,105,105,105,105],effAnimation:'blood13',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:13,num:['10%','15%','20%','25%','30%']},{type:14,num:['10%','15%','20%','25%','30%']}],buffCount:[2,2,2,3,3],atkCount:[0],sp:[10,10,10,10,10]},
+		buff:[{type:13,num:['10%','15%','20%','25%','30%']},{type:14,num:['10%','15%','20%','25%','30%']}],buffCount:[2,2,2,3,3],atkCount:[0],sp:[11,11,11,11,11]},
 	{idx:273,
 		na:{ko:'무거운 한방',en:'Heavy blow',jp:'重い一撃'},element_type:5,cate:3,
 		txt:'<area>, <multiples>, <atkEff><dmg>, <el>',
@@ -681,9 +770,9 @@ export const skill = [
 	{idx:277,
 		na:{ko:'모래뿌리기',en:'Sanding',jp:'砂まき'},element_type:12,cate:7,
 		txt:'<area>, <atkEff><dmg>, <el>',
-		ta_:1,ta:[28,28,28,29,29],effAnimation:'earth0',effAnimationRepeat:1,effSize:[1,1.25,1.5,6,7],effRotate:0,effFilter:'',
+		ta_:1,ta:[28,28,28,29,29],effAnimation:'blood5',effAnimationRepeat:1,effSize:[2,2.25,2.5,5,5],effRotate:0,effFilter:'hue-rotate(45deg) brightness(1.3) blur(1px)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:5,num:['110%','120%','130%','140%','150%']}],buff:[{type:53,num:[]}],buffCount:[1,1,2,2,3],buffChance:['20%','25%','30%','35%','40%'],atkCount:[1],sp:[9,10,11,13,13]},
+		eff:[{type:5,num:['110%','120%','130%','140%','150%']}],buff:[{type:53,num:[]}],buffCount:[1,1,2,2,3],buffChance:['20%','25%','30%','35%','40%'],atkCount:[1],sp:[11,12,13,15,15]},
 	{idx:278,
 		na:{ko:'돌던지기',en:'Throwing stones',jp:'石投げ'},element_type:12,cate:3,
 		txt:'<area>, <atkEff><dmg>, <el>',
@@ -692,40 +781,40 @@ export const skill = [
 		eff:[{type:5,num:['90%','100%','110%','120%','130%']}],atkCount:[1],sp:[6,7,8,10,10]},
 	{idx:279,
 		na:{ko:'바위던지기',en:'Throwing rocks',jp:'石投げゲーム'},element_type:12,cate:7,
-		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
+		txt:'<area>, <atkEff><dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[28,28,29,29,29],effAnimation:'earth2',effAnimationRepeat:1,effSize:[2,2.5,3,3.5,4],effRotate:0,effFilter:'',
 		attackEff:[{type:0,num:['5%','7%','9%','11%','13%']}],multiplesAttack:[],
-		eff:[{type:5,num:['120%','130%','140%','150%','160%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['20%','25%','30%','35%','40%'],atkCount:[1],sp:[10,11,13,14,14]},
+		eff:[{type:5,num:['120%','130%','140%','150%','160%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['20%','25%','30%','35%','40%'],atkCount:[1],sp:[12,13,15,16,16]},
 	{idx:280,
 		na:{ko:'눈덩이던지기',en:'Throwing snowballs',jp:'雪だるま投げ'},element_type:9,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[42,42,42,43,43],effAnimation:'earth2',effAnimationRepeat:1,effSize:[1,1.25,1.5,1.75,2],effRotate:0,effFilter:'invert(100%)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:5,num:['120%','130%','140%','150%','160%']}],buff:[{type:57,num:[]}],buffCount:[2,2,2,2,2],buffChance:['20%','25%','30%','35%','40%'],atkCount:[1],sp:[10,11,12,14,14]},
+		eff:[{type:5,num:['120%','130%','140%','150%','160%']}],buff:[{type:57,num:[]}],buffCount:[2,2,2,2,2],buffChance:['20%','25%','30%','35%','40%'],atkCount:[1],sp:[12,13,14,16,16]},
 	{idx:281,
 		na:{ko:'침뱉기',en:'Spitting',jp:'唾を吐く'},element_type:9,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[1,1,1,28,28],effAnimation:'poison2',effAnimationRepeat:1,effSize:[1,1.25,1.5,1.75,2],effRotate:0,effFilter:'saturate(3)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:5,num:['150%','160%','170%','170%','180%']}],buff:[{type:51,num:['-2%','-2%','-3%','-3%','-4%']}],buffCount:[3,5,7,9,10],buffChance:['30%','40%','50%','60%','70%'],atkCount:[1],sp:[11,12,13,14,14]},
+		eff:[{type:5,num:['150%','160%','170%','170%','180%']}],buff:[{type:51,num:['-2%','-2%','-3%','-3%','-4%']}],buffCount:[3,5,7,9,10],buffChance:['30%','40%','50%','60%','70%'],atkCount:[1],sp:[13,14,15,16,16]},
 	{idx:282,
 		na:{ko:'돌진',en:'Rush',jp:'突進'},element_type:4,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[4,5,5,47,47],effAnimation:'slash6',effAnimationRepeat:1,effSize:[2,2.5,3,3.5,5],effRotate:180,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:5,num:['130%','140%','150%','160%','170%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','12.5%','15%','17.5%','20%'],atkCount:[1],sp:[10,11,12,13,13]},
+		eff:[{type:5,num:['130%','140%','150%','160%','170%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','12.5%','15%','17.5%','20%'],atkCount:[1],sp:[12,13,14,15,15]},
 	{idx:283,
 		na:{ko:'맹렬한 돌진',en:'Onslaught Rush',jp:'猛烈な突進'},element_type:4,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[5,47,47,7,7],effAnimation:'slash6',effAnimationRepeat:1,effSize:[2,2.5,3,3.5,5],effRotate:180,effFilter:'saturate(3)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:5,num:['130%','140%','150%','160%','170%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','12.5%','15%','17.5%','20%'],atkCount:[1],sp:[10,11,12,14,14]},
+		eff:[{type:5,num:['130%','140%','150%','160%','170%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','12.5%','15%','17.5%','20%'],atkCount:[1],sp:[12,13,14,16,16]},
 	{idx:284,
 		na:{ko:'폭풍 돌진',en:'Storm Rush',jp:'嵐の突進'},element_type:4,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[22,49,49,51,12],effAnimation:'slash6',effAnimationRepeat:1,effSize:[2,2.5,3,3.5,5],effRotate:180,effFilter:'invert(100%)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:5,num:['120%','130%','140%','150%','160%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','12.5%','15%','17.5%','20%'],atkCount:[1],sp:[9,11,12,13,13]},
+		eff:[{type:5,num:['120%','130%','140%','150%','160%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','12.5%','15%','17.5%','20%'],atkCount:[1],sp:[11,13,14,15,15]},
 	{idx:285,
 		na:{ko:'회전 박치기',en:'Spin Smash',jp:'回転殴打機'},element_type:11,cate:3,
 		txt:'<area>, <dmg>, <el>',
@@ -761,19 +850,19 @@ export const skill = [
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[1,4,4,4,5],effAnimation:'dark23',effAnimationRepeat:1,effSize:[1.5,1.5,2,2,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['140%','150%','160%','170%','180%']}],buff:[{type:54,num:[]}],buffCount:[1,1,2,2,2],buffChance:['20%','22.5%','25%','27.5%','30%'],atkCount:[1],sp:[10,11,12,13,13]},
+		eff:[{type:3,num:['140%','150%','160%','170%','180%']}],buff:[{type:54,num:[]}],buffCount:[1,1,2,2,2],buffChance:['20%','22.5%','25%','27.5%','30%'],atkCount:[1],sp:[12,13,14,15,15]},
 	{idx:291,
 		na:{ko:'강한 몸통박치기',en:'Strong Body Slam',jp:'強い胴体叩き'},element_type:4,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[1,8,8,8,9],effAnimation:'dark23',effAnimationRepeat:1,effSize:[1.5,1.5,2,2,2.5],effRotate:0,effFilter:'hue(90deg)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['160%','170%','180%','190%','200%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['15%','17.5%','20%','22.5%','25%'],atkCount:[1],sp:[12,14,15,16,16]},
+		eff:[{type:3,num:['160%','170%','180%','190%','200%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['15%','17.5%','20%','22.5%','25%'],atkCount:[1],sp:[14,16,17,18,18]},
 	{idx:292,
 		na:{ko:'강력한 몸통박치기',en:'Powerful Body Slam',jp:'強力な胴体叩き'},element_type:4,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[1,5,5,5,9],effAnimation:'dark23',effAnimationRepeat:1,effSize:[1.5,1.5,2,2,2.5],effRotate:0,effFilter:'hue(180deg)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['170%','180%','190%','200%','210%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,3,3],buffChance:['10%','12.5%','15%','17.5%','20%'],atkCount:[1],sp:[13,14,15,16,16]},
+		eff:[{type:3,num:['170%','180%','190%','200%','210%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,3,3],buffChance:['10%','12.5%','15%','17.5%','20%'],atkCount:[1],sp:[15,16,17,18,18]},
 	{idx:293,
 		na:{ko:'훔쳐먹기',en:'Steal and eat',jp:'盗み食い'},element_type:12,cate:13,
 		txt:'<area>, <dmg>, <el>',
@@ -797,7 +886,7 @@ export const skill = [
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[1,1,1,1,1],effAnimation:'hit3',effAnimationRepeat:1,effSize:[1.5,1.5,2,2,2.5],effRotate:270,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['200%','210%','220%','230%','240%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,3,3],buffChance:['30%','35%','40%','45%','50%'],atkCount:[1],sp:[16,17,18,19,19]},
+		eff:[{type:3,num:['200%','210%','220%','230%','240%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,3,3],buffChance:['30%','35%','40%','45%','50%'],atkCount:[1],sp:[18,19,20,21,21]},
 	{idx:297,
 		na:{ko:'쥐구멍숨기',en:'Hide in a rat hole',jp:'ネズミの穴に隠れる'},element_type:0,cate:5,
 		txt:'<area>, <turn> <buff>',
@@ -878,9 +967,9 @@ export const skill = [
 	{idx:308,
 		na:{ko:'눈알찌르기',en:'Eyeball poking',jp:'目玉刺し'},element_type:1,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
-		ta_:1,ta:[1,1,1,2,2],effAnimation:'pick0',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		ta_:1,ta:[1,1,1,2,2],effAnimation:'pick2',effAnimationRepeat:1,effSize:[2,2.25,2.5,2.75,3],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['170%','190%','210%','230%','250%']}],buff:[{type:53,num:[]}],buffCount:[],buffChance:['10%','20%','30%','30%','40%'],atkCount:[1],sp:[14,16,18,20,20]},
+		eff:[{type:3,num:['170%','190%','210%','230%','250%']}],buff:[{type:53,num:[]}],buffCount:[],buffChance:['10%','20%','30%','30%','40%'],atkCount:[1],sp:[16,18,20,22,22]},
 	{idx:309,
 		na:{ko:'반신욕',en:'Half-body bath',jp:'半身浴'},element_type:9,cate:13,
 		txt:'<area>, <turn> <buff>',
@@ -898,7 +987,7 @@ export const skill = [
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[1,1,1,1,1],effAnimation:'ice7',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'invert(100%)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['160%','180%','200%','220%','140%']}],buff:[{type:56,num:[]}],buffCount:[1,2,3,4,5],buffChance:['20%','25%','30%','35%','40%'],atkCount:[1],sp:[12,14,16,18,18]},
+		eff:[{type:3,num:['160%','180%','200%','220%','240%']}],buff:[{type:56,num:[]}],buffCount:[1,2,3,4,5],buffChance:['20%','25%','30%','35%','40%'],atkCount:[1],sp:[14,16,18,20,20]},
 	{idx:312,
 		na:{ko:'1톤 펀치',en:'1ton Punch',jp:'1トンパンチ'},element_type:4,cate:3,
 		txt:'<area>, <dmg>, <el>',
@@ -910,13 +999,13 @@ export const skill = [
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[1,55,55,21,21],effAnimation:'shoot1',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:270,effFilter:'invert(100%)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:5,num:['120%','130%','140%','150%','160%']}],buff:[{type:50,num:['-7%','-8%','-9%','-10%','-12%']}],buffCount:[2,2,2,2,2],buffChance:['10%','20%','30%','40%','50%'],atkCount:[1],sp:[8,10,11,13,13]},
+		eff:[{type:5,num:['120%','130%','140%','150%','160%']}],buff:[{type:57,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','20%','30%','40%','50%'],atkCount:[1],sp:[10,12,13,15,15]},
 	{idx:314,
 		na:{ko:'하이킥',en:'High Kick',jp:'ハイキック'},element_type:4,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[1,1,1,1,1],effAnimation:'shoot13',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:45,effFilter:'hue-rotate(180deg)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['180%','200%','210%','230%','240%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['20%','25%','30%','35%','40%'],atkCount:[1],sp:[14,16,17,19,19]},
+		eff:[{type:3,num:['180%','200%','210%','230%','240%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['20%','25%','30%','35%','40%'],atkCount:[1],sp:[16,18,19,21,21]},
 	{idx:315,
 		na:{ko:'꼬리공격',en:'Tail Attack',jp:'テールアタック'},element_type:4,cate:3,
 		txt:'<area>, <dmg>, <el>',
@@ -959,7 +1048,7 @@ export const skill = [
 		na:{ko:'고급잠수',en:'Advanced Diving',jp:'高級ダイビング'},element_type:0,cate:5,
 		txt:'<area>, <turn> <buff>',
 		skillClass:1,
-		ta_:0,ta:[23,23,23,23,23],effAnimation:'buff19',effAnimationRepeat:1,effSize:[2,2.25,2.5,2.75,3],effRotate:0,effFilter:'hue-rotate(90deg)',
+		ta_:0,ta:[23,23,23,23,23],effAnimation:'buff19',effAnimationRepeat:1,effSize:[2,2.25,2.5,2.75,3],effRotate:0,effFilter:'hue-rotate(90deg) saturate(5)',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:47,num:[2,2,2,2,2]}],buffCount:[2,3,4,4,5],atkCount:[1],sp:[13,13,13,13,13]},
 	{idx:322,
@@ -994,13 +1083,13 @@ export const skill = [
 		attackEff:[],multiplesAttack:[{type:47,num:['10%','15%','20%','25%','30%']}],
 		eff:[{type:5,num:['140%','150%','160%','170%','170%']}],atkCount:[1],sp:[10,11,13,14,14]},
 	{idx:327,
-		na:{ko:'조롱하기',en:'Mocking',jp:'嘲笑する'},element_type:0,cate:6,
+		na:{ko:'조롱',en:'Mocking',jp:'嘲笑する'},element_type:0,cate:6,
 		txt:'<area>, <turn> <buff>',
 		ta_:1,ta:[2,2,2,3,3],effAnimation:'buff4',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['-10%','-15%','-20%','-25%','-30%']},{type:6,num:['-10%','-15%','-20%','-25%','-30%']}],buffCount:[2,2,2,2,2],atkCount:[0],sp:[8,8,8,9,9]},
 	{idx:328,
-		na:{ko:'정화하기',en:'Purify',jp:'浄化する'},element_type:12,cate:5,
+		na:{ko:'정화',en:'Purify',jp:'浄化する'},element_type:12,cate:5,
 		txt:'<area>, <turn> <buff>',
 		ta_:0,ta:[1,1,1,1,1],effAnimation:'buff18',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
@@ -1016,7 +1105,7 @@ export const skill = [
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[1,1,2,2,3],effAnimation:'press2',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:5,num:['160%','170%','180%','190%','200%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['25%','30%','35%','40%','45%'],atkCount:[1],sp:[12,13,15,16,16]},
+		eff:[{type:5,num:['160%','170%','180%','190%','200%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['25%','30%','35%','40%','45%'],atkCount:[1],sp:[14,15,17,18,18]},
 	{idx:331,
 		na:{ko:'목 공격',en:'Attack by the neck',jp:'首で攻撃'},element_type:4,cate:3,
 		txt:'<area>, <dmg>, <el>',
@@ -1034,25 +1123,25 @@ export const skill = [
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[1,22,22,21,21],effAnimation:'earth7',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:5,num:['130%','140%','150%','160%','170%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['15%','20%','25%','30%','35%'],atkCount:[1],sp:[9,11,12,13,13]},
+		eff:[{type:5,num:['130%','140%','150%','160%','170%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['15%','20%','25%','30%','35%'],atkCount:[1],sp:[11,13,14,15,15]},
 	{idx:334,
 		na:{ko:'날개치기',en:'Wing Attack',jp:'翼の攻撃'},element_type:4,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[54,54,15,15,15],effAnimation:'wind3',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'hue-rotate(90deg)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['120%','130%','140%','150%','160%']}],buff:[{type:53,num:[]}],buffCount:[2,2,2,2,2],buffChance:['5%','10%','15%','20%','25%'],atkCount:[1],sp:[9,10,12,13,13]},
+		eff:[{type:3,num:['120%','130%','140%','150%','160%']}],buff:[{type:53,num:[]}],buffCount:[2,2,2,2,2],buffChance:['5%','10%','15%','20%','25%'],atkCount:[1],sp:[11,12,14,15,15]},
 	{idx:335,
 		na:{ko:'거친 날개치기',en:'Wild Wing Attack',jp:'荒々しい翼の攻撃'},element_type:4,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[55,55,16,16,16],effAnimation:'wind3',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'invert(100%)',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:3,num:['140%','150%','150%','160%','180%']}],buff:[{type:53,num:[]}],buffCount:[2,2,2,2,2],buffChance:['5%','10%','15%','20%','25%'],atkCount:[1],sp:[11,12,13,14,14]},
+		eff:[{type:3,num:['140%','150%','150%','160%','180%']}],buff:[{type:53,num:[]}],buffCount:[2,2,2,2,2],buffChance:['5%','10%','15%','20%','25%'],atkCount:[1],sp:[13,14,15,16,16]},
 	{idx:336,
 		na:{ko:'고공낙하',en:'High-falling',jp:'高所落下'},element_type:12,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[3,6,6,18,19],effAnimation:'earth5',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:5,num:['120%','130%','150%','160%','170%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','15%','20%','25%','30%'],atkCount:[1],sp:[9,11,13,15,15]},
+		eff:[{type:5,num:['120%','130%','150%','160%','170%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','15%','20%','25%','30%'],atkCount:[1],sp:[11,13,15,17,17]},
 	{idx:337,
 		na:{ko:'윈드커터',en:'Wind Cutter',jp:'ウィンドカッター'},element_type:11,cate:3,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
@@ -1073,7 +1162,7 @@ export const skill = [
 		eff:[{type:44,num:[]}],atkCount:[1],sp:[15,16,17,18,18]},
 	{idx:340,
 		na:{ko:'사일런트 어택',en:'Silent Attack',jp:'サイレント攻撃'},element_type:11,cate:3,
-		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
+		txt:'<area>, <atkEff><dmg>, <el>',
 		ta_:1,ta:[1,1,1,1,1],effAnimation:'shoot7',effAnimationRepeat:1,effSize:[2.5,3,3.5,4,4.5],effRotate:0,effFilter:'',
 		attackEff:[{type:0,num:['50%','55%','60%','65%','70%']}],multiplesAttack:[],
 		eff:[{type:5,num:['180%','190%','200%','210%','220%']}],atkCount:[1],sp:[14,15,16,17,17]},
@@ -1082,22 +1171,97 @@ export const skill = [
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[1,4,4,22,22],effAnimation:'poison1',effAnimationRepeat:1,effSize:[1,1.25,1.5,1.75,2],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		eff:[{type:5,num:['130%','140%','170%','180%','200%']}],buff:[{type:51,num:['-2%','-2.5%','-3%','-3.5%','-4%']}],buffCount:[4,6,7,8,10],buffChance:['40%','50%','60%','70%','80%'],atkCount:[1],sp:[9,11,14,15,15]},
-
-	{idx:331,
-		na:{ko:'ㅁㅁㅁ',en:'Seashell Gifts',jp:'貝殻ギフト'},element_type:9,cate:5,
-		txt:'<area>, <dmg>, <el>',
-		ta_:0,ta:[1,1,1,1,1],effAnimation:'buff40',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
+		eff:[{type:5,num:['130%','140%','170%','180%','200%']}],buff:[{type:51,num:['-2%','-2.5%','-3%','-3.5%','-4%']}],buffCount:[4,6,7,8,10],buffChance:['40%','50%','60%','70%','80%'],atkCount:[1],sp:[11,13,16,17,17]},
+	{idx:342,
+		na:{ko:'유혹',en:'Temptation',jp:'誘惑'},element_type:8,cate:7,
+		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
+		ta_:1,ta:[1,1,2,2,3],effAnimation:'mental0',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'saturate(3)',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:54,num:[]}],buffCount:[2,2,2,2,2],atkCount:[0],sp:[1,1,20,21,21]},
-	{idx:239,
-		na:{ko:'개구리 기우제',en:'Frog Rainmaker',jp:'カエル祈雨祭'},element_type:0,cate:10,txt:{ko:'<u>날씨</u>, 비오는 날씨로 밤으로 변환',en:'<u>Weather</u>, Convert to rainy weather',jp:'<u>天気</u>, 雨天で夜に変換'},skillClass:1,
-		ta_:1,ta:20,effAnimation:7,effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,buffAnimation:0,
-		buff:[{type:2,num:['70%','75%','80%','85%','90%']}],buffCount:[4,4,4,4,4],buffChance:['70%','75%','80%','85%','90%'],atkCount:[1],sp:5},
-	{idx:240,
-		na:{ko:'호랑이&여우 결혼식',en:'Tiger&Fox Wedding',jp:'トラ＆キツネの結婚式'},element_type:0,cate:10,txt:{ko:'<u>날씨</u>, 비오는 날씨로 낮으로 변환',en:'<u>Weather</u>, Convert to rainy weather',jp:'<u>天気</u>, 雨天で昼間に変換'},skillClass:1,
-		ta_:1,ta:20,effAnimation:7,effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,buffAnimation:0,
-		buff:[{type:2,num:['70%','75%','80%','85%','90%']}],buffCount:[4,4,4,4,4],buffChance:['70%','75%','80%','85%','90%'],atkCount:[1],sp:5},
+		eff:[{type:5,num:['50%','60%','70%','80%','90%']}],buff:[{type:53,num:[]}],buffCount:[2,2,2,2,2],buffChance:['60%','65%','70%','75%','80%'],atkCount:[1],sp:[6,7,8,8,9]},
+	{idx:343,
+		na:{ko:'흡혈공격',en:'Vampiric Attack',jp:'吸血攻撃'},element_type:8,cate:14,
+		txt:'<area>, <atkEff><dmg>, <el>',
+		ta_:1,ta:[1,1,1,1,1],effAnimation:'blood5',buffAnimation:'buff13',effAnimationRepeat:1,effSize:[2.5,3,3.5,4,4.5],effRotate:0,effFilter:'',
+		attackEff:[{type:2,num:['25%','30%','35%','40%','45%']}],multiplesAttack:[],
+		eff:[{type:5,num:['140%','150%','160%','170%','180%']}],atkCount:[1],sp:[10,11,12,13,13]},
+	{idx:344,
+		na:{ko:'탈피하기',en:'Get out of the skin',jp:'脱皮する'},element_type:0,cate:5,
+		txt:'<area>, <turn> <buff>',
+		ta_:0,ta:[23,23,23,23,23],effAnimation:'buff36',effAnimationRepeat:1,effSize:[2,2.25,2.5,2.75,3],effRotate:0,effFilter:'invert(100%)',
+		attackEff:[],multiplesAttack:[],
+		buff:[{type:3,num:['30%','35%','40%','45%','50%']},{type:4,num:['-20%','-25%','-30%','-35%','-40%']}],buffCount:[2,2,3,3,3],atkCount:[0],sp:[8,8,8,8,8]},
+	{idx:345,
+		na:{ko:'꼬리자르기',en:'Cut off the tail',jp:'尻尾切り'},element_type:0,cate:5,
+		txt:'<area>, <turn> <buff>',
+		ta_:0,ta:[23,23,23,23,23],effAnimation:'buff36',effAnimationRepeat:1,effSize:[2,2.25,2.5,2.75,3],effRotate:0,effFilter:'hue-rotate(180deg) saturate(3)',
+		attackEff:[],multiplesAttack:[],
+		buff:[{type:48,num:[]}],buffCount:[1,1,2,2,2],atkCount:[0],sp:[13,13,13,13,13]},
+	{idx:346,
+		na:{ko:'혓바닥공격',en:'Tongue Attack',jp:'舌の攻撃'},element_type:4,cate:7,
+		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
+		ta_:1,ta:[1,1,1,1,1],effAnimation:'press1',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'saturate(3)',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:3,num:['160%','170%','180%','190%','200%']}],
+		buff:[{type:52,num:[]}],buffCount:[2,2,2,2,2],buffChance:['10%','20%','30%','40%','50%'],atkCount:[1],sp:[14,15,16,17,17]},
+	{idx:347,
+		na:{ko:'위장하기',en:'Camouflage',jp:'カモフラージュする'},element_type:0,cate:5,
+		txt:'<area>, <turn> <buff>',
+		ta_:0,ta:[23,23,23,23,23],effAnimation:'buff19',effAnimationRepeat:1,effSize:[2,2.25,2.5,2.75,3],effRotate:0,effFilter:'contrast(3)',
+		attackEff:[],multiplesAttack:[],
+		buff:[{type:47,num:[3,3,3,3,3]}],buffCount:[4,4,5,5,6],atkCount:[0],sp:[13,13,13,13,13]},
+	{idx:348,
+		na:{ko:'절단물기',en:'Bite off',jp:'噛むこと'},element_type:3,cate:7,
+		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
+		ta_:1,ta:[1,1,1,1,1],effAnimation:'bite1',effAnimationRepeat:1,effSize:[2,2.25,2.5,2.75,3],effRotate:45,effFilter:'invert(100%)',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:3,num:['180%','190%','210%','220%','240%']}],buff:[{type:50,num:['10%','15%','20%','25%','30%']}],buffCount:[1,1,1,2,2],buffChance:['10%','15%','20%','25%','30%'],atkCount:[1],sp:[16,17,19,20,20]},
+	{idx:349,
+		na:{ko:'튼튼한 등껍질',en:'Sturdy backshells',jp:'頑丈な背皮'},element_type:9,cate:5,
+		txt:'<area>, <turn> <buff>',
+		ta_:0,ta:[23,23,23,23,23],effAnimation:'buff33',effAnimationRepeat:1,effSize:[2,2.25,2.5,2.75,3],effRotate:0,effFilter:'hue-rotate(90deg) saturate(5)',
+		attackEff:[],multiplesAttack:[],
+		buff:[{type:4,num:['25%','30%','35%','40%','50%']},{type:6,num:['25%','30%','35%','40%','50%']}],buffCount:[2,2,3,3,4],atkCount:[0],sp:[10,10,10,10,10]},
+	{idx:350,
+		na:{ko:'점프',en:'Jump',jp:'ジャンプ'},element_type:0,cate:5,
+		txt:'<area>, <turn> <buff>',
+		ta_:0,ta:[23,23,23,23,23],effAnimation:'wind5',effAnimationRepeat:1,effSize:[2,2.25,2.5,2.75,3],effRotate:90,effFilter:'hue-rotate(90deg)',
+		attackEff:[],multiplesAttack:[],
+		buff:[{type:49,num:[]}],buffCount:[1,1,1,2,2],atkCount:[0],sp:[10,10,10,10,10]},
+	{idx:351,
+		na:{ko:'음파공격',en:'Sonic Attack',jp:'音波攻撃'},element_type:7,cate:3,
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[42,42,43,43,44],effAnimation:'light5',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'saturate(3)',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:5,num:['120%','130%','140%','150%','160%']}],atkCount:[1],sp:[9,10,12,13,13]},
+	{idx:352,
+		na:{ko:'청개구리공격',en:'Tree Frog Attack',jp:'青蛙の攻撃'},element_type:7,cate:3,
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[25,25,26,26,27],effAnimation:'dark22',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'saturate(3)',
+		attackEff:[],multiplesAttack:[{type:46,num:['10%','20%','30%','40%','50%']}],
+		eff:[{type:5,num:['180%','200%','220%','240%','260%']}],atkCount:[1],sp:[16,18,21,23,23]},
+	{idx:353,
+		na:{ko:'개구리 기우제',en:'Frog Rainmaker',jp:'カエル祈雨祭'},element_type:0,cate:10,
+		txt:'<area>, <turn> <buff>',
+		ta_:2,ta:[],effAnimation:'buff6',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'hue-rotate(90deg) saturate(3)',
+		buff:[{type:110,num:[2,2,2,2,2]}],buffCount:[2,2,2,3,3],buffChance:['60%','70%','80%','90%','100%'],atkCount:[1],sp:[15,14,13,12,11]},
+	{idx:354,
+		na:{ko:'호랑이&여우 결혼식',en:'Tiger&Fox Wedding',jp:'トラ＆キツネの結婚式'},element_type:0,cate:10,txt:'<area>, <turn> <buff>',
+		ta_:2,ta:[],effAnimation:'buff6',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'hue-rotate(180deg) saturate(3)',
+		buff:[{type:110,num:[7,7,7,7,7]}],buffCount:[2,2,2,3,3],buffChance:['60%','70%','80%','90%','100%'],atkCount:[1],sp:[15,14,13,12,11]},
+	{idx:355,
+		na:{ko:'나무뒤에 숨기',en:'Hide behind trees',jp:'木の後ろに隠す'},element_type:0,cate:4,
+		txt:'<area>, <buff>',
+		skillClass:0,
+		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		buff:[{type:4,num:['120%','125%','130%','135%','140%']},{type:6,num:['140%','145%','150%','155%','160%']}],atkCount:[1],sp:[7,8,9,10,10]},
+	{idx:356,
+		na:{ko:'바위뒤에 숨기',en:'Hide behind rocks',jp:'岩の後ろに隠す'},element_type:0,cate:4,
+		txt:'<area>, <buff>',
+		skillClass:0,
+		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		buff:[{type:4,num:['140%','145%','150%','155%','160%']},{type:6,num:['120%','125%','130%','135%','140%']}],atkCount:[1],sp:[7,8,9,10,10]},
 ];
 
 // [cate] (스킬종류)
@@ -1109,6 +1273,7 @@ export const skill = [
 // debuff6(적군) (턴제로 실행),
 // active7(적군), 적군공격 디버프추가 (턴제로 실행)
 // active8(적군), 적군공격 아군버프 추가 (턴제로 실행)
+// active9(아군), 본인공격 아군버프
 // weather10(날씨), 날씨 변환 (턴제로 실행)
 // job11(직업)
 // passive12(조건부 condition), (조건에 맞으면 실행)
@@ -1120,16 +1285,18 @@ export const skill = [
 
 // [element_type] 무속성(0),쪼기(1),할퀴기(2),물기(3),치기(4),누르기(5),던지기(6),빛(7),어둠(8),물(9),불(10),바람(11),땅(12)
 
-// [eff], [buff] 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 행운LUK(9), 반격(10), 쪼기(11), 할퀴기(12), 물기(13), 치기(14), 누르기(15), 던지기(16), 빛(17), 어둠(18), 물(19), 불(20), 바람(21), 땅(22), 쪼기저항(23), 할퀴기저항(24), 물기저항(25), 치기저항(26), 누르기저항(27), 던지기저항(28), 빛저항(29), 어둠저항(30), 물저항(31), 불저항(32), 바람저항(33), 땅저항(34), 치명타(38), 회피(39), 적중률(40), hp회복(41), sp회복(42), hp,sp회복(43), 부활(44), 부활hp회복(45), 위치상태(47), 무적(48), 면역(49), 출혈(50), 중독(51), 석화(52), 혼란(53), 기절(54), 변이(55), 즉사(56), 빙결(57), 출혈저항(60), 중독저항(61), 석화저항(62), 혼란저항(63), 기절저항(64), 변이저항(65), 즉사저항(66), 빙결저항(67), 출혈면역(70), 중독면역(71), 석화면역(72), 혼란면역(73), 기절면역(74), 변이면역(75), 즉사면역(76), 빙결면역(77),  출혈해제(80), 중동해제(81), 석화해제(82), 혼란해제(83), 기절해제(84), 변이해제(85), 빙결헤제(87), 상태이상해제(88), 스킬(100)
+// [eff], [buff] 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 행운LUK(9), 반격(10), 쪼기(11), 할퀴기(12), 물기(13), 치기(14), 누르기(15), 던지기(16), 빛(17), 어둠(18), 물(19), 불(20), 바람(21), 땅(22), 쪼기저항(23), 할퀴기저항(24), 물기저항(25), 치기저항(26), 누르기저항(27), 던지기저항(28), 빛저항(29), 어둠저항(30), 물저항(31), 불저항(32), 바람저항(33), 땅저항(34), 치명타(38), 회피(39), 적중률(40), hp회복(41), sp회복(42), hp,sp회복(43), 부활(44), 부활hp회복(45), 위치상태(47), 무적(48), 면역(49), 출혈(50), 중독(51), 석화(52), 혼란(53), 기절(54), 변이(55), 즉사(56), 빙결(57), 출혈저항(60), 중독저항(61), 석화저항(62), 혼란저항(63), 기절저항(64), 변이저항(65), 즉사저항(66), 빙결저항(67), 출혈면역(70), 중독면역(71), 석화면역(72), 혼란면역(73), 기절면역(74), 변이면역(75), 즉사면역(76), 빙결면역(77),  출혈해제(80), 중동해제(81), 석화해제(82), 혼란해제(83), 기절해제(84), 변이해제(85), 빙결헤제(87), 상태이상해제(88), 스킬(100), 날씨(110), 풍향(111)
 
 //위치상태 0:일반, 1:공중, 2:잠수, 3:나무숲
 
-// type 55(변이) num: 고양이(0), 개(1), 너구리(2), 쥐(3), 원숭이(4), 소(5), 곰(6), 코끼리(7), 새(8), 파충류(9), 034(고양이,쥐,원숭이중 랜덤)
-// [attackEff] 크리티컬(0), 적중률(1)
+//날씨 0:낮,맑음, 1:낮,흐림, 2:낮,비, 3:낮,천둥, 4:낮,눈, 5:밤,맑음, 6:밤,흐림, 7:밤,비, 8:밤,천둥, 9: 밤,눈
 
-// [ta_] 아군0, 적군1
+// type 55(변이) num: 고양이(0), 개(1), 너구리(2), 쥐(3), 원숭이(4), 소(5), 곰(6), 코끼리(7), 새(8), 파충류(9), 034(고양이,쥐,원숭이중 랜덤)
+// [attackEff] 크리티컬(0), 적중률(1), 흡혈(2)
+
+// [ta_] 아군0, 적군1, 날씨2
 // [ta] getEffectArea 효과범위, passive일 경우 1:단일, 100:직업
-// 영역 1단일, 2가로2, 3가로3, 4세로2, 5세로3, 6가로행, 7세로열, 8십자5, 9십자9, 10대각선/, 11대각선\, 12세로열2줄, 13세로열3줄, 14⏊4, 15└┐7, 16┌┘7, 17卍, 18가로행2줄, 19가로행3줄, 20전체, 21정사각형9, 22정사각형4, 23자신, 24원, 25랜덤5, 26랜덤10, 27랜덤15, 28작은마름모, 29큰마름모, 30큰링, 31랜덤세로2열, 32랜덤세로3열, 33랜덤가로2행, 34랜덤가로3행, 35x자5, 36x자9, 37ㅜ4, 38랜덤20, 39바깥1줄, 40바깥2줄, 41바깥3줄, 42n포함 랜덤 5, 43n포함 랜덤 10, 44n포함 랜덤 15, 45n포함 랜덤 20, 46가로4, 47세로4, 48가로3x2, 49세로2x3, 50가로4x2, 51세로2x4, 52, 53, 54작은└┐4, 55작은┌┘4, 56정사각형16, 57마름모라인4, 58사각형라인8, 59사각형라인12, 60원형라인12, 100고양이, 101사자, 102호랑이, 103개, 104늑대, 105물개, 106너구리, 107쥐, 108토끼, 109원숭이, 110고릴라, 111캥거루, 112소, 113곰, 114말, 115사슴, 116코뿔소, 117코끼리, 118기린, 119새, 120독수리, 121뱀, 122도마뱀, 123거북이, 124개구리, 125돼지
+// 영역 1단일, 2가로2, 3가로3, 4세로2, 5세로3, 6가로행, 7세로열, 8십자5, 9십자9, 10대각선/, 11대각선\, 12세로열2줄, 13세로열3줄, 14⏊4, 15└┐7, 16┌┘7, 17卍, 18가로행2줄, 19가로행3줄, 20전체, 21정사각형9, 22정사각형4, 23자신, 24원, 25랜덤5, 26랜덤10, 27랜덤15, 28작은마름모, 29큰마름모, 30큰링, 31랜덤세로2열, 32랜덤세로3열, 33랜덤가로2행, 34랜덤가로3행, 35x자5, 36x자9, 37ㅜ4, 38랜덤20, 39바깥1줄, 40바깥2줄, 41바깥3줄, 42n포함 랜덤 5, 43n포함 랜덤 10, 44n포함 랜덤 15, 45n포함 랜덤 20, 46가로4, 47세로4, 48가로3x2, 49세로2x3, 50가로4x2, 51세로2x4, 52n포함 랜덤 3, 53n포함 랜덤 7, 54작은└┐4, 55작은┌┘4, 56정사각형16, 57마름모라인4, 58사각형라인8, 59사각형라인12, 60원형라인12, 100고양이, 101사자, 102호랑이, 103개, 104늑대, 105물개, 106너구리, 107쥐, 108토끼, 109원숭이, 110고릴라, 111캥거루, 112소, 113곰, 114말, 115사슴, 116코뿔소, 117코끼리, 118기린, 119새, 120독수리, 121뱀, 122도마뱀, 123거북이, 124개구리, 125돼지
 
 // [multiplesAttack] 데미지 x배수 공격
 
@@ -1150,7 +1317,9 @@ export const skill = [
 // 영역 1칸:0, 2~4:1, 5~9:2, 10~14:3, 15~19:4, 20~25:5
 // 공격횟수는 데미지 x 횟수 * 0.9로 계산
 // 100이 기본 데미지 10%당 1추가, 100미만시 20당 -1
-// 버프는 기본 8 갯수추가시 +2, 무적은 13, all상태이상 해제, 부활 10
+// 버프는 기본 8 갯수추가시 +2, 무적은 13, all상태이상 해제, 부활10, 변이15, 위치13
+// 공격횟수 x2
+// 날씨,풍향은 15
 
 // 모아치기
 // 빙결, 석화, 스킬 캔슬기
@@ -1161,7 +1330,7 @@ export const skill = [
 
 // * 0고양이 - 고양이의 예민한 직감(passive)●, 야행성(속도 condition)●,
 // 할퀴기, 물기, 치기
-// 손톱&뿔 갈기(공buff)●, 하악질(공debuff)●, 꾹꾹이(술공debuff)●, 그루밍(속도buff)●, 격렬하게 빵굽기(공,술공buff)●, 나무타기(회피)●,
+// 손톱&뿔 갈기(공buff)●, 하악질(공debuff)●, 꾹꾹이(술공debuff)●, 그루밍(속도buff)●, 격렬하게 빵굽기(공,술공buff)●, 나무타기(회피)●, 나무뒤에 숨기●, 바위뒤에 숨기●,
 // 한손타격(할퀴기)●, 양손타격(할퀴기)●, 뒷발차기(치기)●, 바람발톱(바람)●
 
 // * 1사자 - 사자의 빛나는 영광(passive)●, 초원의지배자(빛 condition)●, 야행성(속도 condition)●,
@@ -1171,43 +1340,45 @@ export const skill = [
 
 // * 2호랑이 - 호랑이의 거친 용맹(passive)●, 밀림의지배자(수 condition)●, 야행성(속도 condition)●,
 // 할퀴기, 물기,
-// 손톱&뿔 갈기(공buff)●, 포효(속도debuff)●, 하악질(공debuff)●, 빵굽기(공,술공buff)●, 피의서약(화,수 buff)●, 나무타기(회피)●,
-// 한손타격(할퀴기)●, 재빠른 양손타격(할퀴기)●, 뒷발차기(치기)●, 송곳니뚫기(물기)●, 앞발휘두르기(광)●, 얼음발톨(수)●, 후려치기(치기)●, 야습(암,광 condition)●
+// 손톱&뿔 갈기(공buff)●, 포효(속도debuff)●, 하악질(공debuff)●, 빵굽기(공,술공buff)●, 피의서약(화,수 buff)●, 나무타기(회피)●, 호랑이&여우 결혼식(날씨)●,
+// 한손타격(할퀴기)●, 재빠른 양손타격(할퀴기)●, 뒷발차기(치기)●, 송곳니뚫기(물기)●, 앞발휘두르기(광)●, 얼음발톨(수)●, 후려치기(치기)●, 야습(암 condition)●
 
 // * 3강아지 - 강아지의 충성스러운 용기(passive), 개과(passive)
 // 물기, 치기
-// 영역표시(b속도uff)●, 냄새맡기(방어debuff)●, 
+// 영역표시(b속도uff)●, 냄새맡기(방어debuff)●, 나무뒤에 숨기●, 바위뒤에 숨기●,
 // 강한 뒷발차기(치기)●, 송곳니뚫기(물기)●, 물어뜯기(물기)●, 무리사냥(바람,광)●, 광견병(독,광역)●, 추격하기(반격기)●, 
 
 // * 4늑대 - 늑대의 강인한 의리(passive), 야행성(속도 condition)●, 개과(passive)
 // 물기, 치기
 // 영역표시(속도buff)●, 하울링(물기,치기buff)●, 냄새맡기(방어debuff)●,
 // 강한 뒷발차기(치기)●, 송곳니뚫기(물기)●, 물어뜯기(물기)●, 무리사냥(땅,광)●, 무리사냥(바람,광)●, 광견병(독,광역)●,
-// [유혹(여우한정)], 
+// [유혹(여우한정)]●, 
 
 // * 5물개 - 물개의 유연함(passive),
 // 치기, 누르기
-// 잠수(회피)●,
-// 회전박치기(바람)●, 물대포(수)●, 파도공격(수,광)●, 바다의 축복(부활,힐)●, 응원의 박수(빛,힐)●, 몸통박치기1(치기)●,
+// 잠수(회피)●, 바다의 축복(부활,힐)●, 응원의 박수(빛,힐)●,
+// 회전박치기(바람)●, 물대포(수)●, 파도공격(수)●, 몸통박치기1(치기)●,
 // [송곳니뚫기(바다사자특정)]●,
 
 // * 6너구리 - 너구리의 영특한 계산(passive), 반격(passive),
 // 물기, 치기, 던지기
-// 돌던지기(땅)●, 고드름던지기(수)●, 훔쳐먹기(회복,자신)●, 응원의 박수(빛,힐)●, 흉내내기(고양이)●, 흉내내기(개)●, 흉내내기(쥐)●,
+// 훔쳐먹기(회복,자신)●, 응원의 박수(빛,힐)●, 흉내내기(고양이)●, 흉내내기(개)●, 흉내내기(쥐)●, 나무뒤에 숨기●, 바위뒤에 숨기●,
+// 돌던지기(땅)●, 고드름던지기(수)●,
 // [주머니털기(너구리한정)], [조개 선물(회복)(해달한정)]●,
 
 // * 7쥐 - 쥐의 날쌘 행동력(passive) - 시작 두턴간 무적, 
 // 물기,
-// 구토(독, 광역)●, 땅굴기습(땅)●, 급소타격(물기)●, 훔쳐먹기(회복,자신)●,
-// 민접한 스틸(아이템획득), 쥐구멍숨기(무적)●,
+// 민접한 스틸(아이템획득), 쥐구멍숨기(무적)●, 나무뒤에 숨기●, 바위뒤에 숨기●, 훔쳐먹기(회복,자신)●,
+// 구토(독)●, 땅굴기습(땅)●, 급소타격(물기)●,
 
 // * 8토끼 -  토끼의 뛰어난 점프력(spd, luk)(passive),
 // 물기, 치기
-// 구토(독, 광역)●, 급소타격(물기)●, 뒷발차기(치기)●, 
+// 나무뒤에 숨기●, 바위뒤에 숨기●,
+// 구토(독)●, 급소타격(물기)●, 뒷발차기(치기)●, 
 
 // * 9원숭이 - 원숭이의 영리한 지략(passive),
 // 물기, 치기, 던지기 
-// 조롱하기(술공,술방debuff)●, 나무타기(회피)●,
+// 조롱(술공,술방debuff)●, 나무타기(회피)●,
 // 구토(독, 광역)●, 눈알찌르기(쪼기)●, 돌던지기(땅)●, 모래뿌리기(땅)●, 눈덩이던지기(수)●, 침뱉기(수, 광)●, 훔쳐먹기(회복,자신)●,
 // [반신욕(일본원숭이한정)]●,
 
@@ -1244,12 +1415,12 @@ export const skill = [
 // * 16코뿔소 - 코뿔소의 돌진하는 용맹(passive), 
 // 쪼기, 누르기,
 // 몸집 키우기(체력buff)●,
-// 거대한 뿔공격(쪼기)●, 폭풍 돌진(광역, 치기)●, 가벼운두방(광역,누르기)●, 발구르기(땅)●, 강한 몸통박치기(치기)●, 주변정리(물)●
+// 거대한 뿔공격(쪼기)●, 폭풍 돌진(광역, 치기)●, 가벼운두방(누르기)●, 발구르기(땅)●, 강한 몸통박치기(치기)●, 주변정리(물)●
 
 // * 17코끼리 - 코끼리의 무거운 한방(광역공격위주)(passive), 
 // 누르기, 던지기
 // 몸집 키우기(체력buff)●, 포효(속도 debuff)●, 
-// 맹렬한 돌진(광역,치기)●, 무거운한방(광역,누르기)●, 가벼운두방(광역,누르기)●, 발구르기(땅)●, 돌던지기(땅)●, 바위던지기(광역,땅)●, 물대포(광역,수)●, 강력한 몸통박치기(치기)●, 주변정리(물)●
+// 맹렬한 돌진(광역,치기)●, 무거운한방(광역,누르기)●, 가벼운두방(누르기)●, 발구르기(땅)●, 돌던지기(땅)●, 바위던지기(광역,땅)●, 물대포(광역,수)●, 강력한 몸통박치기(치기)●, 주변정리(물)●
 // 땅울림(땅,광), 
 
 // * 18기린 - 기린의 충실한 정찰력(passive), 밤샘경계(passive),
@@ -1259,7 +1430,7 @@ export const skill = [
 
 // * 19새 - 새의 청량한 노래(passive), 조류과(passive)
 // 쪼기, 물기
-// 비행(회피)●, 손톱&뿔 갈기(공buff)●, 
+// 비행(회피)●, 손톱&뿔 갈기(공buff)●, 나무뒤에 숨기●,
 // 낙석(땅)●, 날개치기(치기)●, 고공낙하(땅)●, 치유의 노래(회복)●, 부활의 노래(부활)●, 훔쳐먹기(회복,자신)●,
 	
 // * 20독수리 - 독수리의 영리한 전략(passive), 반격(passive), 조류과(passive)
@@ -1269,26 +1440,29 @@ export const skill = [
 
 // * 21뱀 - 뱀의 교활한 계략(passive), 파충류과(passive)
 // 물기
-// 독뿌리기(광역, 어둠)●, 감아쪼이기(누르기), 허물벗기(회복), 흡혈공격(물기), 삼키기(독, 단일)●, 
+// 탈피하기(공업, 방다운)●, 나무뒤에 숨기●, 바위뒤에 숨기●,
+// 독뿌리기(어둠)●, 헤드락(누르기)●, 흡혈공격(물기)●, 삼키기(어둠)●, 
 	
 // * 22도마뱀 - 도마뱀의 뛰어난 은둔술(passive), 파충류과(passive)
 // 물기, 할퀴기
-// 몸집 키우기(체력buff)●, 야행성(속도 condition)●,
-// 혓바닥공격(치기), 허물벗기(회복), 꼬리자르기(회피), 삼키기(독, 단일)●, 응원의 박수(빛,힐)●, 훔쳐먹기(회복,자신)●,
-// 위장술(카멜레온한정), 
+// 몸집 키우기(체력buff)●, 야행성(속도 condition)●, 탈피하기(공업, 방다운)●, 꼬리자르기(무적)●, 나무뒤에 숨기●, 바위뒤에 숨기●,
+// 혓바닥공격(치기)●, 삼키기(어둠)●, 응원의 박수(빛,힐)●, 훔쳐먹기(회복,자신)●,
+// [위장술(카멜레온한정)]●, 
 
 // * 23거북이 - 거북이의 강철 피부(passive), 파충류과(passive)
 // 물기,
-// 절단물기(물기), 튼튼한등껍질(방어), 방향틀기(대기상태, 회피증가)
+// 잠수(회피)●, 탈피하기(공업,방다운)●, 튼튼한등껍질(방어,마방)●, 
+// 파도공격(수)●, 물어뜯기(물기)●, 절단물기(물기)●, 날개치기(치기)●, 
 
 // * 24개구리 - 개구리의 신속한 점프력(passive), 개구리 뿔피리(passive), 파충류과(passive)
-// 치기
-// 뒷발차기(치기)●, 훔쳐먹기(회복,자신)●, 개구리 기우제(날씨변경), 음파공격(광역, 빛), 혓바닥공격(치기), 고드름던지기(수)●, 점프(회피), 물기(물기)
-// [청개구리 공격(한정)], [독뿌리기(암)(한정)], 
+// 치기, 물기
+// 점프(회피)●, 나무뒤에 숨기●, 바위뒤에 숨기●,
+// 뒷발차기(치기)●, 훔쳐먹기(회복,자신)●, 개구리 기우제(날씨)●, 음파공격(빛)●, 혓바닥공격(치기)●, 고드름던지기(수)●, 
+// [청개구리 공격(한정)]●, [독뿌리기(암)(한정)]●, 
 
 // * 25돼지 - 
 // 물기, 누르기,
-// 구토(독, 광역)●, 강한 몸통박치기(치기)●, 주변정리(땅)●, 주변정리(불)●, 주변정리(물)●
+// 구토(독)●, 강한 몸통박치기(치기)●, 주변정리(땅)●, 주변정리(불)●, 주변정리(물)●
 
 //베기
 //살점 분리(ㄴㄱ자(17),베기220), 십자 베기(십자(9),스턴,베기140), 두번 베기(베기80x2), 강하게 베기(베기130), 대지 가르기(가로일자(6),출혈,베기150), 발도(세로일자(7),출혈,베기200),
@@ -1319,92 +1493,86 @@ export const skill = [
 
 
 
-//군주
-//빛의 정령(9), 어둠의 정령(10), 언변(15), 연금술(20), 관찰력(22),
-//십자 베기, 두번 베기
+// 군주
+// 빛의 정령●, 어둠의 정령●, 언변●, 연금술●, 관찰력●,
+// 십자베기●, 엑스자베기●, 이단베기●, 철벽방어●,
 
-//마법사
-//물의 하수인(5), 불의 하수인(6), 바람의 하수인(7), 땅의 하수인(8), 물의 정령(11), 불의 정령(12), 바람의 정령(13), 땅의 정령(14), 언변(15), 아이템확인(x)
+// 마법사
+// 물의 하수인●, 불의 하수인●, 바람의 하수인●, 땅의 하수인●, 물의 정령●, 불의 정령●, 바람의 정령●, 땅의 정령●, 언변●, 아이템확인
+// 매직미사일(물)●, 매직미사일(불)●, 매직미사일(바람)●, 매직미사일(땅)●,
 
-//기사
-//땅의 정령(14)
+// 기사
+// 땅의 정령●, 마법방어●,
+// 반격
 
-//무사
-//불의 정령(12), 장비 전문(17),
-//대지 가르기, 발도, 살점분리
+// 무사
+// 불의 정령●, 장비 전문●,
+// 대지 가르기, 발도, 살점분리, 할복
 
-//학자
-//언변(15), 연금술(20), 관찰력(22), 아이템확인(x)
+// 학자
+// 언변●, 연금술●, 관찰력●, 아이템확인(x)
+// 매직미사일(얼음)●, 
+
+// 닌자
+// 어둠의 정령●
+// 두번베기●, 할복
+
+// 도술사
+// 빛의 하수인●, 어둠의 하수인●, 빛의 정령●, 어둠의 정령●, 연금술●, 아이템확인(x)
+// 매직미사일(빛)●, 매직미사일(어둠)●, 
+
+// 무희
+// 언변●, 관찰력●, 예술●, 
+// 유혹●
+
+// 도적
+// 언변●, 관찰력●,
+// 이단찌르기(찌르기)●, 이단사격(출혈)●,
+
+// 궁수
+// 관찰력●,
+// 얼음화살(물), 불화살(불), 이단사격(출혈)●, 삼단사격(출혈)●, 조준사격(즉사)●, 폭발사격(불)
+
+// 야만용사
+// 마꾸때리기(치기)●, 죽음의 일격●,
+
+// 상인
+// 언변●, 장비 전문●, 아이템확인
 //
 
-//닌자
-//어둠의 정령(10)
+// 한량
+// 바람의 정령●, 언변●, 보석 세공●
+// 마꾸때리기(치기)●
 
-//도술사
-//빛의 하수인(3), 어둠의 하수인(4), 빛의 정령(9), 어둠의 정령(10), 연금술(20), 아이템확인(x)
+// 장군
+// 물의 정령●, 관찰력●, 철벽방어●,
 //
 
-//무희
-//언변(15), 관찰력(22), 예술(23), 
-//
+// 농부
+// 장비 전문●, 식물 재배●
+// 마꾸때리기(치기)●, 죽창찌르기(쪼기), 수확(회복)
 
-//도적
-//언변(15), 관찰력(22),
-//이단찌르기(x), 
+// 의술사
+// 언변●, 관찰력●, 마법방어●, 아이템확인
+// 치료, 부활, 정화●,
 
-//궁수
-//관찰력(22),
-//이단사격(x, 출혈), 삼단사격(x, 출혈), 폭발사격(x, 출혈)
+// 기술자
+// 선박 전문●, 장비 전문●, 조각●, 연금술●, 보석 세공●, 예술●, 아이템확인
+// 마꾸때리기(치기)●, 
 
-//야만용사
-//
-
-//상인
-//언변(15), 장비 전문(17), 아이템확인(x)
-//
-
-//한량
-//바람의 정령(13), 언변(15), 보석 세공(21)
-//
-
-//장군
-//물의 정령(11), 관찰력(22),
-//
-
-//농부
-//장비 전문(17), 식물 재배(19)
-//
-
-//의술사
-//언변(15), 관찰력(22), 아이템확인(x)
-//
-
-//기술자
-//선박 전문(16), 장비 전문(17), 조각(18), 연금술(20), 보석 세공(21), 예술(23), 아이템확인(x)
-//
-
-//물기(일반), 물어뜯기(출혈), 절단물기(데미지 강력)
-//가시, 반격
-
-//물리: 두번 공격, 연속 공격, 무차별 공격, 세게 공격, xx펀치(속성), 기습 공격, 죽기살기, 방어, 철벽방어, 이동, 다구리,
+//물리: 연속 공격, 무차별 공격, 세게 공격, xx펀치(속성), 기습 공격, 죽기살기, 이동, 다구리,
 //불: 불바다, 불침, 불대포
 //물: 바다폭풍, 폭풍우, 물대포, 물안개
-//땅: 땅흔들기, 흙뿌리기, 모래대포, 미세먼지,
+//땅: 땅흔들기, 모래대포, 미세먼지,
 //바랑: 소풍, 중풍, 강풍, 대풍, 돌개바람, 바람대포, 
-//얼음: 고드름 화살, 눈덩이 던지기, 얼음대포
-//독: 손톱갈기, 눈감고 공격, 
+//얼음: 고드름 화살, 얼음대포
+//독: 눈감고 공격, 
 //번개: 자기장
 
-//사자: 물고버티기, 물어뜯기
 //수달: 조개던지기, 고함치기
-//점프, 노려보기, 짖기, 꼬리치기,
-
-
-
 
 //직업스킬
-//베기, 크게베기, 십자베기, 사선베기, 이단베기
-//
+//크게베기, 사선베기,
 
 export const mutateSkill = {
 	mutate0: [//고양이
