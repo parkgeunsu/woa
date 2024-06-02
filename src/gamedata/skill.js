@@ -268,8 +268,25 @@ export const skill = [
 		ta_:1,ta:[1,22,22,21,21],effAnimation:'hit1',buffAnimation:'slash0',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		eff:[{type:3,num:['200%','200%','220%','220%','240%']}],atkCount:[1],sp:[15,16,18,19,19]},
-	{},{},//50
-	{},{},{},{},{},{},{},{},{},{},//60
+	{idx:49,
+		na:{ko:'사선베기',en:'Diagonal Slash',jp:'代角削り'},element_type:2,cate:3,
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[10,10,10,10,10],effAnimation:'slash3',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'saturate(3)',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:3,num:['160%','170%','180%','190%','200%']}],atkCount:[1],sp:[13,14,15,16,16]},
+	{idx:50,
+		na:{ko:'역사선베기',en:'Reverse Diagonal Slash',jp:'歴代角削り'},element_type:2,cate:3,
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[11,11,11,11,11],effAnimation:'slash3',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:270,effFilter:'hue-rotate(180deg) saturate(3)',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:3,num:['160%','170%','180%','190%','200%']}],atkCount:[1],sp:[13,14,15,16,16]},
+	{idx:51,
+		na:{ko:'발도',en:'Batoijutsu',jp:'抜刀術'},element_type:2,cate:7,
+		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
+		ta_:1,ta:[60,4,4,5,5],effAnimation:'slash5',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'saturate(3)',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:3,num:['150%','160%','170%','180%','200%']}],buff:[{type:56,num:[]}],buffCount:[],buffChance:['5%','7%','9%','11%','13%'],atkCount:[1],sp:[15,16,17,18,18]},
+	{},{},{},{},{},{},{},{},{},//60
 	{},{},{},{},{},{},{},{},{},{},//70
 	{},{},{},{},{},{},{},{},{},{},//80
 	{},{},{},{},{},{},{},{},{},{},//90
@@ -1507,7 +1524,7 @@ export const skill = [
 
 // 무사
 // 불의 정령●, 장비 전문●,
-// 대지 가르기, 발도, 살점분리, 할복
+// 사선베기●, 역사선베기●, 대지 가르기, 발도●, 살점분리, 할복●
 
 // 학자
 // 언변●, 연금술●, 관찰력●, 아이템확인(x)
@@ -1515,7 +1532,7 @@ export const skill = [
 
 // 닌자
 // 어둠의 정령●
-// 두번베기●, 할복
+// 두번베기●, 할복●
 
 // 도술사
 // 빛의 하수인●, 어둠의 하수인●, 빛의 정령●, 어둠의 정령●, 연금술●, 아이템확인(x)
