@@ -7,12 +7,10 @@ import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import TabMenu from 'components/TabMenu';
 import 'css/ship.css';
-import iconCardName from 'images/card_name.png';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-const ShipWrap = styled.div`
-	background:url(${({backImg}) => backImg});background-size:cover;
+const Wrap = styled.div`
 `;
 const MenuButton = styled.button``;
 const ShipIcon = styled.span`
@@ -54,7 +52,6 @@ const WoodDeco = styled.div`
 	&:before, &:after, .bar1, .bar2{background:url(${({brick}) => brick});}
 `;
 const ShipName = styled.div`
-	background:url(${({iconCardName}) => iconCardName}) no-repeat center center;
 	background-size:100% 100%;
 `;
 const shipList = [
@@ -236,7 +233,7 @@ const Shipyard = ({
 	}, [cityIdx])
   return (
 		<>
-			<ShipWrap className="wrap" backImg={imgSet.back[2]} >
+			<Wrap className="wrap">
 				<TabMenu type="shipyard" list={shipList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" />
 				<div className={`ship_area`}>
 					<div className={`ship_top ${shipList[selectTab].na}`}>
@@ -375,7 +372,7 @@ const Shipyard = ({
 											<div className={`ship_display size${shipSize(shipD.shipIdx)} ship${shipD.shipIdx}`} key={`shipIdx${shipIdx}`} onClick={() => {
 												
 											}}>
-												<ShipName className="ship_name" iconCardName={iconCardName}>{shipD.resource.name}</ShipName>
+												<ShipName className="ship_name">{shipD.resource.name}</ShipName>
 												<div className="ship_moveX">
 													<div className="ship_moveY">
 														<svg className="ship_body" xmlns="http://www.w3.org/2000/svg" width="320px" height="600px" viewBox="0 0 320 600" dangerouslySetInnerHTML={{__html: util.setShipColor(gameData.shipSvg[shipD.shipIdx], imgSet.wood[shipD.wood] || imgSet.images.transparent, gameData.ships.woodColor[gameData.ships.wood[shipD.wood]?.woodColor ?? 4], Math.random().toString(36).substring(2, 11), [gameData.sailSvg[shipSail[0]], gameData.sailSvg[shipSail[1]], gameData.sailSvg[shipSail[2]]], [shipSailColor[0], shipSailColor[1], shipSailColor[2]], [gameData.cannonSvg[shipCannon[0]], gameData.cannonSvg[shipCannon[1]], gameData.cannonSvg[shipCannon[2]]])}}></svg>
@@ -621,7 +618,7 @@ const Shipyard = ({
 				{shipInfoOn && <div className="ship_info" onClick={() => {
 						setShipInfoOn(false);
 					}}>
-					<ShipContract className="ship_data" scroll={imgSet.back[6]} stamp={imgSet.back[7]}>
+					<ShipContract className="ship_data" scroll={imgSet.back.scroll} stamp={imgSet.back.stamp}>
 						<div className="ship_scroll">
 							<ul>
 								<li className="ship_buildName"><input type="text" value={shipInfo.name} maxLength="13" onClick={(e) => {
@@ -719,7 +716,7 @@ const Shipyard = ({
 						</div>
 					</ShipContract>
 				</div>}
-			</ShipWrap>
+			</Wrap>
 			<PopupContainer>
         {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
       </PopupContainer>

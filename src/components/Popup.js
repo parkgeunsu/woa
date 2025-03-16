@@ -5,6 +5,7 @@ import { ChPic, IconPic, ItemPic, MarkPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import PopupContainer from 'components/PopupContainer';
 import CharacterCard from 'pages/CharacterCard';
+import ChList from 'pages/ChList';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -16,6 +17,25 @@ const StyledIconPic = styled(IconPic)`
   width: 70%;
   height: 70%;
   z-index: 1;
+`;
+const ChUl = styled.ul`
+  .none_skill {
+    line-height: 1.5;
+    font-size: 1rem;
+  }
+`;
+const ChLi = styled.li`
+  display: inline-block;
+  position: relative;
+  margin: 0 4px 4px 0;
+  width: calc(25% - 5px);
+  padding-top: calc(32.5% - 5px);
+  border-radius: 10px;
+  overflow: hidden;
+  &.select {
+    outline: 2px solid #fff;
+    box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+  }
 `;
 const PopupRelation = styled.ul`
   margin: auto auto;
@@ -462,7 +482,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         </PopupItemList>
         <PopupItemList className="item_list item_typeSlot" type="animalCoin_slot">
           <div className="item_type">
-            <MarkPic length={saveItems.markNum} pic="animalType" idx={saveItems.mark} />
+            <MarkPic length={saveItems.markNum} pic="icon100" idx={saveItems.mark} />
           </div>
           <div className="item_slot">
             {saveItems.hole.map((holeData, idx) => {
@@ -620,7 +640,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         </PopupItemList>
         <PopupItemList className="item_list item_typeSlot" type="animalCoin_slot">
           <div className="item_type">
-            <MarkPic length={saveItems.markNum} pic="animalType" idx={saveItems.mark} />
+            <MarkPic length={saveItems.markNum} pic="icon100" idx={saveItems.mark} />
           </div>
           <div className="item_slot">
             {saveItems.hole.map((holeData, idx) => {
@@ -1375,8 +1395,8 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             </ul>}
           </div>
         </div>
-        <div className="ch_list scroll-y action_list">
-          <ul>
+        <ChList type="action_list">
+          <ChUl>
           {chData.map((data, idx) => {
             const saveCh = saveData.ch[idx];
             let hasSkill = false;
@@ -1390,18 +1410,18 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             if (hasSkill) {
               possibleCh ++;
               return (
-                <li className={`g${saveCh.grade} ${dataObj.selectIdx === idx ? 'select' : ''}`} key={idx} onClick={(e) => {
+                <ChLi className={`g${saveCh.grade} ${dataObj.selectIdx === idx ? 'select' : ''}`} key={idx} onClick={(e) => {
                   e.stopPropagation();
                   dataObj.setSelectIdx(idx);
                 }}>
                   <CharacterCard usedType="popup" saveData={saveData} saveCharacter={saveCh} />
-                </li>
+                </ChLi>
               )
             }
           })}
-          </ul>
+          </ChUl>
           {possibleCh === 0 && <div className="none_skill">{gameData.msg.sentenceFn.noneHaveSkill(lang, gameData.skill[skillIdx].na)}</div>}
-        </div>
+        </ChList>
         <div className="item_button" flex="true">
           <button className="button_big" text="true" onClick={(e) => {
             e.stopPropagation();

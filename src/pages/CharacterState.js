@@ -144,7 +144,6 @@ const ElementIcon = styled.div`
   ${({actionPossibleElement}) => actionPossibleElement ? `
     width: 32px;
     height: 32px;
-    animation: horizontalMove infinite alternate 1s ease-in-out;
   ` : `
     width: 24px;
     height: 24px;

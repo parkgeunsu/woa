@@ -13,8 +13,7 @@ import 'css/combineItem.css';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-const CombineWrap = styled.div`
-	background:url(${({backImg}) => backImg});background-size:cover;
+const Wrap = styled.div`
 `;
 
 const combineList = [
@@ -129,7 +128,7 @@ const Composite = ({
 	}, [saveData]);
   return (
 		<>
-			<CombineWrap className="wrap" backImg={imgSet.back[2]} >
+			<Wrap className="wrap">
 				<div className="combineItem_top">
 					<div className="action_select has_button">
 						{Object.keys(actionCh).length !== 0 && (<div ref={actionRef} className={`ch_select_area ${actionCh.idx ? 'g' + saveData.ch[actionCh.idx].grade : ''}`} onClick={() => {
@@ -450,7 +449,7 @@ const Composite = ({
 						})}
 					</div>
 				</div>
-			</CombineWrap>
+			</Wrap>
 			<PopupContainer>
         {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
       </PopupContainer>

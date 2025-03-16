@@ -1,4 +1,5 @@
 import { FlexBox } from 'components/Container';
+import { ChPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import { ColorSet, FontSet } from 'components/Theme';
 import 'css/keyFrameAnimation.css';
@@ -40,37 +41,45 @@ const Wrapper = styled.div`
   display: flex;
   height: 100%;
   flex-direction: column;
-  background: url(${({page, imgSet}) => {
-    switch(page) {
-      case '':
-        return imgSet[2];
-      case 'start':
-        return imgSet[1];
-      case 'setup':
-        return imgSet[2];
-      case 'gameMain':
-        return imgSet[0];
-      case 'cards':
-      case 'cardsList':
-        return imgSet[0];
-      case 'inven':
-        return imgSet[2];
-      case 'cardPlacement':
-        return imgSet[1];
-      case 'moveEvent':
-        return imgSet[3];
-      case 'recruitment':
-      default:
-        return ``;
-    }
-  }}) no-repeat center center;
-  background-size: cover;
+  background: #000;
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    ${({location}) => location === "" ? `background: linear-gradient(#000, rgba(0,0,0,0), #000);` : ''}
+  }
+`;
+const CountryBackground = styled(ChPic)`
+  margin: auto;
+  padding-top: 175%;
+  width: 100%;
+  height: 0;
+`;
+const BackgroundShadow = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  opacity: 0.5;
+  background: #000;
+  z-index: 1;
 `;
 const ContentContainer = styled(FlexBox)`
-  position: relative;
-  flex: 1;
-  height: 100%;
+  position: absolute;
+  width: 100%;
+  ${({location}) => location === "recruitment" || location === "battle" ? `
+    top: 0px;
+    height: 100%;
+  ` : `
+    top: 50px;
+    height: calc(100% - 50px);
+  `};
   overflow: hidden;
+  z-index: 2;
   .skillEffect {
     position:absolute;left:0;top:0;right:0;bottom:0;z-index:10;pointer-events:none;
     .skillName{
@@ -196,6 +205,7 @@ const App = ({
   const [gameMode, setGameMode] = useState('');
   const slotIdx = 'all';
   const [cityIdx] = useState(0); //setCityIdx
+  const [showDim, setShowDim] = useState(false);
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
@@ -203,7 +213,7 @@ const App = ({
     color: ColorSet,
     font: FontSet,
   }
-  const [conTextData, setConTextData] = useState({
+  const [contextData, setContextData] = useState({
     images: loadData,
     gameData: {
       ...gameData,
@@ -217,6 +227,100 @@ const App = ({
       speed: 1,
     }
   });
+  const setBack = (location) => {
+    switch(location) {
+      case "cardsList":
+      case "cards":
+        return {
+          pic: "areaBack",
+          idx: 0
+        };
+      case "inven":
+        return {
+          pic: "areaBack",
+          idx: 1
+        };
+      case "cardPlacement":
+        return {
+          pic: "areaBack",
+          idx: 2
+        };
+      case "enhancingCards":
+        return {
+          pic: "areaBack",
+          idx: 3
+        };
+      case "enhancingStickers":
+        return {
+          pic: "areaBack",
+          idx: 4
+        };
+      case "composite":
+        return {
+          pic: "areaBack",
+          idx: 5
+        };
+      case "shop":
+        return {
+          pic: "areaBack",
+          idx: 6
+        };
+      case "tool":
+        return {
+          pic: "areaBack",
+          idx: 7
+        };
+      case "trade":
+        return {
+          pic: "areaBack",
+          idx: 8
+        };
+      case "ship":
+        return {
+          pic: "areaBack",
+          idx: 9
+        };
+      case "prison":
+        return {
+          pic: "areaBack",
+          idx: 10
+        };
+      case "post":
+        return {
+          pic: "areaBack",
+          idx: 12
+        };
+      case "secretShop":
+        return {
+          pic: "areaBack",
+          idx: 13
+        };
+      case "battleWin":
+        return {
+          pic: "areaBack",
+          idx: 16
+        };
+      case "battleLose":
+        return {
+          pic: "areaBack",
+          idx: 17
+        };
+      case "sail":
+        return {
+          pic: "areaBack",
+          idx: 18
+        };
+      case "gameMain":
+      case "message":
+      case "setup":
+        return {
+          pic:"country",
+          idx:location === "" ? Math.floor(Math.random() * 28) : util.getCountryToIdx(saveData?.info?.stay)
+        };
+      default:
+        return "";
+    }
+  }
   const changeSaveData = (objData) => {
     setSaveData(objData);
     util.saveData('saveData', objData);
@@ -225,55 +329,55 @@ const App = ({
     const setting = util.loadData('setting');
     setting.lang = data;
     util.saveData('setting', setting);
-    const cloneConTextData = {...conTextData};
-    cloneConTextData.setting.lang = data;
-    setConTextData(cloneConTextData);
+    const cloneContextData = {...contextData};
+    cloneContextData.setting.lang = data;
+    setContextData(cloneContextData);
   }
   const setSpeed = (data) => {
     const setting = util.loadData('setting');
     setting.speed = data;
     util.saveData('setting', setting);
-    let cloneConTextData = {...conTextData};
-    cloneConTextData.setting.speed = data;
-    setConTextData(cloneConTextData);
+    let cloneContextData = {...contextData};
+    cloneContextData.setting.speed = data;
+    setContextData(cloneContextData);
   }
   const setBgm = (data) => {
     const setting = util.loadData('setting');
     setting.bgm = data;
     util.saveData('setting', setting);
-    let cloneConTextData = {...conTextData};
-    cloneConTextData.setting.bgm = data;
-    setConTextData(cloneConTextData);
+    let cloneContextData = {...contextData};
+    cloneContextData.setting.bgm = data;
+    setContextData(cloneContextData);
   }
   const setEfm = (data) => {
     const setting = util.loadData('setting');
     setting.efm = data;
     util.saveData('setting', setting);
-    let cloneConTextData = {...conTextData};
-    cloneConTextData.setting.efm = data;
-    setConTextData(cloneConTextData);
+    let cloneContextData = {...contextData};
+    cloneContextData.setting.efm = data;
+    setContextData(cloneContextData);
   }
   const setResolution = (data) => {
     const setting = util.loadData('setting');
     setting.resolution = data;
     util.saveData('setting', setting);
-    let cloneConTextData = {...conTextData};
-    cloneConTextData.setting.resolution = data;
-    setConTextData(cloneConTextData);
+    let cloneContextData = {...contextData};
+    cloneContextData.setting.resolution = data;
+    setContextData(cloneContextData);
   }
   const setBge = (data) => {
     const setting = util.loadData('setting');
     setting.bgm = data;
     util.saveData('setting', setting);
-    let cloneConTextData = {...conTextData};
-    cloneConTextData.setting.bge = data;
-    setConTextData(cloneConTextData);
+    let cloneContextData = {...contextData};
+    cloneContextData.setting.bge = data;
+    setContextData(cloneContextData);
   }
   // useEffect(() => {
   //   setCityData(city(gameData.city.port));
   // }, [cityIdx]);
   useEffect(() => {
-    // setConTextData();
+    // setContextData();
     const storageVer = util.loadData('version'),
       continueGame = util.loadData('continueGame');
     let useSaveData = {}
@@ -282,7 +386,7 @@ const App = ({
         navigate('../');
       }
       //save 는 가상데이터
-      saveNew.city = setCity(gameData.city.port, conTextData.setting.lang);
+      saveNew.city = setCity(gameData.city.port, contextData.setting.lang);
       useSaveData = saveNew;
       util.saveData('saveData', saveNew);
       util.saveData('version', version);
@@ -304,9 +408,9 @@ const App = ({
         useSaveData = util.loadData("saveData");
       }
       const setting = util.loadData('setting');
-      let cloneConTextData = {...conTextData};
-      cloneConTextData.setting = setting;
-      setConTextData(cloneConTextData);
+      let cloneContextData = {...contextData};
+      cloneContextData.setting = setting;
+      setContextData(cloneContextData);
       setSaveData(() => {
         if (useSaveData.ch[0].bSt0) { //캐릭 전투능력치 설정이 안되어 있을 경우
           util.saveData('saveData', useSaveData);
@@ -339,9 +443,10 @@ const App = ({
       localStorage.setItem('closeTime', new Date());
     }
   }, []);
+  console.log(location);
   return (
     <ThemeProvider theme={theme}>
-      <RootContainer value={conTextData}>
+      <RootContainer value={contextData}>
         <svg style={{position:"absolute",width:0,height:0,visibility:"hidden"}}xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100">
           <radialGradient id="radial_rainbow" cx="43.5693" cy="42.9141" r="43.8667" gradientUnits="userSpaceOnUse">
             <stop offset="0" style={{"stopColor":"#FF0000"}}/>
@@ -371,11 +476,13 @@ const App = ({
             <stop offset="1" style={{"stopColor":"#000000"}}/>
           </linearGradient>
         </svg>
-        <Wrapper page={location} imgSet={conTextData?.images.back} className={`root ${location}`}>
+        <Wrapper location={location} className={`root ${location}`}>
           {location !== "battle" && location !== "" && location !== "main" && location !== "start" && (location !== "recruitment" && !paramData?.start?.begin) && location.indexOf('test') < 0 && (
             <Header saveData={saveData} />
           )}
-          <ContentContainer direction="column" className="content">
+          <CountryBackground {...setBack(location)} />
+          {showDim && (location === "gameMain" || location === "setup" || location === "chat") && <BackgroundShadow />}
+          <ContentContainer location={location} direction="column" className="content">
             <Routes>
               <Route path="/" element={<Menu type="new" />} />
 
@@ -383,7 +490,7 @@ const App = ({
 
               <Route path="/setup" element={<Setup setLang={setLang} setSpeed={setSpeed} setBgm={setBgm} setEfm={setEfm} setRes={setResolution} setBge={setBge} />} />
 
-              <Route path="/gameMain" element={<GameMain saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} gameMode={gameMode} setGameMode={setGameMode} />} />
+              <Route path="/gameMain" element={<GameMain saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} gameMode={gameMode} setGameMode={setGameMode} showDim={showDim} setShowDim={setShowDim} />} />
 
               <Route path="/cardsList" element={<CharacterList saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 

@@ -1,7 +1,8 @@
 import { AppContext } from 'App';
+import { Text } from 'components/Atom';
 import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -12,53 +13,57 @@ const QuickMenuBox = styled.div`
   position: absolute;
   top: 0;
   z-index: 100;
-  ${({showMenu, gameMode, type}) => {
+  ${({showDim, gameMode, type}) => {
     if (type === 'move') {
       return `
-        left: ${showMenu ? 0 : -50}px;
+        left: ${showDim ? 0 : -50}px;
       `;
     } else {
       return `
-        left: ${gameMode !== '' ? -90 : showMenu ? 0 : -50}px;
+        left: ${gameMode !== '' ? -90 : showDim ? 0 : -50}px;
         opacity: ${gameMode !== '' ? 0.5 : 1};
         pointer-events: ${gameMode !== '' ? 'none' : 'unset'};
       `;
     }
   }}
-  & > * {
-    ${({showMenu}) => {
-      return showMenu ? `box-shadow: 3px 3px 5px #000` : '';
-    }};
-  }
 `;
 const QuickMenuTitle = styled.div`
   display: flex;
   align-items: start;
   justify-content: center;
-  padding: 20px 0 20px 7px;
-  width: 40px;
+  padding: 10px 0 10px 7px;
+  width: 30px;
   box-sizing: border-box;
   writing-mode: vertical-lr;
   text-orientation: upright;
-  background: ${({theme}) => theme.color.menu};
-  font-size: ${({theme}) => theme.font.t4};
-  border-radius: 0 20px 20px 0;
+  font-size: ${({theme}) => theme.font.t3};
   transition: all .3s;
 `;
 const QuickMenuBody = styled.ul`
   padding: 10px 0;
-  background: ${({theme}) => theme.color.menu};
-  border-radius: 0 0 20px 0;
   transition: all .3s;
   li {
+    margin: 0 0 5px 0;
     width: 50px;
-    height: 50px;
+    text-align: center;
+    font-size: 0;
+    .pic {
+      width: 40px;
+      height: 40px;
+      font-size :0;
+    }
+    .text {
+      line-height: 1;
+      color: ${({theme}) => theme.color.main};
+    }
   }
 `;
 
 const QuickMenu = ({
   type,
   gameMode,
+  showDim,
+  setShowDim,
 }) => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
@@ -71,10 +76,9 @@ const QuickMenu = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const [showMenu, setShowMenu] = useState(false);
-  return <QuickMenuBox showMenu={showMenu} type={type} gameMode={gameMode} className="transition">
+  return <QuickMenuBox showDim={showDim} type={type} gameMode={gameMode} className="transition">
     <QuickMenuTitle onClick={() => {
-      setShowMenu(prev => !prev);
+      setShowDim(prev => !prev);
     }}>{gameData.msg.button['menu'][lang]}</QuickMenuTitle>
     <QuickMenuBody>
       <li><IconPic type="quickMenu" pic="icon100" idx={0} onClick={() => {
@@ -91,7 +95,7 @@ const QuickMenu = ({
         //   const dd = cc.concat(cc);
         //   sData.ch = dd;
         //   changeSaveData(sData);
-      }}>{gameData.msg.button['cards'][lang]}</IconPic></li>
+      }}/><Text className="text">{gameData.msg.button['cards'][lang]}</Text></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={1} onClick={() => {
         util.saveHistory({
           location: 'inven',
@@ -99,7 +103,7 @@ const QuickMenu = ({
           callback: () => {},
           isNavigate: true,
         });//히스토리 저장
-      }}>{gameData.msg.button['inven'][lang]}</IconPic></li>
+      }}/><Text className="text">{gameData.msg.button['inven'][lang]}</Text></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={2} onClick={() => {
         util.saveHistory({
           location: 'cardPlacement',
@@ -107,7 +111,7 @@ const QuickMenu = ({
           callback: () => {},
           isNavigate: true,
         });//히스토리 저장
-      }}>{gameData.msg.button['cardPlacement'][lang]}</IconPic></li>
+      }}/><Text className="text">{gameData.msg.button['cardPlacement'][lang]}</Text></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={3} onClick={() => {
         util.saveHistory({
           location: 'enhancingCards',
@@ -115,7 +119,7 @@ const QuickMenu = ({
           callback: () => {},
           isNavigate: true,
         });//히스토리 저장
-      }}>{gameData.msg.button['enhancingCards'][lang]}</IconPic></li>
+      }}/><Text className="text">{gameData.msg.button['enhancingCards'][lang]}</Text></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={4} onClick={() => {
         util.saveHistory({
           location: 'enhancingStickers',
@@ -123,7 +127,7 @@ const QuickMenu = ({
           callback: () => {},
           isNavigate: true,
         });//히스토리 저장
-      }}>{gameData.msg.button['enhancingStickers'][lang]}</IconPic></li>
+      }}/><Text className="text">{gameData.msg.button['enhancingStickers'][lang]}</Text></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={5} onClick={() => {
         util.saveHistory({
           location: 'composite',
@@ -131,9 +135,9 @@ const QuickMenu = ({
           callback: () => {},
           isNavigate: true,
         });//히스토리 저장
-      }}>{gameData.msg.button['composite'][lang]}</IconPic></li>
+      }}/><Text className="text">{gameData.msg.button['composite'][lang]}</Text></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={6} onClick={() => {
-      }}>{gameData.msg.button['chat'][lang]}</IconPic></li>
+      }}/><Text className="text">{gameData.msg.button['chat'][lang]}</Text></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={7} onClick={() => {
         util.saveHistory({
           location: 'setup',
@@ -141,7 +145,7 @@ const QuickMenu = ({
           callback: () => {},
           isNavigate: true,
         });//히스토리 저장
-      }}>{gameData.msg.button['setup'][lang]}</IconPic></li>
+      }}/><Text className="text">{gameData.msg.button['setup'][lang]}</Text></li>
     </QuickMenuBody>
   </QuickMenuBox>
 }

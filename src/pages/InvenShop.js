@@ -18,41 +18,127 @@ import styled from 'styled-components';
 const ShopWrap = styled.div`
 `;
 const ShopTop = styled.div`
-	display: flex;
-	margin: 0 0 10px 0;
-	height: calc(50% - 10px);
-	padding: 0 20px;
-	flex-grow: 1;
-`;
-const ShopTopLeft = styled.div`
 	position: relative;
-	width: 30%;
+	padding: 0 20px;
+	width: 100%;
+	box-sizing: border-box;
 `;
 const ShopScrollContent = styled.div`
 	position: relative;
-	padding: 5px;
+	padding: 0 20px;
 	flex-wrap: wrap;
-	width: 70%;
-	height: 100%;
+	width: 100%;
+	height: calc(100% - 90px);
 	border-radius: 0 10px 10px 10px;
-	background: rgba(0,0,0,.5);
 	box-sizing: border-box;
 `;
-const ShopBottom = styled.div`
-	display: flex;
-	padding: 0 20px;
-	height: 50%;
+const ShopPopup = styled.div`
+	position: absolute;
+	left: 20px;
+	right: 20px;
+	bottom: 50px;
+	z-index: 3;
+`;
+const ActionCh = styled.div`
+	position: absolute;
+  bottom: 0;
+	right: 0;
+  width: 100px;
+  padding-top: 148px;
+  border: 5px double #00a90c;
+  box-sizing: border-box;
+  white-space: nowrap;
+  background: rgb(0, 0, 0, 0.5);
+  border-radius: 15px;
+  z-index: 3;
+	&.g1 {
+		box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+	}
+	&.g2 {
+		box-shadow: 0 0 10px #00a90c, 0 0 20px #00a90c;
+	}
+	&.g3 {
+		box-shadow: 0 0 10px #0090ff, 0 0 20px #0090ff;
+	}
+	&.g4 {
+		box-shadow: 0 0 10px #f4ea19, 0 0 20px #f4ea19;
+	}
+	&.g5 {
+		box-shadow: 0 0 10px #a800ff, 0 0 20px #a800ff;
+	}
+	&.g6 {
+		box-shadow: 0 0 10px #ff8000, 0 0 20px #ff8000;
+	}
+	&.g7 {
+		box-shadow: 0 0 10px #ff2a00, 0 0 20px #ff2a00;
+	}
+	.action_ch {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		border-radius: 10px;
+		overflow: hidden;
+		span {
+			display: block;
+		}
+		&.g1 {
+			background-color: #fff;
+			&.on {
+				box-shadow: 0 0 10px #fff, 0 0 6px #fff, 0 0 3px #fff;
+			}
+		}
+		&.g2 {
+			background-color: #00a90c;
+			&.on {
+				box-shadow: 0 0 10px #00a90c, 0 0 6px #00a90c, 0 0 3px #00a90c;
+			}
+		}
+		&.g3 {
+			background-color: #0090ff;
+			&.on {
+				box-shadow: 0 0 10px #0090ff, 0 0 6px #0090ff, 0 0 3px #0090ff;
+			}
+		}
+		&.g4 {
+			background-color: #a800ff;
+			&.on {
+				box-shadow: 0 0 10px #a800ff, 0 0 6px #a800ff, 0 0 3px #a800ff;
+			}
+		}
+		&.g5 {
+			background-color: #f4ea19;
+			&.on {
+				box-shadow: 0 0 10px #f4ea19, 0 0 6px #f4ea19, 0 0 3px #f4ea19;
+			}
+		}
+		&.g6 {
+			background-color: #ff2a00;
+			&.on {
+				box-shadow: 0 0 10px #ff2a00, 0 0 6px #ff2a00, 0 0 3px #ff2a00;
+			}
+		}
+		&.g7 {
+			background-color: #ff8000;
+			&.on {
+				box-shadow: 0 0 10px #ff8000, 0 0 6px #ff8000, 0 0 3px #ff8000;
+			}
+		}
+		&.on {
+			transform: scale(1.2) translate(0, 6%);
+			z-index: 1;
+		}
+		/* &.none:before{display:block;position:absolute;left:50%;top:50%;content:'';width:5px;height:50%;background:#ff2a00;transform:translate(-50%,-50%) rotate(-30deg);}
+		&.none:after{display:block;position:absolute;left:50%;top:50%;content:'';width:5px;height:50%;background:#ff2a00;transform:translate(-50%,-50%) rotate(30deg);} */
+	}
 `;
 const ItemContainer = styled.ul`
 	display: flex;
-	${({itemSelect}) => itemSelect === 'select1' ? `
-		border: 3px double #ffac2f;
-	` : `
-		margin: 0 0 0 5px;
-		border: 3px double #e14040;
-	`}
+	border: 3px double ${({color}) => color};
 	flex-direction: column;
-	width: 50%;
+	width: 100%;
+	height: 50%;
 	background: rgba(0,0,0,.7);
   border-image: url(${({frameBack}) => frameBack}) 5 round;
 	& > div {
@@ -65,8 +151,8 @@ const ItemContainer = styled.ul`
 	}
 	.item {
 		position: relative;
-		width: 50px;
-		height: 50px;
+		width: 80px;
+		height: 80px;
 	}
 	.item:after {
 		content: '';
@@ -112,11 +198,7 @@ const ItemFix = styled.li`
 	display: flex;
 	position: relative;
 	padding: 5px;
-	${({itemSelect}) => itemSelect === 'select1' ? `
-		border-bottom: 1px solid #ffac2f;
-	` : `
-		border-bottom: 1px solid #e14040;
-	`}
+	border-bottom: ${({color}) => color};
 `;
 const ItemCont = styled.div`
 	display: flex;
@@ -192,18 +274,20 @@ const ItemList = styled.li`
 	.item_effs .total{flex:1;text-align:right;font-size:0.938rem;color:#fff;}
 	.item_slot{display:flex;margin:5px 0 0 0;align-items:center;}
 	.item_slot .item_holes{margin:0 0 5px 0;}
-	.item_slot .item_holes .item_holeback{display:inline-block;background-image:radial-gradient(at 50%, #000 30%, #888 100%);border-radius:30px;width:24px;height:24px;text-align:center;}
+	.item_slot .item_holes .item_holeback {
+		display:inline-block;background-image:radial-gradient(at 50%, #000 30%, #888 100%);
+		border-radius: 20px;
+		width: 40px;
+		height: 40px;
+		text-align:center;
+	}
 	.item_slot .item_holes.fixed .item_holeback{background:rgba(255,172,47,.7);}
 	.item_slot .item_holes img{margin:2px 0 0 0;width:20px;height:20px;vertical-align:middle;}
 	.item_setNa{margin:0 0 10px 0;color:#0f0;font-size:0.875rem;}
 `;
 const ItemFooter = styled.li`
 	padding: 5px;
-	${({itemSelect}) => itemSelect === 'select1' ? `
-		border-top: 1px solid #ffac2f;
-	` : `
-		border-top: 1px solid #e14040;
-	`}
+	botder-top: ${({color}) => color};
 	.item_price {
 		margin: 0 0 5px 0;
 	}
@@ -219,10 +303,33 @@ const ItemFooter = styled.li`
 		vertical-align: middle;
 	}
 `;
+const  SelectItemGroup = styled.div`
+	position: absolute;
+	left: 20px;
+	right: 20px;
+	bottom: 15px;
+	ul {
+		display: flex;
+	}
+`;
+const  SelectItemList = styled.li`
+	margin: 0 10px 0 0;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	box-sizing: border-box;
+	${({select, color}) => {
+		return select ? `
+			outline: 3px solid ${color};
+		` : `
+			background: ${color};
+		`;
+	}}
+`;
 const ShopItem = styled.div`
 	position: absolute;
-	left: 0;
-	right: 0;
+	left: 20px;
+	right: 20px;
 	top: 0;
 	bottom: 0;
 	${({selected}) => selected ? `
@@ -253,6 +360,8 @@ const buttonType = (button, itemData) => {
 }
 const ShopFooter = ({
 	selectItem,
+	selectItemArr,
+	selectItemNum,
 	setSelectItem,
 	selectSlot,
 	shopType,
@@ -282,7 +391,7 @@ const ShopFooter = ({
   const gameItem = React.useMemo(() => {
     return gameData.items;
   }, [gameData]);
-	const selectedItem = React.useMemo(() => selectItem, [selectItem]);
+	const selectedItem = React.useMemo(() => selectItem[selectItemNum], [selectItem, selectItemNum]);
 	const timeoutRef = useRef(null); //timeout
   const handlePopup = useCallback((saveObj) => {
 		const {saveItemData, itemType, itemIdx} = saveObj;
@@ -309,8 +418,8 @@ const ShopFooter = ({
 				<ItemHeader frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[selectedItem.saveItemData.grade]} flex-center="true">
 					<span className="item_name" dangerouslySetInnerHTML={{__html: `${selectedItem.saveItemData.colorantSet ? util.getColorant(selectedItem.saveItemData.colorantSet, gameData).na[lang] : ''} ${selectedItem.saveItemData.modifier[lang]} ${selectedItem.gameItem.na[lang]}`}}></span>
 				</ItemHeader>
-				<ItemFix itemSelect="select2">
-					<ItemGradeColor part={selectedItem.gameItem.part} grade={gameData.itemGrade.txt_e[selectedItem.saveItemData.grade].toLowerCase()} sealed={selectedItem.saveItemData.sealed} size="50" onClick={() => {
+				<ItemFix color="select2">
+					<ItemGradeColor part={selectedItem.gameItem.part} grade={gameData.itemGrade.txt_e[selectedItem.saveItemData.grade].toLowerCase()} sealed={selectedItem.saveItemData.sealed} size="80" onClick={() => {
 						if (shopType === 'shop') {
 							handlePopup({
 								saveItemData: selectedItem.saveItemData,
@@ -342,7 +451,7 @@ const ShopFooter = ({
 				<div className="scroll-y">
 					{(selectedItem.saveItemData.markNum > 0 || selectedItem.saveItemData.hole.length > 0) && <ItemList type="typeSlot" className="item_list">
 						<div className="item_type">
-							<MarkPic length={selectedItem.saveItemData.markNum} pic="animalType" idx={selectedItem.saveItemData.mark} />
+							<MarkPic length={selectedItem.saveItemData.markNum} pic="icon100" idx={selectedItem.saveItemData.mark} />
 						</div>
 						<div className="item_slot">
 							{selectedItem.saveItemData.hole.map((holeData, idx) => {
@@ -426,8 +535,8 @@ const ShopFooter = ({
 				<ItemHeader frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[selectedItem.saveItemData.grade]} flex-center="true">
 					<span className="item_name" dangerouslySetInnerHTML={{__html: `${selectedItem.gameItem.na[lang]}`}}></span>
 				</ItemHeader>
-				<ItemFix itemSelect="select1">
-					<ItemGradeColor grade={gameData.itemGrade.txt_e[selectedItem.saveItemData.grade || selectedItem.gameItem.grade].toLowerCase()} size="50" onClick={() => {
+				<ItemFix color="select1">
+					<ItemGradeColor grade={gameData.itemGrade.txt_e[selectedItem.saveItemData.grade || selectedItem.gameItem.grade].toLowerCase()} size="80" onClick={() => {
 						handlePopup({
 							saveItemData: selectedItem.saveItemData,
 							itemType: 'hole',
@@ -465,8 +574,8 @@ const ShopFooter = ({
 				<ItemHeader frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[selectedItem.saveItemData.grade]} flex-center="true">
 					<span className="item_name" dangerouslySetInnerHTML={{__html: `${selectedItem.gameItem.na[lang]}`}}></span>
 				</ItemHeader>
-				<ItemFix itemSelect="select1">
-					<ItemGradeColor grade={gameData.itemGrade.txt_e[selectedItem.saveItemData.grade || selectedItem.gameItem.grade].toLowerCase()} size="50" onClick={() => {
+				<ItemFix color="select1">
+					<ItemGradeColor grade={gameData.itemGrade.txt_e[selectedItem.saveItemData.grade || selectedItem.gameItem.grade].toLowerCase()} size="80" onClick={() => {
 						handlePopup({
 							saveItemData: selectedItem.saveItemData,
 							itemType: selectedItem.itemCate,
@@ -494,7 +603,7 @@ const ShopFooter = ({
 				</div>
 			</>
 		)}
-		<ItemFooter itemSelect="select1">
+		<ItemFooter color={selectItemArr[selectItemNum]}>
 			<div className="item_price">
 				{selectedItem.buttonType[0] === 'buy' ? <>
 					<span>{gameData.msg.itemInfo.buyPrice[lang]}</span>
@@ -546,7 +655,16 @@ const ShopFooter = ({
 											showPopup: setPopupOn,
 											lang: lang,
 										});
-										setSelectItem({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
+										const cloneSelectItem = [...selectItem];
+										cloneSelectItem[selectItemNum] = {
+											saveItemData: {},
+											gameItem: {},
+											itemSaveSlot: '',
+											selectTab: '',
+											itemCate: '',
+											buttonType: [],
+										}
+										setSelectItem(cloneSelectItem);
 										// } else {
 										// 	setMsgOn(true);
 										// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
@@ -622,7 +740,16 @@ const ShopFooter = ({
 												showPopup: setPopupOn,
 												lang: lang,
 											});
-											setSelectItem({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
+											const cloneSelectItem = [...selectItem];
+											cloneSelectItem[selectItemNum] = {
+												saveItemData: {},
+												gameItem: {},
+												itemSaveSlot: '',
+												selectTab: '',
+												itemCate: '',
+												buttonType: [],
+											}
+											setSelectItem(cloneSelectItem);
 										// } else {
 										// 	setMsgOn(true);
 										// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
@@ -685,7 +812,16 @@ const ShopFooter = ({
 														isNavigate: true,
 													});
 												} else {
-													setSelectItem({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
+													const cloneSelectItem = [...selectItem];
+													cloneSelectItem[selectItemNum] = {
+														saveItemData: {},
+														gameItem: {},
+														itemSaveSlot: '',
+														selectTab: '',
+														itemCate: '',
+														buttonType: [],
+													}
+													setSelectItem(cloneSelectItem);
 												}
 											});
 											// } else {
@@ -1088,7 +1224,16 @@ const ShopFooter = ({
 									showPopup: setPopupOn,
 									lang: lang,
 								});
-								setSelectItem({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
+								const cloneSelectItem = [...selectItem];
+								cloneSelectItem[selectItemNum] = {
+									saveItemData: {},
+									gameItem: {},
+									itemSaveSlot: '',
+									selectTab: '',
+									itemCate: '',
+									buttonType: [],
+								}
+								setSelectItem(cloneSelectItem);
 							}} data-buttontype="itemUse" />
 						)
 					default:
@@ -1205,24 +1350,35 @@ const ShopList = ({
 	invenIdx,
 	selectTab,
 	gameItem,
-	selectItem1,
-	setSelectItem1,
-	selectItem2,
-	setSelectItem2,
-	selectArea,
+	selectItem,
+	selectItemNum,
+	setSelectItem,
+	setItemPopup,
 }) => {
+	const selectColor = (idx) => {
+		let colorNum = '';
+		selectItem.forEach((selectedItem, selectedIdx) => {
+			if (typeof invenIdx === 'number' ? 
+				selectedItem?.itemCate === invenNa[invenIdx] && selectedItem?.selectTab === selectTab && selectedItem?.itemSaveSlot === idx : 
+				selectedItem?.selectTab === selectTab && selectedItem?.itemSaveSlot === idx) {
+				colorNum = selectedIdx;
+			}
+		});
+		return colorNum;
+	}
 	return <>
 		{list.map((itemData, idx) => {
-			const selectedItem1 = typeof invenIdx === 'number' ? selectItem1?.itemCate === invenNa[invenIdx] && selectItem1?.selectTab === selectTab && selectItem1?.itemSaveSlot === idx : selectItem1?.selectTab === selectTab && selectItem1?.itemSaveSlot === idx,
-				selectedItem2 = typeof invenIdx === 'number' ? selectItem2?.itemCate === invenNa[invenIdx] && selectItem2?.selectTab === selectTab && selectItem2?.itemSaveSlot === idx : selectItem2?.selectTab === selectTab && selectItem2?.itemSaveSlot === idx;
+			const selectColor_ = selectColor(idx);
 			if (typeof itemData.part === 'number') { // 장비인지
 				const itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5;
 				const items = itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx] : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx];
 				const itemsHole = itemData.hole;
 				return items && (
-					<div className={`item_layout ${gameData.itemGrade.txt_e[itemData.grade].toLowerCase()} ${selectedItem1 ? 'select1' : ''} ${ selectedItem2 ? 'select2' : ''} favorite${itemData.favorite}`} key={`items${idx}`} onClick={() => {
+					<div className={`item_layout ${gameData.itemGrade.txt_e[itemData.grade].toLowerCase()} ${typeof selectColor_ === 'number' ? 'select' + selectColor_ : ''} favorite${itemData.favorite}`} 
+					key={`items${idx}`} 
+					onClick={() => {
+						setItemPopup(true);
 						itemData.quality = itemsGrade;
-						const items = itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx] : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx];
 						let button = [];
 						if (shopType === 'shop') {
 							if (selectTab < 3) {
@@ -1242,31 +1398,19 @@ const ShopList = ({
 							button.push('sell');
 							button = buttonType(button, itemData);
 						}
-						if (selectArea === 'area2') {
-							if (selectItem1.itemSaveSlot !== '' && selectItem1.selectTab === selectTab && selectItem1.itemSaveSlot === idx) {
-								setSelectItem1({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
-							}
-							setSelectItem2({
-								saveItemData:itemData,
-								gameItem:items,
-								itemSaveSlot:idx,
-								selectTab:selectTab,
-								itemCate:typeList[scrollIdx].itemCate,
-								buttonType:button,
-							});
-						} else {
-							if (selectItem2.itemSaveSlot !== '' && selectItem2.selectTab === selectTab && selectItem2.itemSaveSlot === idx) {
-								setSelectItem2({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
-							}
-							setSelectItem1({
-								saveItemData:itemData,
-								gameItem:items,
-								itemSaveSlot:idx,
-								selectTab:selectTab,
-								itemCate:typeList[scrollIdx].itemCate,
-								buttonType:button,
-							});
+						if (selectItem[selectItemNum].itemSaveSlot !== '' && selectItem[selectItemNum].selectTab === selectTab && selectItem[selectItemNum].itemSaveSlot === idx) {
+							setSelectItem({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
 						}
+						const cloneSelectItem = [...selectItem];
+						cloneSelectItem[selectItemNum] = {
+							saveItemData: itemData,
+							gameItem: items,
+							itemSaveSlot: idx,
+							selectTab: selectTab,
+							itemCate: typeList[scrollIdx].itemCate,
+							buttonType: button,
+						}
+						setSelectItem(cloneSelectItem);
 					}}>
 						<span className={`pic ${itemData.sealed ? "sealed" : ""}`}>
 							<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], itemData.color, itemData.svgColor || itemData.id)}}>
@@ -1289,7 +1433,8 @@ const ShopList = ({
 				const items = gameItem[itemTypeNa][itemData.idx];
 				const grade = itemData.grade || items?.grade || 0;
 				return items && (
-					<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${selectedItem1 ? 'select1' : ''} ${selectedItem2 ? 'select2' : ''}`} key={`items${idx}`} onClick={() => {
+					<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${typeof selectColor_ === 'number' ? 'select' + selectColor_ : ''}`} key={`items${idx}`} onClick={() => {
+						setItemPopup(true);
 						let button = [];
 						if (shopType === 'shop') {
 							if (selectTab < 3) {
@@ -1309,32 +1454,19 @@ const ShopList = ({
 							button.push('sell');
 							button = buttonType(button, itemData);
 						}
-						if (selectArea === 'area2') {
-							if (selectItem1.itemSaveSlot && (Object.entries(itemData).toString() === Object.entries(selectItem1.saveItemData).toString())) {
-								setSelectItem1({saveItemData:[],gameItem:[],itemSaveSlot:'',buttonType:[],selectTab:'',itemCate:''});
-							}
-							console.log(itemData, items,itemTypeNa,typeList[scrollIdx].na)
-							setSelectItem2({
-								saveItemData:itemData,
-								gameItem:items,
-								itemSaveSlot:idx,
-								selectTab:selectTab,
-								itemCate:itemTypeNa,
-								buttonType:button,
-							});
-						} else {
-							if (selectItem2.itemSaveSlot && (Object.entries(itemData).toString() === Object.entries(selectItem2?.saveItemData).toString())) {
-								setSelectItem2({saveItemData:[],gameItem:[],itemSaveSlot:'',buttonType:[],selectTab:'',itemCate:''});
-							}
-							setSelectItem1({
-								saveItemData:itemData,
-								gameItem:items,
-								itemSaveSlot:idx,
-								selectTab:selectTab,
-								itemCate:itemTypeNa,
-								buttonType:button,
-							});
+						if (selectItem[selectItemNum].itemSaveSlot && (Object.entries(itemData).toString() === Object.entries(selectItem[selectItemNum]?.saveItemData).toString())) {
+							setSelectItem({saveItemData:[],gameItem:[],itemSaveSlot:'',buttonType:[],selectTab:'',itemCate:''});
 						}
+						const cloneSelectItem = [...selectItem];
+						cloneSelectItem[selectItemNum] = {
+							saveItemData: itemData,
+							gameItem: items,
+							itemSaveSlot: idx,
+							selectTab: selectTab,
+							itemCate: itemTypeNa,
+							buttonType: button,
+						}
+						setSelectItem(cloneSelectItem);
 					}}>
 						<ItemPic className="pic" pic="itemEtc" type={itemTypeNa} idx={items.display} />
 					</div>
@@ -1369,7 +1501,8 @@ const InvenShop = ({
   const [popupType, setPopupType] = useState('');
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
-	const item = React.useMemo(() => {
+	const [itemPopup, setItemPopup] = useState(false);
+	const shopItem = React.useMemo(() => {
 		const cityData = sData.city[cityIdx];
 		switch (shopType) {
 			case 'shop':
@@ -1427,22 +1560,31 @@ const InvenShop = ({
 		}
 	}, [shopType]);
 	const invenNa = useRef(['equip', 'hole', 'upgrade', 'material', 'etc']);
+	const selectItemArr = ['#fff','#ffac2f','#e14040','#a800ff','#0090ff','#00a90c'];
+	const [selectItemNum, setSelectItemNum] = useState(0);
 	const [selectTab, setSelectTab] = useState(selectTabFn(state, shopType, typeList));
-	const [selectArea, setSelectArea] = useState('area1');
-	const [selectItem1, setSelectItem1] = useState(selectItemFn(sData, state, shopType, 1));
-	const [selectItem2, setSelectItem2] = useState(selectItemFn(sData, state, shopType, 2));
+	const [selectItem, setSelectItem] = useState(() => {
+		return selectItemArr.map(() => {
+			return selectItemFn(sData, state, shopType, selectItemNum);
+		});
+	});
 	useEffect(() => {
 		setSelectTab(selectTabFn(state, shopType, typeList));
-		setSelectItem1(selectItemFn(sData, state, shopType, 1));
-		setSelectItem2(selectItemFn(sData, state, shopType, 2));
 	}, [sData, state, shopType, typeList]);
+	useEffect(() => {
+		// setSelectItem(() => {
+		// 	return selectItemArr.map(() => {
+		// 		return selectItemFn(sData, state, shopType, selectItemNum);
+		// 	});
+		// });
+	}, [sData, state, shopType, typeList, selectItemArr, selectItemNum]);
 	const actionCh = React.useMemo(() => sData.actionCh.shop, [sData]);//행동할 캐릭터 데이터
 	const actionRef = useRef();//행동할 캐릭터 선택자
 	useEffect(() => {
 		if (Object.keys(sData).length !== 0 && shopType !== 'inven') {
 			setPopupInfo({
-				ch:sData.ch,
-				actionCh:sData.actionCh[shopType].idx,
+				ch: sData.ch,
+				actionCh: sData.actionCh[shopType].idx,
 				type: shopType
 			});
 		}
@@ -1451,59 +1593,106 @@ const InvenShop = ({
 		<>
 			<ShopWrap className="wrap">
 				<ShopTop>
-					<ShopTopLeft>
-						<TabMenu direction="vertical" list={typeList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" />
-						{Object.keys(actionCh).length !== 0 && shopType !== 'inven' && (<div ref={actionRef} className={`ch_select_area ${actionCh.idx ? 'g' + sData.ch[actionCh.idx].grade : ''}`} onClick={() => {
-								setPopupType('selectCh');
-								setPopupOn(true);
-							}}>
-								<ActionChDisplay type="shop" saveData={sData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
-							</div>
-						)}
-					</ShopTopLeft>
-					<ShopScrollContent className="num4">
-						{item.map((scrollData, scrollIdx) => {
-							return <ShopItem className="scroll-y" selected={selectTab === scrollIdx} key={`scrollContent${scrollIdx}`}>
-								{typeList[scrollIdx].na === 'inven' ? 
-									scrollData.map((invenData, invenIdx) => {
-										return (
-											<div key={`inven${invenIdx}`}>
-												<Text code="t3" color="main">{gameData.msg.menu[invenNa.current[invenIdx]][lang]}</Text>
-												<ShopList gameData={gameData} shopType={shopType} typeList={typeList} invenNa={invenNa.current} list={invenData} scrollIdx={scrollIdx} invenIdx={invenIdx} selectTab={selectTab} gameItem={gameItem} selectItem1={selectItem1} setSelectItem1={setSelectItem1} selectItem2={selectItem2} setSelectItem2={setSelectItem2} selectArea={selectArea} />
-											</div>
-										)
-									})
-								: 
-									<ShopList gameData={gameData} shopType={shopType} typeList={typeList} list={scrollData} scrollIdx={scrollIdx} selectTab={selectTab} gameItem={gameItem} selectItem1={selectItem1} setSelectItem1={setSelectItem1} selectItem2={selectItem2} setSelectItem2={setSelectItem2} selectArea={selectArea} />
-								}
-								</ShopItem>
-						})}
-					</ShopScrollContent>
+					<TabMenu list={typeList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" />
 				</ShopTop>
-				<ShopBottom>
-					{selectItem1?.saveItemData && Object.keys(selectItem1?.saveItemData).length !== 0 ? (
-						<ItemContainer className={`item_select item_select1 items ${selectArea === "area1" ? "on" : ""}`} itemSelect="select1" onClick={() => {
-							setSelectArea('area1');
-						}}>
-							<ShopFooter selectItem={selectItem1} setSelectItem={setSelectItem1} selectSlot={1} shopType={shopType} actionCh={actionCh} saveData={sData} changeSaveData={changeSaveData} cityIdx={cityIdx} typeList={typeList} selectTab={selectTab} setPopupType={setPopupType} setPopupInfo={setPopupInfo} setPopupOn={setPopupOn} setMsgOn={setMsgOn} setMsg={setMsg}/>
-						</ItemContainer>
-					) : (
-						<ItemContainer className={`item_select item_select1 items ${selectArea === "area1" ? "on" : ""}`} itemSelect="select1" onClick={() => {
-							setSelectArea('area1');
-						}}></ItemContainer>
-					)}
-					{selectItem2?.saveItemData && Object.keys(selectItem2?.saveItemData).length !== 0 ? (
-						<ItemContainer className={`item_select item_select2 items ${selectArea === "area2" ? "on" : ""}`} itemSelect="select2" onClick={() => {
-							setSelectArea('area2');
-						}}>
-							<ShopFooter selectItem={selectItem2} setSelectItem={setSelectItem2} selectSlot={2} shopType={shopType} actionCh={actionCh} saveData={sData} changeSaveData={changeSaveData} cityIdx={cityIdx} typeList={typeList} selectTab={selectTab} setPopupType={setPopupType} setPopupInfo={setPopupInfo} setPopupOn={setPopupOn} setMsgOn={setMsgOn} setMsg={setMsg}/>
-						</ItemContainer>
-					) : (
-						<ItemContainer className={`item_select item_select2 items ${selectArea === "area2" ? "on" : ""}`} itemSelect="select2" onClick={() => {
-							setSelectArea('area2');
-						}}></ItemContainer>
-					)}
-				</ShopBottom>
+				{Object.keys(actionCh).length !== 0 && shopType !== 'inven' && (<ActionCh ref={actionRef} className={`ch_select_area ${actionCh.idx ? 'g' + sData.ch[actionCh.idx].grade : ''}`} onClick={() => {
+						setPopupType('selectCh');
+						setPopupOn(true);
+					}}>
+						<ActionChDisplay type="shop" saveData={sData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
+					</ActionCh>
+				)}
+				<ShopScrollContent className="num6">
+					{shopItem.map((scrollData, scrollIdx) => {
+						return <ShopItem className="scroll-y" selected={selectTab === scrollIdx} key={`scrollContent${scrollIdx}`}>
+							{typeList[scrollIdx].na === 'inven' ? 
+								scrollData.map((invenData, invenIdx) => {
+									return (
+										<div key={`inven${invenIdx}`}>
+											<Text code="t3" color="main">{gameData.msg.menu[invenNa.current[invenIdx]][lang]}</Text>
+											<ShopList 
+												gameData={gameData} 
+												shopType={shopType} 
+												typeList={typeList} 
+												invenNa={invenNa.current} 
+												list={invenData} 
+												scrollIdx={scrollIdx} 
+												invenIdx={invenIdx} 
+												selectTab={selectTab} 
+												gameItem={gameItem} 
+												selectItem={selectItem} 
+												selectItemNum={selectItemNum} 
+												setSelectItem={setSelectItem}
+												setItemPopup={setItemPopup} />
+										</div>
+									)
+								})
+							: 
+								<ShopList 
+									gameData={gameData} 
+									shopType={shopType} 
+									typeList={typeList} 
+									list={scrollData} 
+									scrollIdx={scrollIdx} 
+									selectTab={selectTab} 
+									gameItem={gameItem} 
+									selectItem={selectItem} 
+									selectItemNum={selectItemNum} 
+									setSelectItem={setSelectItem}
+									setItemPopup={setItemPopup} />
+							}
+							</ShopItem>
+					})}
+				</ShopScrollContent>
+				{itemPopup && selectItem[selectItemNum]?.saveItemData && Object.keys(selectItem[selectItemNum]?.saveItemData).length !== 0 && <ShopPopup onClick={() => {
+					setItemPopup(false);
+				}}>
+					<ItemContainer color={selectItemArr[selectItemNum]} className={`item_select item_select items`} itemSelect="select">
+						<ShopFooter 
+							selectItem={selectItem}
+							selectItemArr={selectItemArr}
+							selectItemNum={selectItemNum}
+							setSelectItem={setSelectItem} 
+							selectSlot={1} 
+							shopType={shopType} 
+							actionCh={actionCh} 
+							saveData={sData} 
+							changeSaveData={changeSaveData} 
+							cityIdx={cityIdx} 
+							typeList={typeList} 
+							selectTab={selectTab} 
+							setPopupType={setPopupType} 
+							setPopupInfo={setPopupInfo} 
+							setPopupOn={setPopupOn} 
+							setMsgOn={setMsgOn} 
+							setMsg={setMsg} />
+					</ItemContainer>
+				</ShopPopup>}
+				<SelectItemGroup>
+					<ul>
+						{selectItemArr.map((itemColor, idx) => {
+							return <SelectItemList select={selectItemNum === idx} color={itemColor} key={`itemColor_${idx}`} onClick={() => {
+								if (selectItemNum === idx) {
+									if (itemPopup === false) {
+										const cloneSelectItem = [...selectItem];
+										cloneSelectItem[idx] = {saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]}
+										setSelectItem(cloneSelectItem);
+									} else {
+										setItemPopup(false);
+									}
+								} else {
+									setItemPopup(true);
+									setSelectItemNum(idx);
+								}
+							}}>
+								{selectItem[idx].itemSaveSlot !== "" && (selectItem[idx].itemCate === "equip" ? <ItemPic type="equip" className="item">
+									<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem[idx].gameItem.display], selectItem[idx].saveItemData.color, selectItem[idx].saveItemData.svgColor ||selectItem[idx].saveItemData.id)}}></svg>
+								</ItemPic>
+								: <ItemPic className="pic" pic="itemEtc" type={selectItem[idx].itemCate} idx={selectItem[idx].gameItem.display} />)}
+							</SelectItemList>
+						})}
+					</ul>
+				</SelectItemGroup>
 			</ShopWrap>
 			<PopupContainer>
         {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={sData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}

@@ -78,9 +78,12 @@ const BattleHeader = styled.div`
 	}
 `;
 const BackButton = styled.div`
+	display: flex;
 	position: relative;
 	height: 100%;
 	padding: 0 10px;
+	justify-content: center;
+	align-items: center;
 	.ico{
 		display: inline-block;
 		width: 40px;
@@ -93,16 +96,17 @@ const BattleTitle = styled(FlexBox)`
 	height: 100%;
 	box-sizing: border-box;
 	justify-content: space-around;
+	.scenario_title {
+		color: var(--color-w);
+	}
 `;
-const BattleWarp = styled.div`
+const Warp = styled.div`
 	position: relative;
 	width: 100%;
 	height: 100%;
 	box-sizing: border-box;
 	overflow: hidden;
 	height: calc(100% - 50px);
-	background: url(${({backImg}) => backImg});
-	background-size: cover;
 	&.order .bgEffect .bg_light.lightning, &.action .bgEffect .bg_light.lightning {
 		transition: unset;
 		animation: onoff 8s infinite;
@@ -115,34 +119,6 @@ const BattleArea = styled.div`
 	height: calc(100% - 50px);
 	.units_enemy, .units_ally, .land_ally, .land_enemy{
 		height: 50%;
-	}
-	&:before {
-		content: "";
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		width: 50px;
-		z-index: 1;
-		pointer-events: none;
-		transition: left 1s;
-		left: ${({mode}) => {
-			return !mode ? "-50px" : 0;
-		}};
-		background: url(${({frameLeft}) => frameLeft}) no-repeat -15px center;
-	}
-	&:after {
-		content: "";
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		width: 50px;
-		z-index: 1;
-		pointer-events: none;
-		transition: right 1s;
-		right: ${({mode}) => {
-			return !mode ? "-50px" : 0;
-		}};
-		background: url(${({frameRight}) => frameRight}) no-repeat 13px center;
 	}
 `;
 const BattleUnit = styled.div`
@@ -394,6 +370,10 @@ const BattleCh = styled.div`
 		}
 	}
 	.state, .stateDie {
+		left: 10%;
+		top: 10%;
+		width: 80%;
+		height: 80%;
 		pointer-events: none;
 		opacity: 0;
 		z-index: 2;
@@ -652,7 +632,7 @@ const BattleChTop = styled(FlexBox)`
 			box-shadow: inset 0 0 2px #000;
 			&.hp {
 				em {
-					display: inline-block;
+					display: flex;
 					height: 100%;
 					width: 100%;
 					background-color: var(--color-red);
@@ -660,11 +640,12 @@ const BattleChTop = styled(FlexBox)`
 					transition: all ${({ gameSpd }) => 0.375/ gameSpd}s;
 					font-size: 0.4375rem;
 					text-indent: 2px;
+					align-items: center;
 				}
 			}
 			&.sp {
 				em {
-					display: inline-block;
+					display: flex;
 					height: 100%;
 					width: 100%;
 					background-color: var(--color-blue);
@@ -672,6 +653,7 @@ const BattleChTop = styled(FlexBox)`
 					transition: all ${({ gameSpd }) => 0.375/ gameSpd}s;
 					font-size: 0.4375rem;
 					text-indent: 2px;
+					align-items: center;
 				}
 			}
 		}
@@ -786,7 +768,6 @@ const Land = styled.div`
 	box-sizing: border-box;
 	border-radius: 0;
 	background-size: 100%;
-	outline: 3px solid rgba(255,255,255,0.5);
 	left:${({left}) => left}%;
 	top:${({top}) => top}%;
 	&:before {
@@ -1442,8 +1423,10 @@ const activeSk = (timeLineData) => { //타임라인에 처리되는 방어등.. 
 				return 'state4';
 			case 35: //마법방어
 				return 'state3';
-			case 355: //나무뒤에 숨기
+			case 354: //나무뒤에 숨기
 				return 'state5';
+			case 355: //바위뒤에 숨기
+				return 'state6';
 			default:
 				return '';
 		}
@@ -1705,9 +1688,9 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 										enemyAction[data.order.idx] = 'state4'; 
 									} else if (data.order.skIdx === 35) { //마법방어
 										enemyAction[data.order.idx] = 'state3'; 
-									} else if (data.order.skIdx === 355) { //나무뒤에 숨기
+									} else if (data.order.skIdx === 354) { //나무뒤에 숨기
 										enemyAction[data.order.idx] = 'state5'; 
-									} else if (data.order.skIdx === 356) { //바위뒤에 숨기
+									} else if (data.order.skIdx === 355) { //바위뒤에 숨기
 										enemyAction[data.order.idx] = 'state6'; 
 									}
 								}
@@ -1752,9 +1735,9 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 										enemyAction[data.order.idx] = 'state4'; 
 									} else if (data.order.skIdx === 35) { //마법방어
 										enemyAction[data.order.idx] = 'state3'; 
-									} else if (data.order.skIdx === 355) { //나무뒤에 숨기
+									} else if (data.order.skIdx === 354) { //나무뒤에 숨기
 										enemyAction[data.order.idx] = 'state5'; 
-									} else if (data.order.skIdx === 356) { //바위뒤에 숨기
+									} else if (data.order.skIdx === 355) { //바위뒤에 숨기
 										enemyAction[data.order.idx] = 'state6'; 
 									}
 								}
@@ -1831,9 +1814,9 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 										allyAction[data.order.idx] = 'state4'; 
 									} else if (data.order.skIdx === 35) { //마법방어
 										allyAction[data.order.idx] = 'state3'; 
-									} else if (data.order.skIdx === 355) { //나무뒤에 숨기
+									} else if (data.order.skIdx === 354) { //나무뒤에 숨기
 										allyAction[data.order.idx] = 'state5'; 
-									} else if (data.order.skIdx === 356) { //바위뒤에 숨기
+									} else if (data.order.skIdx === 355) { //바위뒤에 숨기
 										allyAction[data.order.idx] = 'state6'; 
 									}
 								}
@@ -1881,9 +1864,9 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 										enemyAction[data.order.idx] = 'state4'; 
 									} else if (data.order.skIdx === 35) { //마법방어
 										enemyAction[data.order.idx] = 'state3'; 
-									} else if (data.order.skIdx === 355) { //나무뒤에 숨기
+									} else if (data.order.skIdx === 354) { //나무뒤에 숨기
 										enemyAction[data.order.idx] = 'state5'; 
-									} else if (data.order.skIdx === 356) { //바위뒤에 숨기
+									} else if (data.order.skIdx === 355) { //바위뒤에 숨기
 										enemyAction[data.order.idx] = 'state6'; 
 									}
 								}
@@ -1984,9 +1967,9 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 										allyAction[data.order.idx] = 'state4'; 
 									} else if (data.order.skIdx === 35) { //마법방어
 										allyAction[data.order.idx] = 'state3'; 
-									} else if (data.order.skIdx === 355) { //나무뒤에 숨기
+									} else if (data.order.skIdx === 354) { //나무뒤에 숨기
 										allyAction[data.order.idx] = 'state5'; 
-									} else if (data.order.skIdx === 356) { //바위뒤에 숨기
+									} else if (data.order.skIdx === 355) { //바위뒤에 숨기
 										allyAction[data.order.idx] = 'state6'; 
 									}
 								}
@@ -2031,9 +2014,9 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 										allyAction[data.order.idx] = 'state4'; 
 									} else if (data.order.skIdx === 35) { //마법방어
 										allyAction[data.order.idx] = 'state3'; 
-									} else if (data.order.skIdx === 355) { //나무뒤에 숨기
+									} else if (data.order.skIdx === 354) { //나무뒤에 숨기
 										allyAction[data.order.idx] = 'state5'; 
-									} else if (data.order.skIdx === 356) { //바위뒤에 숨기
+									} else if (data.order.skIdx === 355) { //바위뒤에 숨기
 										allyAction[data.order.idx] = 'state6'; 
 									}
 								}
@@ -2109,9 +2092,9 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 										enemyAction[data.order.idx] = 'state4'; 
 									} else if (data.order.skIdx === 35) { //마법방어
 										enemyAction[data.order.idx] = 'state3'; 
-									} else if (data.order.skIdx === 355) { //나무뒤에 숨기
+									} else if (data.order.skIdx === 354) { //나무뒤에 숨기
 										enemyAction[data.order.idx] = 'state5'; 
-									} else if (data.order.skIdx === 356) { //바위뒤에 숨기
+									} else if (data.order.skIdx === 355) { //바위뒤에 숨기
 										enemyAction[data.order.idx] = 'state6'; 
 									}
 								}
@@ -2159,9 +2142,9 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 										allyAction[data.order.idx] = 'state4'; 
 									} else if (data.order.skIdx === 35) { //마법방어
 										allyAction[data.order.idx] = 'state3'; 
-									} else if (data.order.skIdx === 355) { //나무뒤에 숨기
+									} else if (data.order.skIdx === 354) { //나무뒤에 숨기
 										allyAction[data.order.idx] = 'state5'; 
-									} else if (data.order.skIdx === 356) { //바위뒤에 숨기
+									} else if (data.order.skIdx === 355) { //바위뒤에 숨기
 										allyAction[data.order.idx] = 'state6'; 
 									}
 								}
@@ -2565,7 +2548,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						}
 						defendSkillEnemy.forEach((defEnemy_, idx) => {
 							const skIdx = defEnemy_.skIdx;
-							if (skIdx === 2 || skIdx === 34 || skIdx === 35 || skIdx === 355 || skIdx === 356) { //방어, 철벽방어, 술법방어
+							if (skIdx === 2 || skIdx === 34 || skIdx === 35 || skIdx === 354 || skIdx === 355) { //방어, 철벽방어, 술법방어, 나무뒤에숨기, 바위뒤에 숨기
 								defActionSkill = defEnemy.hasSkill.filter((skData) => {
 									if (skData.idx === skIdx) {
 										return skData;
@@ -5366,7 +5349,7 @@ const Battle = ({
 					<div className="battle_title">격퇴실패</div>
 				</div>
 			)}
-      <BattleWarp className={`battle_wrap ${mode}`} backImg={imgSet.back[1]}>
+      <Warp className={`battle_wrap ${mode}`}>
 				{bge && <BgEffect className={`bgEffect ${mode === "action" ? "action" : ""}`} img1={imgSet.bgEffect[0]} img2={imgSet.bgEffect[1]} gameSpd={speed}>
 					{weather.type === "w0" && (
 						<>
@@ -5773,7 +5756,7 @@ const Battle = ({
 						})}
 					</BattleTurn>
 				</BattleOrder>
-			</BattleWarp>
+			</Warp>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
       </MsgContainer>

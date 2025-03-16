@@ -2,7 +2,6 @@ import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import { util } from 'components/Libs';
-import CharacterCard from 'pages/CharacterCard';
 import GameMainFooter from 'pages/GameMainFooter';
 import MoveRegion from 'pages/MoveRegion';
 import QuickMenu from 'pages/QuickMenu';
@@ -17,8 +16,10 @@ const CountryTitle = styled(FlexBox)`
   position: absolute;
   left: 50%;
   top: 50px;
+  padding: 10px 40px;
   width: 270px;
   height: 90px;
+  box-sizing: border-box;
   transform: translate(-50%, -50%);
   background: url(${({back}) => back}) no-repeat center center;
   background-size: 100%;
@@ -34,32 +35,14 @@ const CardGroup = styled.div`
   transform-style: preserve-3d;
   backface-visibility: hidden;
 `;
-
-const Cards = styled.div`
-  position: absolute;
-  left: 50%;
-  top: ${({idx}) => {
-    return `${80 - idx * 1.5}%`; //10%
-  }};
-  transform-origin: 50% 50%;
-  transform: translate(-50%, -50%) rotateX(70deg) rotateY(0deg) rotateZ(0deg);
-  box-shadow: ${({shadow}) => `0 0 20px ${shadow}`};
-`;
-const CardBack = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background:url(${({cardBack}) => cardBack}) no-repeat center center;
-  background-size:100%;
-`;
 const GameMain = ({
   saveData,
   changeSaveData,
   cityIdx,
   gameMode,
   setGameMode,
+  showDim,
+  setShowDim,
 }) => {
   const context = useContext(AppContext);
   const lang = React.useMemo(() => {
@@ -106,29 +89,14 @@ const GameMain = ({
   const [selectMoveRegion, setSelectMoveRegion] = useState('');
   return (
     <Wrap direction="column">
-      <QuickMenu type="main" gameMode={gameMode} />
-      <CountryTitle alignItems="center" back={imgSet.back[8]}>
-        <StyledText code="t6" color="shadow">{gameData.country.regions[util.getCountryToIdx(stay)].name[lang]}</StyledText>
+      <QuickMenu type="main" gameMode={gameMode} showDim={showDim} setShowDim={setShowDim}/>
+      <CountryTitle alignItems="center" back={imgSet.back.countryTitle}>
+        <StyledText code="t4" color="shadow">{gameData.country.regions[util.getCountryToIdx(stay)].name[lang]}</StyledText>
       </CountryTitle>
       <Roulette gameMode={gameMode} saveData={sData} rouletteState={rouletteState} setRouletteState={setRouletteState} selectRoulettePos={selectRoulettePos} setSelectRoulettePos={setSelectRoulettePos} rouletteArr={rouletteArr.current} rouletteEnemy={rouletteEnemy} setRouletteEnemy={setRouletteEnemy} />
       <Scenario gameMode={gameMode} saveData={sData} changeSaveData={changeSaveData} stay={stay} selectScenario={selectScenario} setSelectScenario={setSelectScenario} />
       <MoveRegion gameMode={gameMode} saveData={sData} stay={stay} selectMoveRegion={selectMoveRegion} setSelectMoveRegion={setSelectMoveRegion} />
       <CardGroup>
-        {sData.ch?.map((cardData, idx) => {
-          const shadowColor = gameData.chGradeColor[cardData.grade];
-          return (
-            <Cards shadow={shadowColor} idx={idx} key={`card${idx}`} onTouchStart={(e) => {
-
-            }} onTouchMove={(e) => {
-
-            }} onTouchEnd={() => {
-
-            }}>
-              <CharacterCard usedType="gameMain" size="90" equalSize={false} saveData={sData} slotIdx={idx} />
-              <CardBack cardBack={imgSet.etc.imgCardBack} />
-            </Cards>
-          );
-        })}
       </CardGroup>
       <GameMainFooter saveData={sData} gameMode={gameMode} setGameMode={setGameMode} stay={stay} rouletteState={rouletteState} setRouletteState={setRouletteState} selectRoulettePos={selectRoulettePos} setSelectRoulettePos={setSelectRoulettePos} rouletteArr={rouletteArr.current} rouletteEnemy={rouletteEnemy} setRouletteEnemy={setRouletteEnemy} selectScenario={selectScenario} selectMoveRegion={selectMoveRegion} />
     </Wrap>

@@ -1,6 +1,6 @@
 import { AppContext } from 'App';
+import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
-import 'css/lineup.css';
 import iconArrowDown from 'images/ico/arrow_down.png';
 import iconArrowUp from 'images/ico/arrow_up.png';
 import ChLineup from 'pages/ChLineup';
@@ -8,11 +8,242 @@ import CharacterCard from 'pages/CharacterCard';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
+const StyledIconPic = styled(IconPic)`
+  position: absolute;
+  left: 0;
+  top: 0;
+`;
+
 const Wrap = styled.div`
+	display: flex;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	flex-direction: column;
+	padding: 0 0 10px 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	overflow: hidden;
+	& > div {
+		padding: 0 20px;
+		justify-content: center;
+	}
+`;
+const LineupSave = styled.div`
+	height: 5%;
+	overflow: hidden;
+	dl {
+		width: 100%;
+		height: 100%;
+	}
+	dt {
+		flex-grow: 0;
+		margin: auto 10px auto 0;
+		color: #000;
+		font-weight: 600;
+	}
+	dd {
+		display: flex;
+		flex-grow: 1;
+		margin: auto auto;
+		height: 100%;
+	}
+	ul {
+		display: flex;
+		width: 100%;
+		height: 100%;
+		justify-content: space-between;
+		li {
+			width: 10%;
+			height: 100%;
+			text-align: center;
+			&.on .save_slot {
+				border: 1px solid #f00;
+				background: #fff;
+				color: #f00;
+			}
+			&.save .save_slot {
+				outline: 1px solid #00f;
+				background: #00f;
+				color: #fff;
+			}
+		}
+	}
+	.save_slot {
+		padding: 0;
+		width: 100%;
+		height: 100%;
+		background: #000;
+		color: #fff;
+		box-sizing: border-box;
+	}
+	.save_submit{
+		margin: 0 0 0 5px;
+		width: 45px;
+		background: #00f;
+		color: #fff;
+		font-weight: 600;
+		font-size: 0.75rem;
+	}
+`;
+const LineupMiddle = styled.div`
+	display: flex;
+	margin: 10px 0;
+	height: 60%;
+	overflow: hidden;
+`;
+const LineupList = styled.div`
+	width: 20%;
+	overflow: hidden;
+	flex: unset !important;
+	ul {
+		width: 100%;
+	}
+`;
+const LineupCate = styled.li`
+	position: relative;
+	margin: 0 0 10px 0;
+	padding-top: 100%;
+	width: 100%;
+	height: 100%;
+	font-size: 0;
+	&:last-of-type {
+		margin:0;
+	}
+`;
+const LineupArea = styled.div`
+	display: flex;
+	flex-direction: column;
+	margin: 0 0 0 10px;
+	width: 80%;
+	overflow: hidden;
+	flex-grow: 1;
+`;
+const LineupInfo = styled.div`
+	display: flex;
+	padding: 5px;
+	background: #ddd;
+	justify-content: space-between;
+	.lineup_na {
+		color: #000;
+		font-weight: 600;
+	}
+	.lineup_cost {
+		color: #000;
+		&.error {
+			color: #f00;
+		}
+		span {
+			font-size: 0.75rem;
+			font-weight: 600;
+		}
+		.bar {
+			color: #000;
+			font-size: 0.75rem;
+			&:before {
+				content: ' / ';
+			}
+		}
+	}
 `;
 const LineupChInfo = styled.div`
-	ul li.up .add_txt:before{background:url(${({arrowUpImg}) => arrowUpImg}) no-repeat center center;background-size:10px;}
-	ul li.down .add_txt:before{background:url(${({arrowDownImg}) => arrowDownImg}) no-repeat center center;background-size:10px;}
+	padding: 10px;
+	width: 100%;
+	background: #ddd;
+	box-sizing: border-box;
+	flex-grow: 1;
+	ul {
+		display: flex;
+		flex-flow: wrap;
+		li {
+			position: relative;
+			margin: 0 0 2px 0;
+			width: 100%;
+			color: #000;
+			box-sizing: border-box;
+			.na {
+				margin: 0 5px 0 0;
+				font-size: 0.75rem;
+			}
+			.txt {
+				font-size: 0.75rem;
+				font-weight: 600;
+			}
+			.add_txt{
+				position: relative;
+				margin: 0 0 0 5px;
+				padding: 0 0 0 12px;
+				font-size: 0.75rem;
+				font-weight: 600;
+			}
+			&:nth-of-type(2) {
+				width: 50%;
+			}
+			&:nth-of-type(3) {
+				width: 50%;
+			}
+			&.none .add_txt{
+				display: none;
+			}
+			&.up .add_txt{
+				color: var(--color-point4);
+				&:before {
+					content: '';
+					position: absolute;
+					left: 0;
+					top: 0;
+					width: 12px;
+					height: 100%;
+					background: url(${({arrowUpImg}) => arrowUpImg}) no-repeat center center;
+					background-size: 10px;
+				}
+			}
+			&.down .add_txt{
+				color: var(--color-point2);
+				&:before {
+					content: '';
+					position: absolute;
+					left: 0;
+					top: 0;
+					width: 12px;
+					height: 100%;
+					background: url(${({arrowDownImg}) => arrowDownImg}) no-repeat center center;
+					background-size: 10px;
+				}
+			}
+		}
+	}
+`;
+const LineupChList = styled.div`
+	height: 40%;
+	overflow: hidden;
+	ul {
+		display: flex;
+		flex-flow: wrap;
+		width: 100%;
+		li {
+			position: relative;
+			margin: 0 6.5px 6.5px 0;
+			width: calc(25% - 5px);
+			padding-top: calc(25% - 5px);
+			font-size: 0;
+			overflow: hidden;
+			border-radius: 10px;
+			&:nth-of-type(4n) {
+				margin: 0 0 6.5px 0;
+			}
+			& > span {
+				position: absolute;
+				font-size: 0.625rem;
+			}
+			&.selected {
+				opacity: .3;
+			}
+		}
+	}
 `;
 
 const checkUseList = (useList, chIdx) => {
@@ -103,7 +334,7 @@ const CardPlacement = ({
   return (
     <>
       <Wrap className="lineup_wrap">
-				<div className="lineup_save">
+				<LineupSave className="lineup_save">
 					<dl flex-center="true">
 						<dt>저장슬롯</dt>
 						<dd>
@@ -119,101 +350,28 @@ const CardPlacement = ({
 							}}>선택</button>
 						</dd>
 					</dl>
-				</div>
-				<div className="lineup_middle">
-					<div className="lineup_list scroll-y">
+				</LineupSave>
+				<LineupMiddle className="lineup_middle">
+					<LineupList className="lineup_list scroll-y">
 						<ul>
-							<li className={`lineup_cate lineup_pos ${0 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(0);}}>
-              {/* <!--기본--> */}
-								<span e4="true" className="l1"></span><span e4="true" className="l2"></span><span e4="true" className="l3"></span><span e4="true" className="l4"></span><span e4="true" className="l5"></span>
-								<span e4="true" className="l6"></span><span e4="true" className="l7"></span><span e4="true" className="l8"></span><span e4="true" className="l9"></span><span e4="true" className="l10"></span>
-								<span e2="true" className="l11"></span><span e2="true" className="l12"></span><span e1="true" className="l13"></span><span e2="true" className="l14"></span><span e2="true" className="l15"></span>
-								<span e4="true" className="l16"></span><span e4="true" className="l17"></span><span e4="true" className="l18"></span><span e4="true" className="l19"></span><span e4="true" className="l20"></span>
-								<span e4="true" className="l21"></span><span e4="true" className="l22"></span><span e4="true" className="l23"></span><span e4="true" className="l24"></span><span e4="true" className="l25"></span>
-							</li>
-							<li className={`lineup_cate lineup_pos ${1 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(1);}}>
-              {/* <!--학익진--> */}
-								<span className="l1" e4="true"></span><span className="l2"></span><span className="l3"></span><span className="l4"></span><span className="l5" e4="true"></span>
-								<span className="l6" e3="true"></span><span className="l7"></span><span className="l8"></span><span className="l9"></span><span className="l10" e3="true"></span>
-								<span className="l11" e3="true"></span><span className="l12"></span><span className="l13"></span><span className="l14"></span><span e3="true" className="l15"></span>
-								<span className="l16"></span><span className="l17" e2="true"></span><span className="l18" e4="true"></span><span className="l19" e2="true"></span><span className="l20"></span>
-								<span className="l21"></span><span className="l22"></span><span className="l23" e1="true"></span><span className="l24"></span><span className="l25"></span>
-							</li>
-							<li className={`lineup_cate lineup_pos ${2 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(2);}}>
-              {/* <!--어린진--> */}
-								<span className="l1"></span><span className="l2"></span><span className="l3" e1="true"></span><span className="l4"></span><span className="l5"></span>
-								<span className="l6"></span><span className="l7" e2="true"></span><span className="l8" e2="true"></span><span className="l9" e2="true"></span><span className="l10"></span>
-								<span className="l11"></span><span e3="true" className="l12"></span><span className="l13"></span><span e3="true" className="l14"></span><span className="l15"></span>
-								<span className="l16" e3="true"></span><span className="l17"></span><span className="l18"></span><span className="l19"></span><span className="l20" e3="true"></span>
-								<span className="l21" e4="true"></span><span className="l22"></span><span className="l23"></span><span className="l24"></span><span className="l25" e4="true"></span>
-							</li>
-							<li className={`lineup_cate lineup_pos ${3 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(3);}}>
-              {/* <!--언월진--> */}
-								<span className="l1"></span><span className="l2" e3="true"></span><span className="l3" e2="true"></span><span className="l4"></span><span className="l5"></span>
-								<span className="l6"></span><span className="l7"></span><span className="l8"></span><span className="l9" e2="true"></span><span className="l10"></span>
-								<span className="l11"></span><span className="l12"></span><span className="l13"></span><span className="l14" e2="true"></span><span className="l15"></span>
-								<span className="l16" e3="true"></span><span className="l17"></span><span className="l18"></span><span className="l19" e1="true"></span><span className="l20" e4="true"></span>
-								<span className="l21"></span><span className="l22" e3="true"></span><span className="l23" e2="true"></span><span className="l24" e4="true"></span><span className="l25"></span>
-							</li>
-							<li className={`lineup_cate lineup_pos ${4 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(4);}}>
-              {/* <!--봉시진--> */}
-								<span className="l1"></span><span className="l2"></span><span className="l3" e1="true"></span><span className="l4"></span><span className="l5"></span>
-								<span className="l6"></span><span className="l7" e2="true"></span><span className="l8"></span><span className="l9" e2="true"></span><span className="l10"></span>
-								<span className="l11" e2="true"></span><span className="l12"></span><span className="l13" e3="true"></span><span className="l14"></span><span className="l15" e2="true"></span>
-								<span className="l16" e4="true"></span><span className="l17"></span><span className="l18" e3="true"></span><span className="l19"></span><span className="l20" e4="true"></span>
-								<span className="l21"></span><span className="l22"></span><span className="l23" e3="true"></span><span className="l24"></span><span className="l25"></span>
-							</li>
-							<li className={`lineup_cate lineup_pos ${5 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(5);}}>
-              {/* <!--방원진--> */}
-								<span className="l1"></span><span className="l2"></span><span e4="true" className="l3"></span><span className="l4"></span><span className="l5"></span>
-								<span className="l6"></span><span e3="true" className="l7"></span><span e2="true" className="l8"></span><span e3="true" className="l9"></span><span className="l10"></span>
-								<span e4="true" className="l11"></span><span e2="true" className="l12"></span><span e1="true" className="l13"></span><span e2="true" className="l14"></span><span e4="true" className="l15"></span>
-								<span className="l16"></span><span e3="true" className="l17"></span><span e2="true" className="l18"></span><span e3="true" className="l19"></span><span className="l20"></span>
-								<span className="l21"></span><span className="l22"></span><span e4="true" className="l23"></span><span className="l24"></span><span className="l25"></span>
-							</li>
-							<li className={`lineup_cate lineup_pos ${6 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(6);}}>
-              {/* <!--안행진--> */}
-								<span className="l1" e3="true"></span><span className="l2"></span><span className="l3"></span><span className="l4"></span><span className="l5" e3="true"></span>
-								<span className="l6" e4="true"></span><span className="l7" e3="true"></span><span className="l8"></span><span className="l9" e3="true"></span><span className="l10" e4="true"></span>
-								<span className="l11"></span><span className="l12" e2="true"></span><span className="l13"></span><span className="l14" e2="true"></span><span className="l15"></span>
-								<span className="l16"></span><span className="l17"></span><span className="l18" e1="true"></span><span className="l19"></span><span className="l20"></span>
-								<span className="l21"></span><span className="l22"></span><span className="l23" e2="true"></span><span className="l24"></span><span className="l25"></span>
-							</li>
-							<li className={`lineup_cate lineup_pos ${7 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(7);}}>
-              {/* <!--장사진--> */}
-								<span className="l1" e4="true"></span><span className="l2" e3="true"></span><span className="l3"></span><span className="l4"></span><span className="l5"></span>
-								<span className="l6"></span><span className="l7" e2="true"></span><span className="l8" e4="true"></span><span className="l9"></span><span className="l10"></span>
-								<span className="l11"></span><span className="l12"></span><span e1="true" className="l13"></span><span className="l14" e4="true"></span><span className="l15"></span>
-								<span className="l16"></span><span className="l17"></span><span className="l18" e4="true"></span><span className="l19" e2="true"></span><span className="l20"></span>
-								<span className="l21"></span><span className="l22"></span><span className="l23"></span><span className="l24" e3="true"></span><span className="l25" e4="true"></span>
-							</li>
-							<li className={`lineup_cate lineup_pos ${8 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(8);}}>
-              {/* <!--형액진--> */}
-								<span className="l1"></span><span className="l2" e2="true"></span><span className="l3"></span><span className="l4" e2="true"></span><span className="l5"></span>
-								<span className="l6"></span><span className="l7" e2="true"></span><span className="l8"></span><span className="l9" e2="true"></span><span className="l10"></span>
-								<span className="l11"></span><span className="l12"></span><span className="l13" e1="true"></span><span className="l14"></span><span className="l15"></span>
-								<span className="l16" e4="true"></span><span className="l17" e3="true"></span><span className="l18"></span><span className="l19" e3="true"></span><span className="l20" e4="true"></span>
-								<span className="l21"></span><span className="l22"></span><span className="l23" e3="true"></span><span className="l24"></span><span className="l25"></span>
-							</li>
-							<li className={`lineup_cate lineup_pos ${9 === selectLineup ? 'on' : ''}`} onClick={() => {clickLineupSlot(9);}}>
-              {/* <!--추행진--> */}
-								<span className="l1"></span><span className="l2"></span><span className="l3" e2="true"></span><span className="l4"></span><span className="l5"></span>
-								<span className="l6"></span><span className="l7" e2="true"></span><span className="l8" e1="true"></span><span className="l9" e2="true"></span><span className="l10"></span>
-								<span className="l11" e3="true"></span><span className="l12" e3="true"></span><span className="l13" e3="true"></span><span className="l14" e3="true"></span><span className="l15" e3="true"></span>
-								<span className="l16"></span><span className="l17"></span><span className="l18" e4="true"></span><span className="l19"></span><span className="l20"></span>
-								<span className="l21"></span><span className="l22"></span><span className="l23"></span><span className="l24"></span><span className="l25"></span>
-							</li>
+							{gameData.lineup.map((lineData, idx) => {
+								return <LineupCate className={`${idx === selectLineup ? "on" : ""}`} selectLineup={selectLineup} onClick={() => {
+									clickLineupSlot(idx);
+								}} key={`lineupCate_${idx}`}>
+									<StyledIconPic pic="img600" idx={idx} />
+								</LineupCate>
+							})}
 						</ul>
-					</div>
-					<div className="lineup_area">
-						<div className="lineup_info">
+					</LineupList>
+					<LineupArea className="lineup_area">
+						<LineupInfo>
 							<div className="lineup_na">{gameData.lineup[selectLineup].na}</div>
 							<div className="lineup_cost">
 								<span className="cost_current">0</span>
 								<span className="bar"></span>
 								<span className="cost_total">0</span>
 							</div>
-						</div>
+						</LineupInfo>
 						<ChLineup saveData={sData} changeSaveData={changeSaveData} selectSave={selectSave} selectLineup={selectLineup} useList={useList} setUseList={setUseList} mapRef={mapRef.current} selectLineupList={selectLineupList} setSelectLineupList={setSelectLineupList} />
 						<LineupChInfo className="lineup_chInfo scroll-y" arrowUpImg={iconArrowUp} arrowDownImg={iconArrowDown}>
 							<ul>
@@ -230,9 +388,9 @@ const CardPlacement = ({
 								})}
 							</ul>
 						</LineupChInfo>
-					</div>
-				</div>
-				<div className="lineup_ch scroll-y">
+					</LineupArea>
+				</LineupMiddle>
+				<LineupChList className="scroll-y">
 					<ul>
 						{noneUseList && noneUseList.map((saveCh, idx) => {
 							const used = checkUseList(useList, idx);
@@ -247,7 +405,7 @@ const CardPlacement = ({
 							);
 						})}
 					</ul>
-				</div>
+				</LineupChList>
 			</Wrap>
     </>
   );

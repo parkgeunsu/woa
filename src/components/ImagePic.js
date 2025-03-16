@@ -137,8 +137,7 @@ const ChPic = ({
   const startIdx = React.useMemo(() => {
     return !type ? 0 : util.iconToStartIdx(type);
   }, [type]);
-  return (
-    <StyledPic startIdx={startIdx} absoluteSize={absoluteSize} type={type} whNum={whNum} isThumb={isThumb} chPic={imgSet.images[pic]} idx={idx} {...rest}>
+  return (typeof idx === "number" && <StyledPic startIdx={startIdx} absoluteSize={absoluteSize} type={type} whNum={whNum} isThumb={isThumb} chPic={imgSet.images[pic]} idx={idx} {...rest}>
       {children}
     </StyledPic>
   )
@@ -154,12 +153,12 @@ const MarkWrap = styled.span`
   display: inline-block;
   position: relative;
   margin: 0 5px 0 0;
-  width: 30px;
-  height: 30px;
+  width: 50px;
+  height: 50px;
   box-sizing: border-box;
   border: 2px solid #895910;
   background-color: #ffc719;
-  border-radius: 15px;
+  border-radius: 25px;
   text-align: center;
   box-shadow: 0px 4px 10px #000;
   z-index: 1;
@@ -219,9 +218,6 @@ const MarkPic = ({
   idx,
 }) => {
   const context = useContext(AppContext);
-  const imgSet = React.useMemo(() => {
-    return context.images;
-  }, [context]);
   const [size, setSize] = useState(0);
   const picSize = useCallback((node) => {
     if (node !== null) {
@@ -231,15 +227,21 @@ const MarkPic = ({
   const mark = React.useMemo(() => Array.from({length: length}, () => ''), [length]);
   return (
     mark.map((markData, markIdx) => {
-      return <MarkWrap ref={picSize} size={size} pic={imgSet.images[pic]} idx={idx} key={`markIdx${markIdx}`}>
-        <MarkImg type="light"/>
-        <MarkImg type="front"/>
-        <MarkImg type="shadow"/>
-      </MarkWrap>
+      return (
+        <MarkWrap ref={picSize} size={size} key={`markIdx${markIdx}`}>
+          <IconPic pic={pic} type="animalMark" idx={idx} />
+        </MarkWrap>
+      )
     })
   )
 }
 
+      
+{/* <MarkWrap ref={picSize} size={size}>
+<MarkImg type="light"/>
+<MarkImg type="front"/>
+<MarkImg type="shadow"/>
+</MarkWrap> */}
 const SkillMarkWrap = styled.span`
   display: inline-block;
   position: absolute;

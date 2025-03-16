@@ -525,9 +525,9 @@ span[small] {
 .popup_cont .items .item_list .item_holeback {
   display: inline-block;
   background-image: radial-gradient(at 50%, #000 30%, #888 100%);
-  border-radius: 30px;
-  width: 24px;
-  height: 24px;
+  border-radius: 20px;
+  width: 40px;
+  height: 40px;
   text-align: center;
 }
 .popup_cont .items .item_list.item_hole {
@@ -937,6 +937,10 @@ span[small] {
   height: 100%;
   pointer-events: none;
 }
+.item_layout.select0 {
+  outline: 2px solid #fff;
+  box-shadow: 0 0 20px #fff;
+}
 .item_layout.select1 {
   outline: 2px solid #ffac2f;
   box-shadow: 0 0 20px #ffac2f;
@@ -944,6 +948,18 @@ span[small] {
 .item_layout.select2 {
   outline: 2px solid #e14040;
   box-shadow: 0 0 20px #e14040;
+}
+.item_layout.select3 {
+  outline: 2px solid #a800ff;
+  box-shadow: 0 0 20px #a800ff;
+}
+.item_layout.select4 {
+  outline: 2px solid #0090ff;
+  box-shadow: 0 0 20px #0090ff;
+}
+.item_layout.select5 {
+  outline: 2px solid #00a90c;
+  box-shadow: 0 0 20px #00a90c;
 }
 
 .wrap {
@@ -1008,101 +1024,6 @@ span[small] {
 .ch_info .skill .sk .txt span[night] {
 }
 
-/* common 캐릭터 선택 공간 */
-.ch_select_area {
-  position: absolute;
-  bottom: 0;
-  width: calc(100% - 5px);
-  padding-top: calc(130% - 5px);
-  border: 5px double #00a90c;
-  box-sizing: border-box;
-  white-space: nowrap;
-  background: rgb(0, 0, 0, 0.5);
-  border-radius: 15px;
-  z-index: 3;
-}
-.ch_select_area.g1 {
-  box-shadow: 0 0 10px #fff, 0 0 20px #fff;
-}
-.ch_select_area.g2 {
-  box-shadow: 0 0 10px #00a90c, 0 0 20px #00a90c;
-}
-.ch_select_area.g3 {
-  box-shadow: 0 0 10px #0090ff, 0 0 20px #0090ff;
-}
-.ch_select_area.g4 {
-  box-shadow: 0 0 10px #f4ea19, 0 0 20px #f4ea19;
-}
-.ch_select_area.g5 {
-  box-shadow: 0 0 10px #a800ff, 0 0 20px #a800ff;
-}
-.ch_select_area.g6 {
-  box-shadow: 0 0 10px #ff8000, 0 0 20px #ff8000;
-}
-.ch_select_area.g7 {
-  box-shadow: 0 0 10px #ff2a00, 0 0 20px #ff2a00;
-}
-.ch_select_area .action_ch {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  border-radius: 10px;
-  overflow: hidden;
-}
-/* .ch_select_area .action_ch.none:before{display:block;position:absolute;left:50%;top:50%;content:'';width:5px;height:50%;background:#ff2a00;transform:translate(-50%,-50%) rotate(-30deg);}
-.ch_select_area .action_ch.none:after{display:block;position:absolute;left:50%;top:50%;content:'';width:5px;height:50%;background:#ff2a00;transform:translate(-50%,-50%) rotate(30deg);} */
-.ch_select_area .action_ch span {
-  display: block;
-}
-.ch_select_area .action_ch.g1 {
-  background-color: #fff;
-}
-.ch_select_area .action_ch.g2 {
-  background-color: #00a90c;
-}
-.ch_select_area .action_ch.g3 {
-  background-color: #0090ff;
-}
-.ch_select_area .action_ch.g4 {
-  background-color: #f4ea19;
-}
-.ch_select_area .action_ch.g5 {
-  background-color: #a800ff;
-}
-.ch_select_area .action_ch.g6 {
-  background-color: #ff8000;
-}
-.ch_select_area .action_ch.g7 {
-  background-color: #ff2a00;
-}
-.ch_select_area .action_ch.on {
-  transform: translate(0, 10%);
-  z-index: 1;
-}
-.ch_select_area .action_ch.g1.on {
-  box-shadow: 0 0 8px #fff, 0 0 3px #fff;
-}
-.ch_select_area .action_ch.g2.on {
-  box-shadow: 0 0 8px #00a90c, 0 0 3px #00a90c;
-}
-.ch_select_area .action_ch.g3.on {
-  box-shadow: 0 0 8px #0090ff, 0 0 3px #0090ff;
-}
-.ch_select_area .action_ch.g4.on {
-  box-shadow: 0 0 8px #f4ea19, 0 0 3px #f4ea19;
-}
-.ch_select_area .action_ch.g5.on {
-  box-shadow: 0 0 8px #a800ff, 0 0 3px #a800ff;
-}
-.ch_select_area .action_ch.g6.on {
-  box-shadow: 0 0 8px #ff8000, 0 0 3px #ff8000;
-}
-.ch_select_area .action_ch.g7.on {
-  box-shadow: 0 0 8px #ff2a00, 0 0 3px #ff2a00;
-}
-
 /* 팝업 캐릭터 선택 */
 .select_character {
   display: flex;
@@ -1151,121 +1072,6 @@ span[small] {
 .select_character .select_chState li {
   margin: 0 0 5px 0;
   font-size: 0.875rem;
-}
-
-.ch_list.list {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-.ch_list.paging {
-  position: absolute;
-  bottom: 4%;
-  left: 20px;
-  right: 20px;
-  height: 10.4vh;
-}
-.ch_list.action_list {
-  position: relative;
-  padding: 10px;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-}
-.ch_list.action_list .none_skill {
-  line-height: 1.5;
-  font-size: 1rem;
-}
-.ch_list.paging ul {
-  padding: 5px;
-  width: 100%;
-  white-space: nowrap;
-}
-.ch_list.list ul {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-.ch_list.list ul li {
-  display: inline-block;
-  position: relative;
-  margin: 0 4px 4px 0;
-  width: calc(25% - 5px);
-  padding-top: calc(37% - 7px);
-  border-radius: 10px;
-  overflow: hidden;
-}
-.ch_list.action_list ul li {
-  display: inline-block;
-  position: relative;
-  margin: 0 4px 4px 0;
-  width: calc(25% - 5px);
-  padding-top: calc(32.5% - 5px);
-  border-radius: 10px;
-  overflow: hidden;
-}
-.ch_list.action_list ul li.select {
-  outline: 2px solid #fff;
-  box-shadow: 0 0 10px #fff, 0 0 20px #fff;
-}
-.ch_list.list ul li:nth-of-type(5n) {
-  margin: 0 0 4px 0;
-}
-.ch_list.paging ul li {
-  display: inline-block;
-  position: relative;
-  width: 5vh;
-  height: calc(5vh * 1.3);
-  transform-origin: center bottom;
-  font-size: 0;
-  transform: translate(0, 50%);
-  transition: all 0.3s;
-}
-.ch_list ul li.g1 {
-  background-color: #fff;
-}
-.ch_list ul li.g2 {
-  background-color: #00a90c;
-}
-.ch_list ul li.g3 {
-  background-color: #0090ff;
-}
-.ch_list ul li.g4 {
-  background-color: #f4ea19;
-}
-.ch_list ul li.g5 {
-  background-color: #a800ff;
-}
-.ch_list ul li.g6 {
-  background-color: #ff8000;
-}
-.ch_list ul li.g7 {
-  background-color: #ff2a00;
-}
-.ch_list ul li.on {
-  transform: translate(0, 10%);
-  z-index: 1;
-}
-.ch_list ul li.g1.on {
-  box-shadow: 0 0 8px #fff, 0 0 3px #fff;
-}
-.ch_list ul li.g2.on {
-  box-shadow: 0 0 8px #00a90c, 0 0 3px #00a90c;
-}
-.ch_list ul li.g3.on {
-  box-shadow: 0 0 8px #0090ff, 0 0 3px #0090ff;
-}
-.ch_list ul li.g4.on {
-  box-shadow: 0 0 8px #f4ea19, 0 0 3px #f4ea19;
-}
-.ch_list ul li.g5.on {
-  box-shadow: 0 0 8px #a800ff, 0 0 3px #a800ff;
-}
-.ch_list ul li.g6.on {
-  box-shadow: 0 0 8px #ff8000, 0 0 3px #ff8000;
-}
-.ch_list ul li.g7.on {
-  box-shadow: 0 0 8px #ff2a00, 0 0 3px #ff2a00;
 }
 
 .item_button {
@@ -1396,14 +1202,6 @@ span[small] {
 }
 
 /*keyframes*/
-@keyframes horizontalMove {
-  from {
-    right: 0;
-  }
-  to {
-    right: 5px;
-  }
-}
 
 @keyframes mapColorTransition {
   from {

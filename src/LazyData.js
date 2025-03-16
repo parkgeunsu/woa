@@ -30,10 +30,10 @@ const LazyData = () => {
     }
   }, []);
   useEffect(() => {
-    back.forEach((image) => {
+    for (let v in back) {
       const img = new Image();
-      img.src = image;
-    });
+      img.src = back[v];
+    }
     for (let v in button) {
       const img = new Image();
       img.src = button[v];

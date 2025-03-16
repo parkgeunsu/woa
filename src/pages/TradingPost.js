@@ -15,8 +15,7 @@ const Img = styled.img.attrs(
     src: imgurl 
   })
 )``;
-const ShopWrap = styled.div`
-	background:url(${({backImg}) => backImg});background-size:cover;
+const Wrap = styled.div`
 `;
 const MenuButton = styled.button``;
 const ShopIcon = styled.span`
@@ -111,7 +110,7 @@ const TradingPost = ({
 	}, [saveData]);
   return (
 		<>
-			<ShopWrap className="wrap" backImg={imgSet.back[2]} >
+			<Wrap className="wrap">
 				<div className="shop_top trading">
 					<div className="shop_top_left">
 						<TabMenu direction="vertical" list={tradingList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" />
@@ -340,7 +339,7 @@ const TradingPost = ({
 					)}
 				</div>
 				{showCal && <Calculator value={rangeValue} max={item[0][selectItem.select].num} setValue={setRangeValue} showCal={setShowCal}/>}
-			</ShopWrap>
+			</Wrap>
 			<PopupContainer>
         {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
       </PopupContainer>

@@ -114,7 +114,7 @@ const StartGame = ({
     <>
       <Wrap direction="column">
         <TitleBox>{nameID ? `${nameID}${gameData.msg.grammar['conjunction'][lang]}` : ''} {gameData.msg.title['cardDeck'][lang]}</TitleBox>
-        <Scroll direction="column" backImg={imgSet.back[6]}>
+        <Scroll direction="column" backImg={imgSet.back.scroll}>
           <ListWrap style={{width: '80%'}} transparentBack={true}>
             <StyledListItem title={gameData.msg.title['name'][lang]}>
               <TextField transparent={true} placeholder={gameData.msg.sentence['enterID'][lang]} onChange={(value) => {
@@ -159,13 +159,13 @@ const StartGame = ({
                   const name = gameData.ch[cardData.idx].na1;
                   return (
                     <ChCard key={`chCard${idx}`} direction="column">
-                      <CharacterCard size="60" equalSize={false} saveData={saveData} saveCharacter={cardData} slotIdx={idx}/>
+                      <CharacterCard usedType="small" size="60" equalSize={true} saveData={saveData} saveCharacter={cardData} slotIdx={idx}/>
                       <ChName>{name}</ChName>
                     </ChCard>
                   )
                 }) : selectGradeArr.map((cardData, idx) => {
                   return (
-                    <CharacterCard key={`chCard${idx}`} size="60" equalSize={false} />
+                    <CharacterCard grade={cardData} key={`chCard${idx}`} size="60" equalSize={true} />
                   )
                 })}
               </CardBox>

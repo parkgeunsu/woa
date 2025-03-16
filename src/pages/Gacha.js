@@ -110,7 +110,7 @@ const GachaMenuButton = styled.button`
 const GachaCard = styled.div`
 	position: absolute;
 	transform-origin: 50% 50%;
-	padding-top: ${30*1.481}%;
+	padding-top: 30%;
 	width: 30%;
 	transition: opacity linear 0.3s;
 	opacity: 0;
@@ -169,25 +169,24 @@ const GachaShadow = styled.div`
 	right: 0;
 	top: 0;
 	bottom: 0;
-	border-radius: 5%;
+	border-radius: 10%;
 	overflow: hidden;
 	pointer-events: none;
-	box-shadow:${({gameData, cardIdx}) => {
-		const grade = gameData.ch[cardIdx].grade;
-		const gradeColor = gameData.chGradeColor[grade*1];
-		if (grade === 1) {
+	box-shadow:${({gameData, cardGrade}) => {
+		const gradeColor = gameData.chGradeColor[cardGrade * 1];
+		if (cardGrade === 1) {
 			return;
-		} else if (grade === 2) {
+		} else if (cardGrade === 2) {
 			return `0 0 5px ${gradeColor},0 0 2px ${gradeColor}`;
-		} else if (grade === 3) {
+		} else if (cardGrade === 3) {
 			return `0 0 10px ${gradeColor},0 0 3px ${gradeColor},0 0 1px ${gradeColor}`;
-		} else if (grade === 4) {
+		} else if (cardGrade === 4) {
 			return `0 0 15px ${gradeColor},0 0 4px ${gradeColor},0 0 1px ${gradeColor}`;
-		} else if (grade === 5) {
+		} else if (cardGrade === 5) {
 			return `0 0 20px ${gradeColor},0 0 5px ${gradeColor},0 0 2px ${gradeColor}`;
-		} else if (grade === 6) {
+		} else if (cardGrade === 6) {
 			return `0 0 40px ${gradeColor},0 0 10px ${gradeColor},0 0 3px ${gradeColor}, 0 0 50px #fff`;
-		} else if (grade === 7) {
+		} else if (cardGrade === 7) {
 			return `0 0 40px ${gradeColor},0 0 10px ${gradeColor},0 0 3px ${gradeColor}, 0 0 50px #fff`;
 		}
 	}};
@@ -321,7 +320,9 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 				luckyGradePoint = 1;
 			}
 		}
-		const cardG = cardGrade.arr[i] + luckyGradePoint;
+		const cardG = cardGrade.arr[i] + luckyGradePoint,
+			maxGradePoint = Math.round(Math.random() * ((gameData.ch[newIdx].grade > 4 ? 7 : 6) - cardG)),
+			maxG = Math.max(cardG + Math.min(maxGradePoint, 0), 7);
 		const animalAction = gameData.animal_type[gameData.ch[newIdx].animal_type].actionType,
 			actionType = animalAction[Math.floor(Math.random() * animalAction.length)];//공격타입
 		const jobs = gameData.ch[newIdx].job,
@@ -332,6 +333,7 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 		chArr.push({
 			idx: newIdx,
 			grade: cardG,
+			gradeMax: maxG,
 			chSlotIdx: saveData.ch.length + i,
 		});
 		chDataArr.push(util.saveLvState('', {
@@ -352,6 +354,8 @@ const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가
 				battleBeige:[0,0,0,0],
 				animalBeige:0,//총 보유 동물뱃지
 				grade: cardG,
+				gradeMax: maxG,
+				gradeUp: 0,
 				mark: Math.round(Math.random()*2),//동물뱃지 추가보유여부(상점에서 exp로 구입가능)
 				idx: newIdx,
 				items: [{}, {}, {}, {}, {}, {}, {}, {}],
@@ -676,6 +680,7 @@ const Gacha = ({
 				<GachaArea>
 					<div ref={cardGroupRef} className="gacha_cards">
 						{gachaCard.map((data, idx) => {
+							const cardGrade = gameData.ch[data.idx].grade;
 							return (
 								<GachaCard onClick={(e) => {
 									if (step === 2) {
@@ -684,7 +689,6 @@ const Gacha = ({
 										infoRef.current.classList.add('on');
 										popCard(gameData.ch[infoIdx]);
 									} else {//카드 열기
-										const cardGrade = gameData.ch[data.idx].grade;
 										if (cardGrade > 5) {
 											e.target.classList.add('special');
 										} else {
@@ -705,8 +709,8 @@ const Gacha = ({
 									<GachaFront className="gacha_front">
           					<CharacterCard usedType="gacha" saveData={saveData} slotIdx={idx} />
 									</GachaFront>
-									<GachaBack className="gacha_back" type="cardBack" pic="card" idx={2} />
-									<GachaShadow cardIdx={data.idx} gameData={gameData} />
+									<GachaBack className="gacha_back" type="cardBack" pic="card_s" idx={1 + cardGrade} />
+									<GachaShadow cardGrade={cardGrade} gameData={gameData} />
 								</GachaCard>
 							);
 						})}

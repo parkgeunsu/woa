@@ -1,13 +1,26 @@
 import { AppContext } from 'App';
 import { util } from 'components/Libs';
 import CharacterCard from 'pages/CharacterCard';
+import ChList from 'pages/ChList';
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
-const ChListUl = styled.ul`
+const ChUl = styled.ul`
+  padding: 5px;
+  width: 100%;
+  white-space: nowrap;
   width: ${({chSize, chLength}) => Math.ceil(chSize) * chLength}px !important;
 `;
-
+const ChLi = styled.li`
+  display: inline-block;
+  position: relative;
+  width: 5vh;
+  height: 5vh;
+  transform-origin: center bottom;
+  font-size: 0;
+  transform: translate(0, calc(50% + 2vh));
+  transition: all 0.3s;
+`;
 // const timer = (currentTime, setCurrentTime, saveData, changeSaveData) => {
 //   if (currentTime > 49) {
 //     let sData = {...saveData};
@@ -60,11 +73,11 @@ const ChracterPaging = ({
   }, [slotIdx, cardWidth]);
 
   return (
-    <div ref={scrollMove} className={`ch_list scroll-x paging`}>
-      <ChListUl chSize={cardWidth} chLength={chLength}>
+    <ChList ref={scrollMove} type="paging">
+      <ChUl chSize={cardWidth} chLength={chLength}>
         {saveData.ch && saveData.ch.map((data, idx) => {
           return (
-            <li className={`g${data.grade} ${slotIdx === idx ? 'on' : ''}`} key={idx} onClick={() => {
+            <ChLi className={`g${data.grade} ${slotIdx === idx ? 'on' : ''}`} key={idx} onClick={() => {
               util.saveData('historyParam', {
                 ...util.loadData('historyParam'),
                 cards: {
@@ -74,11 +87,11 @@ const ChracterPaging = ({
               changeChSlot(idx);
             }}>
               <CharacterCard usedType="paging" saveData={sData} saveCharacter={data} />
-            </li>
+            </ChLi>
           )
         })}
-      </ChListUl>
-    </div>
+      </ChUl>
+    </ChList>
   );
 }
 

@@ -12,8 +12,7 @@ import 'css/shop.css';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-const ShopWrap = styled.div`
-	background:url(${({backImg}) => backImg});background-size:cover;
+const Wrap = styled.div`
 `;
 const ItemContainer = styled.ul`
   border:5px solid transparent;
@@ -95,7 +94,7 @@ const ToolShop = ({
 	}, [cityIdx])
   return (
 		<>
-			<ShopWrap className="wrap" backImg={imgSet.back[2]} >
+			<Wrap className="wrap">
 				<div className="shop_top">
 					<div className="shop_top_left">
 						<TabMenu direction="vertical" list={shopList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" />
@@ -349,7 +348,7 @@ const ToolShop = ({
 									<div className="scroll-y">
 										<li className="item_list item_typeSlot">
 											<div className="item_type">
-												<MarkPic length={selectItem1.save.markNum} pic="animalType" idx={selectItem1.save.mark}/>
+												<MarkPic length={selectItem1.save.markNum} pic="icon100" idx={selectItem1.save.mark} />
 											</div>
 											<div className="item_slot">
 												{selectItem1.save.hole.map((holeData, idx) => {
@@ -621,7 +620,7 @@ const ToolShop = ({
 									<div className="scroll-y">
 										<li className="item_list item_typeSlot">
 											<div className="item_type">
-												<MarkPic length={selectItem2.save.markNum} pic="animalType" idx={selectItem2.save.mark} />
+												<MarkPic length={selectItem2.save.markNum} pic="icon100" idx={selectItem2.save.mark} />
 											</div>
 											<div className="item_slot">
 												{selectItem2.save.hole.map((holeData, idx) => {
@@ -865,7 +864,7 @@ const ToolShop = ({
 						}}></ItemContainer>
 					)}
 				</div>
-			</ShopWrap>
+			</Wrap>
 			<PopupContainer>
         {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
       </PopupContainer>

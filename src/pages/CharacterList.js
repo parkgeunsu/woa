@@ -1,6 +1,7 @@
 import { AppContext } from 'App';
 import { util } from 'components/Libs';
 import CharacterCard from 'pages/CharacterCard';
+import ChList from 'pages/ChList';
 import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -20,6 +21,23 @@ const ChWrap = styled.div`
 const CardGrid = styled.div`
   padding: 0 20px;
   height: 100%;
+`;
+const ChUl = styled.ul`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+`;
+const ChLi = styled.li`
+  display: inline-block;
+  position: relative;
+  margin: 0 4px 4px 0;
+  width: calc(25% - 3px);
+  padding-top: calc(25% - 3px);
+  border-radius: 10px;
+  overflow: hidden;
+  &:nth-of-type(4n) {
+    margin: 0 0 4px 0;
+  }
 `;
 // const timer = (currentTime, setCurrentTime, saveData, changeSaveData) => {
 //   if (currentTime > 49) {
@@ -69,11 +87,11 @@ const ChracterList = ({
   return (
     <ChWrap className="ch_wrap">
       <CardGrid>
-        <div className={`ch_list scroll-y list`}>
-          <ul>
-            { saveData.ch && saveData.ch.map((data, idx) => {
+        <ChList type="list">
+          <ChUl>
+            {saveData.ch && saveData.ch.map((data, idx) => {
               return (
-                <li className={`g${data.grade}`} key={idx} onClick={() => {
+                <ChLi className={`g${data.grade}`} key={idx} onClick={() => {
                   util.saveHistory({
                     location: 'cards',
                     navigate: navigate,
@@ -96,11 +114,11 @@ const ChracterList = ({
                   });//히스토리 저장
                 }}>
                   <CharacterCard usedType="list" saveData={sData} saveCharacter={data} />
-                </li>
+                </ChLi>
               )
             })}
-          </ul>
-        </div>
+          </ChUl>
+        </ChList>
       </CardGrid>
     </ChWrap>
   );

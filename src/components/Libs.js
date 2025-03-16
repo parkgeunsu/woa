@@ -74,15 +74,16 @@ export const util = { //this.loadImage();
   },
   historyBack: (navigate) => {
     const history = util.loadData('history');
+    console.log(history);
+    history.shift();//첫 history 삭제
     if (history === null || history === undefined || history.length === 0 || history[1] === '') {
-      navigate('/');
+      navigate('/gameMain');
     } else {
-      navigate(`../${history[0].location}`, {
+      navigate(`/${history[0].location}`, {
         state: {
           ...history[0].state,
         }
       });
-      history.shift();//첫 history 삭제
       util.saveData('history', history);
     }
   },
@@ -2028,6 +2029,25 @@ export const util = { //this.loadImage();
         return '';
     }
   },
+  getLocationToIdx: (country) => {
+    switch(country) {
+      case 'cardsList':
+      case 'cards':
+        return 0;
+      case 'inven':
+        return 1;
+      case 'cardPlacement':
+        return 2;
+      case 'enhancingCards':
+        return 3;
+      case 'enhancingStickers':
+        return 4;
+      case 'composite':
+        return 5;
+      default:
+        return '';
+    }
+  },
   getItem: ({
     saveData, gameData, changeSaveData, option, isSave, lang
   }) => {
@@ -3131,9 +3151,25 @@ export const util = { //this.loadImage();
       case 'skillBack':
         return 9;
       case 'star':
-        return 12;
+        return 15;
+      case 'star1':
+        return 16;
+      case 'star2':
+        return 17;
+      case 'star3':
+        return 18;
       case 'elevation':
         return 13;
+      case 'animalType':
+        return 15;
+      case 'animalCoin1':
+        return 10;
+      case 'animalCoin2':
+        return 14;
+      case 'animalCoin3':
+        return 18;
+      case 'animalMark':
+        return 20;
       default:
         return 0;
     }
@@ -3145,6 +3181,9 @@ export const util = { //this.loadImage();
       case 'card':
       case 'card_s':
         return [10, 6];
+      case 'country':
+      case 'areaBack':
+        return [8,5];
       case 'cardRing':
       case 'cardRing_s':
         return [5, 5];
@@ -3152,11 +3191,11 @@ export const util = { //this.loadImage();
       case 'ch_s':
         return [10, 6];
       case 'icon100':
-        return [10, 20];
+        return [10, 25];
       case 'icon150':
         return [10, 10];
       case 'icon200':
-        return [10, 10];
+        return [10, 25];
       case 'itemEtc':
         return [10, 50];
       case 'itemTicket':
@@ -3165,8 +3204,10 @@ export const util = { //this.loadImage();
         return [12, 5];
       case 'moveEventCountry':
         return [14, 1];
+      case 'img600':
+        return [10, 2];
       case 'skill':
-        return [10, 30];
+        return [10, 40];
       default:
         break;
     }

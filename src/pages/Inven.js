@@ -412,7 +412,7 @@ const Inven = ({
 									<div className="scroll-y">
 										<li className="item_list item_typeSlot">
 											<div className="item_type">
-												<MarkPic length={selectItem1.save.markNum} pic="animalType" idx={selectItem1.save.mark} />
+												<MarkPic length={selectItem1.save.markNum} pic="icon100" idx={selectItem1.save.mark} />
 											</div>
 											<div className="item_slot">
 												{selectItem1.save.hole.map((holeData, idx) => {
@@ -670,7 +670,7 @@ const Inven = ({
 									<div className="scroll-y">
 										<li className="item_list item_typeSlot">
 											<div className="item_type">
-												<MarkPic length={selectItem2.save.markNum} pic="animalType" idx={selectItem2.save.mark} />
+												<MarkPic length={selectItem2.save.markNum} pic="icon100" idx={selectItem2.save.mark} />
 											</div>
 											<div className="item_slot">
 												{selectItem2.save.hole.map((holeData, idx) => {

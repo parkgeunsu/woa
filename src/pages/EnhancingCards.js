@@ -1,5 +1,5 @@
 import { AppContext } from 'App';
-import { ItemPic } from 'components/ImagePic';
+import { IconPic, ItemPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Modal from 'components/Modal';
 import ModalContainer from 'components/ModalContainer';
@@ -15,8 +15,13 @@ const Img = styled.img.attrs(
     src: imgurl 
   })
 )``;
-const ItemEnWrap = styled.div`
-	background:url(${({backImg}) => backImg});background-size:cover;
+const Wrap = styled.div`
+`;
+const WrapTop = styled.div`
+	position: relative;
+	padding: 0 20px;
+	width: 100%;
+	box-sizing: border-box;
 `;
 const ShopIcon = styled.span`
 	background:url(${({ icoType }) => icoType}) no-repeat left center;background-size:100%;
@@ -84,31 +89,15 @@ const ItemTotalEff = styled.div`
 		font-weight:600;
 	}
 `;
-const LockIcon = styled.div`
-	background-image:url(${({iconLock}) => iconLock});background-size:100%;background-repeat:no-repeat;background-position:center center;
+const StyledIconPic = styled(IconPic)`
+  position: absolute;
+  left: -10%;
+  top: -10%;
+	width: 60%;
+	height: 60%;
+	z-index: 1;
 `;
 const ItemEnBack = styled.div`
-	&:before{
-		content:'';
-		position:absolute;left:50%;
-		top:${({idx}) => {
-			if (idx === 0) {
-				return '45%';
-			} else {
-				return '30%';
-			} 
-		}};
-		width:${({idx}) => {
-			if (idx === 0) {
-				return '50%';
-			} else {
-				return '100%';
-			} 
-		}};
-		height:100%;
-		background: url(${({back}) => back}) no-repeat center top;
-		background-size:100%;transform:translate(-50%,0);
-	}
 `;
 const colorMix = (util, mainColor, color) => {
 	let colorNum = [0,0,0];
@@ -324,8 +313,9 @@ const EnhancingCards = ({
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
 	const [selectTab, setSelectTab] = useState(0);
-	const [item, setItem] = useState(saveData.items);
-	const [selectItem1, setSelectItem1] = useState(saveData.items.equip[0] ? {
+	const [item, setItem] = useState(Object.keys(saveData).length > 0 ? saveData?.items : []);
+
+	const [selectItem1, setSelectItem1] = useState(saveData?.items?.equip[0] ? {
 		save:saveData.items.equip[0],
 		select:0,
 		game:gameItem.equip[saveData.items.equip[0].part][saveData.items.equip[0].weaponType][saveData.items.equip[0].grade < 5 ? 0 : saveData.items.equip[0].grade - 5][saveData.items.equip[0].idx],
@@ -338,7 +328,7 @@ const EnhancingCards = ({
 	const [selectItem2, setSelectItem2] = useState({save:[],select:[],game:[]});//탭1 우측 홀 save, game
 	const [selectItem3, setSelectItem3] = useState({save:{},select:'',game:{}});//탭2 우측 홀 save, game
 	const [colorantIdx, setColorantIdx] = useState(0);
-	const [mainColor, setMainColor] = useState(saveData.items.equip[0] ? saveData.items.equip[0].color : '');//합성된 장비 색상
+	const [mainColor, setMainColor] = useState(saveData?.items?.equip[0] ? saveData.items.equip[0].color : '');//합성된 장비 색상
 	const [itemEffShow, setItemEffShow] = useState(false);//아이템 효과 보기
 	const [mItemEff, setMItemEff] = useState();//아이템 효과 문구
 	const [upgradeOn, setUpgradeOn] = useState('');//업그레이드 애니메이션 동작
@@ -348,6 +338,7 @@ const EnhancingCards = ({
 		fn:() => {},
 		payment:'',
 	});
+
 	const handleModal = (type, socketIdx) => {
 		if (type === 'socket') {
 			setModalInfo({
@@ -393,7 +384,7 @@ const EnhancingCards = ({
 		let baseSelectItem = {save:[],select:[],game:[]},
 		possibleColorantIdx = '';
 		let pHole = [];
-		if (saveData.items.equip[selectItem1.select]) {
+		if (saveData?.items?.equip[selectItem1.select]) {
 			saveData.items.equip[selectItem1.select].hole.forEach((data,idx) => {
 				if (data) {
 					baseSelectItem.save[idx] = data;
@@ -414,18 +405,20 @@ const EnhancingCards = ({
 	}, [saveData]);
   return (
 		<>
-			<ItemEnWrap className="wrap" backImg={imgSet.back[2]} >
-				<TabMenu list={itemEnList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" onClick={(idx) => {
-					if (idx === 1) {
-						setUpgradeOn(false);
-						setSelectItem3({save:{},select:'',game:{}});
-						clearTimeout(timeoutRef.current);
-					}
-				}}/>
+			<Wrap className="wrap">
+				<WrapTop>
+					<TabMenu list={itemEnList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" onClick={(idx) => {
+						if (idx === 1) {
+							setUpgradeOn(false);
+							setSelectItem3({save:{},select:'',game:{}});
+							clearTimeout(timeoutRef.current);
+						}
+					}}/>
+				</WrapTop>
 				<div className="itemEn_area">
 					{selectTab === 0 ? (
 						<>
-							<ItemEnBack className="itemEn_top" idx={0} back={imgSet.back[4]} onClick={(e) => {
+							<ItemEnBack className="itemEn_top" onClick={(e) => {
 								e.stopPropagation();
 								if (itemEffShow) {
 									setItemEffShow(false);
@@ -591,15 +584,16 @@ const EnhancingCards = ({
 																return <div className="eff" key={`colorant_eff${idx}`}>{util.getEffectType(eff.type, lang)}: <em>{eff.num[0]}</em></div>;
 															})}
 														</div>
-														<LockIcon iconLock={imgSet.icon.iconLock} className="lock" onClick={(e) => {
-															e.stopPropagation();
-															setModalData({
-																fn:removeSocket,
-																payment:'socketRemove'
-															});
-															// setModalFn(removeSocket);
-															// setPayment('socketRemove');
-															handleModal('socket',idx);
+														<StyledIconPic type="commonBtn" pic="icon100" idx="4" onClick={(e) => {
+															console.log(selectItem2);
+															// e.stopPropagation();
+															// setModalData({
+															// 	fn:removeSocket,
+															// 	payment:'socketRemove'
+															// });
+															// // setModalFn(removeSocket);
+															// // setPayment('socketRemove');
+															// handleModal('socket',idx);
 															console.log("슬롯 해제");
 														}}/>
 														{cColor && (
@@ -615,7 +609,7 @@ const EnhancingCards = ({
 							</ItemEnBack>
 							<div className="itemEn_bottom scroll-y">
 								<div className="item_select item_select1 num4">
-									{item.equip && item.equip.map((data, idx) => {
+									{item?.equip && item?.equip.map((data, idx) => {
 										const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
 										const items = gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx];
 										const grade = data.grade || items.grade;
@@ -674,7 +668,7 @@ const EnhancingCards = ({
 									})}
 								</div>
 								<div className="item_select item_select2 num4">
-									{item.hole && item.hole.map((data, idx) => {
+									{item?.hole && item?.hole.map((data, idx) => {
 										const items = gameItem.hole[data.idx];
 										const grade = data.grade || items.grade;
 										const select = selectItem2.select.filter((select) => {
@@ -717,7 +711,7 @@ const EnhancingCards = ({
 						</>
 					) : (
 						<>
-							<ItemEnBack className={`itemEn_top ${upgradeOn}`} idx={1} back={imgSet.back[5]} onClick={(e) => {
+							<ItemEnBack className={`itemEn_top ${upgradeOn}`} onClick={(e) => {
 									e.stopPropagation();
 									if (itemEffShow) {
 										setItemEffShow(false);
@@ -899,7 +893,7 @@ const EnhancingCards = ({
 						</>
 					)}
 				</div>
-			</ItemEnWrap>
+			</Wrap>
 			<ModalContainer>
 				{modalOn && <Modal fn={modalData.fn} payment={modalData.payment} imgSet={imgSet} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {
 					setModalOn(false);

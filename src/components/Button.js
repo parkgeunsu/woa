@@ -25,7 +25,9 @@ const ActiveButton = styled.button`
   'auto'};
   ${({type, size}) => {
     return type === 'icon' ? 
-      `padding: 5px`
+      `padding: 5px;
+       width: 40px;
+       height: 40px;`
      : size === 'small' ? 
       `height: 25px;` : 
       `padding: 10px 15px`;
@@ -57,8 +59,8 @@ const ButtonText = styled.span`
 const StyledIconPic = styled(IconPic)`
   display: inline-block;
   ${({isChildren}) => isChildren ? `margin: 0 5px 0 0;` : ''}
-  width: 24px;
-  height: 24px;
+  width: 100%;
+  height: 100%;
   flex-shrink: 0;
 `;
 const Button = ({

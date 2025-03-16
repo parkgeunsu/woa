@@ -14,8 +14,13 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-const ItemEnWrap = styled.div`
-	background:url(${({backImg}) => backImg});background-size:cover;
+const Wrap = styled.div`
+`;
+const WrapTop = styled.div`
+	position: relative;
+	padding: 0 20px;
+	width: 100%;
+	box-sizing: border-box;
 `;
 const itemEnList = [
 	{na:'socket',icon:14},
@@ -80,41 +85,19 @@ const ItemTotalEff = styled.div`
 	}
 `;
 const LockIcon = styled.div`
-	display:none;
-	position:absolute;
-	right:-10px;
-	top:-5px;
-	width:24px;
-	height:24px;
-	z-index:1;
-	background-color:#ffac2f;
-	border-radius:20px;
-	border:2px solid #000;
-	box-sizing:border-box;
-	background-image:url(${({iconLock}) => iconLock});background-size:100%;background-repeat:no-repeat;background-position:center center;
+	display: none;
+	position: absolute;
+	right: -10px;
+	top: -5px;
+	width: 30px;
+	height: 30px;
+	z-index: 1;
+	background-color: #ffac2f;
+	border-radius: 20px;
+	border: 2px solid #000;
+	box-sizing: border-box;
 `;
 const ItemEnBack = styled.div`
-	&:before{
-		content:'';
-		position:absolute;left:50%;
-		top:${({idx}) => {
-			if (idx === 0) {
-				return '45%';
-			} else {
-				return '30%';
-			} 
-		}};
-		width:${({idx}) => {
-			if (idx === 0) {
-				return '50%';
-			} else {
-				return '100%';
-			} 
-		}};
-		height:100%;
-		background: url(${({back}) => back}) no-repeat center top;
-		background-size:100%;transform:translate(-50%,0);
-	}
 `;
 const colorMix = (util, mainColor, color) => {
 	let colorNum = [0,0,0];
@@ -460,35 +443,37 @@ const EnhancingStickers = ({
 	}, [saveData]);
   return (
 		<>
-			<ItemEnWrap className="wrap" backImg={imgSet.back[2]} >
-				<TabMenu list={itemEnList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" onClick={(idx) => {
-					if (idx === 1) {
-						setUpgradeOn(false);
-						setSelectItem3({save:{},select:'',game:{}});
-						clearTimeout(timeoutRef.current);
-						setActionCh(saveData.actionCh.enhancingStickers2);
-						setPopupInfo((prev) => {
-							return {
-								ch:prev.ch,
-								actionCh:saveData.actionCh.enhancingStickers2.idx,
-								type:'enhancingStickers2'
-							}
-						});
-					} else {
-						setActionCh(saveData.actionCh.enhancingStickers1);
-						setPopupInfo((prev) => {
-							return {
-								ch:prev.ch,
-								actionCh:saveData.actionCh.enhancingStickers1.idx,
-								type:'enhancingStickers1'
-							}
-						});
-					}
-				}}/>
+			<Wrap className="wrap">
+				<WrapTop>
+					<TabMenu list={itemEnList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" onClick={(idx) => {
+						if (idx === 1) {
+							setUpgradeOn(false);
+							setSelectItem3({save:{},select:'',game:{}});
+							clearTimeout(timeoutRef.current);
+							setActionCh(saveData.actionCh.enhancingStickers2);
+							setPopupInfo((prev) => {
+								return {
+									ch:prev.ch,
+									actionCh:saveData.actionCh.enhancingStickers2.idx,
+									type:'enhancingStickers2'
+								}
+							});
+						} else {
+							setActionCh(saveData.actionCh.enhancingStickers1);
+							setPopupInfo((prev) => {
+								return {
+									ch:prev.ch,
+									actionCh:saveData.actionCh.enhancingStickers1.idx,
+									type:'enhancingStickers1'
+								}
+							});
+						}
+					}}/>
+				</WrapTop>
 				<div className="itemEn_area">
 					{selectTab === 0 ? (
 						<>
-							<ItemEnBack className="itemEn_top" idx={0} back={imgSet.back[4]} onClick={(e) => {
+							<ItemEnBack className="itemEn_top" onClick={(e) => {
 								e.stopPropagation();
 								if (itemEffShow) {
 									setItemEffShow(false);
@@ -795,7 +780,7 @@ const EnhancingStickers = ({
 						</>
 					) : (
 						<>
-							<ItemEnBack className={`itemEn_top ${upgradeOn}`} idx={1} back={imgSet.back[5]} onClick={(e) => {
+							<ItemEnBack className={`itemEn_top ${upgradeOn}`} onClick={(e) => {
 									e.stopPropagation();
 									if (itemEffShow) {
 										setItemEffShow(false);
@@ -990,7 +975,7 @@ const EnhancingStickers = ({
 						</>
 					)}
 				</div>
-			</ItemEnWrap>
+			</Wrap>
 			<PopupContainer>
         {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
       </PopupContainer>

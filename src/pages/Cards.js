@@ -7,7 +7,7 @@ import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -21,12 +21,13 @@ import CharacterRelation from 'pages/CharacterRelation';
 import CharacterSkill from 'pages/CharacterSkill';
 import CharacterState from 'pages/CharacterState';
 
+const CH_MENU_HEIGHT = 50;
 const Img = styled.img.attrs(
   ({imgurl}) => ({
     src: imgurl 
   })
 )``;
-const ChWrap = styled.div`
+const Wrap = styled.div`
   position: relative;
 	width: 100%;
 	height: 100%;
@@ -43,15 +44,15 @@ const ChArea = styled.div`
 const ChCard = styled.div`
   position: absolute;
   left: 50%;
-  top: calc(50% - 50px);
+  top: calc(50% - 25px);
   transform: translate(-50%,-50%);
   width: 85%;
-  border-radius: 20px;
   overflow: hidden;
   font-size: 0;
   z-index: 1;
   & > img {
     width: 100%;
+    pointer-events: none;
   }
   .lvEffect span{position:absolute;left:0;right:0;bottom:0%;height:1%;z-index:10;opacity:0;background:rgba(255,255,255,.7);}
   .lvEffect span:first-of-type{transition: all 0.5s 0s ease-in;box-shadow:0 0 20px 10px #fff;}
@@ -66,7 +67,6 @@ const ChCard = styled.div`
 const ChBack = styled(ChPic)`
   position: absolute;
   top: 0;
-  background-color: var(--color-b);
 `;
 const ChInfo = styled.div`
   position: absolute;
@@ -121,28 +121,38 @@ const StyledIconPic = styled(IconPic)`
     filter: brightness(10);
   `}
 `;
+const InvenBtn = styled(Button)`
+  position: absolute;
+  right: 10px;
+  top: 0;
+  padding: 5px;
+  width: 40px;
+  height: 40px;
+  z-index: 3;
+  background: ${({ theme }) => theme.color.lightL};
+`;
 const ChInven = styled.div`
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 100%;
-  height: 50%;
+  left: 10px;
+  right: 10px;
+  top: 20px;
+  bottom: 20px;
   border: 5px solid transparent;
   background: rgba(0,0,0,.8);
   border-image: url(${({frameBack}) => frameBack}) 5 round;z-index: 3;
-  transition: top linear 0.2s;
 `;
-const InvenToggleButton = styled(Button)`
+const CloseBtn = styled(Button)`
   position: absolute;
-  left: 50%;
-  top: -50px;
-  height: 50px;
-  width: auto; 
+  right: 0;
+  top: 0;
+  padding: 5px 10px;
+  transform: translateY(-100%);
+  z-index: 1;
   border-radius: 0;
-  border: 5px solid transparent;
-  border-bottom-width: 0;
-  border-image: url(${({frameBack}) => frameBack}) 5 round;
-  transform: translate(-50%, 0);
+  background: ${({ theme }) => theme.color.sub};
+  div {
+    color: ${({ theme }) => theme.color.main};
+  }
 `;
 const InvenItems = styled.div`
   padding: 5px;
@@ -214,8 +224,10 @@ const Cards = ({
   const [popupInfo, setPopupInfo] = useState({});
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
+  const [isShowCard, setShowCard] = useState(false);
   const gameItem = React.useMemo(() => gameData.items, [gameData]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
+  const [showInven, setShowInven] = useState(state?.dataObj.invenOpened);
   const invenItems = React.useMemo(() => {
     return sData.items;
   }, [sData]);
@@ -228,13 +240,6 @@ const Cards = ({
   useEffect(() => {
 		setSlotIdx(setSlotIdxFn(state, paramData));
 		setChPage(setPageIdxFn(state));
-    if (state?.dataObj.invenOpened) {
-      invenRef.current.opend = 'opend';
-      invenRef.current.style.top = "calc(65% - 10px)";
-    } else {
-      invenRef.current.opend = '';
-      invenRef.current.style.top = "100%";
-    }
 	}, [state, paramData]);
   const changeChPage = (idx) => {
     setChPage(idx);
@@ -273,12 +278,11 @@ const Cards = ({
     }
     setPopupOn(prev => !prev);
   }, [invenItems, slotIdx]);
-  const invenRef = useRef(null);
   return (
     <>
-      <ChWrap className="ch_wrap"  backImg={imgSet.back[0]}>
+      <Wrap className="ch_wrap">
         <ChArea>
-          <div style={{position:"absolute",left:0,top:0,zIndex:100, backgroundColor: '#fff'}}>
+          <div style={{position:"absolute",left:"30%",top:0,zIndex:100, backgroundColor: '#fff'}}>
             <button onClick={() => {
               const option = {
                 type:'equip',
@@ -315,8 +319,10 @@ const Cards = ({
             {currentTime}
           </div>
           <ChCard className="ch_card" chPage={chPage}>
-            <Img imgurl={imgSet.images.transparent800} />
-            {chPage === 0 ? <CharacterCard saveData={sData} slotIdx={slotIdx} /> : <ChBack type="cardBack" pic="card" idx={1} />}
+            <Img imgurl={imgSet.images.transparent800} onClick={() => {
+              setShowCard(!isShowCard);
+            }}/>
+            {chPage === 0 ? <CharacterCard saveData={sData} slotIdx={slotIdx} isShowCard={isShowCard}/> : <ChBack type="cardBack" pic="card" idx={0} />}
             {chPage === 1 && <CharacterState saveData={sData} slotIdx={slotIdx} />}
             {chPage === 2 && <CharacterAnimalSkill saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
             {chPage === 3 && <CharacterSkill saveData={sData} slotIdx={slotIdx} />}
@@ -324,139 +330,137 @@ const Cards = ({
             {chPage === 5 && <CharacterItems saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
           </ChCard>
           <CharacterPaging chLength={chLength} saveData={sData} changeChSlot={changeChSlot} slotIdx={slotIdx} />
-          <ChInven ref={invenRef} frameBack={imgSet.etc.frameChBack}>
-            <InvenToggleButton frameBack={imgSet.etc.frameChBack} onClick={() => {
-              if (invenRef.current.opend === 'opend') {
-                invenRef.current.opend = '';
-                invenRef.current.style.top = "100%";
-              } else {
-                invenRef.current.opend = 'opend';
-                invenRef.current.style.top = "calc(65% - 10px)";
-              }
-            }}>
-              <Text code="t2" color="main">{gameData.msg.menu.inven[lang]}</Text></InvenToggleButton>
-              <InvenItems className="has_items scroll-y">
-                <InvenTitle code="t3" color="main">{gameData.msg.menu.equip[lang]}</InvenTitle>
-                <ul className="h_items">
-                  {invenItems.equip && invenItems.equip.map((data, idx) => {
-                    const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
-                    const items = data.part === 3 ? gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx] : gameItem.equip[data.part][0][itemsGrade][data.idx];
-                    const itemsHole = data.hole;
-                    const equipPossible = (() => {
-                      let chk;
-                      if (data.sealed) {
-                        chk = true;
-                      } else {
-                        chk = !items.limit[sData.ch[slotIdx].job];
-                      }
-                      return chk;
-                    })();
-                    return items && (
-                      <ItemList key={`hequip${idx}`} onClick={() => {
-                        handlePopup({
-                          itemType: 'hequip',
-                          itemData: data,
-                          itemSaveSlot: idx,
-                        });
-                      }} data-itemnum={`equip_${data.idx}`}>
-                        <ItemGradeColor part={data.part} grade={gameData.itemGrade.txt_e[data.grade].toLowerCase()} sealed={data.sealed} impossible={equipPossible}>
-                          <ItemPic type="equip" className={`pic`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.svgColor || data.id)}}>
-                            </svg>
-                          </ItemPic>
-                          <span className="hole" flex-center="true">
-                            {itemsHole.map((holeData, holeidx) => {
-                              const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
-                              return (
-                                <span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
-                                  <ItemPic type="hole" className="pic" pic="itemEtc" idx={holePic} />
-                                </span>
-                              );
-                            })}
-                          </span>
-                        </ItemGradeColor>
-                      </ItemList>
-                    )
-                  })}
-                </ul>
-                <InvenTitle code="t3" color="main">{gameData.msg.menu.hole[lang]}</InvenTitle>
-                <ul className="h_items">
-                  { invenItems.hole && invenItems.hole.map((data, idx) => {
-                    const items = gameItem.hole[data.idx];
-                    return (
-                      <ItemList key={`hole${idx}`} data-itemnum={`hole_${data.idx}`} onClick={() => {
-                        handlePopup({
-                          itemType: 'hole',
-                          itemData: data,
-                          itemSaveSlot: idx,
-                        });
-                      }}>
-                        <ItemGradeColor part="11">
-                          <ItemPic type="hole" className="pic" pic="itemEtc" idx={items.display} />
-                        </ItemGradeColor>
-                      </ItemList>
-                    )
-                  })}
-                </ul>
-                <InvenTitle code="t3" color="main">{gameData.msg.menu.upgrade[lang]}</InvenTitle>
-                <ul className="h_items">
-                  { invenItems.upgrade && invenItems.upgrade.map((data, idx) => {
-                    const items = gameItem.upgrade[data.idx];
-                    return (
-                      <ItemList key={`upgrade${idx}`} data-itemnum={`upgrade_${data.idx}`}  onClick={() => {
-                        handlePopup({
-                          itemType: 'upgrade',
-                          itemData: data,
-                          itemSaveSlot: idx,
-                        });
-                      }} >
-                        <ItemGradeColor part="12">
-                          <ItemPic type="upgrade" className="pic" pic="itemEtc" idx={items.display} />
-                        </ItemGradeColor>
-                      </ItemList>
-                    )
-                  })}
-                </ul>
-                <InvenTitle code="t3" color="main">{gameData.msg.menu.material[lang]}</InvenTitle>
-                <ul className="h_items">
-                  { invenItems.material && invenItems.material.map((data, idx) => {
-                    const items = gameItem.material[data.idx];
-                    return (
-                      <ItemList key={`material${idx}`} data-itemnum={`material_${data.idx}`} onClick={() => {
-                        handlePopup({
-                          itemType: 'material',
-                          itemData: data,
-                          itemSaveSlot: idx,
-                        });
-                      }}>
-                        <ItemGradeColor part="13">
-                          <ItemPic type="material" className="pic" pic="itemEtc" idx={items.display} />
-                        </ItemGradeColor>
-                      </ItemList>
-                    )
-                  })}
-                </ul>
-                <InvenTitle code="t3" color="main">{gameData.msg.menu.etc[lang]}</InvenTitle>
-                <ul className="h_items">
-                  { invenItems.etc && invenItems.etc.map((data, idx) => {
-                    const items = gameItem.etc[data.idx];
-                    return (
-                      <ItemList key={`etc${idx}`} data-itemnum={`etc_${data.idx}`} onClick={() => {
-                        handlePopup({
-                          itemType: 'etc',
-                          itemData: data,
-                          itemSaveSlot: idx,
-                        });
-                      }}>
-                        <ItemGradeColor part="13">
-                          <ItemPic type="etc" className="pic" pic="itemEtc" idx={items.display} />
-                        </ItemGradeColor>
-                      </ItemList>
-                    )
-                  })}
-                </ul>
-              </InvenItems>
-          </ChInven>
+          <InvenBtn>
+            <IconPic type="quickMenu" pic="icon100" idx={1} onClick={() => {
+              setShowInven(prev => !prev);
+            }} />
+          </InvenBtn>
+          {showInven && <ChInven frameBack={imgSet.etc.frameChBack}>
+            <CloseBtn onClick={() => {
+              setShowInven(false);
+            }}><Text code="t1">{gameData.msg.button.close[lang]}</Text></CloseBtn>
+            <InvenItems className="has_items scroll-y">
+              <InvenTitle code="t3" color="main">{gameData.msg.menu.equip[lang]}</InvenTitle>
+              <ul className="h_items">
+                {invenItems.equip && invenItems.equip.map((data, idx) => {
+                  const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
+                  const items = data.part === 3 ? gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx] : gameItem.equip[data.part][0][itemsGrade][data.idx];
+                  const itemsHole = data.hole;
+                  const equipPossible = (() => {
+                    let chk;
+                    if (data.sealed) {
+                      chk = true;
+                    } else {
+                      chk = !items.limit[sData.ch[slotIdx].job];
+                    }
+                    return chk;
+                  })();
+                  return items && (
+                    <ItemList key={`hequip${idx}`} onClick={() => {
+                      handlePopup({
+                        itemType: 'hequip',
+                        itemData: data,
+                        itemSaveSlot: idx,
+                      });
+                    }} data-itemnum={`equip_${data.idx}`}>
+                      <ItemGradeColor part={data.part} grade={gameData.itemGrade.txt_e[data.grade].toLowerCase()} sealed={data.sealed} impossible={equipPossible}>
+                        <ItemPic type="equip" className={`pic`}>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.svgColor || data.id)}}>
+                          </svg>
+                        </ItemPic>
+                        <span className="hole" flex-center="true">
+                          {itemsHole.map((holeData, holeidx) => {
+                            const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
+                            return (
+                              <span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
+                                <ItemPic type="hole" className="pic" pic="itemEtc" idx={holePic} />
+                              </span>
+                            );
+                          })}
+                        </span>
+                      </ItemGradeColor>
+                    </ItemList>
+                  )
+                })}
+              </ul>
+              <InvenTitle code="t3" color="main">{gameData.msg.menu.hole[lang]}</InvenTitle>
+              <ul className="h_items">
+                { invenItems.hole && invenItems.hole.map((data, idx) => {
+                  const items = gameItem.hole[data.idx];
+                  return (
+                    <ItemList key={`hole${idx}`} data-itemnum={`hole_${data.idx}`} onClick={() => {
+                      handlePopup({
+                        itemType: 'hole',
+                        itemData: data,
+                        itemSaveSlot: idx,
+                      });
+                    }}>
+                      <ItemGradeColor part="11">
+                        <ItemPic type="hole" className="pic" pic="itemEtc" idx={items.display} />
+                      </ItemGradeColor>
+                    </ItemList>
+                  )
+                })}
+              </ul>
+              <InvenTitle code="t3" color="main">{gameData.msg.menu.upgrade[lang]}</InvenTitle>
+              <ul className="h_items">
+                { invenItems.upgrade && invenItems.upgrade.map((data, idx) => {
+                  const items = gameItem.upgrade[data.idx];
+                  return (
+                    <ItemList key={`upgrade${idx}`} data-itemnum={`upgrade_${data.idx}`}  onClick={() => {
+                      handlePopup({
+                        itemType: 'upgrade',
+                        itemData: data,
+                        itemSaveSlot: idx,
+                      });
+                    }} >
+                      <ItemGradeColor part="12">
+                        <ItemPic type="upgrade" className="pic" pic="itemEtc" idx={items.display} />
+                      </ItemGradeColor>
+                    </ItemList>
+                  )
+                })}
+              </ul>
+              <InvenTitle code="t3" color="main">{gameData.msg.menu.material[lang]}</InvenTitle>
+              <ul className="h_items">
+                { invenItems.material && invenItems.material.map((data, idx) => {
+                  const items = gameItem.material[data.idx];
+                  return (
+                    <ItemList key={`material${idx}`} data-itemnum={`material_${data.idx}`} onClick={() => {
+                      handlePopup({
+                        itemType: 'material',
+                        itemData: data,
+                        itemSaveSlot: idx,
+                      });
+                    }}>
+                      <ItemGradeColor part="13">
+                        <ItemPic type="material" className="pic" pic="itemEtc" idx={items.display} />
+                      </ItemGradeColor>
+                    </ItemList>
+                  )
+                })}
+              </ul>
+              <InvenTitle code="t3" color="main">{gameData.msg.menu.etc[lang]}</InvenTitle>
+              <ul className="h_items">
+                { invenItems.etc && invenItems.etc.map((data, idx) => {
+                  const items = gameItem.etc[data.idx];
+                  return (
+                    <ItemList key={`etc${idx}`} data-itemnum={`etc_${data.idx}`} onClick={() => {
+                      handlePopup({
+                        itemType: 'etc',
+                        itemData: data,
+                        itemSaveSlot: idx,
+                      });
+                    }}>
+                      <ItemGradeColor part="13">
+                        <ItemPic type="etc" className="pic" pic="itemEtc" idx={items.display} />
+                      </ItemGradeColor>
+                    </ItemList>
+                  )
+                })}
+              </ul>
+            </InvenItems>
+          </ChInven>}
           <ChInfo frameBack={imgSet.etc.frameChBack} className="ch_info" />
           {/* <CharacterItemEnhance saveData={sData} slotIdx={slotIdx} />
           <CharacterChEnhance saveData={sData} slotIdx={slotIdx} /> */}
@@ -484,7 +488,7 @@ const Cards = ({
             });
           }}>다음</StyledButton>
         </ButtonArea>
-      </ChWrap>
+      </Wrap>
       <PopupContainer>
         {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={sData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
       </PopupContainer>

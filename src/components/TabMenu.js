@@ -1,4 +1,5 @@
 import { AppContext } from 'App';
+import { Text } from 'components/Atom';
 import { IconPic } from 'components/ImagePic';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
@@ -10,9 +11,7 @@ const TabMenuContainer = styled.div`
     padding: 0;
     flex-direction: column;
     justify-content: flex-start;
-  ` : `
-    padding: 0 20px;
-  `}
+  ` : ``}
   ${({type}) => type === 'shipyard' ? `
     li.on button{
       background: rgb(174, 216, 255);
@@ -21,6 +20,7 @@ const TabMenuContainer = styled.div`
   `: ''}
 `;
 const TabList = styled.li`
+  max-width: 60px;
   ${({direction}) => direction === 'vertical' ? `
     flex:unset;
   ` : `
@@ -29,9 +29,10 @@ const TabList = styled.li`
 `;
 const TabButton = styled.button`
   display: block;
-  padding: 10px 0 5px 0;
+  padding: 3px 0 0 0;
   width: 100%;
   text-align: center;
+  border-radius: 50% 50% 0;
   ${({selected}) => selected ? `
     background-color: rgba(0,0,0,.5);
     color: #fff;
@@ -41,22 +42,16 @@ const TabButton = styled.button`
     color: #000;
   `}
   .menu{padding:0 20px;}
-  ${({direction}) => direction === 'vertical' ? `
-    border-radius: 20px 0 0 20px;
-  ` : `
-    border-radius: 20px 20px 0 0;
-  `}
 `;
 const TabName = styled.span`
   display: inline-block;
   vertical-align: middle;
 `;
-const TabIcon = styled.span`
-  display: inline-block;
+const TabIcon = styled.div`
   position: relative;
-  margin: 0 0 0 10px;
-  width: 20px;
-  height: 20px;
+  margin: 0 auto;
+  width: 30px;
+  height: 30px;
 `;
 /*common tab*/
 
@@ -89,10 +84,10 @@ const TabMenu = ({
             onClick && onClick(idx);
           }}>
             <TabButton selected={idx === selectTab} direction={direction}>
-              <TabName>{gameData.msg.menu[data.na][lang]}</TabName>
               <TabIcon>
                 <IconPic type="commonBtn" pic="icon100" idx={data.icon} />
               </TabIcon>
+              <Text color={"main"} code="t2">{gameData.msg.menu[data.na][lang]}</Text>
             </TabButton>
           </TabList>
         );

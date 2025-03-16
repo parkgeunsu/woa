@@ -32,15 +32,13 @@ const BattleTitle = styled.div`
 	justify-content: space-around;
   color: #000;
 `;
-const BattleWarp = styled.div`
+const Warp = styled.div`
 	position: relative;
 	width: 100%;
 	height: 100%;
 	box-sizing: border-box;
 	overflow: hidden;
 	height: calc(100% - 50px);
-	background: url(${({backImg}) => backImg});
-  background-size: cover;
 `;
 const BattleArea = styled.div`
 	position: relative;
@@ -2525,7 +2523,7 @@ const TestSkill = ({
           }} selectOption={skillRotateList} title={'각도'}></StyleSelect>
         </BattleTitle>
       </BattleHeader>
-      <BattleWarp className={`battle_wrap ${mode}`} backImg={imgSet.back[1]}>
+      <Warp className={`battle_wrap ${mode}`}>
         <BattleArea ref={(node) => {
           if (node !== null) {
             const area = node.getBoundingClientRect(),
@@ -2798,7 +2796,7 @@ const TestSkill = ({
           )}
         </BattleMenu>}
       </BattleOrder>
-    </BattleWarp>
+    </Warp>
     <MsgContainer>
       {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
     </MsgContainer>

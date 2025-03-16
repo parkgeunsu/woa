@@ -2668,3 +2668,19 @@
   87.5%{transform:scale(0.7) translate(40%, -40%)}
   100%{transform:scale(0.7) translate(0%, -50%)}
 }
+@keyframes lineup_mapCh_noCh{
+  0%{
+    background-color: transparent;
+  }
+  100%{
+    background-color: rgba(0,0,0,0.7); 
+  }
+}
+@keyframes lineup_mapCh{
+  0%{
+    filter: invert(0);
+  }
+  100%{
+    filter: invert(1);
+  }
+}

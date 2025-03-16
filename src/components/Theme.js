@@ -28,6 +28,8 @@ const ColorSet = {
   shadow: "rgba(0,0,0,.7)",
   shadowL: "rgba(0,0,0,.4)",
 	shadowR: "rgba(255,55,0,.7)",
+  light: "rgba(255,255,255,.7)",
+  lightL: "rgba(255,255,255,.4)",
 	stageBar: "#a88b6a",
 	stageBack: "#a96347",
 	land0: "rgb(173,236,148)",

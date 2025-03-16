@@ -1,8 +1,19 @@
-import { ChPic } from 'components/ImagePic';
+import { ChPic, IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import { useState } from 'react';
 import { Range, getTrackBackground } from 'react-range';
 import styled from 'styled-components';
+
+
+const StyledIconPic = styled(IconPic)`
+  position: absolute;
+  left: 0%;
+  top: 0%;
+	width: 20px;
+	height: 20px;
+	z-index: 1;
+  border-radius:50%;
+`;
 
 const StyledPrices = styled.div`
   display:inline-block;
@@ -15,23 +26,19 @@ const StyledPrices = styled.div`
   &:after{content:',';margin:0 0 0 2px;font-size:1.25rem;color:#fff;}
   &:last-of-type:after{content:'';margin:0;}
   &:last-of-type{margin:0;}
-  &:before{
-    content:'';position:absolute;left:0;top:0;width:20px;height:20px;
-    background:#fff url(${({ icoType }) => icoType}) no-repeat left center;background-size:20px;
-    background-position:center center;border-radius:50%;
-  }
   em{color:#ffc719;text-shadow:-1px -1px 0 #fff,1px 1px 0 #000;}
 `;
 
-const icon = (data, imgSet, gameData) => {
+const icon = (data, gameData) => {
+  console.log(data.type, gameData);
   switch(data.type) {
     case 'p':
-      return imgSet.icon.iconDia;
+      return 2;
     case 'g':
-      return imgSet.icon.iconGold;
+      return 3;
     default:
-      return imgSet[data.imgGroup][gameData.items[data.type][data.idx].display];
-      break;
+      //[data.imgGroup][gameData.items[data.type][data.idx].display]
+      return 0;
   }
 };
 const remainingItem = (data, saveData) => {
@@ -58,7 +65,9 @@ export const Prices = ({
 }) => {
   return (
     payment.map((data, idx) => {
-      return <StyledPrices icoType={icon(data, imgSet, gameData)} {...props} key={`payment${idx}`} dangerouslySetInnerHTML={{__html:`-${util.comma(data.price)} <em>(${util.comma(remainingItem(data, saveData))})</em>`}}></StyledPrices>
+      return <StyledPrices {...props} key={`payment${idx}`} dangerouslySetInnerHTML={{__html:`-${util.comma(data.price)} <em>(${util.comma(remainingItem(data, saveData))})</em>`}}>
+        <StyledIconPic type="commonBtn" pic="icon100" idx={icon(data, gameData)} />
+      </StyledPrices>
     })
   );
 }

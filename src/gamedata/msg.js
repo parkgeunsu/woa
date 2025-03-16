@@ -700,6 +700,11 @@ export const msg = {
 		},
 	},
 	button:{
+		close:{
+			ko:'닫기',
+			en:'Close',
+			jp:'閉じる',
+		},
 		drawingCardLevels:{
 			ko:'카드 레벨 뽑기',
 			en:'Drawing a Card Levels',

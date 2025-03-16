@@ -9,8 +9,7 @@ const Img = styled.img.attrs(
     src: imgurl 
   })
 )``;
-const MapWrap = styled.div`
-	background:url(${({backImg}) => backImg});background-size:cover;
+const Wrap = styled.div`
 `;
 const Ship = styled.div`
 	position:absolute;
@@ -424,7 +423,7 @@ const Sail = ({
 	}, [weather]);
   return (
 		<>
-			<MapWrap className="map_wrap" backImg={imgSet.back[2]}>
+			<Wrap className="map_wrap">
 				<div className="water" ref={containerRef}>
 					<svg id="svg" className="path" style={{backgroundColor: "rgb(132, 235, 228)"}}>
 						<path fill="#79dfdd" stroke="#79dfdd" d="M -200 1091 L -200 0 C -169.72222222222223 0, -121.27777777777777 -18, -91 -18 C -68.22222222222223 -18, -31.77777777777778 -12, -9 -12 C 18.5 -12, 62.5 -15, 90 -15 C 116.94444444444444 -15, 160.05555555555554 -13, 187 -13 C 208.94444444444446 -13, 244.05555555555554 -10, 266 -10 C 288.5 -10, 324.5 18, 347 18 C 386.44444444444446 18, 449.55555555555554 -15, 489 -15 C 529.2777777777778 -15, 593.7222222222222 14, 634 14 L 710 0 L 710 1091 Z"></path>
@@ -537,7 +536,7 @@ const Sail = ({
 						}}></Sails>
 					</div>
 				</div>
-			</MapWrap>
+			</Wrap>
 		</>
   );
 }
