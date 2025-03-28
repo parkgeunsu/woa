@@ -19,25 +19,26 @@ const QuickMenuBox = styled.div`
         left: ${showDim ? 0 : -50}px;
       `;
     } else {
-      return `
-        left: ${gameMode !== '' ? -90 : showDim ? 0 : -50}px;
-        opacity: ${gameMode !== '' ? 0.5 : 1};
-        pointer-events: ${gameMode !== '' ? 'none' : 'unset'};
+      return gameMode ? `
+        left: -120px;
+        opacity: 0.5;
+        pointer-events: "none";
+      ` : `
+        left: ${showDim ? 0 : -50}px;
+        opacity: 1;
+        pointer-events: "unset";
       `;
     }
   }}
 `;
 const QuickMenuTitle = styled.div`
-  display: flex;
-  align-items: start;
-  justify-content: center;
-  padding: 10px 0 10px 7px;
-  width: 30px;
+  position: relative;
   box-sizing: border-box;
-  writing-mode: vertical-lr;
-  text-orientation: upright;
-  font-size: ${({theme}) => theme.font.t3};
-  transition: all .3s;
+  font-size: 0;
+`;
+const FlagIcon = styled(IconPic)`
+  width: 70px;
+  height: 70px;
 `;
 const QuickMenuBody = styled.ul`
   padding: 10px 0;
@@ -64,6 +65,7 @@ const QuickMenu = ({
   gameMode,
   showDim,
   setShowDim,
+  stay,
 }) => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
@@ -79,7 +81,10 @@ const QuickMenu = ({
   return <QuickMenuBox showDim={showDim} type={type} gameMode={gameMode} className="transition">
     <QuickMenuTitle onClick={() => {
       setShowDim(prev => !prev);
-    }}>{gameData.msg.button['menu'][lang]}</QuickMenuTitle>
+      //{gameData.msg.button['menu'][lang]}
+    }}>
+      <FlagIcon type="flag" pic="icon200" isAbsolute={true} idx={util.getStringToCountryIdx(stay)}/>
+    </QuickMenuTitle>
     <QuickMenuBody>
       <li><IconPic type="quickMenu" pic="icon100" idx={0} onClick={() => {
         util.saveHistory({

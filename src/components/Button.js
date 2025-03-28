@@ -102,8 +102,6 @@ const IconBtn = styled.div`
   align-items: end;
   width: ${({size}) => size}px;
   height: ${({size}) => size}px;
-  background: url(${({icon}) => icon}) no-repeat center center;
-  background-size: 100%;
   text-align: center;
 `;
 
@@ -113,11 +111,12 @@ const IconButton = ({
   onClick,
   ...rest
 }) => {
+  const urlImg = icon.indexOf("png") >= 0;
   return (
     <IconBtn size={size} icon={icon} {...rest} onClick={() => {
       onClick && onClick();
     }}>
-      <IconPic type="commonBtn" pic="icon100" idx={23} />
+      <IconPic urlImg={urlImg} type={urlImg ? "" : "commonBtn"} pic={icon ? icon : "icon100"} idx={urlImg ? 0 : 23} />
     </IconBtn>
   )
 }

@@ -69,7 +69,7 @@ const ChListWrap = styled.div`
               opacity: 0.5;
             }
             &.on {
-              transform: scale(1.2);
+              transform: scale(1.15);
               transform-origin: center 0;
               z-index: 1;
               & > div {

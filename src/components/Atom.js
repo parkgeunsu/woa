@@ -35,28 +35,5 @@ Text.defaultProps = {
   align: 'center',
 }
 
-const StyledIcon = styled.div`
-  display: inline-block;
-  width: ${({size}) => size}px;
-  height: ${({size}) => size}px;
-  background: url(${({url}) => url}) no-repeat center center;
-  background-size: ${({backSize}) => backSize};
-`;
-const Icon = ({
-  size,
-  url,
-  backSize,
-  ...rest
-}) => {
-  return (
-    <StyledIcon url={url} size={size} {...rest} backSize={backSize}/>
-  )
-}
-
-Icon.defaultProps = {
-  size: 20,
-  backSize: '100% 100%',
-}
-
-export { Icon, Text };
+export { Text };
 

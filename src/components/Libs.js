@@ -1901,6 +1901,7 @@ export const util = { //this.loadImage();
     }
   },
   getDistanceToEvent: (arr1, arr2, baseNum) => {//지도 거리 대비 이벤트 갯수
+    console.log(arr1, arr2);
     if (!arr1 || !arr2) return '';
     baseNum = baseNum ?? 0;
     return Math.round(Math.sqrt(Math.pow(arr1[0] - arr2[0], 2) + Math.pow(arr1[1] - arr2[1], 2))) + baseNum;
@@ -2025,6 +2026,80 @@ export const util = { //this.loadImage();
         return 26;
       case 'unitedKingdom1':
         return 27;
+      default:
+        return '';
+    }
+  },
+  getStringToCountryIdx: (country) => {
+    switch(country) {
+      case 'japan0':
+      case 'japan1':
+      case 'japan2':
+      case 0:
+      case 1:
+      case 2:
+        return 0;
+      case 'korea0':
+      case 'korea1':
+      case 'korea2':
+      case 3:
+      case 4:
+      case 5:
+        return 1;
+      case 'mongolia0':
+      case 'mongolia1':
+      case 'mongolia2':
+      case 'mongolia3':
+      case 'mongolia4':
+      case 6:
+      case 7:
+      case 8:
+      case 9:
+      case 10:
+        return 2;
+      case 'china0':
+      case 'china1':
+      case 'china2':
+      case 'china3':
+      case 'china4':
+      case 'china5':
+      case 'china6':
+      case 'china7':
+      case 11:
+      case 12:
+      case 13:
+      case 14:
+      case 15:
+      case 16:
+      case 17:
+      case 18:
+        return 3;
+      case 'saudiArabia0':
+      case 19:
+        return 4;
+      case 'egypt0':
+      case 20:
+        return 5;
+      case 'greece0':
+      case 21:
+        return 6;
+      case 'italy0':
+      case 22:
+        return 7;
+      case 'france0':
+      case 23:
+        return 8;
+      case 'spain0':
+      case 24:
+        return 9;
+      case 'portugal0':
+      case 25:
+        return 10;
+      case 'unitedKingdom0':
+      case 'unitedKingdom1':
+      case 26:
+      case 27:
+        return 11;
       default:
         return '';
     }
@@ -3128,48 +3203,78 @@ export const util = { //this.loadImage();
       case 'enemies':
       case 'elementBack':
       case 'land':
+      case 'moveEventFinish':
         return 0;
-      case 'element':
       case 'lv':
+      case 'quickMenu':
         return 1;
+      case 'commonBtn':
       case 'map':
       case 'elementBack2':
         return 2;
-      case 'quickMenu':
-        return 3;
-      case 'commonBtn':
-      case 'cardBack':
-        return 4;
       case 'item':
-        return 5;
+      case 'moveEventReward':
+        return 3;
+      case 'cardBack':
+      case 'areaBackMoveRegion':
+        return 4;
       case 'scenario':
+        return 5;
       case 'mutate':
+      case 'elevation':
         return 7;
       case 'battleState':
         return 8;
-      case 'job':
       case 'skillBack':
         return 9;
       case 'star':
-        return 15;
+        return 10;
       case 'star1':
-        return 16;
+        return 11;
       case 'star2':
-        return 17;
+        return 12;
       case 'star3':
-        return 18;
-      case 'elevation':
         return 13;
-      case 'animalType':
+      case 'job':
         return 15;
+      case 'job1':
+        return 18;
+      case 'job2':
+        return 21;
+      case 'job3':
+      case 'flag':
+        return 24;
+      case 'animalType':
+      case 'moveEventBlock':
+        return 27;
+      case 'moveEventBlockHead':
+        return 28;
+      case 'moveEventBlockType':
+        return 29;
+      case 'animalType1':
+        return 31;
+      case 'animalType2':
+        return 35;
+      case 'animalType3':
+        return 39; 
       case 'animalCoin1':
         return 10;
       case 'animalCoin2':
         return 14;
       case 'animalCoin3':
         return 18;
+      case 'cardRing':
+        return 22;
       case 'animalMark':
         return 20;
+      case 'element':
+        return 43;
+      case 'element1':
+        return 45;
+      case 'element2':
+        return 47;
+      case 'element3':
+        return 49;
       default:
         return 0;
     }
@@ -3181,27 +3286,28 @@ export const util = { //this.loadImage();
       case 'card':
       case 'card_s':
         return [10, 6];
+      case 'img400':
+        return [10, 5];
       case 'country':
       case 'areaBack':
         return [8,5];
-      case 'cardRing':
-      case 'cardRing_s':
-        return [5, 5];
+      case 'eventBack':
+        return [10,3];
       case 'ch':
       case 'ch_s':
         return [10, 6];
       case 'icon100':
-        return [10, 25];
+        return [10, 60];
       case 'icon150':
         return [10, 10];
       case 'icon200':
-        return [10, 25];
+        return [10, 32];
+      case 'img800':
+        return [5, 8];
       case 'itemEtc':
         return [10, 50];
       case 'itemTicket':
         return [12, 1];
-      case 'moveEvent':
-        return [12, 5];
       case 'moveEventCountry':
         return [14, 1];
       case 'img600':
@@ -3232,4 +3338,144 @@ export const util = { //this.loadImage();
         return 3;
     }
   },
+  getMoveBigEvent: (eventIdx) => {
+    switch(eventIdx) {
+      case 0:
+        return {
+          name: "chest",
+        };
+      case 1:
+        return {
+          name: "card",
+        };
+      case 2:
+        return {
+          name: "helm",
+        };
+      case 3:
+        return {
+          name: "armor",
+        };
+      case 4:
+        return {
+          name: "dagger",
+        };
+      case 5:
+        return {
+          name: "sword",
+        };
+      case 6:
+        return {
+          name: "twoSword",
+        };
+      case 7:
+        return {
+          name: "shield",
+        };
+      case 8:
+        return {
+          name: "axe",
+        };
+      case 9:
+        return {
+          name: "spear",
+        };
+      case 10:
+        return {
+          name: "bow",
+        };
+      case 11:
+        return {
+          name: "mace",
+        };
+      case 12:
+        return {
+          name: "fist",
+        };
+      case 13:
+        return {
+          name: "accessary",
+        };
+      case 14:
+        return {
+          name: "gold",
+        };
+      case 15:
+        return {
+          name: "empty",
+        };
+      default:
+        return {};
+    }
+  },
+  getMoveEvent: (eventIdx) => {
+    switch(eventIdx) {
+      case 0:
+        return {
+          name: "enemy",
+        };
+      case 1:
+        return {
+          name: "sEnemy",
+        };
+      case 2:
+        return {
+          name: "gold",
+        };
+      case 3:
+        return {
+          name: "treasure",
+        };
+      case 4:
+        return {
+          name: "holyGrail",
+        };
+      case 5:
+        return {
+          name: "trap",
+        };
+      case 6:
+        return {
+          name: "warp",
+        };
+      case 7:
+        return {
+          name: "well1",
+        };
+      case 8:
+        return {
+          name: "well2",
+        };
+      case 9:
+        return {
+          name: "well3",
+        };
+      case 10:
+        return {
+          name: "house",
+        };
+      case 11:
+        return {
+          name: "shop",
+        };
+      case 12:
+        return {
+          name: "guard",
+        };
+      case 13:
+        return {
+          name: "wayfarer",
+        };
+      case 14:
+        return {
+          name: "people",
+        };
+      case 15:
+        return {
+          name: "suspiciousPerson",
+        };
+      default:
+        return {};
+    }
+  }
 }

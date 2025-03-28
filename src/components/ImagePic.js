@@ -51,11 +51,18 @@ const ItemPic = ({
 //menu0, element1-2, 
 const StyledIconPic = styled.div`
   display: inline-block;
-  ${({itemPic, startIdx, idx, whNum}) => {
-    return `
-      background: url(${itemPic}) no-repeat ${(idx % whNum[0]) * (100 / (whNum[0] - 1))}% ${Math.floor(idx / whNum[0]) * (100 / (whNum[1] - 1)) + (100 / (whNum[1] - 1)) * startIdx}%;
-      background-size: ${whNum[0] * 100}%;
-    `;
+  ${({itemPic, startIdx, idx, whNum, urlImg}) => {
+    if (urlImg) {
+      return `
+        background: url(${itemPic}) no-repeat 0% 0%;
+        background-size: ${whNum[0] * 100}%;
+      `;
+    } else {
+      return `
+        background: url(${itemPic}) no-repeat ${(idx % whNum[0]) * (100 / (whNum[0] - 1))}% ${Math.floor(idx / whNum[0]) * (100 / (whNum[1] - 1)) + (100 / (whNum[1] - 1)) * startIdx}%;
+        background-size: ${whNum[0] * 100}%;
+      `;
+    }
   }}
   ${({isAbsolute}) => isAbsolute ? `
     position: absolute;
@@ -79,6 +86,7 @@ const IconPic = forwardRef(({
   type,
   idx,
   pic,
+  urlImg,
   isAbsolute,
   children,
   ...rest
@@ -88,13 +96,13 @@ const IconPic = forwardRef(({
     return context.images;
   }, [context]);
   const whNum = React.useMemo(() => {
-    return util.iconHNum(pic);
-  }, [pic]);
+    return urlImg ? [1, 1] : util.iconHNum(pic);
+  }, [pic, urlImg]);
   const startIdx = React.useMemo(() => {
     return !type ? 0 : util.iconToStartIdx(type);
   }, [type]);
   return (
-    <StyledIconPic {...ref ? ref={ref} : '' } isAbsolute={isAbsolute} whNum={whNum} startIdx={startIdx} className="pic" itemPic={imgSet.images[pic]} idx={idx} {...rest}>
+    <StyledIconPic {...ref ? ref={ref} : '' } isAbsolute={isAbsolute} whNum={whNum} startIdx={startIdx} className="pic" itemPic={urlImg ? pic : imgSet.images[pic]} idx={idx} urlImg={urlImg} {...rest}>
       {children}
     </StyledIconPic>
   )
@@ -229,7 +237,7 @@ const MarkPic = ({
     mark.map((markData, markIdx) => {
       return (
         <MarkWrap ref={picSize} size={size} key={`markIdx${markIdx}`}>
-          <IconPic pic={pic} type="animalMark" idx={idx} />
+          <IconPic pic={pic} type="animalType" idx={idx} />
         </MarkWrap>
       )
     })

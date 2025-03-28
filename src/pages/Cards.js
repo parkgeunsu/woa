@@ -50,6 +50,29 @@ const ChCard = styled.div`
   overflow: hidden;
   font-size: 0;
   z-index: 1;
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border: 5px solid ${({gradeUp}) => {
+      switch(gradeUp) {
+        case 1:
+          return '#8d4300';
+        case 2:
+          return '#ccc';
+        case 3:
+          return '#ffcc15';
+        default:
+          return '#444';
+      }
+    }};
+    box-sizing: border-box;
+    z-index: 6;
+    pointer-events: none;
+  }
   & > img {
     width: 100%;
     pointer-events: none;
@@ -318,7 +341,7 @@ const Cards = ({
             }}>동물스킬 리셋</button>
             {currentTime}
           </div>
-          <ChCard className="ch_card" chPage={chPage}>
+          <ChCard className="ch_card" gradeUp={sData.ch[slotIdx]?.gradeUp} chPage={chPage}>
             <Img imgurl={imgSet.images.transparent800} onClick={() => {
               setShowCard(!isShowCard);
             }}/>

@@ -1,7 +1,7 @@
 import { AppContext } from 'App';
-import { Icon } from 'components/Atom';
 import { Button } from 'components/Button';
 import { FlexBox } from 'components/Container';
+import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
@@ -48,7 +48,9 @@ const StyledButton = styled(Button)`
   background: url(${({btnImg}) => btnImg}) no-repeat center center !important;
   background-size: 100% 100% !important;
 `;
-const StyledIcon = styled(Icon)`
+const StyledIcon = styled(IconPic)`
+  width: 16px;
+  height: 16px;
   margin: 0 10px;
   transform: scale(-1);
 `;
@@ -71,15 +73,7 @@ const GameMainFooter = ({
   gameMode,
   setGameMode,
   stay,
-  rouletteState,
-  setRouletteState,
-  selectRoulettePos,
-  setSelectRoulettePos,
-  rouletteArr,
-  rouletteEnemy,
-  setRouletteEnemy,
-  selectScenario,
-  selectMoveRegion,
+  ...props
 }) => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
@@ -119,7 +113,7 @@ const GameMainFooter = ({
             setGameMode('moveRegion');
           }}>{gameData.msg.button['moveRegion'][lang]}</StyledButton>
         </ButtonWrap>}
-        {gameMode === 'roulette' && <ButtonWrap alignItems="self-end" gameMode={gameMode === 'roulette'}>
+        {gameMode === "roulette" && <ButtonWrap alignItems="self-end" gameMode={gameMode === "roulette"}>
           {rouletteIdx === 0 && <StyledButton className="backBtn" btnImg={imgSet.button.btnSD} onClick={() => {
             setRouletteIdx(0);
             setGameMode('');
@@ -146,14 +140,14 @@ const GameMainFooter = ({
                       ...util.loadData('historyParam'),
                       scenario: {
                         stay: stay,
-                        stageDifficult: selectScenario.stageDifficult,
+                        stageDifficult: props.selectScenario.stageDifficult,
                       }
                     });
                   },
                   state: {
                     scenario: {
                       stay: stay,
-                      stageDifficult: selectScenario.stageDifficult,
+                      stageDifficult: props.selectScenario.stageDifficult,
                     }
                   },
                   isNavigate: true,
@@ -164,43 +158,43 @@ const GameMainFooter = ({
               interval.current = setInterval(() => {
                 sec.current += 0.1;
               }, 10);
-              const cloneState = [...rouletteState];
+              const cloneState = [...props.rouletteState];
               cloneState[rouletteIdx] = true;
-              setRouletteState(cloneState);
+              props.setRouletteState(cloneState);
               setRouletteSpin(true);
               setPickMsg(gameData.msg.button['stop'][lang]);
             } else {
               clearInterval(interval.current);
               interval.current = null;
               setRouletteSpin(false);
-              const clonePos = [...selectRoulettePos];
-              clonePos[rouletteIdx] = Math.round(sec.current) % rouletteArr[rouletteIdx].cards.length;
-              setSelectRoulettePos(clonePos);
+              const clonePos = [...props.selectRoulettePos];
+              clonePos[rouletteIdx] = Math.round(sec.current) % props.rouletteArr[rouletteIdx].cards.length;
+              props.setSelectRoulettePos(clonePos);
 
               const cloneRouletteEnemy = {
-                ...rouletteEnemy,
+                ...props.rouletteEnemy,
               }
               switch(rouletteIdx) {
                 case 0:
                   //추가 동물
                   let addEnemyNum = 0,
                     addEnemyArray = [];
-                  while(addEnemyNum <  + rouletteArr[0].cards[clonePos[0]].amount) {
+                  while(addEnemyNum <  + props.rouletteArr[0].cards[clonePos[0]].amount) {
                     addEnemyArray.push(util.getRgbColor());
                     addEnemyNum ++;
                   }
                   cloneRouletteEnemy.add = {idx: clonePos[0], color: addEnemyArray};
                   break;
                 case 1:
-                  cloneRouletteEnemy.lv = {idx: clonePos[1], num: rouletteArr[1].cards[clonePos[1]].amount};
+                  cloneRouletteEnemy.lv = {idx: clonePos[1], num: props.rouletteArr[1].cards[clonePos[1]].amount};
                   break;
                 case 2:
-                  cloneRouletteEnemy.map = {idx: clonePos[2], num: rouletteArr[2].cards[clonePos[2]].amount};
+                  cloneRouletteEnemy.map = {idx: clonePos[2], num: props.rouletteArr[2].cards[clonePos[2]].amount};
                   break;
                 default:
                   break;
               }
-              setRouletteEnemy(cloneRouletteEnemy);
+              props.setRouletteEnemy(cloneRouletteEnemy);
               util.saveData('historyParam', {
                 ...util.loadData('historyParam'),
                 roulette: cloneRouletteEnemy,
@@ -214,16 +208,16 @@ const GameMainFooter = ({
             }
           }}>{pickMsg}</StyledButton>
         </ButtonWrap>}
-        {gameMode === 'scenario' && <ButtonWrap alignItems="self-end" gameMode={gameMode === 'scenario'}>
+        {gameMode === "scenario" && <ButtonWrap alignItems="self-end" gameMode={gameMode === "scenario"}>
           <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="backBtn"  onClick={() => {
             setGameMode('');
           }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
-          {Object.keys(selectScenario).length === 0 ? 
+          {!props.selectScenario?.dynastyIdx ? 
             <StyledButton width="100%" btnImg={imgSet.button.btnMD}>{gameData.msg.sentence['selectScenario'][lang]}</StyledButton> :
             <StyledButton width="100%" btnImg={imgSet.button.btnMD} type="icon" icon={{
               pic: 'icon100',
               type: 'scenario',
-              idx: selectScenario?.stageDifficult
+              idx: props.selectScenario?.stageDifficult
             }} onClick={() => {
               console.log('전투개시');
               util.saveHistory({
@@ -234,36 +228,36 @@ const GameMainFooter = ({
                     ...util.loadData('historyParam'),
                     scenario: {
                       stay: stay,
-                      dynastyIdx: selectScenario.dynastyIdx,
-                      dynastyScenarioIdx: selectScenario.dynastyScenarioIdx,
-                      stageIdx: selectScenario.stageIdx,
-                      stageDifficult: selectScenario.stageDifficult,
+                      dynastyIdx: props.selectScenario.dynastyIdx,
+                      dynastyScenarioIdx: props.selectScenario.dynastyScenarioIdx,
+                      stageIdx: props.selectScenario.stageIdx,
+                      stageDifficult: props.selectScenario.stageDifficult,
                     }
                   });
                 },
                 state: {
                   scenario: {
                     stay: stay,
-                    dynastyIdx: selectScenario.dynastyIdx,
-                    dynastyScenarioIdx: selectScenario.dynastyScenarioIdx,
-                    stageIdx: selectScenario.stageIdx,
-                    stageDifficult: selectScenario.stageDifficult,
+                    dynastyIdx: props.selectScenario.dynastyIdx,
+                    dynastyScenarioIdx: props.selectScenario.dynastyScenarioIdx,
+                    stageIdx: props.selectScenario.stageIdx,
+                    stageDifficult: props.selectScenario.stageDifficult,
                   }
                 },
                 isNavigate: true,
               });
-            }}>{gameData?.scenario[stay][selectScenario.dynastyIdx]?.scenarioList[selectScenario.dynastyScenarioIdx].stage[selectScenario.stageIdx].title[lang]} {gameData.msg.button['startBattle'][lang] || ''}</StyledButton>
+            }}>{gameData?.scenario[stay][props.selectScenario.dynastyIdx]?.scenarioList[props.selectScenario.dynastyScenarioIdx].stage[props.selectScenario.stageIdx].title[lang]} {gameData.msg.button['startBattle'][lang] || ''}</StyledButton>
           }
         </ButtonWrap>}
-        {gameMode === 'moveRegion' && <ButtonWrap alignItems="self-end" gameMode={gameMode === 'moveRegion'}>
+        {gameMode === "moveRegion" && <ButtonWrap alignItems="self-end" gameMode={gameMode === "moveRegion"}>
           <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="backBtn"  onClick={() => {
             setGameMode('');
           }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
           <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
-            if (selectMoveRegion === '') {
+            if (props.selectMoveRegion === '') {
               setMsgOn(true);
               setMsg(gameData.msg.sentence['selectMoveCountry'][lang]);
-            } else if (stayIdx.current === selectMoveRegion) {
+            } else if (stayIdx.current === props.selectMoveRegion) {
               setMsgOn(true);
               setMsg(gameData.msg.sentence['sameCountry'][lang]);
             } else {
@@ -272,16 +266,19 @@ const GameMainFooter = ({
                 location: 'moveEvent',
                 navigate: navigate,
                 callback: () => {
-                  const distance = util.getDistanceToEvent(gameData.country[stayIdx.current].distancePosition, gameData.country[selectMoveRegion]?.distancePosition) + gameData.countryEventsNum;
+                  setGameMode("moveEvent");
+                  const distance = util.getDistanceToEvent(gameData.country.regions[stayIdx.current].distancePosition, gameData.country.regions[props.selectMoveRegion]?.distancePosition) + gameData.countryEventsNum;
                   util.saveData('historyParam', {
                     ...util.loadData('historyParam'),
                     moveEvent: {
                       stay: stay,
-                      moveTo: selectMoveRegion,
+                      moveTo: props.selectMoveRegion,
+                      bg: Math.floor(Math.random() * 6),
                       distance: distance,
                       blockArr: {
-                        block: Array.from({length:distance}, () => Math.floor(Math.random() * gameData.events.block.length)),
-                        type: Array.from({length:distance}, () => util.fnPercent(gameData.percent.eventsPercent)),
+                        type: Array.from({length:distance}, (v, idx) => {
+                          return (idx % 3 === 0 && idx !== 0) ? Math.round(Math.random()) : util.fnPercent(gameData.percent.eventsPercent)
+                        }),
                       },
                       spBlockArr: Array.from({length:Math.floor(distance / 4) + 1}, () => { return {type: util.fnPercent(gameData.percent.bigEventsPercent), get: false}}),
                       currentStep: 0,
@@ -293,14 +290,29 @@ const GameMainFooter = ({
             }
           }}>
             <FlexBox>
-              {stayIdx.current === selectMoveRegion ? <>
+              {stayIdx.current === props.selectMoveRegion ? <>
                 {gameData.msg.sentence['sameCountry'][lang]}
               </> : <>
-                {gameData.country.regions[util.getCountryToIdx(stay)].name[lang]} <StyledIcon url={imgSet.icon?.iconBack} /> {selectMoveRegion !== '' && gameData.country.regions[selectMoveRegion].name[lang]}
+                {gameData.country.regions[util.getCountryToIdx(stay)].name[lang]} <StyledIcon type="commonBtn" pic="icon100" idx="0" /> {props.selectMoveRegion !== '' && gameData.country.regions[props.selectMoveRegion].name[lang]}
               </>
               }
             </FlexBox>
           </StyledButton>
+        </ButtonWrap>}
+        {gameMode === "moveEvent" && <ButtonWrap alignItems="self-end" gameMode={gameMode === "moveEvent"}>
+          <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="backBtn"  onClick={() => {
+            setGameMode('');
+            util.historyBack(navigate);
+          }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
+          <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="backBtn"  onClick={() => {
+            props.setShowEvent(prev => !prev);
+          }}>{gameData.msg.button[props.showEvent ? "hide" : "show"][lang]}</StyledButton>
+          {props.actionData && props.actionData.action?.map((actionData, actionIdx) => {
+            return <StyledButton key={`actionButton_${actionIdx}`} width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
+              console.log(actionData.name);
+            }}>{actionIdx + 1}
+            </StyledButton>
+          })}
         </ButtonWrap>}
       </Wrapper>
       <MsgContainer>

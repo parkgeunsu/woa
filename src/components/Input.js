@@ -119,6 +119,14 @@ const TextField = ({
   )
 }
 
+const SelectArea = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
 const SelectText = styled.div`
   color: ${({theme}) => theme.color.point5};
   font-size: ${({theme}) => theme.font.t2};
@@ -223,6 +231,7 @@ const Select = ({
   setSelectIdx,
   selectOption,
   onClick,
+  children,
   ...rest
 }) => {
   const timeoutRef = useRef(null);
@@ -247,7 +256,8 @@ const Select = ({
     }
   }, []);
   return (
-    <>
+    <SelectArea>
+      {children}
       <SelectText {...rest} onClick={() => {
         selectShow();
       }}>{selectIdx !== "" ? selectOption[selectIdx] : title}</SelectText>
@@ -282,7 +292,7 @@ const Select = ({
           }}/>
         </SelectOptionArea>
       }
-    </>
+    </SelectArea>
   );
 }
 

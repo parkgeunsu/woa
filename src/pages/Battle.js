@@ -4381,11 +4381,11 @@ const Battle = ({
 				na1: gameData.ch[saveCh.idx].na1,
 				animal_type: gameData.ch[saveCh.idx].animal_type,
 				hasExp:saveCh.hasExp,
-				state: idx !== 0 ? 'die' : '',//죽음
+				state: '',//죽음 idx !== 0 ? 'die' : ''
 				elevation: 0,
 				buffDebuff:[],
 				currenthp: hp,
-				hp: idx !== 0 ? 0 : hp, //죽음
+				hp: hp, //죽음 idx !== 0 ? 0 : hp
 				currenthp_: hp,
 				hp_: hp,
 				currentsp: saveCh.bSt1,

@@ -87,9 +87,34 @@ const GameMain = ({
     ]},
   ]);
   const [selectMoveRegion, setSelectMoveRegion] = useState('');
+  const gameModeAttr = (gameMode) => {
+    switch (gameMode) {
+      case "roulette":
+        return {
+          rouletteState: rouletteState,
+          setRouletteState: setRouletteState,
+          selectRoulettePos: selectRoulettePos,
+          setSelectRoulettePos: setSelectRoulettePos,
+          rouletteArr: rouletteArr.current,
+          rouletteEnemy: rouletteEnemy,
+          setRouletteEnemy: setRouletteEnemy,
+          selectScenario: selectScenario,
+        };
+      case "scenario":
+        return {
+          selectScenario: selectScenario,
+        };
+      case "moveRegion":
+        return {
+          selectMoveRegion: selectMoveRegion,
+        };
+      default: 
+        return {};
+    }
+  }
   return (
     <Wrap direction="column">
-      <QuickMenu type="main" gameMode={gameMode} showDim={showDim} setShowDim={setShowDim}/>
+      <QuickMenu type="main" stay={stay} gameMode={gameMode} showDim={showDim} setShowDim={setShowDim}/>
       <CountryTitle alignItems="center" back={imgSet.back.countryTitle}>
         <StyledText code="t4" color="shadow">{gameData.country.regions[util.getCountryToIdx(stay)].name[lang]}</StyledText>
       </CountryTitle>
@@ -98,7 +123,8 @@ const GameMain = ({
       <MoveRegion gameMode={gameMode} saveData={sData} stay={stay} selectMoveRegion={selectMoveRegion} setSelectMoveRegion={setSelectMoveRegion} />
       <CardGroup>
       </CardGroup>
-      <GameMainFooter saveData={sData} gameMode={gameMode} setGameMode={setGameMode} stay={stay} rouletteState={rouletteState} setRouletteState={setRouletteState} selectRoulettePos={selectRoulettePos} setSelectRoulettePos={setSelectRoulettePos} rouletteArr={rouletteArr.current} rouletteEnemy={rouletteEnemy} setRouletteEnemy={setRouletteEnemy} selectScenario={selectScenario} selectMoveRegion={selectMoveRegion} />
+      <GameMainFooter saveData={sData} gameMode={gameMode} setGameMode={setGameMode} stay={stay} 
+      {...gameModeAttr(gameMode)}  />
     </Wrap>
   );
 };

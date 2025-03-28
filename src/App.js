@@ -318,7 +318,10 @@ const App = ({
           idx:location === "" ? Math.floor(Math.random() * 28) : util.getCountryToIdx(saveData?.info?.stay)
         };
       default:
-        return "";
+        return {
+          pic:"country",
+          idx:location === "" ? Math.floor(Math.random() * 28) : util.getCountryToIdx(saveData?.info?.stay)
+        };
     }
   }
   const changeSaveData = (objData) => {
@@ -443,7 +446,6 @@ const App = ({
       localStorage.setItem('closeTime', new Date());
     }
   }, []);
-  console.log(location);
   return (
     <ThemeProvider theme={theme}>
       <RootContainer value={contextData}>
@@ -504,7 +506,7 @@ const App = ({
 
               <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/moveEvent" element={<MoveEvent saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} gameMode={gameMode} />} />
+              <Route path="/moveEvent" element={<MoveEvent saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} gameMode={gameMode} setGameMode={setGameMode}  showDim={showDim} setShowDim={setShowDim} />} />
 
               <Route path="/enhancingCards" element={<EnhancingCards saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 

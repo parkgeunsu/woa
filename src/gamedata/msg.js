@@ -705,6 +705,16 @@ export const msg = {
 			en:'Close',
 			jp:'閉じる',
 		},
+		show:{
+			ko:'보이기',
+			en:'Show',
+			jp:'見える',
+		},
+		hide:{
+			ko:'숨기기',
+			en:'Hide',
+			jp:'隠す',
+		},
 		drawingCardLevels:{
 			ko:'카드 레벨 뽑기',
 			en:'Drawing a Card Levels',
@@ -894,54 +904,433 @@ export const msg = {
 	ship:{
 		durability:{
 			ko:'내구도',
-			en:'Durability'
+			en:'Durability',
+			jp:'耐久性',
 		},
 		loadage:{
 			ko:'적재량',
-			en:'Loadage'
+			en:'Loadage',
+			jp:'積載量',
 		},
 		knot:{
 			ko:'속도',
-			en:'Knot'
+			en:'Knot',
+			jp:'結び目',
 		},
 		space:{
 			ko:'공간',
-			en:'Space'
+			en:'Space',
+			jp:'空間',
 		},
 		cannon:{
 			ko:'대포',
-			en:'Cannon'
+			en:'Cannon',
+			jp:'大砲',
 		},
 		sign:{
 			ko:'싸인',
-			en:'Sign'
+			en:'Sign',
+			jp:'サイン',
 		}
 	},
 	itemInfo:{
 		itemEffect:{
 			ko:'아이템 효과',
 			en:'Item Effect',
+			jp:'アイテムの効果',
 		},
 		basicEffect:{
 			ko:'기본 효과',
 			en:'Basic Effects',
+			jp:'基本的な効果',
 		},
 		addEffect:{
 			ko:'추가 효과',
 			en:'Additional Effects',
+			jp:'追加効果',
 		},
 		socketEffect:{
 			ko:'소켓 효과',
 			en:'Socket effect',
+			jp:'ソケット効果',
 		},
 		sellPrice:{
 			ko:'판매가',
 			en:'Selling Price',
+			jp:'販売価格',
 		},
 		buyPrice:{
 			ko:'구입가',
 			en:'Buying Price',
+			jp:'購入価格',
 		}
+	},
+	moveEvent:{
+		enemy:{
+			ko:'적',
+			en:'Enemy',
+			jp:'敵',
+		},
+		sEnemy:{
+			ko:'강적',
+			en:'Strong Enemy',
+			jp:'強敵',
+		},
+		gold:{
+			ko:'금화',
+			en:'Gold',
+			jp:'金貨',
+		},
+		treasure:{
+			ko:'보물',
+			en:'Treasure',
+			jp:'宝物',
+		},
+		holyGrail:{
+			ko:'성배',
+			en:'Holy Grail',
+			jp:'聖杯',
+		},
+		trap:{
+			ko:'함정',
+			en:'Trap',
+			jp:'罠',
+		},
+		warp:{
+			ko:'워프',
+			en:'Warp',
+			jp:'ワープ',
+		},
+		well1:{
+			ko:'회복 우물',
+			en:'Recovery Well',
+			jp:'回復井',
+		},
+		well2:{
+			ko:'얕은 우물',
+			en:'Shallow Well',
+			jp:'浅い井戸',
+		},
+		well3:{
+			ko:'깊은 우물',
+			en:'Deep Well',
+			jp:'深い井戸',
+		},
+		house:{
+			ko:'집',
+			en:'House',
+			jp:'家',
+		},
+		shop:{
+			ko:'상점',
+			en:'Shop',
+			jp:'お店',
+		},
+		guard:{
+			ko:'경비',
+			en:'Guard',
+			jp:'警備兵',
+		},
+		wayfarer:{
+			ko:'나그네',
+			en:'Wayfarer',
+			jp:'旅人',
+		},
+		people:{
+			ko:'주민',
+			en:'People',
+			jp:'住民',
+		},
+		suspiciousPerson:{
+			ko:'수상한자',
+			en:'Suspicious Person',
+			jp:'受賞した者',
+		},
+		chest:{
+			ko:'상자',
+			en:'Chest',
+			jp:'箱',
+		},
+		card:{
+			ko:'영웅카드',
+			en:'Hero Card',
+			jp:'ヒーローカード',
+		},
+		helm:{
+			ko:'투구',
+			en:'Helm',
+			jp:'ヘルム',
+		},
+		armor:{
+			ko:'갑옷',
+			en:'Armor',
+			jp:'鎧',
+		},
+		dagger:{
+			ko:'단검',
+			en:'Dagger',
+			jp:'短剣',
+		},
+		sword:{
+			ko:'검',
+			en:'Sword',
+			jp:'剣',
+		},
+		twoSword:{
+			ko:'양손검',
+			en:'Two Handed Sword',
+			jp:'両手剣',
+		},
+		shield:{
+			ko:'방패',
+			en:'Shield',
+			jp:'シールド',
+		},
+		axe:{
+			ko:'도끼',
+			en:'Axe',
+			jp:'斧',
+		},
+		spear:{
+			ko:'창',
+			en:'Spear',
+			jp:'窓',
+		},
+		bow:{
+			ko:'활',
+			en:'Bow',
+			jp:'弓',
+		},
+		mace:{
+			ko:'둔기',
+			en:'Mace',
+			jp:'メイス',
+		},
+		fist:{
+			ko:'맨손무기',
+			en:'Fist',
+			jp:'拳',
+		},
+		accessary:{
+			ko:'악세사리',
+			en:'Accessary',
+			jp:'アクセサリー',
+		},
+		empty:{
+			ko:'빈상자',
+			en:'Empty Chest',
+			jp:'空箱',
+		},
+		eventText0:{
+			ko:'적군이 공격해 왔습니다.',
+			en:'The enemy has attacked.',
+			jp:'敵軍が攻撃してきました。',
+		},
+		eventText1:{
+			ko:'강력한 적이 공격해 왔습니다.',
+			en:'A powerful enemy has attacked.',
+			jp:'敵軍強力な敵が攻撃してきました。',
+		},
+		eventText2:{
+			ko:'금화를 발견했습니다.',
+			en:'Found a gold coin.',
+			jp:'金貨を発見しました。。',
+		},
+		eventText3:{
+			ko:'보물을 발견했습니다.',
+			en:'Found a gold coin.',
+			jp:'宝を見つけました。',
+		},
+		eventText4:{
+			ko:'성배를 발견했습니다.',
+			en:'Found the Holy Grail.',
+			jp:'聖杯を見つけました。',
+		},
+		eventText5:{
+			ko:'함정을 발견했습니다.',
+			en:'Found a trap.',
+			jp:'罠を発見しました。',
+		},
+		eventText6:{
+			ko:'순간이동 통로를 발견했습니다.',
+			en:'Found a teleportation passage.',
+			jp:'瞬間移​​動通路を発見しました。',
+		},
+		eventText7:{
+			ko:'우물을 발견했습니다.',
+			en:'Found a well.',
+			jp:'井戸を見つけました。',
+		},
+		eventText8:{
+			ko:'성스러운 우물을 발견했습니다.',
+			en:'Found a sacred well.',
+			jp:'神聖な井戸を発見しました。',
+		},
+		eventText9:{
+			ko:'성스러운 우물을 발견했습니다.',
+			en:'Found a sacred well.',
+			jp:'神聖な井戸を発見しました。',
+		},
+		eventText10:{
+			ko:'민가를 발견했습니다.',
+			en:'Found a folk house.',
+			jp:'民家を見つけました。',
+		},
+		eventText11:{
+			ko:'상점을 발견했습니다.',
+			en:'Found a store.',
+			jp:'店を見つけました。',
+		},
+		eventText12:{
+			ko:'경비병을 발견했습니다.',
+			en:'Found a guard.',
+			jp:'警備兵を発見しました。',
+		},
+		eventText12_1:{
+			ko:'경비병이 공격해 왔습니다.',
+			en:'The guards attacked.',
+			jp:'警備兵が攻撃してきました。',
+		},
+		eventText13:{
+			ko:'나그네를 발견했습니다.',
+			en:'Found a traveler.',
+			jp:'ナグネを発見しました。',
+		},
+		eventText13_1:{
+			ko:'나그네가 공격해 왔습니다.',
+			en:'The strangers attacked.',
+			jp:'ナグネが攻撃してきました。',
+		},
+		eventText14:{
+			ko:'주민을 발견했습니다.',
+			en:'Found a villager.',
+			jp:'住民を発見しました。',
+		},
+		eventText14_1:{
+			ko:'주민이 공격해 왔습니다.',
+			en:'The residents attacked.',
+			jp:'住民が攻撃してきました。',
+		},
+		eventText15:{
+			ko:'수상한자를 발견했습니다.',
+			en:'Found a suspicious person.',
+			jp:'受賞者を発見しました。',
+		},
+		eventText15_1:{
+			ko:'수상한자가 공격해 왔습니다.',
+			en:'A suspicious person attacked.',
+			jp:'怪しい者が攻撃してきました。',
+		},
+		attack:{
+			ko:'공격한다.',
+			en:'Attack.',
+			jp:'攻撃する。',
+		},
+		save:{
+			ko:'살려준다.',
+			en:'Saves the enemy\'s life.',
+			jp:'生かしてくれる。',
+		},
+		run:{
+			ko:'도망친다.',
+			en:'Run away.',
+			jp:'逃げる。',
+		},
+		getGold:{
+			ko:'금화을 얻다.',
+			en:'Get gold coins.',
+			jp:'金貨を得る。',
+		},
+		getTreasure:{
+			ko:'보물을 얻다.',
+			en:'Get the treasure.',
+			jp:'宝物を手に入れる。',
+		},
+		touchGrail:{
+			ko:'성배를 만지다.',
+			en:'Touch the Holy Grail.',
+			jp:'聖杯に触れる。',
+		},
+		dont:{
+			ko:'아무것도 하지 않는다.',
+			en:'Doesn\'t do anything.',
+			jp:'何もしない。',
+		},
+		putMoney:{
+			ko:'성배에 돈을 넣는다.',
+			en:'Put money in the chalice.',
+			jp:'聖杯にお金を入れる。',
+		},
+		putItem:{
+			ko:'성배에 아이템을 넣는다.',
+			en:'Put an item into the Holy Grail.',
+			jp:'聖杯にアイテムを入れる。',
+		},
+		removeTrap:{
+			ko:'함정을 제거한다.',
+			en:'Remove the trap.',
+			jp:'トラップを取り除く。',
+		},
+		ignore:{
+			ko:'무시한다.',
+			en:'Ignore it.',
+			jp:'無視する。',
+		},
+		use:{
+			ko:'이용한다.',
+			en:'Use it.',
+			jp:'利用する。',
+		},
+		drink:{
+			ko:'물을 마신다.',
+			en:'Drink water.',
+			jp:'水を飲む。',
+		},
+		knock:{
+			ko:'노크하다.',
+			en:'Knock.',
+			jp:'ノックする。',
+		},
+		steal:{
+			ko:'도둑질을 시도한다.',
+			en:'Attempt to steal.',
+			jp:'盗むことを試みる。',
+		},
+		gamble:{
+			ko:'도박을 한다.',
+			en:'Take a gamble.',
+			jp:'ギャンブルをする。',
+		},
+		persuade:{
+			ko:'설득을 시도핟다.',
+			en:'Try to persuade.',
+			jp:'説得を試みる。',
+		},
+		conversation:{
+			ko:'대화를 핟다.',
+			en:'Have a conversation.',
+			jp:'会話をする。',
+		},
+		conversation0:{
+			ko:'날씨가 좋네요.',
+			en:'The weather is nice.',
+			jp:'天気がいいですね。',
+		},
+		conversation1:{
+			ko:'내가 가진 아이템 볼래?',
+			en:'Want to see the items I have?',
+			jp:'私が持っているアイテムを見て？',
+		},
+		conversation2:{
+			ko:'세상이 점점 무서워지고 있어.',
+			en:'The world is becoming more and more scary.',
+			jp:'世界がどんどん怖くなっている。',
+		},
+		conversation3:{
+			ko:'오다가 주웠어.',
+			en:'I picked it up on the way.',
+			jp:'織田が拾った。',
+		},
 	},
 	sentence:{
 		card1:{

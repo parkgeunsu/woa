@@ -1,74 +1,29 @@
 import { AppContext } from 'App';
+import { Text } from 'components/Atom';
+import { Button } from 'components/Button';
+import { FlexBox } from 'components/Container';
+import { ChPic, IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
+import GameMainFooter from 'pages/GameMainFooter';
 import QuickMenu from 'pages/QuickMenu';
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useLayoutEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled.div`
   width: 100%;
   height: 100%;
-  ${({color}) => `
-    background-image: linear-gradient(to top, #000, ${color});
-  `}
-  ${'' /* background: ; */}
+  background-color: var(--color-b);
 `;
-const idxToSize = (idx) => {
-  switch(idx) {
-    case 0:
-    case 11:
-      return 0.7;
-    case 5:
-    case 7:
-    case 10:
-      return 1;
-    case 8:
-    case 9:
-      return 1.5;
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 6:
-      return 2;
-    default:
-      break;
-  }
-  return 
-}
-const idxToOpacity = (idx) => {
-  switch(idx) {
-    case 0:
-      return 0.2;
-    case 1:
-    case 3:
-    case 5:
-    case 6:
-    case 7:
-    case 9:
-    case 11:
-      return 0.3;
-    case 4:
-    case 8:
-    case 10:
-      return 0.5;
-    case 2:
-      return 0.7;
-    default:
-      break;
-  }
-  return 
-}
-const CountryPattern = styled.div`
+const MoveEventBack = styled(ChPic)`
   position: absolute;
+  top: 50%;
+  margin: auto;
+  padding-top: 175%;
   width: 100%;
-  height: 100%;
+  height: 0;
+  opacity: ${({completeStep}) => completeStep};
+  transform: translate(0, -50%);
   pointer-events: none;
-  ${({img, idx}) => `
-    background-image: url(${img});
-    background-repeat: repeat;
-    background-size: ${idxToSize(idx) * 100}px;
-    opacity: ${idxToOpacity(idx)};
-  `}
 `;
 const EventAll = styled.div`
   position: relative;
@@ -77,6 +32,16 @@ const EventAll = styled.div`
     const eventHeight = size * 0.7 * (length + 1),
       windowHeight = window.screen.height - 50;
     return eventHeight < windowHeight ? windowHeight : eventHeight}}px;
+`;
+const EventShadow = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: ${({completeStep}) => (completeStep * 100 + 30) >= 100 ? `transparent` : `linear-gradient(0deg, transparent ${completeStep * 100 + 5}% , #000 ${completeStep * 100 + 30}%, #000 100%)`};
+  z-index: 90;
+  pointer-events: none;
 `;
 const lastPos = (idx) => {
   if (idx < 4 || (idx > 6 && idx < 10) || (idx > 12 && idx < 16) || (idx > 18 && idx < 22) || (idx > 24 && idx < 28)) {
@@ -139,49 +104,22 @@ const MapPiece = styled.div`
     }
   }}
 `;
-const Block = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  ${({img, pos, size, last}) => {
-    const sizeUp = last ? 2 : 1;
-    return `
-      background: url(${img}) no-repeat ${pos[0] * -size * sizeUp}px ${pos[1] * -size * sizeUp}px;
-      background-size: ${size * sizeUp * 12}px;
-    `
-  }}
+const Block = styled(IconPic)`
 `;
-const BlockHead = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  ${({img, pos, size, idx, last}) => {
-    const sizeUp = last ? 2 : 1;
-    return `
-      background: url(${img}) no-repeat ${pos[0] * -size * sizeUp}px ${pos[1] * -size * sizeUp}px;
-      background-size: ${size* sizeUp * 12}px;
-      ${idx !== 0 && idx % 3 === 0 ? 'filter: hue-rotate(90deg);' : ''} 
-    `
-  }}
+const BlockHead = styled(IconPic)`
   z-index: 1;
 `;
-const BlockType = styled.div`
-  position: absolute;
+const BlockType = styled(IconPic)`
   top: -35%;
-  width: 100%;
-  height: 100%;
-  ${({img, pos, size, last}) => {
-    const sizeUp = last ? 2 : 1;
-    return `
-      background: url(${img}) no-repeat ${pos[0] * -size * sizeUp}px ${pos[1] * -size * sizeUp}px;
-      background-size: ${size * sizeUp * 12}px;
-    `
-  }}
-  ${({currentStep, idx}) => {
-    if (currentStep !== undefined && currentStep === idx) {
+  ${({currentStep, nowIdx}) => {
+    if (currentStep !== undefined && currentStep === nowIdx) {
       return  `animation: updown 1.5s infinite alternate ease-in-out;`;
-    } else if (currentStep > idx) {
-      return `transition: all .5s;filter: grayscale(100%);opacity:0;`;
+    } else if (currentStep > nowIdx) {
+      return `
+        transition: all .5s;
+        filter: grayscale(100%);
+        opacity: 0;
+      `;
     }
   }}
   z-index: 2;
@@ -205,62 +143,56 @@ const EventStatue = styled.div`
     height: ${size * 2}px;
     z-index: ${30 - (idx * 3 + 4)};
   `}
-  &:before{
-    display: ${({get}) => get ? 'none' : 'block'};
-    content:'';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    ${({size, eventType, eventImg}) => {
-      return `
-      background-image: url(${eventImg});
-      background-position: -${eventType * size * 2}px 0px;
-      background-repeat: no-repeat;
-      background-size: ${size * 2 * 14}px;
-      `
-    }}
-    ${({currentStep, idx}) => {
-      return currentStep > idx * 3 + 3 ? `
-        animation: fadeInOut 0.5s infinite alternate ease-in-out;;
-      ` : `
-        filter: grayscale(1);
-        opacity: 0.5;
-      `
-    }}
-  }
-  &:after{
-    content:'';
-    position: absolute;
-    top: 40%;
-    width: 100%;
-    height: 100%;
-    ${({size, backImg, backPos}) => {
-      return `
-      background-image: url(${backImg});
-      background-position: ${backPos[0] * -size * 2}px ${backPos[1] * -size * 2}px;
-      background-repeat: no-repeat;
-      background-size: ${size * 2 * 12}px;
-      `
-    }}
-    filter: ${({max, idx}) => idx * 3 + 3 > max ? `hue-rotate(200deg);` : `hue-rotate(90deg);`}
-  }
-  @keyframes fadeInOut {
-    0%{
-      opacity: 1;
-    }
-    100%{
-      opacity: 0.5;
-    }
-  }
+`;
+const RewardBlockHead = styled(IconPic)`
+  top: 30%;
+`;
+const RewardBlockType = styled(IconPic)`
+  top: -10%;
+  transform: scale(0.8);
+`;
+const EventView = styled.div`
+  position: absolute;
+  left: 7.5%;
+  top: 5%;
+  width: 85%;
+  background: #000;
+  border: 15px solid;
+  border-image: url(${({frameImg}) =>  frameImg}) 30 /
+  15px round;
+  box-sizing: border-box;
+  z-index: 91;
+`;
+const EventBack = styled(ChPic)`
+  margin: auto;
+  padding-top: 100%;
+  width: 100%;
+  height: 0;
+`;
+const EventTitle = styled(Text)`
+  padding: 5px 0;
+  border: 5px solid;
+  border-image: url(${({frameImg}) =>  frameImg}) 20 /
+  10px 0 round;
+`;
+const EventText = styled(FlexBox)`
+  padding: 10px;
+  height: auto;
+  width: auto;
 `;
 const MoveEvent = ({
   saveData,
   changeSaveData,
   cityIdx,
   gameMode,
+  setGameMode,
+  showDim,
+  setShowDim,
 }) => {
   const context = useContext(AppContext);
+  const sData = React.useMemo(() => {
+    return Object.keys(saveData).length > 0 ? saveData : util.loadData("saveData");
+  }, [saveData]);
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -270,14 +202,20 @@ const MoveEvent = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const canvasRef = useRef(null);
-  const [countryPattern, setCountryPattern] = useState();
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
   const eventHeight = React.useMemo(() => {
     return 80;
   }, []);
+  const currentStep = paramData.moveEvent.currentStep;
+  const blockType = paramData.moveEvent.blockArr.type[currentStep];
+  const [actionData, setActionData] = useState({});
+  const [showEvent, setShowEvent] = useState(true);
+  useLayoutEffect(() => {
+    console.log(gameData.events.eventProcess[blockType]);
+    setActionData(gameData.events.eventProcess[blockType]);
+  }, [currentStep]);
   const events = React.useMemo(() => {
     const eventArr = Array.from({length:paramData.moveEvent.distance}, () => []);
     return eventArr;
@@ -287,67 +225,74 @@ const MoveEvent = ({
   //     return {type: util.fnPercent(gameData.percent.bigEventsPercent)};
   //   });
   // }, [paramData]);
-  useEffect(() => {
-    if (canvasRef.current) {
-      canvasRef.current.setAttribute('width', 200);
-      canvasRef.current.setAttribute('height', 200);
-      const ctx = canvasRef.current.getContext('2d');
-      const img = new Image();
-      img.addEventListener('load', () => {
-        ctx.drawImage(img, 200 * paramData.moveEvent.moveTo, 800, 200, 200, 0, 0, 200, 200);
-        if (canvasRef.current !== null) {
-          setCountryPattern(canvasRef.current.toDataURL('image/png'));
-        }
-      });
-      img.src = imgSet.images.moveEvent;
-    }
-  }, [paramData]);
   const EventAllScroll = useCallback((node) => {
     if (node !== null) {
       node.scrollTo(0, 2000);
     }
   }, []);
   const stepAction = useCallback((idx, type) => {
-    if (paramData.moveEvent.currentStep === idx) {
+    if (currentStep === idx) {
       console.log(`현재 스텝은 ${type}`);
     }
   }, [paramData]);
-  return <Wrap className="scroll-y" ref={EventAllScroll} color={gameData.eventsCountryColor[paramData.moveEvent.moveTo]} >
-    <QuickMenu type="move" gameMode={gameMode} />
-    <canvas style={{
-      position:'absolute',
-      visibility:'hidden',
-      pointerEvents:'none',
-    }} ref={canvasRef}></canvas>
-    <CountryPattern img={countryPattern} idx={paramData.moveEvent.moveTo} />
-    <EventAll size={eventHeight} length={paramData.moveEvent.distance}>
-      {events.map((eventData, eventIdx) => {
-        //(한국0, 일본1, 중국2, 몽골3, 사우디아라비아4, 이집트5, 그리스6, 이탈리아7, 영국8, 프랑스9, 스페인10, 포르투칼11)
-        const block = paramData.moveEvent.blockArr.block[eventIdx],
-          blockHead = gameData.eventsHead[paramData.moveEvent.moveTo],
-          blockType = paramData.moveEvent.blockArr.type[eventIdx];
-        return <MapPiece idx={eventIdx} size={eventHeight} key={`event${eventIdx}`} onClick={() => {
-          stepAction(eventIdx, blockType);
+  return <>
+    <Wrap className="scroll-y" ref={EventAllScroll} >
+      <QuickMenu type="move" gameMode={gameMode} showDim={showDim} setShowDim={setShowDim} stay={sData.info.stay} />
+      <MoveEventBack className="back" type="areaBackMoveRegion" pic="areaBack" idx={paramData.moveEvent.bg ? paramData.moveEvent.bg : 0} completeStep={currentStep / paramData.moveEvent.distance * 0.8 + 0.2}/>
+      <EventAll size={eventHeight} length={paramData.moveEvent.distance}>
+        <EventShadow completeStep={(currentStep + 1) / (paramData.moveEvent.distance + 1)} />
+        {events.map((eventData, eventIdx) => {
+          //(한국0, 일본1, 중국2, 몽골3, 사우디아라비아4, 이집트5, 그리스6, 이탈리아7, 영국8, 프랑스9, 스페인10, 포르투칼11)
+          const blockHead = gameData.eventsHead[util.getStringToCountryIdx(paramData.moveEvent.moveTo)],
+            blockType = paramData.moveEvent.blockArr.type[eventIdx];
+          //idx={eventIdx}
+          return <MapPiece idx={eventIdx} size={eventHeight} key={`event${eventIdx}`} onClick={() => {
+            stepAction(eventIdx, blockType);
+          }}>
+            <Block type="moveEventBlock" pic="icon200" isAbsolute={true} idx={0} />
+            <BlockHead type="moveEventBlockHead" pic="icon200" isAbsolute={true} idx={eventIdx % 3 === 0 ? 9 : blockHead} nowIdx={eventIdx} />
+            <BlockType type="moveEventBlockType" pic="icon200" isAbsolute={true} currentStep={currentStep} idx={blockType} nowIdx={eventIdx} />
+          </MapPiece>
+        })}
+        <MapPiece last idx={paramData.moveEvent.distance} size={eventHeight}  onClick={() => {
+          stepAction(paramData.moveEvent.distance, 'finish');
         }}>
-          <Block img={imgSet.images.moveEvent} size={eventHeight} pos={[block, 0]} />
-          <BlockHead img={imgSet.images.moveEvent} size={eventHeight} pos={[blockHead, 1]} idx={eventIdx} />
-          <BlockType currentStep={paramData.moveEvent.currentStep} idx={eventIdx} img={imgSet.images.moveEvent} size={eventHeight} pos={[blockType, 2]} />
+          <Block last type="moveEventBlock" pic="icon200" isAbsolute={true} idx={0} />
+          <BlockHead last type="moveEventBlockHead" pic="icon200" isAbsolute={true} idx={gameData.eventsHead[util.getStringToCountryIdx(paramData.moveEvent.moveTo)]} nowIdx={paramData.moveEvent.distance} />
+          <BlockType last type="moveEventFinish" pic="img400" isAbsolute={true} idx={util.getStringToCountryIdx(paramData.moveEvent.moveTo)} />
         </MapPiece>
-      })}
-      <MapPiece last idx={paramData.moveEvent.distance} size={eventHeight}  onClick={() => {
-        stepAction(paramData.moveEvent.distance, 'finish');
+        {paramData.moveEvent.spBlockArr.map((spEvent, spEventIdx) => {
+          return (
+            <EventStatue key={`spEvent${spEventIdx}`} size={eventHeight} idx={spEventIdx} eventImg={imgSet.images.moveEventCountry} currentStep={currentStep}  backPos={[gameData.eventsHead[paramData.moveEvent.moveTo], 1]}>
+              <RewardBlockHead type="moveEventReward" pic="img400" isAbsolute={true} idx={19} />
+              <RewardBlockType type="moveEventReward" pic="img400" isAbsolute={true} idx={spEvent.get ? spEvent.type + 1 : 0} distance={paramData.moveEvent.distance} nowIdx={spEventIdx} currentStep={currentStep} eventClear={spEvent.get} />
+            </EventStatue>
+          )
+        })}
+      </EventAll>
+      <EventView frameImg={imgSet.images.frame0} onClick={() => {
+        setShowEvent(prev => !prev);
       }}>
-        <Block last img={imgSet.images.moveEvent} size={eventHeight} pos={[0, 0]} />
-        <BlockHead last img={imgSet.images.moveEvent} size={eventHeight} pos={[gameData.eventsHead[paramData.moveEvent.moveTo], 1]} idx={paramData.moveEvent.distance} />
-        <BlockType last img={imgSet.images.moveEvent} size={eventHeight} pos={[paramData.moveEvent.moveTo, 3]} />
-      </MapPiece>
-      {paramData.moveEvent.spBlockArr.map((spEvent, spEventIdx) => {
-        return (
-          <EventStatue key={`spEvent${spEventIdx}`} size={eventHeight} idx={spEventIdx} max={paramData.moveEvent.distance} eventType={spEvent.type} eventImg={imgSet.images.moveEventCountry} currentStep={paramData.moveEvent.currentStep} eventClear={spEvent.get} backImg={imgSet.images.moveEvent} backPos={[gameData.eventsHead[paramData.moveEvent.moveTo], 1]} />
-        )
-      })}
-    </EventAll>
-  </Wrap>
+        {showEvent && 
+          <>
+            <EventBack pic="eventBack" idx={paramData.moveEvent.blockArr.type[currentStep]} />
+            <EventTitle code="t2" color="main" frameImg={imgSet.images.frame0}>
+              {gameData.msg.moveEvent["eventText" + blockType][lang]}
+            </EventTitle>
+            <EventText direction="column" alignItems="flex-start">
+              {gameData.events.eventProcess[blockType].action.map((actionData, actionIdx) => {
+                return <Button key={`action_${actionIdx}`} size="small" onClick={(e) => {
+                  e.stopPropagation();
+                  console.log(actionIdx, actionData.name)
+                }}>{actionIdx + 1}. {gameData.msg.moveEvent[actionData.name][lang]}</Button>
+              })}
+            </EventText>
+          </>
+        }
+      </EventView>
+    </Wrap>
+    <GameMainFooter saveData={sData} gameMode={"moveEvent"} setGameMode={setGameMode} stay={sData.info.stay} moveData={paramData.moveEvent} actionData={actionData} showEvent={showEvent} setShowEvent={setShowEvent} />
+  </>
 }
 
 export default MoveEvent;

@@ -2588,6 +2588,14 @@
     opacity: 1;
   }
 }
+@keyframes fadeInOut {
+  0%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 0.5;
+  }
+}
 @keyframes onoff {
   10% {
     opacity: 1;

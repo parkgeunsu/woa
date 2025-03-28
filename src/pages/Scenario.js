@@ -660,9 +660,9 @@ const Scenario = ({
             {scenarioData.map((dynastyData, dynastyIdx) => {
               return <CountryScenario key={`countryData${dynastyIdx}`}>
                 {dynastyData.scenarioList?.length > 0 && 
-                  <CountryPeriod btnBack={imgSet.button.btnLD}>{gameData.country.regions[util.getCountryToIdx(dynastyData.name)][lang]}</CountryPeriod>}
+                  <CountryPeriod btnBack={imgSet.button.btnLD}>{gameData.msg.regions[dynastyData.name][lang]}</CountryPeriod>}
                   {dynastyData.scenarioList?.map((dynastyScenario, dynastyScenarioIdx) => {
-                    const saveStage = saveData.scenario[stay][dynastyIdx].scenarioList[dynastyScenarioIdx],
+                    const saveStage = saveData.scenario[stay.replace(/[0-9]/g, "")][dynastyIdx].scenarioList[dynastyScenarioIdx],
                       stageDifficult = saveStage?.open;
                     return (stageDifficult > 0 && <ScenarioList key={`scenarios${dynastyScenarioIdx}`} navigate={navigate} gameData={gameData} saveData={saveData} changeSaveData={changeSaveData} stay={stay} dynastyIdx={dynastyIdx} dynastyScenarioIdx={dynastyScenarioIdx} dynastyScenario={dynastyScenario} imgSet={imgSet} selectScenario={selectScenario} setSelectScenario={setSelectScenario} setTooltip={setTooltip} setTooltipOn={setTooltipOn} setTooltipPos={setTooltipPos} lang={lang} />)
                   })}
