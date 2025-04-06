@@ -12,17 +12,6 @@ import styled from "styled-components";
 const Wrap = styled(FlexBox)`
   position: absolute;
   left: 0;
-  ${({ gameMode }) => {
-    return gameMode
-      ? `
-      opacity: 1;
-      pointer-events: unset;
-    `
-      : `
-      opacity: 0;
-      pointer-events: none;
-    `;
-  }};
   width: 100%;
   height: calc(100% - 40px);
   transition: opacity 1s;
@@ -137,11 +126,12 @@ const EntryList = styled.li`
   }
 `;
 const MoveRegion = ({
-  gameMode,
   saveData,
   stay,
   selectMoveRegion,
   setSelectMoveRegion,
+  moveRegionEntry,
+  setMoveRegionEntry,
 }) => {
   const context = useContext(AppContext);
   const lang = React.useMemo(() => {
@@ -155,18 +145,27 @@ const MoveRegion = ({
   }, [context]);
   const stayIdx = React.useMemo(() => util.getCountryToIdx(stay), [stay]);
   const flagIconIdx = React.useMemo(() => {
-    console.log();
     return util.getStringToCountryIdx(selectMoveRegion);
   }, [selectMoveRegion]);
+  const ticketIdx = React.useMemo(() => (flagIconIdx + 31) * 1, [flagIconIdx]);
   const [showEntryList, setShowEntryList] = useState(false);
   const currentCountryIdx = useRef(0);
   const [countryList, setCountryList] = useState([]); //국가 선택 글자
-  const [entry, setEntry] = useState([]);
+  const ticketNum = React.useMemo(() => {
+    const idx = saveData.items.etc.findIndex((etcItem) => {
+      return etcItem.idx === ticketIdx;
+    })
+    if (idx >= 0) {
+      return saveData.items.etc[idx]?.num ?? 1;
+    } else {
+      return 0;
+    }
+  }, [saveData, ticketIdx]);
   const emptyList = React.useMemo(() => {
-    return entry.length < 10 ? Array.from({length: 10 - entry.length}, () => "") : [];
-  }, [entry]);
+    return moveRegionEntry.length < 10 ? Array.from({length: 10 - moveRegionEntry.length}, () => "") : [];
+  }, [moveRegionEntry]);
   const sortEntry = (idx) => {
-    return entry.findIndex((entry) => {
+    return moveRegionEntry.findIndex((entry) => {
       return entry === idx;
     });
   }
@@ -177,12 +176,8 @@ const MoveRegion = ({
       })
     );
   }, []);
-  useEffect(() => {
-    if (gameMode === "moveRegion") {
-    }
-  }, [gameMode]);
   return (
-    <Wrap gameMode={gameMode === "moveRegion"} direction="column">
+    <Wrap direction="column">
       <MapArea frame={imgSet.etc.frameChBack}>
         <MapTouch ref={(node) => {
           if (node !== null) {
@@ -239,19 +234,23 @@ const MoveRegion = ({
       </ButtonArea>
       <RegionInfo direction="column">
         {selectMoveRegion !== "" && selectMoveRegion !== stayIdx && (
-          <Text code="t2" color="main">
-            거리{" "}
-            {util.getDistanceToEvent(
-              gameData.country.regions[stayIdx].distancePosition,
-              gameData.country.regions[selectMoveRegion]?.distancePosition,
-              gameData.countryEventsNum
-            )}
-          </Text>
+          <>
+            <Text code="t2" color="main">
+              {`${gameData.items.etc[ticketIdx].na[lang]}: ${ticketNum}`} 
+            </Text>
+            <Text code="t2" color="main">
+              {`${gameData.msg.moveEvent.eventNum[lang]}: ${util.getDistanceToEvent(
+                gameData.country.regions[stayIdx].distancePosition,
+                gameData.country.regions[selectMoveRegion]?.distancePosition,
+                gameData.countryEventsNum
+              )}`}
+            </Text>
+          </>
         )}
         <EntryCardsWrap className="scroll-y" onClick={() => {
           setShowEntryList(true);
         }}>
-          {entry.map((eCard, cardIdx) => {
+          {moveRegionEntry.map((eCard, cardIdx) => {
             return (
               <EntryCards
                 key={`entry${cardIdx}`}
@@ -282,7 +281,7 @@ const MoveRegion = ({
               return (
                 <EntryList className={sortEntry(chIdx) >= 0 ? "selected" : ""} onClick={(e) => {
                   e.stopPropagation();
-                  const entryClone = [...entry];
+                  const entryClone = [...moveRegionEntry];
                   const selectedIdx = sortEntry(chIdx);
                   if (selectedIdx >= 0) {
                     entryClone.splice(selectedIdx, 1);
@@ -290,7 +289,7 @@ const MoveRegion = ({
                     entryClone.push(chIdx);
                   }
                   entryClone.sort();
-                  setEntry(entryClone);
+                  setMoveRegionEntry(entryClone);
                 }} key={`chData_${chIdx}`}>
                   <CharacterCard usedType="thumb" saveData={saveData} gameData={gameData} slotIdx={chIdx} />
                 </EntryList>

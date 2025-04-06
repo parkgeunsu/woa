@@ -117,30 +117,30 @@ const QuickMenu = ({
           isNavigate: true,
         });//히스토리 저장
       }}/><Text className="text">{gameData.msg.button['cardPlacement'][lang]}</Text></li>
-      <li><IconPic type="quickMenu" pic="icon100" idx={3} onClick={() => {
+      {type !== "move" && <li><IconPic type="quickMenu" pic="icon100" idx={3} onClick={() => {
         util.saveHistory({
           location: 'enhancingCards',
           navigate: navigate,
           callback: () => {},
           isNavigate: true,
         });//히스토리 저장
-      }}/><Text className="text">{gameData.msg.button['enhancingCards'][lang]}</Text></li>
-      <li><IconPic type="quickMenu" pic="icon100" idx={4} onClick={() => {
+      }}/><Text className="text">{gameData.msg.button['enhancingCards'][lang]}</Text></li>}
+      {type !== "move" && <li><IconPic type="quickMenu" pic="icon100" idx={4} onClick={() => {
         util.saveHistory({
           location: 'enhancingStickers',
           navigate: navigate,
           callback: () => {},
           isNavigate: true,
         });//히스토리 저장
-      }}/><Text className="text">{gameData.msg.button['enhancingStickers'][lang]}</Text></li>
-      <li><IconPic type="quickMenu" pic="icon100" idx={5} onClick={() => {
+      }}/><Text className="text">{gameData.msg.button['enhancingStickers'][lang]}</Text></li>}
+      {type !== "move" && <li><IconPic type="quickMenu" pic="icon100" idx={5} onClick={() => {
         util.saveHistory({
           location: 'composite',
           navigate: navigate,
           callback: () => {},
           isNavigate: true,
         });//히스토리 저장
-      }}/><Text className="text">{gameData.msg.button['composite'][lang]}</Text></li>
+      }}/><Text className="text">{gameData.msg.button['composite'][lang]}</Text></li>}
       <li><IconPic type="quickMenu" pic="icon100" idx={6} onClick={() => {
       }}/><Text className="text">{gameData.msg.button['chat'][lang]}</Text></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={7} onClick={() => {

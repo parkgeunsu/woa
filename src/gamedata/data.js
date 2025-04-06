@@ -28,8 +28,9 @@ export const gameData = {
     stateName: ['lds', 'sta', 'str', 'spd', 'int', 'men', 'chr', 'luk'],
     battleStateName: ['hp','sp','rsp','atk','def','mak','mdf','rcv','spd','luk'],
     chMenu: ['display', 'state', 'animalSkill', 'skill', 'relation', 'item'],
-    startCardArr: [[6], [5,3,2], [4,4,3,2],],
-    startGold: [10000, 20000, 30000],
+    startCardArr: [[6], [5,3,2], [4,4,3,2],], //시작 카드갯수
+    startGold: [10000, 20000, 30000], //시작 돈
+    startMorality: 100, //도덕성
     country: country,
     countryEventsNum : 4, //지역이동시 기본 이벤트 값 4
     events: events,

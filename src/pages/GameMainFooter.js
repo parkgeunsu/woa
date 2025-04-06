@@ -3,9 +3,11 @@ import { Button } from 'components/Button';
 import { FlexBox } from 'components/Container';
 import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
+import Modal from 'components/Modal';
+import ModalContainer from 'components/ModalContainer';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -70,8 +72,10 @@ const checkStep = (data) => {
 }
 const GameMainFooter = ({
   saveData,
+  changeSaveData,
   gameMode,
   setGameMode,
+  setShowDim,
   stay,
   ...props
 }) => {
@@ -86,6 +90,9 @@ const GameMainFooter = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
+  const [modalOn, setModalOn] = useState(false);
+  const [modalInfo, setModalInfo] = useState({});
+  const [modalData, setModalData] = useState({});
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
   const currentStep = React.useMemo(() => {
@@ -97,8 +104,15 @@ const GameMainFooter = ({
   const interval = useRef(0);
   const [pickMsg, setPickMsg] = useState(gameData.msg.button[pickMsgArr[currentStep]][lang]);
   const stayIdx = useRef(util.getCountryToIdx(stay));
-  useEffect(() => {
-  }, []);
+  const moveEventCh = () => {
+    return props.moveRegionEntry.map((idx) => {
+      return {
+        idx: idx,
+        hp: saveData.ch[idx].bSt0,
+        hp_: saveData.ch[idx].bSt0,
+      }
+    });
+  }
   return (
     <>
       <Wrapper className="footer">
@@ -138,9 +152,14 @@ const GameMainFooter = ({
                   callback: () => {
                     util.saveData('historyParam', {
                       ...util.loadData('historyParam'),
-                      scenario: {
-                        stay: stay,
-                        stageDifficult: props.selectScenario.stageDifficult,
+                      battle: {
+                        type: "exploring",
+                        title: gameData.msg.button["startExploring"][lang],
+                        country: util.getCountryToIdx(stay),
+                        scenario: {
+                          stay: stay,
+                          stageDifficult: props.selectScenario.stageDifficult,
+                        },
                       }
                     });
                   },
@@ -226,12 +245,16 @@ const GameMainFooter = ({
                 callback: () => {
                   util.saveData('historyParam', {
                     ...util.loadData('historyParam'),
-                    scenario: {
-                      stay: stay,
-                      dynastyIdx: props.selectScenario.dynastyIdx,
-                      dynastyScenarioIdx: props.selectScenario.dynastyScenarioIdx,
-                      stageIdx: props.selectScenario.stageIdx,
-                      stageDifficult: props.selectScenario.stageDifficult,
+                    battle: {
+                      type: "scenario",
+                      country: util.getCountryToIdx(stay),
+                      scenario: {
+                        stay: stay,
+                        dynastyIdx: props.selectScenario.dynastyIdx,
+                        dynastyScenarioIdx: props.selectScenario.dynastyScenarioIdx,
+                        stageIdx: props.selectScenario.stageIdx,
+                        stageDifficult: props.selectScenario.stageDifficult,
+                      },
                     }
                   });
                 },
@@ -261,32 +284,72 @@ const GameMainFooter = ({
               setMsgOn(true);
               setMsg(gameData.msg.sentence['sameCountry'][lang]);
             } else {
-              console.log('지역이동');
-              util.saveHistory({
-                location: 'moveEvent',
-                navigate: navigate,
-                callback: () => {
-                  setGameMode("moveEvent");
-                  const distance = util.getDistanceToEvent(gameData.country.regions[stayIdx.current].distancePosition, gameData.country.regions[props.selectMoveRegion]?.distancePosition) + gameData.countryEventsNum;
-                  util.saveData('historyParam', {
-                    ...util.loadData('historyParam'),
-                    moveEvent: {
-                      stay: stay,
-                      moveTo: props.selectMoveRegion,
-                      bg: Math.floor(Math.random() * 6),
-                      distance: distance,
-                      blockArr: {
-                        type: Array.from({length:distance}, (v, idx) => {
-                          return (idx % 3 === 0 && idx !== 0) ? Math.round(Math.random()) : util.fnPercent(gameData.percent.eventsPercent)
-                        }),
-                      },
-                      spBlockArr: Array.from({length:Math.floor(distance / 4) + 1}, () => { return {type: util.fnPercent(gameData.percent.bigEventsPercent), get: false}}),
-                      currentStep: 0,
-                    }
+              if (props.moveRegionEntry.length === 0) {
+                setMsgOn(true);
+                setMsg(gameData.msg.sentence['createTravelEntry'][lang]);
+              } else {
+                const countryCode = util.getStringToCountryIdx(props.selectMoveRegion),
+                  itemIdx = 31 + countryCode,
+                  isCondition = util.isCondition("items", "etc", itemIdx),
+                  conditionName = gameData.items.etc[itemIdx].na[lang],
+                  conditionNum = props.moveRegionEntry.length;
+                  console.log(stayIdx.current, countryCode, itemIdx);
+                if (isCondition < conditionNum) {
+                  setMsgOn(true);
+                  setMsg(gameData.msg.sentenceFn.lackOfCondition(lang, conditionName));
+                } else {
+                  setModalOn(true);
+                  setModalData({
+                    submitFn: () => {//moveEvent로 이동
+                      setShowDim(false);
+                      changeSaveData(util.deleteItems({
+                        saveData: saveData,
+                        itemObj: {
+                          type: "items",
+                          cate: "etc",
+                          idx: itemIdx,
+                        },
+                        num: conditionNum,
+                      }));//인벤에서 아이템 제거
+                      util.saveHistory({
+                        location: 'moveEvent',
+                        navigate: navigate,
+                        callback: () => {
+                          //조건 체크
+                          setGameMode("moveEvent");
+                          const distance = util.getDistanceToEvent(gameData.country.regions[stayIdx.current].distancePosition, gameData.country.regions[props.selectMoveRegion]?.distancePosition) + gameData.countryEventsNum;
+                          util.saveData('historyParam', {
+                            ...util.loadData('historyParam'),
+                            moveEvent: {
+                              ch: moveEventCh(),
+                              moveTo: props.selectMoveRegion,
+                              bg: Math.floor(Math.random() * 6),
+                              distance: distance,
+                              blockArr: {
+                                type: Array.from({length:distance}, (v, idx) => {
+                                  return idx % 3 === 0 ? Math.round(Math.random()) : util.fnPercent(gameData.percent.eventsPercent)
+                                }),
+                              },
+                              spBlockArr: Array.from({length:Math.floor(distance / 4) + 1}, () => { return {type: util.fnPercent(gameData.percent.bigEventsPercent), get: false}}),
+                              currentStep: 0,
+                            }
+                          });
+                        },
+                        isNavigate: true,
+                      });
+                    },
                   });
-                },
-                isNavigate: true,
-              });
+                  setModalInfo({
+                    type: 'confirm',
+                    msg: `${gameData.msg.sentence.questionMoveCountry[lang]}<br/><span class="des">${gameData.msg.sentenceFn.useItem(lang, conditionName)}</span>`,
+                    info: {},
+                    bt: [
+                      {txt:gameData.msg.button.use[lang],action:'itemEn'},{txt:gameData.msg.button.cancel[lang],action:'popClose'}
+                    ],
+                  })
+                  console.log('지역이동');
+                }
+              }
             }
           }}>
             <FlexBox>
@@ -303,18 +366,27 @@ const GameMainFooter = ({
           <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="backBtn"  onClick={() => {
             setGameMode('');
             util.historyBack(navigate);
+            util.saveData("historyParam", {
+              ...util.loadData("historyParam"),
+              moveEvent: {},
+            });
           }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
           <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="backBtn"  onClick={() => {
             props.setShowEvent(prev => !prev);
           }}>{gameData.msg.button[props.showEvent ? "hide" : "show"][lang]}</StyledButton>
-          {props.actionData && props.actionData.action?.map((actionData, actionIdx) => {
-            return <StyledButton key={`actionButton_${actionIdx}`} width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
-              console.log(actionData.name);
-            }}>{actionIdx + 1}
+          {props.actionData && props.actionData[`action${props.eventPhase}`]?.list.map((aData, acIdx) => {
+            return <StyledButton key={`actionButton_${acIdx}`} width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
+              document.getElementsByClassName("eventOrderText")[0].children[acIdx].click();
+            }}>{acIdx + 1}
             </StyledButton>
           })}
         </ButtonWrap>}
       </Wrapper>
+			<ModalContainer>
+				{modalOn && <Modal submitFn={modalData.submitFn} payment={modalData.payment} imgSet={imgSet} type={"confirm"} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {
+					setModalOn(false);
+				}} gameData={gameData}/>}
+			</ModalContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
       </MsgContainer>

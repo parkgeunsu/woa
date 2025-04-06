@@ -335,7 +335,7 @@ const EnhancingCards = ({
 	const [upgradePercent, setUpgradePercent] = useState(setPercent(selectItem1?.save, selectItem3?.game));
 	const timeoutRef = useRef(null);
 	const [modalData, setModalData] = useState({
-		fn:() => {},
+		submitFn:() => {},
 		payment:'',
 	});
 
@@ -588,7 +588,7 @@ const EnhancingCards = ({
 															console.log(selectItem2);
 															// e.stopPropagation();
 															// setModalData({
-															// 	fn:removeSocket,
+															// 	submitFn: removeSocket,
 															// 	payment:'socketRemove'
 															// });
 															// // setModalFn(removeSocket);
@@ -729,7 +729,7 @@ const EnhancingCards = ({
 												if (selectItem1.save.part === 3) { //무기면
 													if (selectItem3.save.idx > 5) { //숫돌이면
 														setModalData({
-															fn:upgrade,
+															submitFn: upgrade,
 															payment:`upgrade${selectItem1.save.grade - 1}`
 														});
 														handleModal('upgrade');
@@ -740,7 +740,7 @@ const EnhancingCards = ({
 												} else { //방어구면
 													if (selectItem3.save.idx <= 5) { //대장장이망치면
 														setModalData({
-															fn:upgrade,
+															submitFn: upgrade,
 															payment:`upgrade${selectItem1.save.grade - 1}`
 														});
 														handleModal('upgrade');
@@ -895,7 +895,7 @@ const EnhancingCards = ({
 				</div>
 			</Wrap>
 			<ModalContainer>
-				{modalOn && <Modal fn={modalData.fn} payment={modalData.payment} imgSet={imgSet} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {
+				{modalOn && <Modal submitFn={modalData.submitFn} payment={modalData.payment} imgSet={imgSet} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {
 					setModalOn(false);
 				}} gameData={gameData}/>}
 			</ModalContainer>

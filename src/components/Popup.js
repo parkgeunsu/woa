@@ -416,6 +416,7 @@ const PopupDescription = styled.div`
   .skill_eff_list.on{font-size:1rem;font-weight:600;color:#ff2a00;text-shadow:0 0 10px #ff2a00;}
 `;
 const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, showPopup, lang, navigate, timeoutRef) => {
+  const isMoveEvent = dataObj.isMoveEvent;
 	if (type === 'relation') {
     const member = dataObj.relation.member;
 		return (
@@ -758,7 +759,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   });
                 }, 1800);
               }} data-buttontype="itemEvaluate" />
-              <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={() => {//판매
+              {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={() => {//판매
                 if (dataObj.saveItemData.part < 4) {
                   showMsg(true);
                   msgText(gameData.msg.sentence.goShop[lang]);
@@ -796,7 +797,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                     });
                   }, 1800);
                 }
-              }} data-buttontype="itemSell" />
+              }} data-buttontype="itemSell" />}
             </div>
           ) : (//개봉
             <div className="item_button" flex="true">
@@ -821,7 +822,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   }
                 }});
               }} data-buttontype="itemEquip" />
-              <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:21}} onClick={() => {//강화
+              {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:21}} onClick={() => {//강화
                 showMsg(true);
                 msgText(gameData.msg.sentence.goForge[lang]);
                 timeoutRef.current = setTimeout(() => {
@@ -840,8 +841,8 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                     isNavigate: true,
                   });
                 }, 1800);
-              }} data-buttontype="enhancingStickers" />
-              {hasSocket > 0 && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:22}} onClick={(e) => {//소켓
+              }} data-buttontype="enhancingStickers" />}
+              {!isMoveEvent && hasSocket > 0 && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:22}} onClick={(e) => {//소켓
                 showMsg(true);
                 msgText(gameData.msg.sentence.goForge[lang]);
                 timeoutRef.current = setTimeout(() => {
@@ -861,7 +862,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   });
                 }, 1800);
               }} data-buttontype="itemSocket" />}
-              <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {//판매
+              {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {//판매
                 if (dataObj.saveItemData.part < 4) {
                   showMsg(true);
                   msgText(gameData.msg.sentence.goShop[lang]);
@@ -899,7 +900,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                     });
                   }, 1800);
                 }
-              }} data-buttontype="itemSell" />
+              }} data-buttontype="itemSell" />}
             </div>
           )}
         </PopupItemList>
@@ -951,7 +952,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             <em>{`₩${items.price}`}</em>
           </PopupItemPrice>
           <div className="item_button" flex="true">
-            <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:22}} onClick={() => {//소켓
+            {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:22}} onClick={() => {//소켓
               showMsg(true);
               msgText(gameData.msg.sentence.goForge[lang]);
               timeoutRef.current = setTimeout(() => {
@@ -982,8 +983,8 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               //   showPopup: showPopup,
               //   lang: lang,
               // });
-            }} data-buttontype="itemSocket" />
-            <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {//판매
+            }} data-buttontype="itemSocket" />}
+            {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {//판매
               showMsg(true);
               msgText(gameData.msg.sentence.goTool[lang]);
               timeoutRef.current = setTimeout(() => {
@@ -1013,7 +1014,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               //   showPopup: showPopup,
               //   lang: lang,
               // })
-            }} data-buttontype="itemSell" />
+            }} data-buttontype="itemSell" />}
           </div>
         </PopupItemList>
       </PopupItemContainer>
@@ -1045,7 +1046,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             <em>{`₩${items.price}`}</em>
           </PopupItemPrice>
           <div className="item_button" flex="true">
-            <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:21}} onClick={() => {//강화
+            {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:21}} onClick={() => {//강화
               showMsg(true);
               msgText(gameData.msg.sentence.goForge[lang]);
               timeoutRef.current = setTimeout(() => {
@@ -1076,8 +1077,8 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               //   showPopup: showPopup,
               //   lang: lang,
               // })
-            }} data-buttontype="enhancingStickers" />
-            <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {//판매
+            }} data-buttontype="enhancingStickers" />}
+            {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {//판매
               showMsg(true);
               msgText(gameData.msg.sentence.goTool[lang]);
               timeoutRef.current = setTimeout(() => {
@@ -1107,7 +1108,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               //   showPopup: showPopup,
               //   lang: lang,
               // })
-            }} data-buttontype="itemSell" />
+            }} data-buttontype="itemSell" />}
           </div>
         </PopupItemList>
       </PopupItemContainer>
@@ -1139,7 +1140,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             <em>{`₩${items.price}`}</em>
           </PopupItemPrice>
           <div className="item_button" flex="true">
-            <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {//판매
+            {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {//판매
               showMsg(true);
               msgText(gameData.msg.sentence.goTrade[lang]);
               timeoutRef.current = setTimeout(() => {
@@ -1165,7 +1166,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               //   showPopup: showPopup,
               //   lang: lang,
               // })
-            }} data-buttontype="itemSell" />
+            }} data-buttontype="itemSell" />}
           </div>
         </PopupItemList>
       </PopupItemContainer>
@@ -1211,7 +1212,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                 lang: lang,
               })
             }} data-buttontype="itemUse" />
-            <Button type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {
+            {!isMoveEvent && <Button type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {
               showMsg(true);
               msgText(gameData.msg.sentence.goTool[lang]);
               timeoutRef.current = setTimeout(() => {
@@ -1241,7 +1242,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               //   showPopup: showPopup,
               //   lang: lang,
               // })
-            }} data-buttontype="itemSell" />
+            }} data-buttontype="itemSell" />}
           </div>
         </PopupItemList>
       </PopupItemContainer>

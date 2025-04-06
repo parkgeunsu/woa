@@ -1,6 +1,9 @@
 import { AppContext } from 'App';
+import { Text } from 'components/Atom';
 import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
+import Msg from 'components/Msg';
+import MsgContainer from 'components/MsgContainer';
 import iconArrowDown from 'images/ico/arrow_down.png';
 import iconArrowUp from 'images/ico/arrow_up.png';
 import ChLineup from 'pages/ChLineup';
@@ -113,6 +116,9 @@ const LineupCate = styled.li`
 	&:last-of-type {
 		margin:0;
 	}
+	&.on {
+		background: #f00;
+	}
 `;
 const LineupArea = styled.div`
 	display: flex;
@@ -220,32 +226,34 @@ const LineupChInfo = styled.div`
 const LineupChList = styled.div`
 	height: 40%;
 	overflow: hidden;
-	ul {
-		display: flex;
-		flex-flow: wrap;
-		width: 100%;
-		li {
-			position: relative;
-			margin: 0 6.5px 6.5px 0;
-			width: calc(25% - 5px);
-			padding-top: calc(25% - 5px);
-			font-size: 0;
-			overflow: hidden;
-			border-radius: 10px;
-			&:nth-of-type(4n) {
-				margin: 0 0 6.5px 0;
-			}
-			& > span {
-				position: absolute;
-				font-size: 0.625rem;
-			}
-			&.selected {
-				opacity: .3;
-			}
-		}
+`;
+const ChGroup = styled(Text)`
+  margin: 10px 0 5px 0;
+`;
+const ChUl = styled.ul`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+`;
+const ChLi = styled.li`
+	position: relative;
+	margin: 0 4px 4px 0;
+	width: calc(25% - 3px);
+	padding-top: calc(25% - 3px);
+	overflow: hidden;
+	border-radius: 10px;
+	font-size: 0;
+	&:nth-of-type(4n) {
+		margin: 0 0 4px 0;
+	}
+	& > span {
+		position: absolute;
+		font-size: 0.625rem;
+	}
+	&.selected {
+		opacity: .3;
 	}
 `;
-
 const checkUseList = (useList, chIdx) => {
 	let used = false;
 	useList.forEach((dataIdx, idx) => {
@@ -262,9 +270,9 @@ const CardPlacement = ({
   changeSaveData,
 }) => {
   const context = useContext(AppContext);
-  // const lang = React.useMemo(() => {
-  //   return context.setting.lang;
-  // }, [context]);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
   // const imgSet = React.useMemo(() => {
   //   return context.images;
   // }, [context]);
@@ -274,25 +282,73 @@ const CardPlacement = ({
 	const sData = React.useMemo(() => {
 		return Object.keys(saveData).length !== 0 ? saveData : util.loadData('saveData');
 	}, [saveData]);
-	const [saveSlot, setSaveSlot] = useState(sData?.lineup?.select); // 저장된 슬롯
-	const [selectSave, setSelectSave] = useState(sData?.lineup?.select); // 선택된 진형슬롯
-	const [selectLineup, setSelectLineup] = useState(sData?.lineup?.save_slot[selectSave].no); // 저장된 슬롯에 선택된 진형
+	const [msgOn, setMsgOn] = useState(false);
+	const [msg, setMsg] = useState("");
+	const isMoveEvent = React.useMemo(() => {
+		return Object.keys(util.loadData("historyParam").moveEvent).length > 0;
+	}, []);
+	const chData = React.useMemo(() => {
+		const moveCh = util.loadData("historyParam").moveEvent.ch;
+		const cloneCh = [...sData.ch];
+		return isMoveEvent ? {
+			moveCh: moveCh.map((ch) => {
+				delete cloneCh[ch.idx];
+				return {
+					...sData.ch[ch.idx],
+					partyIdx: ch.idx,
+				};
+			}),
+			moveNotCh: cloneCh.map((ch, idx) => {
+				return {
+					...ch,
+					partyIdx: idx,
+				}
+			})
+		} : {
+			moveCh: [],
+			moveNotCh: cloneCh.map((ch, idx) => {
+				return {
+					...ch,
+					partyIdx: idx,
+				}
+			}),
+			};
+	}, [sData, isMoveEvent]);
+	const lineupData = React.useMemo(() => {
+		return isMoveEvent ? sData?.eventLineup : sData?.lineup;
+	}, [sData, isMoveEvent]);
+	const [saveSlot, setSaveSlot] = useState(lineupData.select); // 저장된 슬롯
+	const [selectSave, setSelectSave] = useState(lineupData.select); // 선택된 진형슬롯
+	const [selectLineup, setSelectLineup] = useState(lineupData.save_slot[selectSave].no); // 저장된 슬롯에 선택된 진형
 	const [selectLineupList, setSelectLineupList] = useState(0); //선택된 라인업 리스트 순번
-	const [useList, setUseList] = useState(sData?.lineup?.save_slot[selectSave].entry); // 라인업 맵 캐릭
-	const [noneUseList, setNoneUseList] = useState(sData?.ch);
-	
+	const [useList, setUseList] = useState(lineupData.save_slot[selectSave].entry); // 라인업 맵 캐릭
+
 	const mapRef = useRef([]);
 	const lineupInfo = ["HP","SP","RSP","ATK","DEF","MAK","MDF","RCV","SPD","LUK"];
 	const lineupSlot = [1,2,3,4,5,6,7,8];
 	const clickSelectSlot = (idx) => {//세이브 슬롯 선택
 		//console.log('saveslot' + idx);
 		setSelectSave(idx);
-		setSelectLineup(sData.lineup.save_slot[idx].no);
-		setUseList(sData.lineup.save_slot[idx].entry);
+		setSelectLineup(lineupData.save_slot[idx].no);
+		if (isMoveEvent) {
+			const cloneMoveNotCh = chData.moveNotCh.filter((notCh) => {
+				return notCh.partyIdx >= 0;
+			});
+			const removeIdx = lineupData.save_slot[idx].entry.findIndex((entry, entryIdx) => {
+				return cloneMoveNotCh.findIndex((chIdx) => {
+					if(chIdx.partyIdx === entry) {
+						return entryIdx;
+					}
+				}) >= 0;
+			})
+			lineupData.save_slot[idx].entry[removeIdx] = "";
+		}
+		setUseList(lineupData.save_slot[idx].entry);
 		util.setLineupSt({
-			saveSlot: selectSave,
+			saveSlot: idx,
 			lineupType: selectLineup,
 			useList: useList,
+			isMoveEvent: isMoveEvent,
 		}, gameData, saveData, changeSaveData);
 	}
 	const clickSaveSlot = () => {
@@ -304,32 +360,28 @@ const CardPlacement = ({
 	const clickLineupSlot = (idx) => {//진형 타입 선택
 		//console.log('lineupslot' + idx);
 		setSelectLineup(idx);
-		setUseList(sData.lineup.save_slot[selectSave].entry);
+		setUseList(lineupData.save_slot[selectSave].entry);
 		util.setLineupSt({
 			saveSlot: selectSave, 
 			lineupType: idx,
 			useList: useList,
+			isMoveEvent: isMoveEvent,
 		}, gameData, sData, changeSaveData);
 	}
-	const clickLineupCh = (chIdx, idx) => {//캐릭 리스트 클릭
-		console.log('선택된 map순번', selectLineupList);//선택되어 있는 map칸
+	const clickLineupCh = (slotIdx) => {//캐릭 리스트 클릭
+		console.log('선택된 map순번', selectLineupList, slotIdx);//선택되어 있는 map칸
 		let saveUseList = [...useList];
-		saveUseList[selectLineupList] = idx;
+		saveUseList[selectLineupList] = slotIdx;
 		setUseList(saveUseList);
 		util.setLineupSt({
 			saveSlot: selectSave, 
 			lineupType: selectLineup,
 			useList: saveUseList,
+			isMoveEvent: isMoveEvent,
 		}, gameData, sData, changeSaveData);
 	}
 	useEffect(() => {
-		const listUsed = sData.lineup.save_slot[selectSave].entry;
-		setUseList(listUsed);
-		util.setLineupSt({
-			saveSlot: selectSave, 
-			lineupType: selectLineup,
-			useList: listUsed,
-		}, gameData, sData, changeSaveData);
+		clickSelectSlot(selectSave);
 	}, []);
   return (
     <>
@@ -377,7 +429,7 @@ const CardPlacement = ({
 							<ul>
 								{lineupInfo && sData.ch[useList[selectLineupList]] && lineupInfo.map((stateName, idx) => {
 									const saveCh = sData.ch[useList[selectLineupList]];
-									const lineupEff = sData.lineup.save_slot[selectSave].eff[selectLineupList];
+									const lineupEff = lineupData.save_slot[selectSave].eff[selectLineupList];
 									return (
 										<li key={idx} className={lineupEff[idx][0] > 0 ? 'up' : ( lineupEff[idx][0] < 0 ?'down' : 'none')}>
 											<span className="na">{stateName}</span>
@@ -391,22 +443,56 @@ const CardPlacement = ({
 					</LineupArea>
 				</LineupMiddle>
 				<LineupChList className="scroll-y">
-					<ul>
-						{noneUseList && noneUseList.map((saveCh, idx) => {
-							const used = checkUseList(useList, idx);
+				{!isMoveEvent ? 
+					<ChUl>
+						{chData.moveNotCh.map((data, idx) => {
+							const used = checkUseList(useList, data.partyIdx);
 							return (
-								<li className={used ? 'selected': ''} onClick={() => {
+								<ChLi className={used ? 'selected': ''} onClick={() => {
 									if (!used) {
-										clickLineupCh(saveCh.idx, idx);
+										clickLineupCh(data.partyIdx);
 									}
 								}} key={idx} data-idx={idx}>
-									<CharacterCard usedType="thumb" saveData={sData} gameData={gameData} slotIdx={idx} />
-								</li>
+									<CharacterCard usedType="thumb" saveData={sData} gameData={gameData} slotIdx={data.partyIdx} />
+								</ChLi>
 							);
 						})}
-					</ul>
+					</ChUl> : <>
+						<ChGroup color="main" code="t3" borderColor="sub" align="left">{gameData.msg.title.travelCard[lang]}</ChGroup>
+						<ChUl>
+							{chData.moveCh.map((data, idx) => {
+								const used = checkUseList(useList, data.partyIdx);
+								return (
+									<ChLi className={used ? 'selected': ''} onClick={() => {
+										if (!used) {
+											clickLineupCh(data.partyIdx);
+										}
+									}} key={idx} data-idx={idx}>
+										<CharacterCard usedType="thumb" saveData={sData} gameData={gameData} slotIdx={data.partyIdx} />
+									</ChLi>
+								);
+							})}
+						</ChUl>
+						<ChGroup color="main" code="t3" borderColor="sub" align="left">{gameData.msg.title.nonTravelCard[lang]}</ChGroup>
+						<ChUl>
+							{chData.moveNotCh.map((data, idx) => {
+								const used = checkUseList(useList, data.partyIdx);
+								return (
+									<ChLi className={used ? 'selected': ''} onClick={() => {
+										setMsgOn(true);
+                  	setMsg(gameData.msg.sentence.onlyTravelHero[lang]);
+									}} key={idx} data-idx={idx}>
+										<CharacterCard usedType="thumb" saveData={sData} gameData={gameData} slotIdx={data.partyIdx} />
+									</ChLi>
+								);
+							})}
+						</ChUl>
+					</>}
 				</LineupChList>
 			</Wrap>
+      <MsgContainer>
+        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+      </MsgContainer>
     </>
   );
 }

@@ -388,21 +388,72 @@ const App = ({
       if (location !== '') {
         navigate('../');
       }
+      //카드 정리 데이터 구성
+      // const classification = {
+      //   grade: [],
+      //   country: [],
+      //   job: [],
+      //   cost: [],
+      // };
+      // gameData.ch.forEach((chData) => {
+      //   if (!classification.grade[chData.grade]) {
+      //     classification.grade[chData.grade] = [];
+      //   }
+      //   classification.grade[chData.grade].push(chData.idx);
+      //   if (!classification.country[chData.country]) {
+      //     classification.country[chData.country] = [];
+      //   }
+      //   classification.country[chData.country].push(chData.idx);
+      //   if (!classification.job[chData.job[0]]) {
+      //     classification.job[chData.job[0]] = [];
+      //   }
+      //   classification.job[chData.job[0]].push(chData.idx);
+      //   if (!classification.cost[chData.cost]) {
+      //     classification.cost[chData.cost] = [];
+      //   }
+      //   classification.cost[chData.cost].push(chData.idx);
+      // });
       //save 는 가상데이터
       saveNew.city = setCity(gameData.city.port, contextData.setting.lang);
       useSaveData = saveNew;
-      util.saveData('saveData', saveNew);
-      util.saveData('version', version);
-      util.saveData('setting', {
+      util.saveData("saveData", saveNew);
+      util.saveData("version", version);
+      util.saveData("setting", {
         lang: 'ko',
         bgm: true,
         efm: true,
         resolution: 1,
         speed: 2,
       });
-      util.saveData('history',[]);
+      // util.saveData("classification", classification);
+      util.saveData("history",[]);
       setSaveData(saveNew);
     } else {
+      const classification = {
+        grade: [],
+        country: [],
+        job: [],
+        cost: [],
+      };
+      gameData.ch.forEach((chData) => {
+        if (!classification.grade[chData.grade]) {
+          classification.grade[chData.grade] = [];
+        }
+        classification.grade[chData.grade].push(chData.idx);
+        if (!classification.country[chData.country]) {
+          classification.country[chData.country] = [];
+        }
+        classification.country[chData.country].push(chData.idx);
+        if (!classification.job[chData.job[0]]) {
+          classification.job[chData.job[0]] = [];
+        }
+        classification.job[chData.job[0]].push(chData.idx);
+        if (!classification.cost[chData.cost]) {
+          classification.cost[chData.cost] = [];
+        }
+        classification.cost[chData.cost].push(chData.idx);
+      });
+      util.saveData("classification", classification);
       if (storageVer !== version) { //데이터 버전이 다를 경우
         //버전 업데이트 통신
         useSaveData = util.loadData("saveData");

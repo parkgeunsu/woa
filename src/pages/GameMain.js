@@ -87,6 +87,7 @@ const GameMain = ({
     ]},
   ]);
   const [selectMoveRegion, setSelectMoveRegion] = useState('');
+  const [moveRegionEntry, setMoveRegionEntry] = useState([]);
   const gameModeAttr = (gameMode) => {
     switch (gameMode) {
       case "roulette":
@@ -107,6 +108,9 @@ const GameMain = ({
       case "moveRegion":
         return {
           selectMoveRegion: selectMoveRegion,
+          moveRegionEntry: moveRegionEntry,
+          setMoveRegionEntry: setMoveRegionEntry,
+          setShowDim: setShowDim,
         };
       default: 
         return {};
@@ -118,12 +122,13 @@ const GameMain = ({
       <CountryTitle alignItems="center" back={imgSet.back.countryTitle}>
         <StyledText code="t4" color="shadow">{gameData.country.regions[util.getCountryToIdx(stay)].name[lang]}</StyledText>
       </CountryTitle>
-      <Roulette gameMode={gameMode} saveData={sData} rouletteState={rouletteState} setRouletteState={setRouletteState} selectRoulettePos={selectRoulettePos} setSelectRoulettePos={setSelectRoulettePos} rouletteArr={rouletteArr.current} rouletteEnemy={rouletteEnemy} setRouletteEnemy={setRouletteEnemy} />
-      <Scenario gameMode={gameMode} saveData={sData} changeSaveData={changeSaveData} stay={stay} selectScenario={selectScenario} setSelectScenario={setSelectScenario} />
-      <MoveRegion gameMode={gameMode} saveData={sData} stay={stay} selectMoveRegion={selectMoveRegion} setSelectMoveRegion={setSelectMoveRegion} />
+      {gameMode === "roulette" && <Roulette saveData={sData} rouletteState={rouletteState} setRouletteState={setRouletteState} selectRoulettePos={selectRoulettePos} setSelectRoulettePos={setSelectRoulettePos} rouletteArr={rouletteArr.current} rouletteEnemy={rouletteEnemy} setRouletteEnemy={setRouletteEnemy} />}
+      {gameMode === "scenario" && <Scenario saveData={sData} changeSaveData={changeSaveData} stay={stay} selectScenario={selectScenario} setSelectScenario={setSelectScenario} />}
+      {gameMode === "moveRegion" && <MoveRegion saveData={sData} stay={stay} selectMoveRegion={selectMoveRegion} setSelectMoveRegion={setSelectMoveRegion} 
+      moveRegionEntry={moveRegionEntry} setMoveRegionEntry={setMoveRegionEntry} />}
       <CardGroup>
       </CardGroup>
-      <GameMainFooter saveData={sData} gameMode={gameMode} setGameMode={setGameMode} stay={stay} 
+      <GameMainFooter saveData={sData} changeSaveData={changeSaveData} gameMode={gameMode} setGameMode={setGameMode} stay={stay} 
       {...gameModeAttr(gameMode)}  />
     </Wrap>
   );

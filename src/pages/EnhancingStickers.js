@@ -362,7 +362,7 @@ const EnhancingStickers = ({
 	const [actionCh, setActionCh] = useState({});//행동할 캐릭터 데이터
 	const actionRef = useRef();//행동할 캐릭터 선택자
 	const [modalData, setModalData] = useState({
-		fn:() => {},
+		submitFn:() => {},
 		payment:'',
 	});
 	const handleModal = (type, socketIdx) => {
@@ -378,7 +378,9 @@ const EnhancingStickers = ({
 					msgText:setMsg,
 					setMainColor:setMainColor,
 				},
-				bt: [{txt:gameData.msg.button.use[lang],action:'itemEn'},{txt:gameData.msg.button.cancel[lang],action:'popClose'}],
+				bt: [
+					{txt:gameData.msg.button.use[lang],action:'itemEn'},{txt:gameData.msg.button.cancel[lang],action:'popClose'}
+				],
 			});
 		} else {
 			setModalInfo({
@@ -394,7 +396,9 @@ const EnhancingStickers = ({
 					timeoutRef:timeoutRef,
 					upgradePercent:upgradePercent,
 				},
-				bt: [{txt:gameData.msg.button.use[lang],action:'itemEn'},{txt:gameData.msg.button.cancel[lang],action:'popClose'}],
+				bt: [
+					{txt:gameData.msg.button.use[lang],action:'itemEn'},{txt:gameData.msg.button.cancel[lang],action:'popClose'}
+				],
 			});
 		}
     setModalOn(true);
@@ -647,7 +651,7 @@ const EnhancingStickers = ({
 														<LockIcon className="lock" onClick={(e) => {
 															e.stopPropagation();
 															setModalData({
-																fn:removeSocket,
+																submitFn: removeSocket,
 																payment:'socketRemove'
 															});
 															// setModalFn(removeSocket);
@@ -803,7 +807,7 @@ const EnhancingStickers = ({
 												if (selectItem1.save.part === 3) { //무기면
 													if (selectItem3.save.idx > 5) { //숫돌이면
 														setModalData({
-															fn:upgrade,
+															submitFn: upgrade,
 															payment:`upgrade${selectItem1.save.grade - 1}`
 														});
 														handleModal('upgrade');
@@ -814,7 +818,7 @@ const EnhancingStickers = ({
 												} else { //방어구면
 													if (selectItem3.save.idx <= 5) { //대장장이망치면
 														setModalData({
-															fn:upgrade,
+															submitFn: upgrade,
 															payment:`upgrade${selectItem1.save.grade - 1}`
 														});
 														handleModal('upgrade');
@@ -980,7 +984,7 @@ const EnhancingStickers = ({
         {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
       </PopupContainer>
 			<ModalContainer>
-				{modalOn && <Modal fn={modalData.fn} payment={modalData.payment} imgSet={imgSet} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {
+				{modalOn && <Modal submitFn={modalData.submitFn} payment={modalData.payment} imgSet={imgSet} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {
 					setModalOn(false);
 				}} gameData={gameData}/>}
 			</ModalContainer>

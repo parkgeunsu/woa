@@ -233,6 +233,9 @@ const Cards = ({
 }) => {
   const context = useContext(AppContext);
 	const {state} = useLocation();
+  const isMoveEvent = React.useMemo(() => {
+    return Object.keys(util.loadData("historyParam").moveEvent).length > 0;
+  }, []);
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -292,6 +295,7 @@ const Cards = ({
         gameItemData = gameItem[itemType][itemIdx];
       }
       setPopupInfo({
+        isMoveEvent: isMoveEvent,
         chSlotIdx: slotIdx,
         gameItem: gameItemData,
         itemSaveSlot: itemSaveSlot,

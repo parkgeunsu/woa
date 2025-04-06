@@ -3,27 +3,27 @@ import { Prices } from 'components/Components';
 import ModalContainer from 'components/ModalContainer';
 import React, { useContext } from 'react';
 
-const buttonEvent = (dataInfo, btInfo, fn, saveData, gameData, changeSaveData, lang) => {
+const buttonEvent = (dataInfo, btInfo, submitFn, saveData, gameData, changeSaveData, lang) => {
 	switch(btInfo.action) {
 		case 'gacha':
-			fn('start', dataInfo, saveData, gameData, changeSaveData, lang);
+			submitFn('start', dataInfo, saveData, gameData, changeSaveData, lang);
 			break;
 		case 'popClose':
 			break;
 		case 'itemEn':
-			fn(dataInfo, saveData, gameData, changeSaveData, lang);
+			submitFn(dataInfo, saveData, gameData, changeSaveData, lang);
 			break;
 		default:
 			break;
 	}
 }
-const typeAsContent = (type, dataObj, fn, saveData, gameData, changeSaveData, lang) => {
+const typeAsContent = (type, dataObj, submitFn, saveData, gameData, changeSaveData, lang) => {
 	if (type === 'confirm') {
 		return (
 			<div className="bt_box" flex="true">
 				{dataObj?.bt && dataObj.bt.map((btData, idx) => {
 					return <button className="button_small" key={idx} onClick={() => {
-							buttonEvent(dataObj.info, dataObj.bt[idx], fn, saveData, gameData, changeSaveData, lang);
+							buttonEvent(dataObj.info, dataObj.bt[idx], submitFn, saveData, gameData, changeSaveData, lang);
 						}} msg="true">{btData.txt}</button>
 				})}
 			</div>
@@ -35,7 +35,7 @@ const typeAsContent = (type, dataObj, fn, saveData, gameData, changeSaveData, la
 				<div className="bt_box" flex="true">
 					{dataObj?.bt && dataObj.bt.map((btData, idx) => {
 						return <button className="button_small" key={idx} onClick={() => {
-							buttonEvent(dataObj.info, dataObj.bt[idx], fn);
+							buttonEvent(dataObj.info, dataObj.bt[idx], submitFn);
 						}} msg="true">{btData.txt}</button>
 					})}
 				</div>
@@ -60,7 +60,7 @@ const Modal = ({
 	saveData,
 	gameData,
 	changeSaveData,
-	fn
+	submitFn,
 }) => {
   const context = useContext(AppContext);
   const lang = React.useMemo(() => {
@@ -79,7 +79,7 @@ const Modal = ({
 								</div>
 							</>
 						)}
-						{typeAsContent(type, dataObj, fn, saveData, gameData, changeSaveData, lang)}
+						{typeAsContent(type, dataObj, submitFn, saveData, gameData, changeSaveData, lang)}
 					</div>
 				</div>
 				<div className="modal_close">

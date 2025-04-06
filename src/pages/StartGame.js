@@ -222,6 +222,7 @@ const StartGame = ({
                 }
               });
               sData.info.money = Number(util.removeComma(hasMoney));
+              sData.info.morality = gameData.startMorality;
               changeSaveData(sData);
 
               //필드 유효성 검사

@@ -895,7 +895,7 @@ const Inven = ({
 				</InvenBottom>
 			</InvenWrap>
 			{/* <ModalContainer>
-				{modalOn && <Modal fn={changeGachaMode} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {handleModal()}} gameData={gameData}/>}
+				{modalOn && <Modal submitFn={changeGachaMode} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {handleModal()}} gameData={gameData}/>}
 			</ModalContainer> */}
 		</>
   );

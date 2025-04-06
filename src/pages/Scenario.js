@@ -16,15 +16,6 @@ import styled from 'styled-components';
 const Wrap = styled(FlexBox)`
   position: absolute;
   left: 0;
-  ${({gameMode}) => {
-    return gameMode ? `
-      opacity: 1;
-      pointer-events: unset;
-    ` : `
-      opacity: 0;
-      pointer-events: none;
-    `;
-  }};
   width: 100%;
   height: calc(100% - 40px);
   transition: opacity 1s;
@@ -614,7 +605,6 @@ const ScenarioList = ({
   </ScenarioContainer>
 }
 const Scenario = ({
-  gameMode,
   saveData,
   changeSaveData,
   stay,
@@ -639,13 +629,11 @@ const Scenario = ({
   const [popupInfo, setPopupInfo] = useState({});
   const [scenarioData, setScenarioData] = useState([]);
   useEffect(() => {
-    if (gameMode === 'scenario') {
-      setScenarioData(gameData.scenario[stay]);
-    }
-  }, [gameData, gameMode]);
+    setScenarioData(gameData.scenario[stay]);
+  }, [gameData]);
   return (
     <>
-      <Wrap gameMode={gameMode === 'scenario'} direction="column">
+      <Wrap direction="column">
         <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
           setPopupOn(true);
           setPopupInfo({

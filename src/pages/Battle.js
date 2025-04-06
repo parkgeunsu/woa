@@ -4126,25 +4126,73 @@ const Battle = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
+	const isMoveEvent = React.useMemo(() => {
+		return Object.keys(util.loadData("historyParam").moveEvent).length > 0;
+	}, []);
 	const sData = React.useMemo(() => saveData && Object.keys(saveData).length !== 0 ? saveData : util.loadData('saveData'), [saveData]);
+	const useLineup = React.useMemo(() => {
+		return isMoveEvent ? sData.eventLineup : sData.lineup;
+	}, [sData, isMoveEvent]);
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
-	const isScenario = React.useMemo(() => typeof paramData?.scenario?.stageIdx === 'number', [paramData]);
-	const scenarioDetail = React.useMemo(() => {
-		return isScenario ? gameData.scenario[paramData.scenario.stay][paramData.scenario.dynastyIdx].scenarioList[paramData.scenario.dynastyScenarioIdx].stage[paramData.scenario.stageIdx] : {
-			title: gameData.msg.button['startExploring'][lang],
-			lineup: 0,
-			map: Array.from({length:50}, () => {
-				const num = Math.round(Math.random() * 11),
-					landType = Math.floor(num / 3),
-					land = num % 3;
-				return (5 * landType) + land;
-			}),
-			entry:[// 적군 생성
-				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
-				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
-				{pos:2,idx:2, lv:1, grade:4, items: [
+	const battleType = React.useMemo(() => {
+		return paramData?.battle.type;
+	}, [paramData]);
+	const battleData = React.useMemo(() => {
+		if (battleType === "scenario") {
+			return gameData.scenario[paramData.scenario.battle.stay][paramData.scenario.battle.dynastyIdx].scenarioList[paramData.scenario.battle.dynastyScenarioIdx].stage[paramData.scenario.battle.stageIdx];
+		}
+		if (battleType === "exploring") {
+			return {
+				title: paramData.battle.title,
+				lineup: 0,
+				map: Array.from({length:50}, () => {
+					const num = Math.round(Math.random() * 11),
+						landType = Math.floor(num / 3),
+						land = num % 3;
+					return (5 * landType) + land;
+				}),
+				entry:[// 적군 생성
+					{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+					{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+					{pos:2,idx:2, lv:1, grade:4, items: [
+						{idx:0, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+						{idx:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+						{idx:2, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+						{idx:4, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+						{},
+						{},
+						{},
+						{},
+					]},{idx:'', lv:1, },{pos:0,idx:27, lv:1, grade:4, items: [
+						{idx:0, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+						{idx:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+						{idx:2, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+						{idx:4, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
+						{},
+						{},
+						{},
+						{},
+					]},{idx:'', lv:1, },{idx:'', lv:1, },
+					{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+					{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+				],
+			}
+		}
+		if (battleType === "moveEvent") {
+			const countryHeros = util.loadData("classification").country[paramData.battle.country];
+			console.log(countryHeros);
+			return {
+				title: paramData.battle.title,
+				lineup: 0,
+				map: Array.from({length:50}, () => {
+					const num = Math.round(Math.random() * 11),
+						landType = Math.floor(num / 3),
+						land = num % 3;
+					return (5 * landType) + land;
+				}),
+				entry: Array.from({length:10}, (v, idx) => ({pos:idx,idx:countryHeros[Math.round(Math.random() * (countryHeros.length - 1))],lv:1,grade:1,items:[
 					{idx:0, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
 					{idx:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
 					{idx:2, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
@@ -4153,27 +4201,27 @@ const Battle = ({
 					{},
 					{},
 					{},
-				]},{idx:'', lv:1, },{pos:0,idx:27, lv:1, grade:4, items: [
-					{idx:0, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
-					{idx:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
-					{idx:2, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
-					{idx:4, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
-					{},
-					{},
-					{},
-					{},
-				]},{idx:'', lv:1, },{idx:'', lv:1, },
-				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
-				{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
-			],
-		};
-	}, [gameData, isScenario, paramData, lang]);
+				]})),
+			}
+		}
+	}, [gameData, battleType, paramData, lang]);
 	const viewScenario = React.useMemo(() => {
-		return isScenario ? sData.scenario[paramData.scenario.stay][paramData.scenario.dynastyIdx].scenarioList[paramData.scenario.dynastyScenarioIdx].stage[paramData.scenario.stageIdx].first : false;
-	}, [sData, isScenario, paramData]);
-	const mapLand = React.useMemo(() => scenarioDetail.map, [scenarioDetail]);
-	const allyDeck = useRef(sData.lineup.save_slot[sData.lineup.select].entry);//캐릭터 저장된 카드index
-	const enemyDeck = React.useMemo(() => scenarioDetail.entry, [scenarioDetail]);
+		return battleType === "scenario" ? sData.scenario[paramData.scenario.battle.stay][paramData.scenario.battle.dynastyIdx].scenarioList[paramData.scenario.battle.dynastyScenarioIdx].stage[paramData.scenario.battle.stageIdx].first : false;
+	}, [sData, battleType, paramData]);
+	const mapLand = React.useMemo(() => battleData.map, [battleData]);
+	const allyDeck = useRef(useLineup.save_slot[useLineup.select].entry);//캐릭터 저장된 카드index
+	const enemyDeck = React.useMemo(() => {
+		if (battleType === "scenario") {
+			return battleData.entry;
+		}
+		if (battleType === "exploring") {
+			return battleData.entry;
+		}
+		if (battleType === "moveEvent") {
+			console.log(paramData.battle);
+			return battleData.entry;
+		}
+	}, [battleType, battleData]);
 	const containerWH = useRef([0,0]);
 	const mapSize = React.useMemo(() => 20, []);
 	const [weather, setWeather] = useState({
@@ -4315,7 +4363,7 @@ const Battle = ({
 		//-----시나리오 시청 판단
 		if (viewScenario) {//시나리오 시청
 			scenarioRepeat.current = false;
-			conversationData.current = gameData.scenario[paramData.scenario.stay][paramData.scenario.dynastyIdx].scenarioList[paramData.scenario.dynastyScenarioIdx].stage[paramData.scenario.stageIdx].conversation;
+			conversationData.current = gameData.scenario[paramData.scenario.battle.stay][paramData.scenario.battle.dynastyIdx].scenarioList[paramData.scenario.battle.dynastyScenarioIdx].stage[paramData.scenario.battle.stageIdx].conversation;
 			conversationList.current.push(conversationData.current[0]);
 			setMode('scenario');
 			conversationCount.current = 0;
@@ -4638,9 +4686,9 @@ const Battle = ({
 		});
 		return () => {//언마운트 리셋
 			clearInterval(conversationTimeout.current);
-			if (isScenario) {
+			if (battleType === "scenario") {
 				let saveD = {...sData};
-				saveD.scenario[paramData.scenario.stay][paramData.scenario.dynastyIdx].scenarioList[paramData.scenario.dynastyScenarioIdx].stage[paramData.scenario.stageIdx].first = scenarioRepeat.current;
+				saveD.scenario[paramData.scenario.battle.stay][paramData.scenario.battle.dynastyIdx].scenarioList[paramData.scenario.battle.dynastyScenarioIdx].stage[paramData.scenario.battle.stageIdx].first = scenarioRepeat.current;
 				changeSaveData(saveD);
 			}
 		}
@@ -5106,15 +5154,15 @@ const Battle = ({
 			}, 500);//pB.timeDelay
 		} else if (mode === 'battleWin') {
 			console.log('pgs', '격!퇴!성!공!');
-			if (!isScenario) { //탐색 모드시 룰렛 데이터 제거
+			if (battleType === "exploring") { //탐색 모드시 룰렛 데이터 제거
 				util.saveData('historyParam', {
 					...util.loadData('historyParam'),
 					roulette: {base: {},add: {}, lv: {}, map: {}},
 				});
 			}
 			let saveD = {...sData};
-			if (isScenario) {
-				saveD.scenario[paramData.scenario.stay][paramData.scenario.dynastyIdx].scenarioList[paramData.scenario.dynastyScenarioIdx].stage[paramData.scenario.stageIdx].first = scenarioRepeat.current;
+			if (battleType === "scenario") {
+				saveD.scenario[paramData.scenario.battle.stay][paramData.scenario.battle.dynastyIdx].scenarioList[paramData.scenario.battle.dynastyScenarioIdx].stage[paramData.scenario.battle.stageIdx].first = scenarioRepeat.current;
 			}
 			setWeather({
 				type: '',
@@ -5142,7 +5190,7 @@ const Battle = ({
 						break;
 				}
 				if (saveD.ch[slotIdx].hasExp > hasMaxExp) {
-					if (!isScenario) { //탐색 모드시 룰렛 데이터 제거
+					if (battleType === "exploring") { //탐색 모드시 룰렛 데이터 제거
 						util.saveData('historyParam', {
 							...util.loadData('historyParam'),
 							roulette: {base: {},add: {}, lv: {}, map: {}},
@@ -5151,9 +5199,17 @@ const Battle = ({
 					saveD.ch[slotIdx].hasExp = hasMaxExp;
 				}
 			});
+			util.saveData('historyParam', {
+				...util.loadData('historyParam'),
+				battle: {}
+			});
 			changeSaveData(saveD);
 		} else if (mode === 'battleLose') {
 			console.log('pgs', '격!퇴!실!패!');
+			util.saveData('historyParam', {
+				...util.loadData('historyParam'),
+				battle: {}
+			});
 		}
 	}, [mode]);
 	useLayoutEffect(() => {
@@ -5241,7 +5297,7 @@ const Battle = ({
 					}}></IconPic>
 				</BackButton>
 				<BattleTitle direction="column">
-					<div className="scenario_title">{isScenario ? scenarioDetail.title[lang] : scenarioDetail.title}</div>
+					<div className="scenario_title">{battleType === "scenario" ? battleData.title[lang] : battleData.title}</div>
 					<div className="team_summary">
 						<div style={{width: teamPower.current.allyPercent+"%"}} className="ally_team gradient_dark"></div>
 						<div style={{width: teamPower.current.enemyPercent+"%"}} className="enemy_team gradient_dark"></div>

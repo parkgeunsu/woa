@@ -56,15 +56,6 @@ const AnimalIcon = ({
 const Wrap = styled(FlexBox)`
   position: absolute;
   left: 0;
-  ${({gameMode}) => {
-    return gameMode ? `
-      opacity: 1;
-      pointer-events: unset;
-    ` : `
-      opacity: 0;
-      pointer-events: none;
-    `;
-  }};
   width: 100%;
   height: calc(100% - 40px);
   transition: opacity 1s;
@@ -159,7 +150,6 @@ const idxToText = (idx) => {
   }
 }
 const Roulette = ({
-  gameMode,
   saveData,
   rouletteState,
   setRouletteState,
@@ -184,27 +174,25 @@ const Roulette = ({
   const [popupOn, setPopupOn] = useState(false);
   const [popupInfo, setPopupInfo] = useState({});
   useEffect(() => {
-    if (gameMode === 'roulette') {
-      setRouletteState(Array.from({length:rouletteArr.length}, () => false));
-      setSelectRoulettePos(Array.from({length:rouletteArr.length}, () => ''));
+    setRouletteState(Array.from({length:rouletteArr.length}, () => false));
+    setSelectRoulettePos(Array.from({length:rouletteArr.length}, () => ''));
 
-      let enemyNum = 0,
-        enemyArray = [];
-      while(enemyNum < BASE_ENEMY_NUM) {
-        enemyArray.push(util.getRgbColor());
-        enemyNum ++;
-      }
-      setRouletteEnemy(prev => {
-        return {
-          ...prev,
-          base: {idx: BASE_ENEMY_NUM, color: enemyArray},
-        }
-      });
+    let enemyNum = 0,
+      enemyArray = [];
+    while(enemyNum < BASE_ENEMY_NUM) {
+      enemyArray.push(util.getRgbColor());
+      enemyNum ++;
     }
-  }, [gameMode]);
+    setRouletteEnemy(prev => {
+      return {
+        ...prev,
+        base: {idx: BASE_ENEMY_NUM, color: enemyArray},
+      }
+    });
+  }, []);
   return (
     <>
-      <Wrap gameMode={gameMode === 'roulette'} direction="column">
+      <Wrap direction="column">
         <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
           setPopupOn(true);
           setPopupInfo({

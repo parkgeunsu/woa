@@ -406,11 +406,13 @@ export const util = { //this.loadImage();
     return effArr;
   },
   setLineupSt: (dataObj, gameData, saveData, changeSaveData) => {
+    console.log(dataObj);
     let save = {...saveData};
-    save.lineup.save_slot[dataObj.saveSlot].no = dataObj.lineupType;
-    save.lineup.save_slot[dataObj.saveSlot].entry = dataObj.useList;
+    const lineup = dataObj.isMoveEvent ? save.eventLineup : save.lineup;
+    lineup.save_slot[dataObj.saveSlot].no = dataObj.lineupType;
+    lineup.save_slot[dataObj.saveSlot].entry = dataObj.useList;
     let peopleLength = [0,0,0,0,0,0,0,0];
-    const ConvertlineupStIdx = save.lineup.save_slot.map((data, idx) => { // 슬롯당 lineup eff번호
+    const ConvertlineupStIdx = lineup.save_slot.map((data, idx) => { // 슬롯당 lineup eff번호
       const lineSlot = data.no;
       const lineupArea = gameData.lineup[lineSlot];
       let lineNum = [];
@@ -435,19 +437,19 @@ export const util = { //this.loadImage();
     });
     //lineupSt 저장
     let saveLineupSlot = [
-      ...save.lineup.save_slot,
+      ...lineup.save_slot,
     ];
     ConvertlineupStIdx.forEach((data, idx) => {
-      save.lineup.save_slot[idx].num = peopleLength[idx];
-      const lineupType = save.lineup.save_slot[idx].no;
+      lineup.save_slot[idx].num = peopleLength[idx];
+      const lineupType = lineup.save_slot[idx].no;
       saveLineupSlot[idx].eff = [];
       data.forEach((lineupData, lineupIdx) => {
-        const chIdx = save.lineup.save_slot[idx].entry[lineupIdx];
+        const chIdx = lineup.save_slot[idx].entry[lineupIdx];
         const ch = save.ch[chIdx];
         saveLineupSlot[idx].eff.push(...util.getLineupSt(lineupType, lineupData, ch, peopleLength[idx], gameData));
       });
     });
-    save.lineup.save_slot = saveLineupSlot;
+    lineup.save_slot = saveLineupSlot;
     changeSaveData(save);//라인업 캐릭 능력치 저장
   },
   compileState: (currentState, itemState) => {
@@ -1901,7 +1903,6 @@ export const util = { //this.loadImage();
     }
   },
   getDistanceToEvent: (arr1, arr2, baseNum) => {//지도 거리 대비 이벤트 갯수
-    console.log(arr1, arr2);
     if (!arr1 || !arr2) return '';
     baseNum = baseNum ?? 0;
     return Math.round(Math.sqrt(Math.pow(arr1[0] - arr2[0], 2) + Math.pow(arr1[1] - arr2[1], 2))) + baseNum;
@@ -2729,6 +2730,8 @@ export const util = { //this.loadImage();
           lvUp(saveCh, dataObj);
           break;
         default:
+          dataObj.showMsg(true);
+          dataObj.msgText(`<span caution>${gameData.msg.sentence.none[dataObj.lang]}</span>`);
           break;
       } //사용 타입
       sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
@@ -3181,6 +3184,27 @@ export const util = { //this.loadImage();
       skillCate: cate,
     }
   },
+  isCondition: (type, category, itemIdx) => {
+    const saveData = util.loadData('saveData');
+    const idx = saveData[type][category].findIndex((v, i) => {
+      return v.idx === itemIdx;
+    });
+    if (idx >= 0) {
+      return saveData[type][category][idx]?.num ?? 1;
+    } else {
+      return 0;
+    }
+  },
+  deleteItems: ({saveData, itemObj, num}) => {
+    const cloneSaveData = {...saveData};
+    const removeIdx = cloneSaveData[itemObj.type][itemObj.cate].findIndex((item, idx) => {
+      return item.idx === itemObj.idx;
+    });
+    if (removeIdx >= 0) {
+      cloneSaveData[itemObj.type][itemObj.cate][removeIdx].num -= num;
+    }
+    return cloneSaveData;
+  },
   typeToStartIdx: (type) => {
     switch(type) {
       case 'equip':
@@ -3306,8 +3330,6 @@ export const util = { //this.loadImage();
         return [5, 8];
       case 'itemEtc':
         return [10, 50];
-      case 'itemTicket':
-        return [12, 1];
       case 'moveEventCountry':
         return [14, 1];
       case 'img600':
@@ -3476,6 +3498,82 @@ export const util = { //this.loadImage();
         };
       default:
         return {};
+    }
+  },
+  battleEnemyNum: (num) => {
+    const diffCount = Math.random();
+    if (diffCount < 0.03) {//1~25
+      return Math.round(Math.random() * 24 + 1);
+    } else if (diffCount < 0.1) {//7~12
+      return Math.round(Math.random() * 5 + (num + 4));
+    } else if (diffCount < 0.5) {//4~7
+      return Math.round(Math.random() * 3 + (num + 1));
+    } else {//3~5
+      return Math.round(Math.random() * 2 + num);
+    }
+  },
+  battlePenalty: () => {
+    const penaltyCoun = Math.random();
+    if (penaltyCoun < 0.01) {
+      return {
+        type: "hp",
+        num: "-30%",
+      }
+    } else if (penaltyCoun < 0.05) {
+      return {
+        type: "hp",
+        num: "-20%",
+      }
+    } else if (penaltyCoun < 0.1) {
+      return {
+        type: "hp",
+        num: "-10%",
+      }
+    } else if (penaltyCoun < 0.15) {
+      return {
+        type: "petrification",
+      }
+    } else if (penaltyCoun < 0.2) {
+      return {
+        type: "stun",
+      }
+    } else if (penaltyCoun < 0.25) {
+      return {
+        type: "freezing",
+      }
+    } else {
+      return "";
+    }
+  },
+  appearedLv1Hero: (battleType) => {
+    const num = Math.random();
+    switch (battleType) {
+      case "moveEvent":
+        if (num < 0.01) {
+          return 2;
+        } else if (num < 0.1) {
+          return 1;
+        } else {
+          return 0;
+        }
+      case "scenario":
+        if (num < 0.01) {
+          return 2;
+        } else if (num < 0.2) {
+          return 1;
+        } else {
+          return 0;
+        }
+      case "exploring":
+        if (num < 0.01) {
+          return 2;
+        } else if (num < 0.3) {
+          return 1;
+        } else {
+          return 0;
+        }
+      default:
+        return 0;
     }
   }
 }

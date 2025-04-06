@@ -848,7 +848,7 @@ const Gacha = ({
 				</GachaInfo>
 			</GachaWrap>
 			<ModalContainer>
-				{modalOn && <Modal fn={changeGachaMode} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {
+				{modalOn && <Modal submitFn={changeGachaMode} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {
 					setModalOn(false);
 				}} gameData={gameData}/>}
 			</ModalContainer>

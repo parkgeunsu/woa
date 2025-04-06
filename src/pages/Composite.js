@@ -142,7 +142,7 @@ const Composite = ({
 								e.stopPropagation();
 								if (actionCh.idx === '') {
 									setMsgOn(true);
-									setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[203].na));
+									setMsg(gameData.msg.sentenceFn.selectSkillCh(lang, gameData.skill[203].na));
 									return;
 								}
 								console.log('합성');
@@ -454,7 +454,7 @@ const Composite = ({
         {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
       </PopupContainer>
 			<ModalContainer>
-				{modalOn && <Modal fn={() => {}} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {
+				{modalOn && <Modal submitFn={() => {}} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {
 					setModalOn(false);
 				}} gameData={gameData}/>}
 			</ModalContainer>

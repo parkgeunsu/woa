@@ -329,6 +329,11 @@ export const msg = {
 		}
 	},
 	info:{
+		moral:{
+			ko:"도덕성",
+			en:"Morality",
+			jp:"道徳",
+		},
 		exp:{
 			ko:'경험치',
 			en:'Exp',
@@ -500,6 +505,16 @@ export const msg = {
 			ko:'획득확률',
 			en:'Probability of getting',
 			jp:'獲得確率',
+		},
+		travelCard:{
+			ko:"여행 참여 카드",
+			en:"Travel Participation Card",
+			jp:"旅行参加カード",
+		},
+		nonTravelCard:{
+			ko:"여행 불참 카드",
+			en:"No Travel Non-participation Card",
+			jp:"旅行不参加カード",
 		}
 	},
 	ocean:{
@@ -899,7 +914,7 @@ export const msg = {
 			ko:'전투개시',
 			en:'Starting a Battle',
 			jp:'戦闘開始',
-		}
+		},
 	},
 	ship:{
 		durability:{
@@ -966,6 +981,11 @@ export const msg = {
 		}
 	},
 	moveEvent:{
+		eventNum:{
+			ko:'이벤트 갯수',
+			en:'Number of events',
+			jp:'イベント数',
+		},
 		enemy:{
 			ko:'적',
 			en:'Enemy',
@@ -1121,10 +1141,30 @@ export const msg = {
 			en:'Empty Chest',
 			jp:'空箱',
 		},
+		next:{
+			ko:"한단계 전진",
+			en:"One Step Forward",
+			jp:"一歩前進",
+		},
 		eventText0:{
 			ko:'적군이 공격해 왔습니다.',
 			en:'The enemy has attacked.',
 			jp:'敵軍が攻撃してきました。',
+		},
+		eventText0_1:{
+			ko:'적군이 광폭화단계에 돌입합니다.',
+			en:'The enemy enters the berserk phase.',
+			jp:'敵軍が広幅化段階に突入します。',
+		},
+		eventText0_2:{
+			ko:'적군을 살려 보냈습니다.',
+			en:'I sent the enemy back alive.',
+			jp:'敵軍を生かした。',
+		},
+		eventText0_3:{
+			ko:'적군에게 붙잡혔습니다.',
+			en:'Captured by the enemy.',
+			jp:'敵軍に捕まった。',
 		},
 		eventText1:{
 			ko:'강력한 적이 공격해 왔습니다.',
@@ -1151,6 +1191,16 @@ export const msg = {
 			en:'Found a trap.',
 			jp:'罠を発見しました。',
 		},
+		eventText5_1:{
+			ko:'함정을 제거했습니다.',
+			en:'The trap has been removed.',
+			jp:'トラップを削除しました。',
+		},
+		eventText5_2:{
+			ko:'함정을 발견했습니다.',
+			en:'Failed to remove trap.',
+			jp:'トラップを削除できませんでした。',
+		},
 		eventText6:{
 			ko:'순간이동 통로를 발견했습니다.',
 			en:'Found a teleportation passage.',
@@ -1176,10 +1226,40 @@ export const msg = {
 			en:'Found a folk house.',
 			jp:'民家を見つけました。',
 		},
+		eventText10_1:{
+			ko:'민가가 비어있습니다.',
+			en:'The house is empty.',
+			jp:'民家が空です。',
+		},
+		eventText10_2:{
+			ko:'인기척이 느껴집니다.',
+			en:'I feel presence.',
+			jp:'人気ふりが感じられます。',
+		},
+		eventText10_3:{
+			ko:'민가속 무언가가 공격해 옵니다.',
+			en:'Something is attacking the people.',
+			jp:'民家属の何かが攻撃してきます。',
+		},
+		eventText10_4:{
+			ko:'아무것도 없습니다.',
+			en:'There is nothing.',
+			jp:'何もありません。',
+		},
 		eventText11:{
 			ko:'상점을 발견했습니다.',
 			en:'Found a store.',
 			jp:'店を見つけました。',
+		},
+		eventText11_1:{
+			ko:'상점주인이 공격해 옵니다.',
+			en:'The shop owner attacks.',
+			jp:'店主が攻撃してきます。',
+		},
+		eventText11_2:{
+			ko:'도망치기를 실패했습니다.',
+			en:'The escape attempt failed.',
+			jp:'逃げることができませんでした。',
 		},
 		eventText12:{
 			ko:'경비병을 발견했습니다.',
@@ -1191,6 +1271,16 @@ export const msg = {
 			en:'The guards attacked.',
 			jp:'警備兵が攻撃してきました。',
 		},
+		eventText12_2:{
+			ko:'설득에 실패했습니다.',
+			en:'Persuasion failed.',
+			jp:'説得に失敗しました。',
+		},
+		eventText12_3:{
+			ko:'경비병이 대화를 하고 싶어합니다.',
+			en:'The guard wants to talk.',
+			jp:'警備兵が会話をしたいです。',
+		},
 		eventText13:{
 			ko:'나그네를 발견했습니다.',
 			en:'Found a traveler.',
@@ -1200,6 +1290,11 @@ export const msg = {
 			ko:'나그네가 공격해 왔습니다.',
 			en:'The strangers attacked.',
 			jp:'ナグネが攻撃してきました。',
+		},
+		eventText13_2:{
+			ko:'나그네가 대화를 하고 싶어합니다.',
+			en:'The traveler wants to talk.',
+			jp:'ナグネが会話をしたいです。',
 		},
 		eventText14:{
 			ko:'주민을 발견했습니다.',
@@ -1211,6 +1306,11 @@ export const msg = {
 			en:'The residents attacked.',
 			jp:'住民が攻撃してきました。',
 		},
+		eventText14_2:{
+			ko:'주민이 대화를 하고 싶어합니다.',
+			en:'The people want to talk.',
+			jp:'住民が会話をしたいです。',
+		},
 		eventText15:{
 			ko:'수상한자를 발견했습니다.',
 			en:'Found a suspicious person.',
@@ -1221,10 +1321,90 @@ export const msg = {
 			en:'A suspicious person attacked.',
 			jp:'怪しい者が攻撃してきました。',
 		},
+		eventText15_2:{
+			ko:'수상한자가 대화를 하고 싶어합니다.',
+			en:'The suspicious person wants to talk.',
+			jp:'怪しい人が会話をしたいです。',
+		},
+		eventText15_3:{
+			ko:'왼쪽, 오른쪽 둘중 하나만 택해. 5번 맞추면 아주 좋은 선물을 줄께. 대신 한번할때 1000 골드야.',
+			en:'Choose either left or right. If you get it right 5 times, I\'ll give you a very nice gift. But it\'s 1000 gold for one time.',
+			jp:'左、右のどちらか一方を選んでください。 5回合わせるととても良いプレゼントをあげましょう。代わりに一度するとき1000ゴールドです。',
+		},
+		eventText15_4:{
+			ko:'첫번째 통과했네. 다시 왼쪽, 오른쪽 둘중 하나만 택해.',
+			en:'You passed the first one. Again, choose either left or right.',
+			jp:'最初通過した。もう一度左、右のどちらかを選んでください。',
+		},
+		eventText15_5:{
+			ko:'잘하는데? 다시 왼쪽, 오른쪽 둘중 하나만 택해.',
+			en:'Are you good at it? Again, choose either left or right.',
+			jp:'うまくいきますか？もう一度左、右のどちらかを選んでください。',
+		},
+		eventText15_6:{
+			ko:'이거 스릴넘치는데? 왼쪽, 오른쪽! 택해!',
+			en:'Isn\'t this thrilling? Left, right! Choose!',
+			jp:'これはスリリングなのですか？左、右！選ぶ！',
+		},
+		eventText15_7:{
+			ko:'네번째까지 맞춘건 너가 처음이야. 왼쪽, 오른쪽?',
+			en:'You\'re the first to get the fourth one right. Left, right?',
+			jp:'4回目まで合わせたのはあなたが初めてだ。左、右？',
+		},
+		eventText15_8:{
+			ko:'5번 다 맞췄네! 축하해. 받고싶은 선물을 말해.',
+			en:'You got all 5 correct! Congratulations. Tell me what gift you want.',
+			jp:'5回すべて当たった！おめでとうございます。受け取りたいプレゼントを教えてください。',
+		},
+		eventText15_9:{
+			ko:'아쉽지만 다음에 다시 도전해.',
+			en:'It\'s a shame, but try again next time.',
+			jp:'残念ながら次回挑戦してください。',
+		},
+		eventText16:{
+			ko:'수문장을 만났습니다.',
+			en:'I met the goalkeeper.',
+			jp:'守門將に会いました。',
+		},
+		eventText16_1:{
+			ko:'수문장이 광폭화단계에 돌입합니다.',
+			en:'The goalkeeper enters a frenzy phase.',
+			jp:'守門將が広幅化段階に突入します。',
+		},
+		conversation0:{
+			ko:'날씨가 좋네요.',
+			en:'The weather is nice.',
+			jp:'天気がいいですね。',
+		},
+		conversation1:{
+			ko:'멋진 장비를 가지고 있네?',
+			en:'You\'ve got some cool gear?',
+			jp:'素敵な装備を持っていますか？',
+		},
+		conversation2:{
+			ko:'세상이 점점 무서워지고 있어.',
+			en:'The world is becoming more and more scary.',
+			jp:'世界がどんどん怖くなっている。',
+		},
+		conversation3:{
+			ko:'너의 정체는 이미 알고 있었다.',
+			en:'I already knew your identity.',
+			jp:'あなたの正体はすでに知っていました。',
+		},
 		attack:{
 			ko:'공격한다.',
 			en:'Attack.',
 			jp:'攻撃する。',
+		},
+		left:{
+			ko:'왼쪽!',
+			en:'Left!',
+			jp:'左！',
+		},
+		right:{
+			ko:'오른쪽!',
+			en:'Right!',
+			jp:'右！',
 		},
 		save:{
 			ko:'살려준다.',
@@ -1311,28 +1491,33 @@ export const msg = {
 			en:'Have a conversation.',
 			jp:'会話をする。',
 		},
-		conversation0:{
-			ko:'날씨가 좋네요.',
-			en:'The weather is nice.',
-			jp:'天気がいいですね。',
+		receiveGift:{
+			ko:'선물을 받는다.',
+			en:'Receive a gift.',
+			jp:'プレゼントをもらう。',
 		},
-		conversation1:{
-			ko:'내가 가진 아이템 볼래?',
-			en:'Want to see the items I have?',
-			jp:'私が持っているアイテムを見て？',
+		receiveGold:{
+			ko:'돈으로 줘.',
+			en:'Give me money.',
+			jp:'お金であげてください。',
 		},
-		conversation2:{
-			ko:'세상이 점점 무서워지고 있어.',
-			en:'The world is becoming more and more scary.',
-			jp:'世界がどんどん怖くなっている。',
-		},
-		conversation3:{
-			ko:'오다가 주웠어.',
-			en:'I picked it up on the way.',
-			jp:'織田が拾った。',
+		joinParty:{
+			ko:'너가 동료로 들어와.',
+			en:'You come in as a colleague.',
+			jp:'仲間に入ってきて',
 		},
 	},
 	sentence:{
+		createTravelEntry:{
+			ko:'여행을 떠날 팀을 구성하세요.',
+			en:'Form a team to go on a trip.',
+			jp:'旅に出るチームを整理してください。'
+		},
+		onlyTravelHero:{
+			ko:'여행에 참여한 영웅만 가능합니다.',
+			en:'Only heroes who have participated in the journey can do this.',
+			jp:'旅行に参加した英雄だけが可能です。'
+		},
 		card1:{
 			ko:'한 카드에 올인',
 			en:'All in on one card',
@@ -1563,6 +1748,11 @@ export const msg = {
 			en:'Go to Equip Item.',
 			jp:'アイテム装着に移動します。',
 		},
+		questionMoveCountry:{
+			ko:'이동 하시겠습니까?',
+			en:'Do you want to move?',
+			jp:'移動しますか？',
+		},
 	},
 	grammar:{
 		conjunction:{
@@ -1717,6 +1907,42 @@ export const msg = {
 					return `Choose a character with <${skill[lang]}> skills.`;
 				case 'jp':
 					return `<${skill[lang]}> スキルを持つキャラクターを選択してください。`;
+				default:
+					break;
+			}
+		},
+		lackOfCondition:(lang, condition) => {
+			switch(lang) {
+				case 'ko':
+					return `${condition} 이/가 부족합니다.`;
+				case 'en':
+					return `${condition} is not enough.`;
+				case 'jp':
+					return `${condition}が足りない`;
+				default:
+					break;
+			}
+		},
+		useItem:(lang, itemName) => {
+			switch(lang) {
+				case 'ko':
+					return `${itemName} 을/를 사용합니다.`;
+				case 'en':
+					return `I use ${itemName}.`;
+				case 'jp':
+					return `${itemName}を使う`;
+				default:
+					break;
+			}
+		},
+		increaseDecrease:(lang, title, num) => {
+			switch(lang) {
+				case 'ko':
+					return `${title} 이/가 ${Math.abs(num)}만큼 ${num < 0 ? "감소" : "증가"}합니다.`;
+				case 'en':
+					return `${title} is ${num < 0 ? "decreased" : "increases"} by ${Math.abs(num)}.`;
+				case 'jp':
+					return `${title}が${Math.abs(num)}だけ${num < 0 ? "減少": "増加"}します。`;
 				default:
 					break;
 			}
