@@ -45,7 +45,7 @@ const ChCard = styled.div`
   }
 `;
 
-const ListNameLv = styled.div`
+const ListNameLv = styled(Text)`
   position: absolute;
   text-align:center;
   ${({elementType}) => {
@@ -65,15 +65,12 @@ const ListNameLv = styled.div`
   ${({isThumb, backColor}) => {
     return isThumb ?
       `
-        left: calc(50% - 7px);
+        right: 5%;
         bottom: 5%;
-        width: 20px;
-        height: 20px;
+        padding: 2px;
         z-index: 6;
-        font-size: 1rem;
-        line-height: 20px;
-        font-weight: 600;
-        border-radius: 50%;
+        line-height: 1;
+        border-radius: 5%;
         background-color: ${backColor};
       `
         : 
@@ -310,6 +307,17 @@ const GradeUp = styled(IconPic)`
   width: 100%;
   height: 0;
 `;
+const ListChCost = styled(Text)`
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: var(--color-darkgrey);
+  line-height: 1.25rem;
+  z-index:7;
+`;
 const ChracterCard = ({
   size,
   equalSize,
@@ -320,7 +328,8 @@ const ChracterCard = ({
   usedType,
   noInfo,
   gameSpd,
-  grade,
+  grade, 
+  showCost,
   ...rest
 }) => {
   const context = useContext(AppContext);
@@ -415,7 +424,7 @@ const ChracterCard = ({
             </>
           ) : (
             <>
-              <ListNameLv isThumb={true} backColor={gameData.chGradeColor[saveCh?.grade]}>{saveCh?.lv}</ListNameLv>
+              <ListNameLv code="t1" color="main" weight="600" isThumb={true} backColor={gameData.chGradeColor[saveCh?.grade]}>Lv.{saveCh?.lv}</ListNameLv>
               <ListCh isRound={10} pic="ch_s" idx={chData?.display} />
               <ListElementSmall type="elementBack" pic="card_s" idx={chData?.element[0] - 6} />
               {saveCh?.lv > 49 && <ListChElement1 pic="icon200" type="cardRing" idx={chData?.element[0] - 7} gameSpd={gameSpd} />}
@@ -426,6 +435,7 @@ const ChracterCard = ({
                   </ListChActionType>
                 )
               })}
+              {showCost && <ListChCost code="t2" color="main" weight="600">{chData?.cost}</ListChCost>}
             </>
           )}
         </>

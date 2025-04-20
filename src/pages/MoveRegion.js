@@ -191,7 +191,7 @@ const MoveRegion = ({
           }
         }}>
           <WorldMap className="worldMap">
-            <MapPic pic="img800" idx={selectMoveRegion !== "" ? selectMoveRegion + 1 : stayIdx + 1} />
+            <MapPic type="worldMap" pic="map800" idx={selectMoveRegion !== "" ? selectMoveRegion + 1 : stayIdx + 1} />
           </WorldMap>
         </MapTouch>
       </MapArea>

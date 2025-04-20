@@ -7,13 +7,9 @@ import color from 'images/colorpicker.jpg';
 
 import bar0 from 'images/frame/bar0.png';
 import bar1 from 'images/frame/bar1.png';
-import frameLeft from 'images/frame/frame_battle1.png';
-import frameRight from 'images/frame/frame_battle2.png';
 import frameChBack from 'images/frame/frame_chback.png';
 import frameMain from 'images/frame/frame_main.png';
 import frameRope from 'images/frame/frame_rope.png';
-import frameWood from 'images/frame/frame_wood.png';
-import stateBack from 'images/pattern/white_brick_wall_@2X_.png';
 
 import cloud1 from 'images/bg/cloud1.png';
 import cloud2 from 'images/bg/cloud2.png';
@@ -35,10 +31,6 @@ import btnSL from 'images/button/button_s_l.png';
 import btnSix from 'images/button/button_six.png';
 import btnSixD from 'images/button/button_six_d.png';
 import btnSixL from 'images/button/button_six_l.png';
-import defenceIcon0 from 'images/ico/shield0.png';
-import defenceIcon1 from 'images/ico/shield1.png';
-import defenceIcon2 from 'images/ico/shield2.png';
-import tombstone from 'images/ico/tombstone.png';
 
 //wheel
 // import controlWheel0 from 'images/control/wheel0.png';
@@ -148,11 +140,6 @@ import sunrain from 'images/weather/sunrain.png';
 import sunsnow from 'images/weather/sunsnow.png';
 import sunthunder from 'images/weather/sunthunder.png';
 import wind from 'images/weather/wind2.png';
-
-//패시브 아이콘
-import passive0 from 'images/passive/passive0.png';
-import passive1 from 'images/passive/passive1.png';
-import passive2 from 'images/passive/passive2.png';
 
 //이펙트 애니메이션
 // import eff4 from 'images/effect/Death1.png';
@@ -524,31 +511,6 @@ import custom01 from 'images/effect/custom/30FPS_custom01.png';
 // import effect202 from 'images/effect/pack2/15_EF_Wind_8.png';
 
 //Map
-import mapAnchor from 'images/map/anchor.png';
-import flag0 from 'images/map/flag0.png';
-import flag1 from 'images/map/flag1.png';
-import flag10 from 'images/map/flag10.png';
-import flag11 from 'images/map/flag11.png';
-import flag2 from 'images/map/flag2.png';
-import flag3 from 'images/map/flag3.png';
-import flag4 from 'images/map/flag4.png';
-import flag5 from 'images/map/flag5.png';
-import flag6 from 'images/map/flag6.png';
-import flag7 from 'images/map/flag7.png';
-import flag8 from 'images/map/flag8.png';
-import flag9 from 'images/map/flag9.png';
-import map0 from 'images/map/map0.png';
-import map1 from 'images/map/map1.png';
-import map10 from 'images/map/map10.png';
-import map11 from 'images/map/map11.png';
-import map2 from 'images/map/map2.png';
-import map3 from 'images/map/map3.png';
-import map4 from 'images/map/map4.png';
-import map5 from 'images/map/map5.png';
-import map6 from 'images/map/map6.png';
-import map7 from 'images/map/map7.png';
-import map8 from 'images/map/map8.png';
-import map9 from 'images/map/map9.png';
 // import map0 from 'images/map/map0.png';
 // import map1 from 'images/map/map1.png';
 
@@ -558,15 +520,13 @@ import card_s from 'images/card_s.png'; //2000 x 1200, 10, 6
 import ch from 'images/ch.png'; //8000 x 7110, 10, 6
 import ch_s from 'images/ch_s.png'; //2000 x 1200, 10, 6
 import country from 'images/country.png'; //8192 x 8960, 10, 5(1024 x 1792)
-import eventBack from 'images/eventBack.png'; //8000 x 2409, 10, 3(800 x 800)
 import icon100 from 'images/icon100.png'; //1000, 10, 25
 import icon150 from 'images/icon150.png'; //1500, 10, 10
 import icon200 from 'images/icon200.png'; //2000, 10, 25
 import img400 from 'images/img400.png'; //6000, 10, 2
-import img600 from 'images/img600.png'; //6000, 10, 2
-import img800 from 'images/img800.png'; //4000 x 4000, 5, 8
+import img800 from 'images/img800.png'; //8000 x 6400, 10, 8(800 x 800)
 import itemEtc from 'images/itemEtc.png'; //1000, 10, 50
-import moveEventCountry from 'images/moveEventCountry.png'; //5600, 14, 1
+import map800 from 'images/map800.png'; //4000 x 4000, 5, 8
 import skill from 'images/skill.png'; //1000 x 4000, 10, 40
 
 import frame0 from 'images/frame0.png';
@@ -575,7 +535,7 @@ export const back = {
   scroll:scroll,stamp:stamp,countryTitle:countryTitle,
 };
 export const etc = {
-  frameChBack:frameChBack,stateBack:stateBack,frameRope:frameRope,frameWood:frameWood,frameLeft:frameLeft,frameRight:frameRight,bar0:bar0,bar1:bar1,frameMain:frameMain,wind:wind,color:color,
+  frameChBack:frameChBack,frameRope:frameRope,bar0:bar0,bar1:bar1,frameMain:frameMain,wind:wind,color:color,
 };
 export const button = {
   btnL:btnL,btnLL:btnLL,btnLD:btnLD,btnM:btnM,btnML:btnML,btnMD:btnMD,btnS:btnS,btnSL:btnSL,btnSD:btnSD,btnCircle:btnCircle,btnCircleL:btnCircleL,btnCircleD:btnCircleD,btnArrow:btnArrow,btnArrowL:btnArrowL,btnArrowD:btnArrowD,btnSix:btnSix,btnSixL:btnSixL,btnSixD:btnSixD
@@ -588,12 +548,6 @@ export const weather = [
 ];
 export const bgEffect = [
   cloud1,cloud2
-];
-export const actionIcon = [
-  defenceIcon0,defenceIcon1,defenceIcon2,tombstone,
-];
-export const passive = [
-  passive0,passive1,passive2,
 ];
 // export const wood = [
 //   wood0,wood1,wood2,wood3,wood4,wood5,wood6,wood7,wood8,wood9
@@ -610,9 +564,6 @@ export const passive = [
 // export const cannon = [
 //   cannon0,cannon1,cannon2,cannon3,cannon4,cannon5,cannon6,cannon7,cannon8
 // ]
-export const map = {
-  mapAnchor:mapAnchor,map0:map0,map1:map1,map2:map2,map3:map3,map4:map4,map5:map5,map6:map6,map7:map7,map8:map8,map9:map9,map10:map10,map11:map11,flag0:flag0,flag1:flag1,flag2:flag2,flag3:flag3,flag4:flag4,flag5:flag5,flag6:flag6,flag7:flag7,flag8:flag8,flag9:flag9,flag10:flag10,flag11:flag11,
-};
 export const effect = {
   slash0:{img:slash0,frame:8,used:'공격'},slash1:{img:slash1,frame:25},slash2:{img:slash2,frame:25,used:'십자베기'},slash3:{img:slash3,frame:13,used:'사선베기'},slash4:{img:slash4,frame:14,used:'목공격'},slash5:{img:slash5,frame:10,used:'발도'},slash6:{img:slash6,frame:14,used:'돌진'},slash7:{img:slash7,frame:11,used:'할퀴기'},slash8:{img:aniPack4_2,frame:8,used:'후려치기'},slash9:{img:aniPack4_3,frame:11},slash10:{img:aniPack4_11,frame:6,used:'조준사격'},
   slash11:{img:aniPack4_15,frame:5,used:'물기'},
@@ -652,7 +603,7 @@ export const effect = {
   buff40:{img:buff40,frame:30,used:'조개선물'},buff41:{img:buff41,frame:30},buff42:{img:aniPack4_6,frame:15},custom01:{img:custom01,frame:24,used:'무거운한방'},
 };
 export const images = {
-  ch:ch,ch_s:ch_s,card:card,card_s:card_s,country:country,areaBack:areaBack,eventBack:eventBack,skill:skill,icon100:icon100,icon150:icon150,icon200:icon200,img400:img400,img600:img600,img800:img800,moveEventCountry:moveEventCountry,itemEtc:itemEtc,
+  ch:ch,ch_s:ch_s,card:card,card_s:card_s,country:country,areaBack:areaBack,skill:skill,icon100:icon100,icon150:icon150,icon200:icon200,img400:img400,img800:img800,map800:map800,itemEtc:itemEtc,
   frame0:frame0,
   transparent:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAAtJREFUGFdjYAACAAAFAAGq1chRAAAAAElFTkSuQmCC',
   red:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDYuMC1jMDA2IDc5LmRhYmFjYmIsIDIwMjEvMDQvMTQtMDA6Mzk6NDQgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCAyMi40IChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjVFM0Q0RkMwMDE5OTExRUZCMkY4QzZDM0YyRDUzRjBBIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjVFM0Q0RkMxMDE5OTExRUZCMkY4QzZDM0YyRDUzRjBBIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MkIzRTE2NjEwMTc3MTFFRkIyRjhDNkMzRjJENTNGMEEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MkIzRTE2NjIwMTc3MTFFRkIyRjhDNkMzRjJENTNGMEEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz72wd/gAAAADklEQVR42mL4b8oAEGAAA2sBNUl4lb4AAAAASUVORK5CYII=',

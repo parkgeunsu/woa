@@ -1,5 +1,3 @@
-import { AppContext } from 'App';
-import { useContext } from 'react';
 // import { util } from 'components/Libs';
 import { IconPic } from 'components/ImagePic';
 import styled from 'styled-components';
@@ -7,8 +5,8 @@ import styled from 'styled-components';
 // import Popup from 'components/Popup';
 const setPos = (pos) => {
   return `
-    ${pos[0]}:10px;
-    ${pos[1]}:10px;
+    ${pos[0]}: 10px;
+    ${pos[1]}: 0px;
   `
 }
 const QuestionButton = styled.div`
@@ -25,7 +23,6 @@ const GuideQuestion = ({
   onclick,
   colorSet,
 }) => {
-  const imgSet = useContext(AppContext).images;
   const backImg = colorSet === 'black' ? 5 : 6;
   const shadowColor = colorSet === 'black' ? '#fff' : '#000';
   return (

@@ -25,6 +25,7 @@ const BackButton = styled.div`
 	}
 `;
 const BattleTitle = styled.div`
+	display: flex;
 	padding: 10px 10px;
 	width: 100%;
 	height: 100%;
@@ -60,7 +61,6 @@ const BattleArea = styled.div`
 		left: ${({mode}) => {
 			return !mode ? "-50px" : 0;
 		}};
-		background: url(${({frameLeft}) => frameLeft}) no-repeat -15px center;
 	}
   &:after {
 		content: "";
@@ -586,7 +586,6 @@ const Land = styled.div`
 	box-sizing: border-box;
 	border-radius: 0;
 	background-size: 100%;
-	outline: 3px solid rgba(255,255,255,0.5);
 	left:${({left}) => left}%;
 	top:${({top}) => top}%;
 	&:before {
@@ -1679,6 +1678,7 @@ const StyleSelect = styled(Select)`
   display: inline-block;
   padding: 5px;
   border: 1px solid #999;
+	background: #fff;
 `;
 const speedList = [1,1.5,2,3];
 // const skillCateList = ['none','passive','active(emeny)','active(self)','buff','debuff','active(debuff)','active(buff)','weather','job'];//1부터
@@ -2542,7 +2542,7 @@ const TestSkill = ({
             }
             containerWH.current = [area.width, area.height];
           }
-        }} className={`battle_area ${mode === "action" ? "action" : ""}`} mode={mode} frameLeft={imgSet.etc.frameLeft} frameRight={imgSet.etc.frameRight}>
+        }} className={`battle_area ${mode === "action" ? "action" : ""}`} mode={mode}>
           <BattleEffect ref={battleEffectRef} className="battle_effect">
             <BattleEffectLand allEff={enemyEffect.allEff >= 5 ? enemyEffect.allEff : 0} className={`land_enemy`} size={enemyEffect.effSize} rotate={enemyEffect.effRotate} filter={enemyEffect.effFilter}>
             {map.map((data, idx) => {
@@ -2630,14 +2630,14 @@ const TestSkill = ({
                   return (
                     <BattleCh key={idx} className={`battle_ch ${area ? "effect effect" + element_type : ""} ${actionCh} ${actionPos} ${state}`} data-ch={chData?.display} data-idx={idx} left={left} top={top} size={mapSize} onClick={(e) => {
                       areaEnemySelect(e, idx);
-                    }} gameSpd={speed} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]}>
-                      {buffEff && buffEff.map((buffData, idx) => {
+                    }} gameSpd={speed}>
+                      {/* {buffEff && buffEff.map((buffData, idx) => {
                         return (
                           <Buff key={idx} className="ch_buff" gameSpd={speed} effImg={imgSet.effect[buffData].img} frame={imgSet.effect[buffData].frame} buffEff={buffData} >
                             <div className="buff_effect"></div>
                           </Buff>
                         );
-                      })}
+                      })} */}
                       <div className="ch_box">
                         {passive && passive.map((passiveData, idx) => {
                           return (
@@ -2688,14 +2688,14 @@ const TestSkill = ({
                   return (
                     <BattleCh key={idx} className={`battle_ch ${posCh} ${area ? "effect effect" + element_type : ""} ${actionCh} ${actionPos} ${state}`} data-ch={chData?.display} data-idx={idx} left={left} top={top} size={mapSize} onClick={(e) => {
                       areaAllySelect(e, idx);
-                    }}  gameSpd={speed} defenceIcon0={imgSet.actionIcon[0]} defenceIcon1={imgSet.actionIcon[1]} defenceIcon2={imgSet.actionIcon[2]} tombstone={imgSet.actionIcon[3]}>
-                      {buffEff && buffEff.map((buffData, idx) => {
+                    }}  gameSpd={speed}>
+                      {/* {buffEff && buffEff.map((buffData, idx) => {
                         return (
                           <Buff key={idx} className="ch_buff" gameSpd={speed} effImg={imgSet.effect[buffData].img} frame={imgSet.effect[buffData].frame} buffEff={buffData}>
                             <div className="buff_effect"></div>
                           </Buff>
                         );
-                      })}
+                      })} */}
                       <div className="ch_box">
                         {passive && passive.map((passiveData, idx) => {
                           return (

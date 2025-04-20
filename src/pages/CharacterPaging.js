@@ -1,8 +1,7 @@
-import { AppContext } from 'App';
 import { util } from 'components/Libs';
 import CharacterCard from 'pages/CharacterCard';
 import ChList from 'pages/ChList';
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
 const ChUl = styled.ul`
@@ -41,16 +40,16 @@ const ChracterPaging = ({
   slotIdx,
   changeChSlot,
 }) => {
-  const context = useContext(AppContext);
+  // const context = useContext(AppContext);
   // const lang = React.useMemo(() => {
   //   return context.setting.lang;
   // }, [context]);
   // const imgSet = React.useMemo(() => {
   //   return context.images;
   // }, [context]);
-  const gameData = React.useMemo(() => {
-    return context.gameData;
-  }, [context]);
+  // const gameData = React.useMemo(() => {
+  //   return context.gameData;
+  // }, [context]);
   const sData = React.useMemo(() => {
     return Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData;
   }, [saveData]);
@@ -75,7 +74,7 @@ const ChracterPaging = ({
   return (
     <ChList ref={scrollMove} type="paging">
       <ChUl chSize={cardWidth} chLength={chLength}>
-        {saveData.ch && saveData.ch.map((data, idx) => {
+        {sData.ch && sData.ch.map((data, idx) => {
           return (
             <ChLi className={`g${data.grade} ${slotIdx === idx ? 'on' : ''}`} key={idx} onClick={() => {
               util.saveData('historyParam', {

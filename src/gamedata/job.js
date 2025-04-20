@@ -1,5 +1,6 @@
 //직업스킬
 export const job = [
+  //군주
   {idx:0,
     na:{
       ko:'군주',
@@ -7,9 +8,9 @@ export const job = [
       jp:'君主',
     },
     txt:{
-      ko:'이 직업은 리더쉽을 바탕으로 부대를 통솔 할 수 있습니다.',
-      en:'This profession allows you to command troops based on leadership.',
-      jp:'この職業は、リーダーシップをもとに部隊を統率することができます。',
+      ko:'한 나라를 통히하는 리더입니다.',
+      en:'He is a leader who leads a country.',
+      jp:'一国を通じるリーダーです。',
     },
     skill:{//단검,검,양손검,둔기,창,도끼,활,타격,방패,
       type:'random',
@@ -18,7 +19,7 @@ export const job = [
       lv0:[], //45%
       lv1:[15,20,22], //40%
       lv2:[24,25,26,27,28,29], //15%
-      lv3:[9,10], //15%
+      lv3:[9,10], //10%
       maxLv:[0,1,2,9,10,15,20,22],
     },
     drop:{
@@ -32,6 +33,7 @@ export const job = [
       ],
       hole:[],
     }},
+  //마법사
   {idx:1,
     na:{
       ko:'마법사',
@@ -39,9 +41,9 @@ export const job = [
       jp:'ウィザード',
     },
     txt:{
-      ko:'이 직업은 자연계 술법에 능통하고 최대 2개의 속성을 연마할 수 있습니다.',
-      en:'This class is proficient in natural arts and can hone up to two attributes.',
-      jp:'この職業は自然界術法に精通しており、最大2つの属性を磨くことができます。',
+      ko:'자연계 속성을 연구하는 학자입니다.',
+      en:'A scholar who studies the properties of nature.',
+      jp:'自然界の属性を研究する学者です。',
     },
     skill:{//단검,검,한손둔기,보조,
       type:'choose', //물, 불, 바람, 땅
@@ -62,6 +64,7 @@ export const job = [
       ],
       hole:[],
     }},
+  //기사
   {idx:2,
     na:{
       ko:'기사',
@@ -69,17 +72,17 @@ export const job = [
       jp:'騎士',
     },
     txt:{
-      ko:'이 직업은 무거운 장비까지 착용이 가능하여 방어력이 뛰어나고 대부분의 공격을 무효화 시킵니다.',
-      en:'This class can wear up to heavy equipment, giving it great defense and negating most attacks.',
-      jp:'この職業は重い装備まで着用でき、防御力に優れ、ほとんどの攻撃を無効化します。',
+      ko:'중장비를 착용하여 대부분의 공격을 무효화 시킵니다.',
+      en:'Wearing heavy equipment nullifies most attacks.',
+      jp:'重機を着用してほとんどの攻撃を無効にします。',
     },
     skill:{//검,양손검,둔기,창,도끼,방패,
       type:'choose', //방어스킬, 공격스킬
       initialCounts:2,
       basic:[24,25,26,27,28],
       lv0:[],
-      lv1:[],
-      lv2:[24,25,26,27,28],
+      lv1:[24,25,26,27,28],
+      lv2:[52],
       lv3:[14],
       maxLv:[0,1,2,14],
     },
@@ -92,6 +95,7 @@ export const job = [
       ],
       hole:[],
     }},
+  //무사
   {idx:3,
     na:{
       ko:'무사',
@@ -99,9 +103,9 @@ export const job = [
       jp:'武士',
     },
     txt:{
-      ko:'이 직업은 다양한 무기에 통달하여 특히 일대일 전투에서 진가가 들어납니다.',
-      en:'This class is particularly effective in one-on-one combat due to its mastery of a variety of weapons.',
-      jp:'このクラスは様々な武器に精通しており、特に1対1の戦闘で威力を発揮します。',
+      ko:'1:1에 능하고 다양한 무기를 사용합니다.',
+      en:'He is good at 1:1 and uses a variety of weapons.',
+      jp:'1:1に堪能で様々な武器を使用します。',
     },
     skill:{//단검,검,양손검,한손둔기,창,
       type:'random',
@@ -122,6 +126,7 @@ export const job = [
       ],
       hole:[],
     }},
+  //학자
   {idx:4,
     na:{
       ko:'학자',
@@ -129,9 +134,9 @@ export const job = [
       jp:'学者',
     },
     txt:{
-      ko:'이 직업은 많은 지식을 연구하고 발전시킨 직업으로 전투에 약합니다.',
-      en:'This is a class that has studied and developed a lot of knowledge and is weak in combat.',
-      jp:'この職業は多くの知識を研究・発展させた職業で、戦闘に弱いです。',
+      ko:'다양한 분야의 학문을 연구합니다.',
+      en:'We study a variety of fields of study.',
+      jp:'さまざまな分野の学問を研究します。',
     },
     skill:{//단검,검,타격,방패,보조,
       type:'choose',//전투스킬, 직업스킬
@@ -152,6 +157,7 @@ export const job = [
       ],
       hole:[],
     }},
+  //닌자
   {idx:5,
     na:{
       ko:'닌자',
@@ -159,9 +165,9 @@ export const job = [
       jp:'忍者',
     },
     txt:{
-      ko:'이 직업은 마음의 수양을 통해 정신의 한계를 극복한 직업으로 암기에 능통합니다.',
-      en:'This is a profession that has overcome the limitations of the mind through the discipline of the heart and is adept at memorization.',
-      jp:'この職業は、心の修養によって精神の限界を克服した職業で、暗記に長けています。',
+      ko:'암살과 정보수집을 위해 훈련된 직업입니다.',
+      en:'A profession trained for assassination and intelligence gathering.',
+      jp:'暗殺と情報収集のために訓練された職業です。',
     },
     skill:{//단검,검,한손둔기,한손도끼,타격,
       type:'random',
@@ -182,6 +188,7 @@ export const job = [
       ],
       hole:[4],
     }},
+  //도술사
   {idx:6,
     na:{
       ko:'도술사',
@@ -189,9 +196,9 @@ export const job = [
       jp:'占い師',
     },
     txt:{
-      ko:'이 직업은 선 또는 악을 연구하는 직업으로 상당히 강력합니다.',
-      en:'This class is quite powerful as a study of good or evil.',
-      jp:'この職業は善悪を研究する職業で、かなり強力です。',
+      ko:'선/악의 연구를 끊임없이 하는 학자입니다.',
+      en:'A scholar who continuously studies good and evil.',
+      jp:'善・悪の研究を絶えずする学者です。',
     },
     skill:{//한손둔기,타격,보조,
       type:'choose',//빛, 어둠
@@ -213,6 +220,7 @@ export const job = [
       ],
       hole:[],
     }},
+  //무희
   {idx:7,
     na:{
       ko:'무희',
@@ -220,9 +228,9 @@ export const job = [
       jp:'踊り子',
     },
     txt:{
-      ko:'이 직업은 정신술법에 특화된 직업으로 남성에게 특히 강합니다.',
-      en:'This class specializes in mentalism and is particularly strong for men.',
-      jp:'この職業は精神術法に特化した職業で、男性に特に強いです。',
+      ko:'화려한 언변을 통해 이성의 마음을 사로잡습니다.',
+      en:'Captivate the heart of the opposite sex with flowery speech.',
+      jp:'華やかな言葉で異性の心を魅了します。',
     },
     skill:{//단검,검,활,타격,보조,
       type:'random',
@@ -245,6 +253,7 @@ export const job = [
       ],
       hole:[],
     }},
+  //도적
   {idx:8,
     na:{
       ko:'도적',
@@ -252,9 +261,9 @@ export const job = [
       jp:'盗賊',
     },
     txt:{
-      ko:'이 직업은 빠른 속도를 기반으로 적을 농락합니다.',
-      en:'This class relies on speed to outmaneuver enemies.',
-      jp:'このクラスはスピードで敵を翻弄する。',
+      ko:'재빠른 손놀림으로 물건을 훔칩니다.',
+      en:'TSteal things with quick hands.',
+      jp:'素早い手のひらで物を盗む。',
     },
     skill:{//단검,검,한손둔기,활,타격,
       type:'choose',//활, 단검
@@ -276,6 +285,7 @@ export const job = [
       ],
       hole:[],
     }},
+  //궁수
   {idx:9,
     na:{
       ko:'궁수',
@@ -283,9 +293,9 @@ export const job = [
       jp:'射手',
     },
     txt:{
-      ko:'이 직업은 원거리에서 광 범위한 영역에 공격이 가능한 직업입니다.',
-      en:'This is a class that can attack a large area from a distance.',
-      jp:'この職業は遠距離から広範囲のエリアに攻撃が可能な職業です。',
+      ko:'원거리에서 공격을 할 수 있는 직업입니다.',
+      en:'This is a job that can attack from a distance.',
+      jp:'遠距離で攻撃ができる職業です。',
     },
     skill:{//단검,검,활,타격,방패,
       type:'random',
@@ -306,16 +316,17 @@ export const job = [
       ],
       hole:[],
     }},
+  //야만인
   {idx:10,
     na:{
-      ko:'야만용사',
+      ko:'야만인',
       en:'Barbarian',
       jp:'野蛮人',
     },
     txt:{
-      ko:'이 직업은 자연을 통해 강화시킨 신체능력으로 전쟁에서 중요한 역할을 합니다.',
-      en:'This class plays an important role in warfare with physical abilities enhanced by nature.',
-      jp:'この職業は自然を通じて強化した身体能力で戦争で重要な役割を果たします。',
+      ko:'도시문명 보다는 자연과 어우러져 살아갑니다.',
+      en:'We live in harmony with nature rather than in urban civilization.',
+      jp:'都市文明よりも自然と調和して生きていきます。',
     },
     skill:{//단검,검,양손검,둔기,창,도끼,활,타격,방패,
       type:'choose',//도끼, 창, 양손검
@@ -336,6 +347,7 @@ export const job = [
       ],
       hole:[],
     }},
+  //상인
   {idx:11,
     na:{
       ko:'상인',
@@ -343,9 +355,9 @@ export const job = [
       jp:'商人',
     },
     txt:{
-      ko:'이 직업은 숫자에 능한 직업으로 돈 버는 능력이 탁월합니다.',
-      en:'This is a job where you\'re good with numbers, and you\'re good at making money.',
-      jp:'この職業は数字に強い職業で、お金を稼ぐ能力に優れています。',
+      ko:'물건을 사고 파는 능력이 월등합니다.',
+      en:'The ability to buy and sell things is outstanding.',
+      jp:'物を買って売る能力が優れています。',
     },
     skill:{//단검,검,양손검,둔기,도끼,활,타격,방패,
       type:'random',
@@ -368,6 +380,7 @@ export const job = [
       ],
       hole:[],
     }},
+  //한량
   {idx:12,
     na:{
       ko:'한량',
@@ -375,9 +388,9 @@ export const job = [
       jp:'詐欺師',
     },
     txt:{
-      ko:'이 직업은 하루 종일 놀고 먹는 직업이며 대체로 행운이 따릅니다.',
-      en:'This job is day job to play and eat, and generally good luck.',
-      jp:'この仕事は一日中遊んだり食べたりする仕事で、一般的に運がつきものです。',
+      ko:'특별한 직업없이 도박과 풍류만을 즐깁니다.',
+      en:'He has no particular occupation and only enjoys gambling and pleasure.',
+      jp:'特別な仕事なしでギャンブルと風流だけを楽しんでください。',
     },
     skill:{//단검,둔기,창,도끼,타격,
       type:'random',
@@ -397,6 +410,7 @@ export const job = [
       ],
       hole:[],
     }},
+  //장군
   {idx:13,
     na:{
       ko:'장군',
@@ -404,16 +418,16 @@ export const job = [
       jp:'将軍',
     },
     txt:{
-      ko:'이 직업은 전쟁의 승패를 좌지우지 하는 전쟁에 특화된 직업입니다.',
-      en:'This class specializes in warfare, which can mean the difference between winning and losing a war.',
-      jp:'この職業は戦争の勝敗を左右する戦争に特化した職業です。',
+      ko:'한 부대를 이끄는 리더로서 전쟁의 승패를 결정합니다.',
+      en:'As a leader leading a unit, you determine the outcome of the war.',
+      jp:'一部隊を率いるリーダーとして戦争の勝敗を決める。',
     },
     skill:{//단검,검,양손검,둔기,창,도끼,활,타격,방패,
       type:'random',
       initialCounts:3,
       basic:[24,25,26,27,28,29],
       lv0:[],
-      lv1:[],
+      lv1:[52],
       lv2:[22,24,25,26,27,28,29],
       lv3:[11],
       maxLv:[0,1,2,11,22],
@@ -427,6 +441,7 @@ export const job = [
       ],
       hole:[],
     }},
+  //농부
   {idx:14,
     na:{
       ko:'농부',
@@ -434,9 +449,9 @@ export const job = [
       jp:'農家',
     },
     txt:{
-      ko:'이 직업은 일반적인 직업으로 체력이 좋습니다.',
-      en:'This is a common job and requires good stamina.',
-      jp:'この職業は一般的な職業で体力があります。',
+      ko:'땅에서 식물을 재배하고 체력이 좋습니다.',
+      en:'Grow plants on the ground and have good stamina.',
+      jp:'地面で植物を栽培し、体力が良いです。',
     },
     skill:{//단검,검,둔기,창,도끼,타격,
       type:'random',
@@ -457,6 +472,7 @@ export const job = [
       ],
       hole:[],
     }},
+  //의술사
   {idx:15,
     na:{
       ko:'의술사',
@@ -464,9 +480,9 @@ export const job = [
       jp:'医術師',
     },
     txt:{
-      ko:'이 직업은 회복에 특화된 직업으로 전투시 보조를 담당합니다.',
-      en:'This class specializes in healing and aids in combat.',
-      jp:'この職業は回復に特化した職業で、戦闘時の補助を担当する。',
+      ko:'치료에 특화된 직업으로 전투시 보조를 담당합니다.',
+      en:'A profession specializing in healing, it provides assistance during battle.',
+      jp:'治療に特化した職業で戦闘時補助を担当します。',
     },
     skill:{//단검,검,둔기,도끼,보조,
       type:'random',
@@ -487,6 +503,7 @@ export const job = [
       ],
       hole:[],
     }},
+  //기술자
   {idx:16,
     na:{
       ko:'기술자',
@@ -494,9 +511,9 @@ export const job = [
       jp:'技術者',
     },
     txt:{
-      ko:'이 직업은 도구 및 장비에 대한 높은 지식을 바탕으로 생산적인 역할을 담당합니다.',
-      en:'This job is a productive role with a high knowledge of tools and equipment.',
-      jp:'この職業は、工具や設備に関する高い知識をもとに生産的な役割を担います。',
+      ko:'도구 및 장비에 대한 높은 지식을 바탕으로 생산적인 역할을 담당합니다.',
+      en:'Takes on a productive role based on your high level of knowledge of tools and equipment.',
+      jp:'ツールと機器の高い知識に基づいて生産的な役割を果たします。',
     },
     skill:{//단검,둔기,도끼,타격,방패,보조,
       type:'random',
@@ -514,6 +531,37 @@ export const job = [
         '1-0-0-3', '1-0-0-6',
         '2-0-0-5', '2-0-0-7',
         '3-0-3', '3-0-5', '3-0-8',
+      ],
+      hole:[],
+    }},
+  //어부
+  {idx:17,
+    na:{
+      ko:'어부',
+      en:'Fisherman',
+      jp:'漁師',
+    },
+    txt:{
+      ko:'바다에서 주로 생할을 하는 직업으로 물에 대한 이해도가 높습니다.',
+      en:'Since this is a job that mainly involves living in the ocean, they have a high level of understanding of water.',
+      jp:'海で主に生きることをする職業で、水に対する理解度が高いです。',
+    },
+    skill:{//단검,검,둔기,창,도끼,타격,
+      type:'random',
+      initialCounts:2,
+      basic:[],
+      lv0:[],
+      lv1:[24,25,26,27],
+      lv2:[17,19],
+      lv3:[],
+      maxLv:[0,1,2,17,19],
+    },
+    drop:{
+      gold:100,
+      equip:[
+        '1-0-0-2', '1-0-0-3',
+        '2-0-0-1', '2-0-0-3', '2-0-0-5',
+        '3-0-3', '3-0-4', '3-0-5', '3-0-9',
       ],
       hole:[],
     }},

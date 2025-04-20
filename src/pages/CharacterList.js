@@ -76,20 +76,20 @@ const ChracterList = ({
     return Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData;
   }, [saveData]);
   const isMoveEvent = React.useMemo(() => {
-    return Object.keys(util.loadData("historyParam").moveEvent).length > 0;
+    return util.loadData("historyParam")?.moveEvent && Object.keys(util.loadData("historyParam").moveEvent).length > 0;
   }, []);
   const chData = React.useMemo(() => {
-    const moveCh = util.loadData("historyParam").moveEvent.ch;
+    const ch = isMoveEvent ? util.loadData("historyParam").moveEvent.ch : sData.ch;
     const cloneCh = [...sData.ch];
     return isMoveEvent ? {
-      moveCh: moveCh.map((ch) => {
+      moveCh: ch.map((ch) => {
         delete cloneCh[ch.idx];
         return sData.ch[ch.idx];
       }),
       moveNotCh: cloneCh,
     } : {
       moveCh: [],
-      moveNotCh: sData.ch,
+      moveNotCh: ch,
      };
   }, [sData, isMoveEvent]);
   useLayoutEffect(() => {

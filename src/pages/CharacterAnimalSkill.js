@@ -27,7 +27,8 @@ const SkillHorizontal = styled.div`
   }
 `;
 const SkillHeader = styled(FlexBox)`
-margin: 0 0 25px 0;
+  margin: 0 auto 25px;
+  width: calc(100% - 10px);
   height: auto;
   align-items: center;
 `;
@@ -90,7 +91,7 @@ const StyledIconPic = styled(IconPic)`
 `;
 const SkillPoint = styled.div`
   position: relative;
-  height: 40px;
+  height: 50px;
   flex: 1;
 `;
 const SkillLine = styled(FlexBox)`
@@ -146,9 +147,9 @@ const CharacterAnimalSkill = ({
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
-  const imgSet = React.useMemo(() => {
-    return context.images;
-  }, [context]);
+  // const imgSet = React.useMemo(() => {
+  //   return context.images;
+  // }, [context]);
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
@@ -172,6 +173,7 @@ const CharacterAnimalSkill = ({
     <>
       <Wrap className="skillAnimal scroll-y">
         <InfoGroup pointTitle={chName} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.animalSkill[lang]}`} guideClick={() => {
+          console.log("aa");
           setPopupType('guide');
           setPopupOn(true);
           setPopupInfo({
@@ -200,7 +202,7 @@ const CharacterAnimalSkill = ({
               setMsg(gameData.msg.sentence.resetAnimalSkill[lang]);
             }}>{gameData.msg.button.skillReset[lang]}</div>
             <SkillPoint className="skill_point">
-              <SkillMark point={animalPoint} pic="animalType" idx={animalType}/>
+              <SkillMark point={animalPoint} idx={animalType}/>
             </SkillPoint>
           </SkillHeader>
           {animalSkill && animalSkill.map((skGroup, groupIdx) => {
@@ -211,7 +213,7 @@ const CharacterAnimalSkill = ({
                     if (Object.keys(skData).length !== 0){
                       const sk = gameData.skill[skData.idx];
                       const skillCate = sk.cate;
-                      const skillIcon = (() => {
+                      {/* const skillIcon = (() => {
                         if (skillCate === 2 || skillCate === 11) {//passive, job
                           return imgSet.passive[sk.effAnimation];
                         } else if (skillCate === 4) {//defence
@@ -219,7 +221,7 @@ const CharacterAnimalSkill = ({
                         } else {
                           return imgSet.effect[sk.effAnimation].img;
                       }
-                      })();
+                      })(); */}
                       return (
                         <SkillList key={skIdx} pos={skIdx % 4}>
                           <SkillButton used={skData.lv > 0} {...LongPress({

@@ -5477,7 +5477,7 @@ const Battle = ({
 						}
 						containerWH.current = [area.width, area.height];
 					}
-				}} className={`battle_area ${mode === "action" ? "action" : ""}`} mode={mode} frameLeft={imgSet.etc.frameLeft} frameRight={imgSet.etc.frameRight}>
+				}} className={`battle_area ${mode === "action" ? "action" : ""}`} mode={mode}>
 					<BattleEffect ref={battleEffectRef} gameSpd={gameData.timeDelay.battle.skill * 0.001 / speed} className="battle_effect">
 						<BattleEffectLand allEff={enemyEffect.effSize >= 5 ? enemyEffect.effSize : 0} className={`land_enemy`} size={enemyEffect.effSize} rotate={enemyEffect.effRotate} filter={enemyEffect.effFilter}>
 						{map.map((data, idx) => {
@@ -5553,7 +5553,7 @@ const Battle = ({
 									const actionState = enemyAction[currentEnemyIdx.current] || "";
 									const iconIdx = /[0-9]+/g.exec(actionState);
 									const passive = allyEnemyPassive[1][currentEnemyIdx.current];
-									{/* const buffEff = allyEnemyBuff[1][currentEnemyIdx.current]; */}
+									//const buffEff = allyEnemyBuff[1][currentEnemyIdx.current];
 									currentEnemyIdx.current ++;
 									return (
 										<BattleCh key={idx} className={`battle_ch ${area ? "effect effect" + element_type : ""} ${actionCh} ${rtCh} ${actionState} ${isDie}`} data-ch={chData?.display} data-idx={idx} left={left} top={top} size={mapSize} onClick={(e) => {

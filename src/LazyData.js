@@ -1,4 +1,4 @@
-import { actionIcon, back, bgEffect, button, effect, etc, images, map, passive, weather } from 'components/ImgSet'; //anchor, cannon, control, figure, sail, wood
+import { back, bgEffect, button, effect, etc, images, weather } from 'components/ImgSet'; //anchor, cannon, control, figure, sail, wood
 //icon100 menu0, element1~2
 import { FlexBox } from 'components/Container';
 import React, { Suspense, useEffect, useRef, useState } from 'react';
@@ -46,14 +46,6 @@ const LazyData = () => {
       const img = new Image();
       img.src = image;
     });
-    actionIcon.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-    passive.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
     weather.forEach((image) => {
       const img = new Image();
       img.src = image;
@@ -82,10 +74,6 @@ const LazyData = () => {
     //   const img = new Image();
     //   img.src = control[v];
     // };
-    for (let v in map) {
-      const img = new Image();
-      img.src = map[v];
-    };
     for (let v in images) {
       const img = new Image();
       img.src = images[v];
@@ -112,7 +100,7 @@ const LazyData = () => {
         }
       }
     };
-  }, [actionIcon, back, bgEffect, button, effect, etc, images, map, passive, weather]);
+  }, [back, bgEffect, button, effect, etc, images, weather]);
   return (
     <Suspense>
       {isReady ? <App loadData={{
@@ -120,8 +108,6 @@ const LazyData = () => {
         etc: etc,
         button: button,
         bgEffect: bgEffect,
-        passive: passive,
-        actionIcon: actionIcon,
         weather: weather,
         // wood: wood,
         // anchor: anchor,
@@ -129,7 +115,6 @@ const LazyData = () => {
         // cannon: cannon,
         // figure: figure,
         // control: control,
-        map: map,
         images: images,
         effect: effect,
       }} /> : <Loading>Loading...<LoadingPercent ref={loadingRef}></LoadingPercent></Loading>}

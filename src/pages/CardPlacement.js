@@ -4,19 +4,16 @@ import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
-import iconArrowDown from 'images/ico/arrow_down.png';
-import iconArrowUp from 'images/ico/arrow_up.png';
 import ChLineup from 'pages/ChLineup';
 import CharacterCard from 'pages/CharacterCard';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-const StyledIconPic = styled(IconPic)`
-  position: absolute;
-  left: 0;
-  top: 0;
+const ArrowIcon = styled(IconPic)`
+	margin: 0 5px 0 0;
+	width: 20px;
+	height: 20px;
 `;
-
 const Wrap = styled.div`
 	display: flex;
 	position: absolute;
@@ -30,78 +27,91 @@ const Wrap = styled.div`
 	height: 100%;
 	box-sizing: border-box;
 	overflow: hidden;
-	& > div {
-		padding: 0 20px;
-		justify-content: center;
-	}
 `;
 const LineupSave = styled.div`
+	display: flex;
 	height: 5%;
 	overflow: hidden;
-	dl {
-		width: 100%;
-		height: 100%;
-	}
-	dt {
-		flex-grow: 0;
-		margin: auto 10px auto 0;
-		color: #000;
-		font-weight: 600;
-	}
-	dd {
-		display: flex;
-		flex-grow: 1;
-		margin: auto auto;
-		height: 100%;
-	}
-	ul {
-		display: flex;
-		width: 100%;
-		height: 100%;
-		justify-content: space-between;
-		li {
-			width: 10%;
-			height: 100%;
-			text-align: center;
-			&.on .save_slot {
-				border: 1px solid #f00;
-				background: #fff;
-				color: #f00;
-			}
-			&.save .save_slot {
-				outline: 1px solid #00f;
-				background: #00f;
-				color: #fff;
-			}
-		}
-	}
-	.save_slot {
-		padding: 0;
-		width: 100%;
-		height: 100%;
-		background: #000;
-		color: #fff;
-		box-sizing: border-box;
-	}
-	.save_submit{
-		margin: 0 0 0 5px;
-		width: 45px;
-		background: #00f;
-		color: #fff;
-		font-weight: 600;
-		font-size: 0.75rem;
-	}
+	padding: 0 20px;
+	justify-content: center;
+`;
+const LineupSaveUl = styled.ul`
+	display: flex;
+	width: 100%;
+	height: 100%;
+	justify-content: space-between;
+	align-items: center;
+`;
+const LineupSaveLi = styled.li`
+	position: relative;
+	padding-top: 10%;
+	width: 10%;
+	height: 0;
+	box-sizing: border-box;
+	border-radius: 50%;
+	${({selected}) => selected ? "" : `box-shadow: 0 0 0 3px var(--color-darkgrey) inset;`}
+`;
+const SaveIcon = styled(IconPic)`
+	position: absolute;
+	left: 0;
+	top: 0;
+`;
+const LineupSaveLiText = styled(Text)`
+	display: flex;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	align-items: center;
+	justify-content: center;
+`;
+const SubmitBtn = styled.button`
+	position: relative;
+	margin: 0 0 0 5px;
+	padding-top: 45px;
+	width: 45px;
+	height: 0;
+	background: #00f;
+	color: #fff;
+	font-weight: 600;
+	font-size: 0.75rem;
+`;
+const SubmitBtnText = styled(Text)`
+	display: flex;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	align-items: center;
+	justify-content: center;
 `;
 const LineupMiddle = styled.div`
 	display: flex;
 	margin: 10px 0;
 	height: 60%;
 	overflow: hidden;
+	padding: 0 20px;
+	justify-content: center;
 `;
 const LineupList = styled.div`
+	display: flex;
+	flex-direction: column;
 	width: 20%;
-	overflow: hidden;
+`;
+const LineupLeader = styled.div`
+	position: relative;
+	margin: 0 auto 10px;
+	padding-top: 90%;
+	width: 90%;
+	border: 2px solid #fff;
+	border-radius: 10px;
+	background: #000;
+`;
+const LineupCateArea = styled.div`
 	flex: unset !important;
+	overflow: hidden;
 	ul {
 		width: 100%;
 	}
@@ -109,16 +119,28 @@ const LineupList = styled.div`
 const LineupCate = styled.li`
 	position: relative;
 	margin: 0 0 10px 0;
-	padding-top: 100%;
-	width: 100%;
-	height: 100%;
-	font-size: 0;
+	padding-top: 80%;
+	min-width: 80%;
+	box-sizing: border-box;
+	border-radius: 15px;
+	border: 2px solid #fff;
 	&:last-of-type {
 		margin:0;
 	}
-	&.on {
+	${({selected}) => selected ? `
 		background: #f00;
-	}
+	` : `
+		background: #000;
+	`};
+`;
+const LineupCateText = styled(Text)`
+	display: flex;
+	position: absolute;
+	top:0;
+	width: 100%;
+	height: 100%;
+	align-items: center;
+	justify-content: center;
 `;
 const LineupArea = styled.div`
 	display: flex;
@@ -130,102 +152,80 @@ const LineupArea = styled.div`
 `;
 const LineupInfo = styled.div`
 	display: flex;
-	padding: 5px;
-	background: #ddd;
+	padding: 5px 10px;
 	justify-content: space-between;
-	.lineup_na {
-		color: #000;
-		font-weight: 600;
+`;
+const LineupTitle = styled(Text)`
+	text-shadow: 0 0 5px #000;
+	div {
+		display: inline-block;
 	}
-	.lineup_cost {
-		color: #000;
-		&.error {
-			color: #f00;
-		}
-		span {
-			font-size: 0.75rem;
-			font-weight: 600;
-		}
-		.bar {
-			color: #000;
-			font-size: 0.75rem;
-			&:before {
-				content: ' / ';
-			}
-		}
+`;
+const LineupCost = styled(Text)`
+	text-shadow: 0 0 5px #000;
+	&.error {
+		color: #f00;
 	}
 `;
 const LineupChInfo = styled.div`
+	margin: 10px 0 0 0;
 	padding: 10px;
 	width: 100%;
-	background: #ddd;
+	background: #000;
 	box-sizing: border-box;
 	flex-grow: 1;
-	ul {
-		display: flex;
-		flex-flow: wrap;
-		li {
-			position: relative;
-			margin: 0 0 2px 0;
-			width: 100%;
-			color: #000;
-			box-sizing: border-box;
-			.na {
-				margin: 0 5px 0 0;
-				font-size: 0.75rem;
-			}
-			.txt {
-				font-size: 0.75rem;
-				font-weight: 600;
-			}
-			.add_txt{
-				position: relative;
-				margin: 0 0 0 5px;
-				padding: 0 0 0 12px;
-				font-size: 0.75rem;
-				font-weight: 600;
-			}
-			&:nth-of-type(2) {
-				width: 50%;
-			}
-			&:nth-of-type(3) {
-				width: 50%;
-			}
-			&.none .add_txt{
-				display: none;
-			}
-			&.up .add_txt{
-				color: var(--color-point4);
-				&:before {
-					content: '';
-					position: absolute;
-					left: 0;
-					top: 0;
-					width: 12px;
-					height: 100%;
-					background: url(${({arrowUpImg}) => arrowUpImg}) no-repeat center center;
-					background-size: 10px;
-				}
-			}
-			&.down .add_txt{
-				color: var(--color-point2);
-				&:before {
-					content: '';
-					position: absolute;
-					left: 0;
-					top: 0;
-					width: 12px;
-					height: 100%;
-					background: url(${({arrowDownImg}) => arrowDownImg}) no-repeat center center;
-					background-size: 10px;
-				}
-			}
+  border: 15px solid;
+  border-image: url(${({frameImg}) =>  frameImg}) 30 /
+  15px round;
+`;
+const LineupChUl = styled.ul`
+	display: flex;
+	flex-flow: wrap;
+`;
+const LineupChLi = styled.li`
+	display: flex;
+	align-items: center;
+	position: relative;
+	margin: 0 0 2px 0;
+	width: 100%;
+	color: #fff;
+	box-sizing: border-box;
+`;
+const LineupChNa = styled(Text)`
+	margin: 0 10px 0 0;
+`;
+const LineupChTxt = styled(Text)`
+	margin: 0 5px 0 0;
+`;
+const LineupChAddTxt = styled(Text)`
+	display: flex;
+	position: relative;
+	margin: 0 5px 0 12px;
+	${({arrow}) => {
+		switch(arrow) {
+			case "up":
+				return `
+					color: var(--color-point4);
+					text-shadow: 1px 1px 0 var(--color-w);
+				`;
+			case "down":
+				return `
+					color: var(--color-point2);
+					text-shadow: 1px 1px 0 var(--color-w);
+				`;
+			default:
+				return `
+					font-size: 0;
+				`;
+				break;
 		}
-	}
+	}}
 `;
 const LineupChList = styled.div`
 	height: 40%;
 	overflow: hidden;
+	padding: 0 20px;
+	justify-content: center;
 `;
 const ChGroup = styled(Text)`
   margin: 10px 0 5px 0;
@@ -237,9 +237,9 @@ const ChUl = styled.ul`
 `;
 const ChLi = styled.li`
 	position: relative;
-	margin: 0 4px 4px 0;
-	width: calc(25% - 3px);
-	padding-top: calc(25% - 3px);
+	margin: 0 3px 3px 0;
+	width: calc(20% - 2.4px);
+	padding-top: calc(20% - 2.4px);
 	overflow: hidden;
 	border-radius: 10px;
 	font-size: 0;
@@ -250,19 +250,14 @@ const ChLi = styled.li`
 		position: absolute;
 		font-size: 0.625rem;
 	}
-	&.selected {
+	${({used}) => used ? `
 		opacity: .3;
-	}
+	` : ""}
 `;
 const checkUseList = (useList, chIdx) => {
-	let used = false;
-	useList.forEach((dataIdx, idx) => {
-		if (dataIdx === chIdx) {
-			used = true;
-			return;
-		}
-	});
-	return used;
+	return useList.filter((dataIdx, idx) => {
+		return dataIdx === chIdx
+	}).length > 0;
 }
 
 const CardPlacement = ({
@@ -273,9 +268,9 @@ const CardPlacement = ({
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
-  // const imgSet = React.useMemo(() => {
-  //   return context.images;
-  // }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
@@ -285,13 +280,13 @@ const CardPlacement = ({
 	const [msgOn, setMsgOn] = useState(false);
 	const [msg, setMsg] = useState("");
 	const isMoveEvent = React.useMemo(() => {
-		return Object.keys(util.loadData("historyParam").moveEvent).length > 0;
+		return util.loadData("historyParam")?.moveEvent && Object.keys(util.loadData("historyParam").moveEvent).length > 0;
 	}, []);
 	const chData = React.useMemo(() => {
-		const moveCh = util.loadData("historyParam").moveEvent.ch;
+		const ch = isMoveEvent ? util.loadData("historyParam").moveEvent.ch : sData.ch;
 		const cloneCh = [...sData.ch];
 		return isMoveEvent ? {
-			moveCh: moveCh.map((ch) => {
+			moveCh: ch.map((ch) => {
 				delete cloneCh[ch.idx];
 				return {
 					...sData.ch[ch.idx],
@@ -306,28 +301,63 @@ const CardPlacement = ({
 			})
 		} : {
 			moveCh: [],
-			moveNotCh: cloneCh.map((ch, idx) => {
+			moveNotCh: ch.map((ch, idx) => {
 				return {
 					...ch,
 					partyIdx: idx,
 				}
 			}),
 			};
-	}, [sData, isMoveEvent]);
+	}, [saveData, isMoveEvent]);
 	const lineupData = React.useMemo(() => {
 		return isMoveEvent ? sData?.eventLineup : sData?.lineup;
 	}, [sData, isMoveEvent]);
-	const [saveSlot, setSaveSlot] = useState(lineupData.select); // 저장된 슬롯
 	const [selectSave, setSelectSave] = useState(lineupData.select); // 선택된 진형슬롯
+	const [leaderIdx, setLeaderIdx] = useState(() => {
+		return lineupData.save_slot[selectSave].leader;
+	});
+	const makeLeaderformationArr = (lIdx) => {
+		if (lIdx === "") {
+			return [0];
+		}
+		let formationSkill = [];
+		sData.ch[lIdx].hasSkill.forEach((skill) => {
+			if (skill.idx > 100 && skill.idx < 110) {
+				formationSkill.push(Number(skill.idx) - 100);
+			};
+		});
+		formationSkill.sort();
+		return formationSkill ?  [0, ...formationSkill] : [0];
+	};
+	const [leaderformationArr, setLeaderformationArr] = useState(makeLeaderformationArr(leaderIdx));
+	
 	const [selectLineup, setSelectLineup] = useState(lineupData.save_slot[selectSave].no); // 저장된 슬롯에 선택된 진형
-	const [selectLineupList, setSelectLineupList] = useState(0); //선택된 라인업 리스트 순번
-	const [useList, setUseList] = useState(lineupData.save_slot[selectSave].entry); // 라인업 맵 캐릭
+	const [formationLeaderIdx, setFormationLeaderIdx] = useState(gameData.lineup[selectLineup].entry[0][0]);
 
-	const mapRef = useRef([]);
+	const [useList, setUseList] = useState(() => {
+		const selectEntry = lineupData.save_slot[selectSave].entry;
+		selectEntry[formationLeaderIdx] = leaderIdx;
+		return selectEntry;
+	}); // 라인업 맵 캐릭
+	const peopleLength = React.useMemo(() => {
+		return useList.filter((people) => people !== "").length;
+	}, [useList]);
+	const limitLeadership = React.useMemo(() => {
+		let leadership = 0;
+		useList.forEach((people) => {
+			if (people !== "") {
+				leadership += gameData.ch[sData.ch[people].idx].cost;
+			}
+		});
+		return leadership;
+	}, [gameData, sData, useList]);
+	const leadership = React.useMemo(() => leaderIdx !== "" ? gameData.ch[sData.ch[leaderIdx].idx].st0 : 0, [gameData, sData, leaderIdx]);
+	const [selectFormationPosition, setSelectFormationPosition] = useState(leaderIdx !== "" ? formationLeaderIdx : 0); //선택된 라인업 리스트 순번
+
 	const lineupInfo = ["HP","SP","RSP","ATK","DEF","MAK","MDF","RCV","SPD","LUK"];
 	const lineupSlot = [1,2,3,4,5,6,7,8];
+
 	const clickSelectSlot = (idx) => {//세이브 슬롯 선택
-		//console.log('saveslot' + idx);
 		setSelectSave(idx);
 		setSelectLineup(lineupData.save_slot[idx].no);
 		if (isMoveEvent) {
@@ -343,102 +373,107 @@ const CardPlacement = ({
 			})
 			lineupData.save_slot[idx].entry[removeIdx] = "";
 		}
+
 		setUseList(lineupData.save_slot[idx].entry);
-		util.setLineupSt({
+		const sData = Object.keys(saveData).length !== 0 ? saveData : util.loadData('saveData');
+		changeSaveData(util.setLineupSt({
 			saveSlot: idx,
 			lineupType: selectLineup,
 			useList: useList,
+			leaderIdx: leaderIdx,
 			isMoveEvent: isMoveEvent,
-		}, gameData, saveData, changeSaveData);
+		}, gameData, sData));
 	}
-	const clickSaveSlot = () => {
-		let save = sData;
-		save.lineup.select = selectSave;
-		setSaveSlot(selectSave);
-		changeSaveData(save);
-	}
-	const clickLineupSlot = (idx) => {//진형 타입 선택
-		//console.log('lineupslot' + idx);
-		setSelectLineup(idx);
-		setUseList(lineupData.save_slot[selectSave].entry);
-		util.setLineupSt({
-			saveSlot: selectSave, 
-			lineupType: idx,
-			useList: useList,
-			isMoveEvent: isMoveEvent,
-		}, gameData, sData, changeSaveData);
-	}
-	const clickLineupCh = (slotIdx) => {//캐릭 리스트 클릭
-		console.log('선택된 map순번', selectLineupList, slotIdx);//선택되어 있는 map칸
-		let saveUseList = [...useList];
-		saveUseList[selectLineupList] = slotIdx;
-		setUseList(saveUseList);
-		util.setLineupSt({
-			saveSlot: selectSave, 
-			lineupType: selectLineup,
-			useList: saveUseList,
-			isMoveEvent: isMoveEvent,
-		}, gameData, sData, changeSaveData);
-	}
+
 	useEffect(() => {
 		clickSelectSlot(selectSave);
 	}, []);
   return (
     <>
       <Wrap className="lineup_wrap">
-				<LineupSave className="lineup_save">
-					<dl flex-center="true">
-						<dt>저장슬롯</dt>
-						<dd>
-							<ul>
-								{lineupSlot && lineupSlot.map((txt, idx) => {
-									return (
-										<li className={`${idx === selectSave ? 'on' : ''} ${idx === saveSlot ? 'save' : ''}`} key={idx}><button onClick={() => {clickSelectSlot(idx);}} className="save_slot">{txt}</button></li>
-									);
-								})}
-							</ul>
-							<button className="save_submit" onClick={() => {
-								clickSaveSlot();
-							}}>선택</button>
-						</dd>
-					</dl>
+				<LineupSave>
+					<LineupSaveUl>
+						{lineupSlot && lineupSlot.map((txt, idx) => {
+							return (
+								<LineupSaveLi key={`save_${idx}`} selected={idx === selectSave} onClick={() => {
+									clickSelectSlot(idx);}
+								}>
+									{idx === selectSave ? <SaveIcon type="commonBtn" pic="icon100" idx="26" /> : <LineupSaveLiText code="t4" weight="600" color="main">{txt}</LineupSaveLiText>}
+								</LineupSaveLi>
+							);
+						})}
+					</LineupSaveUl>
 				</LineupSave>
 				<LineupMiddle className="lineup_middle">
-					<LineupList className="lineup_list scroll-y">
-						<ul>
-							{gameData.lineup.map((lineData, idx) => {
-								return <LineupCate className={`${idx === selectLineup ? "on" : ""}`} selectLineup={selectLineup} onClick={() => {
-									clickLineupSlot(idx);
-								}} key={`lineupCate_${idx}`}>
-									<StyledIconPic pic="img600" idx={idx} />
-								</LineupCate>
-							})}
-						</ul>
+					<LineupList>
+						<LineupLeader onClick={() => {
+							setSelectFormationPosition(formationLeaderIdx);
+							if (useList[formationLeaderIdx] !== "") {
+								setMsgOn(true);
+								setMsg(gameData.msg.sentenceFn.selectedLeader(lang, gameData.ch[sData.ch[useList[formationLeaderIdx]].idx].na1));
+							} else {
+								setMsgOn(true);
+								setMsg(gameData.msg.sentence.selectLeader[lang]);
+							}
+						}}>
+							{leaderIdx !== "" && <CharacterCard usedType="thumb" saveData={sData} gameData={gameData} slotIdx={leaderIdx} />}
+						</LineupLeader>
+						<LineupCateArea className="scroll-y">
+							<ul>
+								{leaderformationArr.map((lineupData, idx) => {
+									const selectedIdx = leaderformationArr.findIndex((_idx) => _idx === selectLineup);
+									return <LineupCate selected={idx === selectedIdx}  onClick={() => {
+										let cloneUseList = [...useList];
+										cloneUseList = cloneUseList.map((useCh) => {
+											return useCh === leaderIdx ? "" : useCh;
+										});
+										const formationIdx = gameData.lineup[lineupData].entry[0][0];
+										cloneUseList[formationIdx] = leaderIdx;
+
+										setUseList(cloneUseList);
+										setSelectLineup(leaderformationArr[idx]);
+										changeSaveData(util.setLineupSt({
+											saveSlot: selectSave, 
+											lineupType: lineupData,
+											useList: cloneUseList,
+											leaderIdx: leaderIdx,
+											isMoveEvent: isMoveEvent,
+										}, gameData, sData));
+										setFormationLeaderIdx(gameData.lineup[lineupData].entry[0][0]);
+										setSelectFormationPosition(formationIdx);
+									}} key={`lineupCate_${idx}`}>
+										<LineupCateText color="main" code="t2">{gameData.msg.lineup[`lineup${lineupData}`][lang]}</LineupCateText>
+									</LineupCate>
+								})}
+							</ul>
+						</LineupCateArea>
 					</LineupList>
 					<LineupArea className="lineup_area">
 						<LineupInfo>
-							<div className="lineup_na">{gameData.lineup[selectLineup].na}</div>
-							<div className="lineup_cost">
-								<span className="cost_current">0</span>
-								<span className="bar"></span>
-								<span className="cost_total">0</span>
-							</div>
+							<LineupTitle code="t4" color="main" weight="600">{gameData.msg.lineup[`lineup${selectLineup}`][lang]} <Text  code="t1" color={peopleLength >= gameData.lineup[selectLineup].limitPeople ? "grey" : "red"}>({gameData.msg.sentenceFn.limitPeople(lang, peopleLength >= gameData.lineup[selectLineup].limitPeople, gameData.lineup[selectLineup].limitPeople)})</Text></LineupTitle>
+							<LineupCost code="t4" color="main">
+								{`${limitLeadership} / ${leadership}`}
+							</LineupCost>
 						</LineupInfo>
-						<ChLineup saveData={sData} changeSaveData={changeSaveData} selectSave={selectSave} selectLineup={selectLineup} useList={useList} setUseList={setUseList} mapRef={mapRef.current} selectLineupList={selectLineupList} setSelectLineupList={setSelectLineupList} />
-						<LineupChInfo className="lineup_chInfo scroll-y" arrowUpImg={iconArrowUp} arrowDownImg={iconArrowDown}>
-							<ul>
-								{lineupInfo && sData.ch[useList[selectLineupList]] && lineupInfo.map((stateName, idx) => {
-									const saveCh = sData.ch[useList[selectLineupList]];
-									const lineupEff = lineupData.save_slot[selectSave].eff[selectLineupList];
+						<ChLineup saveData={sData} changeSaveData={changeSaveData} selectSave={selectSave} selectLineup={selectLineup} useList={useList} setUseList={setUseList} selectFormationPosition={selectFormationPosition} setSelectFormationPosition={setSelectFormationPosition} leaderIdx={leaderIdx} setLeaderIdx={setLeaderIdx} isMoveEvent={isMoveEvent} />
+						<LineupChInfo className="lineup_chInfo scroll-y" frameImg={imgSet.images.frame0}>
+							<LineupChUl>
+								{lineupInfo && sData.ch[useList[selectFormationPosition]] && lineupData.save_slot[selectSave].eff && lineupInfo.map((stateName, idx) => {
+									const saveCh = sData.ch[useList[selectFormationPosition]];
+									const lineupEff = lineupData.save_slot[selectSave].eff[selectFormationPosition];
+									const arrow = lineupEff[idx][0] > 0 ? 'up' : (lineupEff[idx][0] < 0 ? 'down' : 'none');
 									return (
-										<li key={idx} className={lineupEff[idx][0] > 0 ? 'up' : ( lineupEff[idx][0] < 0 ?'down' : 'none')}>
-											<span className="na">{stateName}</span>
-											<span className="txt">{saveCh[`bSt${idx}`] + saveCh[`iSt${idx}`] + Math.round(lineupEff[idx][1])}</span>
-											<span className="add_txt">{`${lineupEff[idx][0]}% (${Math.round(lineupEff[idx][1])})`}</span>
-										</li>
+										<LineupChLi key={`li_${idx}`}>
+											<LineupChNa code="t3" color="grey">{stateName}</LineupChNa>
+											<LineupChTxt code="t5" color="main" weight="600">{saveCh[`bSt${idx}`] + saveCh[`iSt${idx}`] + Math.round(lineupEff[idx][1])}</LineupChTxt>
+											<LineupChAddTxt code="t3" arrow={arrow} color="main" weight="600">
+												{arrow === "down" ? <ArrowIcon type="commonBtn" pic="icon100" idx="7" /> : arrow === "up" ? <ArrowIcon type="commonBtn" pic="icon100" idx="8" /> : ""}
+												{`${lineupEff[idx][0]}% (${Math.round(lineupEff[idx][1])})`}
+											</LineupChAddTxt>
+										</LineupChLi>
 									);
 								})}
-							</ul>
+							</LineupChUl>
 						</LineupChInfo>
 					</LineupArea>
 				</LineupMiddle>
@@ -448,12 +483,83 @@ const CardPlacement = ({
 						{chData.moveNotCh.map((data, idx) => {
 							const used = checkUseList(useList, data.partyIdx);
 							return (
-								<ChLi className={used ? 'selected': ''} onClick={() => {
-									if (!used) {
-										clickLineupCh(data.partyIdx);
+								<ChLi used={used} onClick={() => {
+									if ((formationLeaderIdx !== selectFormationPosition && leadership < limitLeadership + gameData.ch[data.idx].cost) || (formationLeaderIdx === selectFormationPosition && gameData.ch[data.idx].st0 < limitLeadership)) {
+										setMsgOn(true);
+										setMsg(gameData.msg.sentence.lackLeadership[lang]);
+										return;
 									}
+									let cloneSData = {...saveData},
+										cloneUseList = [...useList],
+										leader = "";
+									if (!used) {//선택되지 않은
+										if (formationLeaderIdx === selectFormationPosition) {
+											cloneSData.lineup.save_slot[selectSave].leader = data.partyIdx;
+											cloneSData.lineup.save_slot[selectSave].no = 0;
+											
+											cloneUseList = cloneUseList.map((useCh) => {
+												return useCh === leaderIdx ? "" : useCh;
+											});
+											const lFormationArr = makeLeaderformationArr(data.partyIdx),
+												formationIdx = gameData.lineup[lFormationArr[0]].entry[0][0];
+											
+											cloneUseList[formationIdx] = data.partyIdx;
+											leader = data.partyIdx;
+											setLeaderformationArr(lFormationArr);
+											setFormationLeaderIdx(formationIdx);
+											setSelectFormationPosition(formationIdx);
+											
+											setSelectLineup(0);
+											setLeaderIdx(leader);
+										} else {
+											if (formationLeaderIdx === selectFormationPosition) {
+											} else {
+												leader = leaderIdx;
+												cloneUseList[selectFormationPosition] = data.partyIdx;
+											}
+										}
+									} else {//선택된
+										if (cloneUseList[formationLeaderIdx] === data.partyIdx) {
+											cloneUseList[formationLeaderIdx] = "";
+											if (formationLeaderIdx === selectFormationPosition) {
+												cloneSData.lineup.save_slot[selectSave].leader = "";
+												cloneSData.lineup.save_slot[selectSave].no = 0;
+												setSelectLineup(0);
+											} else {
+												cloneUseList[selectFormationPosition] = data.partyIdx;
+											}
+											setLeaderIdx("");
+											setLeaderformationArr(makeLeaderformationArr(""));
+										} else {
+											if (cloneUseList[selectFormationPosition] === data.partyIdx) {
+												cloneUseList[selectFormationPosition] = "";
+											} else {
+												if (formationLeaderIdx === selectFormationPosition) {
+													leader = data.partyIdx;
+													const lFormationArr = makeLeaderformationArr(data.partyIdx),
+													formationIdx = gameData.lineup[lFormationArr[0]].entry[0][0];
+													setLeaderIdx(data.partyIdx);
+													setLeaderformationArr(lFormationArr);
+													setFormationLeaderIdx(formationIdx);
+												}
+												cloneUseList = cloneUseList.map((useCh) => {
+													return useCh === data.partyIdx ? "" : useCh;
+												});
+												cloneUseList[selectFormationPosition] = data.partyIdx;
+											}
+										}
+									}
+									cloneSData = util.setLineupSt({
+										saveSlot: selectSave, 
+										lineupType: selectLineup,
+										useList: cloneUseList,
+										leaderIdx: leader,
+										isMoveEvent: isMoveEvent,
+									}, gameData, cloneSData);
+									setUseList(cloneUseList);
+									changeSaveData(cloneSData);
 								}} key={idx} data-idx={idx}>
-									<CharacterCard usedType="thumb" saveData={sData} gameData={gameData} slotIdx={data.partyIdx} />
+									<CharacterCard usedType="thumb" saveData={sData} gameData={gameData} showCost={true} slotIdx={data.partyIdx} />
 								</ChLi>
 							);
 						})}
@@ -463,12 +569,63 @@ const CardPlacement = ({
 							{chData.moveCh.map((data, idx) => {
 								const used = checkUseList(useList, data.partyIdx);
 								return (
-									<ChLi className={used ? 'selected': ''} onClick={() => {
-										if (!used) {
-											clickLineupCh(data.partyIdx);
+									<ChLi used={used} onClick={() => {
+										if (leadership < limitLeadership + gameData.ch[data.idx].cost && formationLeaderIdx !== selectFormationPosition) {
+											setMsgOn(true);
+											setMsg(gameData.msg.sentence.lackLeadership[lang]);
+											return;
 										}
+										let cloneSData = {...saveData},
+											cloneUseList = [...useList],
+											leader = "";
+										if (!used) {
+											cloneUseList[selectFormationPosition] = data.partyIdx;
+											if (formationLeaderIdx === selectFormationPosition) {
+												cloneSData.lineup.save_slot[selectSave].leader = data.partyIdx;
+												cloneSData.lineup.save_slot[selectSave].no = 0;
+											
+												cloneUseList = cloneUseList.map((useCh) => {
+													return useCh === leaderIdx ? "" : useCh;
+												});
+												const lFormationArr = makeLeaderformationArr(data.partyIdx),
+													formationIdx = gameData.lineup[lFormationArr[0]].entry[0][0];
+												
+												cloneUseList[formationIdx] = data.partyIdx;
+												leader = data.partyIdx;
+												setLeaderformationArr(lFormationArr);
+												setFormationLeaderIdx(formationIdx);
+												setSelectFormationPosition(formationIdx);
+
+												setSelectLineup(0);
+												setLeaderIdx(leader);
+											}
+										} else {
+											if (cloneUseList[formationLeaderIdx] === data.partyIdx) {
+												cloneUseList[formationLeaderIdx] = "";
+												if (formationLeaderIdx === selectFormationPosition) {
+													cloneSData.lineup.save_slot[selectSave].leader = "";
+													cloneSData.lineup.save_slot[selectSave].no = 0;
+													setSelectLineup(0);
+													setLeaderIdx("");
+												}
+											} else {
+												cloneUseList = cloneUseList.map((useCh) => {
+													return useCh === data.partyIdx ? "" : useCh;
+												});
+												cloneUseList[formationLeaderIdx] = data.partyIdx;
+											}
+										}
+										cloneSData = util.setLineupSt({
+											saveSlot: selectSave, 
+											lineupType: selectLineup,
+											useList: cloneUseList,
+											leaderIdx: leader,
+											isMoveEvent: isMoveEvent,
+										}, gameData, cloneSData);
+										setUseList(cloneUseList);
+										changeSaveData(cloneSData);
 									}} key={idx} data-idx={idx}>
-										<CharacterCard usedType="thumb" saveData={sData} gameData={gameData} slotIdx={data.partyIdx} />
+										<CharacterCard usedType="thumb" saveData={sData} gameData={gameData} showCost={true} slotIdx={data.partyIdx} />
 									</ChLi>
 								);
 							})}
@@ -478,11 +635,11 @@ const CardPlacement = ({
 							{chData.moveNotCh.map((data, idx) => {
 								const used = checkUseList(useList, data.partyIdx);
 								return (
-									<ChLi className={used ? 'selected': ''} onClick={() => {
+									<ChLi used={used} onClick={() => {
 										setMsgOn(true);
                   	setMsg(gameData.msg.sentence.onlyTravelHero[lang]);
 									}} key={idx} data-idx={idx}>
-										<CharacterCard usedType="thumb" saveData={sData} gameData={gameData} slotIdx={data.partyIdx} />
+										<CharacterCard usedType="thumb" saveData={sData} gameData={gameData} showCost={true} slotIdx={data.partyIdx} />
 									</ChLi>
 								);
 							})}

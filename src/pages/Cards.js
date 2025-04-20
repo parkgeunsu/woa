@@ -50,14 +50,8 @@ const ChCard = styled.div`
   overflow: hidden;
   font-size: 0;
   z-index: 1;
-  &:after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    border: 5px solid ${({gradeUp}) => {
+  ${({chPage, gradeUp}) => {
+    const grade = (() => {
       switch(gradeUp) {
         case 1:
           return '#8d4300';
@@ -68,11 +62,21 @@ const ChCard = styled.div`
         default:
           return '#444';
       }
-    }};
-    box-sizing: border-box;
-    z-index: 6;
-    pointer-events: none;
-  }
+    })();
+    return chPage === 0 ? `
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      border: 5px solid ${grade};
+      box-sizing: border-box;
+      z-index: 6;
+      pointer-events: none;
+    }
+  ` : ""}}
   & > img {
     width: 100%;
     pointer-events: none;
@@ -234,7 +238,7 @@ const Cards = ({
   const context = useContext(AppContext);
 	const {state} = useLocation();
   const isMoveEvent = React.useMemo(() => {
-    return Object.keys(util.loadData("historyParam").moveEvent).length > 0;
+    return util.loadData("historyParam")?.moveEvent && Object.keys(util.loadData("historyParam").moveEvent)?.length > 0;
   }, []);
   const lang = React.useMemo(() => {
     return context.setting.lang;
@@ -252,7 +256,7 @@ const Cards = ({
   const [msg, setMsg] = useState("");
   const [isShowCard, setShowCard] = useState(false);
   const gameItem = React.useMemo(() => gameData.items, [gameData]);
-  const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
+  const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : {...saveData}, [saveData]);
   const [showInven, setShowInven] = useState(state?.dataObj.invenOpened);
   const invenItems = React.useMemo(() => {
     return sData.items;
@@ -327,6 +331,11 @@ const Cards = ({
                 lang: lang,
               });
             }}>아이템 추가</button><br/>
+            <button onClick={() => {
+              const card = util.makeCard(1, "p", gameData, sData);
+              sData.ch.push(card.chDataArr[0]);
+              changeSaveData(sData); //세이브
+            }}>영웅 추가</button><br/>
             <button onClick={() => {
               const option = {
                 type:'equip',

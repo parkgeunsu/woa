@@ -217,167 +217,6 @@ const GachaInfo = styled.div`
 	.ch_state{border-image:url(${({ borderImg }) => borderImg}) 5 round;}
 `;
 
-const makeCard = (num, gachaType, gameData, saveData, changeSaveData) => { //가챠횟수
-	const beginType = typeof num !== 'number'; //최초 시작상태 체크
-  const getCardIdx = (gradeNum) => {
-		const chOfGrade = gameData.chArr.grade;//등급별
-    const length = chOfGrade[gradeNum].length,
-          ran = Math.floor(Math.random() * length);
-    return chOfGrade[gradeNum][ran];
-  }
-	const getGrade = (n, type) => {
-    let ch_arr = [];
-		if (beginType) {
-			ch_arr = num;
-		} else {
-			const arr = type === 'p' ? [3,10,21,38] : [2,6,15,30,50,75]; // 다이아 & 골드 등급 나올확률값
-			//1, 3, 10, 15
-			//0.1, 0.3, 1, 5, 20, 25
-			for(let i = 0 ; i < n ; ++i){
-				const ranCount = Math.random()*100;
-				let resultGrade = 0;
-				if (gachaType === 'p') {
-					if (ranCount < arr[0]){//7등급
-						resultGrade = 6;
-					}else if(ranCount < arr[1]){//6등급
-						resultGrade = 5;
-					}else if(ranCount < arr[2]){//5등급
-						resultGrade = 4;
-					}else if(ranCount < arr[3]){//4등급
-						resultGrade = 3;
-					}else{//3등급
-						resultGrade = 2;
-					}
-				} else {
-					if (ranCount < arr[0]){//7등급
-						resultGrade = 6;
-					}else if(ranCount < arr[1]){//6등급
-						resultGrade = 5;
-					}else if(ranCount < arr[2]){//5등급
-						resultGrade = 4;
-					}else if(ranCount < arr[3]){//4등급
-						resultGrade = 3;
-					}else if(ranCount < arr[4]){//3등급
-						resultGrade = 2;
-					}else if(ranCount < arr[5]){//2등급
-						resultGrade = 1;
-					}else{//1등급
-						resultGrade = 0;
-					}
-				}
-				ch_arr.push(resultGrade);
-			}
-		}
-    const cloneArr = ch_arr.slice();
-    const maxGrade = ch_arr.sort((a,b)=>b-a)[0];
-    return {
-			arr: cloneArr,
-			maxGrade: maxGrade < 3 ? 3 : maxGrade //최고 높은 등급 확인
-		};
-  }
-	let chArr = [];
-	let chDataArr = [];
-	const recruitmentNum = beginType ? num.length : num;// 뽑는 횟수
-	const cardGrade = getGrade(recruitmentNum, gachaType);
-	for (let i = 0; i < recruitmentNum; ++i) {
-		const newIdx = getCardIdx(cardGrade.arr[i]);		
-		const addGrade = Math.random();
-		let luckyGradePoint = 0;
-		if (cardGrade.arr[i] === 1) {
-			if (addGrade < .005) {
-				luckyGradePoint = 5;
-			} else if (addGrade < .01) {
-				luckyGradePoint = 4;
-			} else if (addGrade < .05) {
-				luckyGradePoint = 3;
-			} else if (addGrade < .1) {
-				luckyGradePoint = 2;
-			} else if (addGrade < .3) {
-				luckyGradePoint = 1;
-			}
-		} else if (cardGrade.arr[i] === 2) {
-			if (addGrade < .005) {
-				luckyGradePoint = 4;
-			} else if (addGrade < .01) {
-				luckyGradePoint = 3;
-			} else if (addGrade < .05) {
-				luckyGradePoint = 2;
-			} else if (addGrade < .1) {
-				luckyGradePoint = 1;
-			}
-		} else if (cardGrade.arr[i] === 3) {
-			if (addGrade < .005) {
-				luckyGradePoint = 3;
-			} else if (addGrade < .01) {
-				luckyGradePoint = 2;
-			} else if (addGrade < .05) {
-				luckyGradePoint = 1;
-			}
-		} else if (cardGrade.arr[i] === 4) {
-			if (addGrade < .005) {
-				luckyGradePoint = 2;
-			} else if (addGrade < .01) {
-				luckyGradePoint = 1;
-			}
-		}
-		const cardG = cardGrade.arr[i] + luckyGradePoint,
-			maxGradePoint = Math.round(Math.random() * ((gameData.ch[newIdx].grade > 4 ? 7 : 6) - cardG)),
-			maxG = Math.max(cardG + Math.min(maxGradePoint, 0), 7);
-		const animalAction = gameData.animal_type[gameData.ch[newIdx].animal_type].actionType,
-			actionType = animalAction[Math.floor(Math.random() * animalAction.length)];//공격타입
-		const jobs = gameData.ch[newIdx].job,
-			job = jobs[Math.floor(Math.random() * jobs.length)];//직업
-		
-		const kgData = gameData.animal_size.kg[gameData.ch[newIdx].animal_type],
-			kg = Math.round((Math.random() < 0.1 ? Math.random() * (kgData[2] - kgData[0]) + kgData[0] : Math.random() * (kgData[1] - kgData[0]) + kgData[0]) * 10) / 10;
-		chArr.push({
-			idx: newIdx,
-			grade: cardG,
-			gradeMax: maxG,
-			chSlotIdx: saveData.ch.length + i,
-		});
-		chDataArr.push(util.saveLvState('', {
-			itemEff: util.getItemEff(),
-			grade: cardG,
-			newState: {
-				actionPoint: 25,
-				actionMax: Math.floor(gameData.ch[newIdx].st1 / 3 + gameData.ch[newIdx].st6 / 3),
-				pointTime: 25*5*60,//5분, 초단위로 변환
-				stateLuk: Math.round(Math.random() * 200),
-				element: gameData.ch[newIdx].element,
-				actionType: actionType,
-				newActionType : [actionType],
-				job: job,
-				kg: kg,
-				exp: 0,
-				hasExp: 0,
-				battleBeige:[0,0,0,0],
-				animalBeige:0,//총 보유 동물뱃지
-				grade: cardG,
-				gradeMax: maxG,
-				gradeUp: 0,
-				mark: Math.round(Math.random()*2),//동물뱃지 추가보유여부(상점에서 exp로 구입가능)
-				idx: newIdx,
-				items: [{}, {}, {}, {}, {}, {}, {}, {}],
-				lv: 20,
-				sk: [{idx: 1, lv: 1, exp: 0,},{idx: 2, lv: 1, exp: 0,},],
-				// animalSkill:[],
-				animalSkill:[
-					[{idx:15,lv:1},{idx:11,lv:1},{idx:6,lv:0},{idx:12,lv:0}],
-					[{idx:21,lv:1},{idx:10,lv:1},{idx:13,lv:0},{idx:5,lv:0}],
-					[{idx:23,lv:1},{idx:16,lv:1},{idx:14,lv:0},{}],
-					[{},{},{},{}],
-				],
-				hasSkill: [{idx: 1, lv: 1, exp: 0,},{idx: 2, lv: 1, exp: 0,},],
-			},
-		}, saveData, gameData));
-	};
-	return {
-		chArr: chArr,
-		chDataArr: chDataArr,
-		maxCard: cardGrade.maxGrade,
-	};
-}
 const makeStar = (n) => {//별 처리
   let tag = [];
   for(var i =0; i< n; ++i){
@@ -425,7 +264,7 @@ const Gacha = ({
 			} else {
 				sData.info.money -= data.price; //돈 계산
 			}
-			const cardList = makeCard(data.num, data.type, gameData, sData, changeSaveData);
+			const cardList = util.makeCard(data.num, data.type, gameData, sData);
 			cardList.chDataArr.forEach((data, idx) => {
 				sData.ch.push(data);
 			});
@@ -466,7 +305,7 @@ const Gacha = ({
 			if (paramData.recruitment.begin) {
 				const sData = {...saveData};
 				const startingGrade = paramData.recruitment.cardArr; //최초 시작 영웅들 등급
-				const cardList = makeCard(startingGrade, 'p', gameData, saveData, changeSaveData);
+				const cardList = util.makeCard(startingGrade, 'p', gameData, saveData);
 				cardList.chDataArr.forEach((data, idx) => {
 					sData.ch.push(data);
 				});
@@ -740,7 +579,7 @@ const Gacha = ({
 								const sData = {...saveData}
 								sData.ch = [];
 								const startingGrade = paramData.recruitment.cardArr; //최초 시작 영웅들 등급
-								const cardList = makeCard(startingGrade, 'p', gameData, saveData, changeSaveData);
+								const cardList = util.makeCard(startingGrade, 'p', gameData, saveData);
 								setTimeout(() => {
 									cardList.chDataArr.forEach((data, idx) => {
 										sData.ch.push(data);

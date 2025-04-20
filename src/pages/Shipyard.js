@@ -338,7 +338,7 @@ const Shipyard = ({
 						{shipList[selectTab].na === 'possessed' && (
 							<>
 								<div className="ship_possessed">
-									<WoodDeco className="wood_deco" shipNum={saveData.ship.length} brick={imgSet.etc.stateBack}>
+									<WoodDeco className="wood_deco" shipNum={saveData.ship.length}>
 										<div className="bar1"></div>
 										{possessedShip.current.map((data, idx) => {
 											const shipX = 100 / saveData.ship.length,

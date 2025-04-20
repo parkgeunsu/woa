@@ -348,13 +348,13 @@ export const util = { //this.loadImage();
     }
     return stateArr;
   },
-  getLineupSt: (lineupType, lineupNum, ch, peopleLength, gameData) => {
+  getLineupSt: ({lineupType, lineupGrade, ch, peopleLength, gameData}) => {
     let effArr = [];
     if (!ch) {
       effArr.push([[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]);
     } else {
       let arr = [0,0,0,0,0,0,0,0,0,0];
-      const eff = gameData.lineup[lineupType].eff[lineupNum];
+      const eff = gameData.lineup[lineupType].eff[lineupGrade];
       const peopleNum = peopleLength - 1 < 0 ? 0 : peopleLength - 1;
       for(let v in eff){
         switch(v){
@@ -405,52 +405,50 @@ export const util = { //this.loadImage();
     }
     return effArr;
   },
-  setLineupSt: (dataObj, gameData, saveData, changeSaveData) => {
-    console.log(dataObj);
-    let save = {...saveData};
-    const lineup = dataObj.isMoveEvent ? save.eventLineup : save.lineup;
+  setLineupSt: (dataObj, gameData, saveData) => {
+    const sData = {...saveData};
+    const lineup = dataObj.isMoveEvent ? sData.eventLineup : sData.lineup;
     lineup.save_slot[dataObj.saveSlot].no = dataObj.lineupType;
-    lineup.save_slot[dataObj.saveSlot].entry = dataObj.useList;
-    let peopleLength = [0,0,0,0,0,0,0,0];
-    const ConvertlineupStIdx = lineup.save_slot.map((data, idx) => { // 슬롯당 lineup eff번호
-      const lineSlot = data.no;
-      const lineupArea = gameData.lineup[lineSlot];
-      let lineNum = [];
-      for (const [entry_idx, entry_data] of data.entry.entries()) {
+    lineup.save_slot[dataObj.saveSlot].entry = [...dataObj.useList];
+    let peopleLength = 0;
+
+    const lineupType = dataObj.lineupType,
+      lineupArea = gameData.lineup[lineupType];
+    let lineNum = [];
+    if(dataObj.leaderIdx !== "") {
+      for (const [entry_idx, entry_data] of lineup.save_slot[dataObj.saveSlot].entry.entries()) {
         if (entry_data !== '') {
-          let line = '';
           for (const [line_idx, line_data] of lineupArea.entry.entries()) {
             for (const lineData of line_data) {
               if (lineData === entry_idx) {
-                line = line_idx;
+                peopleLength ++;
+                lineNum.push(line_idx);
                 break;
               }
             }
           }//엔트리 라인 확인
-          lineNum.push(line);
-          peopleLength[idx] ++;
         } else {
           lineNum.push('');
         }
       }
-      return lineNum;
+    } else {
+      lineNum = ["","","","","","","","","","","","","","","","","","","","","","","","",""];
+    }
+    let eff = [];
+    lineNum.forEach((lineupData, lineupIdx) => {
+      const chIdx = lineup.save_slot[dataObj.saveSlot].entry[lineupIdx];
+      const ch = saveData.ch[chIdx];
+      eff.push(...util.getLineupSt({
+        lineupType: lineupType,
+        lineupGrade: lineupData,
+        ch: ch,
+        peopleLength: peopleLength,
+        gameData: gameData,
+      }));
     });
-    //lineupSt 저장
-    let saveLineupSlot = [
-      ...lineup.save_slot,
-    ];
-    ConvertlineupStIdx.forEach((data, idx) => {
-      lineup.save_slot[idx].num = peopleLength[idx];
-      const lineupType = lineup.save_slot[idx].no;
-      saveLineupSlot[idx].eff = [];
-      data.forEach((lineupData, lineupIdx) => {
-        const chIdx = lineup.save_slot[idx].entry[lineupIdx];
-        const ch = save.ch[chIdx];
-        saveLineupSlot[idx].eff.push(...util.getLineupSt(lineupType, lineupData, ch, peopleLength[idx], gameData));
-      });
-    });
-    lineup.save_slot = saveLineupSlot;
-    changeSaveData(save);//라인업 캐릭 능력치 저장
+    lineup.save_slot[dataObj.saveSlot].num = peopleLength;
+    lineup.save_slot[dataObj.saveSlot].eff = eff;
+    return sData;//라인업 캐릭 능력치 저장
   },
   compileState: (currentState, itemState) => {
     let num = 0;
@@ -653,6 +651,15 @@ export const util = { //this.loadImage();
       {},{},{},{},{},{},{},{},{},
       {na:'WT',ko:'날씨',en:'Weather',jp:'天気'},
       {na:'WD',ko:'풍향',en:'Wind direction',jp:'風向き'},
+      {},{},{},{},{},{},{},{},{},
+      {},{},{},{},{},{},{},{},{},{},
+      {},{},{},{},{},{},{},{},{},{},
+      {},{},{},{},{},{},{},{},{},{},
+      {},{},{},{},{},{},{},{},{},{},
+      {},{},{},{},{},{},{},{},{},{},
+      {},{},{},{},{},{},{},{},{},{},
+      {},{},{},{},{},{},{},{},{},{},
+      {},{},{},{},{},{},{},{},{},{na:'FM',ko:'진형',en:'Formation',jp:'陣形'},
     ]
     // let arr = ['체력(HP)','행동력(SP)','행동회복력(RSP)','공격력(ATK)','방어력(DEF)','술법공격력(MAK)','술법방어력(MDF)','회복력(RCV)','속도(SPD)','행운(LUK)','쪼기','할퀴기','물기','치기','누르기','던지기','','','','','',
     // '빛','어둠','물','불','바람','땅','빛 강화','어둠 강화','물 강화','불 강화',
@@ -2659,7 +2666,7 @@ export const util = { //this.loadImage();
       sData.items['equip'].push(dataObj.data.saveItemData);//인벤에 아이템 넣기
       sData.ch[dataObj.data.chSlotIdx].items[dataObj.data.itemSaveSlot] = {}; //아이템 삭제
       if (dataObj.data.saveItemData.mark === gameData.ch[saveCh.idx].animal_type) {//동물 뱃지 수정
-        saveCh.animalBeige = util.getAnimalPoint(saveCh.items, gameData.ch[saveCh.idx].animal_type, saveCh.mark);
+      saveCh.animalBeige = util.getAnimalPoint(saveCh.items, gameData.ch[saveCh.idx].animal_type, saveCh.mark);
       }
       saveCh.animalSkill = saveCh.animalSkill.map((skGroup) => {//동물 스킬 초기화
         return skGroup.map((skData) => {
@@ -3071,10 +3078,19 @@ export const util = { //this.loadImage();
       {ko:'식물 재배 가능',en:'Can grow plants',jp:'植物栽培可能'},
       {ko:'아이템 합성 가능',en:'Items can be composited',jp:'アイテム合成可能'},
       {ko:'목걸이, 반지 제작/분해 가능',en:'Can create/disassemble necklaces and rings',jp:'ネックレス、指輪製作/分解可能'},
-      {ko:'고급 등급의 동물 찾을 확률 증가',en:'Increased chance of finding an advanced ranked animal',jp:'高級ランクの動物が見つかる確率アップ'},
+      {ko:'동료를 확률 증가',en:'Increases the chance of finding a companion',jp:'仲間を確率アップ'},
       {ko:'예술품 제작 가능',en:'Can create art',jp:'アート作品制作可能'},
+      {ko:'기습 공격 가능',en:'Surprise attack possible',jp:'奇襲攻撃可能'},
+      {ko:'상황 판단능력이 좋음',en:'Good judgment skills',jp:'状況判断能​​力が良い'},
     ];
     return jobText[jobIdx][lang];
+  },
+  getSkillChSpecialLang: ({chSpecialIdx, lang}) => {
+    const chSpecialText = [
+      {},
+      {ko:'상황 판단능력이 좋음',en:'Good judgment skills',jp:'状況判断能​​力が良い'},
+    ];
+    return chSpecialText[chSpecialIdx][lang];
   },
   getSkillText: (skillObj) => { //스킬 텍스트 전환 $(0), $<0>
     const {skill, lv, lang} = skillObj;
@@ -3128,10 +3144,16 @@ export const util = { //this.loadImage();
         lang:lang,
       }));
     }
-    if (skill.job > 0) {//직업 스킬
+    if (skill.jobTxtIdx > 0) {//직업 스킬
       replaceText = replaceText.replace('<job>', util.getSkillJobLang({
-        jobIdx:skill.job,
-        lang:lang,
+        jobIdx: skill.jobTxtIdx,
+        lang: lang,
+      }));
+    }
+    if (skill.chSpecialIdx > 0) {//인물 스킬
+      replaceText = replaceText.replace('<chSpecial>', util.getSkillChSpecialLang({
+        jobIdx: skill.chSpecialIdx,
+        lang: lang,
       }));
     }
     // replaceUpDownArr.forEach((data, idx) => {//효과 up, down 아이콘
@@ -3228,6 +3250,8 @@ export const util = { //this.loadImage();
       case 'elementBack':
       case 'land':
       case 'moveEventFinish':
+      case 'eventBack':
+      case 'worldMap':
         return 0;
       case 'lv':
       case 'quickMenu':
@@ -3246,6 +3270,7 @@ export const util = { //this.loadImage();
         return 5;
       case 'mutate':
       case 'elevation':
+      case 'pattern':
         return 7;
       case 'battleState':
         return 8;
@@ -3315,8 +3340,8 @@ export const util = { //this.loadImage();
       case 'country':
       case 'areaBack':
         return [8,5];
-      case 'eventBack':
-        return [10,3];
+      case 'img800':
+        return [10,8];
       case 'ch':
       case 'ch_s':
         return [10, 6];
@@ -3326,14 +3351,10 @@ export const util = { //this.loadImage();
         return [10, 10];
       case 'icon200':
         return [10, 32];
-      case 'img800':
+      case 'map800':
         return [5, 8];
       case 'itemEtc':
         return [10, 50];
-      case 'moveEventCountry':
-        return [14, 1];
-      case 'img600':
-        return [10, 2];
       case 'skill':
         return [10, 40];
       default:
@@ -3575,5 +3596,194 @@ export const util = { //this.loadImage();
       default:
         return 0;
     }
+  },
+  makeCard: (num, gachaType, gameData, saveData) => { //가챠횟수
+    const beginType = typeof num !== 'number'; //최초 시작상태 체크
+    const getCardIdx = (gradeNum) => {
+      const chOfGrade = gameData.chArr.grade;//등급별
+      const length = chOfGrade[gradeNum].length,
+            ran = Math.floor(Math.random() * length);
+      return chOfGrade[gradeNum][ran];
+    }
+    const getGrade = (n, type) => {
+      let ch_arr = [];
+      if (beginType) {
+        ch_arr = num;
+      } else {
+        const arr = type === 'p' ? [1,5,10,30] : [0.1,1,5,10,20,30]; // 다이아 & 골드 등급 나올확률값
+        for(let i = 0 ; i < n ; ++i){
+          const ranCount = Math.random()*100;
+          let resultGrade = 0;
+          if (gachaType === 'p') {
+            if (ranCount < arr[0]){//7등급
+              resultGrade = 6;
+            }else if(ranCount < arr[1]){//6등급
+              resultGrade = 5;
+            }else if(ranCount < arr[2]){//5등급
+              resultGrade = 4;
+            }else if(ranCount < arr[3]){//4등급
+              resultGrade = 3;
+            }else{//3등급
+              resultGrade = 2;
+            }
+          } else {
+            if (ranCount < arr[0]){//7등급
+              resultGrade = 6;
+            }else if(ranCount < arr[1]){//6등급
+              resultGrade = 5;
+            }else if(ranCount < arr[2]){//5등급
+              resultGrade = 4;
+            }else if(ranCount < arr[3]){//4등급
+              resultGrade = 3;
+            }else if(ranCount < arr[4]){//3등급
+              resultGrade = 2;
+            }else if(ranCount < arr[5]){//2등급
+              resultGrade = 1;
+            }else{//1등급
+              resultGrade = 0;
+            }
+          }
+          ch_arr.push(resultGrade);
+        }
+      }
+      const cloneArr = ch_arr.slice();
+      const maxGrade = ch_arr.sort((a,b)=>b-a)[0];
+      return {
+        arr: cloneArr,
+        maxGrade: maxGrade < 3 ? 3 : maxGrade //최고 높은 등급 확인
+      };
+    }
+    let chArr = [];
+    let chDataArr = [];
+    const recruitmentNum = beginType ? num.length : num;// 뽑는 횟수
+    const cardGrade = getGrade(recruitmentNum, gachaType);
+    for (let i = 0; i < recruitmentNum; ++i) {
+      const newIdx = getCardIdx(cardGrade.arr[i]);		
+      const addGrade = Math.random();
+      let luckyGradePoint = 0;
+      if (cardGrade.arr[i] === 1) {
+        if (addGrade < .005) {
+          luckyGradePoint = 5;
+        } else if (addGrade < .01) {
+          luckyGradePoint = 4;
+        } else if (addGrade < .05) {
+          luckyGradePoint = 3;
+        } else if (addGrade < .1) {
+          luckyGradePoint = 2;
+        } else if (addGrade < .3) {
+          luckyGradePoint = 1;
+        }
+      } else if (cardGrade.arr[i] === 2) {
+        if (addGrade < .005) {
+          luckyGradePoint = 4;
+        } else if (addGrade < .01) {
+          luckyGradePoint = 3;
+        } else if (addGrade < .05) {
+          luckyGradePoint = 2;
+        } else if (addGrade < .1) {
+          luckyGradePoint = 1;
+        }
+      } else if (cardGrade.arr[i] === 3) {
+        if (addGrade < .005) {
+          luckyGradePoint = 3;
+        } else if (addGrade < .01) {
+          luckyGradePoint = 2;
+        } else if (addGrade < .05) {
+          luckyGradePoint = 1;
+        }
+      } else if (cardGrade.arr[i] === 4) {
+        if (addGrade < .005) {
+          luckyGradePoint = 2;
+        } else if (addGrade < .01) {
+          luckyGradePoint = 1;
+        }
+      }
+      const cardG = cardGrade.arr[i] + luckyGradePoint,
+        maxGradePoint = Math.round(Math.random() * ((gameData.ch[newIdx].grade > 4 ? 7 : 6) - cardG)),
+        maxG = Math.max(cardG + Math.min(maxGradePoint, 0), 7);
+      const animalAction = gameData.animal_type[gameData.ch[newIdx].animal_type].actionType,
+        actionType = animalAction[Math.floor(Math.random() * animalAction.length)];//공격타입
+      const jobs = gameData.ch[newIdx].job,
+        job = jobs[Math.floor(Math.random() * jobs.length)];//직업
+      
+      const kgData = gameData.animal_size.kg[gameData.ch[newIdx].animal_type],
+        kg = Math.round((Math.random() < 0.1 ? Math.random() * (kgData[2] - kgData[0]) + kgData[0] : Math.random() * (kgData[1] - kgData[0]) + kgData[0]) * 10) / 10;
+      chArr.push({
+        idx: newIdx,
+        grade: cardG,
+        gradeMax: maxG,
+        chSlotIdx: saveData.ch.length + i,
+      });
+      chDataArr.push(util.saveLvState('', {
+        itemEff: util.getItemEff(),
+        grade: cardG,
+        newState: {
+          actionPoint: 25,
+          actionMax: Math.floor(gameData.ch[newIdx].st1 / 3 + gameData.ch[newIdx].st6 / 3),
+          pointTime: 25*5*60,//5분, 초단위로 변환
+          stateLuk: Math.round(Math.random() * 200),
+          element: gameData.ch[newIdx].element,
+          actionType: actionType,
+          newActionType : [actionType],
+          job: job,
+          kg: kg,
+          exp: 0,
+          hasExp: 0,
+          battleBeige:[0,0,0,0],
+          animalBeige:0,//총 보유 동물뱃지
+          grade: cardG,
+          gradeMax: maxG,
+          gradeUp: 0,
+          mark: Math.round(Math.random()*2),//동물뱃지 추가보유여부(상점에서 exp로 구입가능)
+          idx: newIdx,
+          items: [{}, {}, {}, {}, {}, {}, {}, {}],
+          lv: 20,
+          sk: [{idx: 1, lv: 1, exp: 0,},{idx: 2, lv: 1, exp: 0,},],
+          animalSkill: util.makeSkillTree(gameData, newIdx, job),
+          hasSkill: [{idx: 1, lv: 1, exp: 0,},{idx: 2, lv: 1, exp: 0,},],
+        },
+      }, saveData, gameData));
+    };
+    return {
+      chArr: chArr,
+      chDataArr: chDataArr,
+      maxCard: cardGrade.maxGrade,
+    };
+  },
+  makeSkillTree: (gameData, chIdx, jobIdx) => {
+    const element = gameData.ch[chIdx].element[0],
+      job = gameData.job[jobIdx],
+      animalType = gameData.ch[chIdx].animal_type;
+    if (job.skill.type === "random") {
+      const skillLv = [45, 30, 15, 10],
+        randomNum = util.fnPercent(skillLv),
+        skillLvGroup = job.skill[`lv${skillLv[randomNum]}`];
+      const skillNum = Math.floor(Math.random() * skillLvGroup.length);
+      console.log(skillLvGroup[skillNum]);
+    }
+    let skillPos = [];
+    const limitLvArr = Array.from({length: 4}, (v, idx) => idx * (Math.floor(Math.random() * 10 - 5) + 15));
+    const emptySkillArr = Array.from({length: 4}, () => ([])).map((v, skillY) => (Array.from({length: 4}, (sk, skillX) => {
+      const hasSkill = Math.random() < (0.6 - 0.1 * skillY);
+      if (hasSkill) {
+        skillPos.push([skillY, skillX]);
+      }
+      return hasSkill ? {
+        idx: 0,
+        lv: 1,
+        required: skillY === 0 ? 0 : Math.round(Math.random()),
+        lvLimit: limitLvArr[skillY],
+      } : {idx: ""}
+    })));
+    skillPos.forEach((skillPos) => {
+      emptySkillArr[skillPos[0]][skillPos[1]].idx = 2;
+    });
+    console.log(emptySkillArr);
+    return [
+      [{idx:15,lv:1},{idx:11,lv:1},{idx:6,lv:0},{idx:12,lv:0}],
+      [{idx:21,lv:1},{idx:10,lv:1},{idx:13,lv:0},{idx:5,lv:0}],
+      [{idx:23,lv:1},{idx:16,lv:1},{idx:14,lv:0},{}],
+      [{},{},{},{}],
+    ];
   }
 }

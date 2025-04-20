@@ -65,6 +65,7 @@ export const skill = [
 	{idx:9,
 		na:{ko:'빛의 정령',en:'Spirit of Light',jp:'光の精霊'},element_type:7,cate:2,
 		txt:'<area>, <el> <buff>',
+		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:23,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:[0,0,0,0,0]},
@@ -107,56 +108,56 @@ export const skill = [
 		na:{ko:'언변',en:'Speech',jp:'言論'},element_type:0,cate:11,
 		txt:'<job>',
 		skillClass:2,
-		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',job:1,
+		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',jobTxtIdx:1,
 		eff:[{type:'grade',num:['10','20','30','40','50']}],sp:[5,5,5,5,5]},
 	{idx:16,
 		na:{ko:'선박 전문',en:'Ship Specialty',jp:'船舶専門'},element_type:0,cate:11,
 		txt:'<job>',
 		skillClass:2,
-		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',job:2,
-		eff:[{type:'grade',num:['5','10','15','20','25']}],sp:[5,5,5,5,5]},
+		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',jobTxtIdx:2,
+		eff:[{type:'grade',num:['10','20','30','40','50']}],sp:[5,5,5,5,5]},
 	{idx:17,
 		na:{ko:'장비 전문',en:'Equipment Specialty',jp:'設備専門'},element_type:0,cate:11,
 		txt:'<job>',
 		skillClass:2,
-		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',job:3,
-		eff:[{type:'grade',num:['5','10','15','20','25']}],sp:[5,5,5,5,5]},
+		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',jobTxtIdx:3,
+		eff:[{type:'grade',num:['10','20','30','40','50']}],sp:[5,5,5,5,5]},
 	{idx:18,
 		na:{ko:'조각',en:'Sculpture',jp:'彫刻'},element_type:0,cate:11,
 		txt:'<job>',
 		skillClass:2,
-		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',job:4,
-		eff:[{type:'grade',num:['5','10','15','20','25']}],sp:[5,5,5,5,5]},
+		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',jobTxtIdx:4,
+		eff:[{type:'grade',num:['10','20','30','40','50']}],sp:[5,5,5,5,5]},
 	{idx:19,
 		na:{ko:'식물 재배',en:'Plant Cultivation',jp:'植物栽培'},element_type:0,cate:11,
 		txt:'<job>',
 		skillClass:2,
-		ta_:0,ta:1,effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',job:5,
-		eff:[{type:'grade',num:['5','10','15','20','25']}],sp:[5,5,5,5,5]},
+		ta_:0,ta:1,effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',jobTxtIdx:5,
+		eff:[{type:'grade',num:['10','20','30','40','50']}],sp:[5,5,5,5,5]},
 	{idx:20,
 		na:{ko:'연금술',en:'Alchemy',jp:'錬金術'},element_type:0,cate:11,
 		txt:'<job>',
 		skillClass:2,
-		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',job:6,
-		eff:[{type:'grade',num:['5','10','15','20','25']}],sp:[5,5,5,5,5]},
+		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',jobTxtIdx:6,
+		eff:[{type:'grade',num:['10','20','30','40','50']}],sp:[5,5,5,5,5]},
 	{idx:21,
 		na:{ko:'보석 세공',en:'Jewelry',jp:'宝石細工'},element_type:0,cate:11,
 		txt:'<job>',
 		skillClass:2,
-		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',job:7,
-		eff:[{type:'grade',num:['5','10','15','20','25']}],sp:[5,5,5,5,5]},
+		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',jobTxtIdx:7,
+		eff:[{type:'grade',num:['10','20','30','40','50']}],sp:[5,5,5,5,5]},
 	{idx:22,
-		na:{ko:'관찰력',en:'Observation',jp:'観察力'},element_type:0,cate:11,
+		na:{ko:'수색',en:'Search',jp:'検索'},element_type:0,cate:11,
 		txt:'<job>',
 		skillClass:2,
-		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',job:8,
-		eff:[{type:'grade',num:['5','10','15','20','25']}],sp:[5,5,5,5,5]},
+		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',jobTxtIdx:8,
+		eff:[{type:'grade',num:['10','20','30','40','50']}],sp:[5,5,5,5,5]},
 	{idx:23,
 		na:{ko:'예술',en:'Art',jp:'アート'},element_type:0,cate:11,
 		txt:'<job>',
 		skillClass:2,
-		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',job:9,
-		eff:[{type:'grade',num:['5','10','15','20','25']}],sp:[5,5,5,5,5]},
+		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',jobTxtIdx:9,
+		eff:[{type:'grade',num:['10','20','30','40','50']}],sp:[5,5,5,5,5]},
 	{},{},{},{},{},{},{},
 	{idx:31,
 		na:{ko:'십자베기',en:'Cross Slash',jp:'十字刈り'},element_type:2,cate:3,
@@ -286,12 +287,77 @@ export const skill = [
 		ta_:1,ta:[60,4,4,5,5],effAnimation:'slash5',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'saturate(3)',
 		attackEff:[],multiplesAttack:[],
 		eff:[{type:3,num:['150%','160%','170%','180%','200%']}],buff:[{type:56,num:[]}],buffCount:[],buffChance:['5%','7%','9%','11%','13%'],atkCount:[1],sp:[15,16,17,18,18]},
-	{},{},{},{},{},{},{},{},{},//60
+	{idx:52,
+		na:{ko:'기습공격',en:'Surprise Attack',jp:'奇襲攻撃'},element_type:0,cate:11,
+		txt:'<job>',
+		skillClass:2,
+		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',jobTxtIdx:10,
+		eff:[{type:'grade',num:['10','20','30','40','50']}],sp:[5,5,5,5,5]},
+	{idx:53,
+		na:{ko:'통찰력',en:'Insight',jp:'洞察力'},element_type:0,cate:11,
+		txt:'<chSpecial>',
+		skillClass:2,
+		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',chSpecialIdx:1,
+		eff:[{type:'grade',num:['10','20','30','40','50']}],sp:[5,5,5,5,5]},
+	{},{},{},{},{},{},{},//60
 	{},{},{},{},{},{},{},{},{},{},//70
 	{},{},{},{},{},{},{},{},{},{},//80
 	{},{},{},{},{},{},{},{},{},{},//90
 	{},{},{},{},{},{},{},{},{},{},//100
-	{},{},{},{},{},{},{},{},{},{},//110
+	{idx:101,
+		na:{ko:'학익진 숙련',en:'Crane Wing Formation Skilled',jp:'学益陣熟練'},element_type:0,cate:2,
+		txt:'<area>, <buff>',
+		ta_:0,ta:[20,20,20,20,20],effAnimation:'slash5',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[],buff:[{type:200,num:['100%','110%','120%','130%','150%']}],buffCount:[],buffChance:[],atkCount:[1],sp:[0,0,0,0,0]},
+	{idx:102,
+		na:{ko:'어린진 숙련',en:'Fish Scale Formation Skilled',jp:'魚鱗陣熟練'},element_type:0,cate:2,
+		txt:'<area>, <buff>',
+		ta_:0,ta:[20,20,20,20,20],effAnimation:'slash5',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[],buff:[{type:200,num:['100%','110%','120%','130%','150%']}],buffCount:[],buffChance:[],atkCount:[1],sp:[0,0,0,0,0]},
+	{idx:103,
+		na:{ko:'언월진 숙련',en:'Halfmoon Formation Skilled',jp:'偃月陣熟練'},element_type:0,cate:2,
+		txt:'<area>, <buff>',
+		ta_:0,ta:[20,20,20,20,20],effAnimation:'slash5',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[],buff:[{type:200,num:['100%','110%','120%','130%','150%']}],buffCount:[],buffChance:[],atkCount:[1],sp:[0,0,0,0,0]},
+	{idx:104,
+		na:{ko:'봉시진 숙련',en:'Sword Tip and Arrow Formation Skilled',jp:'鋒矢陣熟練'},element_type:0,cate:2,
+		txt:'<area>, <buff>',
+		ta_:0,ta:[20,20,20,20,20],effAnimation:'slash5',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[],buff:[{type:200,num:['100%','110%','120%','130%','150%']}],buffCount:[],buffChance:[],atkCount:[1],sp:[0,0,0,0,0]},
+	{idx:105,
+		na:{ko:'방원진 숙련',en:'Round Formation Skilled',jp:'方圓陣熟練'},element_type:0,cate:2,
+		txt:'<area>, <buff>',
+		ta_:0,ta:[20,20,20,20,20],effAnimation:'slash5',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[],buff:[{type:200,num:['100%','110%','120%','130%','150%']}],buffCount:[],buffChance:[],atkCount:[1],sp:[0,0,0,0,0]},
+	{idx:106,
+		na:{ko:'안행진 숙련',en:'Wild Goose Formation Skilled',jp:'雁行陣熟練'},element_type:0,cate:2,
+		txt:'<area>, <buff>',
+		ta_:0,ta:[20,20,20,20,20],effAnimation:'slash5',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[],buff:[{type:200,num:['100%','110%','120%','130%','150%']}],buffCount:[],buffChance:[],atkCount:[1],sp:[0,0,0,0,0]},
+	{idx:107,
+		na:{ko:'장사진 숙련',en:'Long Snake Formation Skilled',jp:'長蛇陣熟練'},element_type:0,cate:2,
+		txt:'<area>, <buff>',
+		ta_:0,ta:[20,20,20,20,20],effAnimation:'slash5',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[],buff:[{type:200,num:['100%','110%','120%','130%','150%']}],buffCount:[],buffChance:[],atkCount:[1],sp:[0,0,0,0,0]},
+	{idx:108,
+		na:{ko:'형액진 숙련',en:'Scales of Bondage Formation Skilled',jp:'衡軛陣熟練'},element_type:0,cate:2,
+		txt:'<area>, <buff>',
+		ta_:0,ta:[20,20,20,20,20],effAnimation:'slash5',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[],buff:[{type:200,num:['100%','110%','120%','130%','150%']}],buffCount:[],buffChance:[],atkCount:[1],sp:[0,0,0,0,0]},
+	{idx:109,
+		na:{ko:'추행진 숙련',en:'Wedge Formation Skilled',jp:'錐形陣熟練'},element_type:0,cate:2,
+		txt:'<area>, <buff>',
+		ta_:0,ta:[20,20,20,20,20],effAnimation:'slash5',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		eff:[],buff:[{type:200,num:['100%','110%','120%','130%','150%']}],buffCount:[],buffChance:[],atkCount:[1],sp:[0,0,0,0,0]},{},//110
 	{},{},{},{},{},{},{},{},{},{},//120
 	{},{},{},{},{},{},{},{},{},{},//130
 	{},{},{},{},{},{},{},{},{},{},//140
@@ -364,157 +430,157 @@ export const skill = [
 		attackEff:[],multiplesAttack:[],
 		eff:[{type:3,num:['80%','90%','100%','110%','130%']}],atkCount:[1],sp:[5,6,7,8,8]},
 	{idx:207,
-		na:{ko:'사자의 빛나는 영광',en:'Lion\'s Shining Glory',jp:'ライオンの輝く栄光'},element_type:0,cate:2,
+		na:{ko:'사자의 왕',en:'King of Lions',jp:'ライオンの王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[20,20,20,20,20],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:3,num:['10%','15%','20%','25%','30%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:208,
-		na:{ko:'호랑이의 거친 용맹',en:'Tiger\'s Wild Bravery',jp:'虎の荒々しい勇気'},element_type:0,cate:2,
+		na:{ko:'호랑이의 왕',en:'King of Tigers',jp:'虎の王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:3,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:209,
-		na:{ko:'곰의 강철 피부',en:'Bear\'s Steel Skin',jp:'クマのスチールスキン'},element_type:0,cate:2,
+		na:{ko:'곰의 왕',en:'King of Bears',jp:'クマの王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:4,num:['20%','25%','30%','35%','45%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:210,
-		na:{ko:'독수리의 영리한 전략',en:'Eagle\'s Clever Strategy',jp:'鷲の巧妙な戦略'},element_type:0,cate:2,
+		na:{ko:'독수리의 왕',en:'King of Eagles',jp:'ワシの王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[20,20,20,20,20],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','15%','20%','25%','30%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:211,
-		na:{ko:'뱀의 교활한 계략',en:'Snake\'s Cunning Plan',jp:'蛇の狡猾な策略'},element_type:0,cate:2,
+		na:{ko:'뱀의 왕',en:'King of Snakes',jp:'ヘビの王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:212,
-		na:{ko:'개의 충성스런 용기',en:'Dog\'s Loyal Courage',jp:'愛犬の忠実な勇気'},element_type:0,cate:2,
+		na:{ko:'개의 왕',en:'King of Dogs',jp:'犬の王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:1,num:['5','10','15','20','25']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:213,
-		na:{ko:'늑대의 강인한 의리',en:'Wolf\'s Strong Loyalty',jp:'オオカミの強靭な義理'},element_type:0,cate:2,
+		na:{ko:'늑대의 왕',en:'King of Wolves',jp:'オオカミの王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[100,100,100,100,100],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:214,
-		na:{ko:'물개의 유연함',en:'Seal\'s Flexibility',jp:'シールの柔軟性'},element_type:0,cate:2,
+		na:{ko:'물개의 왕',en:'King of Seals',jp:'シールの王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:215,
-		na:{ko:'너구리의 영특한 계산',en:'Raccoon\'s Special Calculus',jp:'アライグマの賢い計算'},element_type:0,cate:2,
+		na:{ko:'너구리의 왕',en:'King of Raccoons',jp:'アライグマの王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:216,
-		na:{ko:'쥐의 날쌘 행동력',en:'Rat\'s Nimble behavior',jp:'ネズミの俊敏な行動力'},element_type:0,cate:2,
+		na:{ko:'쥐의 왕',en:'King of Rats',jp:'ラットの王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:217,
-		na:{ko:'토끼의 뛰어난 점프력',en:'Rabbit\'s Great Jumping Ability',jp:'ウサギの優れたジャンプ力'},element_type:0,cate:2,
+		na:{ko:'토끼의 왕',en:'King of Rabbits',jp:'ウサギの王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:218,
-		na:{ko:'원숭이의 영리한 지략',en:'monkey\'s Clever Trick',jp:'猿の賢い知恵'},element_type:0,cate:2,
+		na:{ko:'원숭이의 왕',en:'King of Monkeys',jp:'猿の王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:219,
-		na:{ko:'고릴라의 막강한 파워',en:'Gorilla\'s Power to the max',jp:'ゴリラの強大なパワー'},element_type:0,cate:2,
+		na:{ko:'고릴라의 왕',en:'King of Gorillas',jp:'ゴリラの王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:220,
-		na:{ko:'캥거루의 요술주머니',en:'Kangaroo\'s Magic Pouch',jp:'カンガルーの魔法の袋'},element_type:0,cate:2,
+		na:{ko:'캥거루의 왕',en:'King of Kangaroos',jp:'カンガルーの王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:221,
-		na:{ko:'소의 튼튼한 체력',en:'Cow\'s Physical fitness',jp:'牛の丈夫な体力'},element_type:0,cate:2,
+		na:{ko:'소의 왕',en:'King of Cows',jp:'牛の王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:222,
-		na:{ko:'고양이의 예민한 직감',en:'Cat\'s keen Intuition',jp:'猫の鋭い直感'},element_type:0,cate:2,
+		na:{ko:'고양이의 왕',en:'King of Cats',jp:'猫の王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:3,num:['5%','7%','10%','15%','20%']}, {type:4,num:['5%','10%','15%','20%','25%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:223,
-		na:{ko:'말의 날쌘 이동력',en:'Horse\'s Nimble Movement',jp:'馬の俊敏な移動力'},element_type:0,cate:2,
+		na:{ko:'말의 왕',en:'King of Horses',jp:'馬の王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:224,
-		na:{ko:'사슴의 성스러운 보호',en:'Deer\'s Protecting the sacred',jp:'鹿の神聖な保護'},element_type:0,cate:2,
+		na:{ko:'사슴의 왕',en:'King of Deer',jp:'鹿の王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:225,
-		na:{ko:'코뿔소의 돌진하는 용맹',en:'Rhino\'s Charging Valor',jp:'サイの突進する勇気'},element_type:0,cate:2,
+		na:{ko:'코뿔소의 왕',en:'King of Rhinoceros',jp:'サイの王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:226,
-		na:{ko:'코끼리의',en:'Elephant\'s ',jp:'象の'},element_type:0,cate:2,
+		na:{ko:'코끼리의 왕',en:'King of Elephants',jp:'象の王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:227,
-		na:{ko:'기린의 충실한 정찰력',en:'Giraffe\'s Faithful scouting',jp:'キリンの忠実な偵察力'},element_type:0,cate:2,
+		na:{ko:'기린의 왕',en:'King of Giraffes',jp:'キリンの王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:228,
-		na:{ko:'새의 청량한 노래',en:'Bird\'s Chirpy songs',jp:'鳥のさわやかな歌'},element_type:0,cate:2,
+		na:{ko:'새의 왕',en:'King of Birds',jp:'鳥の王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:229,
-		na:{ko:'도마뱀의 뛰어난 은둔술',en:'Lizard\'s Superior Hermitry',jp:'トカゲの優れた隠遁術'},element_type:0,cate:2,
+		na:{ko:'도마뱀의 왕',en:'King of Lizards',jp:'トカゲの王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:230,
-		na:{ko:'거북이의 강한 회복력',en:'Turtle\'s Strong resilience',jp:'亀の強い回復力'},element_type:0,cate:2,
+		na:{ko:'거북이의 왕',en:'King of Turtles',jp:'カメの王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:231,
-		na:{ko:'개구리의',en:'Frog\'s',jp:'カエルの'},element_type:0,cate:2,
+		na:{ko:'개구리의 왕',en:'King of Frogs',jp:'カエルの王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
 	{idx:232,
-		na:{ko:'돼지의',en:'Pig\'s',jp:'豚の'},element_type:0,cate:2,
+		na:{ko:'돼지의 왕',en:'King of Pigs',jp:'豚の王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
@@ -1273,7 +1339,32 @@ export const skill = [
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:4,num:['140%','145%','150%','155%','160%']},{type:6,num:['120%','125%','130%','135%','140%']}],atkCount:[1],sp:[7,8,9,10,10]},
-];
+	{idx:356,
+		na:{ko:'양의 왕',en:'King of Sheep',jp:'羊の王'},element_type:0,cate:2,
+		txt:'<area>, <buff>',
+		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
+	{idx:357,
+		na:{ko:'하마의 왕',en:'King of Hippos',jp:'カバの王'},element_type:0,cate:2,
+		txt:'<area>, <buff>',
+		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
+	{idx:358,
+		na:{ko:'악어의 왕',en:'King of Crocodiles',jp:'ワニの王'},element_type:0,cate:2,
+		txt:'<area>, <buff>',
+		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
+		attackEff:[],multiplesAttack:[],
+		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
+	{idx:359,
+		na:{ko:'무리사냥(어둠)',en:'Herd Hunt(Dark)',jp:'群れ狩り(暗)'},element_type:8,cate:3,
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[22,22,21,21,20],effAnimation:'earth4',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'hue-rotate(290deg) brightness(0.5)',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:5,num:['90%','120%','90%','120%','130%']}],atkCount:[1],sp:[10,13,11,14,14]},
+	
+	];
 
 // [cate] (스킬종류)
 // none1
@@ -1292,11 +1383,11 @@ export const skill = [
 // active14(적군, 아군) 적군공격 아군힐 (턴제로 실행)
 // active15(팀킬) (턴제로 실행)
 
-//   condition 1밤(날씨), 2낮(날씨), 3눈(날씨), 4비(날씨), 5해(날씨), 10평원(지형), 11숲(지형), 12물(지형), 21풀피(스텟), 22피20%이하(스텟)
+// condition 1밤(날씨), 2낮(날씨), 3눈(날씨), 4비(날씨), 5해(날씨), 10평원(지형), 11숲(지형), 12물(지형), 21풀피(스텟), 22피20%이하(스텟)
 
 // [element_type] 무속성(0),쪼기(1),할퀴기(2),물기(3),치기(4),누르기(5),던지기(6),빛(7),어둠(8),물(9),불(10),바람(11),땅(12)
 
-// [eff], [buff] 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 행운LUK(9), 반격(10), 쪼기(11), 할퀴기(12), 물기(13), 치기(14), 누르기(15), 던지기(16), 빛(17), 어둠(18), 물(19), 불(20), 바람(21), 땅(22), 쪼기저항(23), 할퀴기저항(24), 물기저항(25), 치기저항(26), 누르기저항(27), 던지기저항(28), 빛저항(29), 어둠저항(30), 물저항(31), 불저항(32), 바람저항(33), 땅저항(34), 치명타(38), 회피(39), 적중률(40), hp회복(41), sp회복(42), hp,sp회복(43), 부활(44), 부활hp회복(45), 위치상태(47), 무적(48), 면역(49), 출혈(50), 중독(51), 석화(52), 혼란(53), 기절(54), 변이(55), 즉사(56), 빙결(57), 출혈저항(60), 중독저항(61), 석화저항(62), 혼란저항(63), 기절저항(64), 변이저항(65), 즉사저항(66), 빙결저항(67), 출혈면역(70), 중독면역(71), 석화면역(72), 혼란면역(73), 기절면역(74), 변이면역(75), 즉사면역(76), 빙결면역(77),  출혈해제(80), 중동해제(81), 석화해제(82), 혼란해제(83), 기절해제(84), 변이해제(85), 빙결헤제(87), 상태이상해제(88), 스킬(100), 날씨(110), 풍향(111)
+// [eff], [buff] 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 행운LUK(9), 반격(10), 쪼기(11), 할퀴기(12), 물기(13), 치기(14), 누르기(15), 던지기(16), 빛(17), 어둠(18), 물(19), 불(20), 바람(21), 땅(22), 쪼기저항(23), 할퀴기저항(24), 물기저항(25), 치기저항(26), 누르기저항(27), 던지기저항(28), 빛저항(29), 어둠저항(30), 물저항(31), 불저항(32), 바람저항(33), 땅저항(34), 치명타(38), 회피(39), 적중률(40), hp회복(41), sp회복(42), hp,sp회복(43), 부활(44), 부활hp회복(45), 위치상태(47), 무적(48), 면역(49), 출혈(50), 중독(51), 석화(52), 혼란(53), 기절(54), 변이(55), 즉사(56), 빙결(57), 출혈저항(60), 중독저항(61), 석화저항(62), 혼란저항(63), 기절저항(64), 변이저항(65), 즉사저항(66), 빙결저항(67), 출혈면역(70), 중독면역(71), 석화면역(72), 혼란면역(73), 기절면역(74), 변이면역(75), 즉사면역(76), 빙결면역(77),  출혈해제(80), 중동해제(81), 석화해제(82), 혼란해제(83), 기절해제(84), 변이해제(85), 빙결헤제(87), 상태이상해제(88), 스킬(100), 날씨(110), 풍향(111), 진형(200)
 
 //위치상태 0:일반, 1:공중, 2:잠수, 3:나무숲
 
@@ -1339,139 +1430,139 @@ export const skill = [
 // * 공통
 // 재빠른 움직임●, 
 
-// * 0고양이 - 고양이의 예민한 직감(passive)●, 야행성(속도 condition)●,
+// * 0고양이 - 고양이의 왕(passive)●, 야행성(속도 condition)●,
 // 할퀴기, 물기, 치기
 // 손톱&뿔 갈기(공buff)●, 하악질(공debuff)●, 꾹꾹이(술공debuff)●, 그루밍(속도buff)●, 격렬하게 빵굽기(공,술공buff)●, 나무타기(회피)●, 나무뒤에 숨기●, 바위뒤에 숨기●,
 // 한손타격(할퀴기)●, 양손타격(할퀴기)●, 뒷발차기(치기)●, 바람발톱(바람)●
 
-// * 1사자 - 사자의 빛나는 영광(passive)●, 초원의지배자(빛 condition)●, 야행성(속도 condition)●,
+// * 1사자 - 사자의 왕(passive)●, 초원의지배자(빛 condition)●, 야행성(속도 condition)●,
 // 할퀴기, 물기,
 // 손톱&뿔 갈기(공buff)●, 포효(속도debuff)●, 하악질(공debuff)●, 빵굽기(공,술공buff)●, 금빛갈기(빛,땅 buff)●, 나무타기(회피)●,
 // 무거운 한손타격(할퀴기)●, 양손타격(할퀴기)●, 뒷발차기(치기)●, 송곳니뚫기(물기)●, 무리사냥(땅,광)●, 화염발톱(화)●
 
-// * 2호랑이 - 호랑이의 거친 용맹(passive)●, 밀림의지배자(수 condition)●, 야행성(속도 condition)●,
+// * 2호랑이 - 호랑이의 왕(passive)●, 밀림의지배자(수 condition)●, 야행성(속도 condition)●,
 // 할퀴기, 물기,
 // 손톱&뿔 갈기(공buff)●, 포효(속도debuff)●, 하악질(공debuff)●, 빵굽기(공,술공buff)●, 피의서약(화,수 buff)●, 나무타기(회피)●, 호랑이&여우 결혼식(날씨)●,
-// 한손타격(할퀴기)●, 재빠른 양손타격(할퀴기)●, 뒷발차기(치기)●, 송곳니뚫기(물기)●, 앞발휘두르기(광)●, 얼음발톨(수)●, 후려치기(치기)●, 야습(암 condition)●
+// 한손타격(할퀴기)●, 재빠른 양손타격(할퀴기)●, 뒷발차기(치기)●, 송곳니뚫기(물기)●, 앞발휘두르기(광)●, 얼음발톱(수)●, 후려치기(치기)●, 야습(암 condition)●
 
-// * 3강아지 - 강아지의 충성스러운 용기(passive), 개과(passive)
+// * 3강아지 - 강아지의 왕(passive), 개과(passive)
 // 물기, 치기
 // 영역표시(b속도uff)●, 냄새맡기(방어debuff)●, 나무뒤에 숨기●, 바위뒤에 숨기●,
 // 강한 뒷발차기(치기)●, 송곳니뚫기(물기)●, 물어뜯기(물기)●, 무리사냥(바람,광)●, 광견병(독,광역)●, 추격하기(반격기)●, 
 
-// * 4늑대 - 늑대의 강인한 의리(passive), 야행성(속도 condition)●, 개과(passive)
+// * 4늑대 - 늑대의 왕(passive), 야행성(속도 condition)●, 개과(passive)
 // 물기, 치기
 // 영역표시(속도buff)●, 하울링(물기,치기buff)●, 냄새맡기(방어debuff)●,
 // 강한 뒷발차기(치기)●, 송곳니뚫기(물기)●, 물어뜯기(물기)●, 무리사냥(땅,광)●, 무리사냥(바람,광)●, 광견병(독,광역)●,
 // [유혹(여우한정)]●, 
 
-// * 5물개 - 물개의 유연함(passive),
+// * 5물개 - 물개의 왕(passive),
 // 치기, 누르기
 // 잠수(회피)●, 바다의 축복(부활,힐)●, 응원의 박수(빛,힐)●,
 // 회전박치기(바람)●, 물대포(수)●, 파도공격(수)●, 몸통박치기1(치기)●,
 // [송곳니뚫기(바다사자특정)]●,
 
-// * 6너구리 - 너구리의 영특한 계산(passive), 반격(passive),
+// * 6너구리 - 너구리의 왕(passive), 반격(passive),
 // 물기, 치기, 던지기
 // 훔쳐먹기(회복,자신)●, 응원의 박수(빛,힐)●, 흉내내기(고양이)●, 흉내내기(개)●, 흉내내기(쥐)●, 나무뒤에 숨기●, 바위뒤에 숨기●,
 // 돌던지기(땅)●, 고드름던지기(수)●,
 // [주머니털기(너구리한정)], [조개 선물(회복)(해달한정)]●,
 
-// * 7쥐 - 쥐의 날쌘 행동력(passive) - 시작 두턴간 무적, 
+// * 7쥐 - 쥐의 왕(passive) - 시작 두턴간 무적, 
 // 물기,
 // 민접한 스틸(아이템획득), 쥐구멍숨기(무적)●, 나무뒤에 숨기●, 바위뒤에 숨기●, 훔쳐먹기(회복,자신)●,
 // 구토(독)●, 땅굴기습(땅)●, 급소타격(물기)●,
 
-// * 8토끼 -  토끼의 뛰어난 점프력(spd, luk)(passive),
+// * 8토끼 -  토끼의 왕(spd, luk)(passive),
 // 물기, 치기
 // 나무뒤에 숨기●, 바위뒤에 숨기●,
 // 구토(독)●, 급소타격(물기)●, 뒷발차기(치기)●, 
 
-// * 9원숭이 - 원숭이의 영리한 지략(passive),
+// * 9원숭이 - 원숭이의 왕(passive),
 // 물기, 치기, 던지기 
 // 조롱(술공,술방debuff)●, 나무타기(회피)●,
 // 구토(독, 광역)●, 눈알찌르기(쪼기)●, 돌던지기(땅)●, 모래뿌리기(땅)●, 눈덩이던지기(수)●, 침뱉기(수, 광)●, 훔쳐먹기(회복,자신)●,
 // [반신욕(일본원숭이한정)]●,
 
-// * 10고릴라 - 고릴리의 막강한 파괴(atk)(passive), 
+// * 10고릴라 - 고릴리의 왕(atk)(passive), 
 // 치기, 누르기, 던지기
 // 몸집 키우기(체력buff)●, 포효(속도 debuff)●, 가슴치기(치기,누르기buff)●, 나무타기(회피)●,
 // 맹렬한 돌진(광역, 치기)●, 모래뿌리기(땅)●, 1톤 펀치(치기)●, 돌던지기(땅)●, 바위던지기(땅)●, 눈덩이던지기(수)●, 헤드락(누르기)●, 몸통박치기(치기)●, 고드름던지기(수)● , 주변정리(땅)●
 
-// * 11캥거루 - 캥거루의 요술주머니(힐 기술)(passive), 매턴 10% 회복
+// * 11캥거루 - 캥거루의 왕(힐 기술)(passive), 매턴 10% 회복
 // 치기
 // 몸집 키우기(체력buff)●,
-// 침뱉기(수, 광)●, 후려치기(치기)●, 아웃복싱(치기), 마구때리기(치기)●, 원투펀치(치기)●, 하이킥(치기)●, 꼬리공격(치기)●, 꼬리채찍(바람)●, 헤드락(누르기)●, 몸통박치기(치기)●, 만능주머니 랜덤 효과
+// 침뱉기(수, 광)●, 후려치기(치기)●, 마구때리기(치기)●, 원투펀치(치기)●, 하이킥(치기)●, 꼬리공격(치기)●, 꼬리채찍(바람)●, 헤드락(누르기)●, 몸통박치기(치기)●, 만능주머니 랜덤 효과
 
-// * 12소 - 소의 우직한 전진(passive),
+// * 12소 - 소의 왕(passive),
 // 쪼기, 누르기
 // 몸집 키우기(체력buff)●, 손톱&뿔 갈기(공buff)●,
 // 거대한 뿔공격(쪼기)●, 폭풍 돌진(광역, 치기)●, 발구르기(땅)●, 맹렬히 추격하기(반격기)●, 강한 몸통박치기(치기)●, 무거운한방(광역,누르기)●, 주변정리(불)●
 
-// * 13곰 - 곰의 우렁찬 포효(hp)(passive), 
+// * 13곰 - 곰의 왕(hp)(passive), 
 // 할퀴기, 치기
 // 몸집 키우기(체력buff)●, 포효(속도 debuff)●, 나무타기(회피)●,
 // 무거운 한손타격(할퀴기)●, 재빠른 양손타격(할퀴기)●, 후려치기(치기)●, 주변정리(땅)●, 꿀빨기(회복)●,  몸통박치기(치기)●, 
 
-// * 14말 - 말의 날쌘 이동력(spd)(passive), 반격(passive),
+// * 14말 - 말의 왕(spd)(passive), 반격(passive),
 // 치기
 // 재빠른 움직임(buff)●, 
 // 강력한 뒷발차기(치기)●, 맹렬한 돌진(광역, 치기)●, 가벼운두방(광역,누르기)●, 주변정리(불)●
 
-// * 15사슴 - 사슴의 성스러운 보호(mdk)(passive),
+// * 15사슴 - 사슴의 왕(mdk)(passive),
 // 쪼기, 치기
 // 손톱&뿔 갈기(공buff)●,
 // 뿔공격(쪼기)●, 침뱉기(수, 광)●, 정화(상태이상치료)●, 그룹정화(상태이상치료)●, 뒷발차기(치기)●, 돌진(광역, 치기)●
 	
-// * 16코뿔소 - 코뿔소의 돌진하는 용맹(passive), 
+// * 16코뿔소 - 코뿔소의 왕(passive), 
 // 쪼기, 누르기,
 // 몸집 키우기(체력buff)●,
 // 거대한 뿔공격(쪼기)●, 폭풍 돌진(광역, 치기)●, 가벼운두방(누르기)●, 발구르기(땅)●, 강한 몸통박치기(치기)●, 주변정리(물)●
 
-// * 17코끼리 - 코끼리의 무거운 한방(광역공격위주)(passive), 
+// * 17코끼리 - 코끼리의 왕(광역공격위주)(passive), 
 // 누르기, 던지기
 // 몸집 키우기(체력buff)●, 포효(속도 debuff)●, 
 // 맹렬한 돌진(광역,치기)●, 무거운한방(광역,누르기)●, 가벼운두방(누르기)●, 발구르기(땅)●, 돌던지기(땅)●, 바위던지기(광역,땅)●, 물대포(광역,수)●, 강력한 몸통박치기(치기)●, 주변정리(물)●
 // 땅울림(땅,광), 
 
-// * 18기린 - 기린의 충실한 정찰력(passive), 밤샘경계(passive),
+// * 18기린 - 기린의 왕(passive), 밤샘경계(passive),
 // 누르기, 치기
 // 기침(buff),
 // 침뱉기(수, 광)●, 목치기(치기)●, 강한 뒷발차기(치기)●, 맹렬한 돌진(광역, 치기)●, 초저주파공격(빛)●, 발구르기(땅)●, 주변정리(땅)●
 
-// * 19새 - 새의 청량한 노래(passive), 조류과(passive)
+// * 19새 - 새의 왕(passive), 조류과(passive)
 // 쪼기, 물기
 // 비행(회피)●, 손톱&뿔 갈기(공buff)●, 나무뒤에 숨기●,
-// 낙석(땅)●, 날개치기(치기)●, 고공낙하(땅)●, 치유의 노래(회복)●, 부활의 노래(부활)●, 훔쳐먹기(회복,자신)●,
+// 낙석(땅)●, 날개치기(치기)●, 고공낙하(땅)●, 회복의 노래(회복)●, 부활의 노래(부활)●, 훔쳐먹기(회복,자신)●,
 	
-// * 20독수리 - 독수리의 영리한 전략(passive), 반격(passive), 조류과(passive)
+// * 20독수리 - 독수리의 왕(passive), 반격(passive), 조류과(passive)
 // 쪼기, 물기
 // 비행(회피)●, 손톱&뿔 갈기(공buff)●, 
 // 꽤뚫기(쪼기), 낙석(땅)●, 고공낙하(땅)●, 거친 날개치기(치기)●, 윈드커터(바람)●, 사일런트 어택(바람, 치명타)●,
 
-// * 21뱀 - 뱀의 교활한 계략(passive), 파충류과(passive)
+// * 21뱀 - 뱀의 왕(passive), 파충류과(passive)
 // 물기
 // 탈피하기(공업, 방다운)●, 나무뒤에 숨기●, 바위뒤에 숨기●,
 // 독뿌리기(어둠)●, 헤드락(누르기)●, 흡혈공격(물기)●, 삼키기(어둠)●, 
 	
-// * 22도마뱀 - 도마뱀의 뛰어난 은둔술(passive), 파충류과(passive)
+// * 22도마뱀 - 도마뱀의 왕(passive), 파충류과(passive)
 // 물기, 할퀴기
 // 몸집 키우기(체력buff)●, 야행성(속도 condition)●, 탈피하기(공업, 방다운)●, 꼬리자르기(무적)●, 나무뒤에 숨기●, 바위뒤에 숨기●,
 // 혓바닥공격(치기)●, 삼키기(어둠)●, 응원의 박수(빛,힐)●, 훔쳐먹기(회복,자신)●,
 // [위장술(카멜레온한정)]●, 
 
-// * 23거북이 - 거북이의 강철 피부(passive), 파충류과(passive)
+// * 23거북이 - 거북이의 왕(passive), 파충류과(passive)
 // 물기,
 // 잠수(회피)●, 탈피하기(공업,방다운)●, 튼튼한등껍질(방어,마방)●, 
 // 파도공격(수)●, 물어뜯기(물기)●, 절단물기(물기)●, 날개치기(치기)●, 
 
-// * 24개구리 - 개구리의 신속한 점프력(passive), 개구리 뿔피리(passive), 파충류과(passive)
+// * 24개구리 - 개구리의 왕(passive), 개구리 뿔피리(passive), 파충류과(passive)
 // 치기, 물기
 // 점프(회피)●, 나무뒤에 숨기●, 바위뒤에 숨기●,
 // 뒷발차기(치기)●, 훔쳐먹기(회복,자신)●, 개구리 기우제(날씨)●, 음파공격(빛)●, 혓바닥공격(치기)●, 고드름던지기(수)●, 
 // [청개구리 공격(한정)]●, [독뿌리기(암)(한정)]●, 
 
-// * 25돼지 - 
+// * 25돼지 - 돼지의 왕(passive),
 // 물기, 누르기,
 // 구토(독)●, 강한 몸통박치기(치기)●, 주변정리(땅)●, 주변정리(불)●, 주변정리(물)●
 

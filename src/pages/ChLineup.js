@@ -2,7 +2,7 @@ import { AppContext } from 'App';
 import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import CharacterCard from 'pages/CharacterCard';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 const LineupArea = styled.div`
@@ -11,7 +11,7 @@ const LineupArea = styled.div`
   padding-top: 100%;
   font-size: 0;
 `;
-const LineupPic = styled(IconPic)`
+const LineupBack = styled(IconPic)`
   position: absolute;
   left: 0;
   top: 0;
@@ -19,10 +19,10 @@ const LineupPic = styled(IconPic)`
 `;
 const LineupMap = styled.div`
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
+  left: 5px;
+  right: 5px;
+  top: 5px;
+  bottom: 5px;
   z-index: 2;
 `;
 const Map = styled.div`
@@ -31,6 +31,24 @@ const Map = styled.div`
   height: 20%;
   font-size: 0;
   box-sizing: border-box;
+  &:before {
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #000;
+  }
+  &:after {
+    position: absolute;
+    content: '';
+    left: 50%;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: #000;
+  }
   &:nth-of-type(1) {left: 0%;top: 0%;}
   &:nth-of-type(2) {left:20%;top:0%;}
   &:nth-of-type(3) {left:40%;top:0%;}
@@ -63,16 +81,13 @@ const Map = styled.div`
   &.has {
     border: none;
   }
-  &.on {
-    border: none;
-  }
 `;
 const MapEff = styled.div`
-  z-index: 2;
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
+  z-index: 3;
 `;
 const MapCh = styled.div`
   left: 10%;
@@ -82,14 +97,167 @@ const MapCh = styled.div`
   box-sizing: border-box;
   border-radius: 30%;
   overflow: hidden;
+  z-index: 2;
   li{
     position: absolute;
     color: #fff;
   }
-  ${({select, noneCh}) => select ? `
-    animation: ${noneCh ? 'lineup_mapCh_noCh' : 'lineup_mapCh'} .7s alternate infinite;
-    z-index: 1;
+  ${({selected, noneCh}) => (selected && noneCh) ? `
+    border: 1px solid #fff;
+    border-radius: 10%;
   ` : ''}
+`;
+const MapPoint = styled.div`
+  pointer-events: none;
+  z-index: 1;
+  ${({type, selected, noneCh}) => {
+    if (noneCh) {
+      switch(type) {
+        case 1:
+          return `
+            left: 45%;
+            top: 45%;
+            width: 10%;
+            height: 10%;
+            border-radius: 50%;
+            background: #00a90c;
+            box-shadow: 0 0 2px #00a90c, 0 0 5px #00a90c, 0 0 10px #00a90c; 
+          `;
+        case 2:
+          return `
+            left: 42.5%;
+            top: 42.5%;
+            width: 15%;
+            height: 15%;
+            border-radius: 50%;
+            background: #0090ff;
+            box-shadow: 0 0 2px #0090ff, 0 0 5px #0090ff, 0 0 10px #0090ff; 
+          `;
+        case 3:
+          return `
+            left: 40%;
+            top: 40%;
+            width: 20%;
+            height: 20%;
+            border-radius: 50%;
+            background: #ffcc15;
+            box-shadow: 0 0 2px #ffcc15, 0 0 5px #ffcc15, 0 0 10px #ffcc15; 
+          `;
+        case 4:
+          return `
+            left: 35%;
+            top: 35%;
+            width: 30%;
+            height: 30%;
+            border-radius: 50%;
+            background: #ff2a00;
+            box-shadow: 0 0 2px #ff2a00, 0 0 5px #ff2a00, 0 0 10px #ff2a00; 
+          `;
+        default:
+          return '';
+      }
+    } else {
+      if (selected) {
+        switch(type) {
+          case 1:
+            return `
+              left: 10%;
+              top: 10%;
+              width: 80%;
+              height: 80%;
+              background: #00a90c;
+              box-shadow: 0 0 2px #00a90c, 0 0 5px #00a90c, 0 0 10px #00a90c;
+              z-index: 3;
+              opacity: 0.7;
+            `;
+          case 2:
+            return `
+              left: 10%;
+              top: 10%;
+              width: 80%;
+              height: 80%;
+              background: #0090ff;
+              box-shadow: 0 0 2px #0090ff, 0 0 5px #0090ff, 0 0 10px #0090ff;
+              z-index: 3;
+              opacity: 0.7;
+            `;
+          case 3:
+            return `
+              left: 10%;
+              top: 10%;
+              width: 80%;
+              height: 80%;
+              background: #ffcc15;
+              box-shadow: 0 0 2px #ffcc15, 0 0 5px #ffcc15, 0 0 10px #ffcc15;
+              z-index: 3;
+              opacity: 0.7;
+            `;
+          case 4:
+            return `
+              left: 10%;
+              top: 10%;
+              width: 80%;
+              height: 80%;
+              background: #ff2a00;
+              box-shadow: 0 0 2px #ff2a00, 0 0 5px #ff2a00, 0 0 10px #ff2a00;
+              z-index: 3;
+              opacity: 0.7;
+            `;
+          default:
+            return `
+              left: 10%;
+              top: 10%;
+              width: 80%;
+              height: 80%;
+              background: #fff;
+              box-shadow: 0 0 2px #fff, 0 0 5px #fff, 0 0 10px #fff;
+              z-index: 3;
+              opacity: 0.5;`;
+        }
+      } else {
+        switch(type) {
+          case 1:
+            return `
+              left: 10%;
+              top: 10%;
+              width: 80%;
+              height: 80%;
+              background: #00a90c;
+              box-shadow: 0 0 2px #00a90c, 0 0 5px #00a90c, 0 0 10px #00a90c; 
+            `;
+          case 2:
+            return `
+              left: 10%;
+              top: 10%;
+              width: 80%;
+              height: 80%;
+              background: #0090ff;
+              box-shadow: 0 0 2px #0090ff, 0 0 5px #0090ff, 0 0 10px #0090ff; 
+            `;
+          case 3:
+            return `
+              left: 10%;
+              top: 10%;
+              width: 80%;
+              height: 80%;
+              background: #ffcc15;
+              box-shadow: 0 0 2px #ffcc15, 0 0 5px #ffcc15, 0 0 10px #ffcc15; 
+            `;
+          case 4:
+            return `
+              left: 10%;
+              top: 10%;
+              width: 80%;
+              height: 80%;
+              background: #ff2a00;
+              box-shadow: 0 0 2px #ff2a00, 0 0 5px #ff2a00, 0 0 10px #ff2a00; 
+            `;
+          default:
+            return '';
+        }
+      }
+    }
+  }}
 `;
 const clickListupMap = ({
   saveData,
@@ -97,23 +265,36 @@ const clickListupMap = ({
   selectSave,
   selectLineup,
   gameData,
-  setSelectLineupList,
-  mapRef,
+  setSelectFormationPosition,
+  selectFormationPosition,
   useList,
   setUseList,
+  leaderIdx,
+  setLeaderIdx,
+  isMoveEvent,
   idx
 }) => {//맵 캐릭터 클릭
-  //console.log('mapidx', idx);
-  setSelectLineupList(idx);
-  let saveUseList = useList;
-  if (mapRef[idx].classList.contains('on')) {
+  setSelectFormationPosition(idx);
+  const saveUseList = [...useList];
+  let leader = leaderIdx;
+  if (selectFormationPosition === idx) {
     saveUseList[idx] = '';
+    if (gameData.lineup[selectLineup].entry[0][0] === idx) {
+      leader = "";
+      setLeaderIdx("");
+      const cloneSData = {...saveData};
+      cloneSData.lineup.save_slot[selectSave].leader = "";
+      cloneSData.lineup.save_slot[selectSave].no = 0;
+      changeSaveData(cloneSData);
+    }
   }
   setUseList(saveUseList);
   util.setLineupSt({
     saveSlot: selectSave, 
     lineupType: selectLineup,
     useList: useList,
+    leaderIdx: leader,
+    isMoveEvent: isMoveEvent,
   }, gameData, saveData, changeSaveData);
 }
 
@@ -125,20 +306,25 @@ const ChLineup = ({
   selectLineup,
   useList,
   setUseList,
-  mapRef,
-  selectLineupList,
-  setSelectLineupList,
+  selectFormationPosition,
+  setSelectFormationPosition,
+  leaderIdx,
+  setLeaderIdx,
+  isMoveEvent,
   onClick,
 }) => {
   // const imgSet = useContext(AppContext).images;
   const gameData = useContext(AppContext).gameData;
+  const lineupMap = React.useMemo(() => {
+    return gameData.lineup[selectLineup].map;
+  }, [gameData, selectLineup])
   return (
     <LineupArea>
-      <LineupPic pic="img600" idx={selectLineup} />
-        {showMode ? 
-        <LineupMap onClick={() => {
-          onClick && onClick();
-        }} >
+			<LineupBack type="pattern" pic="img800" idx={0} />
+      {showMode ? 
+      <LineupMap onClick={() => {
+        onClick && onClick();
+      }} >
         {useList && useList.map((slotIdx, idx) => {
           if (slotIdx === "") {
             return (
@@ -161,53 +347,61 @@ const ChLineup = ({
       </LineupMap> : 
       <LineupMap>
         {useList && useList.map((slotIdx, idx) => {
+          const selected = selectFormationPosition === idx;
           if (slotIdx === "") {
             return (
-              <Map ref={(element) => {mapRef[idx] = element}} className={selectLineupList === idx ? 'on' : ''} key={idx} data-mapnum={idx} onClick={() => {
+              <Map selected={selected} key={idx} data-mapnum={idx} onClick={() => {
                 clickListupMap({
                   saveData: saveData, 
                   changeSaveData: changeSaveData,
                   selectSave: selectSave,
                   selectLineup: selectLineup,
                   gameData: gameData, 
-                  setSelectLineupList: setSelectLineupList, 
-                  mapRef: mapRef, 
+                  setSelectFormationPosition: setSelectFormationPosition,
+                  selectFormationPosition: selectFormationPosition,
                   useList: useList, 
                   setUseList: setUseList,
+                  leaderIdx: leaderIdx,
+                  setLeaderIdx: setLeaderIdx,
+                  isMoveEvent: isMoveEvent,
                   idx:idx
                 });
               }}>
                 <MapEff />
-                <MapCh noneCh={true} select={selectLineupList === idx} />
+                <MapCh noneCh={true} selected={selected} />
+                <MapPoint type={lineupMap[idx]} noneCh={true} selected={selected} />
               </Map>
             );
           } else {
             //const saveCh = saveData.ch[slotIdx];
             //const chData = gameData.ch[saveCh.idx];
             return (
-              <Map ref={(element) => {mapRef[idx] = element}} className={selectLineupList === idx ? 'on' : ''} key={idx} data-mapnum={idx} onClick={() => {
+              <Map type={lineupMap[idx]} selected={selected} key={idx} data-mapnum={idx} onClick={() => {
                 clickListupMap({
                   saveData: saveData, 
                   changeSaveData: changeSaveData,
                   selectSave: selectSave,
                   selectLineup: selectLineup,
                   gameData: gameData, 
-                  setSelectLineupList: setSelectLineupList, 
-                  mapRef: mapRef, 
+                  setSelectFormationPosition: setSelectFormationPosition,
+                  selectFormationPosition: selectFormationPosition,
                   useList: useList, 
                   setUseList: setUseList,
+                  leaderIdx: leaderIdx,
+                  setLeaderIdx: setLeaderIdx,
                   idx:idx
                 });
               }}>
                 <MapEff />
-                <MapCh select={selectLineupList === idx}>
+                <MapCh selected={selected}>
                   <CharacterCard usedType="thumb" saveData={saveData} gameData={gameData} slotIdx={slotIdx} />
                 </MapCh>
+                <MapPoint type={lineupMap[idx]} selected={selected} />
               </Map>
             );
           }
         })}
-    </LineupMap>}
+      </LineupMap>}
   </LineupArea>)
 };
 

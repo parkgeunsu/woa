@@ -59,6 +59,7 @@ const StyledIconPic = styled.div`
       `;
     } else {
       return `
+      \
         background: url(${itemPic}) no-repeat ${(idx % whNum[0]) * (100 / (whNum[0] - 1))}% ${Math.floor(idx / whNum[0]) * (100 / (whNum[1] - 1)) + (100 / (whNum[1] - 1)) * startIdx}%;
         background-size: ${whNum[0] * 100}%;
       `;
@@ -244,23 +245,13 @@ const MarkPic = ({
   )
 }
 
-      
-{/* <MarkWrap ref={picSize} size={size}>
-<MarkImg type="light"/>
-<MarkImg type="front"/>
-<MarkImg type="shadow"/>
-</MarkWrap> */}
-const SkillMarkWrap = styled.span`
+const SkillMarkWrap = styled.div`
   display: inline-block;
   position: absolute;
   right: ${({posIdx}) => posIdx * 15}px;
   bottom: 0;
-  width: 30px;
-  height: 30px;
   box-sizing: border-box;
-  border: 2px solid #db8624;
-  background-color: #704615;
-  border-radius: 15px;
+  border-radius: 50%;
   text-align: center;
   box-shadow: 0px 4px 10px #000;
   z-index: 1;
@@ -270,49 +261,28 @@ const SkillMarkWrap = styled.span`
       case 10:
         return `
           margin: 0;
-          width: 40px;
-          height: 40px;
-          border: 2px solid #895910;
-          background-color: #ffc719;
-          border-radius: 25px;
+          width: 50px;
+          height: 50px;
         `;
       case 5:
         return `
-          margin:0;
-          width:35px;
-          height:35px;
-          border:2px solid #ddd;
-          background-color:#666;
-          border-radius:25px;
+          margin: 0;
+          width: 35px;
+          height: 35px;
         `;
       default:
-        break;
+        return `
+          margin: 0;
+          width: 25px;
+          height: 25px;
+        `;
     }
   }}
-  span {
-    ${({pic, size, idx}) => {
-      return `
-        background: url(${pic}) no-repeat -${(idx % 10) * size}px -${Math.floor(idx / 10) * size}px;
-        background-size: ${size * 10}px;
-      `;
-    }}
-  }
 `;
 const SkillMark = ({
   point,
-  pic,
   idx,
 }) => {
-  const context = useContext(AppContext);
-  const imgSet = React.useMemo(() => {
-    return context.images;
-  }, [context]);
-  const [size, setSize] = useState(0);
-  const picSize = useCallback((node) => {
-    if (node !== null) {
-      setSize(Math.floor(node.getBoundingClientRect().width * 0.8));
-    }
-  }, []);
   const mark = React.useMemo(() => {
     const arrLength = [];
     arrLength[0] = Math.floor(point / 10);
@@ -322,10 +292,8 @@ const SkillMark = ({
   }, [point]);
   return (
     mark.map((markData, markIdx) => {
-      return <SkillMarkWrap key={`markIdx${markIdx}`} ref={picSize} size={size} type={markData} pic={imgSet.images[pic]} idx={idx} posIdx={markIdx}>
-        <MarkImg type="light"/>
-        <MarkImg type="front"/>
-        <MarkImg type="shadow"/>
+      return <SkillMarkWrap key={`markIdx${markIdx}`} type={markData} posIdx={markIdx}>
+        <IconPic type={`animalCoin${Math.floor(markData / 5) + 1}`} pic="icon200" idx={idx}/>
       </SkillMarkWrap>
     })
   )

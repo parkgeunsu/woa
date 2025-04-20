@@ -6,6 +6,15 @@
 //num 효과
 //sp 행동력
 export const scenario = {
+	japan0:[
+		{ // peroid 0
+			name:'junkuk',
+			scenarioList:[
+			]
+		}
+	],
+	japan1:[],
+	japan2:[],
 	korea0:[],
 	korea1:[],
 	korea2:[
@@ -926,15 +935,41 @@ export const scenario = {
 			]
 		}
 	],
-	japan0:[
-		{ // peroid 0
-			name:'junkuk',
-			scenarioList:[
+	mongolia0:[
+		{
+			name:'mongolia',
+			scenarioList:[//징기즈칸
 			]
 		}
 	],
-	japan1:[],
-	japan2:[],
+	mongolia1:[
+		{
+			name:'mongolia',
+			scenarioList:[//징기즈칸
+			]
+		}
+	],
+	mongolia2:[
+		{
+			name:'mongolia',
+			scenarioList:[//징기즈칸
+			]
+		}
+	],
+	mongolia3:[
+		{
+			name:'mongolia',
+			scenarioList:[//징기즈칸
+			]
+		}
+	],
+	mongolia4:[
+		{
+			name:'mongolia',
+			scenarioList:[//징기즈칸
+			]
+		}
+	],
 	china0:[
 		{name:'yin',}, //(BC1600) period:0
 		{name:'ju',}, //(BC10세기) period:1
@@ -946,28 +981,98 @@ export const scenario = {
 		{name:'song',}, //수호지 period:7
 		{name:'ming',}, //금병매(1368) period:8
 	],
-	mongolia0:[
+	china1:[
+		{name:'yin',}, //(BC1600) period:0
+		{name:'ju',}, //(BC10세기) period:1
+		{name:'chunchu',}, //공자 period:2
+		{name:'jin',}, //(BC221) period:3
+		{name:'han',}, //초한지(BC206) period:4
+		{name:'three',}, //삼국지(BC220) period:5
+		{name:'dang',}, //서유기(618) period:6
+		{name:'song',}, //수호지 period:7
+		{name:'ming',}, //금병매(1368) period:8
+	],
+	china2:[
+		{name:'yin',}, //(BC1600) period:0
+		{name:'ju',}, //(BC10세기) period:1
+		{name:'chunchu',}, //공자 period:2
+		{name:'jin',}, //(BC221) period:3
+		{name:'han',}, //초한지(BC206) period:4
+		{name:'three',}, //삼국지(BC220) period:5
+		{name:'dang',}, //서유기(618) period:6
+		{name:'song',}, //수호지 period:7
+		{name:'ming',}, //금병매(1368) period:8
+	],
+	china3:[
+		{name:'yin',}, //(BC1600) period:0
+		{name:'ju',}, //(BC10세기) period:1
+		{name:'chunchu',}, //공자 period:2
+		{name:'jin',}, //(BC221) period:3
+		{name:'han',}, //초한지(BC206) period:4
+		{name:'three',}, //삼국지(BC220) period:5
+		{name:'dang',}, //서유기(618) period:6
+		{name:'song',}, //수호지 period:7
+		{name:'ming',}, //금병매(1368) period:8
+	],
+	china4:[
+		{name:'yin',}, //(BC1600) period:0
+		{name:'ju',}, //(BC10세기) period:1
+		{name:'chunchu',}, //공자 period:2
+		{name:'jin',}, //(BC221) period:3
+		{name:'han',}, //초한지(BC206) period:4
+		{name:'three',}, //삼국지(BC220) period:5
+		{name:'dang',}, //서유기(618) period:6
+		{name:'song',}, //수호지 period:7
+		{name:'ming',}, //금병매(1368) period:8
+	],
+	china5:[
+		{name:'yin',}, //(BC1600) period:0
+		{name:'ju',}, //(BC10세기) period:1
+		{name:'chunchu',}, //공자 period:2
+		{name:'jin',}, //(BC221) period:3
+		{name:'han',}, //초한지(BC206) period:4
+		{name:'three',}, //삼국지(BC220) period:5
+		{name:'dang',}, //서유기(618) period:6
+		{name:'song',}, //수호지 period:7
+		{name:'ming',}, //금병매(1368) period:8
+	],
+	china6:[
+		{name:'yin',}, //(BC1600) period:0
+		{name:'ju',}, //(BC10세기) period:1
+		{name:'chunchu',}, //공자 period:2
+		{name:'jin',}, //(BC221) period:3
+		{name:'han',}, //초한지(BC206) period:4
+		{name:'three',}, //삼국지(BC220) period:5
+		{name:'dang',}, //서유기(618) period:6
+		{name:'song',}, //수호지 period:7
+		{name:'ming',}, //금병매(1368) period:8
+	],
+	china7:[
+		{name:'yin',}, //(BC1600) period:0
+		{name:'ju',}, //(BC10세기) period:1
+		{name:'chunchu',}, //공자 period:2
+		{name:'jin',}, //(BC221) period:3
+		{name:'han',}, //초한지(BC206) period:4
+		{name:'three',}, //삼국지(BC220) period:5
+		{name:'dang',}, //서유기(618) period:6
+		{name:'song',}, //수호지 period:7
+		{name:'ming',}, //금병매(1368) period:8
+	],
+	saudiArabia0:[
 		{
-			name:'mongolia',
-			scenarioList:[//징기즈칸
+			name:'saudiArabia',
+			scenarioList:[
 			]
 		}
 	],
-	unitedKingdom:[
+	egypt0:[
 		{
-			name:'unitedKingdom',
-			scenarioList:[//리처드3세
+			name:'egypt',//(BC3000) period 0
+			scenarioList:[//파라오, 예컨대 쿠푸, 핫셉수트, 투탕카문, 람세스
 			]
-		}
+		},
 	],
-	france:[
-		{
-			name:'france',
-			scenarioList:[//나폴레옹, 잔다르크
-			]
-		}
-	],
-	greece:[
+	greece0:[
 		{
 			name:'greece',//(BC1100) period 0
 			scenarioList:[//아테네: 소크라테스,플라톤,아리스토텔레스
@@ -976,46 +1081,53 @@ export const scenario = {
 			]
 		}
 	],
-	macedonia:[
-		{
-			name:'macedonia',//알렉산드로스 대왕(BC356) period 1
-			scenarioList:[
-			]
-		}
-	],
-	italy:[
+	italy0:[
 		{
 			name:'italy',//로마, 율리우스 카이사르(BC100) period 2
 			scenarioList:[//포에니 전쟁,
 			]
 		},
 	],
-	spain:[
+	france0:[
+		{
+			name:'france',
+			scenarioList:[//나폴레옹, 잔다르크
+			]
+		}
+	],
+	spain0:[
 		{
 			name:'spain',
 			scenarioList:[
 			]
 		},
 	],
-	portugal:[
+	portugal0:[
 		{
 			name:'portugal',
 			scenarioList:[
 			]
 		},
 	],
-	theMiddleEast:[
+	unitedKingdom0:[
 		{
-			name:'theMiddleEast',//(476) period 4
+			name:'unitedKingdom',
+			scenarioList:[//리처드3세
+			]
+		}
+	],
+	unitedKingdom1:[
+		{
+			name:'unitedKingdom',
+			scenarioList:[//리처드3세
+			]
+		}
+	],
+	macedonia0:[
+		{
+			name:'macedonia',//알렉산드로스 대왕(BC356) period 1
 			scenarioList:[
 			]
-		},
+		}
 	],
-	egypt:[
-		{
-			name:'egypt',//(BC3000) period 0
-			scenarioList:[//파라오, 예컨대 쿠푸, 핫셉수트, 투탕카문, 람세스
-			]
-		},
-	]
 };

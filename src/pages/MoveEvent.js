@@ -116,9 +116,9 @@ const BlockHead = styled(IconPic)`
 const BlockType = styled(IconPic)`
   top: -35%;
   ${({currentStep, nowIdx, last}) => {
-    if (currentStep !== undefined && currentStep + 1 === nowIdx) {
+    if (currentStep !== undefined && currentStep === nowIdx) {
       return  `animation: ${last ? "moveEventLastSelect" : "moveEventSelect"} 1.5s infinite alternate ease-in-out;`;
-    } else if (currentStep + 1 > nowIdx) {
+    } else if (currentStep > nowIdx) {
       return `
         transition: all .5s;
         filter: grayscale(100%);
@@ -282,6 +282,8 @@ const action = ({
     case "dont":
       increaseStep();
       break;
+    case "use":
+      break;
     default:
       break;
   }
@@ -376,7 +378,7 @@ const MoveEvent = ({
         </MapPiece>
         {paramData.moveEvent.spBlockArr.map((spEvent, spEventIdx) => {
           return (
-            <EventStatue key={`spEvent${spEventIdx}`} size={EVENT_HEIGHT} idx={spEventIdx} eventImg={imgSet.images.moveEventCountry} currentStep={currentStep}  backPos={[gameData.eventsHead[paramData.moveEvent.moveTo], 1]}>
+            <EventStatue key={`spEvent${spEventIdx}`} size={EVENT_HEIGHT} idx={spEventIdx} currentStep={currentStep}  backPos={[gameData.eventsHead[paramData.moveEvent.moveTo], 1]}>
               <RewardBlockHead type="moveEventReward" pic="img400" isAbsolute={true} idx={19} />
               <RewardBlockType type="moveEventReward" pic="img400" isAbsolute={true} idx={spEvent.get ? spEvent.type + 1 : 0} distance={paramData.moveEvent.distance} nowIdx={spEventIdx} currentStep={currentStep} eventClear={spEvent.get} />
             </EventStatue>
@@ -387,7 +389,7 @@ const MoveEvent = ({
         setShowEvent(prev => !prev);
       }}>
         {showEvent && (currentStep + 1 === paramData.moveEvent.distance ? <>
-            <EventBack pic="eventBack" idx={1} />
+            <EventBack type="eventBack" pic="img800" idx={1} />
             <EventTitle code="t2" color="main" frameImg={imgSet.images.frame0}>
               {gameData.msg.moveEvent[gameData.events.lastEvent[`action${eventPhase}`].title][lang]}
             </EventTitle>
@@ -414,7 +416,7 @@ const MoveEvent = ({
               })}
             </EventText>
           </> : <>
-            <EventBack pic="eventBack" idx={eventBack} />
+            <EventBack type="eventBack" pic="img800" idx={gameData.events.eventProcess[blockType][`action${eventPhase}`].picIdx} />
             <EventTitle code="t2" color="main" frameImg={imgSet.images.frame0}>
               {gameData.msg.moveEvent[gameData.events.eventProcess[blockType][`action${eventPhase}`].title][lang]}
             </EventTitle>

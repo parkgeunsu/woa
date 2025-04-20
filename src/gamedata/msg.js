@@ -718,6 +718,11 @@ export const msg = {
 		close:{
 			ko:'닫기',
 			en:'Close',
+			jp:'選択',
+		},
+		select:{
+			ko:'선택',
+			en:'Select',
 			jp:'閉じる',
 		},
 		show:{
@@ -1146,6 +1151,76 @@ export const msg = {
 			en:"One Step Forward",
 			jp:"一歩前進",
 		},
+		yes:{
+			ko:"좋아! 할께.",
+			en:"Okay! I'll do it.",
+			jp:"いいね！やります。",
+		},
+		no:{
+			ko:"아니, 생각이 바꿨어.",
+			en:"No, I changed my mind.",
+			jp:"いいえ、考えが変わりました。",
+		},
+		apple1:{
+			ko:"파란사과",
+			en:"Blue Apple",
+			jp:"青リンゴ",
+		},
+		apple2:{
+			ko:"빨간사과",
+			en:"Red Apple",
+			jp:"赤いリンゴ",
+		},
+		stone1:{
+			ko:"검은돌",
+			en:"Black Stone",
+			jp:"黒い石",
+		},
+		stone2:{
+			ko:"하얀돌",
+			en:"White Stone",
+			jp:"白い石",
+		},
+		weapon1:{
+			ko:"단검",
+			en:"Dagger",
+			jp:"短剣",
+		},
+		weapon2:{
+			ko:"손도끼",
+			en:"Hatchet",
+			jp:"手斧",
+		},
+		drop1:{
+			ko:"물방울",
+			en:"Water Drop",
+			jp:"水滴",
+		},
+		drop2:{
+			ko:"핏멍울",
+			en:"Blood Lump",
+			jp:"ピット",
+		},
+		coin1:{
+			ko:"금화",
+			en:"Gold Coin",
+			jp:"金貨",
+		},
+		coin2:{
+			ko:"은화",
+			en:"Silver Coin",
+			jp:"銀貨",
+		},
+		baby1:{
+			ko:"새끼 고양이",
+			en:"Catling",
+			jp:"子猫",
+		},
+		baby2:{
+			ko:"새끼 강아지",
+			en:"Puppy",
+			jp:"子犬",
+		},
 		eventText0:{
 			ko:'적군이 공격해 왔습니다.',
 			en:'The enemy has attacked.',
@@ -1170,6 +1245,11 @@ export const msg = {
 			ko:'강력한 적이 공격해 왔습니다.',
 			en:'A powerful enemy has attacked.',
 			jp:'敵軍強力な敵が攻撃してきました。',
+		},
+		eventText1_1:{
+			ko:'지쳐서 강적에게 붙잡혔습니다.',
+			en:'I was caught by my enemy because I was exhausted.',
+			jp:'疲れて強敵に捕まった。',
 		},
 		eventText2:{
 			ko:'금화를 발견했습니다.',
@@ -1197,7 +1277,7 @@ export const msg = {
 			jp:'トラップを削除しました。',
 		},
 		eventText5_2:{
-			ko:'함정을 발견했습니다.',
+			ko:'함정을 제거를 실패했습니다.',
 			en:'Failed to remove trap.',
 			jp:'トラップを削除できませんでした。',
 		},
@@ -1217,9 +1297,9 @@ export const msg = {
 			jp:'神聖な井戸を発見しました。',
 		},
 		eventText9:{
-			ko:'성스러운 우물을 발견했습니다.',
-			en:'Found a sacred well.',
-			jp:'神聖な井戸を発見しました。',
+			ko:'생명의 우물을 발견했습니다.',
+			en:'Found a well of life.',
+			jp:'命の井戸を発見しました。',
 		},
 		eventText10:{
 			ko:'민가를 발견했습니다.',
@@ -1232,9 +1312,9 @@ export const msg = {
 			jp:'民家が空です。',
 		},
 		eventText10_2:{
-			ko:'인기척이 느껴집니다.',
-			en:'I feel presence.',
-			jp:'人気ふりが感じられます。',
+			ko:'누군가가 있습니다.',
+			en:'There is someone.',
+			jp:'誰かがいます。',
 		},
 		eventText10_3:{
 			ko:'민가속 무언가가 공격해 옵니다.',
@@ -1257,9 +1337,9 @@ export const msg = {
 			jp:'店主が攻撃してきます。',
 		},
 		eventText11_2:{
-			ko:'도망치기를 실패했습니다.',
-			en:'The escape attempt failed.',
-			jp:'逃げることができませんでした。',
+			ko:'상점주인에게 붙잡혔습니다.',
+			en:'Got caught by the store owner.',
+			jp:'店主に捕まった。',
 		},
 		eventText12:{
 			ko:'경비병을 발견했습니다.',
@@ -1272,27 +1352,42 @@ export const msg = {
 			jp:'警備兵が攻撃してきました。',
 		},
 		eventText12_2:{
-			ko:'설득에 실패했습니다.',
-			en:'Persuasion failed.',
-			jp:'説得に失敗しました。',
+			ko:'경비병 설득에 실패하여, 광폭화단계에 들어갑니다.',
+			en:'Failing to convince the guards, he enters a berserk phase.',
+			jp:'警備兵の説得に失敗し、広幅化段階に入ります。',
 		},
 		eventText12_3:{
+			ko:'경비병에게 붙잡혔습니다.',
+			en:'Got caught by the guards.',
+			jp:'警備兵に捕まった。',
+		},
+		eventText12_4:{
 			ko:'경비병이 대화를 하고 싶어합니다.',
 			en:'The guard wants to talk.',
 			jp:'警備兵が会話をしたいです。',
 		},
 		eventText13:{
-			ko:'나그네를 발견했습니다.',
+			ko:'여행자를 발견했습니다.',
 			en:'Found a traveler.',
 			jp:'ナグネを発見しました。',
 		},
 		eventText13_1:{
-			ko:'나그네가 공격해 왔습니다.',
+			ko:'여행자가 공격해 왔습니다.',
 			en:'The strangers attacked.',
 			jp:'ナグネが攻撃してきました。',
 		},
 		eventText13_2:{
-			ko:'나그네가 대화를 하고 싶어합니다.',
+			ko:'여행자 설득에 실패하여, 광폭화 단계에 들어갑니다.',
+			en:'Failing to convince the traveler, he enters the berserk phase.',
+			jp:'旅行者の説得に失敗し、広幅化段階に入ります。',
+		},
+		eventText13_3:{
+			ko:'여행자에게 붙잡혔습니다.',
+			en:'Caught by a traveler.',
+			jp:'旅行者に捕まった。',
+		},
+		eventText13_4:{
+			ko:'여행자가 대화를 하고 싶어합니다.',
 			en:'The traveler wants to talk.',
 			jp:'ナグネが会話をしたいです。',
 		},
@@ -1307,6 +1402,16 @@ export const msg = {
 			jp:'住民が攻撃してきました。',
 		},
 		eventText14_2:{
+			ko:'주민 설득에 실패하여, 광폭화 단계에 들어갑니다.',
+			en:'Failing to convince the residents, it enters a frenzy phase.',
+			jp:'住民説得に失敗し、広幅化段階に入ります。',
+		},
+		eventText14_3:{
+			ko:'주민에게 붙잡혔습니다.',
+			en:'Caught by the residents.',
+			jp:'住民に捕まった。',
+		},
+		eventText14_4:{
 			ko:'주민이 대화를 하고 싶어합니다.',
 			en:'The people want to talk.',
 			jp:'住民が会話をしたいです。',
@@ -1322,44 +1427,74 @@ export const msg = {
 			jp:'怪しい者が攻撃してきました。',
 		},
 		eventText15_2:{
+			ko:'수상한자 설득에 실패하여, 광폭화 단계에 들어갑니다.',
+			en:'Failing to persuade the suspicious person, he enters the berserk phase.',
+			jp:'受賞漢字説得に失敗し、広幅化段階に入ります。',
+		},
+		eventText15_3:{
+			ko:'수상한자에게 붙잡혔습니다.',
+			en:'Caught by the suspicious person.',
+			jp:'怪しい者に捕まった。',
+		},
+		eventText15_4:{
 			ko:'수상한자가 대화를 하고 싶어합니다.',
 			en:'The suspicious person wants to talk.',
 			jp:'怪しい人が会話をしたいです。',
 		},
-		eventText15_3:{
-			ko:'왼쪽, 오른쪽 둘중 하나만 택해. 5번 맞추면 아주 좋은 선물을 줄께. 대신 한번할때 1000 골드야.',
-			en:'Choose either left or right. If you get it right 5 times, I\'ll give you a very nice gift. But it\'s 1000 gold for one time.',
-			jp:'左、右のどちらか一方を選んでください。 5回合わせるととても良いプレゼントをあげましょう。代わりに一度するとき1000ゴールドです。',
-		},
-		eventText15_4:{
-			ko:'첫번째 통과했네. 다시 왼쪽, 오른쪽 둘중 하나만 택해.',
-			en:'You passed the first one. Again, choose either left or right.',
-			jp:'最初通過した。もう一度左、右のどちらかを選んでください。',
-		},
 		eventText15_5:{
-			ko:'잘하는데? 다시 왼쪽, 오른쪽 둘중 하나만 택해.',
-			en:'Are you good at it? Again, choose either left or right.',
-			jp:'うまくいきますか？もう一度左、右のどちらかを選んでください。',
+			ko:'내가 문제를 낼꺼야. 5번 맞추면 아주 좋은 선물을 줄께. 대신 한번할때 1000 골드야.',
+			en:'I\'ll give you a problem. If you get it right 5 times, I\'ll give you a very nice gift. But it\'ll be 1000 gold for one time.',
+			jp:'私は問題を起こします。 5回合わせるととても良いプレゼントをあげましょう。代わりに一度するとき1000ゴールドです。',
 		},
 		eventText15_6:{
-			ko:'이거 스릴넘치는데? 왼쪽, 오른쪽! 택해!',
-			en:'Isn\'t this thrilling? Left, right! Choose!',
-			jp:'これはスリリングなのですか？左、右！選ぶ！',
+			ko:'왼쪽에 파란사과, 오른쪽에 빨간사과 둘중 하나만 택해.',
+			en:'Choose one of the two apples: the blue apple on the left and the red apple on the right.',
+			jp:'左側に青いリンゴ、右側に赤いリンゴのうちの1つだけを選んでください。',
 		},
 		eventText15_7:{
-			ko:'네번째까지 맞춘건 너가 처음이야. 왼쪽, 오른쪽?',
-			en:'You\'re the first to get the fourth one right. Left, right?',
-			jp:'4回目まで合わせたのはあなたが初めてだ。左、右？',
+			ko:'첫번째 통과했네. 다시 왼쪽에 검은돌, 오른쪽에 흰색돌 둘중 하나만 택해.',
+			en:'You passed the first one. Now choose either the black stone on the left or the white stone on the right.',
+			jp:'最初通過した。もう一度左側に黒い石、右側に白い石のどちらかを選んでください。',
 		},
 		eventText15_8:{
+			ko:'잘하는데? 왼쪽에 단검, 오른쪽에 손도끼! 택해!',
+			en:'Are you good at it? Dagger on the left, hatchet on the right! Take your pick!',
+			jp:'うまくいきますか？左に短剣、右に手斧！選ぶ！',
+		},
+		eventText15_9:{
+			ko:'이거 스릴넘치는데? 왼쪽에 물방울, 오른쪽에 핏멍울. 어느쪽을 선택할래?',
+			en:'This is thrilling. Water droplets on the left, blood blobs on the right. Which one would you choose?',
+			jp:'これはスリリングなのですか？左側に水滴、右側に血まみれ。どちらを選ぶ？',
+		},
+		eventText15_10:{
+			ko:'네번째까지 맞춘건 너가 처음이야... 마지막 문제가 될 수 있어. 왼쪽에는 금화, 오른쪽에는 은화. 어떤걸 선택할래?',
+			en:'You\'re the first to get the fourth one right... This could be the last question. Gold on the left, silver on the right. Which one will you choose?',
+			jp:'4回目まで合わせたのはあなたが初めてだ…最後の問題になることができる。左側は金貨、右側は銀貨。どれを選ぶ？',
+		},
+		eventText15_11:{
+			ko:'너무 아쉬운데? 여기서 끝낼래? 더 큰 보상을 걸고 한판 더 할래? 이번판은 무료야.',
+			en:'It\'s such a shame. Do you want to end it here? Do you want to play one more round with a bigger prize? This round is free.',
+			jp:'あまりにも残念ですか？ここで終わりますか？より大きな報酬をかけてもう一度やりますか？今回は無料です。',
+		},
+		eventText15_12:{
+			ko:'아까 선택한 무기로 한마리는 죽이고 한마리는 살릴수 있어. 왼쪽에는 고양이, 오른쪽에는 강아지. 누굴 살릴래?',
+			en:'With the weapon you just selected, you can kill one and save the other. The cat on the left, the dog on the right. Who do you want to save?',
+			jp:'さっき選択した武器で一匹は殺して一匹は生かせる。左には猫、右には子犬。誰を生かしてくれる？',
+		},
+		eventText15_13:{
 			ko:'5번 다 맞췄네! 축하해. 받고싶은 선물을 말해.',
 			en:'You got all 5 correct! Congratulations. Tell me what gift you want.',
 			jp:'5回すべて当たった！おめでとうございます。受け取りたいプレゼントを教えてください。',
 		},
-		eventText15_9:{
+		eventText15_14:{
 			ko:'아쉽지만 다음에 다시 도전해.',
 			en:'It\'s a shame, but try again next time.',
 			jp:'残念ながら次回挑戦してください。',
+		},
+		eventText15_15:{
+			ko:'최종승리자여! 원하는것을 말하시오.',
+			en:'Final victor! Tell me what you want.',
+			jp:'最終勝利者よ！欲しいものを教えてください。',
 		},
 		eventText16:{
 			ko:'수문장을 만났습니다.',
@@ -1507,7 +1642,69 @@ export const msg = {
 			jp:'仲間に入ってきて',
 		},
 	},
+	lineup:{
+		lineup0:{
+			ko:"기본진형",
+			en:"Basic Formation",
+			jp:"基本陣形",
+		},
+		lineup1:{
+			ko:"학익진",
+			en:"Crane Wing Formation",
+			jp:"鶴翼陣",
+		},
+		lineup2:{
+			ko:"어린진",
+			en:"Fish Scale Formation",
+			jp:"魚鱗陣",
+		},
+		lineup3:{
+			ko:"언월진",
+			en:"Halfmoon Formation",
+			jp:"偃月陣",
+		},
+		lineup4:{
+			ko:"봉시진",
+			en:"Sword Tip and Arrow Formation",
+			jp:"鋒矢陣",
+		},
+		lineup5:{
+			ko:"방원진",
+			en:"Round Formation",
+			jp:"方圓陣",
+		},
+		lineup6:{
+			ko:"안행진",
+			en:"Wild Goose Formation",
+			jp:"雁行陣",
+		},
+		lineup7:{
+			ko:"장사진",
+			en:"Long Snake Formation",
+			jp:"長蛇陣",
+		},
+		lineup8:{
+			ko:"형액진",
+			en:"Scales of Bondage Formation",
+			jp:"衡軛陣",
+		},
+		lineup9:{
+			ko:"추행진",
+			en:"Wedge Formation",
+			jp:"錐形陣",
+		},
+	},
 	sentence:{
+		lackLeadership:{
+			ko:'리더의 통솔력이 부족합니다.',
+			en:'The leader lacks leadership skills.',
+			jp:'リーダーの統率力が不足しています。'
+		},
+		selectLeader:{
+			ko:'리더가 될 영웅을 선택하세요.',
+			en:'Choose a hero to become your leader.',
+			jp:'リーダーになるヒーローを選択してください。'
+		},
 		createTravelEntry:{
 			ko:'여행을 떠날 팀을 구성하세요.',
 			en:'Form a team to go on a trip.',
@@ -1943,6 +2140,30 @@ export const msg = {
 					return `${title} is ${num < 0 ? "decreased" : "increases"} by ${Math.abs(num)}.`;
 				case 'jp':
 					return `${title}が${Math.abs(num)}だけ${num < 0 ? "減少": "増加"}します。`;
+				default:
+					break;
+			}
+		},
+		selectedLeader:(lang, title) => {
+			switch(lang) {
+				case 'ko':
+					return `리더로 ${title} 이/가 선택되어 있습니다.`;
+				case 'en':
+					return `${title} has been selected as the leader.`;
+				case 'jp':
+					return `リーダーとして${title}が選択されています。`;
+				default:
+					break;
+			}
+		},
+		limitPeople:(lang, condition, num) => {
+			switch(lang) {
+				case 'ko':
+					return `최소인원 ${num} ${condition ? "만족" : ""}`;
+				case 'en':
+					return `Min of people ${num} ${condition ? "satisfied" : ""}`;
+				case 'jp':
+					return `最小人数${num} ${condition ? "満足" : ""}`;
 				default:
 					break;
 			}
