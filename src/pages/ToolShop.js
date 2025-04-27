@@ -13,6 +13,18 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled.div`
+	display: flex;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	flex-direction: column;
+	padding: 0 0 20px 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	overflow: hidden;
 `;
 const ItemContainer = styled.ul`
   border:5px solid transparent;
@@ -94,7 +106,7 @@ const ToolShop = ({
 	}, [cityIdx])
   return (
 		<>
-			<Wrap className="wrap">
+			<Wrap>
 				<div className="shop_top">
 					<div className="shop_top_left">
 						<TabMenu direction="vertical" list={shopList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" />

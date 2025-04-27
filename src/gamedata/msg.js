@@ -326,7 +326,32 @@ export const msg = {
 			ko:'숲',
 			en:'Forest',
 			jp:'森',
-		}
+		},
+		kg0:{
+			ko:'매우 작음',
+			en:'Very Small',
+			jp:'非常に小さい',
+		},
+		kg1:{
+			ko:'작음',
+			en:'Small',
+			jp:'小さい',
+		},
+		kg2:{
+			ko:'평균',
+			en:'Average',
+			jp:'平均',
+		},
+		kg3:{
+			ko:'큼',
+			en:'Large',
+			jp:'大きい',
+		},
+		kg4:{
+			ko:'매우 큼',
+			en:'Very Large',
+			jp:'とても大きい',
+		},
 	},
 	info:{
 		moral:{
@@ -1770,10 +1795,20 @@ export const msg = {
 			en:'There are not enough animal badges.',
 			jp:'動物バッジが不足しています。',
 		},
+		noBadges:{
+			ko:'동물 뱃지가 없습니다.',
+			en:'There are no animal badges.',
+			jp:'動物のバッジはありません。',
+		},
 		maxSkillLv:{
 			ko:'스킬이 최대 레벨입니다.',
 			en:'The skill maximum level.',
 			jp:'スキルが最大レベルです。',
+		},
+		lackLv:{
+			ko:'영웅 레벨이 부족합니다.',
+			en:'Your hero level is insufficient.',
+			jp:'ヒーローレベルが足りません。',
 		},
 		lackSkillPoint:{
 			ko:'스킬 포인트가 부족합니다.',
@@ -1949,6 +1984,11 @@ export const msg = {
 			ko:'이동 하시겠습니까?',
 			en:'Do you want to move?',
 			jp:'移動しますか？',
+		},
+		learnSkillPossible:{
+			ko:'습득 가능합니다.',
+			en:'It can be acquired.',
+			jp:'習得可能です。',
 		},
 	},
 	grammar:{
@@ -2164,6 +2204,30 @@ export const msg = {
 					return `Min of people ${num} ${condition ? "satisfied" : ""}`;
 				case 'jp':
 					return `最小人数${num} ${condition ? "満足" : ""}`;
+				default:
+					break;
+			}
+		},
+		limitRequiredSkill:(lang, requiredSkill) => {
+			switch(lang) {
+				case 'ko':
+					return `${requiredSkill} 을/를 배우고,`;
+				case 'en':
+					return `You must learn ${requiredSkill} and`;
+				case 'jp':
+					return `${requiredSkill}を学び、`;
+				default:
+					break;
+			}
+		},
+		limitLvSkill:(lang, lv) => {
+			switch(lang) {
+				case 'ko':
+					return `Lv.${lv} 이상이 되어야 배울 수 있습니다.`;
+				case 'en':
+					return `You can learn it only when you are at least Lv.${lv} or higher.`;
+				case 'jp':
+					return `Lv.${lv}以上になると学ぶことができます。`;
 				default:
 					break;
 			}

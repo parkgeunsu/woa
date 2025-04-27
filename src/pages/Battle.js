@@ -9,15 +9,15 @@ import React, { useCallback, useContext, useLayoutEffect, useRef, useState } fro
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-const StyledIconPic = styled(IconPic)`
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	z-index:10;
-	background: #f00;
-`;
+// const StyledIconPic = styled(IconPic)`
+// 	position: absolute;
+// 	left: 0;
+// 	right: 0;
+// 	top: 0;
+// 	bottom: 0;
+// 	z-index:10;
+// 	background: #f00;
+// `;
 const TeamIcon = styled.div`
 	position: absolute;
 	left: 50%;
@@ -659,16 +659,16 @@ const BattleChTop = styled(FlexBox)`
 		}
 	}
 `;
-const Buff = styled.div`
-	.buff_effect{
-		height:${({frame}) => {
-			return Math.ceil(frame / 5) * 100;
-		}}%;
-		background:url(${({effImg}) => effImg}) no-repeat center center;background-size:100%;z-index:1;
-		animation:frame${({frame}) => frame} ${({gameSpd}) => gameSpd}s steps(1);
-		animation-iteration-count: infinite;
-	}
-`;
+// const Buff = styled.div`
+// 	.buff_effect{
+// 		height:${({frame}) => {
+// 			return Math.ceil(frame / 5) * 100;
+// 		}}%;
+// 		background:url(${({effImg}) => effImg}) no-repeat center center;background-size:100%;z-index:1;
+// 		animation:frame${({frame}) => frame} ${({gameSpd}) => gameSpd}s steps(1);
+// 		animation-iteration-count: infinite;
+// 	}
+// `;
 const Passive = styled.div`
 	position: absolute;
 	pointer-events: none;
@@ -1393,11 +1393,7 @@ const enemyPattern = ({mode, ai, battleAlly, allyPos, battleEnemy, enemyPos, gam
 				}
 			})
 		});
-		const currentSk = data.hasSkill.filter((skData) => {
-			if (skData.idx === skIdx) {
-				return skData;
-			}
-		});
+		const currentSk = data.hasSkill.filter((skData) => skData.idx === skIdx);
 		enemySkill.push({
 			team: 'enemy',
 			idx: idx,
@@ -1439,30 +1435,30 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 		return;
 	}
 	const timeDelay = gameData.timeDelay.battle;
-	const endGameCheck = () => {//게임 종료 체크
-		const chLength = [battleAlly.length, battleEnemy.length],
-			allyEnemyDie = [0,0];
-		battleAlly.forEach((ally) => {
-			if (ally.state === 'die') {
-				allyEnemyDie[0] ++;
-			}
-		});
-		battleEnemy.forEach((enemy) => {
-			if (enemy.state === 'die') {
-				allyEnemyDie[1] ++;
-			}
-		})
-		if (allyEnemyDie[0] >= chLength[0]) {
-			modeRef = 'battleLose';
-			resetOrder('battleLose');
-		}
-		if (allyEnemyDie[1] >= chLength[1]) {
-			modeRef = 'battleWin';
-			resetOrder('battleWin');
-		}
-	}
+	// const endGameCheck = () => {//게임 종료 체크
+	// 	const chLength = [battleAlly.length, battleEnemy.length],
+	// 		allyEnemyDie = [0,0];
+	// 	battleAlly.forEach((ally) => {
+	// 		if (ally.state === 'die') {
+	// 			allyEnemyDie[0] ++;
+	// 		}
+	// 	});
+	// 	battleEnemy.forEach((enemy) => {
+	// 		if (enemy.state === 'die') {
+	// 			allyEnemyDie[1] ++;
+	// 		}
+	// 	})
+	// 	if (allyEnemyDie[0] >= chLength[0]) {
+	// 		modeRef = 'battleLose';
+	// 		resetOrder('battleLose');
+	// 	}
+	// 	if (allyEnemyDie[1] >= chLength[1]) {
+	// 		modeRef = 'battleWin';
+	// 		resetOrder('battleWin');
+	// 	}
+	// }
 	if (turnIdx <= timeLine.length - 1) {
-		let isCounterAtk = false; //카운터 어택인지
+		//let isCounterAtk = false; //카운터 어택인지
 		let skillCate = 0;
 		let atkC = [0, false], //공격 횟수
 			atkS = atkOption?.atkStay || 0; //한캐릭이 공격한 횟수 체크
@@ -4204,7 +4200,7 @@ const Battle = ({
 				]})),
 			}
 		}
-	}, [gameData, battleType, paramData, lang]);
+	}, [gameData, battleType, paramData]);
 	const viewScenario = React.useMemo(() => {
 		return battleType === "scenario" ? sData.scenario[paramData.scenario.battle.stay][paramData.scenario.battle.dynastyIdx].scenarioList[paramData.scenario.battle.dynastyScenarioIdx].stage[paramData.scenario.battle.stageIdx].first : false;
 	}, [sData, battleType, paramData]);
@@ -4221,7 +4217,7 @@ const Battle = ({
 			console.log(paramData.battle);
 			return battleData.entry;
 		}
-	}, [battleType, battleData]);
+	}, [battleType, battleData, paramData.battle]);
 	const containerWH = useRef([0,0]);
 	const mapSize = React.useMemo(() => 20, []);
 	const [weather, setWeather] = useState({
@@ -4304,12 +4300,12 @@ const Battle = ({
 		if (conversationCount.current >= conversationList.current[conversationStepRef.current - 1].txt[lang].length) {
 			clearInterval(conversationTimeout.current);
 		}
-	});
+	}, [lang]);
 	useLayoutEffect(() => {//최초 실행
 		let ally = [];
 		let pos = [];
 		let count = 0;
-		allyDeck.current.filter((data, idx) => {
+		allyDeck.current.forEach((data, idx) => {
 			if (typeof data === 'number') {
 				ally.push(data);
 				pos.push({
@@ -4327,7 +4323,7 @@ const Battle = ({
 		let enemy = [],
 			enemy_ = [],
 			enemyP = [];
-		enemyDeck.filter((data, idx) => {
+		enemyDeck.forEach((data, idx) => {
 			if (typeof data.idx === 'number') {
 				enemy_.push(data);
 				enemyP.push(idx);
@@ -5105,7 +5101,7 @@ const Battle = ({
 		} else if (mode === 'action') {
 			setWeather(changeWeather(weather));//날씨 변경
 			//행동 포인트 수정
-			battleAlly.current.map((data, idx) => {
+			battleAlly.current.forEach((data, idx) => {
 				data.sp += allyOrders.current[idx].sp || 0;
 				if (data.sp > data.sp_) {
 					data.sp = data.sp_;
@@ -5173,18 +5169,18 @@ const Battle = ({
 			allySlot.current.forEach((slotIdx, idx) => {
 				const hasMaxExp = gameData.hasMaxExp[saveD.ch[slotIdx].grade];
 				saveD.ch[slotIdx].hasExp += resultExp.current[idx];
-				switch (saveD.ch[slotIdx].battleBeige) {
+				switch (saveD.ch[slotIdx].battleBadge) {
 					case "S":
-						saveD.ch[slotIdx].battleBeige[0] += 1;
+						saveD.ch[slotIdx].battleBadge[0] += 1;
 						break;
 					case "A":
-						saveD.ch[slotIdx].battleBeige[1] += 1;
+						saveD.ch[slotIdx].battleBadge[1] += 1;
 						break;	
 					case "B":
-						saveD.ch[slotIdx].battleBeige[2] += 1;
+						saveD.ch[slotIdx].battleBadge[2] += 1;
 						break;
 					case "C":
-						saveD.ch[slotIdx].battleBeige[3] += 1;
+						saveD.ch[slotIdx].battleBadge[3] += 1;
 						break;
 					default:
 						break;

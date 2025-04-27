@@ -598,7 +598,7 @@ export const util = { //this.loadImage();
       {na:'ⓡEH',ko:'땅속성저항',en:'Earth Element Resist',jp:'地属性抵抗'},
       {},{},{},
       {na:'CRI',ko:'치명타',en:'Critical',jp:'クリティカル'},
-      {na:'AVD',ko:'회피',en:'Avoidance rate',jp:'回避率'},
+      {na:'AVD',ko:'회피',en:'Avoidance rate',jp:'回避率'},//39
       {na:'HRT',ko:'적중율',en:'Hit rate',jp:'命中率'},
       {na:'RHP',ko:'HP회복',en:'HP Recovery',jp:'HP回復'},
       {na:'RSP',ko:'SP회복',en:'SP Recovery',jp:'SP回復'},
@@ -608,7 +608,7 @@ export const util = { //this.loadImage();
       {},
       {na:'PS',ko:'위치상태',en:'Position State',jp:'位置状態'},
       {na:'IV',ko:'무적',en:'Invincible',jp:'無敵'},
-      {na:'IM',ko:'면역',en:'Immunity',jp:'免疫'},
+      {na:'IM',ko:'면역',en:'Immunity',jp:'免疫'},//49
       {na:'BD',ko:'출혈',en:'Bleeding',jp:'出血'},
       {na:'AC',ko:'중독',en:'Addicted',jp:'中毒'},
       {na:'PF',ko:'석화',en:'Petrification',jp:'石化'},
@@ -2638,7 +2638,7 @@ export const util = { //this.loadImage();
             } else { //착용 가능 무게일 경우
               saveCh.items[itemSlot] = {...dataObj.saveData.items['equip'][dataObj.data.itemSaveSlot]};//캐릭에 아이템 넣기
               if (dataObj.data.saveItemData.mark === gameData.ch[saveCh.idx].animal_type) {//동물 뱃지 수정
-                saveCh.animalBeige += dataObj.data.saveItemData.markNum;
+                saveCh.animalBadge += dataObj.data.saveItemData.markNum;
               }
               if (dataObj.data.gameItem.actionType !== '') {
                 saveCh.newActionType = dataObj.data.gameItem.actionType;
@@ -2666,7 +2666,7 @@ export const util = { //this.loadImage();
       sData.items['equip'].push(dataObj.data.saveItemData);//인벤에 아이템 넣기
       sData.ch[dataObj.data.chSlotIdx].items[dataObj.data.itemSaveSlot] = {}; //아이템 삭제
       if (dataObj.data.saveItemData.mark === gameData.ch[saveCh.idx].animal_type) {//동물 뱃지 수정
-      saveCh.animalBeige = util.getAnimalPoint(saveCh.items, gameData.ch[saveCh.idx].animal_type, saveCh.mark);
+      saveCh.animalBadge = util.getAnimalPoint(saveCh.items, gameData.ch[saveCh.idx].animal_type, saveCh.mark);
       }
       saveCh.animalSkill = saveCh.animalSkill.map((skGroup) => {//동물 스킬 초기화
         return skGroup.map((skData) => {
@@ -2892,7 +2892,7 @@ export const util = { //this.loadImage();
       {ko:'모든동물',en:'All Animals',jp:'すべての動物'},
     ];
     const upDown = buff.indexOf('-') >= 0 ? 1 : 0;
-    const muliplesText = `<br/><span small>${lang === 'en' ? textFor[lang] + ' ' + animalType[type][lang] : animalType[type][lang] + textFor[lang]}</span> <b dmg>${buff}</b> <i icon ${updownText[upDown].tag}></i>`;//${updownText[upDown][lang]}
+    const muliplesText = `<span small>${lang === 'en' ? textFor[lang] + ' ' + animalType[type][lang] : animalType[type][lang] + textFor[lang]}</span> <b dmg>${buff}</b> <i icon ${updownText[upDown].tag}></i>`;//${updownText[upDown][lang]}
     return muliplesText;
   },
   getSkillElementLang: ({element, cate, atkCount, lang}) => {
@@ -2903,6 +2903,7 @@ export const util = { //this.loadImage();
       {ko:'세번 공격',en:'Triple Attack',jp:'3回攻撃'},
       {ko:'네번 공격',en:'Four attacks',jp:'4回攻撃'},
     ];
+    const heal = {ko:'회복',en:'Heal',jp:'回復'};
     const elementTag = [
       {type:'ac',idx:0},
       {type:'ac',idx:1},
@@ -2935,7 +2936,21 @@ export const util = { //this.loadImage();
       {},{},{},{},{},{},{},{},
     ];
     const elTag = elementTag[element];
-    return cate !== 2 ? `<i ${elTag.type} ${elTag.type}${elTag.idx}>${elementArr[element][lang]}</i> ${attack[atkCount][lang]}` : `<i ${elTag.type} ${elTag.type}${elTag.idx}>${elementArr[element][lang]}</i>`;
+    switch(cate) {
+      case 2:
+        return `
+          <i ${elTag.type} ${elTag.type}${elTag.idx}>${elementArr[element][lang]}</i>
+        `;
+      case 13:
+      case 14:
+        return `
+          <i ${elTag.type} ${elTag.type}${elTag.idx}>${elementArr[element][lang]}</i> ${heal[lang]}
+        `;
+      default:
+        return `
+          <i ${elTag.type} ${elTag.type}${elTag.idx}>${elementArr[element][lang]}</i> ${attack[atkCount][lang]}
+        `;
+    }
   },
   getSkillAreaLang: ({scope, areaIdx, cate, lang}) => {
     const teamArr = [
@@ -2947,10 +2962,10 @@ export const util = { //this.loadImage();
     const areaArr = [
       {},
       {ko:'단일',en:'Single',jp:'単一'},
-      {ko:'가로 2마리',en:'2 horizontal',jp:'横2匹'},
-      {ko:'가로 3마리',en:'3 horizontal',jp:'横3匹'},
-      {ko:'세로 2마리',en:'2 verticals',jp:'縦2匹'},
-      {ko:'세로 3마리',en:'3 verticals',jp:'縦3匹'},
+      {ko:'가로 2',en:'2 horizontal',jp:'横2'},
+      {ko:'가로 3',en:'3 horizontal',jp:'横3'},
+      {ko:'세로 2',en:'2 verticals',jp:'縦2'},
+      {ko:'세로 3',en:'3 verticals',jp:'縦3'},
       {ko:'가로 행',en:'Horizontal rows',jp:'横列'},
       {ko:'세로 열',en:'Vertical columns',jp:'縦列'},
       {ko:'작은 십자 형태',en:'Small cross',jp:'小さな十字形'},
@@ -2970,9 +2985,9 @@ export const util = { //this.loadImage();
       {ko:'작은 사각형 형태',en:'Small rectangle shape',jp:'小さな四角形'},
       {ko:'자신',en:'Self',jp:'自己'},
       {ko:'원 형태',en:'Circle shape',jp:'円形'},
-      {ko:'랜덤 5마리',en:'5 Random',jp:'ランダム5匹'},
-      {ko:'랜덤 10마리',en:'10 Random',jp:'ランダム10匹'},
-      {ko:'랜덤 15마리',en:'15 Random',jp:'ランダム15匹'},
+      {ko:'랜덤 5',en:'5 Random',jp:'ランダム5'},
+      {ko:'랜덤 10',en:'10 Random',jp:'ランダム10'},
+      {ko:'랜덤 15',en:'15 Random',jp:'ランダム15'},
       {ko:'작은 마름모 형태',en:'Small rhombus shape',jp:'小さな菱形の形'},
       {ko:'큰 마름모 형태',en:'Large rhombus shape',jp:'大きな菱形の形'},
       {ko:'큰 링',en:'Large ring',jp:'大きなリング'},//30
@@ -2983,9 +2998,63 @@ export const util = { //this.loadImage();
       {ko:'작은 x 형태',en:'Small X shape',jp:'小さいxの形'},
       {ko:'큰 x 형태',en:'Large X shape',jp:'大きいxの形'},
       {ko:'⏉ 형태',en:'⏉ Shape',jp:'形 ⏉形状'},
+      {ko:'랜덤 20',en:'Random 20',jp:'ランダム20'},
+      {ko:'바깥 1줄',en:'1 Outer Row',jp:'外側1行'},
+      {ko:'바깥 2줄',en:'2 Outer Row',jp:'外側2行'},//40
+      {ko:'바깥 3줄',en:'3 Outer Row',jp:'外側3行'},
+      {ko:'선택포함 랜덤 5',en:'Random 5 with selection included',jp:'オプションを含むランダム5'},
+      {ko:'선택포함 랜덤 10',en:'Random 10 with selection included',jp:'オプションを含むランダム10'},
+      {ko:'선택포함 랜덤 15',en:'Random 15 with selection included',jp:'オプションを含むランダム15'},
+      {ko:'선택포함 랜덤 20',en:'Random 20 with selection included',jp:'オプションを含むランダム20'},
+      {ko:'가로 4',en:'Horizontal 4',jp:'横4'},
+      {ko:'세로 4',en:'Vertical 4',jp:'縦4'},
+      {ko:'가로 3x2',en:'3x2 Wide',jp:'横3x2'},
+      {ko:'세로 2x3',en:'2x3 Vertical',jp:'縦2x3'},
+      {ko:'가로 4x2',en:'4x2 Wide',jp:'横4x2'},//50
+      {ko:'세로 2x4',en:'2x4 Vertical',jp:'縦2x4'},
+      {ko:'선택포함 랜덤 3',en:'Random 3 with selection included',jp:'オプションを含むランダム3'},
+      {ko:'선택포함 랜덤 7',en:'Random 7 with selection included',jp:'オプションを含むランダム7'},
+      {ko:'작은 └┐형태',en:'Small └┐ Shape',jp:'小さな└┐型'},
+      {ko:'작은 ┌┘형태',en:'Small ┌┘ Shape',jp:'小さな┌┘型'},
+      {ko:'정사각형 16',en:'Square 16',jp:'正方形16'},
+      {ko:'마름모 라인 4',en:'Rhombus line 4',jp:'菱形ライン4'},
+      {ko:'마름모 라인 8',en:'Rhombus line 8',jp:'菱形ライン8'},
+      {ko:'사각형 라인 12',en:'Square line 12',jp:'長方形の線12'},
+      {ko:'원형 라인 12',en:'Circular line 12',jp:'円形ライン12'},//60
+      {},{},{},{},{},{},{},{},{},{},
+      {},{},{},{},{},{},{},{},{},{},
+      {},{},{},{},{},{},{},{},{},{},
+      {},{},{},{},{},{},{},{},{},
+      {ko:'고양이들',en:'Cats',jp:'猫'},//100
+      {ko:'사자들',en:'Lions',jp:'ライオン'},
+      {ko:'호랑이들',en:'Tigers',jp:'虎'},
+      {ko:'개들',en:'Dogs',jp:'犬'},
+      {ko:'늑대들',en:'Wolves',jp:'オオカミ'},
+      {ko:'물개들',en:'Seals',jp:'シール'},
+      {ko:'너구리들',en:'Raccoons',jp:'アライグマ'},
+      {ko:'쥐들',en:'Rats',jp:'ラット'},
+      {ko:'토끼들',en:'Rabbits',jp:'うさぎ'},
+      {ko:'고릴라들',en:'Gorillas',jp:'ゴリラ'},//110
+      {ko:'캥거루들',en:'Kangaroos',jp:'カンガルー'},
+      {ko:'소들',en:'Cows',jp:'牛'},
+      {ko:'곰들',en:'Bears',jp:'クマ'},
+      {ko:'말들',en:'Horses',jp:'馬'},
+      {ko:'사슴들',en:'Deers',jp:'鹿'},
+      {ko:'코뿔소들',en:'Rhinos',jp:'サイ'},
+      {ko:'코끼리들',en:'Elephants',jp:'象'},
+      {ko:'기린들',en:'Giraffes',jp:'キリン'},
+      {ko:'새들',en:'Birds',jp:'鳥'},
+      {ko:'독수리들',en:'Eagles',jp:'イーグル'},//독수리
+      {ko:'도마뱀들',en:'Lizards',jp:'トカゲ'},
+      {ko:'거북이들',en:'Turtles',jp:'カメ'},
+      {ko:'개구리들',en:'Frogs',jp:'カエル'},
+      {ko:'돼지들',en:'Pigs',jp:'豚'},
+      {ko:'양들',en:'Sheep',jp:'羊'},
+      {ko:'하마들',en:'Hippos',jp:'カバ'},
+      {ko:'악어들',en:'Alligators',jp:'ワニ'},
     ];
     const areaText = areaIdx !== 23 ? `<span co${scope}>${teamArr[scope][lang]}</span> ${areaArr[areaIdx][lang]}` : areaArr[areaIdx][lang];
-    return cate === 2 ? `<u>${inBattle[lang]}</u> ${areaText}` : areaText;
+    return (cate === 2 || cate === 30) ? `<u>${inBattle[lang]}</u> ${areaText}` : areaText;
   },
   getSkillAtkEffLang: ({eff, type, lang}) => {
     const isAttack = {ko:'공격시',en:'On attack',jp:'攻撃時'}
@@ -3000,11 +3069,11 @@ export const util = { //this.loadImage();
       {ko:'감소',en:'reduction',jp:'減少',tag:'down'},
     ];
     const upDown = eff.indexOf('-') >= 0 ? 1 : 0;
-    return `<br/>(${isAttack[lang]} ${effType[type][lang]} <b buff>${eff}</b> <i icon ${updownText[upDown].tag}></i>)`;//${updownText[upDown][lang]}
+    return `(${isAttack[lang]} ${effType[type][lang]} <b buff>${eff}</b> <i icon ${updownText[upDown].tag}></i>)`;//${updownText[upDown][lang]}
   },
-  getSkillDmgLang: ({eff, lang}) => {
-    const dmg = {ko:'데미지',en:'damage',jp:'ダメージ'};
-    return `<br/><b dmg>${eff}</b> ${dmg[lang]}`;
+  getSkillDmgLang: ({eff, cate, lang}) => {
+    const dmg = {ko:'효과로',en:'with effect',jp:'効果で'};
+    return `<b dmg>${eff}</b> ${dmg[lang]}`;
   },
   getSkillBuffLang: ({buff, type, lang}) => {
     const updownText = [
@@ -3023,15 +3092,21 @@ export const util = { //this.loadImage();
       {ko:'천둥치는날의 낮',en:'Thunderstorm Day',jp:'雷雨の日の昼間'},
       {ko:'눈오는날의 낮',en:'Snowy Day',jp:'雪の日の昼間'},
     ]
-    const windText = [
-      {ko:'',en:'',jp:''},
+    const posistionText = [
+      {},
+      {ko:'비행',en:'Flight',jp:'飛ぶ'},
+      {ko:'잠수',en:'Diving',jp:'ダイビング'},
+      {ko:'위장',en:'Camouflage',jp:'偽装'},
     ];
+    // const windText = [
+    //   {ko:'',en:'',jp:''},
+    // ];
     const changeText = {ko:'으로 변경',en:'Change to',jp:'に変更'}
-    const upDown = buff.indexOf('-') >= 0 ? 1 : 0;
+    const upDown = typeof buff === "number" ? "" : `<i icon ${updownText[buff?.indexOf('-') >= 0 ? 1 : 0].tag}>`;
     return buff 
       ? type !== 110 
-        ? `<br/>${util.getEffectType(type,lang)} <b buff>${buff}</b> <i icon ${updownText[upDown].tag}></i>`
-        : `<br/>${util.getEffectType(type,lang)} <b buff>${lang === 'en' ? changeText[lang] + ' ' + weatherText[buff][lang] : weatherText[buff][lang] + ' ' + changeText[lang]}</b>`
+        ? `${util.getEffectType(type,lang)} <b buff>${type === 47 ? posistionText[buff][lang] : buff}</b> ${upDown}</i>`
+        : `${util.getEffectType(type,lang)} <b buff>${lang === 'en' ? changeText[lang] + ' ' + weatherText[buff][lang] : weatherText[buff][lang] + ' ' + changeText[lang]}</b>`
       : util.getEffectType(type,lang);//${updownText[upDown][lang]}
   },
   getSkillConditionBuffLang: ({condition, lang}) => {
@@ -3042,13 +3117,13 @@ export const util = { //this.loadImage();
     return `<span ${conditionType[condition].tag}>${conditionType[condition][lang]}</span>`;
   },
   getSkillBuffCountLang: ({buffCount, lang}) => {
-    const turnText = {ko:'턴',en:'turn',jp:'ターン'},
+    const turnText = {ko:'턴 동안',en:'during the turn',jp:'ターン中'},
       immediateText = {ko:'즉시',en:'Immediate',jp:'すぐに'};
     return buffCount === 0 ? immediateText[lang] : `${buffCount}${turnText[lang]}`;
   },
   getSkillBuffChanceLang: ({buffChance, lang}) => {
     const chanceText = {ko:'확률',en:'chance',jp:'確率'};
-    return `<br/><span chance>${buffChance}</span> ${chanceText[lang]}`;
+    return `<span chance>${buffChance}</span> ${chanceText[lang]}`;
   },
   getSkillPossibleLang: ({element, lang}) => {
     const possibleElement = [
@@ -3066,7 +3141,7 @@ export const util = { //this.loadImage();
       {ko:'바람속성의 스킬 사용 가능',en:'Ability to use skills with the Wind Element',jp:'風属性のスキル使用可能'},
       {ko:'땅속성의 스킬 사용 가능',en:'Ability to use skills with the Earth Element',jp:'地属性のスキル使用可能'},
     ]
-    return `${possibleElement[element][lang]}<br/>`;
+    return `${possibleElement[element][lang]}`;
   },
   getSkillJobLang: ({jobIdx, lang}) => {
     const jobText = [
@@ -3078,7 +3153,7 @@ export const util = { //this.loadImage();
       {ko:'식물 재배 가능',en:'Can grow plants',jp:'植物栽培可能'},
       {ko:'아이템 합성 가능',en:'Items can be composited',jp:'アイテム合成可能'},
       {ko:'목걸이, 반지 제작/분해 가능',en:'Can create/disassemble necklaces and rings',jp:'ネックレス、指輪製作/分解可能'},
-      {ko:'동료를 확률 증가',en:'Increases the chance of finding a companion',jp:'仲間を確率アップ'},
+      {ko:'동료를 찾을 확률 증가',en:'Increases the chance of finding a companion',jp:'仲間を確率アップ'},
       {ko:'예술품 제작 가능',en:'Can create art',jp:'アート作品制作可能'},
       {ko:'기습 공격 가능',en:'Surprise attack possible',jp:'奇襲攻撃可能'},
       {ko:'상황 판단능력이 좋음',en:'Good judgment skills',jp:'状況判断能​​力が良い'},
@@ -3123,6 +3198,9 @@ export const util = { //this.loadImage();
           type: data.type,
           lang: lang,
         });
+        if (idx < skill.buff.length - 1) {
+          buffText += ", ";
+        }
       });
       replaceText = replaceText.replace('<buff>', buffText);
     }
@@ -3169,12 +3247,14 @@ export const util = { //this.loadImage();
     //     }));
     //   }
     // });
-    replaceText = replaceText.replace('<area>', util.getSkillAreaLang({//이펙트 범위
-      scope:skill.ta_,
-      areaIdx:skill.ta[lv],
-      cate:skill.cate,
-      lang:lang,
-    }));
+    if (skill.ta[lv]) {
+      replaceText = replaceText.replace('<area>', util.getSkillAreaLang({//이펙트 범위
+        scope:skill.ta_,
+        areaIdx:skill.ta[lv],
+        cate:skill.cate,
+        lang:lang,
+      }));
+    }
     if (skill.multiplesAttack?.length > 0) {//배수 공격
       let multiplesText = '';
       skill.multiplesAttack.forEach((data, idx) => {
@@ -3324,6 +3404,8 @@ export const util = { //this.loadImage();
         return 47;
       case 'element3':
         return 49;
+      case 'state':
+        return 51;
       default:
         return 0;
     }
@@ -3729,8 +3811,8 @@ export const util = { //this.loadImage();
           kg: kg,
           exp: 0,
           hasExp: 0,
-          battleBeige:[0,0,0,0],
-          animalBeige:0,//총 보유 동물뱃지
+          battleBadge:[0,0,0,0],
+          animalBadge:0,//총 보유 동물뱃지
           grade: cardG,
           gradeMax: maxG,
           gradeUp: 0,
@@ -3752,38 +3834,39 @@ export const util = { //this.loadImage();
   },
   makeSkillTree: (gameData, chIdx, jobIdx) => {
     const element = gameData.ch[chIdx].element[0],
-      job = gameData.job[jobIdx],
-      animalType = gameData.ch[chIdx].animal_type;
-    if (job.skill.type === "random") {
-      const skillLv = [45, 30, 15, 10],
-        randomNum = util.fnPercent(skillLv),
-        skillLvGroup = job.skill[`lv${skillLv[randomNum]}`];
-      const skillNum = Math.floor(Math.random() * skillLvGroup.length);
-      console.log(skillLvGroup[skillNum]);
-    }
-    let skillPos = [];
+      cloneJob = {...gameData.job[jobIdx]},
+      cloneAnimalType = {...gameData.animal_type[gameData.ch[chIdx].animal_type]};
+    // if (job.skill.type === "random") {
+    //   const skillLv = [45, 30, 15, 10],
+    //     randomNum = util.fnPercent(skillLv),
+    //     skillLvGroup = job.skill[`lv${randomNum}`];
+    //   const skillNum = Math.floor(Math.random() * skillLvGroup.length);
+    // }
     const limitLvArr = Array.from({length: 4}, (v, idx) => idx * (Math.floor(Math.random() * 10 - 5) + 15));
-    const emptySkillArr = Array.from({length: 4}, () => ([])).map((v, skillY) => (Array.from({length: 4}, (sk, skillX) => {
-      const hasSkill = Math.random() < (0.6 - 0.1 * skillY);
-      if (hasSkill) {
-        skillPos.push([skillY, skillX]);
-      }
-      return hasSkill ? {
-        idx: 0,
-        lv: 1,
-        required: skillY === 0 ? 0 : Math.round(Math.random()),
-        lvLimit: limitLvArr[skillY],
-      } : {idx: ""}
-    })));
-    skillPos.forEach((skillPos) => {
-      emptySkillArr[skillPos[0]][skillPos[1]].idx = 2;
+    const emptySkillArr = Array.from({length: 4}, () => ([])).map((v, skLineIdx) => {
+      return Array.from({length: 4}, (sk, skIdx) => {
+        let skill = {}
+        if (skIdx < 2) {
+          skill = cloneAnimalType.skill[`lv${skLineIdx}`];
+          //동물 스킬
+        } else {
+          skill = cloneJob.skill[`lv${skLineIdx}`];
+          //직업 스킬
+        }
+        if (skill.length === 0) {
+          return {idx: ""};
+        }
+        const randomSkillCount = Math.floor(Math.random() * skill.length),
+          skillIdx = skill[randomSkillCount];
+        skill.splice(randomSkillCount, 1);
+        const hasSkill = Math.random() < (0.6 - 0.1 * skLineIdx);
+        return hasSkill ? {
+          idx: skillIdx,
+          lv: 0,
+          lvLimit: limitLvArr[skLineIdx],
+        } : {idx: ""}
+      })
     });
-    console.log(emptySkillArr);
-    return [
-      [{idx:15,lv:1},{idx:11,lv:1},{idx:6,lv:0},{idx:12,lv:0}],
-      [{idx:21,lv:1},{idx:10,lv:1},{idx:13,lv:0},{idx:5,lv:0}],
-      [{idx:23,lv:1},{idx:16,lv:1},{idx:14,lv:0},{}],
-      [{},{},{},{}],
-    ];
+    return emptySkillArr;
   }
 }

@@ -217,13 +217,13 @@ const GachaInfo = styled.div`
 	.ch_state{border-image:url(${({ borderImg }) => borderImg}) 5 round;}
 `;
 
-const makeStar = (n) => {//별 처리
-  let tag = [];
-  for(var i =0; i< n; ++i){
-    tag.push(<span key={i}></span>);
-  }
-  return tag
-}
+// const makeStar = (n) => {//별 처리
+//   let tag = [];
+//   for(var i =0; i< n; ++i){
+//     tag.push(<span key={i}></span>);
+//   }
+//   return tag
+// }
 
 const Gacha = ({
 	saveData,
@@ -408,12 +408,12 @@ const Gacha = ({
 			{title: '매력', color: '#ce20c2', percent: 100,},
 		];
 		const ctxWidth = can.getBoundingClientRect().width,
-			ctxCenter = ctxWidth*.5,
-			barMaxSize = ctxWidth*.75,
 			ctx = can.getContext('2d');
-		let arc_c = 0,
-			arr = [{},{},{},{},{},{},{}],
-			st = [];
+		//ctxCenter = ctxWidth*.5,
+		//barMaxSize = ctxWidth*.75,
+		// let arc_c = 0,
+		// 	arr = [{},{},{},{},{},{},{}],
+		// 	st = [];
 		can.setAttribute('width', ctxWidth+'px');
 		can.setAttribute('height', ctxWidth+'px');
 		for(let i = 0; i < 7; ++i){

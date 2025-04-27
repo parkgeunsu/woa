@@ -14,6 +14,18 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled.div`
+	display: flex;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	flex-direction: column;
+	padding: 0 0 20px 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	overflow: hidden;
 `;
 
 const combineList = [
@@ -128,7 +140,7 @@ const Composite = ({
 	}, [saveData]);
   return (
 		<>
-			<Wrap className="wrap">
+			<Wrap>
 				<div className="combineItem_top">
 					<div className="action_select has_button">
 						{Object.keys(actionCh).length !== 0 && (<div ref={actionRef} className={`ch_select_area ${actionCh.idx ? 'g' + saveData.ch[actionCh.idx].grade : ''}`} onClick={() => {

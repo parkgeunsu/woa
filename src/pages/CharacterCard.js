@@ -9,13 +9,6 @@ const CardContainer = styled.div`
   width: ${({size}) => size}px;
   height: ${({sizeH}) => sizeH}px;
 `;
-const Img = styled.img.attrs(
-  ({imgurl}) => ({
-    src: imgurl 
-  })
-)`
-  width: 100%;
-`;
 const ChCard = styled.div`
   position:absolute;
   top:0;
@@ -336,9 +329,9 @@ const ChracterCard = ({
   // const lang = React.useMemo(() => {
   //   return context.setting.lang;
   // }, [context]);
-  const imgSet = React.useMemo(() => {
-    return context.images;
-  }, [context]);
+  // const imgSet = React.useMemo(() => {
+  //   return context.images;
+  // }, [context]);
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);

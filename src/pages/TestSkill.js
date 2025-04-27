@@ -491,16 +491,6 @@ const BattleCh = styled.div`
 		}
 	}
 `;
-const Buff = styled.div`
-	.buff_effect{
-		height:${({frame}) => {
-			return Math.ceil(frame / 5) * 100;
-		}}%;
-		background:url(${({effImg}) => effImg}) no-repeat center center;background-size:100%;z-index:1;
-		animation:frame${({frame}) => frame} ${({gameSpd}) => 1.125 / gameSpd}s steps(1);
-		animation-iteration-count: infinite;
-	}
-`;
 const Passive = styled.div`
 	position: absolute;
 	pointer-events: none;
@@ -671,8 +661,7 @@ const BattleMsg = styled.div`
 `;
 const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, bgm, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, modeRef, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, atkOption, customSkill}) => {
 	const endGameCheck = () => {//게임 종료 체크
-		const chLength = [battleAlly.length, battleEnemy.length],
-			allyEnemyDie = [0,0];
+		const allyEnemyDie = [0,0];
 		battleAlly.forEach((ally) => {
 			if (ally.state === 'die') {
 				allyEnemyDie[0] ++;
@@ -687,7 +676,6 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 	if (turnIdx <= timeLine.length - 1) {
 		const skillIdx = customSkill ? 0 : timeLine[turnIdx].order.skIdx;
 		const skill = customSkill ? customSkill : gameData.skill[skillIdx];
-		let isCounterAtk = false; //카운터 어택인지
 		let skillCate = skill.cate;
 		let atkC = [0, false], //공격 횟수
 			atkS = atkOption?.atkStay || 0; //한캐릭이 공격한 횟수 체크
@@ -1383,31 +1371,17 @@ const actionAnimation = ({setTurnIdx, setShowSkillMsg, skillEffect, turnIdx, tim
 						defendSkillEnemy.forEach((defEnemy_, idx) => {
 							const chkIdx = defEnemy_.idx;
 							if (chkIdx === 2) { //방어
-								sk = defEnemy.hasSkill.filter((skData) => {
-									if (skData.idx === 2) {
-										return skData;
-									};
-								});
+								sk = defEnemy.hasSkill.filter((skData) => skData.idx === 2);
 							} else if (chkIdx === 13) { //철벽방어
-								sk = defEnemy.hasSkill.filter((skData) => {
-									if (skData.idx === 13) {
-										return skData;
-									};
-								});	
+								sk = defEnemy.hasSkill.filter((skData) => skData.idx === 13);	
 							} else if (chkIdx === 14) { //마법방어
-								sk = defEnemy.hasSkill.filter((skData) => {
-									if (skData.idx === 14) {
-										return skData;
-									};
-								});	
+								sk = defEnemy.hasSkill.filter((skData) => skData.idx === 14);	
 							} else if (chkIdx === 15) { //나무뒤에 숨기
-								sk = defEnemy.hasSkill.filter((skData) => {
-									if (skData.idx === 15) {
-										return skData;
-									};
-								});	
+								sk = defEnemy.hasSkill.filter((skData) => skData.idx === 15);	
 							}
 						});
+
+
 						if (Object.keys(sk).length !== 0) {
 							gameData.skill[sk[0].idx].eff.forEach((skData) => {
 								const stateName = util.getStateName(skData.type);

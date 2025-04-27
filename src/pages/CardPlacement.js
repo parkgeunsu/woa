@@ -66,27 +66,6 @@ const LineupSaveLiText = styled(Text)`
 	align-items: center;
 	justify-content: center;
 `;
-const SubmitBtn = styled.button`
-	position: relative;
-	margin: 0 0 0 5px;
-	padding-top: 45px;
-	width: 45px;
-	height: 0;
-	background: #00f;
-	color: #fff;
-	font-weight: 600;
-	font-size: 0.75rem;
-`;
-const SubmitBtnText = styled(Text)`
-	display: flex;
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	align-items: center;
-	justify-content: center;
-`;
 const LineupMiddle = styled.div`
 	display: flex;
 	margin: 10px 0;
@@ -217,7 +196,6 @@ const LineupChAddTxt = styled(Text)`
 				return `
 					font-size: 0;
 				`;
-				break;
 		}
 	}}
 `;
@@ -308,7 +286,7 @@ const CardPlacement = ({
 				}
 			}),
 			};
-	}, [saveData, isMoveEvent]);
+	}, [sData.ch, isMoveEvent]);
 	const lineupData = React.useMemo(() => {
 		return isMoveEvent ? sData?.eventLineup : sData?.lineup;
 	}, [sData, isMoveEvent]);

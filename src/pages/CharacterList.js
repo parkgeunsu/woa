@@ -96,7 +96,7 @@ const ChracterList = ({
     if (sData.ch.length === 0) {
       navigate('../');
     }
-  }, [saveData, sData]);
+  }, [saveData, sData, navigate]);
   //const timerRef = useRef(null); //시간계산
   //const [currentTime, setCurrentTime] = useState(1);
   // useEffect(() => {

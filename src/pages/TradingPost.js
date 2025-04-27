@@ -16,6 +16,18 @@ const Img = styled.img.attrs(
   })
 )``;
 const Wrap = styled.div`
+	display: flex;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	flex-direction: column;
+	padding: 0 0 20px 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	overflow: hidden;
 `;
 const MenuButton = styled.button``;
 const ShopIcon = styled.span`
@@ -110,7 +122,7 @@ const TradingPost = ({
 	}, [saveData]);
   return (
 		<>
-			<Wrap className="wrap">
+			<Wrap>
 				<div className="shop_top trading">
 					<div className="shop_top_left">
 						<TabMenu direction="vertical" list={tradingList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" />

@@ -68,42 +68,42 @@ export const skill = [
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:23,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:[0,0,0,0,0]},
+		buff:[{type:17,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:[0,0,0,0,0]},
 	{idx:10,
 		na:{ko:'어둠의 정령',en:'Spirit of Dark',jp:'暗の精霊'},element_type:8,cate:2,
 		txt:'<area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:24,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:[0,0,0,0,0]},
+		buff:[{type:18,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:[0,0,0,0,0]},
 	{idx:11,
 		na:{ko:'물의 정령',en:'Spirit of Water',jp:'水の精霊'},element_type:9,cate:2,
 		txt:'<area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:25,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:[0,0,0,0,0]},
+		buff:[{type:19,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:[0,0,0,0,0]},
 	{idx:12,
 		na:{ko:'불의 정령',en:'Spirit of Fire',jp:'火の精霊'},element_type:10,cate:2,
 		txt:'<area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:26,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:[0,0,0,0,0]},
+		buff:[{type:20,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:[0,0,0,0,0]},
 	{idx:13,
 		na:{ko:'바람의 정령',en:'Spirit of Wind',jp:'風の精霊'},element_type:11,cate:2,
 		txt:'<area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:27,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:[0,0,0,0,0]},
+		buff:[{type:21,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:[0,0,0,0,0]},
 	{idx:14,
 		na:{ko:'땅의 정령',en:'Spirit of Earth',jp:'地の精霊'},element_type:12,cate:2,
 		txt:'<area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:28,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:[0,0,0,0,0]},
+		buff:[{type:22,num:['10%','20%','30%','40%','50%']}],atkCount:[0],sp:[0,0,0,0,0]},
 	{idx:15,
 		na:{ko:'언변',en:'Speech',jp:'言論'},element_type:0,cate:11,
 		txt:'<job>',
@@ -965,7 +965,7 @@ export const skill = [
 		attackEff:[],multiplesAttack:[],
 		eff:[{type:3,num:['200%','210%','220%','230%','240%']}],buff:[{type:54,num:[]}],buffCount:[2,2,2,3,3],buffChance:['30%','35%','40%','45%','50%'],atkCount:[1],sp:[18,19,20,21,21]},
 	{idx:296,
-		na:{ko:'쥐구멍숨기',en:'Hide in a rat hole',jp:'ネズミの穴に隠れる'},element_type:0,cate:5,
+		na:{ko:'쥐구멍 숨기',en:'Hide in a rat hole',jp:'ネズミの穴に隠れる'},element_type:0,cate:5,
 		txt:'<area>, <turn> <buff>',
 		skillClass:1,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'buff5',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,2.5],effRotate:0,effFilter:'',
@@ -1363,7 +1363,6 @@ export const skill = [
 		ta_:1,ta:[22,22,21,21,20],effAnimation:'earth4',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'hue-rotate(290deg) brightness(0.5)',
 		attackEff:[],multiplesAttack:[],
 		eff:[{type:5,num:['90%','120%','90%','120%','130%']}],atkCount:[1],sp:[10,13,11,14,14]},
-	
 	];
 
 // [cate] (스킬종류)
@@ -1382,6 +1381,7 @@ export const skill = [
 // active13(아군), (턴제로 힐 실행)
 // active14(적군, 아군) 적군공격 아군힐 (턴제로 실행)
 // active15(팀킬) (턴제로 실행)
+// relation30(인연시스템)
 
 // condition 1밤(날씨), 2낮(날씨), 3눈(날씨), 4비(날씨), 5해(날씨), 10평원(지형), 11숲(지형), 12물(지형), 21풀피(스텟), 22피20%이하(스텟)
 

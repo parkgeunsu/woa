@@ -158,16 +158,16 @@ ChPic.defaultProps = {
   type: '',
 }
 
-const MarkWrap = styled.span`
+const MarkWrap = styled.div`
   display: inline-block;
   position: relative;
   margin: 0 5px 0 0;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   box-sizing: border-box;
   border: 2px solid #895910;
   background-color: #ffc719;
-  border-radius: 25px;
+  border-radius: 20px;
   text-align: center;
   box-shadow: 0px 4px 10px #000;
   z-index: 1;
@@ -180,53 +180,13 @@ const MarkWrap = styled.span`
   &:nth-of-type(4) {
     transform: translate(-60px,0);
   }
-  span {
-    ${({pic, size, idx}) => {
-      return `
-        background: url(${pic}) no-repeat -${(idx % 10) * size}px -${Math.floor(idx / 10) * size}px;
-        background-size: ${size * 10}px;
-      `;
-    }}
-  }
-`;
-const MarkImg = styled.span`
-  display: inline-block;
-  position: absolute;
-  width: 80%;
-  height: 80%;
-  ${({type}) => {
-    switch(type) {
-      case 'front':
-        return `
-          left: 10%;
-          top: 10%;
-          z-index: 2;
-          filter: brightness(0.7);
-        `;
-      case 'light':
-        return `
-          left: 7%;
-          top: 7%;
-          z-index: 1;
-        `;
-      case 'shadow':
-        return `
-          left: 13%;
-          top: 13%;
-          z-index: 1;
-          filter: invert(1);
-        `;
-      default:
-        break;
-    }
-  }}
 `;
 const MarkPic = ({
   length,
   pic,
   idx,
 }) => {
-  const context = useContext(AppContext);
+  // const context = useContext(AppContext);
   const [size, setSize] = useState(0);
   const picSize = useCallback((node) => {
     if (node !== null) {

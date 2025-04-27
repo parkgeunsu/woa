@@ -175,7 +175,7 @@ const MoveRegion = ({
         return data.name[lang];
       })
     );
-  }, []);
+  }, [lang, gameData.country]);
   return (
     <Wrap direction="column">
       <MapArea frame={imgSet.etc.frameChBack}>

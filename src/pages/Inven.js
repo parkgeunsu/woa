@@ -8,6 +8,18 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const InvenWrap = styled.div`
+	display: flex;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	flex-direction: column;
+	padding: 0 0 20px 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	overflow: hidden;
 `;
 const InvenTop = styled.div`
 	display: flex;
@@ -141,7 +153,7 @@ const Inven = ({
 	}, [saveData]);
   return (
 		<>
-			<InvenWrap className="wrap">
+			<InvenWrap>
 				<InvenTop>
 					<InvenTopLeft>
 						<TabMenu direction="vertical" list={invenList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" />

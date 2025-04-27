@@ -1,4 +1,5 @@
 import { AppContext } from 'App';
+import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import { IconPic } from 'components/ImagePic';
 import InfoGroup from 'components/InfoGroup';
@@ -26,7 +27,7 @@ const Wrap = styled(FlexBox)`
 const Skill = styled.div`
   position: relative;
   margin: 0 10px 5px;
-  padding: 0 0 5px 0;
+  padding: 5px 10px;
   font-size: 0.75rem;
   border: 3px double rgba(255,255,255,.5);
   border-radius: 5px;
@@ -35,29 +36,6 @@ const Skill = styled.div`
     border-color: var(--color-magic);
     opacity: 1;
   ` : ''}
-  .txt{
-    flex:1;
-    min-height: 30px;
-    line-height: 1.4;
-    font-size: 0.75rem;
-    text-align: center;
-    span[co0]{
-      color: var(--color-green);
-    }
-    span[co1]{
-      color: var(--color-purple);
-    }
-    span[co2]{
-      color: var(--color-magic);
-    }
-    > * {
-      line-height: 1;
-      vertical-align: middle;
-    }
-    span[chance]{
-      color: var(--color-yellow);
-    }
-  }
   .lv{margin:0 10px 0 0;}
   &:after {
     content: '';
@@ -115,17 +93,27 @@ const Skill = styled.div`
     }
   }}
 `;
-const SkillInfo = styled.div`
-  display: flex;
-  padding: 5px 10px 0;
+const SkillInfo = styled(FlexBox)``;
+const SkillTxt = styled(FlexBox)`
+  padding: 0 10px;
+  width: calc(200px - 20px);
+  flex-grow: 1;
 `;
-const SkillName = styled.div`
-  display:flex;justify-content:center;align-items:center;margin:2px 5px 5px;width:100%;text-align:center;font-size:0.75rem;color:#fff;font-weight:600;font-size:0.938rem;
+const SkillTitle = styled(FlexBox)`
+  height: auto;
 `;
-const SkillIcon = styled.span`
+const SkillName = styled(Text)`
+`;
+const ActionType = styled.div`
   position: relative;
-  width: 40px;
-  height: 40px;
+  margin: 0 0 0 3px;
+  width: 20px;
+  height: 20px;
+`;
+const SkillIcon = styled.div`
+  position: relative;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
 `;
 const StyledIconPic = styled(IconPic)`
@@ -136,11 +124,28 @@ const StyledIconPic = styled(IconPic)`
   height: 70%;
   z-index: 1;
 `;
-const ActionType = styled.span`
-  position: relative;
-  margin: 0 0 0 3px;
-  width: 20px;
-  height: 20px;
+const SkillEff = styled.div`
+  margin: 3px 0 0 0;
+  width: 100%;
+  text-align: left;
+  line-height: 1.5;
+  span[co0]{
+    color: var(--color-green);
+  }
+  span[co1]{
+    color: var(--color-purple);
+  }
+  span[co2]{
+    color: var(--color-magic);
+  }
+  > * {
+    margin: 0 0 0 5px;
+    line-height: 1;
+    vertical-align: baseline;
+  }
+  span[chance]{
+    color: var(--color-yellow);
+  }
 `;
 const LvBar = styled(FlexBox)`
   height: auto;
@@ -170,9 +175,9 @@ const CharacterSkill = ({
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
-  const imgSet = React.useMemo(() => {
-    return context.images;
-  }, [context]);
+  // const imgSet = React.useMemo(() => {
+  //   return context.images;
+  // }, [context]);
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
@@ -212,28 +217,19 @@ const CharacterSkill = ({
               <Skill key={idx} possible={actionPossibleSkill} skillCate={skillCate}>
                 <SkillInfo>
                   <SkillIcon>
-                    {(skillCate === 2 || skillCate === 11) ? ( //passive, job
-                      <IconPic pic="skill" idx={skData.idx} />
-                    ) : (
-                      <>
-                        <IconPic type="skillBack" pic="icon200" idx="0" />
-                        <StyledIconPic pic="skill" idx={skData.idx} />
-                      </>
-                    )}
+                    <IconPic pic="skill" idx={skData.idx} />
                   </SkillIcon>
-                  {/* 
-                  {cate !== 2 && cate !== 4 && cate !== 11 && (
-                    <SkillIcon skillIcon={imgSet.effect[skData.effAnimation]} skillScene={gameData.effect[skData.effAnimation].imgScene} skillFrame={gameData.effect[skData.effAnimation].frame} />
-                  )} */}
-                  <div style={{padding:"0 0 5px 10px",width:"100%", flex:1}} flex-h-center="true">
-                    <SkillName>
-                      <span className="lv">LV.{skillData.lv}</span>{skData.na[lang]}
+                  <SkillTxt direction="column">
+                    <SkillTitle justifyContent="flex-start">
+                      <SkillName code="t2" color="main" weight="600">
+                        <span className="lv">LV.{skillData.lv}</span>{skData.na[lang]}
+                      </SkillName>
                       {skData.element_type !== 0 && <ActionType>
                         <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={skData.element_type} />
                       </ActionType>}
-                    </SkillName>
-                    <div className="txt" dangerouslySetInnerHTML={{__html: skillText}} />
-                  </div>
+                    </SkillTitle>
+                    <SkillEff className="txt" dangerouslySetInnerHTML={{__html: skillText}} />
+                  </SkillTxt>
                 </SkillInfo>
                 {typeof skData.exp === "number" && (
                   <LvBar>

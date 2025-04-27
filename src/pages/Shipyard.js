@@ -11,6 +11,18 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled.div`
+	display: flex;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	flex-direction: column;
+	padding: 0 0 20px 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	overflow: hidden;
 `;
 const MenuButton = styled.button``;
 const ShipIcon = styled.span`
@@ -233,7 +245,7 @@ const Shipyard = ({
 	}, [cityIdx])
   return (
 		<>
-			<Wrap className="wrap">
+			<Wrap>
 				<TabMenu type="shipyard" list={shipList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" />
 				<div className={`ship_area`}>
 					<div className={`ship_top ${shipList[selectTab].na}`}>

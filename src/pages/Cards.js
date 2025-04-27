@@ -21,7 +21,7 @@ import CharacterRelation from 'pages/CharacterRelation';
 import CharacterSkill from 'pages/CharacterSkill';
 import CharacterState from 'pages/CharacterState';
 
-const CH_MENU_HEIGHT = 50;
+//const CH_MENU_HEIGHT = 50;
 const Img = styled.img.attrs(
   ({imgurl}) => ({
     src: imgurl 
@@ -148,14 +148,17 @@ const StyledIconPic = styled(IconPic)`
     filter: brightness(10);
   `}
 `;
-const InvenBtn = styled(Button)`
+const TopBtnGroup = styled.div`
   position: absolute;
   right: 10px;
   top: 0;
+  z-index: 3;
+`;
+const TopBtn = styled(Button)`
+  position: relative;
   padding: 5px;
   width: 40px;
   height: 40px;
-  z-index: 3;
   background: ${({ theme }) => theme.color.lightL};
 `;
 const ChInven = styled.div`
@@ -308,7 +311,7 @@ const Cards = ({
       });
     }
     setPopupOn(prev => !prev);
-  }, [invenItems, slotIdx]);
+  }, [invenItems, slotIdx, isMoveEvent, gameItem]);
   return (
     <>
       <Wrap className="ch_wrap">
@@ -336,6 +339,10 @@ const Cards = ({
               sData.ch.push(card.chDataArr[0]);
               changeSaveData(sData); //세이브
             }}>영웅 추가</button><br/>
+            <button onClick={() => {
+              sData.ch.splice(sData.ch.length - 1, 1);
+              changeSaveData(sData); //세이브
+            }}>영웅 삭제</button><br/>
             <button onClick={() => {
               const option = {
                 type:'equip',
@@ -366,11 +373,24 @@ const Cards = ({
             {chPage === 5 && <CharacterItems saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
           </ChCard>
           <CharacterPaging chLength={chLength} saveData={sData} changeChSlot={changeChSlot} slotIdx={slotIdx} />
-          <InvenBtn>
-            <IconPic type="quickMenu" pic="icon100" idx={1} onClick={() => {
-              setShowInven(prev => !prev);
-            }} />
-          </InvenBtn>
+          <TopBtnGroup>
+            <FlexBox>
+              <TopBtn>
+                <IconPic type="quickMenu" pic="icon100" idx={1} onClick={() => {
+                  setShowInven(prev => !prev);
+                }} />
+              </TopBtn>
+              <TopBtn>
+                <IconPic type="state" pic="icon100" idx={9} onClick={() => {
+                  setPopupType('applyState');
+                  setPopupOn(true);
+                  setPopupInfo({
+                    chSlotIdx: slotIdx,
+                  });
+                }} />
+              </TopBtn>
+            </FlexBox>
+          </TopBtnGroup>
           {showInven && <ChInven frameBack={imgSet.etc.frameChBack}>
             <CloseBtn onClick={() => {
               setShowInven(false);

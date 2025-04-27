@@ -15,6 +15,18 @@ import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrap = styled.div`
+	display: flex;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	flex-direction: column;
+	padding: 0 0 20px 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	overflow: hidden;	
 `;
 const WrapTop = styled.div`
 	position: relative;
@@ -447,7 +459,7 @@ const EnhancingStickers = ({
 	}, [saveData]);
   return (
 		<>
-			<Wrap className="wrap">
+			<Wrap>
 				<WrapTop>
 					<TabMenu list={itemEnList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" onClick={(idx) => {
 						if (idx === 1) {

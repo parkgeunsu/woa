@@ -1,6 +1,7 @@
 import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { Button } from 'components/Button';
+import { FlexBox } from 'components/Container';
 import { ChPic, IconPic, ItemPic, MarkPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import PopupContainer from 'components/PopupContainer';
@@ -12,10 +13,6 @@ import styled from 'styled-components';
 
 const StyledIconPic = styled(IconPic)`
   position: absolute;
-  left: 15%;
-  top: 15%;
-  width: 70%;
-  height: 70%;
   z-index: 1;
 `;
 const ChUl = styled.ul`
@@ -227,6 +224,54 @@ const PopupItemList = styled.li`
         break;
     }
   }};
+  &.item_eff {
+    padding: 0 10px;
+  }
+  &.item_hole {
+    padding: 0 10px;
+  }
+  &.item_set {
+    margin: 0 0 10px 0;
+    padding: 0 10px;
+  }
+  .item_holes {
+    margin: 0 0 5px 0;
+  }
+  .item_holes img {
+    margin: 2px 0 0 0;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+  }
+  .item_setNa {
+    margin: 0 0 10px 0;
+    color: #0f0;
+    font-size: 0.875rem;
+  }
+  .item_set_piece {
+    margin: 0 0 5px 15px;
+    color: #555;
+  }
+  .item_set_piece:last-of-type {
+    margin: 0 0 0 15px;
+  }
+  .item_holeback {
+    display: inline-block;
+    background-image: radial-gradient(at 50%, #000 30%, #888 100%);
+    border-radius: 20px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+  }
+  .item_set_piece.on {
+    color: #fff;
+    font-weight: 600;
+  }
+`;
+const PopupItemSlot = styled(FlexBox)`
+  .item_holes {
+    margin: 0;
+  }
 `;
 const PopupItemName = styled.span`
   color: ${({ grade }) => grade};
@@ -363,6 +408,44 @@ const PopupItem = styled.div`
     }
   }}
 `;
+const PopupItemEffs = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 0 0 5px 15px;
+  color: #2f73ff;
+  font-weight: 600;
+  &.add {
+    color: #ffac2f;
+  }
+  &.hole {
+    color: #e14040;
+  }
+  span {
+    display: block;
+    font-weight: 600;
+  }
+  .cate {
+    margin: 0 10px 0 0;
+    color: #00a90c;
+  }
+  .base {
+    margin: 0 5px 0 0;
+    color: #2f73ff;
+  }
+  .add {
+    margin: 0 5px 0 0;
+    color: #ffac2f;
+  }
+  .hole {
+    color: #e14040;
+  }
+  .total {
+    flex: 1;
+    text-align: right;
+    font-size: 0.938rem;
+    color: #fff;
+  }
+`;
 const PopupItemPrice = styled.div`
   span{display:inline-block;margin:0 5px 0 0;font-size:0.875rem;color:#c80;}
   em{font-size:0.875rem;color:#fff;vertical-align:middle;}
@@ -385,13 +468,6 @@ const getSetChk = (has_item, n) => {//셋트 아이템 체크
   });
   return chk ? 'on' : '';
 }
-const makeMark = (markNum, img) => {
-  let markTag = '';
-  for (let i = 0; i < markNum; ++i) {
-    markTag += `<span><img src="${img}" class="light"/><img src="${img}" class="front"/><img src="${img}" class="shadow"/></span>`
-  }
-  return markTag;
-}
 const PopupGuide = styled.div`
   margin:auto auto;width:80%;flex-flow:wrap;
   .guide_title{margin:0 0 10px 0;font-size:1.125rem;font-weight:600;text-align:center;}
@@ -401,19 +477,34 @@ const PopupGuide = styled.div`
   .guide_cont li:before{content:"";position:absolute;left:0;top:8px;width:7px;height:2px;background:#fff;}
 `;
 const PopupDescription = styled.div`
-  display:flex;margin:auto auto;width:80%;flex-flow:wrap;
-  .skill_icon:before{content:"";display:block;position:absolute;top:13%;left:13%;width:80%;height:80%;background-repeat:no-repeat;filter:brightness(0);}
-  .skill_icon:after{content:"";display:block;position:absolute;top:10%;left:10%;width:80%;height:80%;background-repeat:no-repeat;}
-  .skill_icon.cate2:before{content:"";display:block;position:absolute;top:13%;left:13%;width:80%;height:80%;background-repeat:no-repeat;background-position:center center;filter:brightness(0);}
-  .skill_icon.cate2:after{content:"";display:block;position:absolute;top:10%;left:10%;width:80%;height:80%;background-repeat:no-repeat;background-position:center center;}
-  .skill_icon.cate4:before{content:"";display:block;position:absolute;top:13%;left:13%;width:80%;height:80%;background-repeat:no-repeat;background-position:center center;filter:brightness(0);}
-  .skill_icon.cate4:after{content:"";display:block;position:absolute;top:10%;left:10%;width:80%;height:80%;background-repeat:no-repeat;background-position:center center;}
-  dl{flex:1;}
-  dt{margin:0 0 10px 0;text-align:center;font-size:0.938rem;font-weight:600;}
-  dd{line-height:1.2;text-align:center;}
-  .skill_eff{margin:10px 0 0 0;width:100%;}
-  .skill_eff_list{margin:0 0 5px 0;font-size:0.875rem;text-align:center;}
-  .skill_eff_list.on{font-size:1rem;font-weight:600;color:#ff2a00;text-shadow:0 0 10px #ff2a00;}
+  display: flex;
+  margin: auto auto;
+  width: 80%;
+  flex-flow: wrap;
+  dl {
+    flex:1;
+  }
+  dt {
+    margin: 0 0 10px 0;
+    text-align: center;
+  }
+  dd {
+    line-height:1.2;
+    text-align:center;
+  }
+  .skill_eff {
+    margin: 10px 0 0 0;
+    width: 100%;
+  }
+`;
+const SkillLimit = styled(Text)`
+  display: inline-block;
+  margin: 0 0 5px 0;
+`;
+const SkillTitle = styled(Text)``;
+const SkillDescription = styled(Text)``;
+const SkillEff = styled(Text)`
+  text-align:center;
 `;
 const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, showPopup, lang, navigate, timeoutRef) => {
   const isMoveEvent = dataObj.isMoveEvent;
@@ -481,11 +572,11 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
           </div>
         </PopupItemList>
-        <PopupItemList className="item_list item_typeSlot" type="animalCoin_slot">
+        <PopupItemList className="item_typeSlot" type="animalCoin_slot">
           <div className="item_type">
             <MarkPic length={saveItems.markNum} pic="icon100" idx={saveItems.mark} />
           </div>
-          <div className="item_slot">
+          <PopupItemSlot>
             {saveItems.hole.map((holeData, idx) => {
               const holePic = holeData !== 0 ? gameData.items.hole[holeData.idx].display : 0;
               return (
@@ -496,77 +587,77 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                 </div>
               )
             })}
-          </div>
+          </PopupItemSlot>
         </PopupItemList>
-        <PopupItemList className="item_list item_eff" type="eff">
+        <PopupItemList className="item_eff" type="eff">
           <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.itemEffect[lang]}</PopupItemTitle>
           {totalEff.map((eff, idx) => {
             if (eff.type === 100) {
               return (
-                <div key={idx} className="item_effs">
+                <PopupItemEffs key={idx}>
                   <span className="cate">{util.getEffectType(eff.type, lang)}</span>
                   {eff.skList.map((sk, skIndex) => {
                     return (
                       <span key={`skIndex${skIndex}`} className="total">{`${gameData.skill[sk.idx].na[lang]} LV.${sk.lv}`}</span>
                     )
                   })}
-                </div>
+                </PopupItemEffs>
               )
             } else {
               return (
-                <div key={idx} className="item_effs">
+                <PopupItemEffs key={idx}>
                   <span className="cate">{util.getEffectType(eff.type, lang)}</span>
                   {eff.base > 0 && <span className="base">{eff.base}</span>}
                   {eff.add > 0 && <span className="add">{eff.add}</span>}
                   {eff.hole > 0 && <span className="hole">{eff.hole}</span>}
                   <span className="total">{eff.base + eff.add + eff.hole}</span>
-                </div>
+                </PopupItemEffs>
               )
             }
           })}
         </PopupItemList>
         <div style={{width:"100%"}} className="scroll-y">
           {saveItems.baseEff.length > 0 && (
-            <PopupItemList className="item_list item_eff" type="eff">
+            <PopupItemList className="item_eff" type="eff">
               <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.basicEffect[lang]}</PopupItemTitle>
               {saveItems.baseEff.map((data, idx) => {
                 const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
                 return (
-                  <div key={idx} className="item_effs">{`${util.getEffectType(data.type, lang)} ${data.num[grade]}`}</div>
+                  <PopupItemEffs key={idx}>{`${util.getEffectType(data.type, lang)} ${data.num[grade]}`}</PopupItemEffs>
                 ) 
               })}
             </PopupItemList>
           )}
           {saveItems.addEff.length > 0 && (
-            <PopupItemList className="item_list item_eff" type="eff">
+            <PopupItemList className="item_eff" type="eff">
               <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.addEffect[lang]}</PopupItemTitle>
               {saveItems.addEff.map((data, idx) => {
                 const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
                 if (data.type === 100) {
                   return (
-                    <div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${gameData.skill[data.skIdx].na[lang]} LV.${data.skLv}`}</div>
+                    <PopupItemEffs key={idx} className="add">{`${util.getEffectType(data.type, lang)} ${gameData.skill[data.skIdx].na[lang]} LV.${data.skLv}`}</PopupItemEffs>
                   )
                 } else {
                   return (
-                    <div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
+                    <PopupItemEffs key={idx} className="add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</PopupItemEffs>
                   )
                 } 
               })}
             </PopupItemList>
           )}
           {saveItems.hole.length > 0 && (
-            <PopupItemList className="item_list item_hole" type="hole">
+            <PopupItemList className="item_hole" type="hole">
               <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.socketEffect[lang]}</PopupItemTitle>
               {totalEff.map((data, idx) => {
                 if (data.hole > 0) {
                   return (
-                    <div key={idx} className="item_effs hole">{`${util.getEffectType(data.type, lang)} ${data.hole}`}</div>
+                    <PopupItemEffs key={idx} className="hole">{`${util.getEffectType(data.type, lang)} ${data.hole}`}</PopupItemEffs>
                   )
                 }
               })}
             </PopupItemList>
           )}
-          <PopupItemList className="item_list item_set" type="set">
+          <PopupItemList className="item_set" type="set">
             <div className="item_setNa">{setsInfo.na}</div>
             {setsInfo.part && setsInfo.part.map((data, idx) => {
               return (
@@ -639,11 +730,11 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
           </div>
         </PopupItemList>
-        <PopupItemList className="item_list item_typeSlot" type="animalCoin_slot">
+        <PopupItemList className="item_typeSlot" type="animalCoin_slot">
           <div className="item_type">
             <MarkPic length={saveItems.markNum} pic="icon100" idx={saveItems.mark} />
           </div>
-          <div className="item_slot">
+          <PopupItemSlot>
             {saveItems.hole.map((holeData, idx) => {
               const holePic = holeData !== 0 ? gameData.items.hole[holeData.idx].display : 0;
               return (
@@ -654,77 +745,77 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                 </div>
               )
             })}
-          </div>
+          </PopupItemSlot>
         </PopupItemList>
-        <PopupItemList className="item_list item_eff" type="eff">
+        <PopupItemList className="item_eff" type="eff">
           <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.itemEffect[lang]}</PopupItemTitle>
           {totalEff.map((eff, idx) => {
             if (eff.type === 100) {
               return (
-                <div key={idx} className="item_effs">
+                <PopupItemEffs key={idx}>
                   <span className="cate">{util.getEffectType(eff.type, lang)}</span>
                   {eff.skList.map((sk, skIndex) => {
                     return (
                       <span key={`skIndex${skIndex}`} className="total">{`${gameData.skill[sk.idx].na[lang]} LV.${sk.lv}`}</span>
                     )
                   })}
-                </div>
+                </PopupItemEffs>
               )
             } else {
               return (
-                <div key={idx} className="item_effs">
+                <PopupItemEffs key={idx}>
                   <span className="cate">{util.getEffectType(eff.type, lang)}</span>
                   {eff.base > 0 && <span className="base">{eff.base}</span>}
                   {eff.add > 0 && <span className="add">{eff.add}</span>}
                   {eff.hole > 0 && <span className="hole">{eff.hole}</span>}
                   <span className="total">{sealed ? eff.base : eff.base + eff.add + eff.hole}</span>
-                </div>
+                </PopupItemEffs>
               )
             }
           })}
         </PopupItemList>
         <div style={{width:"100%"}} className="scroll-y">
           {!sealed && (
-            <PopupItemList className="item_list item_eff" type="eff">
+            <PopupItemList className="item_eff" type="eff">
               <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.basicEffect[lang]}</PopupItemTitle>
               {saveItems.baseEff && saveItems.baseEff.map((data, idx) => {
                 const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
                 return (
-                  <div key={idx} className="item_effs">{`${util.getEffectType(data.type, lang)} ${data.num[grade]}`}</div>
+                  <PopupItemEffs key={idx}>{`${util.getEffectType(data.type, lang)} ${data.num[grade]}`}</PopupItemEffs>
                 ) 
               })}
             </PopupItemList>
           )}
           {saveItems.addEff.length > 0 && (
-            <PopupItemList className="item_list item_eff" type="eff">
+            <PopupItemList className="item_eff" type="eff">
               <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.addEffect[lang]}</PopupItemTitle>
               {saveItems.addEff.map((data, idx) => {
                 const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
                 if (data.type === 100) {
 										return (
-											<div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${gameData.skill[data.skIdx].na[lang]} LV.${data.skLv}`}</div>
+											<PopupItemEffs key={idx} className="add">{`${util.getEffectType(data.type, lang)} ${gameData.skill[data.skIdx].na[lang]} LV.${data.skLv}`}</PopupItemEffs>
 										)
                 } else {
                   return (
-                    <div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
+                    <PopupItemEffs key={idx} className="add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</PopupItemEffs>
                   )
                 }
               })}
             </PopupItemList>
           )}
           {saveItems.hole.length > 0 && (
-            <PopupItemList className="item_list item_hole" type="hole">
+            <PopupItemList className="item_hole" type="hole">
               <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.socketEffect[lang]}</PopupItemTitle>
               {totalEff.map((data, idx) => {
                 if (data.hole > 0) {
                   return (
-                    <div key={idx} className="item_effs hole">{`${util.getEffectType(data.type, lang)} ${data.hole}`}</div>
+                    <PopupItemEffs key={idx} className="hole">{`${util.getEffectType(data.type, lang)} ${data.hole}`}</PopupItemEffs>
                   )
                 }
               })}
             </PopupItemList>
           )}
-          <PopupItemList className="item_list item_set" type="set">
+          <PopupItemList className="item_set" type="set">
             <div className="item_setNa">{setsInfo.na}</div>
             {setsInfo.part && setsInfo.part.map((data, idx) => {
               return (
@@ -928,20 +1019,20 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
           </div>
         </PopupItemList>
-        <PopupItemList className="item_list item_eff" type="eff">
+        <PopupItemList className="item_eff" type="eff">
           <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.basicEffect[lang]}</PopupItemTitle>
           {saveItems.baseEff && saveItems.baseEff.map((data, idx) => {
             return (
-              <div key={idx} className="item_effs">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
+              <PopupItemEffs key={idx}>{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</PopupItemEffs>
             ) 
           })}
         </PopupItemList>
         {saveItems.addEff?.length > 0 && (
-          <PopupItemList className="item_list item_eff" type="eff">
+          <PopupItemList className="item_eff" type="eff">
             <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.addEffect[lang]}</PopupItemTitle>
             {saveItems.addEff.map((data, idx) => {
               return (
-                <div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
+                <PopupItemEffs key={idx} className="add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</PopupItemEffs>
               ) 
             })}
           </PopupItemList>
@@ -1267,8 +1358,12 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     );
   } else if (type === 'skillDescription') {
     const skData = dataObj.sk,
-      skillLv = dataObj.skData.lv - 1;;
-      const {skillText, skillType, skillCate} = util.getSkillText({
+      skillLv = dataObj.skData.lv,
+      skillLimit = dataObj.skData.lvLimit,
+      chLv = dataObj.chLv,
+      requiredSkillName = dataObj.requiredSkill ? dataObj.requiredSkill.na[lang] : "",
+      activeRequired = dataObj.activeRequired;
+    const {skillText, skillType, skillCate} = util.getSkillText({
       skill: skData,
       lv: skillLv,
       lang: lang,
@@ -1276,60 +1371,147 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     return (
       <PopupDescription>
         <SkillImg className="skill_icon">
-          {(skillCate === 2 || skillCate === 11) ? ( //passive, job
-            <IconPic pic="skill" idx={skData.idx} />
-          ) : (
-            <>
-              <IconPic type="skillBack" pic="icon200" idx={util.idxToSkillBack(skillCate)} />
-              <StyledIconPic pic="skill" idx={skData.idx} />
-            </>
-          )}
+          <StyledIconPic pic="skill" idx={skData.idx} />
         </SkillImg>
         <div style={{flex:1}} flex-v="true">
           <dl>
-            <dt>{`${dataObj.skData.lv > 0 ? 'Lv.' + dataObj.skData.lv : '(' + gameData.msg.info.unlearned[lang]+')'} ${dataObj.sk.na[lang]}`}</dt>
-            <dd dangerouslySetInnerHTML={{__html: skillText}}></dd>
+            <dt>
+              {(skillLv <= 0 && activeRequired && chLv >= skillLimit) && <SkillLimit code="t2" color="grey">
+                {gameData.msg.sentence.learnSkillPossible[lang]}
+              </SkillLimit>}
+              {(skillLv <= 0 && !activeRequired && !requiredSkillName && chLv >= skillLimit) && 
+                <>
+                  <SkillLimit code="t2" color="grey">
+                    {gameData.msg.sentence.learnSkillPossible[lang]}
+                  </SkillLimit>
+                </>
+              }
+              {(skillLv <= 0 && !activeRequired && requiredSkillName && chLv >= skillLimit) && 
+                <>
+                  <SkillLimit code="t2" color="red">
+                    {gameData.msg.sentenceFn.limitRequiredSkill(lang, requiredSkillName)}
+                  </SkillLimit>
+                  <SkillLimit code="t2" color="grey">
+                    {gameData.msg.sentenceFn.limitLvSkill(lang, skillLimit)}
+                  </SkillLimit>
+                </>
+              }
+              {(skillLv <= 0 && !activeRequired && !requiredSkillName && chLv < skillLimit) &&
+                <>
+                  <SkillLimit code="t2" color="red">
+                    {gameData.msg.sentenceFn.limitLvSkill(lang, skillLimit)}
+                  </SkillLimit>
+                </>
+              }
+              {(skillLv <= 0 && !activeRequired && requiredSkillName && chLv < skillLimit) &&
+                <>
+                  <SkillLimit code="t2" color="red">
+                    {gameData.msg.sentenceFn.limitRequiredSkill(lang, requiredSkillName)}
+                  </SkillLimit>
+                  <SkillLimit code="t2" color="red">
+                    {gameData.msg.sentenceFn.limitLvSkill(lang, skillLimit)}
+                  </SkillLimit>
+                </>
+              }
+              {(skillLv <= 0 && activeRequired && chLv < skillLimit) &&
+                <>
+                  <SkillLimit code="t2" color="grey">
+                    {gameData.msg.sentenceFn.limitRequiredSkill(lang, requiredSkillName)}
+                  </SkillLimit>
+                  <SkillLimit code="t2" color="red">
+                    {gameData.msg.sentenceFn.limitLvSkill(lang, skillLimit)}
+                  </SkillLimit>
+                </>
+              }
+              <SkillTitle code="t3" color="main" weight="600">
+                {`${skillLv > 0 ? 'Lv.' + skillLv : '(' + gameData.msg.info.unlearned[lang]+')'} ${dataObj.sk.na[lang]}`}
+              </SkillTitle>
+            </dt>
+            <dd>
+              <SkillDescription dangerouslySetInnerHTML={{__html: skillText}} code="t2" color="main" />
+            </dd>
           </dl>
           <ul className="skill_eff">
-            {(skillCate === 5 || skillCate === 6) && dataObj.sk.buff.map((skillEff) => {
+            {(skillCate === 2 || skillCate === 4 || skillCate === 5 || skillCate === 6 || skillCate === 12) && dataObj.sk.buff.map((skillEff) => {
               return skillEff.num.map((eff, idx) => {
                 return (
-                  <li className={`skill_eff_list ${dataObj.skData.lv === idx + 1 ? 'on' : ''}`} key={idx}>{`Lv.${idx + 1}: ${util.getEffectType(skillEff.type, lang)} ${eff}`}</li>
+                  <li key={idx}>
+                    <SkillEff  {...skillLv === idx + 1 ? {
+                      "code": "t3",
+                      "color": "red",
+                      "weight": "600",
+                    } : {
+                      "code": "t2",
+                      "color": "grey",
+                    }}>{`Lv.${idx + 1}: ${util.getEffectType(skillEff.type, lang)} ${eff}`}</SkillEff>
+                  </li>
                 )
               });
             })}
-            {skillCate !== 5 && skillCate !== 6 && skillCate !== 10 && skillCate !== 11 && dataObj.sk.eff[0].num.map((skillEff, skillIdx) => {
+            {skillCate !== 2 && skillCate !== 4 && skillCate !== 5 && skillCate !== 6 && skillCate !== 10 && skillCate !== 11 && skillCate !== 12 && skillCate !== 13 && dataObj.sk.eff[0].num.map((skillEff, skillIdx) => {
               let skill = '';
               return dataObj.sk.eff.map((eff, idx) => {
-                if(idx === 0) {
-                  if (dataObj.sk.eff.length !== 1) {
-                    skill += `Lv.${skillIdx + 1}: ${dataObj.sk.cate !== 3 ? util.getEffectType(eff.type, lang) : ''} ${dataObj.sk.eff[idx].num[skillIdx]}, `;
-                  } else {
-                    skill += `Lv.${skillIdx + 1}: ${dataObj.sk.cate !== 3 ? util.getEffectType(eff.type, lang) : ''} ${dataObj.sk.eff[idx].num[skillIdx]}`;
-                  }
-                } else {
-                  skill += `${dataObj.sk.cate !== 3 ? util.getEffectType(eff.type, lang) : ''} ${dataObj.sk.eff[idx].num[skillIdx]}`;
-                }
+                skill += `Lv.${skillIdx + 1}: ${dataObj.sk.cate !== 3 ? util.getEffectType(eff.type, lang) : ''} ${dataObj.sk.eff[idx].num[skillIdx]}${idx === 0 && dataObj.sk.eff.length !== 1 ? "," : ""} `;
                 if(idx === dataObj.sk.eff.length - 1) {
-                  if (dataObj.skData.lv === skillIdx + 1) {
-                    return <li className="skill_eff_list on" key={idx}>{skill}</li>
-                  } else {
-                    return <li className="skill_eff_list" key={idx}>{skill}</li>
-                  }
+                  return <li key={idx}>
+                    <SkillEff {...skillLv === skillIdx + 1 ? {
+                      "code": "t3",
+                      "color": "red",
+                      "weight": "600",
+                    } : {
+                      "code": "t2",
+                      "color": "grey",
+                    }}>{skill}
+                    </SkillEff>
+                  </li>
+                }
+              })
+            })}
+            {skillCate === 13 && dataObj.sk.eff[0].num.map((skillEff, skillIdx) => {
+              let skill = '';
+              return dataObj.sk.eff.map((eff, idx) => {
+                skill += `Lv.${skillIdx + 1}: ${dataObj.sk.cate !== 3 ? util.getEffectType(eff.type, lang) : ''} ${dataObj.sk.eff[idx].num[skillIdx]}${idx === 0 && dataObj.sk.eff.length !== 1 ? "," : ""} `;
+                if(idx === dataObj.sk.eff.length - 1) {
+                  return <li key={idx}>
+                    <SkillEff {...skillLv === skillIdx + 1 ? {
+                      "code": "t3",
+                      "color": "red",
+                      "weight": "600",
+                    } : {
+                      "code": "t2",
+                      "color": "grey",
+                    }}>{skill}
+                    </SkillEff>
+                  </li>
                 }
               })
             })}
             {skillCate === 10 && dataObj.sk.buff.map((skillEff) => {
               return skillEff.num.map((eff, idx) => {
                 return (
-                  <li className={`skill_eff_list ${dataObj.skData.lv === idx + 1 ? 'on' : ''}`} key={idx}>{`Lv.${idx + 1}: ${gameData.msg.info.percent[lang]} ${eff}`}</li>
+                  <li key={idx}>
+                    <SkillEff {...skillLv === idx + 1 ? {
+                      "code": "t3",
+                      "color": "red",
+                      "weight": "600",
+                    } : {
+                      "code": "t2",
+                      "color": "grey",
+                    }}>
+                      {`Lv.${idx + 1}: ${gameData.msg.info.percent[lang]} ${eff}`}
+                    </SkillEff>
+                  </li>
                 )
               });
             })}
             {skillCate === 11 && dataObj.sk.eff.map((skillEff) => {
               return skillEff.num.map((eff, idx) => {
                 return (
-                  <li className={`skill_eff_list ${dataObj.skData.lv === idx + 1 ? 'on' : ''}`} key={idx}>{`Lv.${idx + 1}: ${gameData.msg.state[util.getStateName(skillEff.type)][lang]} ${eff}%`}</li>
+                  <li className={`skill_eff_list ${skillLv === idx + 1 ? 'on' : ''}`} key={idx}>
+                  <SkillEff code="t2" color="grey">
+                    {`Lv.${idx + 1}: ${gameData.msg.state[util.getStateName(skillEff.type)][lang]} ${eff}%`}
+                  </SkillEff>
+                </li>
                 )
               });
             })}
