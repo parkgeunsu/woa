@@ -43,20 +43,6 @@ const ChLi = styled.li`
     margin: 0 0 4px 0;
   }
 `;
-// const timer = (currentTime, setCurrentTime, saveData, changeSaveData) => {
-//   if (currentTime > 49) {
-//     let sData = {...saveData};
-//     sData.ch.forEach((data) => {
-//       data.actionPoint += 1;
-//       data.pointTime -= 50;
-//     })
-//     changeSaveData(sData);
-//     setCurrentTime(1);
-//     localStorage.setItem('closeTime', new Date());
-//   } else {
-//     setCurrentTime(currentTime + 1);
-//   };
-// };
 const ChracterList = ({
   saveData,
   slotIdx,
@@ -80,17 +66,17 @@ const ChracterList = ({
   }, []);
   const chData = React.useMemo(() => {
     const ch = isMoveEvent ? util.loadData("historyParam").moveEvent.ch : sData.ch;
-    const cloneCh = [...sData.ch];
-    return isMoveEvent ? {
-      moveCh: ch.map((ch) => {
-        delete cloneCh[ch.idx];
-        return sData.ch[ch.idx];
-      }),
-      moveNotCh: cloneCh,
-    } : {
+    if (isMoveEvent) {
+      const moveChIdxs = new Set(ch.map(c => c.idx));
+      return {
+        moveCh: ch.map((c) => sData.ch[c.idx]),
+        moveNotCh: sData.ch.filter((_, idx) => !moveChIdxs.has(idx)),
+      };
+    }
+    return {
       moveCh: [],
       moveNotCh: ch,
-     };
+    };
   }, [sData, isMoveEvent]);
   useLayoutEffect(() => {
     if (sData.ch.length === 0) {

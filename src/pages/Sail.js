@@ -54,13 +54,13 @@ const WeatherIcon = styled.div`
 	position:absolute;left:${({idx}) => 50 * idx}px;background-image:url(${({src}) => src});background-size:80%;background-position:center center;background-repeat:no-repeat;width:46px;height:46px;
 `;
 const WeatherWind = styled.div`
-	.weather_arrow{background-image:url(${({src}) => src});background-size:100%;background-repeat:no-repeat;background-position:center center;transform:rotate(${({weatherInfo}) => weatherInfo.wind}deg);
+	.weather_arrow{background-image:url(${({src}) => src});background-size:100%;background-repeat:no-repeat;background-position:center center;transform:rotate(${({weatherInfo}) => weatherInfo?.wind || 0}deg);
 	}
 `;
 const BgEffect = styled.div`
-	.cloud{transition:all ${({gameSpd}) => 2 / gameSpd}s;}
-	.cloud1{top:0;animation:cloudAnimation ${({gameSpd}) => 210 / gameSpd}s linear infinite;background-image:url(${({img1}) => img1});background-size:100%;}
-	.cloud2{top:30%;animation:cloudAnimationReverse ${({gameSpd}) => 130 / gameSpd}s linear infinite;background-image:url(${({img2}) => img2});background-size:100%;opacity:1;}
+	.cloud{transition:all ${({gameSpd}) => (2 / (gameSpd || 1))}s;}
+	.cloud1{top:0;animation:cloudAnimation ${({gameSpd}) => (210 / (gameSpd || 1))}s linear infinite;background-image:url(${({img1}) => img1});background-size:100%;}
+	.cloud2{top:30%;animation:cloudAnimationReverse ${({gameSpd}) => (130 / (gameSpd || 1))}s linear infinite;background-image:url(${({img2}) => img2});background-size:100%;opacity:1;}
 `;
 const BgLight = styled.div`
 	&:after{
@@ -94,13 +94,15 @@ const BgLight = styled.div`
 	}
 `;
 const getWeather = (weather) => {
-	return weather.type.split('w')[1]*2 + (weather.day ? 0 : 1);
+	if (!weather?.type) return 0;
+	return (weather.type.split('w')[1] || 0)*2 + (weather.day ? 0 : 1);
 }
 const changeWeather = (weather) => {
-	let type = weather.type.split('w')[1]*1,
+	if (!weather?.type) return weather;
+	let type = (weather.type.split('w')[1] || 0)*1,
 		type_ = type,
-		wind = weather.wind,
-		delay = weather.delay;
+		wind = weather.wind || 0,
+		delay = weather.delay || 0;
 	const typePercent = Math.random(),
 		windPercent = Math.random();
 	if (typePercent < .1) {
@@ -215,42 +217,54 @@ const Sail = ({
 		}
 		shipSpeed.current = 2;
 		wheelDegree.current += rotateSpeed1.current;
-		wheelContainerRef.current.style.transform = `translate(-50%,-50%) rotate(${wheelDegree.current}deg)`;
+		if (wheelContainerRef.current) {
+			wheelContainerRef.current.style.transform = `translate(-50%,-50%) rotate(${wheelDegree.current}deg)`;
+		}
 
-		//console.log(wheelDegree.current);
 		const x = Math.cos(wheelDegree.current * (Math.PI / 180)) * shipSpeed.current + shipX.current,
 			y = Math.sin(wheelDegree.current * (Math.PI / 180)) * shipSpeed.current + shipY.current;
-		const mapColor = mapCtx.current.getImageData(x, y, 1, 1).data;
-		if (x < 0) { //맵 좌측
-			console.log('left map');
-			shipContainerRef.current.style.left = shipX.current + 'px';
-			shipContainerRef.current.style.top = shipY.current + 'px';
-		} else if (x > mapInfo.current.w) { //맵 우측
-			console.log('right map');
-			shipContainerRef.current.style.left = shipX.current + 'px';
-			shipContainerRef.current.style.top = shipY.current + 'px';
-		} else if (y < 0) { //맵 상단
-			console.log('up map');
-			shipContainerRef.current.style.left = shipX.current + 'px';
-			shipContainerRef.current.style.top = shipY.current + 'px';
-		} else if (y > mapInfo.current.h) { //맵 하단
-			console.log('down map');
-			shipContainerRef.current.style.left = shipX.current + 'px';
-			shipContainerRef.current.style.top = shipY.current + 'px';
-		} else {//맵 안쪽일 경우
-			if (mapColor[0] === 195 && mapColor[1] === 128 && mapColor[2] === 0) {
-				console.log('land');
-				shipContainerRef.current.style.left = shipX.current + 'px';
-				shipContainerRef.current.style.top = shipY.current + 'px';
-			} else {
-				console.log('water');
-				shipContainerRef.current.style.left = x + 'px';
-				shipContainerRef.current.style.top = y + 'px';
+		
+		if (mapCtx.current) {
+			const mapColor = mapCtx.current.getImageData(x, y, 1, 1).data;
+			if (x < 0) { //맵 좌측
+				if (shipContainerRef.current) {
+					shipContainerRef.current.style.left = shipX.current + 'px';
+					shipContainerRef.current.style.top = shipY.current + 'px';
+				}
+			} else if (x > mapInfo.current.w) { //맵 우측
+				if (shipContainerRef.current) {
+					shipContainerRef.current.style.left = shipX.current + 'px';
+					shipContainerRef.current.style.top = shipY.current + 'px';
+				}
+			} else if (y < 0) { //맵 상단
+				if (shipContainerRef.current) {
+					shipContainerRef.current.style.left = shipX.current + 'px';
+					shipContainerRef.current.style.top = shipY.current + 'px';
+				}
+			} else if (y > mapInfo.current.h) { //맵 하단
+				if (shipContainerRef.current) {
+					shipContainerRef.current.style.left = shipX.current + 'px';
+					shipContainerRef.current.style.top = shipY.current + 'px';
+				}
+			} else {//맵 안쪽일 경우
+				if (mapColor[0] === 195 && mapColor[1] === 128 && mapColor[2] === 0) {
+					if (shipContainerRef.current) {
+						shipContainerRef.current.style.left = shipX.current + 'px';
+						shipContainerRef.current.style.top = shipY.current + 'px';
+					}
+				} else {
+					if (shipContainerRef.current) {
+						shipContainerRef.current.style.left = x + 'px';
+						shipContainerRef.current.style.top = y + 'px';
+					}
+				}
 			}
 		}
-		shipContainerRef.current.style.transform = `translate(-50%,-50%) rotate(${90 + wheelDegree.current}deg)`;
-		shipX.current = parseInt(shipContainerRef.current.style.left);
-		shipY.current = parseInt(shipContainerRef.current.style.top);
+		if (shipContainerRef.current) {
+			shipContainerRef.current.style.transform = `translate(-50%,-50%) rotate(${90 + wheelDegree.current}deg)`;
+			shipX.current = parseInt(shipContainerRef.current.style.left) || 0;
+			shipY.current = parseInt(shipContainerRef.current.style.top) || 0;
+		}
 
 		//sail
 		sailDegree.current += rotateSpeed2.current;
@@ -267,23 +281,25 @@ const Sail = ({
 		timeoutRef.current = setTimeout(animation, TIMEOUT_SPEED);//애니메이션 실행
 	};
 	useEffect(() => {
-		if (Object.keys(saveData).length !== 0) {
+		if (Object.keys(saveData || {}).length !== 0 && saveData.ship && saveData.info) {
 			const ship = saveData.ship[saveData.info.shipIdx];
-			setSelectShip({
-				shipIdx:ship.shipIdx,
-				wood:ship.wood,
-				figure:ship.figure,
-				anchor:ship.anchor,
-				sail0:ship.sail[0]?.type || '',
-				sail1:ship.sail[1]?.type || '',
-				sail2:ship.sail[2]?.type || '',
-				sail0Color:ship.sail[0]?.color || '',
-				sail1Color:ship.sail[1]?.color || '',
-				sail2Color:ship.sail[2]?.color || '#fff',
-				cannon0:ship.cannon[0] || '',
-				cannon1:ship.cannon[1] || '',
-				cannon2:ship.cannon[2] || '',
-			});
+			if (ship) {
+				setSelectShip({
+					shipIdx:ship.shipIdx || '',
+					wood:ship.wood || '',
+					figure:ship.figure || '',
+					anchor:ship.anchor || '',
+					sail0:ship.sail?.[0]?.type || '',
+					sail1:ship.sail?.[1]?.type || '',
+					sail2:ship.sail?.[2]?.type || '',
+					sail0Color:ship.sail?.[0]?.color || '',
+					sail1Color:ship.sail?.[1]?.color || '',
+					sail2Color:ship.sail?.[2]?.color || '#fff',
+					cannon0:ship.cannon?.[0] || '',
+					cannon1:ship.cannon?.[1] || '',
+					cannon2:ship.cannon?.[2] || '',
+				});
+			}
 		}
 	}, [saveData]);
 	useEffect(() => {
@@ -451,10 +467,14 @@ const Sail = ({
 					<canvas className="map_land" ref={mapRef}></canvas>
 					<Ship ref={shipContainerRef}>
 						<div className="ship" ref={shipRef}>
-						{selectShip.shipIdx !== '' && <div className={`ship_display size${shipSize(selectShip.shipIdx)} ship${selectShip.shipIdx}`}>
-								<svg className="ship_body" xmlns="http://www.w3.org/2000/svg" width="320px" height="600px" viewBox="0 0 320 600" dangerouslySetInnerHTML={{__html: util.setShipColor(gameData.shipSvg[selectShip.shipIdx], imgSet.wood[selectShip.wood] || imgSet.images.transparent, gameData.ships.woodColor[gameData.ships.wood[selectShip.wood]?.woodColor ?? 4], Math.random().toString(36).substring(2, 11), [gameData.sailSvg[`${selectShip.shipIdx}_${selectShip.sail0}_1`], gameData.sailSvg[`${selectShip.shipIdx}_${selectShip.sail1}_2`], gameData.sailSvg[`${selectShip.shipIdx}_${selectShip.sail2}_3`]], [selectShip.sail0Color, selectShip.sail1Color, selectShip.sail2Color], [gameData.cannonSvg[`${selectShip.shipIdx}_${selectShip.cannon0}_1`], gameData.cannonSvg[`${selectShip.shipIdx}_${selectShip.cannon1}_2`], gameData.cannonSvg[`${selectShip.shipIdx}_${selectShip.cannon2}_3`]])}}></svg>
-								{selectShip.figure !== '' && <svg className="ship_face" style={{filter:`drop-shadow(0 0 7px ${gameData.ships.figureColor[gameData.ships.figurehead[selectShip.figure].color][2]})`}} xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg[gameData.ships.figurehead[selectShip.figure].display], gameData.ships.figureColor, gameData.ships.figurehead[selectShip.figure].color)}}></svg>}
-							</div>}
+						{selectShip.shipIdx !== '' && (
+							<div className={`ship_display size${shipSize(selectShip.shipIdx)} ship${selectShip.shipIdx}`}>
+								<svg className="ship_body" xmlns="http://www.w3.org/2000/svg" width="320px" height="600px" viewBox="0 0 320 600" dangerouslySetInnerHTML={{__html: util.setShipColor(gameData.shipSvg?.[selectShip.shipIdx], imgSet.wood?.[selectShip.wood] || imgSet.images?.transparent, gameData.ships?.woodColor?.[gameData.ships?.wood?.[selectShip.wood]?.woodColor ?? 4], Math.random().toString(36).substring(2, 11), [gameData.sailSvg?.[`${selectShip.shipIdx}_${selectShip.sail0}_1`], gameData.sailSvg?.[`${selectShip.shipIdx}_${selectShip.sail1}_2`], gameData.sailSvg?.[`${selectShip.shipIdx}_${selectShip.sail2}_3`]], [selectShip.sail0Color, selectShip.sail1Color, selectShip.sail2Color], [gameData.cannonSvg?.[`${selectShip.shipIdx}_${selectShip.cannon0}_1`], gameData.cannonSvg?.[`${selectShip.shipIdx}_${selectShip.cannon1}_2`], gameData.cannonSvg?.[`${selectShip.shipIdx}_${selectShip.cannon2}_3`]])}}></svg>
+								{selectShip.figure !== '' && gameData.ships?.figurehead?.[selectShip.figure] && (
+									<svg className="ship_face" style={{filter:`drop-shadow(0 0 7px ${gameData.ships?.figureColor?.[gameData.ships.figurehead[selectShip.figure].color]?.[2] || '#000'})`}} xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg?.[gameData.ships.figurehead[selectShip.figure].display], gameData.ships?.figureColor, gameData.ships.figurehead[selectShip.figure].color)}}></svg>
+								)}
+							</div>
+						)}
 						</div>
 					</Ship>
 					<BgEffect className="bgEffect" img1={imgSet.bgEffect[0]} img2={imgSet.bgEffect[1]} gameSpd={speed}>

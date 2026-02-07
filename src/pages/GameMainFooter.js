@@ -40,7 +40,7 @@ const ButtonWrap = styled(FlexBox)`
       width: 100%;
       flex: 1;
     }
-    button.backBtn{
+    button.smallSize{
       width: unset;
       flex: unset;
     }
@@ -49,6 +49,7 @@ const ButtonWrap = styled(FlexBox)`
 const StyledButton = styled(Button)`
   background: url(${({btnImg}) => btnImg}) no-repeat center center !important;
   background-size: 100% 100% !important;
+  font-size: ${({theme}) => theme.font.t2};
 `;
 const StyledIcon = styled(IconPic)`
   width: 16px;
@@ -57,19 +58,7 @@ const StyledIcon = styled(IconPic)`
   transform: scale(-1);
 `;
 const pickMsgArr = ['drawingEnemy', 'drawingCardLevels', 'pickMapType', 'startExploring'];
-const checkStep = (data) => {
-  if (!data) return 0;
-  if (Object.keys(data.map).length !== 0) {
-    return 3;
-  }
-  if (Object.keys(data.lv).length !== 0) {
-    return 2;
-  }
-  if (Object.keys(data.add).length !== 0) {
-    return 1;
-  }
-  return 0;
-}
+
 const GameMainFooter = ({
   saveData,
   changeSaveData,
@@ -96,20 +85,18 @@ const GameMainFooter = ({
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
   const currentStep = React.useMemo(() => {
-    return checkStep(util.loadData('historyParam')?.roulette) || 0
+    return util.exploreArea.checkStep(util.loadData('historyParam')?.roulette) || 0
   }, []);
   const [rouletteIdx, setRouletteIdx] = useState(currentStep);
-  const [isRouletteSpin, setRouletteSpin] = useState(false);
-  const sec = useRef(0);
-  const interval = useRef(0);
   const [pickMsg, setPickMsg] = useState(gameData.msg.button[pickMsgArr[currentStep]][lang]);
-  const stayIdx = useRef(util.getCountryToIdx(stay));
+  const stayIdx = useRef(util.getRegionToIdx(stay));
   const moveEventCh = () => {
     return props.moveRegionEntry.map((idx) => {
+      const char = saveData && saveData.ch && saveData.ch[idx];
       return {
         idx: idx,
-        hp: saveData.ch[idx].bSt0,
-        hp_: saveData.ch[idx].bSt0,
+        hp: char ? char.bSt0 : 0,
+        hp_: char ? char.bSt0 : 0,
       }
     });
   }
@@ -121,19 +108,18 @@ const GameMainFooter = ({
             setGameMode('roulette');
           }}>{gameData.msg.button['exploreRegions'][lang]}</StyledButton>
           <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
-            setGameMode('scenario');
+            setGameMode('scenarioRegion');
           }}>{gameData.msg.button['scenarios'][lang]}</StyledButton>
           <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
             setGameMode('moveRegion');
           }}>{gameData.msg.button['moveRegion'][lang]}</StyledButton>
         </ButtonWrap>}
         {gameMode === "roulette" && <ButtonWrap alignItems="self-end" gameMode={gameMode === "roulette"}>
-          {rouletteIdx === 0 && <StyledButton className="backBtn" btnImg={imgSet.button.btnSD} onClick={() => {
+          {rouletteIdx === 0 && <StyledButton className="smallSize" btnImg={imgSet.button.btnSD} onClick={() => {
             setRouletteIdx(0);
             setGameMode('');
           }}>{gameData.msg.button['cancel'][lang]}</StyledButton>}
           <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
-            if (!isRouletteSpin) {
               if (rouletteIdx === 3) {//탐색시작
                 let isEmptyEntry = true;
                 saveData.lineup.save_slot[saveData.lineup.select].entry.forEach((entryData) => {
@@ -150,15 +136,16 @@ const GameMainFooter = ({
                   location: 'battle',
                   navigate: navigate,
                   callback: () => {
+                    const historyP = JSON.parse(JSON.stringify(util.loadData('historyParam') || {}));
                     util.saveData('historyParam', {
-                      ...util.loadData('historyParam'),
+                      ...historyP,
                       battle: {
                         type: "exploring",
-                        title: gameData.msg.button["startExploring"][lang],
-                        country: util.getCountryToIdx(stay),
+                        title: gameData.msg.button["startExploring"]?.[lang] || "Exploring",
+                        country: util.getRegionToIdx(stay),
                         scenario: {
                           stay: stay,
-                          stageDifficult: props.selectScenario.stageDifficult,
+                          stageDifficult: props.selectScenario?.stageDifficult,
                         },
                       }
                     });
@@ -173,107 +160,123 @@ const GameMainFooter = ({
                 });
                 setRouletteIdx(0);
                 return;
+              } else {
+                const randomIdx = Math.floor(Math.random() * props.rouletteArr[rouletteIdx].cards.length);
+
+                const cloneRouletteEnemy = JSON.parse(JSON.stringify(props.rouletteEnemy || { base: {}, add: {}, lv: {}, map: {} }));
+                switch(rouletteIdx) {
+                  case 0:
+                    //추가 동물
+                    let addEnemyNum = 0,
+                      addEnemyArray = [];
+                    const amount = props.rouletteArr[0].cards[randomIdx]?.amount || 0;
+                    while(addEnemyNum < amount) {
+                      addEnemyArray.push(util.getRgbColor());
+                      addEnemyNum ++;
+                    }
+                    cloneRouletteEnemy.add = {idx: randomIdx, color: addEnemyArray};
+                    break;
+                  case 1:
+                    cloneRouletteEnemy.lv = {idx: randomIdx, num: props.rouletteArr[1].cards[randomIdx]?.amount || 0};
+                    break;
+                  case 2:
+                    cloneRouletteEnemy.map = {idx: randomIdx, num: props.rouletteArr[2].cards[randomIdx]?.amount || 0};
+                    break;
+                  default:
+                    break;
+                }
+                props.setRouletteEnemy(cloneRouletteEnemy);
+                const historyP = JSON.parse(JSON.stringify(util.loadData('historyParam') || {}));
+                util.saveData('historyParam', {
+                  ...historyP,
+                  roulette: cloneRouletteEnemy,
+                });
+                setRouletteIdx(prev => {
+                  prev += 1;
+                  setPickMsg(gameData.msg.button[pickMsgArr[prev]][lang]);
+                  return prev;
+                });
               }
-              interval.current = setInterval(() => {
-                sec.current += 0.1;
-              }, 10);
               const cloneState = [...props.rouletteState];
               cloneState[rouletteIdx] = true;
               props.setRouletteState(cloneState);
-              setRouletteSpin(true);
-              setPickMsg(gameData.msg.button['stop'][lang]);
-            } else {
-              clearInterval(interval.current);
-              interval.current = null;
-              setRouletteSpin(false);
-              const clonePos = [...props.selectRoulettePos];
-              clonePos[rouletteIdx] = Math.round(sec.current) % props.rouletteArr[rouletteIdx].cards.length;
-              props.setSelectRoulettePos(clonePos);
-
-              const cloneRouletteEnemy = {
-                ...props.rouletteEnemy,
-              }
-              switch(rouletteIdx) {
-                case 0:
-                  //추가 동물
-                  let addEnemyNum = 0,
-                    addEnemyArray = [];
-                  while(addEnemyNum <  + props.rouletteArr[0].cards[clonePos[0]].amount) {
-                    addEnemyArray.push(util.getRgbColor());
-                    addEnemyNum ++;
-                  }
-                  cloneRouletteEnemy.add = {idx: clonePos[0], color: addEnemyArray};
-                  break;
-                case 1:
-                  cloneRouletteEnemy.lv = {idx: clonePos[1], num: props.rouletteArr[1].cards[clonePos[1]].amount};
-                  break;
-                case 2:
-                  cloneRouletteEnemy.map = {idx: clonePos[2], num: props.rouletteArr[2].cards[clonePos[2]].amount};
-                  break;
-                default:
-                  break;
-              }
-              props.setRouletteEnemy(cloneRouletteEnemy);
-              util.saveData('historyParam', {
-                ...util.loadData('historyParam'),
-                roulette: cloneRouletteEnemy,
-              });
-              setRouletteIdx(prev => {
-                prev += 1;
-                setPickMsg(gameData.msg.button[pickMsgArr[prev]][lang]);
-                return prev;
-              });
-              sec.current = 0;
-            }
           }}>{pickMsg}</StyledButton>
+          {rouletteIdx > 0 && <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="smallSize"  onClick={() => {
+            props.setRouletteEnemy({base: {},add: {}, lv: {}, map: {}});
+            util.saveData('historyParam', {
+              ...util.loadData('historyParam'),
+              battle: {},
+              roulette: { base: {}, add: {}, lv: {}, map: {} }
+            });
+            setRouletteIdx(0);
+            props.setRouletteState([]);
+          }}>{gameData.msg.button['reset'][lang]}</StyledButton>}
         </ButtonWrap>}
-        {gameMode === "scenario" && <ButtonWrap alignItems="self-end" gameMode={gameMode === "scenario"}>
-          <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="backBtn"  onClick={() => {
-            setGameMode('');
-          }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
-          {!props.selectScenario?.dynastyIdx ? 
-            <StyledButton width="100%" btnImg={imgSet.button.btnMD}>{gameData.msg.sentence['selectScenario'][lang]}</StyledButton> :
-            <StyledButton width="100%" btnImg={imgSet.button.btnMD} type="icon" icon={{
-              pic: 'icon100',
-              type: 'scenario',
-              idx: props.selectScenario?.stageDifficult
-            }} onClick={() => {
-              console.log('전투개시');
-              util.saveHistory({
-                location: 'battle',
-                navigate: navigate,
-                callback: () => {
-                  util.saveData('historyParam', {
-                    ...util.loadData('historyParam'),
-                    battle: {
-                      type: "scenario",
-                      country: util.getCountryToIdx(stay),
-                      scenario: {
-                        stay: stay,
-                        dynastyIdx: props.selectScenario.dynastyIdx,
-                        dynastyScenarioIdx: props.selectScenario.dynastyScenarioIdx,
-                        stageIdx: props.selectScenario.stageIdx,
-                        stageDifficult: props.selectScenario.stageDifficult,
-                      },
+        {gameMode === "scenarioRegion" && <ButtonWrap alignItems="self-end" gameMode={gameMode === "scenarioRegion"}>
+          {Object.keys(props.selectScenario).length <= 0 ? 
+            <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
+              setGameMode('');
+            }}>{gameData.msg.button['cancel'][lang]}</StyledButton> : 
+            <>
+              <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="smallSize"  onClick={() => {
+                setGameMode('');
+              }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
+              {!props.selectScenario?.dynastyIdx ? 
+                <StyledButton width="100%" btnImg={imgSet.button.btnMD}>{gameData.msg.sentence['selectScenario'][lang]}</StyledButton> :
+                <StyledButton width="100%" btnImg={imgSet.button.btnMD} type="icon" icon={{
+                  pic: 'icon100',
+                  type: 'scenario',
+                  idx: props.selectScenario?.stageDifficult
+                }} onClick={() => {
+                console.log('전투개시');
+                let isEmptyEntry = true;
+                  saveData.lineup.save_slot[saveData.lineup.select].entry.forEach((entryData) => {
+                    if (entryData !== '') {
+                      isEmptyEntry = false;
                     }
                   });
-                },
-                state: {
-                  scenario: {
-                    stay: stay,
-                    dynastyIdx: props.selectScenario.dynastyIdx,
-                    dynastyScenarioIdx: props.selectScenario.dynastyScenarioIdx,
-                    stageIdx: props.selectScenario.stageIdx,
-                    stageDifficult: props.selectScenario.stageDifficult,
+                  if (isEmptyEntry) {
+                    setMsgOn(true);
+                    setMsg(gameData.msg.sentence['organizeCard'][lang]);
+                    return;
                   }
-                },
-                isNavigate: true,
-              });
-            }}>{gameData?.scenario[stay][props.selectScenario.dynastyIdx]?.scenarioList[props.selectScenario.dynastyScenarioIdx].stage[props.selectScenario.stageIdx].title[lang]} {gameData.msg.button['startBattle'][lang] || ''}</StyledButton>
+                util.saveHistory({
+                  location: 'battle',
+                  navigate: navigate,
+                    callback: () => {
+                      const historyP = JSON.parse(JSON.stringify(util.loadData('historyParam') || {}));
+                      util.saveData('historyParam', {
+                        ...historyP,
+                        battle: {
+                          type: "scenarioRegion",
+                          country: util.getRegionToIdx(stay),
+                          scenario: {
+                            stay: stay,
+                            dynastyIdx: props.selectScenario.dynastyIdx,
+                            dynastyScenarioIdx: props.selectScenario.dynastyScenarioIdx,
+                            stageIdx: props.selectScenario.stageIdx,
+                            stageDifficult: props.selectScenario.stageDifficult,
+                          },
+                        }
+                      });
+                    },
+                  state: {
+                    scenario: {
+                      stay: stay,
+                      dynastyIdx: props.selectScenario.dynastyIdx,
+                      dynastyScenarioIdx: props.selectScenario.dynastyScenarioIdx,
+                      stageIdx: props.selectScenario.stageIdx,
+                      stageDifficult: props.selectScenario.stageDifficult,
+                    }
+                  },
+                  isNavigate: true,
+                });
+              }}>{gameData?.scenario[stay][props.selectScenario.dynastyIdx]?.scenarioList[props.selectScenario.dynastyScenarioIdx].stage?.[props.selectScenario.stageIdx]?.title[lang]} {gameData.msg.button['startBattle'][lang] || ''}</StyledButton>
           }
+          </>}
         </ButtonWrap>}
         {gameMode === "moveRegion" && <ButtonWrap alignItems="self-end" gameMode={gameMode === "moveRegion"}>
-          <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="backBtn"  onClick={() => {
+          <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="smallSize"  onClick={() => {
             setGameMode('');
           }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
           <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
@@ -318,8 +321,9 @@ const GameMainFooter = ({
                           //조건 체크
                           setGameMode("moveEvent");
                           const distance = util.getDistanceToEvent(gameData.country.regions[stayIdx.current].distancePosition, gameData.country.regions[props.selectMoveRegion]?.distancePosition) + gameData.countryEventsNum;
+                          const historyP = JSON.parse(JSON.stringify(util.loadData('historyParam') || {}));
                           util.saveData('historyParam', {
-                            ...util.loadData('historyParam'),
+                            ...historyP,
                             moveEvent: {
                               ch: moveEventCh(),
                               moveTo: props.selectMoveRegion,
@@ -356,22 +360,23 @@ const GameMainFooter = ({
               {stayIdx.current === props.selectMoveRegion ? <>
                 {gameData.msg.sentence['sameCountry'][lang]}
               </> : <>
-                {gameData.country.regions[util.getCountryToIdx(stay)].name[lang]} <StyledIcon type="commonBtn" pic="icon100" idx="0" /> {props.selectMoveRegion !== '' && gameData.country.regions[props.selectMoveRegion].name[lang]}
+                {gameData.country.regions[util.getRegionToIdx(stay)].name[lang]} <StyledIcon type="commonBtn" pic="icon100" idx="0" /> {props.selectMoveRegion !== '' && gameData.country.regions[props.selectMoveRegion].name[lang]}
               </>
               }
             </FlexBox>
           </StyledButton>
         </ButtonWrap>}
         {gameMode === "moveEvent" && <ButtonWrap alignItems="self-end" gameMode={gameMode === "moveEvent"}>
-          <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="backBtn"  onClick={() => {
+          <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="smallSize"  onClick={() => {
             setGameMode('');
             util.historyBack(navigate);
+            const historyP = JSON.parse(JSON.stringify(util.loadData('historyParam') || {}));
             util.saveData("historyParam", {
-              ...util.loadData("historyParam"),
+              ...historyP,
               moveEvent: {},
             });
           }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
-          <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="backBtn"  onClick={() => {
+          <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="smallSize"  onClick={() => {
             props.setShowEvent(prev => !prev);
           }}>{gameData.msg.button[props.showEvent ? "hide" : "show"][lang]}</StyledButton>
           {props.actionData && props.actionData[`action${props.eventPhase}`]?.list.map((aData, acIdx) => {

@@ -172,7 +172,7 @@ export const job = [
     skill:{//단검,검,한손둔기,한손도끼,타격,
       type:'random',
       initialCounts:1,
-      basic:[10,],
+      basic:[10],
       lv0:[],
       lv1:[],
       lv2:[],

@@ -70,53 +70,23 @@ const SpinContainer = styled(FlexBox)`
 const SpinArea = styled.div`
   position: relative;
   margin: 0 5px;
-  padding-top: calc(30% - 20px);
+  ${({borderNone, frameMain}) => borderNone ? `
+    padding-top: 30%;
+  ` : `
+    padding-top: calc(30% - 20px);
+    border: 10px solid transparent;
+    border-image: url(${frameMain}) 20 stretch;
+    border-radius: 10px;
+  `}
   width: 30%;
-  border: 10px solid transparent;
   background: #000;
-  border-image: url(${({frameMain}) => frameMain}) 20 stretch;
-  border-radius: 10px;
   box-sizing: border-box;
   overflow: hidden;
-`;
-const makeKeyframes = (size) => {
-  return `
-    @keyframes upDown${size}{
-      0% {
-        top: 0;
-      }
-      100% {
-        top: -${size * 100}%;
-      }
-    }
-  `;
-}
-const SpinGroup = styled.div`
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transition: top 1s ease-in-out;
-  ${({saveIdx, selectRoulettePos, size, rouletteState}) => {
-    if (typeof saveIdx === 'number') {
-      return `top: ${saveIdx * -100}%`;
-    } else {
-      if(typeof selectRoulettePos === 'number') {
-        return `top: ${selectRoulettePos * -100}%`;
-      } else {
-        return `
-          top: 0;
-          ${rouletteState ? `animation: upDown${size} 0.${size}s infinite linear;` : ''};
-        `;
-      }}
-    }
-  };
-  ${({size}) => makeKeyframes(size)};
 `;
 const SpinCards = styled.div`
   position: absolute;
   left: 0;
-  top: ${({idx}) => 100 * idx}%;
+  top: 0;
   width: 100%;
   height: 100%;
 `;
@@ -152,9 +122,6 @@ const idxToText = (idx) => {
 const Roulette = ({
   saveData,
   rouletteState,
-  setRouletteState,
-  selectRoulettePos,
-  setSelectRoulettePos,
   rouletteArr,
   rouletteEnemy,
   setRouletteEnemy,
@@ -173,10 +140,11 @@ const Roulette = ({
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupInfo, setPopupInfo] = useState({});
+  const currentStep = React.useMemo(() => {
+      const historyP = util.loadData('historyParam');
+      return util.exploreArea.checkStep(historyP?.roulette) || 0
+    }, [rouletteState]);
   useEffect(() => {
-    setRouletteState(Array.from({length:rouletteArr.length}, () => false));
-    setSelectRoulettePos(Array.from({length:rouletteArr.length}, () => ''));
-
     let enemyNum = 0,
       enemyArray = [];
     while(enemyNum < BASE_ENEMY_NUM) {
@@ -184,11 +152,15 @@ const Roulette = ({
       enemyNum ++;
     }
     setRouletteEnemy(prev => {
+      const freshPrev = JSON.parse(JSON.stringify(prev || { base: {}, add: {}, lv: {}, map: {} }));
       return {
-        ...prev,
+        ...freshPrev,
         base: {idx: BASE_ENEMY_NUM, color: enemyArray},
       }
     });
+    return () => {
+      
+    }
   }, []);
   return (
     <>
@@ -196,28 +168,31 @@ const Roulette = ({
         <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
           setPopupOn(true);
           setPopupInfo({
-            data:gameData.guide['exploreRegions'],
+            data: gameData.guide?.['exploreRegions'],
           });
         }} />
         <SpinContainer>
-          {rouletteArr.map((data, idx) => {
+          {rouletteArr.map((cardsData, idx) => {
+            const idxToName = util.exploreArea.stepName(idx),
+              cardIdx = rouletteEnemy[idxToName]?.idx || 0;
             return (
+              idx <= currentStep - 1 ?
               <SpinArea key={`data${idx}`} frameMain={imgSet.etc.frameMain}>
-                <SpinGroup saveIdx={rouletteEnemy[idxToText(idx)].idx} rouletteState={rouletteState[idx]} selectRoulettePos={selectRoulettePos[idx]} size={data.cards.length} direction="column">
-                  {data.cards.map((cardsData, cardsIdx) => <SpinCards idx={cardsIdx} key={`cardsIdx${cardsIdx}`}>
-                    <IconPic type={cardsData.type} pic="icon200" idx={cardsData.cardIdx} />
-                  </SpinCards>)}
-                  <SpinCards idx={data.cards.length}>
-                    <IconPic type={data.cards[0].type} pic="icon200" idx={data.cards[0].cardIdx} />
-                  </SpinCards>
-                </SpinGroup>
+                 <SpinCards>
+                  {cardsData.cards?.[cardIdx] && <IconPic type={cardsData.cards[cardIdx].type} pic="icon200" idx={cardsData.cards[cardIdx].cardIdx} />}
+                </SpinCards> 
+              </SpinArea> : 
+              <SpinArea key={`data${idx}`} frameMain={imgSet.etc.frameMain} borderNone={true}>
+                <SpinCards>
+                  <IconPic type="cardBack" pic="card_s" idx={1} />
+                </SpinCards>
               </SpinArea>
             )
           })}
         </SpinContainer>
         <LineupContainer>
           <LineupGroup>
-            <ChLineup showMode={true} saveData={saveData} useList={saveData?.lineup?.save_slot[saveData?.lineup?.select].entry} selectLineup={saveData?.lineup?.save_slot[saveData?.lineup?.select].no} onClick={() => {
+            <ChLineup showMode={true} saveData={saveData} useList={saveData?.lineup?.save_slot?.[saveData?.lineup?.select]?.entry || []} selectLineup={saveData?.lineup?.save_slot?.[saveData?.lineup?.select]?.no} onClick={() => {
               util.saveHistory({
                 location: 'cardPlacement',
                 navigate: navigate,
@@ -227,14 +202,14 @@ const Roulette = ({
             }} />
           </LineupGroup>
           <ExploringInfo direction="column" frameMain={imgSet.etc.frameMain}>
-            <Text code="t3" color="main">{gameData.msg.title['region'][lang]} : {gameData.country.regions[util.getCountryToIdx(sData.info.stay)][lang]}</Text>
-            <Text code="t3" color="main">{gameData.msg.title['wildlife'][lang]} : 
-            {rouletteEnemy.base.color?.map((colorData, idx) => <AnimalIcon key={`color${idx}`} color={colorData}/>)}
-            {rouletteEnemy.add.color?.length > 0 && ' + '} 
-            {rouletteEnemy.add.color?.map((colorData, idx) => <AnimalIcon key={`color${idx}`} color={colorData}/>)} ({rouletteEnemy.base.color?.length + (rouletteEnemy.add.color?.length || 0)})</Text>
-            <Text code="t3" color="main">{gameData.msg.title['animals'][lang]} LV : {rouletteEnemy.lv.num !== '' ? sData.info.lv + (rouletteEnemy.lv.num < 0 ? 0 : (rouletteEnemy.lv.num || 0)) : sData.info.lv} Lv</Text>
-            <Text code="t3" color="main">{gameData.msg.title['mapType'][lang]} : {rouletteEnemy.map.num && gameData.msg.state[rouletteEnemy.map.num][lang]}</Text>
-            <Text code="t3" color="main">{gameData.msg.title['addOption'][lang]} : </Text>
+            <Text code="t2" color="main">{gameData.msg.title?.['region']?.[lang] || "Region"} : {gameData.country?.regions?.[util.getRegionToIdx(sData.info?.stay)]?.[lang] || ""}</Text>
+            <Text code="t2" color="main">{gameData.msg.title?.['wildlife']?.[lang] || "Wildlife"} : 
+            {rouletteEnemy.base?.color?.map((colorData, idx) => <AnimalIcon key={`color${idx}`} color={colorData}/>)}
+            {rouletteEnemy.add?.color?.length > 0 && ' + '} 
+            {rouletteEnemy.add?.color?.map((colorData, idx) => <AnimalIcon key={`color${idx}`} color={colorData}/>)} ({ (rouletteEnemy.base?.color?.length || 0) + (rouletteEnemy.add?.color?.length || 0) })</Text>
+            <Text code="t2" color="main">{gameData.msg.title?.['animals']?.[lang] || "Animals"} LV : {rouletteEnemy.lv?.num !== '' && rouletteEnemy.lv?.num !== undefined ? (sData.info?.lv || 1) + (rouletteEnemy.lv.num < 0 ? 0 : (rouletteEnemy.lv.num || 0)) : (sData.info?.lv || 1)} Lv</Text>
+            <Text code="t2" color="main">{gameData.msg.title?.['mapType']?.[lang] || "Map Type"} : {rouletteEnemy.map?.num !== undefined && gameData.msg.state?.[rouletteEnemy.map.num]?.[lang]}</Text>
+            <Text code="t2" color="main">{gameData.msg.title?.['addOption']?.[lang] || "Option"} : </Text>
           </ExploringInfo>
         </LineupContainer>
       </Wrap>

@@ -319,16 +319,16 @@ export const scenario = {
 							],
 							lineup:0,
 							map:[
-								10,9,9,11,10,
-								9,11,10,11,10,
-								9,9,9,11,9,
-								11,11,10,10,11,
-								10,10,10,10,10,
-								10,9,9,11,10,
-								10,9,11,10,10,
-								3,3,9,10,9,
-								4,5,3,4,3,
-								1,0,4,5,5,
+								11,10,10,12,11,
+								10,12,11,12,11,
+								10,10,10,12,10,
+								12,12,11,11,12,
+								11,11,11,11,11,
+								11,10,10,12,11,
+								11,10,12,11,11,
+								10,2,10,11,2,
+								2,2,1,0,1,
+								1,0,0,30,0,
 							],
 							entry:[
 								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
@@ -454,16 +454,16 @@ export const scenario = {
 							],
 							lineup:0,
 							map:[
-								0,1,1,2,2,
-								5,0,1,1,2,
-								5,5,0,0,1,
-								4,4,5,5,4,
-								3,3,3,3,3,
-								3,9,9,3,10,
-								10,10,10,10,10,
-								11,11,10,10,11,
-								10,9,9,3,3,
-								3,9,3,4,4
+								11,10,10,12,11,
+								10,12,11,12,11,
+								10,10,10,12,10,
+								12,12,11,11,12,
+								11,11,11,11,11,
+								10,11,10,11,10,
+								2,2,11,10,2,
+								1,30,2,1,2,
+								1,1,1,1,30,
+								1,1,0,0,1
 							],
 							entry:[
 								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
@@ -507,25 +507,70 @@ export const scenario = {
 								jp:"佐川砲海戦の翌日、斥候船から唐浦埠頭に倭船が停泊しているという情報を得た李舜臣艦隊は、すぐに唐浦沖に出撃し、倭軍の徳井道隆が率いる大船9隻、中船・小船12隻を撃破した。",
 							},//충무공 이순신,원균,권준,김완 vs 가메이 고레노리, 도쿠이 미치유키
 							conversation:[
-
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"적들이 당포 선창에 정박해 있다! 기습하라!",
+									en:"The enemy is anchored at Dangpo dock! Ambush them!",
+									jp:"敵が唐浦の船着き場に停泊している！奇襲せよ！"
+								}},
+								{idx:57, team:"enemy", pos:"right", txt:{//도쿠이 미치유키
+									ko:"아니, 저게 무슨 배냐? 거북? 괴물인가?",
+									en:"What kind of ship is that? A turtle? Is it a monster?",
+									jp:"なんだあの船は？亀？怪物か？"
+								}},
+								{idx:30, team:"enemy", pos:"right", txt:{//가메이 고레노리
+									ko:"당황하지 마라! 응사하라! 놈들을 가까이 오게 하지 마라!",
+									en:"Don't panic! Return fire! Do not let them get close!",
+									jp:"慌てるな！応戦せよ！奴らを近づけるな！"
+								}},
+								{idx:20, team:"ally", pos:"left", txt:{//권준
+									ko:"거북선이 적진을 돌파했습니다! 지금입니다!",
+									en:"The Turtle Ship has breached enemy lines! Now is the time!",
+									jp:"亀甲船が敵陣を突破しました！今です！"
+								}},
+								{idx:57, team:"enemy", pos:"right", txt:{//도쿠이 미치유키
+									ko:"크헉! 대포가... 배가 부서진다! 막아라!",
+									en:"Argh! The cannons... the ship is breaking! Stop them!",
+									jp:"ぐわっ！大砲が…船が壊れる！防げ！"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"적장 도쿠이 미치유키를 쳐라! 놓치지 마라!",
+									en:"Strike down the enemy commander Tokui Michiyuki! Do not let him escape!",
+									jp:"敵将徳井道隆を討て！逃がすな！"
+								}}
 							],
 							lineup:0,
 							map:[
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
+								11,10,12,10,11,
+								11,12,10,12,11,
+								12,11,12,12,11,
+								10,10,2,11,10,
+								11,10,2,2,1,
+								11,11,10,1,0,
+								2,11,10,11,10,
+								0,2,0,10,11,
+								0,1,2,1,2,
+								30,0,0,1,0,
 							],
-							entry:[],
+							entry:[
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{pos:1,idx:30, lv:45, grade:3, items: []},{pos:3,idx:57, lv:45, grade:3, items: []},{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							],
 							drop:{
-								first:[],
-								always:[],
+								first:[
+									[
+										{type:"Gold",num:1500},
+										{type:"Etc",idx:"8"}
+									]
+								],
+								always:[
+									[
+										{type:"Gold",num:150},
+										{type:"Material",idx:"13",num:3}
+									]
+								]
 							},
 						},
 						{
@@ -540,25 +585,65 @@ export const scenario = {
 								jp:"李舜臣艦隊を主軸とした朝鮮水軍の連合艦隊が第2回出撃で四川・唐浦海戦に続いて3回目の海戦である。李舜臣の全羅道左水泳戦線23隻、李億基の全羅道右水泳戦線25隻、元均の慶尚道右水泳戦線3隻など計51隻が参加した。総指揮は李舜臣が務めた。",
 							},// 이순신, 원균, 이억기 vs 모리 무라하루, 오모리 로쿠다유, 가비시바루 우시노스케, 아와다 한시치, 와타나베 시키부
 							conversation:[
-								
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"전군 공격하라! 단 한 척의 왜선도 돌려보내지 마라!",
+									en:"All forces attack! Do not let a single Japanese ship return!",
+									jp:"全軍攻撃せよ！一隻の倭船も帰すな！"
+								}},
+								{idx:34, team:"ally", pos:"right", txt:{//원균
+									ko:"이순신! 내 공을 가로챌 생각 마라! 내가 먼저 간다!",
+									en:"Yi Sun-sin! Don't you dare steal my credit! I'm going first!",
+									jp:"李舜臣！俺の手柄を横取りするな！俺が先に行く！"
+								}},
+								{idx:23, team:"ally", pos:"left", txt:{//이억기
+									ko:"적들이 바다로 빠져나가지 못하게 포위해야 합니다!",
+									en:"We must surround them so they cannot escape to the sea!",
+									jp:"敵が海へ逃げられないように包囲しなければなりません！"
+								}},
+								{idx:58, team:"enemy", pos:"right", txt:{//모리 무라하루 (가상 ID, 엔트리 참고)
+									ko:"이런 좁은 곳에서 포위되다니... 뚫어라! 뚫어야 산다!",
+									en:"Trapped in such a narrow place... Break through! We must break through to live!",
+									jp:"こんな狭い場所で包囲されるとは…突破せよ！突破せねば生きられない！"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"진형을 유지하라! 침착하게 적의 선체를 격파하라!",
+									en:"Maintain formation! Calmly destroy the enemy hulls!",
+									jp:"陣形を維持せよ！落ち着いて敵の船体を撃破せよ！"
+								}}
 							],
 							lineup:0,
 							map:[
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
+								10,12,12,10,11,
+								11,11,10,11,10,
+								10,2,1,10,11,
+								2,1,30,2,1,
+								1,0,1,0,1,
+								15,1,15,0,1,
+								17,15,0,15,16,
+								30,11,1,0,15,
+								16,15,0,15,16,
+								17,0,30,15,16,
 							],
-							entry:[],
+							entry:[
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{pos:2,idx:28, lv:40, grade:3, items: []},{idx:'', lv:1, },{idx:'', lv:1, }, //도도 다카토라 대역
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							],
 							drop:{
-								first:[],
-								always:[],
+								first:[
+									[
+										{type:"Gold",num:1600},
+										{type:"Etc",idx:"8"}
+									]
+								],
+								always:[
+									[
+										{type:"Gold",num:160},
+										{type:"Material",idx:"13",num:3}
+									]
+								]
 							},
 						},
 						{
@@ -573,25 +658,65 @@ export const scenario = {
 								jp:"見乃梁大捷とも呼ばれる壬辰倭乱の間に行われた李舜臣の勝利の一つで、行州大捷、真珠大捷と共に壬辰倭乱3大捷として知られている。\n	壬辰倭乱の戦況を変えるのに決定的な貢献をした戦いの一つで、日本水軍の水陸両用兵の進軍を完全に打ち砕いた大捷である。",
 							},//이순신, 권준, 배홍립, 정운, 어영담, 김완, 우치적, 한백록, 이영남, 송희립, 기효근, 황세득 vs 와키자카 사효에, 와타나베 시치에몬, 마나베 사마노조
 							conversation:[
-								
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"견내량의 적을 한산도 넓은 바다로 유인했다. 학익진을 펼쳐라!",
+									en:"We have lured the enemy from Gyeonnaeryang to the open sea of Hansando. Deploy the Crane Wing formation!",
+									jp:"見乃梁の敵を閑山島の広い海に誘き寄せた。鶴翼の陣を敷け！"
+								}},
+								{idx:31, team:"enemy", pos:"right", txt:{//와키자카 야스하루
+									ko:"조선 수군이 학익진을? 포위당했다! 뚫어라! 전속력으로 돌파하라!",
+									en:"The Joseon Navy uses the Crane Wing? We are surrounded! Break through! Full speed ahead!",
+									jp:"朝鮮水軍が鶴翼の陣を？包囲された！突破せよ！全速力で突破せよ！"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"일제히 발포하라! 적의 기세를 꺾어라!",
+									en:"Fire all at once! Break their momentum!",
+									jp:"一斉に発砲せよ！敵の気勢を挫け！"
+								}},
+								{idx:31, team:"enemy", pos:"right", txt:{//와키자카 야스하루
+									ko:"크윽... 배가... 침몰한다... 이대로 당할 수는...",
+									en:"Ugh... the ship... is sinking... I cannot be defeated like this...",
+									jp:"くっ…船が…沈没する…このままやられるわけには…"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"한 놈도 살려보내지 마라! 계속 공격하라!",
+									en:"Do not let a single one escape! Continue the attack!",
+									jp:"一人も生かして帰すな！攻撃を続けろ！"
+								}}
 							],
 							lineup:0,
 							map:[
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
+								10,11,12,10,10,
+								12,11,11,10,11,
+								10,2,10,2,10,
+								1,1,2,1,1,
+								0,0,1,0,0,
+								1,0,2,0,2,
+								0,15,0,1,1,
+								15,2,0,2,30,
+								0,30,1,0,16,
+								0,0,15,15,0,
 							],
-							entry:[],
+							entry:[
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{pos:2,idx:31, lv:1, grade:5, items: []},{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							],
 							drop:{
-								first:[],
-								always:[],
+								first:[
+									[
+										{type:"Gold",num:2000},
+										{type:"Etc",idx:"8"}
+									]
+								],
+								always:[
+									[
+										{type:"Gold",num:200},
+										{type:"Material",idx:"13",num:3}
+									]
+								]
 							},
 						},
 						{
@@ -606,25 +731,70 @@ export const scenario = {
 								jp:"壬辰倭乱初期、1592年(宣祖25年)7月10日、全羅左水師李舜臣が率いる朝鮮水軍連合艦隊が、鎮海の地安骨浦で久喜義隆と加藤嘉章が率いる日本水軍の精鋭艦隊42隻を撃破して勝利を収めた海戦です。",
 							},//이순신, 원균, 이억기, 권준, 어영담, 무의공 이순신, 김완, 신호, 정운, 배홍립, 김인영, 이언량, 송희립, 나대용, 우치적.... vs 구키 요시타카, 가토 요시아키
 							conversation:[
-								
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"적선들이 안골포 깊숙히 숨어있다. 교대로 침투하여 사격하라!",
+									en:"Enemy ships are hidden deep in Angolpo. Infiltrate in turns and fire!",
+									jp:"敵船が安骨浦の奥深くに隠れている。交代で浸透し、射撃せよ！"
+								}},
+								{idx:32, team:"enemy", pos:"right", txt:{//구키 요시타카
+									ko:"이순신... 집요한 놈이구나. 내 수군을 여기서 잃을 순 없다.",
+									en:"Yi Sun-sin... you persistent fellow. I cannot lose my navy here.",
+									jp:"李舜臣…執拗な奴だな。俺の水軍をここで失うわけにはいかない。"
+								}},
+								{idx:33, team:"enemy", pos:"right", txt:{//가토 요시아키
+									ko:"구키님, 우리가 나설 차례입니다! 일본 수군의 저력을 보여줍시다!",
+									en:"Lord Kuki, it is our turn! Let's show them the power of the Japanese Navy!",
+									jp:"九鬼様、我らが出る番です！日本水軍の底力を見せつけましょう！"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"적들이 나오지 못하게 입구를 봉쇄하고 포격하라!",
+									en:"Blockade the entrance so they cannot come out, and bombard them!",
+									jp:"敵が出てこられないように入口を封鎖し、砲撃せよ！"
+								}},
+								{idx:32, team:"enemy", pos:"right", txt:{//구키 요시타카
+									ko:"으윽... 나갈 수가 없다! 이대로 당할 수밖에 없는가!",
+									en:"Ugh... we cannot go out! Are we to be defeated like this!",
+									jp:"うっ…出られない！このままやられるしかないのか！"
+								}},
+								{idx:33, team:"enemy", pos:"right", txt:{//가토 요시아키
+									ko:"버텨라! 지원군이 올 때까지 버텨야 한다!",
+									en:"Hold on! We must hold on unitl reinforcements arrive!",
+									jp:"耐えろ！援軍が来るまで耐えねばならん！"
+								}}
 							],
 							lineup:0,
 							map:[
+								11,11,12,11,11,
+								12,10,2,10,12,
+								11,0,0,0,11,
+								10,30,0,30,10,
 								0,0,0,0,0,
+								30,0,0,0,30,
 								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
+								0,2,0,2,0,
+								0,0,1,0,0,
 								0,0,0,0,0,
 							],
-							entry:[],
+							entry:[
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{pos:1,idx:32, lv:50, grade:3, items: []},{pos:3,idx:33, lv:50, grade:3, items: []},{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							],
 							drop:{
-								first:[],
-								always:[],
+								first:[
+									[
+										{type:"Gold",num:2500},
+										{type:"Etc",idx:"8"}
+									]
+								],
+								always:[
+									[
+										{type:"Gold",num:250},
+										{type:"Material",idx:"13",num:3}
+									]
+								]
 							},
 						},
 						{
@@ -639,25 +809,70 @@ export const scenario = {
 								jp:"壬辰倭乱初期1592年(宣祖25年)9月1日、釜山浦で行われた海戦で、日本軍の本営であり前進基地が大きな打撃を受け、前線少なくとも130隻が沈没する甚大な被害を受け、この海戦以降、日本軍は本営であり前進基地である釜山浦もいつでも朝鮮水軍の攻撃を受け崩れる恐れが生じ、恐怖に怯えるようになった。この海戦で全羅左水軍最高の突撃隊長であった緑島湾号鄭雲(チョンウン)が敵の大台銃に当たって戦死した。",
 							},// 이순신, 원균, 이억기, 정운, 권준, 어영담, 신호, 김완, 무의공 이순신, 우치적, 황세득, 나대용, 송희립, 이영남 vs 도도 다카도라, 구키 요시타카
 							conversation:[
-								
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"여기가 적의 본거지 부산포다! 모든 화력을 집중하라!",
+									en:"This is the enemy's main base, Busanpo! Concentrate all firepower!",
+									jp:"ここが敵の本拠地、釜山浦だ！全火力を集中せよ！"
+								}},
+								{idx:28, team:"enemy", pos:"right", txt:{//도도 다카토라
+									ko:"이순신이 여기까지 쳐들어오다니! 막아라! 목숨을 걸고 막아!",
+									en:"Yi Sun-sin has come this far! Stop him! Stop him with your lives!",
+									jp:"李舜臣がここまで攻めてくるとは！防げ！命を懸けて防げ！"
+								}},
+								{idx:36, team:"ally", pos:"right", txt:{//정운
+									ko:"장군! 제가 선봉에 서겠습니다! 왜놈들을 쓸어버리겠습니다! 돌격!",
+									en:"General! I will take the vanguard! I will sweep away the Japanese! Charge!",
+									jp:"将軍！私が先鋒に立ちます！倭人どもを一掃してやります！突撃！"
+								}},
+								{idx:28, team:"enemy", pos:"right", txt:{//도도 다카토라
+									ko:"저 놈이 선봉이다! 집중 사격하라!",
+									en:"That one is the vanguard! Focus fire!",
+									jp:"あいつが先鋒だ！集中射撃せよ！"
+								}},
+								{idx:36, team:"ally", pos:"right", txt:{//정운
+									ko:"으악! ...장군... 부디 승리를...",
+									en:"Argh! ...General... please achieve victory...",
+									jp:"ぐわっ！…将軍…どうか勝利を…"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"정운!!! ...네 원수를 갚아주마! 전군, 적을 섬멸하라!",
+									en:"Jeong Un!!! ...I will avenge you! All forces, annihilate the enemy!",
+									jp:"鄭運！！！…お前の仇を討ってやる！全軍、敵を殲滅せよ！"
+								}}
 							],
 							lineup:0,
 							map:[
+								11,11,11,11,11,
+								12,12,12,12,12,
+								10,10,10,10,10,
+								0,0,2,0,0,
+								0,2,1,2,0,
+								0,0,2,0,0,
+								30,0,0,0,30,
 								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
+								30,0,0,0,30,
 								0,0,0,0,0,
 							],
-							entry:[],
+							entry:[
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{pos:1,idx:28, lv:50, grade:4, items: []},{pos:3,idx:32, lv:50, grade:3, items: []},{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							],
 							drop:{
-								first:[],
-								always:[],
+								first:[
+									[
+										{type:"Gold",num:3000},
+										{type:"Etc",idx:"8"}
+									]
+								],
+								always:[
+									[
+										{type:"Gold",num:300},
+										{type:"Material",idx:"13",num:3}
+									]
+								]
 							},
 						},
 						{
@@ -672,25 +887,65 @@ export const scenario = {
 								jp:"壬辰倭乱当時である1593年(朝鮮王朝26年)癸巳年2月10日～3月6日、全羅座道水軍節度使李舜臣が率いる朝鮮水軍連合艦隊が雲川(ウンポ)で約1ヶ月間7回の接戦を繰り広げた末、日本軍を破り勝利を収めた海戦であり、壬辰倭乱で初めて李舜臣が上陸戦を展開した海戦である。",
 							}, //이순신, 원균, 이억기 vs 와키자카 야스하루, 쵸소카베 치카우지, 구와나 치카카츠, 하타 치카시
 							conversation:[
-								
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"적들이 상륙하려 한다. 수륙 협공으로 적을 섬멸하라!",
+									en:"The enemy is trying to land. Destroy them with a coordinated amphibious attack!",
+									jp:"敵が上陸しようとしている。水陸挟撃で敵を殲滅せよ！"
+								}},
+								{idx:31, team:"enemy", pos:"right", txt:{//와키자카 야스하루
+									ko:"이순신... 이번엔 육지에서 결판을 내주마! 상륙하라!",
+									en:"Yi Sun-sin... I will settle this on land this time! Land the troops!",
+									jp:"李舜臣…今度は陸で決着をつけてやる！上陸せよ！"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"상륙을 허용해선 안 된다! 포격하라!",
+									en:"Do not allow them to land! Fire!",
+									jp:"上陸を許してはならない！砲撃せよ！"
+								}},
+								{idx:31, team:"enemy", pos:"right", txt:{//와키자카 야스하루
+									ko:"제기랄... 포격이 너무 거세다... 다가갈 수가 없다!",
+									en:"Damn it... the shelling is too intense... we cannot get close!",
+									jp:"くそっ…砲撃が激しすぎる…近づけない！"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"적의 기세가 꺾였다! 돌격하라!",
+									en:"The enemy's momentum is broken! Charge!",
+									jp:"敵の気勢が挫けた！突撃せよ！"
+								}}
 							],
 							lineup:0,
 							map:[
+								11,11,11,11,11,
+								12,12,12,12,12,
+								30,0,2,0,30,
+								0,2,1,2,0,
+								0,0,30,0,0,
 								0,0,0,0,0,
+								12,0,12,0,12,
 								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
+								30,0,0,0,30,
 								0,0,0,0,0,
 							],
-							entry:[],
+							entry:[
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{pos:2,idx:31, lv:45, grade:3, items: []},{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							],
 							drop:{
-								first:[],
-								always:[],
+								first:[
+									[
+										{type:"Gold",num:3000},
+										{type:"Etc",idx:"8"}
+									]
+								],
+								always:[
+									[
+										{type:"Gold",num:300},
+										{type:"Material",idx:"13",num:3}
+									]
+								]
 							},
 						},
 						{
@@ -705,25 +960,65 @@ export const scenario = {
 								jp:"水陸兵進策が失敗した日本水軍が巨済島内陸を行き来し、殺人・拉致・略奪を繰り返していた1594年3月4日(陽暦4月23日)に行われた。味方連合戦線124隻が参加した大規模な海戦で、三島水軍統制使李舜臣の緻密で迅速かつ正確な戦略で圧勝した海戦である。連合艦隊の6回目の出場であり、戦闘としては12回目の海戦である。",
 							}, // 이순신, 어영담, 이억기, 김완, 무의공 이순신, 권준, 황세득, 송희립, 이언량, 신호, 배흥립 vs 나가오카 다다오키, 기무라 시게코레
 							conversation:[
-								
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"거제도로 들어온 왜군을 소탕하라!",
+									en:"Sweep away the Japanese troops that have entered Geoje Island!",
+									jp:"巨済島に入ってきた倭軍を掃討せよ！"
+								}},
+								{idx:28, team:"enemy", pos:"right", txt:{//도도 다카토라 (Generic Commander)
+									ko:"이순신이다! 또 그가 왔다!",
+									en:"It's Yi Sun-sin! He is here again!",
+									jp:"李舜臣だ！また彼が来た！"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"적들의 퇴로를 차단하라! 한 놈도 놓치지 마라!",
+									en:"Cut off their retreat! Do not miss a single one!",
+									jp:"敵の退路を遮断せよ！一人も逃すな！"
+								}},
+								{idx:28, team:"enemy", pos:"right", txt:{//도도 다카토라
+									ko:"도망칠 곳이 없다... 싸워라! 죽기 살기로 싸워라!",
+									en:"There is nowhere to run... Fight! Fight for your lives!",
+									jp:"逃げる場所がない…戦え！死に物狂いで戦え！"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"승리는 우리의 것이다! 전군 돌격!",
+									en:"Victory is ours! All forces charge!",
+									jp:"勝利は我々のものだ！全軍突撃！"
+								}}
 							],
 							lineup:0,
 							map:[
+								11,10,12,10,11,
+								10,12,11,12,10,
 								0,0,0,0,0,
+								0,30,0,30,0,
 								0,0,0,0,0,
+								0,10,11,10,0,
+								12,0,0,0,12,
 								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
+								30,0,0,0,30,
 								0,0,0,0,0,
 							],
-							entry:[],
+							entry:[
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{pos:2,idx:28, lv:40, grade:3, items: []},{idx:'', lv:1, },{idx:'', lv:1, }, // Generic Boss
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							],
 							drop:{
-								first:[],
-								always:[],
+								first:[
+									[
+										{type:"Gold",num:3000},
+										{type:"Etc",idx:"8"}
+									]
+								],
+								always:[
+									[
+										{type:"Gold",num:300},
+										{type:"Material",idx:"13",num:3}
+									]
+								]
 							},
 						},
 						{
@@ -738,25 +1033,65 @@ export const scenario = {
 								jp:"壬辰倭乱期間中、李舜臣が9回出撃し、合計17回に渡って行った大小の海戦の中で最も成果が少なかった海戦で、日本軍が積極的に交戦を回避し、戦いらしい戦いも行われなかった。",
 							}, // 이순신, 윤두수, 곽재우, 김덕령 vs 시마즈 요시히로, 시마즈 도요히사, 후쿠시마 마사노리, 조소카베 모토치카, 이코마 지카마사, 가토 기요마사
 							conversation:[
-								
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"왜군이 성에 틀어박혀 나오질 않는다. 무리하게 공격하지 마라.",
+									en:"The Japanese troops are holed up in the castle and won't come out. Do not attack recklessly.",
+									jp:"倭軍が城に閉じこもって出てこない。無理に攻撃するな。"
+								}},
+								{idx:44, team:"ally", pos:"left", txt:{//김덕령 (의병장)
+									ko:"장군! 저희가 육지에서 공격하여 저들을 끌어내겠습니다!",
+									en:"General! We will attack from land and flush them out!",
+									jp:"将軍！我々が陸地から攻撃して彼らを引きずり出します！"
+								}},
+								{idx:28, team:"enemy", pos:"right", txt:{//시마즈 요시히로
+									ko:"절대 나가지 마라! 성을 사수하라! 버티면 이긴다!",
+									en:"Do not go out! Defend the castle! If we hold out, we win!",
+									jp:"絶対に出るな！城を死守せよ！耐えれば勝つ！"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"적들이 나올 생각이 없군... 화공으로 적을 괴롭혀라!",
+									en:"They have no intention of coming out... Harass them with fire attacks!",
+									jp:"敵は出てくる気がないな…火攻めで敵を苦しめろ！"
+								}},
+								{idx:28, team:"enemy", pos:"right", txt:{//시마즈 요시히로
+									ko:"끄떡없다! 자리를 지켜라!",
+									en:"It's nothing! Hold your positions!",
+									jp:"びくともしない！席を守れ！"
+								}}
 							],
 							lineup:0,
 							map:[
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
+								10,11,12,11,10,
+								11,12,10,12,11,
+								10,11,12,11,10,
+								12,0,0,0,12,
+								2,2,1,2,2,
+								0,0,2,0,0,
 								0,0,0,0,0,
 								0,0,0,0,0,
 								0,0,0,0,0,
 								0,0,0,0,0,
 							],
-							entry:[],
+							entry:[
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{pos:2,idx:28, lv:40, grade:3, items: []},{idx:'', lv:1, },{idx:'', lv:1, }, // Generic Boss
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							],
 							drop:{
-								first:[],
-								always:[],
+								first:[
+									[
+										{type:"Gold",num:3000},
+										{type:"Etc",idx:"8"}
+									]
+								],
+								always:[
+									[
+										{type:"Gold",num:300},
+										{type:"Material",idx:"13",num:3}
+									]
+								]
 							},
 						},
 						{
@@ -771,25 +1106,65 @@ export const scenario = {
 								jp:"丁酉再亂当時である1597年(宣祖30年)7月16日未明、慶尚南道巨済島と七千島間の海峡「七千梁」で朝鮮水軍が日本軍の奇襲を受けると、三道水軍統制使の元均が行き止まりの海峡に艦隊を追い込み、艦隊を自ら焼却し、陸地に兵士たちを降ろして散らばらせ、全員虐殺された。この時、失われた戦力は戦争末期まで再建されず、当時の朝廷では重臣たちが党争に巻き込まれ、李舜臣を幽閉し、元均を水軍統制使に任命した状態だった。",
 							},//원균, 이억기, 최호, 배설, 김완, 배홍립, 우치적 vs 시마즈 요시히로, 가토 요시아키, 와키자카 야스하루, 시마즈 토요히사, 구키 요시타카, 고니시 유키나가, 도도 다카토라, 간 미치나가
 							conversation:[
-								
+								{idx:34, team:"ally", pos:"right", txt:{//원균
+									ko:"으악! 기습이다! 당황하지 마라! 전군 요격하라!",
+									en:"Argh! It's an ambush! Do not panic! All forces intercept!",
+									jp:"うわっ！奇襲だ！慌てるな！全軍迎撃せよ！"
+								}},
+								{idx:33, team:"enemy", pos:"right", txt:{//가토 요시아키
+									ko:"조선 수군은 독 안에 든 쥐다. 전멸시켜라!",
+									en:"The Joseon Navy is a rat in a jar. Exterminate them!",
+									jp:"朝鮮水軍は袋のネズミだ。全滅させろ！"
+								}},
+								{idx:38, team:"ally", pos:"left", txt:{//배설
+									ko:"장군! 함대가 무너지고 있습니다! 후퇴해야 합니다!",
+									en:"General! The fleet is collapsing! We must retreat!",
+									jp:"将軍！艦隊が崩れています！撤退しなければなりません！"
+								}},
+								{idx:34, team:"ally", pos:"right", txt:{//원균
+									ko:"무슨 소리냐! 싸워라! 도망치는 놈은 내가 베겠다!",
+									en:"What are you saying! Fight! I will cut down anyone who runs!",
+									jp:"何言ってるんだ！戦え！逃げる奴は俺が斬る！"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신 (과거 회상 혹은 부재중 상황 묘사, 실제로는 원균이 지휘)
+									ko:"(원균... 자네의 오판이 조선 수군을 위기로 몰아넣었네...)",
+									en:"(Won Gyun... your misjudgment has put the Joseon Navy in crisis...)",
+									jp:"(元均…お前の誤判が朝鮮水軍を危機に追い込んだ…)"
+								}}
 							],
 							lineup:0,
 							map:[
+								11,11,12,11,11,
+								12,10,0,10,12,
+								11,0,30,0,11,
+								0,0,0,0,0,
+								30,0,0,0,30,
+								0,0,30,0,0,
 								0,0,0,0,0,
 								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
+								30,0,0,0,30,
 								0,0,0,0,0,
 							],
-							entry:[],
+							entry:[
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{pos:1,idx:28, lv:55, grade:5, items: []},{pos:2,idx:31, lv:55, grade:5, items: []},{pos:3,idx:33, lv:55, grade:5, items: []},{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							],
 							drop:{
-								first:[],
-								always:[],
+								first:[
+									[
+										{type:"Gold",num:3500},
+										{type:"Etc",idx:"8"}
+									]
+								],
+								always:[
+									[
+										{type:"Gold",num:350},
+										{type:"Material",idx:"13",num:3}
+									]
+								]
 							},
 						},
 						{
@@ -804,25 +1179,70 @@ export const scenario = {
 								jp:"丁酉再亂当時である1597年(宣祖30年)9月16日、全羅座道水軍節度使兼統制使李舜臣が率いる朝鮮水軍連合艦隊が明凉水都で日本軍艦隊を撃破し、滅亡の危機に陥った朝鮮を救った奇跡的な大捷である。朝鮮水軍の板옥船13隻と日本軍艦隊133隻が対峙し、わずか13隻しかなかった朝鮮水軍が10倍以上の日本軍を撃破し、圧倒的な勝利を収めた大捷である。",
 							}, // 이순신, 김응함, 조계종, 우수, 안위, 정응두, 김억추, 배홍립, 민정붕, 소계남, 송여종, 나대용, 이응표, 류형 vs 도도 다카토라, 구루시마 미치후사, 와키자카 야스하루, 간 마사카게, 모리 다카마사, 하타 치카시
 							conversation:[
-								
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"신에게는 아직 12척의 배가 남아있사옵니다. 죽고자 하면 살 것이요, 살고자 하면 죽을 것이다!",
+									en:"I still have 12 ships. Those who seek death shall live, and those who seek life shall die!",
+									jp:"私にはまだ12隻の船が残っております。死のうとすれば生き、生きようとすれば死ぬだろう！"
+								}},
+								{idx:29, team:"enemy", pos:"right", txt:{//구루시마 미치후사
+									ko:"고작 12척이라니... 단숨에 밟아버려라!",
+									en:"Only 12 ships... Crush them at once!",
+									jp:"たった12隻だと…一気に踏み潰せ！"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"울돌목의 물살을 이용해 적을 섬멸하라!",
+									en:"Use the currents of Uldolmok to destroy the enemy!",
+									jp:"鳴梁の潮流を利用して敵を殲滅せよ！"
+								}},
+								{idx:24, team:"ally", pos:"left", txt:{//김응함
+									ko:"장군! 적의 수가 너무 많습니다! 버틸 수가 없습니다!",
+									en:"General! The enemy is too numerous! We cannot hold out!",
+									jp:"将軍！敵の数が多すぎます！耐えられません！"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"물러서지 마라! 내가 앞장서겠다! 적의 대장선을 쳐라!",
+									en:"Do not retreat! I will lead the way! Strike the enemy flagship!",
+									jp:"退くな！私が先頭に立つ！敵の大将船を討て！"
+								}},
+								{idx:29, team:"enemy", pos:"right", txt:{//구루시마 미치후사
+									ko:"이놈들... 왜 무너지지 않는 거냐! 으악!",
+									en:"You bastards... why won't you fall! Argh!",
+									jp:"貴様ら…なぜ崩れないんだ！ぐわっ！"
+								}}
 							],
 							lineup:0,
 							map:[
+								11,10,2,10,11,
+								11,10,2,10,11,
+								11,0,0,0,11,
+								0,0,2,0,0,
+								0,2,1,2,0,
+								0,0,2,0,0,
 								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
+								11,0,2,0,11,
+								11,10,0,10,11,
+								11,0,0,0,11,
 							],
-							entry:[],
+							entry:[
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{pos:1,idx:28, lv:60, grade:6, items: []},{pos:2,idx:29, lv:60, grade:6, items: []},{pos:3,idx:31, lv:60, grade:6, items: []},{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							],
 							drop:{
-								first:[],
-								always:[],
+								first:[
+									[
+										{type:"Gold",num:4000},
+										{type:"Etc",idx:"8"}
+									]
+								],
+								always:[
+									[
+										{type:"Gold",num:400},
+										{type:"Material",idx:"13",num:3}
+									]
+								]
 							},
 						},
 						{
@@ -837,25 +1257,65 @@ export const scenario = {
 								jp:"明良海戦後、艦隊の再建をある程度進めた李舜臣の朝鮮水軍が、藤堂高虎、加藤嘉明の日本水軍と正面から交戦した戦いである。朝鮮水軍は日本水軍の奇襲を見破り、前線50余隻を撃沈させた。",
 							}, //이순신, 무의공 이순신, 송여종, 배홍립, 우치적, 이언량, 나대용, 송희립 vs 도도 다카도라, 가토 요시아키
 							conversation:[
-								
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"적들이 함대를 재건하여 다시 도전해왔다. 이번에야말로 뿌리를 뽑아야 한다.",
+									en:"The enemy has rebuilt their fleet and challenged us again. We must root them out this time.",
+									jp:"敵が艦隊を再建して再び挑んできた。今回こそ根絶やしにしなければならない。"
+								}},
+								{idx:28, team:"enemy", pos:"right", txt:{//도도 다카토라
+									ko:"이순신 네이놈! 이번엔 절대 당하지 않는다!",
+									en:"Yi Sun-sin! I will not be defeated this time!",
+									jp:"李舜臣！今度こそ絶対に負けない！"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"적들이 우리의 유인책에 걸려들었다. 복병을 출동시켜라!",
+									en:"The enemy has fallen for our lure. Send out the ambush troops!",
+									jp:"敵が我々の誘引策に引っかかった。伏兵を出動させろ！"
+								}},
+								{idx:28, team:"enemy", pos:"right", txt:{//도도 다카토라
+									ko:"복병이라고? 함정이다! 후퇴하라! 전군 후퇴!",
+									en:"Ambush? It's a trap! Retreat! All forces retreat!",
+									jp:"伏兵だと？罠だ！撤退せよ！全軍撤退！"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"도망치게 두지 마라! 끝까지 추격하여 수장을 시켜라!",
+									en:"Do not let them escape! Chase them to the end and bury them at sea!",
+									jp:"逃がすな！最後まで追撃して水葬にせよ！"
+								}}
 							],
 							lineup:0,
 							map:[
+								30,12,11,12,30,
+								11,10,10,10,11,
+								10,10,0,10,10,
+								0,0,30,0,0,
 								0,0,0,0,0,
 								0,0,0,0,0,
+								30,0,0,0,30,
 								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
+								1,0,0,0,1,
 								0,0,0,0,0,
 							],
-							entry:[],
+							entry:[
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{pos:1,idx:28, lv:60, grade:5, items: []},{pos:2,idx:33, lv:60, grade:5, items: []},{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							],
 							drop:{
-								first:[],
-								always:[],
+								first:[
+									[
+										{type:"Gold",num:4000},
+										{type:"Etc",idx:"8"}
+									]
+								],
+								always:[
+									[
+										{type:"Gold",num:400},
+										{type:"Material",idx:"13",num:3}
+									]
+								]
 							},
 						},
 						{
@@ -871,25 +1331,65 @@ export const scenario = {
 							}, //이순신, 권율, 무의공 이순신, 황세득, 이언량, 배홍립, 방덕룡, 류형, 이영남, 우치적, 나대용, 송희립 vs 고니시 유키나가, 오야노 다네모토, 오야노 다네하카루, 마츠라 시게노부, 아리마 하루노부, 오무라 요시아키, 우치노미야 쿠니츠나, 고토 하루마사, 스모토 미치타카
 							//명나라 유정, 진린, 등자룡 참전
 							conversation:[
-								
+								{idx:40, team:"ally", pos:"right", txt:{//권율
+									ko:"왜군이 왜교성에 고립되었다. 이순신 장군, 해상을 봉쇄해주시오.",
+									en:"The Japanese are isolated in Waegyoseong. General Yi, please blockade the sea.",
+									jp:"倭軍が倭京城に孤立した。李舜臣将軍、海上を封鎖してくれ。"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"알겠습니다. 단 한 척의 배도 빠져나가지 못하게 하겠습니다.",
+									en:"Understood. I will not let a single ship escape.",
+									jp:"分かりました。一隻の船も逃がしません。"
+								}},
+								{idx:28, team:"enemy", pos:"right", txt:{//고니시 유키나가 (Generic Commander)
+									ko:"식량이 바닥나고 있다... 어떻게든 뚫고 나가야 한다!",
+									en:"We are running out of food... We must break out somehow!",
+									jp:"食糧が尽きつつある…何とかして突破しなければならない！"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"포위망을 좁혀라! 적들이 말라죽게 만들어라!",
+									en:"Tighten the siege! Let them starve to death!",
+									jp:"包囲網を狭めろ！敵を干上がらせろ！"
+								}},
+								{idx:28, team:"enemy", pos:"right", txt:{//고니시 유키나가
+									ko:"명나라 수군 도독에게 뇌물을 보내라... 길을 열어줄지도 모른다.",
+									en:"Send a bribe to the Ming naval commander... he might open a path.",
+									jp:"明の水軍都督に賄賂を送れ…道を開けてくれるかもしれない。"
+								}}
 							],
 							lineup:0,
 							map:[
+								11,11,11,11,11,
+								12,12,12,12,12,
+								10,12,11,10,10,
 								0,0,0,0,0,
+								0,2,0,2,0,
 								0,0,0,0,0,
+								11,0,0,0,11,
 								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
+								30,0,0,0,30,
 								0,0,0,0,0,
 							],
-							entry:[],
+							entry:[
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{pos:2,idx:28, lv:45, grade:3, items: []},{idx:'', lv:1, },{idx:'', lv:1, }, // Generic
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							],
 							drop:{
-								first:[],
-								always:[],
+								first:[
+									[
+										{type:"Gold",num:4000},
+										{type:"Etc",idx:"8"}
+									]
+								],
+								always:[
+									[
+										{type:"Gold",num:400},
+										{type:"Material",idx:"13",num:3}
+									]
+								]
 							},
 						},
 						{
@@ -904,25 +1404,70 @@ export const scenario = {
 								jp:"丁酉再亂は最後の戦いである。1598年(宣祖31年)武戌年(1598年)11月19日未明、全羅左道水軍節度使兼三道水軍統制使李舜臣(イ・スンシン)と明の水軍統制使秦麟(ジンリン)が指揮する朝鮮・明の連合艦隊が、老梁海峡から撤退する日本軍艦隊500隻を追撃し、退却路を遮断した後、火工戦術を駆使して猛烈な攻撃を仕掛け、200隻を打ち砕き、燃やし、100隻を捕獲するなど、日本軍を大きく打ち破り勝利を収めた海戦です。",
 							}, //이순신, 진린, 무의공 이순신, 안위, 송희립, 우치적, 나대용, 이언량, 이회, 이완등.... vs 시마즈 요시히로, 고니시 유키나가, 다치바나 모네시게, 소 요시토시, 시마즈 토요히사, 시마즈 타다츠네, 테라자와 마사시게, 타카하시 무네마스, 쓰쿠시 히로카도, 모리 히데카네, 요코히라 타카시게, 마치다 히사마사, 이케베 사다마사, 키이레 세주노카미, 키바야마 쿠다카, 아리마 하루노부, 마츠라 시게노부
 							conversation:[
-								
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"이 원수만 갚을 수 있다면 죽어도 여한이 없겠습니다. 천지신명이시여, 도와주소서!",
+									en:"If I can just avenge this enemy, I will die with no regrets. Heaven and earth, please help me!",
+									jp:"この敵さえ討てれば、死んでも悔いはありません。天地神明よ、お助けください！"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"전군 발포하라! 적들을 한 놈도 살려보내지 마라!",
+									en:"All forces fire! Do not let a single enemy escape!",
+									jp:"全軍発砲せよ！敵を一匹も生かして帰すな！"
+								}},
+								{idx:28, team:"enemy", pos:"right", txt:{//도도 다카토라 (시마즈 대역)
+									ko:"후퇴하라! 이순신은 괴물이다! 도망쳐!",
+									en:"Retreat! Yi Sun-sin is a monster! Run away!",
+									jp:"撤退せよ！李舜臣は怪物だ！逃げろ！"
+								}},
+								{idx:21, team:"ally", pos:"left", txt:{//이순신
+									ko:"(탐!)... 싸움이 급하다... 나의 죽음을 알리지 마라...",
+									en:"(Bang!)... The battle is urgent... Do not announce my death...",
+									jp:"(ターン！)…戦いが急だ…私の死を知らせるな…"
+								}},
+								{idx:55, team:"ally", pos:"left", txt:{//송희립/나대용 등 부관
+									ko:"장군! 장군! ...장군께서 잠시 기절하셨다! 계속 싸워라!",
+									en:"General! General! ...The General has just fainted! Keep fighting!",
+									jp:"将軍！将軍！…将軍が少し気絶された！戦い続けろ！"
+								}},
+								{idx:59, team:"ally", pos:"right", txt:{//진린 (명나라 제독 - 가상 ID)
+									ko:"노장군... 당신은 진정한 영웅이오... 내 남은 적을 쓸어버리리라!",
+									en:"Old General... you are a true hero... I will sweep away the remaining enemies!",
+									jp:"老将軍…あなたは真の英雄だ…私が残りの敵を一掃しよう！"
+								}}
 							],
 							lineup:0,
 							map:[
+								11,10,2,10,11,
+								10,12,1,12,10,
+								30,2,0,2,30,
+								0,0,30,0,0,
+								2,1,2,1,2,
+								0,0,30,0,0,
+								30,2,0,2,30,
 								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
-								0,0,0,0,0,
+								11,0,0,0,11,
 								0,0,0,0,0,
 							],
-							entry:[],
+							entry:[
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{pos:1,idx:28, lv:65, grade:6, items: []},{pos:2,idx:31, lv:65, grade:6, items: []},{pos:3,idx:33, lv:65, grade:6, items: []},{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+							],
 							drop:{
-								first:[],
-								always:[],
+								first:[
+									[
+										{type:"Gold",num:5000},
+										{type:"Etc",idx:"8"}
+									]
+								],
+								always:[
+									[
+										{type:"Gold",num:500},
+										{type:"Material",idx:"13",num:3}
+									]
+								]
 							},
 						},
 					],

@@ -47,24 +47,24 @@ const Menu = ({
           <ul className="menu">
             {type === 'new' ?
               <>
-                <li><Button type="menu" to="/start" onClick={() => {console.log("start");}}>{gameData.msg.button['startingGame'][lang]}</Button></li>
-                <li><Button type="menu" to="/setup" onClick={() => {console.log("setup");}}>{gameData.msg.button['setup'][lang]}</Button></li>
+                <li><Button type="menu" to="/start" onClick={() => {console.log("start");}}>{gameData.msg?.button?.['startingGame']?.[lang] || "Start"}</Button></li>
+                <li><Button type="menu" to="/setup" onClick={() => {console.log("setup");}}>{gameData.msg?.button?.['setup']?.[lang] || "Setup"}</Button></li>
               </>
             :
               <>
-                <li><Button type="menu" to="/cards" onClick={() => {console.log("card");}}>{gameData.msg.menu['card'][lang]}</Button></li>
-                <li><Button type="menu" to="/inven" onClick={() => {console.log("inven");}}>{gameData.msg.menu['inven'][lang]}</Button></li>
-                <li><Button type="menu" to="/shop" onClick={() => {console.log("shop");}}>{gameData.msg.menu['shop'][lang]}</Button></li>
-                <li><Button type="menu" to="/tool" onClick={() => {console.log("tool");}}>{gameData.msg.menu['tool'][lang]}</Button></li>
-                <li><Button type="menu" to="/shipyard" onClick={() => {console.log("shipyard");}}>{gameData.msg.menu['shipyard'][lang]}</Button></li>
-                <li><Button type="menu" to="/tradingPost" onClick={() => {console.log("tradingPost");}}>{gameData.msg.menu['tradingPost'][lang]}</Button></li>
-                <li><Button type="menu" to="/enhancingCards" onClick={() => {console.log("enhancingCards");}}>{gameData.msg.menu['enhancingCards'][lang]}</Button></li>
-                <li><Button type="menu" to="/enhancingStickers" onClick={() => {console.log("enhancingStickers");}}>{gameData.msg.menu['enhancingStickers'][lang]}</Button></li>
-                <li><Button type="menu" to="/composite" onClick={() => {console.log("composite");}}>{gameData.msg.menu['composite'][lang]}</Button></li>
-                <li><Button type="menu" to="/recruitment" onClick={() => {console.log("gacha");}}>{gameData.msg.menu['recruitment'][lang]}</Button></li>
-                <li><Button type="menu" to="/cardPlacement" onClick={() => {console.log("cardPlacement");}}>{gameData.msg.menu['cardPlacement'][lang]}</Button></li>
-                <li><Button type="menu" to="/battle" onClick={() => {console.log("battle");}}>{gameData.msg.menu['battle'][lang]}</Button></li>
-                <li><Button type="menu" to="/map" onClick={() => {console.log("map");}}>{gameData.msg.menu['sail'][lang]}</Button></li>
+                <li><Button type="menu" to="/cards" onClick={() => {console.log("card");}}>{gameData.msg?.menu?.['card']?.[lang] || "Card"}</Button></li>
+                <li><Button type="menu" to="/inven" onClick={() => {console.log("inven");}}>{gameData.msg?.menu?.['inven']?.[lang] || "Inven"}</Button></li>
+                <li><Button type="menu" to="/shop" onClick={() => {console.log("shop");}}>{gameData.msg?.menu?.['shop']?.[lang] || "Shop"}</Button></li>
+                <li><Button type="menu" to="/tool" onClick={() => {console.log("tool");}}>{gameData.msg?.menu?.['tool']?.[lang] || "Tool"}</Button></li>
+                <li><Button type="menu" to="/shipyard" onClick={() => {console.log("shipyard");}}>{gameData.msg?.menu?.['shipyard']?.[lang] || "Shipyard"}</Button></li>
+                <li><Button type="menu" to="/tradingPost" onClick={() => {console.log("tradingPost");}}>{gameData.msg?.menu?.['tradingPost']?.[lang] || "Trading Post"}</Button></li>
+                <li><Button type="menu" to="/enhancingCards" onClick={() => {console.log("enhancingCards");}}>{gameData.msg?.menu?.['enhancingCards']?.[lang] || "Enhancing Cards"}</Button></li>
+                <li><Button type="menu" to="/enhancingStickers" onClick={() => {console.log("enhancingStickers");}}>{gameData.msg?.menu?.['enhancingStickers']?.[lang] || "Enhancing Stickers"}</Button></li>
+                <li><Button type="menu" to="/composite" onClick={() => {console.log("composite");}}>{gameData.msg?.menu?.['composite']?.[lang] || "Composite"}</Button></li>
+                <li><Button type="menu" to="/recruitment" onClick={() => {console.log("gacha");}}>{gameData.msg?.menu?.['recruitment']?.[lang] || "Recruitment"}</Button></li>
+                <li><Button type="menu" to="/cardPlacement" onClick={() => {console.log("cardPlacement");}}>{gameData.msg?.menu?.['cardPlacement']?.[lang] || "Placement"}</Button></li>
+                <li><Button type="menu" to="/battle" onClick={() => {console.log("battle");}}>{gameData.msg?.menu?.['battle']?.[lang] || "Battle"}</Button></li>
+                <li><Button type="menu" to="/map" onClick={() => {console.log("map");}}>{gameData.msg?.menu?.['sail']?.[lang] || "Map"}</Button></li>
               </>
             }
           </ul>

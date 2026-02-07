@@ -84,27 +84,31 @@ const valuePrice = (data, shipItem, setSelectShip, shipInfo, setShipInfo) => {
 	let cloneShipInfo = {name:shipInfo.name,price:shipInfo.price,durability:0,loadage:0,knot:0,space:0};
 	const stateFn = (data, state, first) => {
 		if (first) {
-			data.durability = state[0];
-			data.loadage = state[1];
-			data.knot = state[2];
-			data.space = state[3];
-			data.cannon = [state[4],state[5],state[6]];
+			data.durability = state[0] || 0;
+			data.loadage = state[1] || 0;
+			data.knot = state[2] || 0;
+			data.space = state[3] || 0;
+			data.cannon = [state[4] || 0, state[5] || 0, state[6] || 0];
 		} else {
-			data.durability = (state[0].indexOf('%') >= 0 ? Math.round(Number(data.durability) * (parseInt(state[0]) / 100)) : Math.round(Number(data.durability) + Number(state[0])));
-			data.loadage = (state[1].indexOf('%') >= 0 ? Math.round(Number(data.loadage) * (parseInt(state[1]) / 100)) : Math.round(Number(data.loadage) + Number(state[1]))); 
-			data.knot = (state[2].indexOf('%') >= 0 ? Math.round(Number(data.knot) * (parseInt(state[2]) / 100)) : Math.round(Number(data.knot) + Number(state[2])));
-			data.space = (state[3].indexOf('%') >= 0 ? Math.round(Number(data.space) * (parseInt(state[3]) / 100)) : Math.round(Number(data.space) + Number(state[3])));
-			data.cannon[0] = (state[4].indexOf('%') >= 0 ? Math.round(Number(data.cannon[0]) * (parseInt(state[4]) / 100)) : Math.round(Number(data.cannon[0]) + Number(state[4])));
-			data.cannon[1] = (state[4].indexOf('%') >= 0 ? Math.round(Number(data.cannon[1]) * (parseInt(state[4]) / 100)) : Math.round(Number(data.cannon[1]) + Number(state[4])));
-			data.cannon[2] = (state[4].indexOf('%') >= 0 ? Math.round(Number(data.cannon[2]) * (parseInt(state[4]) / 100)) : Math.round(Number(data.cannon[2]) + Number(state[4])));
+			if (state[0] !== undefined) data.durability = (String(state[0]).indexOf('%') >= 0 ? Math.round(Number(data.durability) * (parseInt(state[0]) / 100)) : Math.round(Number(data.durability) + Number(state[0])));
+			if (state[1] !== undefined) data.loadage = (String(state[1]).indexOf('%') >= 0 ? Math.round(Number(data.loadage) * (parseInt(state[1]) / 100)) : Math.round(Number(data.loadage) + Number(state[1]))); 
+			if (state[2] !== undefined) data.knot = (String(state[2]).indexOf('%') >= 0 ? Math.round(Number(data.knot) * (parseInt(state[2]) / 100)) : Math.round(Number(data.knot) + Number(state[2])));
+			if (state[3] !== undefined) data.space = (String(state[3]).indexOf('%') >= 0 ? Math.round(Number(data.space) * (parseInt(state[3]) / 100)) : Math.round(Number(data.space) + Number(state[3])));
+			if (state[4] !== undefined) {
+				data.cannon[0] = (String(state[4]).indexOf('%') >= 0 ? Math.round(Number(data.cannon[0]) * (parseInt(state[4]) / 100)) : Math.round(Number(data.cannon[0]) + Number(state[4])));
+				data.cannon[1] = (String(state[4]).indexOf('%') >= 0 ? Math.round(Number(data.cannon[1]) * (parseInt(state[4]) / 100)) : Math.round(Number(data.cannon[1]) + Number(state[4])));
+				data.cannon[2] = (String(state[4]).indexOf('%') >= 0 ? Math.round(Number(data.cannon[2]) * (parseInt(state[4]) / 100)) : Math.round(Number(data.cannon[2]) + Number(state[4])));
+			}
 		}
 	}
 	//{name:'',price:0,durability:0,loadage:0,knot:0,space:0,cannon1,cannon2,cannon3}
-	const ship = shipItem.ship[0][data.shipIdx];
-	let price = ship.price;
-	stateFn(cloneShipInfo, [ship.durability,ship.loadage,ship.knot,ship.space,shipItem.cannon[data.cannon0]?.eff.power || '',shipItem.cannon[data.cannon1]?.eff.power || '',shipItem.cannon[data.cannon2]?.eff.power || ''], true);
+	const ship = shipItem.ship?.[0]?.[data.shipIdx];
+	if (!ship) return;
+	let price = ship.price || 0;
+	stateFn(cloneShipInfo, [ship.durability,ship.loadage,ship.knot,ship.space,shipItem.cannon?.[data.cannon0]?.eff?.power || '',shipItem.cannon?.[data.cannon1]?.eff?.power || '',shipItem.cannon?.[data.cannon2]?.eff?.power || ''], true);
 	for (const key in data) {
 		if (typeof data[key] === 'number') {
+			const itemRef = shipItem[key]?.[data[key]];
 			switch(key) {
 				case 'shipIdx':
 				case 'sail0Color':
@@ -112,27 +116,37 @@ const valuePrice = (data, shipItem, setSelectShip, shipInfo, setShipInfo) => {
 				case 'sail2Color':
 					break;
 				case 'figure':
-					price += shipItem.figurehead[data[key]].price;
-					stateFn(cloneShipInfo, shipItem.figurehead[data[key]].factor, false);
+					if (itemRef) {
+						price += itemRef.price || 0;
+						stateFn(cloneShipInfo, itemRef.factor, false);
+					}
 					break;
 				case 'wood':
-					price = Math.round(price * (parseInt(shipItem.wood[data[key]].price) / 100));
-					stateFn(cloneShipInfo, shipItem.wood[data[key]].factor, false);
+					if (itemRef) {
+						price = Math.round(price * (parseInt(itemRef.price || 100) / 100));
+						stateFn(cloneShipInfo, itemRef.factor, false);
+					}
 					break;
 				case 'sail0':
 				case 'sail1':
 				case 'sail2':
-					price += shipItem.sail[data[key]].price;
-					stateFn(cloneShipInfo, shipItem.sail[data[key]].factor, false);
+					if (itemRef) {
+						price += itemRef.price || 0;
+						stateFn(cloneShipInfo, itemRef.factor, false);
+					}
 					break;
 				case 'cannon0':
 				case 'cannon1':
 				case 'cannon2':
-					price += shipItem.cannon[data[key]].price;
+					if (itemRef) {
+						price += itemRef.price || 0;
+					}
 					break;
 				default:
-					price += shipItem[key][data[key]].price;
-					stateFn(cloneShipInfo, shipItem[key][data[key]].factor, false);
+					if (itemRef) {
+						price += itemRef.price || 0;
+						stateFn(cloneShipInfo, itemRef.factor, false);
+					}
 					break;
 			}
 		}
@@ -204,37 +218,44 @@ const Shipyard = ({
 	const possessedShip = useRef([]);//보유한 배 갯수 데이터
 	const [actionCh, setActionCh] = useState({});//행동할 캐릭터 데이터
 	const actionRef = useRef();//행동할 캐릭터 선택자
+	const shipNameRef = useRef(null);//함선 이름 입력 선택자
 	useEffect(() => {
 			colorPicker(canvasRef.current, imgSet.etc.color, setCtx);
 	}, []);
 	useEffect(() => {
-		if (Object.keys(saveData).length !== 0) {
-			possessedShip.current = new Array(saveData.ship.length - 1).fill('');
-			const cityData = saveData.city[cityIdx];
-			const items = [
-				[...cityData.shipyard.blueprint],
-				['',...cityData.shipyard.wood],
-				['',...cityData.shipyard.figure],
-				['',...cityData.shipyard.anchor],
-				['',...cityData.shipyard.sail],
-				['',...cityData.shipyard.sail],
-				['',...cityData.shipyard.sail],
-				['',...cityData.shipyard.cannon],
-				['',...cityData.shipyard.cannon],
-				['',...cityData.shipyard.cannon],
-			];
-			setItem(items);
-			setActionCh(saveData.actionCh.shipyard);
-			setPopupInfo({
-				ch:saveData.ch,
-				actionCh:saveData.actionCh.shipyard.idx,
-				type:'shipyard'
-			});
+		if (Object.keys(saveData || {}).length !== 0) {
+			possessedShip.current = new Array(Math.max(0, (saveData.ship?.length || 1) - 1)).fill('');
+			const cityData = saveData.city?.[cityIdx];
+			if (cityData?.shipyard) {
+				const items = [
+					[...(cityData.shipyard.blueprint || [])],
+					['',...(cityData.shipyard.wood || [])],
+					['',...(cityData.shipyard.figure || [])],
+					['',...(cityData.shipyard.anchor || [])],
+					['',...(cityData.shipyard.sail || [])],
+					['',...(cityData.shipyard.sail || [])],
+					['',...(cityData.shipyard.sail || [])],
+					['',...(cityData.shipyard.cannon || [])],
+					['',...(cityData.shipyard.cannon || [])],
+					['',...(cityData.shipyard.cannon || [])],
+				];
+				setItem(items);
+			}
+			if (saveData.actionCh?.shipyard) {
+				setActionCh(saveData.actionCh.shipyard);
+				setPopupInfo({
+					ch:saveData.ch || [],
+					actionCh:saveData.actionCh.shipyard.idx,
+					type:'shipyard'
+				});
+			}
 			let itemL = [[],[],[],[],[],[],[],[],[],[]];
-			for (let key in saveData.items) {
-				for (const [idx, data] of saveData.items[key].entries()) {
-					if (key === 'etc' && data.idx >= 27 && data.idx <= 38) {
-						itemL[0].push(data.idx);
+			if (saveData.items) {
+				for (let key in saveData.items) {
+					for (const [idx, data] of (saveData.items[key] || []).entries()) {
+						if (key === 'etc' && data.idx >= 27 && data.idx <= 38) {
+							itemL[0].push(data.idx);
+						}
 					}
 				}
 			}
@@ -259,33 +280,38 @@ const Shipyard = ({
 										<>
 											<div className="ship_moveX">
 												<div className="ship_moveY">
-													<svg className="ship_body" xmlns="http://www.w3.org/2000/svg" width="320px" height="600px" viewBox="0 0 320 600" dangerouslySetInnerHTML={{__html: util.setShipColor(gameData.shipSvg[selectShip.shipIdx], imgSet.wood[selectShip.wood] || imgSet.images.transparent, gameData.ships.woodColor[gameData.ships.wood[selectShip.wood]?.woodColor ?? 4], Math.random().toString(36).substring(2, 11), [gameData.sailSvg[`${selectShip.shipIdx}_${selectShip.sail0}_1`], gameData.sailSvg[`${selectShip.shipIdx}_${selectShip.sail1}_2`], gameData.sailSvg[`${selectShip.shipIdx}_${selectShip.sail2}_3`]], [selectShip.sail0Color, selectShip.sail1Color, selectShip.sail2Color], [gameData.cannonSvg[`${selectShip.shipIdx}_${selectShip.cannon0}_1`], gameData.cannonSvg[`${selectShip.shipIdx}_${selectShip.cannon1}_2`], gameData.cannonSvg[`${selectShip.shipIdx}_${selectShip.cannon2}_3`]])}}></svg>
-													{selectShip.figure !== '' && <svg className="ship_face" style={{filter:`drop-shadow(0 0 7px ${gameData.ships.figureColor[gameData.ships.figurehead[selectShip.figure].color][2]})`}} xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg[gameData.ships.figurehead[selectShip.figure].display], gameData.ships.figureColor, gameData.ships.figurehead[selectShip.figure].color)}}></svg>}
+													<svg className="ship_body" xmlns="http://www.w3.org/2000/svg" width="320px" height="600px" viewBox="0 0 320 600" dangerouslySetInnerHTML={{__html: util.setShipColor(gameData.shipSvg?.[selectShip.shipIdx], imgSet.wood?.[selectShip.wood] || imgSet.images?.transparent, gameData.ships?.woodColor?.[gameData.ships.wood?.[selectShip.wood]?.woodColor ?? 4], Math.random().toString(36).substring(2, 11), [gameData.sailSvg?.[`${selectShip.shipIdx}_${selectShip.sail0}_1`], gameData.sailSvg?.[`${selectShip.shipIdx}_${selectShip.sail1}_2`], gameData.sailSvg?.[`${selectShip.shipIdx}_${selectShip.sail2}_3`]], [selectShip.sail0Color, selectShip.sail1Color, selectShip.sail2Color], [gameData.cannonSvg?.[`${selectShip.shipIdx}_${selectShip.cannon0}_1`], gameData.cannonSvg?.[`${selectShip.shipIdx}_${selectShip.cannon1}_2`], gameData.cannonSvg?.[`${selectShip.shipIdx}_${selectShip.cannon2}_3`]])}}></svg>
+													{selectShip.figure !== '' && gameData.ships?.figurehead?.[selectShip.figure] && (
+														<svg className="ship_face" style={{filter:`drop-shadow(0 0 7px ${gameData.ships.figureColor?.[gameData.ships.figurehead[selectShip.figure].color]?.[2] || '#000'})`}} xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg?.[gameData.ships.figurehead[selectShip.figure].display], gameData.ships.figureColor, gameData.ships.figurehead[selectShip.figure].color)}}></svg>
+													)}
 												</div>
 											</div>
-											{selectShip.anchor !== '' && <div className="display_anchor on">
-												<ItemPic className="pic" itemPic={imgSet.anchor[selectShip.anchor]} />
-											</div>}
+											{selectShip.anchor !== '' && (
+												<div className="display_anchor on">
+													<ItemPic className="pic" itemPic={imgSet.anchor?.[selectShip.anchor]} />
+												</div>
+											)}
 										</>
 									)}
 								</div>
 								<div className="ship_option_container">
 									{cateList.map((data, idx) => {
 										if (typeof selectItem1.selectCate[idx] === 'number') {
-											const items = selectItem1.selectCate[idx] === 0 ? gameItem[cateList[idx].na][selectItem1.save[idx]] : shipItem[cateList[idx].na][selectItem1.save[idx]];
+											const items = selectItem1.selectCate[idx] === 0 ? gameItem?.[cateList[idx].na]?.[selectItem1.save[idx]] : shipItem?.[cateList[idx].na]?.[selectItem1.save[idx]];
+											if (!items) return null;
 											const grade = items.grade || 1;
 											return (
-													<ShipOption className={`ship_option ship_${data.classNa} ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${selectCate === idx ? 'on' : ''}`} key={`shipList${idx}`} onClick={() => {
+													<ShipOption className={`ship_option ship_${data.classNa} ${gameData.itemGrade.txt_e?.[grade]?.toLowerCase() || 'normal'} ${selectCate === idx ? 'on' : ''}`} key={`shipList${idx}`} onClick={() => {
 														setSelectCate(idx);
-														setSelectItem2({save:selectItem1.save[idx],game:selectItem1.game[idx],select:selectItem1.select[idx],selectCate:selectCate[idx],userHave:selectItem1.userHave[idx]});
+														setSelectItem2({save:selectItem1.save[idx],game:selectItem1.game[idx],select:selectItem1.select[idx],selectCate:selectItem1.selectCate[idx],userHave:selectItem1.userHave[idx]});
 													}}>
 														<div className="ship_option_box">
 															{idx === 2 ? (
 																<ItemPic className="pic" style={{transform:'scale(1.5)'}}>
-																	<svg className="ship_face" xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg[items.display], gameData.ships.figureColor, gameData.ships.figurehead[items.idx].color)}}></svg>
+																	<svg className="ship_face" xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg?.[items.display], gameData.ships?.figureColor, gameData.ships?.figurehead?.[items.idx]?.color || 0)}}></svg>
 																</ItemPic>
 															) : (
-																<ItemPic className="pic" itemPic={imgSet[cateList[selectItem1.selectCate[idx]].imgName][items.display]}>
+																<ItemPic className="pic" itemPic={imgSet[cateList[idx].imgName]?.[items.display]}>
 																	{items.displayText && <span className="display_text">{items.displayText}</span>}
 																</ItemPic>
 															)}
@@ -303,14 +329,14 @@ const Shipyard = ({
 												<ShipOption className={`ship_option none ship_${data.classNa} ${selectCate === idx ? 'on' : ''}`} key={`shipList${idx}`} onClick={() => {
 													if (selectShip.shipIdx === '' && idx > 0) {
 														setMsgOn(true);
-														setMsg(gameData.msg.sentence.selectBlueprint[lang]);
+														setMsg(gameData.msg.sentence?.selectBlueprint?.[lang] || "Select blueprint first.");
 													} else {
 														setSelectCate(idx);
 														setSelectItem2({save:{},game:{},select:'',selectCate:'',userHave:''});
 													}
 												}}>
 													<div className="ship_option_box">
-														{idx !== 0 && <ItemPic className="pic" itemPic={imgSet[cateList[idx].imgName][0]} />
+														{idx !== 0 && <ItemPic className="pic" itemPic={imgSet[cateList[idx].imgName]?.[0]} />
 														}
 													</div>
 												</ShipOption>
@@ -353,7 +379,8 @@ const Shipyard = ({
 									<WoodDeco className="wood_deco" shipNum={saveData.ship.length}>
 										<div className="bar1"></div>
 										{possessedShip.current.map((data, idx) => {
-											const shipX = 100 / saveData.ship.length,
+											const shipLen = Math.max(1, saveData.ship?.length || 1);
+											const shipX = 100 / shipLen,
 												shipLeft = shipX * idx + shipX;
 											return (
 												<div className="bar2" style={{left:`${shipLeft}%`}} key={`possessedShip${idx}`}></div>
@@ -384,16 +411,20 @@ const Shipyard = ({
 											<div className={`ship_display size${shipSize(shipD.shipIdx)} ship${shipD.shipIdx}`} key={`shipIdx${shipIdx}`} onClick={() => {
 												
 											}}>
-												<ShipName className="ship_name">{shipD.resource.name}</ShipName>
+												<ShipName className="ship_name">{shipD.resource?.name || ""}</ShipName>
 												<div className="ship_moveX">
 													<div className="ship_moveY">
-														<svg className="ship_body" xmlns="http://www.w3.org/2000/svg" width="320px" height="600px" viewBox="0 0 320 600" dangerouslySetInnerHTML={{__html: util.setShipColor(gameData.shipSvg[shipD.shipIdx], imgSet.wood[shipD.wood] || imgSet.images.transparent, gameData.ships.woodColor[gameData.ships.wood[shipD.wood]?.woodColor ?? 4], Math.random().toString(36).substring(2, 11), [gameData.sailSvg[shipSail[0]], gameData.sailSvg[shipSail[1]], gameData.sailSvg[shipSail[2]]], [shipSailColor[0], shipSailColor[1], shipSailColor[2]], [gameData.cannonSvg[shipCannon[0]], gameData.cannonSvg[shipCannon[1]], gameData.cannonSvg[shipCannon[2]]])}}></svg>
-														{shipD.figure !== '' && <svg className="ship_face" style={{filter:`drop-shadow(0 0 7px ${gameData.ships.figureColor[gameData.ships.figurehead[shipD.figure].color][2]})`}} xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg[gameData.ships.figurehead[shipD.figure].display], gameData.ships.figureColor, gameData.ships.figurehead[shipD.figure].color)}}></svg>}
+														<svg className="ship_body" xmlns="http://www.w3.org/2000/svg" width="320px" height="600px" viewBox="0 0 320 600" dangerouslySetInnerHTML={{__html: util.setShipColor(gameData.shipSvg?.[shipD.shipIdx], imgSet.wood?.[shipD.wood] || imgSet.images?.transparent, gameData.ships?.woodColor?.[gameData.ships.wood?.[shipD.wood]?.woodColor ?? 4], Math.random().toString(36).substring(2, 11), [gameData.sailSvg?.[shipSail[0]], gameData.sailSvg?.[shipSail[1]], gameData.sailSvg?.[shipSail[2]]], [shipSailColor[0], shipSailColor[1], shipSailColor[2]], [gameData.cannonSvg?.[shipCannon[0]], gameData.cannonSvg?.[shipCannon[1]], gameData.cannonSvg?.[shipCannon[2]]])}}></svg>
+														{shipD.figure !== '' && gameData.ships?.figurehead?.[shipD.figure] && (
+															<svg className="ship_face" style={{filter:`drop-shadow(0 0 7px ${gameData.ships.figureColor?.[gameData.ships.figurehead[shipD.figure].color]?.[2] || '#000'})`}} xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg?.[gameData.ships.figurehead[shipD.figure].display], gameData.ships.figureColor, gameData.ships.figurehead[shipD.figure].color)}}></svg>
+														)}
 													</div>
 												</div>
-												{shipD.anchor !== '' && <div className="display_anchor on">
-													<ItemPic className="pic" itemPic={imgSet.anchor[shipD.anchor]} />
-												</div>}
+												{shipD.anchor !== '' && (
+													<div className="display_anchor on">
+														<ItemPic className="pic" itemPic={imgSet.anchor?.[shipD.anchor]} />
+													</div>
+												)}
 											</div>
 										)
 									}
@@ -415,7 +446,8 @@ const Shipyard = ({
 					</div>
 					<div className="ship_bottom">
 						<div className="action_select">
-							{Object.keys(actionCh).length !== 0 && (<div ref={actionRef} className={`ch_select_area ${actionCh.idx ? 'g' + saveData.ch[actionCh.idx].grade : ''}`} onClick={() => {
+							{Object.keys(actionCh || {}).length !== 0 && (
+								<div ref={actionRef} className={`ch_select_area ${actionCh.idx ? 'g' + (saveData.ch?.[actionCh.idx]?.grade || 1) : ''}`} onClick={() => {
 									setPopupOn(true);
 								}}>
 									<ActionChDisplay type="shipyard" saveData={saveData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
@@ -451,10 +483,11 @@ const Shipyard = ({
 										</div>
 									)
 								} else {
-									const items = selectCate === 0 ? gameItem[cateList[selectCate].na][data] : shipItem[cateList[selectCate].na][data];
+									const items = selectCate === 0 ? gameItem?.[cateList[selectCate].na]?.[data] : shipItem?.[cateList[selectCate].na]?.[data];
+									if (!items) return null;
 									const grade = items.grade || 1;
 									return (
-										<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${selectItem1.userHave[selectCate] === false && selectItem1.selectCate[selectCate] === selectCate && selectItem1.select[selectCate] === idx ? 'select1' : ''}`} key={`cateItem_${idx}`} onClick={() => {
+										<div className={`item_layout ${gameData.itemGrade.txt_e?.[grade]?.toLowerCase() || 'normal'} ${selectItem1.userHave[selectCate] === false && selectItem1.selectCate[selectCate] === selectCate && selectItem1.select[selectCate] === idx ? 'select1' : ''}`} key={`cateItem_${idx}`} onClick={() => {
 											const itemSelect = item[selectCate][idx];
 											let cloneShip = {};
 											setSelectItem2({
@@ -490,10 +523,10 @@ const Shipyard = ({
 										}}>
 										{selectCate === 2 ? (
 											<ItemPic className="pic" style={{transform:'scale(1.5)'}}>
-												<svg className="ship_face" xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg[items.display], gameData.ships.figureColor, gameData.ships.figurehead[items.idx].color)}}></svg>
+												<svg className="ship_face" xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg?.[items.display], gameData.ships?.figureColor, gameData.ships?.figurehead?.[items.idx]?.color || 0)}}></svg>
 											</ItemPic>
 										) : (
-											<ItemPic className="pic" itemPic={imgSet[cateList[selectCate].imgName][items.display]}>
+											<ItemPic className="pic" itemPic={imgSet[cateList[selectCate].imgName]?.[items.display]}>
 												{items.displayText && <span className="display_text">{items.displayText}</span>}
 											</ItemPic>
 										)}
@@ -529,10 +562,11 @@ const Shipyard = ({
 										</div>
 									)
 								} else {
-									const items = selectCate === 0 ? gameItem[cateList[selectCate].na][data] : shipItem[cateList[selectCate].na][data];
+									const items = selectCate === 0 ? gameItem?.[cateList[selectCate].na]?.[data] : shipItem?.[cateList[selectCate].na]?.[data];
+									if (!items) return null;
 									const grade = items.grade || 1;
 									return (
-										<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${selectItem1.userHave[selectCate] === true && selectItem1.selectCate[selectCate] === selectCate && selectItem1.select[selectCate] === idx ? 'select1' : ''}`} key={`cateItem_${idx}`} onClick={() => {
+										<div className={`item_layout ${gameData.itemGrade.txt_e?.[grade]?.toLowerCase() || 'normal'} ${selectItem1.userHave[selectCate] === true && selectItem1.selectCate[selectCate] === selectCate && selectItem1.select[selectCate] === idx ? 'select1' : ''}`} key={`cateItem_${idx}`} onClick={() => {
 											const itemSelect = hasItem[selectCate][idx];
 											let cloneShip = {};
 											setSelectItem2({
@@ -574,32 +608,32 @@ const Shipyard = ({
 							)}
 						</div>
 						{typeof selectItem2.save === 'number' ? (
-							<ItemContainer className={`item_select item_select2 items`} color={gameData.itemGrade.color[selectItem2.save.grade]}>
-								<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.game.na[lang]}`}}></span></li>
+							<ItemContainer className={`item_select item_select2 items`} color={gameData.itemGrade.color?.[selectItem2.game?.grade || 1] || '#fff'}>
+								<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem2.game?.na?.[lang] || ""}`}}></span></li>
 								<li className="item_fix" flex="true">
-									<div className={`item ${gameData.itemGrade.txt_e[selectItem2.save.grade || selectItem2.game.grade || 1].toLowerCase()}`}>
+									<div className={`item ${gameData.itemGrade.txt_e?.[selectItem2.game?.grade || 1]?.toLowerCase() || 'normal'}`}>
 										{selectCate === 2 ? (
 											<ItemPic className="pic" style={{transform:'scale(1.5)'}}>
-												<svg className="ship_face" xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg[selectItem2.game.display], gameData.ships.figureColor, gameData.ships.figurehead[selectItem2.game.idx].color)}}></svg>
+												<svg className="ship_face" xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg?.[selectItem2.game?.display], gameData.ships?.figureColor, gameData.ships?.figurehead?.[selectItem2.game?.idx]?.color || 0)}}></svg>
 											</ItemPic>
 										) : (
-											<ItemPic className="pic" itemPic={imgSet[cateList[selectCate].imgName][selectItem2.game.display]} />
+											<ItemPic className="pic" itemPic={imgSet[cateList[selectCate].imgName]?.[selectItem2.game?.display]} />
 										)}
 									</div>
 									<div flex-h="true" style={{flex: 1,}}>
-										<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem2.save.grade]}>
+										<ItemName className="item_cont" color={gameData.itemGrade.color?.[selectItem2.game?.grade || 1] || '#fff'}>
 											<div className="item_top">
-												<span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[selectItem2.save.grade] : gameData.itemGrade.txt_e[selectItem2.save.grade]}</span>
+												<span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k?.[selectItem2.game?.grade || 1] : gameData.itemGrade.txt_e?.[selectItem2.game?.grade || 1]}</span>
 											</div>
-											<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectItem2.game.txt[lang]}"`}}></div>
-											<div className="item_kg">{selectItem2.game.kg}kg</div>
+											<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectItem2.game?.txt?.[lang] || ""}"`}}></div>
+											<div className="item_kg">{selectItem2.game?.kg || 0}kg</div>
 										</ItemName>
 									</div>
 								</li>
 								<div className="scroll-y">
 									<li className="item_list item_eff">
 										<div className="item_title">
-											{selectItem2.game.txt[lang]}
+											{selectItem2.game?.txt?.[lang] || ""}
 										</div>
 									</li>
 								</div>
@@ -612,15 +646,21 @@ const Shipyard = ({
 				{<div className={`color_picker ${showPicker ? 'on': ''}`}>
 					<canvas ref={canvasRef} width="200" height="129" onTouchEnd={(e) => {
 						const pos = [e.changedTouches[0].pageX - (canvasRef.current.offsetLeft - 100), e.changedTouches[0].pageY - (canvasRef.current.offsetTop - 64.5)];
-						const color = `rgba(${ctx.getImageData(pos[0],pos[1],1,1).data[0]},${ctx.getImageData(pos[0],pos[1],1,1).data[1]},${ctx.getImageData(pos[0],pos[1],1,1).data[2]},1)`;
-						canColorRef.current.style.background = color;
-						setShowPicker(false);
-						let cloneSelectShip = {...selectShip}
-						cloneSelectShip[`${cateList[colorChip.current].classNa}Color`] = color;
-						setSelectShip(cloneSelectShip);
+						if (ctx) {
+							const colorData = ctx.getImageData(pos[0],pos[1],1,1).data;
+							const color = `rgba(${colorData[0]},${colorData[1]},${colorData[2]},1)`;
+							if (canColorRef.current) canColorRef.current.style.background = color;
+							setShowPicker(false);
+							let cloneSelectShip = {...selectShip}
+							cloneSelectShip[`${cateList[colorChip.current].classNa}Color`] = color;
+							setSelectShip(cloneSelectShip);
+						}
 					}} onTouchMove={(e) => {
 						const pos = [e.changedTouches[0].pageX - (canvasRef.current.offsetLeft - 100), e.changedTouches[0].pageY - (canvasRef.current.offsetTop - 64.5)];
-						canColorRef.current.style.background = `rgba(${ctx.getImageData(pos[0],pos[1],1,1).data[0]},${ctx.getImageData(pos[0],pos[1],1,1).data[1]},${ctx.getImageData(pos[0],pos[1],1,1).data[2]},1)`;
+						if (ctx) {
+							const colorData = ctx.getImageData(pos[0],pos[1],1,1).data;
+							if (canColorRef.current) canColorRef.current.style.background = `rgba(${colorData[0]},${colorData[1]},${colorData[2]},1)`;
+						}
 					}}></canvas>
 					<div className="shadow" onClick={() => {
 						setShowPicker(false);
@@ -633,21 +673,21 @@ const Shipyard = ({
 					<ShipContract className="ship_data" scroll={imgSet.back.scroll} stamp={imgSet.back.stamp}>
 						<div className="ship_scroll">
 							<ul>
-								<li className="ship_buildName"><input type="text" value={shipInfo.name} maxLength="13" onClick={(e) => {
+								<li className="ship_buildName"><input ref={shipNameRef} type="text" value={shipInfo.name} maxLength="13" onClick={(e) => {
 									e.stopPropagation();
 								}} onChange={(e) => {
 									let cloneShipInfo = {...shipInfo};
 									cloneShipInfo.name = e.target.value;
 									setShipInfo(cloneShipInfo);
 								}}/></li>
-								<li>{`${gameData.msg.ship.durability[lang]}: ${shipInfo.durability}`}</li>
-								<li>{`${gameData.msg.ship.loadage[lang]}: ${shipInfo.loadage} kg`}</li>
-								<li>{`${gameData.msg.ship.knot[lang]}: ${shipInfo.knot} knot`}</li>
-								<li>{`${gameData.msg.ship.space[lang]}: ${shipInfo.space}`}</li>
-								{selectShip.cannon0 !== '' && <li>{`${gameData.msg.ship.cannon[lang]}1: ${shipInfo.cannon[0]}`}</li>}
-								{selectShip.cannon1 !== '' && <li>{`${gameData.msg.ship.cannon[lang]}2: ${shipInfo.cannon[1]}`}</li>}
-								{selectShip.cannon2 !== '' && <li>{`${gameData.msg.ship.cannon[lang]}3: ${shipInfo.cannon[2]}`}</li>}
-								<li className="ship_buildCh">{`${gameData.msg.info.shipBuilder[lang]}: ${actionCh.idx !== '' ? gameData.ch[saveData.ch[actionCh.idx].idx].na1 : gameData.msg.info.undefined[lang]}`}</li>
+								<li>{`${gameData.msg.ship?.durability?.[lang] || "Durability"}: ${shipInfo.durability}`}</li>
+								<li>{`${gameData.msg.ship?.loadage?.[lang] || "Loadage"}: ${shipInfo.loadage} kg`}</li>
+								<li>{`${gameData.msg.ship?.knot?.[lang] || "Knot"}: ${shipInfo.knot} knot`}</li>
+								<li>{`${gameData.msg.ship?.space?.[lang] || "Space"}: ${shipInfo.space}`}</li>
+								{selectShip.cannon0 !== '' && <li>{`${gameData.msg.ship?.cannon?.[lang] || "Cannon"}1: ${shipInfo.cannon?.[0] || 0}`}</li>}
+								{selectShip.cannon1 !== '' && <li>{`${gameData.msg.ship?.cannon?.[lang] || "Cannon"}2: ${shipInfo.cannon?.[1] || 0}`}</li>}
+								{selectShip.cannon2 !== '' && <li>{`${gameData.msg.ship?.cannon?.[lang] || "Cannon"}3: ${shipInfo.cannon?.[2] || 0}`}</li>}
+								<li className="ship_buildCh">{`${gameData.msg.info?.shipBuilder?.[lang] || "Shipwright"}: ${actionCh.idx !== '' ? gameData.ch?.[saveData.ch?.[actionCh.idx]?.idx]?.na1 || "" : gameData.msg.info?.undefined?.[lang] || ""}`}</li>
 								<li className="ship_buildPrice">{`₩ ${util.comma(shipInfo.price)}`}</li>
 							</ul>
 							<button text="true" className="button_sign" onClick={(e) => {
@@ -655,35 +695,35 @@ const Shipyard = ({
 								if (selectShip.wood === '') {
 									setShipInfoOn(false);
 									setMsgOn(true);
-									setMsg(gameData.msg.sentence.selectWood[lang]);
+									setMsg(gameData.msg.sentence?.selectWood?.[lang] || "Select wood material.");
 									return;
 								} else if (selectShip.sail0 === '' && selectShip.sail1 === '' && selectShip.sail2 === '') {
 									setShipInfoOn(false);
 									setMsgOn(true);
-									setMsg(gameData.msg.sentence.selectSail[lang]);
+									setMsg(gameData.msg.sentence?.selectSail?.[lang] || "Select sail material.");
 									return;
 								} else if (selectShip.anchor === ''){
 									setShipInfoOn(false);
 									setMsgOn(true);
-									setMsg(gameData.msg.sentence.selectAnchor[lang]);
+									setMsg(gameData.msg.sentence?.selectAnchor?.[lang] || "Select anchor material.");
 									return;
 								} else if (shipInfo.name === ''){
 									setMsgOn(true);
-									setMsg(gameData.msg.sentence.selectShipName[lang]);
-									document.querySelector('.ship_buildName input').focus();
+									setMsg(gameData.msg.sentence?.selectShipName?.[lang] || "Enter ship name.");
+									if (shipNameRef.current) shipNameRef.current.focus();
 									return;
 								}
 								if (actionCh.idx === '') {
 									setMsgOn(true);
-									setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[202].na));
+									setMsg(gameData.msg.sentenceFn?.selectSkillCh?.(lang, gameData.skill?.[202]?.na || "Shipwright") || "Select a shipwright.");
 									return;
 								}
-								if (saveData.info.money < shipInfo.price) {
+								if (saveData.info?.money < shipInfo.price) {
 									setMsgOn(true);
-									setMsg(gameData.msg.sentence.lackMoney[lang]);
+									setMsg(gameData.msg.sentence?.lackMoney?.[lang] || "Not enough money.");
 									return;
 								} else  {
-									let sData = {...saveData};
+									let sData = JSON.parse(JSON.stringify(saveData));
 									sData.info.money -= shipInfo.price;
 									let shipSail = [],
 										shipCannon = [];
@@ -696,7 +736,7 @@ const Shipyard = ({
 										}
 									}
 									sData.ship.push({
-										stay:saveData.info.stay,
+										stay:saveData.info?.stay || "",
 										shipIdx:selectShip.shipIdx,
 										wood:selectShip.wood,
 										figure:selectShip.figure,
@@ -709,7 +749,7 @@ const Shipyard = ({
 											durability:shipInfo.durability,
 											loadage:shipInfo.loadage,
 											knot:shipInfo.knot,
-											space:new Array(shipInfo.space).fill(0),
+											space:new Array(shipInfo.space || 0).fill(0),
 											cannon:shipInfo.cannon,
 										},
 										loadedItem:[],
@@ -724,7 +764,7 @@ const Shipyard = ({
 									setSelectItem1({save:[],game:[],select:[],selectCate:[],userHave:[]});
 									setSelectItem2({save:{},game:{},select:'',selectCate:'',userHave:''});
 								}
-							}}>{gameData.msg.ship.sign[lang]}</button>
+							}}>{gameData.msg.ship?.sign?.[lang] || "Build"}</button>
 						</div>
 					</ShipContract>
 				</div>}

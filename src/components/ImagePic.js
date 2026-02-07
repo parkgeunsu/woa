@@ -112,7 +112,7 @@ IconPic.defaultProps = {
   isAbsolute: false,
 }
 
-const StyledPic = styled.div`
+const StyledMergedPic = styled.div`
   width: 100%;
   height: 100%;
   ${({chPic, type, startIdx, idx, whNum, isThumb, absoluteSize}) => {
@@ -127,7 +127,7 @@ const StyledPic = styled.div`
     //0.6745, 1.4825
   }}
 `;
-const ChPic = ({
+const MergedPic = ({//merged 된 이미지에서 좌표를 찾는 방식
   idx,
   pic,
   type,
@@ -146,16 +146,48 @@ const ChPic = ({
   const startIdx = React.useMemo(() => {
     return !type ? 0 : util.iconToStartIdx(type);
   }, [type]);
-  return (typeof idx === "number" && <StyledPic startIdx={startIdx} absoluteSize={absoluteSize} type={type} whNum={whNum} isThumb={isThumb} chPic={imgSet.images[pic]} idx={idx} {...rest}>
+  return (typeof idx === "number" && <StyledMergedPic startIdx={startIdx} absoluteSize={absoluteSize} type={type} whNum={whNum} isThumb={isThumb} chPic={imgSet.images[pic]} idx={idx} {...rest}>
       {children}
-    </StyledPic>
+    </StyledMergedPic>
   )
 }
-ChPic.defaultProps = {
+MergedPic.defaultProps = {
   isThumb: false,
   wNum: 10,
   hNum: 6,
   type: '',
+}
+
+const StyledPic = styled.div`
+  width: 100%;
+  height: 100%;
+  ${({chPic}) => {
+    return `
+      background: url(${chPic}) no-repeat 0 0;
+      background-size: 100% 100%;
+    `;
+  }}
+`;
+const ChPic = ({//merged 된 이미지에서 좌표를 찾는 방식
+  pic,
+  type,
+  isThumb,
+  absoluteSize,
+  children,
+  ...rest
+}) => {
+  const context = useContext(AppContext);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
+  const whNum = React.useMemo(() => {
+    return util.iconHNum(pic);
+  }, [pic]);
+  return <StyledPic whNum={whNum} chPic={imgSet.images[pic]} {...rest}>
+    {children}
+  </StyledPic>
+}
+ChPic.defaultProps = {
 }
 
 const MarkWrap = styled.div`
@@ -259,5 +291,5 @@ const SkillMark = ({
   )
 }
 
-export { ChPic, IconPic, ItemPic, MarkPic, SkillMark };
+export { ChPic, IconPic, ItemPic, MarkPic, MergedPic, SkillMark };
 

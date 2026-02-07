@@ -401,6 +401,11 @@ export const msg = {
 		},
 	},
 	title:{
+		getItem:{
+			ko:'획득 아이템',
+			en:'Obtained Item',
+			jp:'獲得アイテム',
+		},
 		startingCardType:{
 			ko:'시작카드 선택 유형',
 			en:'Starting card selection type',
@@ -1720,6 +1725,26 @@ export const msg = {
 		},
 	},
 	sentence:{
+		needMoreHero:{
+			ko:'해당 난이도를 도전하려면 영웅이 더 필요합니다.',
+			en:'You need more heroes to challenge this difficulty.',
+			jp:'この難易度を挑戦するには、英雄が必要です。',
+		},
+		prevStageClear:{
+			ko:'이전 스테이지를 클리어 해야 합니다.',
+			en:'You must clear the previous stage.',
+			jp:'前のステージをクリアする必要があります。',
+		},
+		nodata_relation:{
+			ko:'인물의 인연 데이터가 없습니다.',
+			en:'There is no character relationship data.',
+			jp:'人物の縁データがありません。',
+		},
+		nodata_scenario:{
+			ko:'인물의 시나리오 데이터가 없습니다.',
+			en:'There is no character scenario data.',
+			jp:'人物のシナリオデータはありません。',
+		},
 		lackLeadership:{
 			ko:'리더의 통솔력이 부족합니다.',
 			en:'The leader lacks leadership skills.',
@@ -1739,6 +1764,11 @@ export const msg = {
 			ko:'여행에 참여한 영웅만 가능합니다.',
 			en:'Only heroes who have participated in the journey can do this.',
 			jp:'旅行に参加した英雄だけが可能です。'
+		},
+		card0:{
+			ko:'이벤트 영웅 확정',
+			en:'Event hero confirmed',
+			jp:'イベントヒーロー確定',
 		},
 		card1:{
 			ko:'한 카드에 올인',

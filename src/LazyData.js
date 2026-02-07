@@ -74,31 +74,26 @@ const LazyData = () => {
     //   const img = new Image();
     //   img.src = control[v];
     // };
+    const imgLoad = () => {
+      currentNum.current += 1;
+      if (loadingRef.current) {
+        loadingRef.current.innerHTML = `${currentNum.current} / ${totalNum}`;
+      }
+      if (currentNum.current >= totalNum) {
+        setReady(true);
+      }
+    }
     for (let v in images) {
       const img = new Image();
+      img.onload = imgLoad;
+      img.onerror = imgLoad;
       img.src = images[v];
-      img.onload = () => {
-        currentNum.current += 1;
-        if (loadingRef.current) {
-          loadingRef.current.innerHTML = `${currentNum.current} / ${totalNum}`;
-        }
-        if (currentNum.current >= totalNum) {
-          setReady(true);
-        }
-      }
     };
     for (let v in effect) {
       const img = new Image();
+      img.onload = imgLoad;
+      img.onerror = imgLoad;
       img.src = effect[v].img;
-      img.onload = () => {
-        currentNum.current += 1;
-        if (loadingRef.current) {
-          loadingRef.current.innerHTML = `${currentNum.current} / ${totalNum}`;
-        }
-        if (currentNum.current >= totalNum) {
-          setReady(true);
-        }
-      }
     };
   }, [back, bgEffect, button, effect, etc, images, weather]);
   return (

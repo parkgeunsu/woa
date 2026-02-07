@@ -143,7 +143,7 @@ const MoveRegion = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const stayIdx = React.useMemo(() => util.getCountryToIdx(stay), [stay]);
+  const stayIdx = React.useMemo(() => util.getRegionToIdx(stay), [stay]);
   const flagIconIdx = React.useMemo(() => {
     return util.getStringToCountryIdx(selectMoveRegion);
   }, [selectMoveRegion]);
@@ -171,9 +171,9 @@ const MoveRegion = ({
   }
   useEffect(() => {
     setCountryList(
-      gameData.country?.regions.map((data) => {
-        return data.name[lang];
-      })
+      gameData.country?.regions?.map((data) => {
+        return data.name?.[lang] || "";
+      }) || []
     );
   }, [lang, gameData.country]);
   return (
@@ -184,9 +184,11 @@ const MoveRegion = ({
             const nodeH = node.getBoundingClientRect().width;
             node.style.height = `${nodeH * (500 / 800)}px`;
             if (selectMoveRegion !== '') {
-              const selectCountry = gameData.country?.regions[selectMoveRegion];
-              node.scrollTop = selectCountry.pos[1];
-              node.scrollLeft = selectCountry.pos[0];
+              const selectCountry = gameData.country?.regions?.[selectMoveRegion];
+              if (selectCountry?.pos) {
+                node.scrollTop = selectCountry.pos[1];
+                node.scrollLeft = selectCountry.pos[0];
+              }
             }
           }
         }}>
@@ -204,7 +206,8 @@ const MoveRegion = ({
             setSelectMoveRegion((prev) => {
               const num = prev === "" ? currentCountryIdx.current : ++prev;
               currentCountryIdx.current++;
-              return num > gameData.country.regions.length - 1 ? 0 : num;
+              const regionLength = gameData.country?.regions?.length || 1;
+              return num > regionLength - 1 ? 0 : num;
             });
           }}
         />
@@ -215,7 +218,7 @@ const MoveRegion = ({
             setSelectMoveRegion(idx);
           }}
           selectOption={countryList}
-          title={gameData.msg.title["selectRegion"][lang]}
+          title={gameData.msg?.title?.["selectRegion"]?.[lang] || "Select Region"}
         >
           <FlagIcon type="flag" pic="icon200" idx={flagIconIdx === "" ? 21 : flagIconIdx}/>
         </Select>
@@ -227,7 +230,8 @@ const MoveRegion = ({
             setSelectMoveRegion((prev) => {
               const num = prev === "" ? currentCountryIdx.current : --prev;
               currentCountryIdx.current--;
-              return num < 0 ? gameData.country.regions.length - 1 : num;
+              const regionLength = gameData.country?.regions?.length || 1;
+              return num < 0 ? regionLength - 1 : num;
             });
           }}
         />
@@ -236,12 +240,12 @@ const MoveRegion = ({
         {selectMoveRegion !== "" && selectMoveRegion !== stayIdx && (
           <>
             <Text code="t2" color="main">
-              {`${gameData.items.etc[ticketIdx].na[lang]}: ${ticketNum}`} 
+              {`${gameData.items.etc[ticketIdx]?.na?.[lang] || "Item"}: ${ticketNum}`} 
             </Text>
             <Text code="t2" color="main">
-              {`${gameData.msg.moveEvent.eventNum[lang]}: ${util.getDistanceToEvent(
-                gameData.country.regions[stayIdx].distancePosition,
-                gameData.country.regions[selectMoveRegion]?.distancePosition,
+              {`${gameData.msg.moveEvent.eventNum?.[lang] || "Distance"}: ${util.getDistanceToEvent(
+                gameData.country?.regions[stayIdx]?.distancePosition,
+                gameData.country?.regions[selectMoveRegion]?.distancePosition,
                 gameData.countryEventsNum
               )}`}
             </Text>

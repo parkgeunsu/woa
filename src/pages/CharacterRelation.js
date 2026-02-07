@@ -6,7 +6,7 @@ import InfoGroup from 'components/InfoGroup';
 import { util } from 'components/Libs';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
@@ -23,8 +23,8 @@ const RelationName = styled(Text)`
 const RelationTxt = styled(Text)`
   padding: 0 10px;
   width: 100%;
-  div {
-    text-align: left;
+  &.hide {
+    display: none;
   }
 `;
 const RelationMember = styled(FlexBox)`
@@ -68,7 +68,8 @@ const CardCh = styled.span`
 	width: 130%;
 	height: 130%;
 `;
-const ChRelation = styled(FlexBox)`
+const ChRelation = styled.div`
+  position: relative;
 `;
 const ChDescription = styled(Text)`
   padding: 10px;
@@ -76,15 +77,21 @@ const ChDescription = styled(Text)`
 `;
 const Relations = styled(FlexBox)`
   position: relative;
-  margin: 0 0 5px;
-  padding: 5px 10px;
+  margin: 0 auto;
+  padding: 10px;
   width: calc(100% - 20px);
-  height: auto;
   border: 3px double rgba(255,255,255,.5);
   border-radius: 5px;
   background: rgba(0,0,0,.5);
   overflow: hidden;
   box-sizing: border-box;
+`;
+const Relation = styled(FlexBox)`
+  position: relative;
+  margin: 0 0 15px 0;
+  &:last-of-type {
+    margin: 0;
+  }
 `;
 const CharacterRelation = ({
   saveData,
@@ -100,88 +107,145 @@ const CharacterRelation = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
-  const chData = React.useMemo(() => gameData.ch[saveCh.idx], [gameData, saveCh]);
+  const saveCh = React.useMemo(() => saveData.ch?.[slotIdx] || {}, [saveData, slotIdx]);
+  const chData = React.useMemo(() => gameData.ch?.[saveCh.idx], [gameData, saveCh]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
   const chRelation = React.useMemo(() => chData.relation, [chData]);
-  const relationAll = React.useMemo(() => {
-    return chRelation.map((rtIdx, idx) => {
-      return Array.from({length: gameData.relation[rtIdx].member.length}, () => false);
-    });
-  }, [chRelation, gameData]);
   
+  const relationStatus = React.useMemo(() => {
+    if (!chRelation || !gameData.relation) return [];
+    
+    return chRelation.map((rtIdx) => {
+      const relationData = gameData.relation[rtIdx];
+      if (!relationData || !relationData.member) return { members: [], isAllComplete: false };
+      
+      const memberStatus = relationData.member.map((memberIdx) => {
+        const hasMember = saveData.ch?.some(saveCh => saveCh.idx === memberIdx);
+        return {
+          idx: memberIdx,
+          chData: gameData.ch?.[memberIdx],
+          hasMember
+        };
+      });
+      
+      const isAllComplete = memberStatus.every(m => m.hasMember);
+      
+      return {
+        id: rtIdx,
+        data: relationData,
+        memberStatus,
+        isAllComplete
+      };
+    });
+  }, [chRelation, gameData, saveData.ch]);
+
+  const chScenario = React.useMemo(() => chData.scenarioRegion, [chData]);
+  const [openStages, setOpenStages] = useState({});
+
+  const toggleStage = useCallback((scIdx, sIdx) => {
+    setOpenStages((prev) => ({
+      ...prev,
+      [`${scIdx}_${sIdx}`]: !prev[`${scIdx}_${sIdx}`]
+    }));
+  }, []);
+
   return (
     <>
       <Wrap className="relation">
-        <InfoGroup pointTitle={chData.na1} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.relation[lang]}`} guideClick={() => {
+        <InfoGroup pointTitle={chData?.na1} title={`${gameData?.msg?.grammar?.conjunction[lang]} ${gameData?.msg?.menu?.relation[lang]}`} guideClick={() => {
           setPopupType('guide');
           setPopupOn(true);
           setPopupInfo({
-            data:gameData.guide["characterRelation"],
-            lang:lang,
+            data: gameData?.guide?.["characterRelation"],
+            lang: lang,
           });
         }}>
           <RelationWrap className="scroll-y">
             <ChRelation direction="column" justifyContent="flex-start">
-              {chRelation && chRelation.map((rtData, idx) => {
-                const relationData = gameData.relation[rtData];
-                const {skillText} = util.getSkillText({
-                  skill: relationData,
-                  lv: 0,
-                  lang: lang,
-                });
-                return (
-                  <Relations direction="column" key={idx}>
-                    <RelationName code="t3" color="main" weight="600">{relationData.na[lang]}</RelationName>
-                    <RelationTxt code="t2" color="main">
-                      <div dangerouslySetInnerHTML={{__html: skillText}}></div>
-                    </RelationTxt>
-                    <RelationMember>
-                      {relationData.member && relationData.member.map((data, idx_) => {
-                        const chData = gameData.ch[data];
-                        let hasRelation = false;
-                        saveData.ch.forEach((saveCh) => {
-                          if (saveCh.idx === data) {
-                            hasRelation = true;
-                            relationAll[idx][idx_] = true;
-                          }
-                        });
-                        let rtAll = true;
-                        relationAll[idx].forEach((rtData) => {
-                          if (rtData === false) {
-                            rtAll = false;
-                          }
-                        });
-                        return (
-                          chData && (
-                            <div key={idx_} style={{
-                              margin: "0 10px 0 0",
-                            }}>
-                              <ChBox active={hasRelation}>
+              <Relations direction="column">
+                {relationStatus.length > 0 ? relationStatus.map((rtStatus) => {
+                  const { skillText } = util.getSkillText({
+                    skill: rtStatus.data,
+                    lv: 0,
+                    lang: lang,
+                  });
+                  return (
+                    <Relation direction="column" key={`chRelation_${rtStatus.id}`}>
+                      <RelationName code="t2" color="main" weight="600">{rtStatus.data?.na?.[lang]}</RelationName>
+                      <RelationTxt code="t1" color="main" align="left" dangerouslySetInnerHTML={{ __html: skillText }}>
+                      </RelationTxt>
+                      <RelationMember>
+                        {rtStatus.memberStatus.map((mStatus, idx_) => (
+                          mStatus.chData && (
+                            <div key={`relationMember_${mStatus.idx}`} style={{ margin: "0 10px 0 0" }}>
+                              <ChBox active={mStatus.hasMember}>
                                 <CardCh>
-                                  <ChPic isThumb={true} pic="ch" idx={chData.display} />
+                                  <ChPic isThumb={true} pic={`ch${mStatus.chData.display}`} />
                                 </CardCh>
                               </ChBox>
-                              {rtAll && <RtComplete color="red" code="t4" weight="600">ALL</RtComplete>}
+                              {rtStatus.isAllComplete && <RtComplete color="red" code="t4" weight="600">ALL</RtComplete>}
                             </div>
                           )
+                        ))}
+                      </RelationMember>
+                    </Relation>
+                  );
+                }) : (
+                  <Text code="t1" color="main" weight="600">{gameData?.msg?.sentence?.nodata_relation?.[lang]}</Text>
+                )}
+              </Relations>
+              <Relations style={{ margin: "10px auto 0"}} direction="column">
+                {chScenario ? chScenario.map((scPath, scIdx) => {
+                  const scenarioData = scPath.split("-");
+                  const scenarioInfo = gameData?.scenario?.[scenarioData[0]]?.[scenarioData[1]]?.scenarioList?.[scenarioData[2]];
+                  
+                  if (!scenarioInfo) return null;
+
+                  return (
+                    <Relation direction="column" key={`relations_${scPath}`}>
+                      <RelationName code="t2" color="main" weight="600">{scenarioInfo.name?.[lang]}</RelationName>
+                      {scenarioInfo.stage?.map((stageData, sIdx) => {
+                        const isOpen = !!openStages[`${scIdx}_${sIdx}`];
+                        return (
+                          <FlexBox direction="column" key={`scenarioInfo_${sIdx}`}>
+                            <RelationTxt 
+                              code="t2" 
+                              color="main" 
+                              align="left" 
+                              onClick={() => toggleStage(scIdx, sIdx)}
+                            >
+                              {sIdx + 1}. {stageData.title?.[lang]}
+                            </RelationTxt>
+                            {isOpen && (
+                              <RelationTxt 
+                                style={{margin: "0 0 10px 0"}} 
+                                code="t1" 
+                                color="grey" 
+                                align="left" 
+                                onClick={() => toggleStage(scIdx, sIdx)}
+                              >
+                                {stageData.history?.[lang]}
+                              </RelationTxt>
+                            )}
+                          </FlexBox>
                         )
                       })}
-                    </RelationMember>
-                  </Relations>
-                )
-              })}
-              <ChDescription code="t3" color="main">
-                {chData.txt}
+                    </Relation>
+                  )
+                }) :
+                <Text code="t1" color="main" weight="600">{gameData?.msg?.sentence?.nodata_scenario?.[lang]}</Text>}
+              </Relations>
+              <ChDescription code="t1" color="main" isDynamic={true}>
+                {chData?.txt}
               </ChDescription>
             </ChRelation>
           </RelationWrap>
         </InfoGroup>
       </Wrap>
       <PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} imgSet={imgSet} />}
+        {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} />}
       </PopupContainer>
     </>
   );

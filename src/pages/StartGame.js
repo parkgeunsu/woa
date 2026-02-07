@@ -82,8 +82,8 @@ const StartGame = ({
   const [selectList, setSelectList] = useState([]); //시작 카드 유형 글자
   const [countryList, setCountryList] = useState([]); //국가 선택 글자
   const [languageList, setLanguageList] = useState([]); //언어 선택 글자
-  const [selectCardTypeIdx, setSelectCardTypeIdx] = useState(paramData?.start?.selectType || ''); //시작 카드 유형 index
-  const [hasMoney, setHasMoney] = useState(typeof selectCardTypeIdx === 'number' ? String(gameData.startGold[selectCardTypeIdx]).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : 0); //소지금
+  const [selectCardTypeIdx, setSelectCardTypeIdx] = useState(paramData?.start?.selectType ?? ''); //시작 카드 유형 index
+  const [hasMoney, setHasMoney] = useState(typeof selectCardTypeIdx === 'number' ? String(gameData.startCardArr[selectCardTypeIdx].gold).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : 0); //소지금
   const [selectCountryIdx, setSelectCountryIdx] = useState(paramData?.start?.country || ''); //시작 국가 선택 index
   const [selectLanguageIdx, setSelectLanguageIdx] = useState(paramData?.recruitment?.language || 0); //게임 언어 선택 index
   useEffect(() => {
@@ -95,49 +95,54 @@ const StartGame = ({
   }, [paramData]);
   useEffect(() => {
     setSelectList([
-      gameData.msg.sentence['card1'][lang],
-      gameData.msg.sentence['card2'][lang],
-      gameData.msg.sentence['card3'][lang],
+      `${gameData.msg.sentence?.['card0']?.[lang] || "Starting Card 0"} (${gameData.ch?.[gameData.startCardArr?.[0]?.fix?.[0]]?.na1 || "Unknown"})`,
+      gameData.msg.sentence?.['card1']?.[lang] || "Starting Card 1",
+      gameData.msg.sentence?.['card2']?.[lang] || "Starting Card 2",
+      gameData.msg.sentence?.['card3']?.[lang] || "Starting Card 3",
     ]);
     setCountryList(
-      gameData.country.regions.map((data) => {
-        return data.name[lang];
+      (gameData.country?.regions || []).map((data) => {
+        return data.name?.[lang] || "Unknown Region";
       })
     );
     setLanguageList([
-      gameData.msg.language['korean'][lang],
-      gameData.msg.language['english'][lang],
-      gameData.msg.language['japanese'][lang],
+      gameData.msg.language?.['korean']?.[lang] || "Korean",
+      gameData.msg.language?.['english']?.[lang] || "English",
+      gameData.msg.language?.['japanese']?.[lang] || "Japanese",
     ]);
   }, [gameData, lang]);
   return (
     <>
-      <Wrap direction="column">
-        <TitleBox>{nameID ? `${nameID}${gameData.msg.grammar['conjunction'][lang]}` : ''} {gameData.msg.title['cardDeck'][lang]}</TitleBox>
-        <Scroll direction="column" backImg={imgSet.back.scroll}>
+      <Wrap direction="column" justifyContent="flex-start">
+        <TitleBox>{nameID ? `${nameID}${gameData.msg.grammar?.['conjunction']?.[lang] || ""}` : ''} {gameData.msg.title?.['cardDeck']?.[lang] || "Card Deck"}</TitleBox>
+        <Scroll direction="column" backImg={imgSet.back?.scroll}>
           <ListWrap style={{width: '80%'}} transparentBack={true}>
-            <StyledListItem title={gameData.msg.title['name'][lang]}>
-              <TextField transparent={true} placeholder={gameData.msg.sentence['enterID'][lang]} onChange={(value) => {
+            <StyledListItem title={gameData.msg.title?.['name']?.[lang] || "Name"}>
+              <TextField transparent={true} placeholder={gameData.msg.sentence?.['enterID']?.[lang] || "Enter ID"} onChange={(value) => {
                 setNameID(value);
               }} text={nameID} />
               <Button onClick={() => {
 								setMsgOn(true);
-                setMsg(gameData.msg.sentence[`sumitId${Math.floor(Math.random()*3)}`][lang]);
-                const sData = {...saveData};
-                sData.info.id = nameID;
-                changeSaveData(sData);
-              }} width={60} size="small">{gameData.msg.button['confirm'][lang]}</Button>
+                setMsg(gameData.msg.sentence?.[`sumitId${Math.floor(Math.random()*3)}`]?.[lang] || "ID confirmed.");
+                const newSaveData = JSON.parse(JSON.stringify(saveData || {}));
+                if (newSaveData.info) newSaveData.info.id = nameID;
+                changeSaveData(newSaveData);
+              }} width={60} size="small">{gameData.msg.button?.['confirm']?.[lang] || "Confirm"}</Button>
             </StyledListItem>
-            <StyledListItem title={gameData.msg.title['startingCard'][lang]}>
+            <StyledListItem title={gameData.msg.title?.['startingCard']?.[lang] || "Starting Card"}>
               <Select selectIdx={selectCardTypeIdx} setSelectIdx={setSelectCardTypeIdx} onClick={(idx) => {
                 setSelectCardTypeIdx(idx);
-                setHasMoney(String(gameData.startGold[idx]).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-                setSelectGradeArr(gameData.startCardArr[idx]);
-                const hParam = {...util.loadData('historyParam')};
-                delete hParam?.start?.card;
+                const gold = gameData.startCardArr?.[idx]?.gold || 0;
+                setHasMoney(String(gold).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+                setSelectGradeArr(gameData.startCardArr?.[idx] || []);
+                const hParam = util.loadData('historyParam') || {};
+                if (hParam.start) {
+                  const { card, ...restStart } = hParam.start;
+                  hParam.start = restStart;
+                }
                 util.saveData('historyParam', hParam);
                 setSelectCard('');
-              }} selectOption={selectList} title={gameData.msg.title['startingCardType'][lang]}></Select>
+              }} selectOption={selectList} title={gameData.msg.title?.['startingCardType']?.[lang] || "Card Type"}></Select>
               <CardBox onClick={() => {
                 util.saveData('historyParam', {
                   ...util.loadData('historyParam'),
@@ -151,41 +156,53 @@ const StartGame = ({
                 });
                 navigate('../recruitment');
                 // changePage('recruitment', {begin: true, cardArr: selectGradeArr, selectType: selectCardTypeIdx, language: selectLanguageIdx, country: selectCountryIdx});
-                const sData = {...saveData}
-                sData.ch = [];
-                changeSaveData(sData);
-              }} justifyContent={selectGradeArr.length === 1 ? 'center' : 'space-between'} >
+                const newSaveData = { ...saveData, ch: [] };
+                changeSaveData(newSaveData);
+              }} justifyContent={(selectGradeArr?.fix?.length || 0) + (selectGradeArr?.arr?.length || 0) === 1 ? 'center' : 'space-between'} >
+              {(selectGradeArr?.fix?.length || 0) > 0 && selectGradeArr.fix.map((fixData, fixIdx) => {
+                    const cardData = gameData.ch?.[fixData];
+                    const name = cardData?.na1 || "Unknown";
+                    return (
+                      <ChCard  key={`fixCard${fixIdx}`} direction="column">
+                        <CharacterCard usedType="small" size="60" equalSize={true} saveData={saveData} saveCharacter={cardData} slotIdx={fixIdx}/>
+                        <ChName>{name}</ChName>
+                      </ChCard>
+                    )
+                    })}
                 {selectCard && selectCard[0]?.idx ? selectCard.map((cardData, idx) => {
-                  const name = gameData.ch[cardData.idx].na1;
+                  const name = gameData.ch?.[cardData.idx]?.na1 || "Unknown";
                   return (
                     <ChCard key={`chCard${idx}`} direction="column">
                       <CharacterCard usedType="small" size="60" equalSize={true} saveData={saveData} saveCharacter={cardData} slotIdx={idx}/>
                       <ChName>{name}</ChName>
                     </ChCard>
                   )
-                }) : selectGradeArr.map((cardData, idx) => {
-                  return (
-                    <CharacterCard grade={cardData} key={`chCard${idx}`} size="60" equalSize={true} />
+                }) : 
+                  selectGradeArr?.arr?.map((cardData, idx) => {
+                    return (
+                      <ChCard key={`chCard${idx}`} direction="column">
+                        <CharacterCard grade={cardData} size="60" equalSize={true} />
+                      </ChCard>
                   )
                 })}
               </CardBox>
             </StyledListItem>
-            <StyledListItem title={gameData.msg.title['money'][lang]}>
+            <StyledListItem title={gameData.msg.title?.['money']?.[lang] || "Money"}>
               <IconBox>
                 <IconPic className="ico" type="commonBtn" pic="icon100" idx={3} /> 
               </IconBox>
               <StyledText code="t3" color="point5">{hasMoney}</StyledText>
             </StyledListItem>
-            <StyledListItem title={gameData.msg.title['startingArea'][lang]}>
+            <StyledListItem title={gameData.msg.title?.['startingArea']?.[lang] || "Starting Area"}>
               <Select selectIdx={selectCountryIdx} setSelectIdx={setSelectCountryIdx} onClick={(idx) => {
                 setSelectCountryIdx(idx);
-                const sData = {...saveData};
-                sData.info.stay = gameData.country.regions[idx].id;
-                changeSaveData(sData);
-              }} selectOption={countryList} title={gameData.msg.title['selectRegion'][lang]}></Select>
-              {/* <TextField transparent={true} placeholder={gameData.msg.sentence['selectCountry'][lang]} text="" /> */}
+                const regionId = gameData.country?.regions?.[idx]?.id || "";
+                const newSaveData = JSON.parse(JSON.stringify(saveData || {}));
+                if (newSaveData.info) newSaveData.info.stay = regionId;
+                changeSaveData(newSaveData);
+              }} selectOption={countryList} title={gameData.msg.title?.['selectRegion']?.[lang] || "Select Region"}></Select>
             </StyledListItem>
-            <StyledListItem title={gameData.msg.title['gameLanguage'][lang]}>
+            <StyledListItem title={gameData.msg.title?.['gameLanguage']?.[lang] || "Language"}>
               <Select selectIdx={selectLanguageIdx} setSelectIdx={setSelectLanguageIdx} onClick={(idx) => {
                 setSelectLanguageIdx(idx);
                 const countryCode = (() => {
@@ -202,44 +219,69 @@ const StartGame = ({
                 })();
                 setLang(countryCode);
                 util.saveData('language', countryCode);
-                // const sData = {...saveData};
-                // sData.info.stay = countryList[idx];
-                // changeSaveData(sData);
-              }} selectOption={languageList} title={gameData.msg.title['selectLanguage'][lang]}></Select>
+              }} selectOption={languageList} title={gameData.msg.title?.['selectLanguage']?.[lang] || "Select Language"}></Select>
             </StyledListItem>
           </ListWrap>
           <ConFirmArea>
             <Button size="large" width={100} onClick={() => {
               localStorage.removeItem('historyParam');//게임기록 삭제
               //시나리오 개방
-              const sData = {...saveData};
-              sData.ch.forEach((chData) => {
-                const chPeriod = gameData.ch[chData.idx].period,
-                  chScenario = gameData.ch[chData.idx].scenario
-                if (chScenario !== '') { //인물 전기가 있다면
-                  const chCountry = util.getIdxToCountry(gameData.ch[chData.idx].country);
-                  sData.scenario[chCountry][chPeriod].scenarioList[chScenario].open += 1;
+              let updatedSaveData = JSON.parse(JSON.stringify(saveData || {}));
+              let updatedCh = updatedSaveData.ch || [];
+              let updatedScenario = updatedSaveData.scenario || {};
+
+              if (selectGradeArr?.fix?.length > 0) {
+                const cardList = util.makeCard({
+                  gachaNum: selectGradeArr.fix,
+                  gachaType: "fix",
+                  gameData: gameData,
+                  saveData: saveData,
+                });
+                updatedCh = [...(cardList.chDataArr || []), ...updatedCh];
+              }
+
+              updatedCh.forEach((chData) => {
+                const chScenario = gameData.ch?.[chData.idx]?.scenarioRegion;
+                if (chScenario && chScenario !== '') { //인물 전기가 있다면
+                  chScenario.forEach((scenarioData) => {
+                    if (!scenarioData) return;
+                    const chScenarioInfo = scenarioData.split("-");
+                    if (chScenarioInfo.length < 3) return;
+                    const category = chScenarioInfo[0].replace(/[0-9]/g, "");
+                    const regionIdx = chScenarioInfo[1];
+                    const scenarioIdx = chScenarioInfo[2];
+
+                    if (updatedScenario[category]?.[regionIdx]) {
+                      updatedScenario[category][regionIdx].scenarioList = (updatedScenario[category][regionIdx].scenarioList || []).map((s, si) => 
+                        si === Number(scenarioIdx) ? { ...s, open: (s.open || 0) + 1 } : s
+                      );
+                    }
+                  });
                 }
               });
-              sData.info.money = Number(util.removeComma(hasMoney));
-              sData.info.morality = gameData.startMorality;
-              changeSaveData(sData);
+
+              updatedSaveData.ch = updatedCh;
+              updatedSaveData.scenario = updatedScenario;
+              if (updatedSaveData.info) {
+                updatedSaveData.info.money = Number(util.removeComma(hasMoney) || 0);
+                updatedSaveData.info.morality = gameData.startMorality || 0;
+              }
+              changeSaveData(updatedSaveData);
 
               //필드 유효성 검사
-              if (!saveData.info.id) {
+              if (!saveData.info?.id) {
 								setMsgOn(true);
-                setMsg(gameData.msg.sentence['enterIDSubmit'][lang]);
+                setMsg(gameData.msg.sentence?.['enterIDSubmit']?.[lang] || "Enter name first.");
                 return;
               }
-              if (Object.keys(saveData.ch).length === 0) {
-                console.log(selectCard)
+              if (Object.keys(saveData.ch || {}).length === 0) {
 								setMsgOn(true);
-                setMsg(gameData.msg.sentence['selectCards'][lang]);
+                setMsg(gameData.msg.sentence?.['selectCards']?.[lang] || "Select starting cards.");
                 return;
               }
-              if (!saveData.info.stay) {
+              if (!saveData.info?.stay) {
 								setMsgOn(true);
-                setMsg(gameData.msg.sentence['selectCountry'][lang]);
+                setMsg(gameData.msg.sentence?.['selectCountry']?.[lang] || "Select starting area.");
                 return;
               }
               util.saveData('continueGame', true);

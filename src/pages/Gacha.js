@@ -2,7 +2,7 @@ import { AppContext } from 'App';
 import { Button } from 'components/Button';
 import { Prices } from 'components/Components';
 import { FlexBox } from 'components/Container';
-import { ChPic } from 'components/ImagePic';
+import { MergedPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Modal from 'components/Modal';
 import ModalContainer from 'components/ModalContainer';
@@ -29,7 +29,7 @@ const GachaMenu = styled.ul`
 	flex-grow: 0;
 	overflow: hidden;
 	height: ${({gachaMode}) => {
-		return gachaMode === ('start' || 'card') ? 0 : 'auto';
+		return ['start', 'card'].includes(gachaMode) ? 0 : 'auto';
 	}};
 	li {
 		margin: 0 0 10px 0;
@@ -42,6 +42,83 @@ const GachaArea = styled.div`
 	position: relative;
 	width: 100%;
 	height: calc(100% - 50px);
+`;
+const GachaCards = styled.div`
+	&.pos {
+		.gacha_card:first-of-type{
+			transform:translate(10%,10%) !important;
+			}
+		.gacha_card:nth-of-type(2){
+			transform:translate(130%,10%) !important;
+			}
+		.gacha_card:nth-of-type(3){
+			transform:translate(250%,10%) !important;
+			}
+		.gacha_card:nth-of-type(4){
+			transform:translate(70%,100%) !important;
+			}
+		.gacha_card:nth-of-type(5){
+			transform:translate(190%,100%) !important;
+			}
+		.gacha_card:nth-of-type(6){
+			transform:translate(10%,190%) !important;
+			}
+		.gacha_card:nth-of-type(7){
+			transform:translate(130%,190%) !important;
+			}
+		.gacha_card:nth-of-type(8){
+			transform:translate(250%,190%) !important;
+			}
+		.gacha_card:nth-of-type(9){
+			transform:translate(70%,280%) !important;
+			}
+		.gacha_card:last-of-type{
+			transform:translate(190%,280%) !important;
+			}
+	}
+	&.begin1 {
+		.gacha_card{
+			left:50%;top:20%;transform:translate(-50%, -50%) !important;
+		}
+	}
+	&.begin2 {
+		.gacha_card:first-of-type{
+			left:25%;top:50%;transform:translate(-50%, -50%) !important;
+		}
+		.gacha_card:nth-of-type(2){
+			left:75%;top:50%;transform:translate(-50%, -50%) !important;
+		}
+	}
+	&.begin3 {
+		.gacha_card:first-of-type{
+			left:50%;top:20%;transform:translate(-50%, -50%) !important;
+		}
+		.gacha_card:nth-of-type(2){
+			left:20%;top:50%;transform:translate(-50%, -50%) !important;
+		}
+		.gacha_card:nth-of-type(3){
+			left:80%;top:50%;transform:translate(-50%, -50%) !important;
+		}
+	}
+	&.begin4 {
+		.gacha_card:first-of-type{
+			left:50%;top:20%;transform:translate(-50%, -50%) !important;
+		}
+		.gacha_card:nth-of-type(2){
+			left:20%;top:50%;transform:translate(-50%, -50%) !important;
+		}
+		.gacha_card:nth-of-type(3){
+			left:80%;top:50%;transform:translate(-50%, -50%) !important;
+		}
+		.gacha_card:last-of-type{
+			left:50%;top:80%;transform:translate(-50%, -50%) !important;
+		}
+	}
+	&.posOne {
+		.gacha_card{
+			left:0 !important;top:0 !important;transform:scale(1.5) translate(80%,80%) !important;
+		}
+	}
 `;
 const GachaEffect = styled.div`
 	position: absolute;
@@ -173,22 +250,13 @@ const GachaShadow = styled.div`
 	overflow: hidden;
 	pointer-events: none;
 	box-shadow:${({gameData, cardGrade}) => {
-		const gradeColor = gameData.chGradeColor[cardGrade * 1];
-		if (cardGrade === 1) {
-			return;
-		} else if (cardGrade === 2) {
-			return `0 0 5px ${gradeColor},0 0 2px ${gradeColor}`;
-		} else if (cardGrade === 3) {
-			return `0 0 10px ${gradeColor},0 0 3px ${gradeColor},0 0 1px ${gradeColor}`;
-		} else if (cardGrade === 4) {
-			return `0 0 15px ${gradeColor},0 0 4px ${gradeColor},0 0 1px ${gradeColor}`;
-		} else if (cardGrade === 5) {
-			return `0 0 20px ${gradeColor},0 0 5px ${gradeColor},0 0 2px ${gradeColor}`;
-		} else if (cardGrade === 6) {
-			return `0 0 40px ${gradeColor},0 0 10px ${gradeColor},0 0 3px ${gradeColor}, 0 0 50px #fff`;
-		} else if (cardGrade === 7) {
-			return `0 0 40px ${gradeColor},0 0 10px ${gradeColor},0 0 3px ${gradeColor}, 0 0 50px #fff`;
-		}
+		const grade = cardGrade * 1;
+		if (grade <= 1) return;
+		const gradeColor = gameData.chGradeColor[grade];
+		const shadowSize = { 2: 5, 3: 10, 4: 15, 5: 20 }[grade] || 40;
+		const blurSize = { 2: 2, 3: 3, 4: 4, 5: 5 }[grade] || 10;
+		const extra = grade >= 6 ? `, 0 0 50px #fff` : '';
+		return `0 0 ${shadowSize}px ${gradeColor}, 0 0 ${blurSize}px ${gradeColor}${grade >= 3 ? `, 0 0 1px ${gradeColor}` : ''}${extra}`;
 	}};
 `;
 const GachaFront = styled.div`
@@ -202,7 +270,7 @@ const GachaFront = styled.div`
 	background: #000;
 	pointer-events: none;
 `;
-const GachaBack = styled(ChPic)`
+const GachaBack = styled(MergedPic)`
 	position:absolute;
 	left: 0;
 	right: 0;
@@ -258,17 +326,23 @@ const Gacha = ({
 	const [step, setStep] = useState(0); //진행단계
 	const changeGachaMode = (mode, data, saveData, gameData, changeSaveData) => {
 		if (mode === 'start') { // 뽑기모드
-			let sData = {...saveData};
+			let sData = JSON.parse(JSON.stringify(saveData));
 			if (data.type === 'p') {
 				sData.info.diamond -= data.price; //다이아 계산
 			} else {
 				sData.info.money -= data.price; //돈 계산
 			}
-			const cardList = util.makeCard(data.num, data.type, gameData, sData);
-			cardList.chDataArr.forEach((data, idx) => {
-				sData.ch.push(data);
+			const cardList = util.makeCard({
+				gachaNum: data.num,
+				gachaType: data.type,
+				gameData: gameData,
+				saveData: sData,
 			});
-			changeSaveData(sData); //세이브
+			const finalSData = {
+				...sData,
+				ch: [...sData.ch, ...cardList.chDataArr]
+			};
+			changeSaveData(finalSData); //세이브
 			maxCardGrade.current = cardList.maxCard;
 			setGachaCard(cardList.chArr);
 		}
@@ -303,18 +377,24 @@ const Gacha = ({
 	useEffect(() => {
 		if (Object.keys(saveData).length > 0) {
 			if (paramData.recruitment.begin) {
-				const sData = {...saveData};
-				const startingGrade = paramData.recruitment.cardArr; //최초 시작 영웅들 등급
-				const cardList = util.makeCard(startingGrade, 'p', gameData, saveData);
-				cardList.chDataArr.forEach((data, idx) => {
-					sData.ch.push(data);
+				const sData = JSON.parse(JSON.stringify(saveData));
+				const startingGrade = paramData.recruitment.cardArr.arr; //최초 시작 영웅들 등급
+				const cardList = util.makeCard({
+					gachaNum: startingGrade,
+					gachaType: 'p',
+					gameData: gameData,
+					saveData: sData,
 				});
-				changeSaveData(sData); //세이브
+				const finalSData = {
+					...sData,
+					ch: [...sData.ch, ...cardList.chDataArr]
+				};
+				changeSaveData(finalSData); //세이브
 				maxCardGrade.current = cardList.maxCard;
 				setGachaCard(cardList.chArr);
 				//setGachaMode('start');
 
-				const gachaLength = paramData.recruitment.cardArr.length;
+				const gachaLength = paramData.recruitment.cardArr.arr.length;
 				const beginCheck = paramData.recruitment.begin ? `begin${gachaLength}` : 'pos';
 				cardGroupRef.current.classList.add(beginCheck);
 				setTimeCard.current = setTimeout(() => {
@@ -339,11 +419,14 @@ const Gacha = ({
 	const [gachaCard, setGachaCard] = useState([]);
 	const handleModal = (modalType, gachaIdx) => {
 		setModalOn(true);
-    if( modalType ){
-			const price = gameData.prices.gacha.draw[gachaIdx][0].price;
+		if (modalType) {
+			const gachaPriceData = gameData && gameData.prices && gameData.prices.gacha && gameData.prices.gacha.draw[gachaIdx] && gameData.prices.gacha.draw[gachaIdx][0];
+			if (!gachaPriceData) return;
+
+			const price = gachaPriceData.price;
 			const num = gachaList[gachaIdx].num;
-			const gachaType = gameData.prices.gacha.draw[gachaIdx][0].type;
-			if (gachaIdx < 2){ // 다이아 뽑기
+			const gachaType = gachaPriceData.type;
+			if (gachaIdx < 2) { // 다이아 뽑기
 				if (saveData.info.diamond >= price) { //돈이 충분할 경우
 					setModalInfo({
 						type: 'confirm',
@@ -353,7 +436,7 @@ const Gacha = ({
 							price: price,
 							num: num,
 						},
-						bt: [{txt:'사용',action:'gacha'},{txt:'취소',action:'popClose'}],
+						bt: [{ txt: '사용', action: 'gacha' }, { txt: '취소', action: 'popClose' }],
 					});
 				} else { //돈이 모자를 경우
 					setModalInfo({
@@ -371,18 +454,18 @@ const Gacha = ({
 							price: price,
 							num: num,
 						},
-						bt: [{txt:'사용',action:'gacha'},{txt:'취소',action:'popClose'}],
+						bt: [{ txt: '사용', action: 'gacha' }, { txt: '취소', action: 'popClose' }],
 					});
 				} else { //돈이 모자를 경우
 					setModalInfo({
 						type: 'confirm',
-						msg: `발바닥이 충분하지 않습니다.`,
+						msg: `골드가 충분하지 않습니다.`,
 					});
 				}
 			}
-      setModalType(modalType);
-    }
-  }
+			setModalType(modalType);
+		}
+	}
 	const popCard = useCallback((chData) => {
 		const can = graphRef.current;
 		const roundedRectangle = (container, x, y, width, height, rounded) => {
@@ -399,13 +482,13 @@ const Gacha = ({
 			container.lineTo(x + rounded, y); // line from top right to top left
 		}
 		const stData = [
-			{title: '통솔', color: '#037ace', percent: 125,},
-			{title: '체력', color: '#f3004e', percent: 200,},
-			{title: '무력', color: '#ff5326', percent: 200,},
-			{title: '민첩', color: '#77b516', percent: 100,},
-			{title: '지력', color: '#f9c215', percent: 200,},
-			{title: '정치', color: '#5f3dc4', percent: 100,},
-			{title: '매력', color: '#ce20c2', percent: 100,},
+			{title: gameData.stateName[0], color: '#037ace', percent: 125,},
+			{title: gameData.stateName[1], color: '#f3004e', percent: 200,},
+			{title: gameData.stateName[2], color: '#ff5326', percent: 200,},
+			{title: gameData.stateName[3], color: '#77b516', percent: 100,},
+			{title: gameData.stateName[4], color: '#f9c215', percent: 200,},
+			{title: gameData.stateName[5], color: '#5f3dc4', percent: 100,},
+			{title: gameData.stateName[6], color: '#ce20c2', percent: 100,},
 		];
 		const ctxWidth = can.getBoundingClientRect().width,
 			ctx = can.getContext('2d');
@@ -517,7 +600,7 @@ const Gacha = ({
 					})}
 				</GachaMenu>}
 				<GachaArea>
-					<div ref={cardGroupRef} className="gacha_cards">
+					<GachaCards ref={cardGroupRef} className="gacha_cards">
 						{gachaCard.map((data, idx) => {
 							const cardGrade = gameData.ch[data.idx].grade;
 							return (
@@ -526,7 +609,7 @@ const Gacha = ({
 										setInfoIdx(data.idx);
 										setSlotIdx(data.slotIdx);
 										infoRef.current.classList.add('on');
-										popCard(gameData.ch[infoIdx]);
+										popCard(gameData.ch[data.idx]);
 									} else {//카드 열기
 										if (cardGrade > 5) {
 											e.target.classList.add('special');
@@ -553,7 +636,7 @@ const Gacha = ({
 								</GachaCard>
 							);
 						})}
-					</div>
+					</GachaCards>
 					<GachaEffect ref={effectRef}/>
 				</GachaArea>
 				<GachaOrder>
@@ -577,14 +660,19 @@ const Gacha = ({
 									el.classList.remove('open');
 								});
 								const sData = {...saveData}
-								sData.ch = [];
-								const startingGrade = paramData.recruitment.cardArr; //최초 시작 영웅들 등급
-								const cardList = util.makeCard(startingGrade, 'p', gameData, saveData);
+								const startingGrade = paramData.recruitment.cardArr.arr; //최초 시작 영웅들 등급
+								const cardList = util.makeCard({
+									gachaNum: startingGrade,
+									gachaType: 'p',
+									gameData: gameData,
+									saveData: saveData,
+								});
 								setTimeout(() => {
-									cardList.chDataArr.forEach((data, idx) => {
-										sData.ch.push(data);
-									});
-									changeSaveData(sData); //세이브
+									const finalSData = {
+										...saveData,
+										ch: [...cardList.chDataArr]
+									};
+									changeSaveData(finalSData); //세이브
 									maxCardGrade.current = cardList.maxCard;
 									setGachaCard(cardList.chArr);
 									setGachaMode('start');
@@ -621,10 +709,10 @@ const Gacha = ({
 								<span className="lv">1</span><span className="name_">{gameData.ch[infoIdx].na}</span><span className="name">{gameData.ch[infoIdx].na1}</span>
 							</CardLvName>
 							<CardDisplay>
-								<ChPic pic="ch" idx={gameData.ch[infoIdx].display} />
+								<ChPic pic={`ch${gameData.ch[infoIdx].display}`} />
 							</CardDisplay>
 							<CardRing className="gacha_ring">
-								<ChPic type="cardBack" pic="card" idx={0} />
+								<MergedPic type="cardBack" pic="card" idx={0} />
 							</CardRing>
 							<CardElement className="gacha_element" ringDisplay={imgSet.ringImg[gameData.ch[infoIdx].element]} />
 							<CardStar type={'open'} className="gacha_star" starIcon={iconStar}>

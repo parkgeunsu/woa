@@ -363,8 +363,8 @@ const ToolShop = ({
 												<MarkPic length={selectItem1.save.markNum} pic="icon100" idx={selectItem1.save.mark} />
 											</div>
 											<div className="item_slot">
-												{selectItem1.save.hole.map((holeData, idx) => {
-													const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
+												{(selectItem1.save.hole || []).map((holeData, idx) => {
+													const holePic = holeData !== 0 ? gameItem.hole?.[holeData.idx]?.display : 0;
 													return (
 														<div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}>
 															<span className="item_holeback">
@@ -421,15 +421,19 @@ const ToolShop = ({
 															<div className="item_price"><span>{gameData.msg.itemInfo.buyPrice[lang]}</span><em>{`₩${util.comma((selectItem1.game.price < 1000 ? 1000 : selectItem1.game.price) * 2 * selectItem1.save.grade)}`}</em></div>
 															<div className="item_button" flex="true">
 																<button text="true" className="button_small" onClick={(e) => {
-																	if (actionCh.idx === '') {
+																	if (actionCh.idx === '' || actionCh.idx === undefined) {
 																		setMsgOn(true);
-																		setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[201].na));
+																		setMsg(gameData.msg?.sentenceFn?.selectSkillCh?.(lang,gameData.skill?.[201]?.na) || "Select Character");
 																		return;
 																	}
-																	let saveD = {...saveData};
-																	if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemBuy) {//행동력 지불
-																		saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemBuy;
-																		saveD.city[cityIdx].toolShop.accessory.splice(selectItem1.select, 1);
+																	let saveD = JSON.parse(JSON.stringify(saveData));
+																	const charData = saveD.ch?.[actionCh.idx];
+																	const buyPrice = gameData.actionPoint?.itemBuy || 0;
+																	if (charData && charData.actionPoint >= buyPrice) {//행동력 지불
+																		charData.actionPoint -= buyPrice;
+																		if (saveD.city[cityIdx]?.toolShop?.accessory) {
+																			saveD.city[cityIdx].toolShop.accessory.splice(selectItem1.select, 1);
+																		}
 																		util.buttonEvent({
 																			event: e,
 																			type: 'itemBuy',
@@ -450,9 +454,9 @@ const ToolShop = ({
 																		setSelectItem1({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 																	} else {
 																		setMsgOn(true);
-																		setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
+																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
 																	}
-																}} data-buttontype="itemBuy">{gameData.msg.button.buy[lang]}</button>
+																}} data-buttontype="itemBuy">{gameData.msg?.button?.buy?.[lang] || "Buy"}</button>
 															</div>
 														</div>
 													)
@@ -462,9 +466,13 @@ const ToolShop = ({
 															<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${util.comma(selectItem1.game.price * (selectItem1.game.grade || selectItem1.save.grade))}`}</em></div>
 															<div className="item_button" flex="true">
 																<button text="true" className="button_small" onClick={(e) => {
-																	let saveD = {...saveData};
-																	if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemSell) {//행동력 지불
-																		saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemSell;util.buttonEvent({
+																	if (actionCh.idx === '' || actionCh.idx === undefined) return;
+																	let saveD = JSON.parse(JSON.stringify(saveData));
+																	const charData = saveD.ch?.[actionCh.idx];
+																	const sellPrice = gameData.actionPoint?.itemSell || 0;
+																	if (charData && charData.actionPoint >= sellPrice) {//행동력 지불
+																		charData.actionPoint -= sellPrice;
+																		util.buttonEvent({
 																			event: e,
 																			type: 'itemSell',
 																			data: {
@@ -473,7 +481,7 @@ const ToolShop = ({
 																				itemSaveSlot:selectItem1.select,
 																				type: 'equip',
 																			},
-																			saveData: saveData,
+																			saveData: saveD,
 																			changeSaveData: changeSaveData,
 																			gameData: gameData,
 																			msgText: setMsg,
@@ -484,9 +492,9 @@ const ToolShop = ({
 																		setSelectItem1({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 																	} else {
 																		setMsgOn(true);
-																		setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
+																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
 																	}
-																}} data-buttontype="itemSell">{gameData.msg.button.sell[lang]}</button>
+																}} data-buttontype="itemSell">{gameData.msg?.button?.sell?.[lang] || "Sell"}</button>
 															</div>
 														</div>
 													)
@@ -530,9 +538,16 @@ const ToolShop = ({
 															<div className="item_price"><span>{gameData.msg.itemInfo.buyPrice[lang]}</span><em>{`₩${util.comma((selectItem1.game.price < 1000 ? 1000 : selectItem1.game.price) * 2)}`}</em></div>
 															<div className="item_button" flex="true">
 																<button text="true" className="button_small" onClick={(e) => {
-																	let saveD = {...saveData};
-																	if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemBuy) {//행동력 지불
-																		saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemBuy;
+																	if (actionCh.idx === '' || actionCh.idx === undefined) {
+																		setMsgOn(true);
+																		setMsg(gameData.msg?.sentenceFn?.selectSkillCh?.(lang,gameData.skill?.[201]?.na) || "Select Character");
+																		return;
+																	}
+																	let saveD = JSON.parse(JSON.stringify(saveData));
+																	const charData = saveD.ch?.[actionCh.idx];
+																	const buyPrice = gameData.actionPoint?.itemBuy || 0;
+																	if (charData && charData.actionPoint >= buyPrice) {//행동력 지불
+																		charData.actionPoint -= buyPrice;
 																		util.buttonEvent({
 																			event: e,
 																			type: 'itemBuy',
@@ -542,7 +557,7 @@ const ToolShop = ({
 																				saveItemData: selectItem1.save,
 																				type: 'equip',
 																			},
-																			saveData: saveData,
+																			saveData: saveD,
 																			changeSaveData: changeSaveData,
 																			gameData: gameData,
 																			msgText: setMsg,
@@ -553,9 +568,9 @@ const ToolShop = ({
 																		setSelectItem1({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 																	} else {
 																		setMsgOn(true);
-																		setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
+																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
 																	}
-																}} data-buttontype="itemBuy">{gameData.msg.button.buy[lang]}</button>
+																}} data-buttontype="itemBuy">{gameData.msg?.button?.buy?.[lang] || "Buy"}</button>
 															</div>
 														</div>
 													)
@@ -565,9 +580,13 @@ const ToolShop = ({
 															<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${util.comma(selectItem1.game.price * (selectItem1.game.grade || selectItem1.save.grade))}`}</em></div>
 															<div className="item_button" flex="true">
 																<button text="true" className="button_small" onClick={(e) => {
-																	let saveD = {...saveData};
-																	if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemSell) {//행동력 지불
-																		saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemSell;util.buttonEvent({
+																	if (actionCh.idx === '' || actionCh.idx === undefined) return;
+																	let saveD = JSON.parse(JSON.stringify(saveData));
+																	const charData = saveD.ch?.[actionCh.idx];
+																	const sellPrice = gameData.actionPoint?.itemSell || 0;
+																	if (charData && charData.actionPoint >= sellPrice) {//행동력 지불
+																		charData.actionPoint -= sellPrice;
+																		util.buttonEvent({
 																			event: e,
 																			type: 'itemSell',
 																			data: {
@@ -576,7 +595,7 @@ const ToolShop = ({
 																				itemSaveSlot:selectItem1.select,
 																				type: 'equip',
 																			},
-																			saveData: saveData,
+																			saveData: saveD,
 																			changeSaveData: changeSaveData,
 																			gameData: gameData,
 																			msgText: setMsg,
@@ -587,9 +606,9 @@ const ToolShop = ({
 																		setSelectItem1({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 																	} else {
 																		setMsgOn(true);
-																		setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
+																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
 																	}
-																}} data-buttontype="itemSell">{gameData.msg.button.sell[lang]}</button>
+																}} data-buttontype="itemSell">{gameData.msg?.button?.sell?.[lang] || "Sell"}</button>
 															</div>
 														</div>
 													)
@@ -635,8 +654,8 @@ const ToolShop = ({
 												<MarkPic length={selectItem2.save.markNum} pic="icon100" idx={selectItem2.save.mark} />
 											</div>
 											<div className="item_slot">
-												{selectItem2.save.hole.map((holeData, idx) => {
-													const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
+												{(selectItem2.save.hole || []).map((holeData, idx) => {
+													const holePic = holeData !== 0 ? gameItem.hole?.[holeData.idx]?.display : 0;
 													return (
 														<div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}>
 															<span className="item_holeback">
@@ -693,10 +712,19 @@ const ToolShop = ({
 															<div className="item_price"><span>{gameData.msg.itemInfo.buyPrice[lang]}</span><em>{`₩${util.comma((selectItem2.game.price < 1000 ? 1000 : selectItem2.game.price) * 2 * selectItem2.save.grade)}`}</em></div>
 															<div className="item_button" flex="true">
 																<button text="true" className="button_small" onClick={(e) => {
-																	let saveD = {...saveData};
-																	if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemBuy) {//행동력 지불
-																		saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemBuy;
-																		saveD.city[cityIdx].toolShop.accessory.splice(selectItem2.select, 1);
+																	if (actionCh.idx === '' || actionCh.idx === undefined) {
+																		setMsgOn(true);
+																		setMsg(gameData.msg?.sentenceFn?.selectSkillCh?.(lang,gameData.skill?.[201]?.na) || "Select Character");
+																		return;
+																	}
+																	let saveD = JSON.parse(JSON.stringify(saveData));
+																	const charData = saveD.ch?.[actionCh.idx];
+																	const buyPrice = gameData.actionPoint?.itemBuy || 0;
+																	if (charData && charData.actionPoint >= buyPrice) {//행동력 지불
+																		charData.actionPoint -= buyPrice;
+																		if (saveD.city[cityIdx]?.toolShop?.accessory) {
+																			saveD.city[cityIdx].toolShop.accessory.splice(selectItem2.select, 1);
+																		}
 																		util.buttonEvent({
 																			event: e,
 																			type: 'itemBuy',
@@ -706,7 +734,7 @@ const ToolShop = ({
 																				saveItemData: selectItem2.save,
 																				type: 'equip',
 																			},
-																			saveData: saveData,
+																			saveData: saveD,
 																			changeSaveData: changeSaveData,
 																			gameData: gameData,
 																			msgText: setMsg,
@@ -717,9 +745,9 @@ const ToolShop = ({
 																		setSelectItem2({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 																	} else {
 																		setMsgOn(true);
-																		setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
+																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
 																	}
-																}} data-buttontype="itemRelease">{gameData.msg.button.buy[lang]}</button>
+																}} data-buttontype="itemRelease">{gameData.msg?.button?.buy?.[lang] || "Buy"}</button>
 															</div>
 														</div>
 													);
@@ -729,19 +757,22 @@ const ToolShop = ({
 															<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${util.comma(selectItem2.game.price * (selectItem2.game.grade || selectItem2.save.grade))}`}</em></div>
 															<div className="item_button" flex="true">
 																<button text="true" className="button_small" onClick={(e) => {
-																	let saveD = {...saveData};
-																	if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemSell) {//행동력 지불
-																		saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemSell;
+																	if (actionCh.idx === '' || actionCh.idx === undefined) return;
+																	let saveD = JSON.parse(JSON.stringify(saveData));
+																	const charData = saveD.ch?.[actionCh.idx];
+																	const sellPrice = gameData.actionPoint?.itemSell || 0;
+																	if (charData && charData.actionPoint >= sellPrice) {//행동력 지불
+																		charData.actionPoint -= sellPrice;
 																		util.buttonEvent({
 																			event: e,
 																			type: 'itemSell',
 																			data: {
 																				slotIdx: 0,
 																				gameItem: selectItem2.game,
-																				itemSaveSlot:selectItem2.select,
+																				itemSaveSlot: selectItem2.select,
 																				type: 'equip',
 																			},
-																			saveData: saveData,
+																			saveData: saveD,
 																			changeSaveData: changeSaveData,
 																			gameData: gameData,
 																			msgText: setMsg,
@@ -752,9 +783,9 @@ const ToolShop = ({
 																		setSelectItem2({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 																	} else {
 																		setMsgOn(true);
-																		setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
+																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
 																	}
-																}} data-buttontype="itemSell">{gameData.msg.button.sell[lang]}</button>
+																}} data-buttontype="itemSell">{gameData.msg?.button?.sell?.[lang] || "Sell"}</button>
 															</div>
 														</div>
 													);
@@ -798,9 +829,16 @@ const ToolShop = ({
 															<div className="item_price"><span>{gameData.msg.itemInfo.buyPrice[lang]}</span><em>{`₩${util.comma((selectItem2.game.price < 1000 ? 1000 : selectItem2.game.price) * 2)}`}</em></div>
 															<div className="item_button" flex="true">
 																<button text="true" className="button_small" onClick={(e) => {
-																	let saveD = {...saveData};
-																	if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemBuy) {//행동력 지불
-																		saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemBuy;
+																	if (actionCh.idx === '' || actionCh.idx === undefined) {
+																		setMsgOn(true);
+																		setMsg(gameData.msg?.sentenceFn?.selectSkillCh?.(lang,gameData.skill?.[201]?.na) || "Select Character");
+																		return;
+																	}
+																	let saveD = JSON.parse(JSON.stringify(saveData));
+																	const charData = saveD.ch?.[actionCh.idx];
+																	const buyPrice = gameData.actionPoint?.itemBuy || 0;
+																	if (charData && charData.actionPoint >= buyPrice) {//행동력 지불
+																		charData.actionPoint -= buyPrice;
 																		util.buttonEvent({
 																			event: e,
 																			type: 'itemBuy',
@@ -810,7 +848,7 @@ const ToolShop = ({
 																				saveItemData: selectItem2.save,
 																				type: 'equip',
 																			},
-																			saveData: saveData,
+																			saveData: saveD,
 																			changeSaveData: changeSaveData,
 																			gameData: gameData,
 																			msgText: setMsg,
@@ -821,9 +859,9 @@ const ToolShop = ({
 																		setSelectItem2({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 																	} else {
 																		setMsgOn(true);
-																		setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
+																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
 																	}
-																}} data-buttontype="itemRelease">{gameData.msg.button.buy[lang]}</button>
+																}} data-buttontype="itemRelease">{gameData.msg?.button?.buy?.[lang] || "Buy"}</button>
 															</div>
 														</div>
 													);
@@ -833,19 +871,22 @@ const ToolShop = ({
 															<div className="item_price"><span>{gameData.msg.itemInfo.sellPrice[lang]}</span><em>{`₩${util.comma(selectItem2.game.price * (selectItem2.game.grade || selectItem2.save.grade))}`}</em></div>
 															<div className="item_button" flex="true">
 																<button text="true" className="button_small" onClick={(e) => {
-																	let saveD = {...saveData};
-																	if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemSell) {//행동력 지불
-																		saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemSell;
+																	if (actionCh.idx === '' || actionCh.idx === undefined) return;
+																	let saveD = JSON.parse(JSON.stringify(saveData));
+																	const charData = saveD.ch?.[actionCh.idx];
+																	const sellPrice = gameData.actionPoint?.itemSell || 0;
+																	if (charData && charData.actionPoint >= sellPrice) {//행동력 지불
+																		charData.actionPoint -= sellPrice;
 																		util.buttonEvent({
 																			event: e,
 																			type: 'itemSell',
 																			data: {
 																				slotIdx: 0,
 																				gameItem: selectItem2.game,
-																				itemSaveSlot:selectItem2.select,
+																				itemSaveSlot: selectItem2.select,
 																				type: 'equip',
 																			},
-																			saveData: saveData,
+																			saveData: saveD,
 																			changeSaveData: changeSaveData,
 																			gameData: gameData,
 																			msgText: setMsg,
@@ -856,9 +897,9 @@ const ToolShop = ({
 																		setSelectItem2({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 																	} else {
 																		setMsgOn(true);
-																		setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
+																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
 																	}
-																}} data-buttontype="itemSell">{gameData.msg.button.sell[lang]}</button>
+																}} data-buttontype="itemSell">{gameData.msg?.button?.sell?.[lang] || "Sell"}</button>
 															</div>
 														</div>
 													);

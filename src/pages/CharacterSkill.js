@@ -24,14 +24,16 @@ const Wrap = styled(FlexBox)`
   .sk[cate8]:after{content:'';position:absolute;left:0;top:0;border-left:10px solid var(--color-point2);border-top:10px solid var(--color-point2);border-right:10px solid transparent;border-bottom:10px solid transparent;}/*active, buff*/
   .sk[cate9]:after{content:'';position:absolute;left:0;top:0;border-left:10px solid var(--color-w);border-top:10px solid var(--color-w);border-right:10px solid transparent;border-bottom:10px solid transparent;}/*active, passive, buff*/
 `;
-const Skill = styled.div`
+const Skill = styled(FlexBox)`
   position: relative;
   margin: 0 10px 5px;
   padding: 5px 10px;
+  width: calc(100% - 20px);
   font-size: 0.75rem;
   border: 3px double rgba(255,255,255,.5);
   border-radius: 5px;
   opacity: .3;
+  box-sizing: border-box;
   ${({possible}) => possible ? `
     border-color: var(--color-magic);
     opacity: 1;
@@ -112,6 +114,7 @@ const ActionType = styled.div`
 `;
 const SkillIcon = styled.div`
   position: relative;
+  flex-shrink: 0;
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -153,7 +156,7 @@ const LvBar = styled(FlexBox)`
     position: relative;
     margin: auto 5px;
     width: 100%;
-    height: 20px;
+    height: 10px;
     border-radius: 20px;
     background: var(--color-grey);
     overflow: hidden;
@@ -175,18 +178,18 @@ const CharacterSkill = ({
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
-  // const imgSet = React.useMemo(() => {
-  //   return context.images;
-  // }, [context]);
+
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
+
   const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
-  const chName = React.useMemo(() => gameData.ch[saveCh.idx].na1, [saveData, slotIdx]);
+  const chName = React.useMemo(() => gameData.ch[saveCh.idx]?.na1, [gameData, saveCh]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
   const saveSkill = React.useMemo(() => saveCh.hasSkill, [saveCh]);
+
   return (
     <>
       <Wrap className="skill scroll-y">
@@ -194,27 +197,29 @@ const CharacterSkill = ({
           setPopupType('guide');
           setPopupOn(true);
           setPopupInfo({
-            data:gameData.guide["characterSkill"],
+            data: gameData.guide["characterSkill"],
           });
         }}>
           {saveSkill && saveSkill.map((skillData, idx) => {
             const skData = gameData.skill[skillData.idx];
-            const {skillText, skillType, skillCate} = util.getSkillText({
+            if (!skData) return null;
+
+            const { skillText, skillType, skillCate } = util.getSkillText({
               skill: skData,
               lv: skillData.lv - 1,
               lang: lang,
             });
+
             let actionPossibleSkill = 'possible';
             if (skillType > 0 && skillType < 7) {
-              saveData.ch[slotIdx].newActionType.forEach((data) => {
-                actionPossibleSkill = (data + 1) === skillType;
-                if (actionPossibleSkill) {
-                  return;
-                }
-              });
+              const isMatch = saveCh.newActionType?.some((type) => (type + 1) === skillType);
+              actionPossibleSkill = isMatch ? 'possible' : '';
             }
+
+            const skillKey = `skill-${skillData.idx}-${idx}`;
+
             return (
-              <Skill key={idx} possible={actionPossibleSkill} skillCate={skillCate}>
+              <Skill key={skillKey} possible={actionPossibleSkill} skillCate={skillCate} direction="column">
                 <SkillInfo>
                   <SkillIcon>
                     <IconPic pic="skill" idx={skData.idx} />
@@ -224,22 +229,24 @@ const CharacterSkill = ({
                       <SkillName code="t2" color="main" weight="600">
                         <span className="lv">LV.{skillData.lv}</span>{skData.na[lang]}
                       </SkillName>
-                      {skData.element_type !== 0 && <ActionType>
-                        <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={skData.element_type} />
-                      </ActionType>}
+                      {skData.element_type !== 0 && (
+                        <ActionType>
+                          <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={skData.element_type} />
+                        </ActionType>
+                      )}
                     </SkillTitle>
-                    <SkillEff className="txt" dangerouslySetInnerHTML={{__html: skillText}} />
+                    <SkillEff className="txt" dangerouslySetInnerHTML={{ __html: skillText }} />
                   </SkillTxt>
                 </SkillInfo>
-                {typeof skData.exp === "number" && (
+                {typeof skillData.exp === "number" && (
                   <LvBar>
                     <span className="exp">
-                      <span className="gradient_dark" skdata={skData} style={{width:`${skData.exp || 0}%`}}></span>
+                      <span className="gradient_dark" style={{ width: `${skillData.exp || 0}%` }}></span>
                     </span>
                   </LvBar>
                 )}
               </Skill>
-            )
+            );
           })}
         </InfoGroup>
       </Wrap>

@@ -74,8 +74,7 @@ export const util = { //this.loadImage();
   },
   historyBack: (navigate) => {
     const history = util.loadData('history');
-    console.log(history);
-    history.shift();//첫 history 삭제
+    history && history.shift();//첫 history 삭제
     if (history === null || history === undefined || history.length === 0 || history[1] === '') {
       navigate('/gameMain');
     } else {
@@ -84,8 +83,8 @@ export const util = { //this.loadImage();
           ...history[0].state,
         }
       });
-      util.saveData('history', history);
     }
+    util.saveData('history', history);
   },
   getEnemyState: (enemyData, gameData) => {
     let battleState_ = [];
@@ -134,7 +133,7 @@ export const util = { //this.loadImage();
   },
   saveLvState: (saveSlot, obj, saveData, gameData) => {//카드 획득시 레벨당 능력치 저장(캐릭터 저장된 슬롯번호, {카드등급, 아이템 이펙트등...})
     let battleState_ = [];
-    let saveChSlot = saveData.ch[saveSlot] || obj.newState;
+    let saveChSlot = { ...(saveData.ch[saveSlot] || obj.newState) };
     for (const idx of gameData.stateName.keys()) {
       const st = gameData.ch[saveChSlot.idx]['st' + idx] || 0;
       saveChSlot['st' + idx] = st//현재능력치
@@ -177,20 +176,20 @@ export const util = { //this.loadImage();
     return saveChSlot;
   },
   saveCharacter: (dataObj) => { //아이템 변경시 스텟저장
-    // console.log(dataObj);
     const gameData = dataObj.gameData;
     const saveData = dataObj.saveData;
     const gameItem = dataObj.gameData.items;
     let saveCh = [
       ...dataObj.saveData.ch,
-    ];
+    ].map(ch => ({ ...ch, items: ch.items.map(item => ({ ...item })), animalSkill: ch.animalSkill.map(group => group.map(sk => ({ ...sk }))) }));
+
     if (typeof dataObj.chSlotIdx === "number") { //슬롯설정이 되면 개별 캐릭만 실행
       const itemEff = util.getItemEff(dataObj.chSlotIdx, saveCh, gameItem);
       saveCh[dataObj.chSlotIdx] = util.saveLvState(dataObj.chSlotIdx, {
         itemEff: itemEff,
         grade: gameData.ch[saveCh[dataObj.chSlotIdx].idx].grade,
         newState: {},
-      }, saveData, gameData)
+      }, { ...saveData, ch: saveCh }, gameData)
     } else if (dataObj.chSlotIdx === "all") { //슬롯설정이 없으면 전체 캐릭 실행
       for (const idx of saveCh.keys()) {
         const itemEff = util.getItemEff(idx, saveCh, gameItem);
@@ -198,7 +197,7 @@ export const util = { //this.loadImage();
           itemEff: itemEff,
           grade: saveCh[idx].grade || gameData.ch[saveCh[idx].idx].grade,
           newState: {},
-        }, saveData, gameData);
+        }, { ...saveData, ch: saveCh }, gameData);
       }
     }
     return {
@@ -406,49 +405,82 @@ export const util = { //this.loadImage();
     return effArr;
   },
   setLineupSt: (dataObj, gameData, saveData) => {
-    const sData = {...saveData};
-    const lineup = dataObj.isMoveEvent ? sData.eventLineup : sData.lineup;
-    lineup.save_slot[dataObj.saveSlot].no = dataObj.lineupType;
-    lineup.save_slot[dataObj.saveSlot].entry = [...dataObj.useList];
+    const isMoveEvent = dataObj.isMoveEvent;
+    const lineupType = dataObj.lineupType;
+    const lineupArea = gameData.lineup[lineupType];
+    const saveSlotIdx = dataObj.saveSlot;
+    
     let peopleLength = 0;
-
-    const lineupType = dataObj.lineupType,
-      lineupArea = gameData.lineup[lineupType];
     let lineNum = [];
+    
     if(dataObj.leaderIdx !== "") {
-      for (const [entry_idx, entry_data] of lineup.save_slot[dataObj.saveSlot].entry.entries()) {
+      for (const [entry_idx, entry_data] of dataObj.useList.entries()) {
         if (entry_data !== '') {
+          let found = false;
           for (const [line_idx, line_data] of lineupArea.entry.entries()) {
             for (const lineData of line_data) {
               if (lineData === entry_idx) {
                 peopleLength ++;
                 lineNum.push(line_idx);
+                found = true;
                 break;
               }
             }
-          }//엔트리 라인 확인
+            if (found) break;
+          }
+          if (!found) lineNum.push('');
         } else {
           lineNum.push('');
         }
       }
     } else {
-      lineNum = ["","","","","","","","","","","","","","","","","","","","","","","","",""];
+      lineNum = new Array(25).fill("");
     }
+
     let eff = [];
-    lineNum.forEach((lineupData, lineupIdx) => {
-      const chIdx = lineup.save_slot[dataObj.saveSlot].entry[lineupIdx];
+    lineNum.forEach((lGrade, lineupIdx) => {
+      const chIdx = dataObj.useList[lineupIdx];
       const ch = saveData.ch[chIdx];
       eff.push(...util.getLineupSt({
         lineupType: lineupType,
-        lineupGrade: lineupData,
+        lineupGrade: lGrade,
         ch: ch,
         peopleLength: peopleLength,
         gameData: gameData,
       }));
     });
-    lineup.save_slot[dataObj.saveSlot].num = peopleLength;
-    lineup.save_slot[dataObj.saveSlot].eff = eff;
-    return sData;//라인업 캐릭 능력치 저장
+
+    const updateSlot = (slot, idx) => {
+      if (idx === saveSlotIdx) {
+        return {
+          ...slot,
+          no: lineupType,
+          entry: [...dataObj.useList],
+          num: peopleLength,
+          eff: eff,
+          leader: dataObj.leaderIdx
+        };
+      }
+      return slot;
+    };
+
+    if (isMoveEvent) {
+      return {
+        ...saveData,
+        eventLineup: {
+          ...saveData.eventLineup,
+          save_slot: saveData.eventLineup.save_slot.map(updateSlot)
+        }
+      };
+    } else {
+      return {
+        ...saveData,
+        lineup: {
+          ...saveData.lineup,
+          save_slot: saveData.lineup.save_slot.map(updateSlot)
+        }
+      };
+    }
   },
   compileState: (currentState, itemState) => {
     let num = 0;
@@ -1914,7 +1946,7 @@ export const util = { //this.loadImage();
     baseNum = baseNum ?? 0;
     return Math.round(Math.sqrt(Math.pow(arr1[0] - arr2[0], 2) + Math.pow(arr1[1] - arr2[1], 2))) + baseNum;
   },
-  getIdxToCountry: (idx) => {
+  getIdxToRegion: (idx) => {
     switch(idx) {
       case 0:
         return 'japan0';
@@ -1976,8 +2008,8 @@ export const util = { //this.loadImage();
         return '';
     }
   },
-  getCountryToIdx: (country) => {
-    switch(country) {
+  getRegionToIdx: (region) => {
+    switch(region) {
       case 'japan0':
         return 0;
       case 'japan1':
@@ -2034,6 +2066,52 @@ export const util = { //this.loadImage();
         return 26;
       case 'unitedKingdom1':
         return 27;
+      default:
+        return '';
+    }
+  },
+  getCountryToIdx: (country) => {
+    switch(country) {
+      case 'japan0':
+      case 'japan1':
+      case 'japan2':
+        return 0;
+      case 'korea0':
+      case 'korea1':
+      case 'korea2':
+        return 1;
+      case 'mongolia0':
+      case 'mongolia1':
+      case 'mongolia2':
+      case 'mongolia3':
+      case 'mongolia4':
+        return 2;
+      case 'china0':
+      case 'china1':
+      case 'china2':
+      case 'china3':
+      case 'china4':
+      case 'china5':
+      case 'china6':
+      case 'china7':
+        return 3;
+      case 'saudiArabia0':
+        return 4;
+      case 'egypt0':
+        return 5;
+      case 'greece0':
+        return 6;
+      case 'italy0':
+        return 7;
+      case 'france0':
+        return 8;
+      case 'spain0':
+        return 9;
+      case 'portugal0':
+        return 10;
+      case 'unitedKingdom0':
+      case 'unitedKingdom1':
+        return 11;
       default:
         return '';
     }
@@ -2194,66 +2272,6 @@ export const util = { //this.loadImage();
         itemData = gameData.items[type][Math.floor(Math.random() * itemLength)];
       }
     }
-    itemData = itemData ? itemData : gameData.items.equip[3][0][0][0];//보조아이템이 없을 경우 예외처리
-    // if (type === 'equip') {
-    //   const items = item.split('-');//아이템 부위(장비만 해당)
-    //   itemData = items[0] === 3 ? gameData.items[type][items[0]][0][items[1]][items[2]] : gameData.items[type][items[0]][0][0][items[1]];
-    // } else {
-    //   item = option.items;
-    // }
-    // const itemIdx = Math.floor(Math.random() * item.length),//아이템 번호
-    //const selectItem = item[itemIdx];
-    const id = Math.random().toString(36).substring(2, 11);
-    const selectItem = itemData;
-    const grade = (option.grade > 1 ? option.grade : util.getItemGrade()) || util.getItemGrade();
-    if (option.sealed) {
-      const itemObj = {
-        id: id,
-        idx: selectItem.idx,
-        part: selectItem.part,
-        grade: grade,
-        itemLv: itemLv,
-        slot: 0,//아이템 홀착용 갯수
-        hole: [],
-        color: selectItem.color,
-        baseEff: [{
-          type: selectItem.eff[0].type,
-          num: selectItem.eff[0].num[0] + ' ~ ' + selectItem.eff[0].num[1],
-        }],
-        addEff: [],
-        mark: '',
-        markNum: 0,
-        modifier: {ko:'미확인',en:'unSealed',jp:'未確認'},
-        weaponType: weaponType,
-        sealed: true,
-        favorite: 0,
-      }
-      save.items[type].unshift(itemObj);
-      changeSaveData(save);
-      return;
-    }
-    const darkColor = util.getHslColor('dark',1),
-      lightColor = util.getHslColor('light',1);
-    let colorArr = Math.random() < .5 ? [lightColor, darkColor] : [darkColor, lightColor];
-    const color = selectItem.color.map((data, idx) => {
-      if (idx < 2) {
-        return colorArr[idx];
-      } else {
-        return util.getHslColor('point',1);
-      }
-    });
-    const baseEff = selectItem.eff.map((data) => {
-      let num = [];
-      num[0] = String(Math.round(Math.random() * (Number(data.num[1]) - Number(data.num[0]))) + (Number(data.num[1]) - Number(data.num[0])));
-      for (let i = 1; i < 4; ++i) {
-        num[i] = String(Number(num[i - 1]) + Math.round(Number(data.num[0]) * 0.25 + Math.random() * (Number(data.num[0]) * .25)));
-      }
-      return {
-        type: data.type,
-        num: num,
-      }
-    });
-    const addEff = [];
     const getAddEff = (grade, itemPart) => {
       const effList = [// 레어, 에픽, 매직
         [[100,200],[200,400],[100,1000]], //체력
@@ -2427,7 +2445,7 @@ export const util = { //this.loadImage();
         } else {//3% 스킬 아이템
           effType = 100;
         }
-      } else {//5:목걸이
+      } else if (itemPart === '5') {//5:목걸이
         if (chance1 < 0.1) {//10% 상태 면역타입
           effType = Math.round(Math.random() * 7) + 70;
         } else if (chance1 < 0.3) {//40% 물리,마법 저항타입
@@ -2443,6 +2461,9 @@ export const util = { //this.loadImage();
         } else {//3% 스킬 아이템
           effType = 100;
         }
+      } else { // 보석
+        effType = Math.floor(Math.random() * effList.length);
+        effType = effList[effType] ? effType : Math.round(Math.random() * 9);
       }
 
       let effRandomNum = [];
@@ -2468,106 +2489,251 @@ export const util = { //this.loadImage();
         }
       }
     }
-
-    //슬롯
-    const slotNum = (() => {
-      if (grade === 1) {
-        if (Math.random() < 0.3) {
-          return Math.round(Math.random() * (selectItem.socket - 1)) + 1;
-        } else {
-          return Math.round(Math.random() * selectItem.socket);
-        }
-      } else {
-        return Math.round(Math.random() * selectItem.socket);
-      }
-    })();
-    itemLv -= slotNum * 10;
-    if (itemLv > 0) {
-      const itemPart = String(option.items)[0];
-      if (grade === 2) {
-        const addEffLength = Math.floor(itemLv / 20);
-        for (let i = 0; i < addEffLength; ++i) {
-          if (itemLv > 20) {
-            itemLv -= 20;
-            addEff.push(getAddEff(grade, itemPart));
-          } else {
-            break;
-          }
-        }
-      } else if (grade === 3) {
-        const addEffLength = Math.floor(itemLv / 15);
-        for (let i = 0; i < addEffLength; ++i) {
-          if (itemLv > 15) {
-            itemLv -= 15;
-            addEff.push(getAddEff(grade, itemPart));
-          } else {
-            break;
-          }
-        }
-      } else if (grade === 4) {
-        const addEffLength = Math.floor(itemLv / 12);
-        for (let i = 0; i < addEffLength; ++i) {
-          if (itemLv > 12) {
-            itemLv -= 12;
-            addEff.push(getAddEff(grade, itemPart));
-          } else {
-            break;
-          }
-        }
-      }
-    }
-    //동물벳지
-    const mark = Math.random() < .8 ? Math.round(Math.random() * 24) : '';
-    const markNum = mark === '' ? 0 : (() => {
-      const randomCount = Math.random();
-      if (randomCount < .1) {
-        return 4;
-      } else if (randomCount < .3) {
-        return 3;
-      } else if (randomCount < .6) {
-        return 2;
-      } else {
-        return 1;
-      }
-    })();
-    const animalModifier = [
-      `${mark !== '' ? gameData.animal_type[mark].na.ko : ''}${gameData.items.markModifier.ko[markNum]}`,
-      `${gameData.items.markModifier.en[markNum]} ${mark !== '' ? gameData.animal_type[mark].na.en : ''}${markNum > 1 ? 's' : ''}`,
-      `${mark !== '' ? gameData.animal_type[mark].na.jp : ''}${gameData.items.markModifier.jp[markNum]}`,
-    ];
-    const modifier = {
-      ko:gameData.items.slotModifier.ko[slotNum] + ' ' + animalModifier[0],
-      en:gameData.items.slotModifier.en[slotNum] + ' ' + animalModifier[1],
-      jp:gameData.items.slotModifier.jp[slotNum] + ' ' + animalModifier[2],
-    };
-    itemLv -= slotNum * 5;
-    const itemObj = {
-      id: id,
-      idx: selectItem.idx,
-      part: selectItem.part,
-      grade: grade,
-      itemLv: option.lv,
-      slot: slotNum,//아이템 홀착용 갯수
-      hole: new Array(slotNum).fill(0),
-      color: color,
-      baseEff: baseEff,
-      addEff: addEff,
-      mark: mark,
-      markNum: markNum,
-      modifier: modifier,
-      weaponType: weaponType,
-      sealed: false,
-      favorite: option.favorite || 0,
-    }
-    if (isSave) {
-      if (typeof option.evaluateSlot === 'number') {
-        save.items[type].splice(option.evaluateSlot,1,itemObj);
-      } else {
+    if (type === "hole") {
+      itemData = gameData.items.hole[option.items];
+      const id = Math.random().toString(36).substring(2, 11);
+      const grade = (option.grade > 1 ? option.grade : util.getItemGrade()) || util.getItemGrade();
+      if (option.sealed && Number(option.items) < 100) {
+        const itemObj = {
+          id: id,
+          idx: itemData.idx,
+          grade: grade,
+          itemLv: itemLv,
+          baseEff: [{
+            type: itemData.eff[0].type,
+            num: itemData.eff[0].num[0],
+          }],
+          addEff: [],
+          modifier: {ko:'미확인',en:'unSealed',jp:'未確認'},
+          sealed: true,
+          favorite: 0,
+        };
         save.items[type].unshift(itemObj);
+        changeSaveData(save);
+        return;
       }
+
+      const addEff = [];
+      //슬롯
+      if (itemLv > 0) {
+        if (grade === 2) {
+          const addEffLength = Math.floor(itemLv / 25);
+          for (let i = 0; i < addEffLength; ++i) {
+            if (itemLv > 25) {
+              itemLv -= 25;
+              addEff.push(getAddEff(grade, "0"));
+            } else {
+              break;
+            }
+          }
+        } else if (grade === 3) {
+          const addEffLength = Math.floor(itemLv / 20);
+          for (let i = 0; i < addEffLength; ++i) {
+            if (itemLv > 20) {
+              itemLv -= 20;
+              addEff.push(getAddEff(grade, "0"));
+            } else {
+              break;
+            }
+          }
+        } else if (grade === 4) {
+          const addEffLength = Math.floor(itemLv / 15);
+          for (let i = 0; i < addEffLength; ++i) {
+            if (itemLv > 15) {
+              itemLv -= 15;
+              addEff.push(getAddEff(grade, "0"));
+            } else {
+              break;
+            }
+          }
+        }
+        addEff.sort((a, b) => {// type 순번 정렬
+          return a.type - b.type;
+        })
+      }
+      const itemObj = {
+        id: id,
+        idx: itemData.idx,
+        grade: grade,
+        itemLv: option.lv,
+        baseEff: [{
+          type: itemData.eff[0].type,
+          num: itemData.eff[0].num[0],
+        }],
+        addEff: addEff,
+        sealed: false,
+        favorite: option.favorite || 0,
+      }
+      save.items[type].unshift(itemObj);
       changeSaveData(save);
+    } else if (type === "equip") {
+      itemData = itemData ? itemData : gameData.items.equip[3][0][0][0];//보조아이템이 없을 경우 예외처리
+      // if (type === 'equip') {
+      //   const items = item.split('-');//아이템 부위(장비만 해당)
+      //   itemData = items[0] === 3 ? gameData.items[type][items[0]][0][items[1]][items[2]] : gameData.items[type][items[0]][0][0][items[1]];
+      // } else {
+      //   item = option.items;
+      // }
+      // const itemIdx = Math.floor(Math.random() * item.length),//아이템 번호
+      //const selectItem = item[itemIdx];
+      const id = Math.random().toString(36).substring(2, 11);
+      const grade = (option.grade > 1 ? option.grade : util.getItemGrade()) || util.getItemGrade();
+      if (option.sealed) {
+        const itemObj = {
+          id: id,
+          idx: itemData.idx,
+          part: itemData.part,
+          grade: grade,
+          itemLv: itemLv,
+          slot: 0,//아이템 홀착용 갯수
+          hole: [],
+          color: itemData.color,
+          baseEff: [{
+            type: itemData.eff[0].type,
+            num: itemData.eff[0].num[0] + ' ~ ' + itemData.eff[0].num[1],
+          }],
+          addEff: [],
+          mark: '',
+          markNum: 0,
+          modifier: {ko:'미확인',en:'unSealed',jp:'未確認'},
+          weaponType: weaponType,
+          sealed: true,
+          favorite: 0,
+        }
+        save.items[type].unshift(itemObj);
+        changeSaveData(save);
+        return;
+      }
+      const darkColor = util.getHslColor('dark',1),
+        lightColor = util.getHslColor('light',1);
+      let colorArr = Math.random() < .5 ? [lightColor, darkColor] : [darkColor, lightColor];
+      const color = itemData.color.map((data, idx) => {
+        if (idx < 2) {
+          return colorArr[idx];
+        } else {
+          return util.getHslColor('point',1);
+        }
+      });
+      const baseEff = itemData.eff.map((data) => {
+        let num = [];
+        num[0] = String(Math.round(Math.random() * (Number(data.num[1]) - Number(data.num[0]))) + (Number(data.num[1]) - Number(data.num[0])));
+        for (let i = 1; i < 4; ++i) {
+          num[i] = String(Number(num[i - 1]) + Math.round(Number(data.num[0]) * 0.25 + Math.random() * (Number(data.num[0]) * .25)));
+        }
+        return {
+          type: data.type,
+          num: num,
+        }
+      });
+      const addEff = [];
+  
+      //슬롯
+      const slotNum = () => {
+        if (grade === 1) {
+          if (Math.random() < 0.3) {
+            return Math.round(Math.random() * (itemData.socket - 1)) + 1;
+          } else {
+            return Math.round(Math.random() * itemData.socket);
+          }
+        } else {
+          return Math.round(Math.random() * itemData.socket);
+        }
+      };
+      itemLv -= slotNum() * 10;
+      if (itemLv > 0) {
+        const itemPart = String(option.items)[0];
+        if (grade === 2) {
+          const addEffLength = Math.floor(itemLv / 20);
+          for (let i = 0; i < addEffLength; ++i) {
+            if (itemLv > 20) {
+              itemLv -= 20;
+              addEff.push(getAddEff(grade, itemPart));
+            } else {
+              break;
+            }
+          }
+        } else if (grade === 3) {
+          const addEffLength = Math.floor(itemLv / 15);
+          for (let i = 0; i < addEffLength; ++i) {
+            if (itemLv > 15) {
+              itemLv -= 15;
+              addEff.push(getAddEff(grade, itemPart));
+            } else {
+              break;
+            }
+          }
+        } else if (grade === 4) {
+          const addEffLength = Math.floor(itemLv / 12);
+          for (let i = 0; i < addEffLength; ++i) {
+            if (itemLv > 12) {
+              itemLv -= 12;
+              addEff.push(getAddEff(grade, itemPart));
+            } else {
+              break;
+            }
+          }
+        }
+      }
+      //동물벳지
+      const mark = Math.random() < .8 ? Math.round(Math.random() * 24) : '';
+      const markNum = mark === '' ? 0 : (() => {
+        const randomCount = Math.random();
+        if (randomCount < .1) {
+          return 4;
+        } else if (randomCount < .3) {
+          return 3;
+        } else if (randomCount < .6) {
+          return 2;
+        } else {
+          return 1;
+        }
+      })();
+      const animalModifier = [
+        `${mark !== '' ? gameData.animal_type[mark].na.ko : ''}${gameData.items.markModifier.ko[markNum]}`,
+        `${gameData.items.markModifier.en[markNum]} ${mark !== '' ? gameData.animal_type[mark].na.en : ''}${markNum > 1 ? 's' : ''}`,
+        `${mark !== '' ? gameData.animal_type[mark].na.jp : ''}${gameData.items.markModifier.jp[markNum]}`,
+      ];
+      const modifier = {
+        ko:gameData.items.slotModifier.ko[slotNum] + ' ' + animalModifier[0],
+        en:gameData.items.slotModifier.en[slotNum] + ' ' + animalModifier[1],
+        jp:gameData.items.slotModifier.jp[slotNum] + ' ' + animalModifier[2],
+      };
+      itemLv -= slotNum * 5;
+      const itemObj = {
+        id: id,
+        idx: itemData.idx,
+        part: itemData.part,
+        grade: grade,
+        itemLv: option.lv,
+        slot: slotNum,//아이템 홀착용 갯수
+        hole: new Array(slotNum).fill(0),
+        color: color,
+        baseEff: baseEff,
+        addEff: addEff,
+        mark: mark,
+        markNum: markNum,
+        modifier: modifier,
+        weaponType: weaponType,
+        sealed: false,
+        favorite: option.favorite || 0,
+      }
+      if (isSave) {
+        if (typeof option.evaluateSlot === 'number') {
+          save.items[type].splice(option.evaluateSlot,1,itemObj);
+        } else {
+          save.items[type].unshift(itemObj);
+        }
+        changeSaveData(save);
+      } else {
+        return itemObj;
+      }
     } else {
-      return itemObj;
+      const itemObj = {
+        idx: itemData.idx,
+      }
+      console.log("pgs", itemObj);
+      save.items[type].unshift(itemObj);
+      changeSaveData(save);
     }
   },
   getAnimalPoint: (items, animal, addMark) => {
@@ -2600,7 +2766,24 @@ export const util = { //this.loadImage();
   buttonEvent: (dataObj, callback) => {
     dataObj.event.stopPropagation();
     const gameData = dataObj.gameData;
-    let sData = {...dataObj.saveData};
+    let sData = {
+      ...dataObj.saveData,
+      ch: dataObj.saveData.ch.map(ch => ({
+        ...ch,
+        items: ch.items.map(item => ({ ...item })),
+        animalSkill: ch.animalSkill.map(group => group.map(sk => ({ ...sk })))
+      })),
+      items: Object.keys(dataObj.saveData.items).reduce((acc, key) => {
+        acc[key] = dataObj.saveData.items[key].map(item => ({ ...item }));
+        return acc;
+      }, {}),
+      info: { ...dataObj.saveData.info },
+      ship: dataObj.saveData.ship.map(s => ({
+        ...s,
+        loadedItem: s.loadedItem.map(i => ({ ...i }))
+      }))
+    };
+
     if (dataObj.type === 'enhancingStickers') {
 
     } else if (dataObj.type === 'itemEquip') { //아이템 착용
@@ -2610,7 +2793,7 @@ export const util = { //this.loadImage();
       //아이템 무게 측정
       let currentKg = 0;
       let itemSubmit = false;
-      const totalKg = Math.floor(gameData.ch[saveCh.idx].st1 / 0.3)/10;
+      const totalKg = Math.floor(gameData.ch[saveCh.idx].st1 / 0.3) / 10;
       for (const item of saveCh.items) {
         if (Object.keys(item).length !== 0) {
           const itemsGrade = item.grade < 5 ? 0 : item.grade - 5;
@@ -2636,7 +2819,7 @@ export const util = { //this.loadImage();
               dataObj.showMsg(true);
               dataObj.msgText(`<span caution>${gameData.msg.sentence.heavyKg[dataObj.lang]}</span>`);
             } else { //착용 가능 무게일 경우
-              saveCh.items[itemSlot] = {...dataObj.saveData.items['equip'][dataObj.data.itemSaveSlot]};//캐릭에 아이템 넣기
+              saveCh.items[itemSlot] = { ...sData.items['equip'][dataObj.data.itemSaveSlot] };//캐릭에 아이템 넣기
               if (dataObj.data.saveItemData.mark === gameData.ch[saveCh.idx].animal_type) {//동물 뱃지 수정
                 saveCh.animalBadge += dataObj.data.saveItemData.markNum;
               }
@@ -2663,17 +2846,17 @@ export const util = { //this.loadImage();
       }
     } else if (dataObj.type === 'itemRelease') { //아이템 해제
       const saveCh = sData.ch[dataObj.data.chSlotIdx];
-      sData.items['equip'].push(dataObj.data.saveItemData);//인벤에 아이템 넣기
-      sData.ch[dataObj.data.chSlotIdx].items[dataObj.data.itemSaveSlot] = {}; //아이템 삭제
+      sData.items['equip'] = [...sData.items['equip'], dataObj.data.saveItemData];//인벤에 아이템 넣기
+      saveCh.items[dataObj.data.itemSaveSlot] = {}; //아이템 삭제
       if (dataObj.data.saveItemData.mark === gameData.ch[saveCh.idx].animal_type) {//동물 뱃지 수정
-      saveCh.animalBadge = util.getAnimalPoint(saveCh.items, gameData.ch[saveCh.idx].animal_type, saveCh.mark);
+        saveCh.animalBadge = util.getAnimalPoint(saveCh.items, gameData.ch[saveCh.idx].animal_type, saveCh.mark);
       }
       saveCh.animalSkill = saveCh.animalSkill.map((skGroup) => {//동물 스킬 초기화
         return skGroup.map((skData) => {
           if (Object.keys(skData).length !== 0) {
             return {
-              idx:skData.idx,
-              lv:0,
+              idx: skData.idx,
+              lv: 0,
             }
           } else {
             return {}
@@ -2701,7 +2884,7 @@ export const util = { //this.loadImage();
           sData.info.money += dataObj.data.gameItem.price;//돈 계산
           break;
         case 98: //경험치 획득
-          if(saveCh.lv >= 50) {
+          if (saveCh.lv >= 50) {
             const hasMaxExp = gameData.hasMaxExp[saveCh.grade];
             saveCh.hasExp += dataObj.data.gameItem.eff;
             saveCh.hasExp += saveCh.exp;
@@ -2713,10 +2896,10 @@ export const util = { //this.loadImage();
           } else {
             saveCh.exp += dataObj.data.gameItem.eff;
           }
-          const lvUp = (ch, dataObj) => {
-            const maxExp = gameData.exp['grade'+ch.grade][ch.lv-1];
+          const lvUp = (ch, dataObj, currentSData) => {
+            const maxExp = gameData.exp['grade' + ch.grade][ch.lv - 1];
             dataObj.changeSaveData(util.saveCharacter({//데이터 저장
-              saveData: sData,
+              saveData: currentSData,
               chSlotIdx: dataObj.data.chSlotIdx,
               gameData: gameData,
             }));
@@ -2726,22 +2909,22 @@ export const util = { //this.loadImage();
                 ch.lv += 1;
                 ch.exp -= maxExp;
                 setTimeout(() => {
-                  lvUp(ch, dataObj);
+                  lvUp(ch, dataObj, currentSData);
                 }, 300);
-                if(ch.lv % 10 === 0) {
-                  util.getSkill(gameData, ch, dataObj.data.chSlotIdx, dataObj.saveData, dataObj.changeSaveData);
+                if (ch.lv % 10 === 0) {
+                  util.getSkill(gameData, ch, dataObj.data.chSlotIdx, currentSData, dataObj.changeSaveData);
                 }
               }
             }
           }
-          lvUp(saveCh, dataObj);
+          lvUp(saveCh, dataObj, sData);
           break;
         default:
           dataObj.showMsg(true);
           dataObj.msgText(`<span caution>${gameData.msg.sentence.none[dataObj.lang]}</span>`);
           break;
       } //사용 타입
-      sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
+      sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot, 1);//인벤에서 아이템 제거
       dataObj.changeSaveData(sData);//데이터 저장
       dataObj.showPopup(false);
     } else if (dataObj.type === 'itemBuy') { //아이템 구입
@@ -2757,8 +2940,8 @@ export const util = { //this.loadImage();
           sData.ship[dataObj.data.type.split('ship')[1]].loadedItem[overlapIdx].num += dataObj.data.num;
         } else { //같은 상품이 없으면
           sData.ship[dataObj.data.type.split('ship')[1]].loadedItem.push({
-            idx:dataObj.data.saveItemData.idx,
-            num:dataObj.data.num,
+            idx: dataObj.data.saveItemData.idx,
+            num: dataObj.data.num,
           });
         }
         //배 저장소 측정
@@ -2781,7 +2964,7 @@ export const util = { //this.loadImage();
         if (dataObj.data.num < num) { //일부만 팔경우
           sData.ship[dataObj.data.type.split('ship')[1]].loadedItem[dataObj.data.itemSaveSlot].num -= dataObj.data.num;
         } else { //전체 팔경우
-          sData.ship[dataObj.data.type.split('ship')[1]].loadedItem.splice(dataObj.data.itemSaveSlot,1);
+          sData.ship[dataObj.data.type.split('ship')[1]].loadedItem.splice(dataObj.data.itemSaveSlot, 1);
         }
         sData.info.money += dataObj.data.gameItem.price * dataObj.data.num;//돈 계산
       } else {
@@ -2791,24 +2974,24 @@ export const util = { //this.loadImage();
         } else {
           sData.info.money += dataObj.data.gameItem.price;//돈 계산
         }
-        console.log(dataObj.data);
-        sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
+        sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot, 1);//인벤에서 아이템 제거
       }
       dataObj.changeSaveData(sData);//데이터 저장
       dataObj.showPopup(false);
     } else if (dataObj.type === 'itemEvaluate') { //아이템 확인
-      //sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
+      sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
       const itemInfo = dataObj.data.saveItemData.part === 3 ? `${dataObj.data.saveItemData.part}-${dataObj.data.saveItemData.weaponType}-${dataObj.data.saveItemData.idx}` : `${dataObj.data.saveItemData.part}-${dataObj.data.saveItemData.idx}`;
       const option = {
-        type:'equip',
-        items:itemInfo,
+        type: dataObj.data.type,
+        items: dataObj.data.type === "hole" ? dataObj.data.saveItemData.idx : itemInfo,
         //아이템종류, 세부종류(검,단검), 매직등급
-        grade:dataObj.data.saveItemData.grade,
-        lv:dataObj.data.saveItemData.itemLv,
-        sealed:false,
-        evaluateSlot:dataObj.data.itemSaveSlot,
-        favorite:dataObj.data.saveItemData.favorite
+        grade: dataObj.data.saveItemData.grade,
+        lv: dataObj.data.saveItemData.itemLv,
+        sealed: false,
+        evaluateSlot: dataObj.data.itemSaveSlot,
+        favorite: dataObj.data.saveItemData.favorite
       }
+      console.log("pgs", option);
       util.getItem({
         saveData: sData,
         gameData: gameData,
@@ -2817,10 +3000,24 @@ export const util = { //this.loadImage();
         isSave: true,
         lang: dataObj.lang
       });
-      //dataObj.changeSaveData(sData);//데이터 저장
-      // dataObj.showPopup(false);
+      dataObj.changeSaveData(sData);//데이터 저장
+      dataObj.setItemPopup(false);//팝업 제거
+      dataObj.data.setSelectItem(dataObj.data.selectItem.map((item_) => {
+        if (dataObj.data.saveItemData.id !== item_.saveItemData.id) {
+          return item_;
+        } else {
+          return {
+            "saveItemData": {},
+            "gameItem": {},
+            "itemSaveSlot": "",
+            "selectTab": "",
+            "itemCate": "",
+            "buttonType": [],
+          };
+        }
+      }));
     } else if (dataObj.type === 'holeEquip') {
-      dataObj.showPopup(false);
+      dataObj.setItemPopup(false);
     }
     callback && callback();
   },
@@ -3424,8 +3621,26 @@ export const util = { //this.loadImage();
         return [8,5];
       case 'img800':
         return [10,8];
-      case 'ch':
-      case 'ch_s':
+      case 'ch0':
+      case 'chs0':
+      case 'ch1':
+      case 'chs1':
+      case 'ch2':
+      case 'chs2':
+      case 'ch3':
+      case 'chs3':
+      case 'ch4':
+      case 'chs4':
+      case 'ch5':
+      case 'chs5':
+      case 'ch6':
+      case 'chs6':
+      case 'ch7':
+      case 'chs7':
+      case 'ch8':
+      case 'chs8':
+      case 'ch9':
+      case 'chs9':
         return [10, 6];
       case 'icon100':
         return [10, 60];
@@ -3438,7 +3653,7 @@ export const util = { //this.loadImage();
       case 'itemEtc':
         return [10, 50];
       case 'skill':
-        return [10, 40];
+        return [20, 40];
       default:
         break;
     }
@@ -3659,7 +3874,7 @@ export const util = { //this.loadImage();
         } else {
           return 0;
         }
-      case "scenario":
+      case "scenarioRegion":
         if (num < 0.01) {
           return 2;
         } else if (num < 0.2) {
@@ -3679,8 +3894,13 @@ export const util = { //this.loadImage();
         return 0;
     }
   },
-  makeCard: (num, gachaType, gameData, saveData) => { //가챠횟수
-    const beginType = typeof num !== 'number'; //최초 시작상태 체크
+  makeCard: ({
+    gachaNum, 
+    gachaType, 
+    gameData, 
+    saveData
+  }) => { //가챠횟수
+    const beginType = typeof gachaNum !== 'number'; //최초 시작상태 체크
     const getCardIdx = (gradeNum) => {
       const chOfGrade = gameData.chArr.grade;//등급별
       const length = chOfGrade[gradeNum].length,
@@ -3690,7 +3910,11 @@ export const util = { //this.loadImage();
     const getGrade = (n, type) => {
       let ch_arr = [];
       if (beginType) {
-        ch_arr = num;
+        if (gachaType === "fix") {
+          ch_arr = Array.from({length: gachaNum.length}, () => 4);
+        } else {
+          ch_arr = gachaNum;
+        }
       } else {
         const arr = type === 'p' ? [1,5,10,30] : [0.1,1,5,10,20,30]; // 다이아 & 골드 등급 나올확률값
         for(let i = 0 ; i < n ; ++i){
@@ -3728,6 +3952,7 @@ export const util = { //this.loadImage();
           ch_arr.push(resultGrade);
         }
       }
+      console.log(ch_arr);
       const cloneArr = ch_arr.slice();
       const maxGrade = ch_arr.sort((a,b)=>b-a)[0];
       return {
@@ -3737,10 +3962,10 @@ export const util = { //this.loadImage();
     }
     let chArr = [];
     let chDataArr = [];
-    const recruitmentNum = beginType ? num.length : num;// 뽑는 횟수
+    const recruitmentNum = beginType ? gachaNum.length : gachaNum;// 뽑는 횟수
     const cardGrade = getGrade(recruitmentNum, gachaType);
     for (let i = 0; i < recruitmentNum; ++i) {
-      const newIdx = getCardIdx(cardGrade.arr[i]);		
+      const newIdx = gachaType === "fix" ? gachaNum[i] : getCardIdx(cardGrade.arr[i]);		
       const addGrade = Math.random();
       let luckyGradePoint = 0;
       if (cardGrade.arr[i] === 1) {
@@ -3868,5 +4093,113 @@ export const util = { //this.loadImage();
       })
     });
     return emptySkillArr;
+  },
+  chIdxToGroup: (num) => {
+    return Math.floor(num / 60);
+  },
+  mergeConcat: (obj1, obj2) => {
+    const result = {};
+    const keys = new Set([...Object.keys(obj1), ...Object.keys(obj2)]);
+
+    for (const key of keys) {
+      const v1 = Array.isArray(obj1[key]) ? obj1[key] : [];
+      const v2 = Array.isArray(obj2[key]) ? obj2[key] : [];
+      result[key] = v1.concat(v2);
+    }
+    return result;
+  },
+  mergeConcatAll:(objects) => {
+    return objects.reduce((acc, obj) => {
+      if (!obj || typeof obj !== "object") return acc;
+
+      for (const [key, value] of Object.entries(obj)) {
+        const arr = Array.isArray(value) ? value : [];
+        if (!acc[key]) acc[key] = key !== "money" ? [] : 0;
+        key === "money" ? acc[key] += value : acc[key].push(...arr); // concat과 동일 효과
+      }
+      return acc;
+    }, {});
+  },
+  itemTypeToIdx: (type) => {
+    switch (type) {
+      case "head":
+        return "1";
+      case "armor":
+        return "2";
+      case "weapon":
+        return "3";
+      case "ring":
+        return "4";
+      case "amulet":
+        return "5";
+    }
+  },
+  isEquipment: (type) => {
+    return ["head", "armor", "weapon", "ring", "amulet"].includes(type);
+  },
+  selectDropItemType: (dropList) => {
+    const num = Math.random();
+    const typeList = ["head", "armor", "weapon", "ring", "amulet", "hole", "upgrade", "material", "etc", "money"];
+    const dropItemType = (dropList, idx) => {
+      if (idx === typeList.length - 1) {
+        return "money";
+      } else {
+        if (dropList[typeList[idx]].length > 0) {
+          return typeList[idx];
+        } else {
+          return dropItemType(dropList, idx + 1);
+        }
+      }
+    }
+    if (num < 0.05) {
+      return dropItemType(dropList, 0);
+    } else if (num < 0.1) {
+      return dropItemType(dropList, 1);
+    } else if (num < 0.15) {
+      return dropItemType(dropList, 2);
+    } else if (num < 0.2) {
+      return dropItemType(dropList, 3);
+    } else if (num < 0.25) {
+      return dropItemType(dropList, 4);
+    } else if (num < 0.35) {
+      return dropItemType(dropList, 5);
+    } else if (num < 0.55) {
+      return dropItemType(dropList, 6);
+    } else if (num < 0.75) {
+      return dropItemType(dropList, 7);
+    } else if (num < 0.95) {
+      return dropItemType(dropList, 8);
+    } else {
+      return "money";
+    }
+  },
+  exploreArea: {
+    checkStep: (data) => {
+      if (!data) return 0;
+      if (Object.keys(data.map).length !== 0) {
+        return 3;
+      }
+      if (Object.keys(data.lv).length !== 0) {
+        return 2;
+      }
+      if (Object.keys(data.add).length !== 0) {
+        return 1;
+      }
+      return 0;
+    },
+    stepName: (idx) => {
+      switch (idx) {
+        case 0:
+          return "add";
+        case 1:
+          return "lv";
+        case 2:
+          return "map";
+        case 3:
+          return "base";
+        default:
+          return "";
+      }
+    }
   }
 }

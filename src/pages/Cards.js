@@ -2,7 +2,7 @@ import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { Button } from 'components/Button';
 import { FlexBox } from 'components/Container';
-import { ChPic, IconPic, ItemPic } from 'components/ImagePic';
+import { IconPic, ItemPic, MergedPic } from 'components/ImagePic';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
@@ -91,7 +91,7 @@ const ChCard = styled.div`
   .lvEffect span:last-of-type{transition: all 0.5s 0.9s ease-in;box-shadow:0 0 20px 10px #f20;}
   .lvEffect.on span{opacity:.5;bottom:100%;}
 `;
-const ChBack = styled(ChPic)`
+const ChBack = styled(MergedPic)`
   position: absolute;
   top: 0;
 `;
@@ -161,7 +161,19 @@ const TopBtn = styled(Button)`
   height: 40px;
   background: ${({ theme }) => theme.color.lightL};
 `;
-const ChInven = styled.div`
+const CloseBtn = styled(Button)`
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 5px 10px;
+  z-index: 1;
+  border-radius: 0;
+  background: ${({ theme }) => theme.color.sub};
+  div {
+    color: ${({ theme }) => theme.color.main};
+  }
+`;
+const ChStory = styled.div`
   position: absolute;
   left: 10px;
   right: 10px;
@@ -171,18 +183,20 @@ const ChInven = styled.div`
   background: rgba(0,0,0,.8);
   border-image: url(${({frameBack}) => frameBack}) 5 round;z-index: 3;
 `;
-const CloseBtn = styled(Button)`
+const Storys = styled.div`
+  padding: 5px;
+  height: 100%;
+  box-sizing: border-box;
+`;
+const ChInven = styled.div`
   position: absolute;
-  right: 0;
+  left: 10px;
+  right: 10px;
   top: 0;
-  padding: 5px 10px;
-  transform: translateY(-100%);
-  z-index: 1;
-  border-radius: 0;
-  background: ${({ theme }) => theme.color.sub};
-  div {
-    color: ${({ theme }) => theme.color.main};
-  }
+  height: 80%;
+  border: 5px solid transparent;
+  background: rgba(0,0,0,.8);
+  border-image: url(${({frameBack}) => frameBack}) 5 round;z-index: 3;
 `;
 const InvenItems = styled.div`
   padding: 5px;
@@ -261,6 +275,7 @@ const Cards = ({
   const gameItem = React.useMemo(() => gameData.items, [gameData]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : {...saveData}, [saveData]);
   const [showInven, setShowInven] = useState(state?.dataObj.invenOpened);
+  const [showStory, setShowStory] = useState(false);
   const invenItems = React.useMemo(() => {
     return sData.items;
   }, [sData]);
@@ -318,30 +333,42 @@ const Cards = ({
         <ChArea>
           <div style={{position:"absolute",left:"30%",top:0,zIndex:100, backgroundColor: '#fff'}}>
             <button onClick={() => {
-              const option = {
-                type:'equip',
-                items:Math.ceil(Math.random()*3),//장비만 해당
-                //아이템종류, 세부종류(검,단검), 매직등급
-                lv:Math.round(Math.random()*100),
-                sealed:true,
-              }
               util.getItem({
                 saveData: sData,
                 gameData: gameData,
                 changeSaveData: changeSaveData,
-                option: option,
+                option: {
+                  type:'equip',
+                  items:Math.ceil(Math.random()*3),//장비만 해당
+                  //아이템종류, 세부종류(검,단검), 매직등급
+                  lv:Math.round(Math.random()*100),
+                  sealed:true,
+                },
                 isSave: true,
                 lang: lang,
               });
             }}>아이템 추가</button><br/>
             <button onClick={() => {
-              const card = util.makeCard(1, "p", gameData, sData);
-              sData.ch.push(card.chDataArr[0]);
-              changeSaveData(sData); //세이브
+              const card = util.makeCard({
+                gachaNum: 1,
+                gachaType: "p",
+                gameData: gameData,
+                saveData: sData,
+              });
+              const newSaveDataAdd = {
+                ...sData,
+                ch: [...sData.ch, card.chDataArr[0]]
+              };
+              changeSaveData(newSaveDataAdd);
             }}>영웅 추가</button><br/>
             <button onClick={() => {
-              sData.ch.splice(sData.ch.length - 1, 1);
-              changeSaveData(sData); //세이브
+              if (sData.ch.length > 0) {
+                const newSaveDataDel = {
+                  ...sData,
+                  ch: sData.ch.slice(0, -1)
+                };
+                changeSaveData(newSaveDataDel);
+              }
             }}>영웅 삭제</button><br/>
             <button onClick={() => {
               const option = {
@@ -376,6 +403,11 @@ const Cards = ({
           <TopBtnGroup>
             <FlexBox>
               <TopBtn>
+                <IconPic type="item" pic="icon100" idx={7} onClick={() => {
+                  setShowStory(prev => !prev);
+                }} />
+              </TopBtn>
+              <TopBtn>
                 <IconPic type="quickMenu" pic="icon100" idx={1} onClick={() => {
                   setShowInven(prev => !prev);
                 }} />
@@ -391,10 +423,26 @@ const Cards = ({
               </TopBtn>
             </FlexBox>
           </TopBtnGroup>
+          {showStory && <ChStory frameBack={imgSet.etc.frameChBack}>
+            <CloseBtn onClick={() => {
+              setShowStory(false);
+            }}>
+              <Text code="t1">{gameData.msg.button.close[lang]}</Text>
+            </CloseBtn>
+            <Storys className="scroll-y">
+              <ul>
+                <li>
+                  {slotIdx}
+                </li>
+              </ul>
+            </Storys>
+          </ChStory>}
           {showInven && <ChInven frameBack={imgSet.etc.frameChBack}>
             <CloseBtn onClick={() => {
               setShowInven(false);
-            }}><Text code="t1">{gameData.msg.button.close[lang]}</Text></CloseBtn>
+            }}>
+              <Text code="t1">{gameData.msg.button.close[lang]}</Text>
+            </CloseBtn>
             <InvenItems className="has_items scroll-y">
               <InvenTitle code="t3" color="main">{gameData.msg.menu.equip[lang]}</InvenTitle>
               <ul className="h_items">

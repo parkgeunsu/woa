@@ -55,14 +55,15 @@ const GameMain = ({
     return context.gameData;
   }, [context]);
   const sData = React.useMemo(() => {
-    return Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData;
+    return (Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData) || {};
   }, [saveData]);
-  const stay = React.useMemo(() => sData.info.stay, [sData]);
+  const stay = React.useMemo(() => sData?.info?.stay, [sData]);
   //roulette
   const [rouletteState, setRouletteState] = useState([]);
   const [selectRoulettePos, setSelectRoulettePos] = useState([]);
-  const [selectScenario, setSelectScenario] = useState(util.loadData('historyParam')?.scenario ? util.loadData('historyParam').scenario : {});
-  const [rouletteEnemy, setRouletteEnemy] = useState(util.loadData('historyParam')?.roulette ? util.loadData('historyParam').roulette : {base: {},add: {}, lv: {}, map: {}});
+  const historyParam = util.loadData('historyParam');
+  const [selectScenario, setSelectScenario] = useState(historyParam?.scenario || {});
+  const [rouletteEnemy, setRouletteEnemy] = useState(historyParam?.roulette || {base: {},add: {}, lv: {}, map: {}});
   const rouletteArr = useRef([
     {cards:[
       gameData.roulette[0],
@@ -101,7 +102,7 @@ const GameMain = ({
           setRouletteEnemy: setRouletteEnemy,
           selectScenario: selectScenario,
         };
-      case "scenario":
+      case "scenarioRegion":
         return {
           selectScenario: selectScenario,
         };
@@ -120,10 +121,10 @@ const GameMain = ({
     <Wrap direction="column">
       <QuickMenu type="main" stay={stay} gameMode={gameMode} showDim={showDim} setShowDim={setShowDim}/>
       <CountryTitle alignItems="center" back={imgSet.back.countryTitle}>
-        <StyledText code="t4" color="shadow">{gameData.country.regions[util.getCountryToIdx(stay)].name[lang]}</StyledText>
+        <StyledText code="t4" color="shadow">{gameData.country.regions[util.getRegionToIdx(stay)]?.name[lang]}</StyledText>
       </CountryTitle>
       {gameMode === "roulette" && <Roulette saveData={sData} rouletteState={rouletteState} setRouletteState={setRouletteState} selectRoulettePos={selectRoulettePos} setSelectRoulettePos={setSelectRoulettePos} rouletteArr={rouletteArr.current} rouletteEnemy={rouletteEnemy} setRouletteEnemy={setRouletteEnemy} />}
-      {gameMode === "scenario" && <Scenario saveData={sData} changeSaveData={changeSaveData} stay={stay} selectScenario={selectScenario} setSelectScenario={setSelectScenario} />}
+      {gameMode === "scenarioRegion" && <Scenario saveData={sData} changeSaveData={changeSaveData} stay={stay} selectScenario={selectScenario} setSelectScenario={setSelectScenario} />}
       {gameMode === "moveRegion" && <MoveRegion saveData={sData} stay={stay} selectMoveRegion={selectMoveRegion} setSelectMoveRegion={setSelectMoveRegion} 
       moveRegionEntry={moveRegionEntry} setMoveRegionEntry={setMoveRegionEntry} />}
       <CardGroup>

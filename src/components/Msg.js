@@ -26,11 +26,12 @@ const MsgWrap = styled.div`
 `;
 const MsgCont = styled(FlexBox)`
 	position: absolute;
-	left: 10%;
-	right: 10%;
+	left: 0;
+	right: 0;
 	top: 0;
 	bottom: 0;
 	padding: 0 20px;
+	width: auto;
 	z-index: 2;
 	word-break: break-all;
 	line-height: 1.5;
@@ -96,7 +97,9 @@ const Msg = ({
 	}, []);
 	return (
 		<MsgContinaer>
-			<MsgWrap ref={msgRef} className="transition">
+			<MsgWrap ref={msgRef} className="transition" onClick={() => {
+				showMsg(prev => !prev);
+			}}>
 				<MsgCont direction="column"  dangerouslySetInnerHTML={{__html: text}}></MsgCont>
 			</MsgWrap>
 		</MsgContinaer>

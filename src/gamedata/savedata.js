@@ -602,6 +602,7 @@ const saveNew = {
         scenarioList:[
           {//이순신(1592) period:6
             open:0,
+            currentStage:0,
             stage:[
               {first:true,clear:[false,false,false,false],select:0}, //옥포해전
               {first:true,clear:[false,false,false,false],select:0}, //사천해전

@@ -171,38 +171,46 @@ const CharacterState = ({
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
-  // const imgSet = React.useMemo(() => {
-  //   return context.images;
-  // }, [context]);
+
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
+
+  const saveCh = React.useMemo(() => saveData.ch?.[slotIdx] || {}, [saveData.ch, slotIdx]);
   const chData = React.useMemo(
-    () => gameData.ch[saveCh.idx],
-    [gameData, saveCh]
+    () => gameData.ch?.[saveCh.idx] || {},
+    [gameData.ch, saveCh.idx]
   );
-  const chName = React.useMemo(() => gameData.ch[saveCh.idx].na1, [saveData, slotIdx]);
+  const chName = React.useMemo(() => chData.na1 || "", [chData.na1]);
+
   const saveExp = React.useMemo(() => {
-    return Object.keys(saveCh).length > 0 ? {
-      current: saveCh.exp,
-      max: gameData.exp['grade' + saveCh.grade][saveCh.lv-1]
-    } : {
-      current : 0,
-      max: 0,
-    }
-  }, [gameData, saveCh]);
+    const gradeKey = 'grade' + saveCh.grade;
+    const maxExpArr = gameData.exp?.[gradeKey];
+    const maxExp = (maxExpArr && typeof saveCh.lv === "number") ? maxExpArr[saveCh.lv - 1] : 0;
+    
+    return {
+      current: saveCh.exp || 0,
+      max: maxExp
+    };
+  }, [gameData.exp, saveCh.grade, saveCh.lv, saveCh.exp]);
+
   const saveHasExp = React.useMemo(() => {
     return {
-      current: saveCh.hasExp,
-      max: gameData.hasMaxExp[saveCh.grade]
-    }
-  }, [gameData, saveCh]);
+      current: saveCh.hasExp || 0,
+      max: gameData.hasMaxExp?.[saveCh.grade] || 0
+    };
+  }, [gameData.hasMaxExp, saveCh.grade, saveCh.hasExp]);
+
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
+
   const animalKg = React.useMemo(() => {
-    const percentKg = Math.min(1, saveCh.kg / gameData.animal_size.kg[chData.animal_type][2]);
+    const animalType = chData.animal_type;
+    const kgLimit = gameData.animal_size?.kg?.[animalType]?.[2];
+    if (typeof kgLimit !== "number") return "";
+
+    const percentKg = Math.min(1, (saveCh.kg || 0) / kgLimit);
     if (percentKg < 0.2) {
       return gameData.msg.state.kg0[lang];
     } else if (percentKg < 0.4) {
@@ -214,9 +222,8 @@ const CharacterState = ({
     } else {
       return gameData.msg.state.kg4[lang];
     }
-  }, [gameData, saveCh, chData]);
-  // const chIdx = saveCh.idx;
-  // util.saveLvState(0);
+  }, [gameData, saveCh.kg, chData.animal_type, lang]);
+
   return (
     <>
       <Wrap className="state">
@@ -224,7 +231,7 @@ const CharacterState = ({
           setPopupType('guide');
           setPopupOn(true);
           setPopupInfo({
-            data:gameData.guide["characterState"],
+            data: gameData.guide["characterState"],
           });
         }}>
           <StateArea>
@@ -233,14 +240,13 @@ const CharacterState = ({
                 <ActionBox justifyContent="space-between">
                   <Text code="t2" color="grey">{gameData.msg.state.sp[lang]}</Text>
                   <StyledText code="t2" color="main">
-                    <span className="current">{saveData.ch[slotIdx].actionPoint}</span><ChInfoBar>/</ChInfoBar><span className="max">50</span>
+                    <span className="current">{saveCh.actionPoint || 0}</span><ChInfoBar>/</ChInfoBar><span className="max">50</span>
                   </StyledText>
                 </ActionBox>
                 <BodyKg justifyContent="flex-end">
                   <SizeTxt code="t3" color="main">({animalKg})</SizeTxt>
-                  <KgPic type="state" pic="icon100" idx={8}
-                  />
-                  <KgText code="t2" color={util.getPercentColor(gameData.animal_size.kg[chData.animal_type][2], saveCh.kg).stateColor}>{`${saveCh.kg} kg`}</KgText>
+                  <KgPic type="state" pic="icon100" idx={8} />
+                  <KgText code="t2" color={util.getPercentColor(gameData.animal_size.kg[chData.animal_type]?.[2] || 1, saveCh.kg || 0).stateColor}>{`${saveCh.kg || 0} kg`}</KgText>
                 </BodyKg>
               </ChInfoLi>
               <ChInfoLi>
@@ -262,14 +268,14 @@ const CharacterState = ({
             </ChInfoContainer>
             <StateContainer direction="row" justifyContent="flex-start">
               {gameData.stateName.map((data, idx) => {
-                const {stateColor, gradeText} = util.getPercentColor(gameData.stateMax[idx] ,saveCh['st' + idx]);
+                const { stateColor } = util.getPercentColor(gameData.stateMax[idx], saveCh['st' + idx] || 0);
                 return (
                   <StateGroup key={`chst${idx}`} justifyContent="flex-start">
                     <StateIcon type="state" pic="icon100" idx={idx} />
                     <StateInner>
                       <StateText code="t2" color="main">{gameData.msg.state[data][lang]}</StateText>
                       <TextTotal code="t4" weight="600" color={stateColor} borderColor="sub">
-                        {saveCh['st'+idx]}
+                        {saveCh['st' + idx] || 0}
                       </TextTotal>
                     </StateInner>
                   </StateGroup>
@@ -278,17 +284,19 @@ const CharacterState = ({
             </StateContainer>
             <ElementContainer direction="row" justifyContent="flex-start">
               {gameData.element.map((data, idx) => {
-                const num = [saveCh['el' + idx] + saveCh['iSt' + (11 + idx)], saveCh['el' + idx] + saveCh['iSt' + (23 + idx)]];
-                const elementPercent = [num[0] * .5, num[1] * 0.5];//최대 200
-                let actionPossibleElement = false;
-                saveData.ch[slotIdx].newActionType.forEach((type) => {
-                  actionPossibleElement = type === idx;
-                  if (actionPossibleElement) {
-                    return;
-                  }
-                });
+                const num = [(saveCh['el' + idx] || 0) + (saveCh['iSt' + (11 + idx)] || 0), (saveCh['el' + idx] || 0) + (saveCh['iSt' + (23 + idx)] || 0)];
+                const elementPercent = [num[0] * .5, num[1] * 0.5];
+                const actionPossibleElement = saveCh.newActionType?.some((type) => type === idx);
+                
                 return (
-                  <ElementList className={`el el${idx}`} key={`chst${idx}`} actionPossibleElement={actionPossibleElement} elementPercent={elementPercent} idx={idx} num={num} />
+                  <ElementList 
+                    className={`el el${idx}`} 
+                    key={`el${idx}`} 
+                    actionPossibleElement={actionPossibleElement} 
+                    elementPercent={elementPercent} 
+                    idx={idx} 
+                    num={num} 
+                  />
                 )
               })}
             </ElementContainer>

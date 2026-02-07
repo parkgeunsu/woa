@@ -517,8 +517,133 @@ import custom01 from 'images/effect/custom/30FPS_custom01.png';
 import areaBack from 'images/areaBack.png'; //8192 x 8960, 10, 5(1024 x 1792)
 import card from 'images/card.png'; //8000 x 7110, 10, 6
 import card_s from 'images/card_s.png'; //2000 x 1200, 10, 6
-import ch from 'images/ch.png'; //8000 x 7110, 10, 6
-import ch_s from 'images/ch_s.png'; //2000 x 1200, 10, 6
+
+import ch_0 from 'images/ch/ch_0.png'; //800 x 1185
+import ch_1 from 'images/ch/ch_1.png';
+import ch_10 from 'images/ch/ch_10.png';
+import ch_11 from 'images/ch/ch_11.png';
+import ch_12 from 'images/ch/ch_12.png';
+import ch_13 from 'images/ch/ch_13.png';
+import ch_14 from 'images/ch/ch_14.png';
+import ch_15 from 'images/ch/ch_15.png';
+import ch_16 from 'images/ch/ch_16.png';
+import ch_17 from 'images/ch/ch_17.png';
+import ch_18 from 'images/ch/ch_18.png';
+import ch_19 from 'images/ch/ch_19.png';
+import ch_2 from 'images/ch/ch_2.png';
+import ch_20 from 'images/ch/ch_20.png';
+import ch_21 from 'images/ch/ch_21.png';
+import ch_22 from 'images/ch/ch_22.png';
+import ch_23 from 'images/ch/ch_23.png';
+import ch_24 from 'images/ch/ch_24.png';
+import ch_25 from 'images/ch/ch_25.png';
+import ch_26 from 'images/ch/ch_26.png';
+import ch_27 from 'images/ch/ch_27.png';
+import ch_28 from 'images/ch/ch_28.png';
+import ch_29 from 'images/ch/ch_29.png';
+import ch_3 from 'images/ch/ch_3.png';
+import ch_30 from 'images/ch/ch_30.png';
+import ch_31 from 'images/ch/ch_31.png';
+import ch_32 from 'images/ch/ch_32.png';
+import ch_33 from 'images/ch/ch_33.png';
+import ch_34 from 'images/ch/ch_34.png';
+import ch_35 from 'images/ch/ch_35.png';
+import ch_36 from 'images/ch/ch_36.png';
+import ch_37 from 'images/ch/ch_37.png';
+import ch_38 from 'images/ch/ch_38.png';
+import ch_39 from 'images/ch/ch_39.png';
+import ch_4 from 'images/ch/ch_4.png';
+import ch_40 from 'images/ch/ch_40.png';
+import ch_41 from 'images/ch/ch_41.png';
+import ch_42 from 'images/ch/ch_42.png';
+import ch_43 from 'images/ch/ch_43.png';
+import ch_44 from 'images/ch/ch_44.png';
+import ch_45 from 'images/ch/ch_45.png';
+import ch_46 from 'images/ch/ch_46.png';
+import ch_47 from 'images/ch/ch_47.png';
+import ch_48 from 'images/ch/ch_48.png';
+import ch_49 from 'images/ch/ch_49.png';
+import ch_5 from 'images/ch/ch_5.png';
+import ch_50 from 'images/ch/ch_50.png';
+import ch_51 from 'images/ch/ch_51.png';
+import ch_52 from 'images/ch/ch_52.png';
+import ch_53 from 'images/ch/ch_53.png';
+import ch_54 from 'images/ch/ch_54.png';
+import ch_55 from 'images/ch/ch_55.png';
+import ch_56 from 'images/ch/ch_56.png';
+import ch_6 from 'images/ch/ch_6.png';
+import ch_60 from 'images/ch/ch_60.png';
+import ch_61 from 'images/ch/ch_61.png';
+import ch_62 from 'images/ch/ch_62.png';
+import ch_63 from 'images/ch/ch_63.png';
+import ch_64 from 'images/ch/ch_64.png';
+import ch_7 from 'images/ch/ch_7.png';
+import ch_8 from 'images/ch/ch_8.png';
+import ch_9 from 'images/ch/ch_9.png';
+
+import chs_0 from 'images/chs/ch_0.png'; //200 x 200
+import chs_1 from 'images/chs/ch_1.png';
+import chs_10 from 'images/chs/ch_10.png';
+import chs_11 from 'images/chs/ch_11.png';
+import chs_12 from 'images/chs/ch_12.png';
+import chs_13 from 'images/chs/ch_13.png';
+import chs_14 from 'images/chs/ch_14.png';
+import chs_15 from 'images/chs/ch_15.png';
+import chs_16 from 'images/chs/ch_16.png';
+import chs_17 from 'images/chs/ch_17.png';
+import chs_18 from 'images/chs/ch_18.png';
+import chs_19 from 'images/chs/ch_19.png';
+import chs_2 from 'images/chs/ch_2.png';
+import chs_20 from 'images/chs/ch_20.png';
+import chs_21 from 'images/chs/ch_21.png';
+import chs_22 from 'images/chs/ch_22.png';
+import chs_23 from 'images/chs/ch_23.png';
+import chs_24 from 'images/chs/ch_24.png';
+import chs_25 from 'images/chs/ch_25.png';
+import chs_26 from 'images/chs/ch_26.png';
+import chs_27 from 'images/chs/ch_27.png';
+import chs_28 from 'images/chs/ch_28.png';
+import chs_29 from 'images/chs/ch_29.png';
+import chs_3 from 'images/chs/ch_3.png';
+import chs_30 from 'images/chs/ch_30.png';
+import chs_31 from 'images/chs/ch_31.png';
+import chs_32 from 'images/chs/ch_32.png';
+import chs_33 from 'images/chs/ch_33.png';
+import chs_34 from 'images/chs/ch_34.png';
+import chs_35 from 'images/chs/ch_35.png';
+import chs_36 from 'images/chs/ch_36.png';
+import chs_37 from 'images/chs/ch_37.png';
+import chs_38 from 'images/chs/ch_38.png';
+import chs_39 from 'images/chs/ch_39.png';
+import chs_4 from 'images/chs/ch_4.png';
+import chs_40 from 'images/chs/ch_40.png';
+import chs_41 from 'images/chs/ch_41.png';
+import chs_42 from 'images/chs/ch_42.png';
+import chs_43 from 'images/chs/ch_43.png';
+import chs_44 from 'images/chs/ch_44.png';
+import chs_45 from 'images/chs/ch_45.png';
+import chs_46 from 'images/chs/ch_46.png';
+import chs_47 from 'images/chs/ch_47.png';
+import chs_48 from 'images/chs/ch_48.png';
+import chs_49 from 'images/chs/ch_49.png';
+import chs_5 from 'images/chs/ch_5.png';
+import chs_50 from 'images/chs/ch_50.png';
+import chs_51 from 'images/chs/ch_51.png';
+import chs_52 from 'images/chs/ch_52.png';
+import chs_53 from 'images/chs/ch_53.png';
+import chs_54 from 'images/chs/ch_54.png';
+import chs_55 from 'images/chs/ch_55.png';
+import chs_56 from 'images/chs/ch_56.png';
+import chs_6 from 'images/chs/ch_6.png';
+import chs_60 from 'images/chs/ch_60.png';
+import chs_61 from 'images/chs/ch_61.png';
+import chs_62 from 'images/chs/ch_62.png';
+import chs_63 from 'images/chs/ch_63.png';
+import chs_64 from 'images/chs/ch_64.png';
+import chs_7 from 'images/chs/ch_7.png';
+import chs_8 from 'images/chs/ch_8.png';
+import chs_9 from 'images/chs/ch_9.png';
+
 import country from 'images/country.png'; //8192 x 8960, 10, 5(1024 x 1792)
 import icon100 from 'images/icon100.png'; //1000, 10, 25
 import icon150 from 'images/icon150.png'; //1500, 10, 10
@@ -564,6 +689,134 @@ export const bgEffect = [
 // export const cannon = [
 //   cannon0,cannon1,cannon2,cannon3,cannon4,cannon5,cannon6,cannon7,cannon8
 // ]
+const chGroup = {
+  ch0:ch_0,
+  ch1:ch_1,
+  ch2:ch_2,
+  ch3:ch_3,
+  ch4:ch_4,
+  ch5:ch_5,
+  ch6:ch_6,
+  ch7:ch_7,
+  ch8:ch_8,
+  ch9:ch_9,
+  ch10:ch_10,
+  ch11:ch_11,
+  ch12:ch_12,
+  ch13:ch_13,
+  ch14:ch_14,
+  ch15:ch_15,
+  ch16:ch_16,
+  ch17:ch_17,
+  ch18:ch_18,
+  ch19:ch_19,
+  ch20:ch_20,
+  ch21:ch_21,
+  ch22:ch_22,
+  ch23:ch_23,
+  ch24:ch_24,
+  ch25:ch_25,
+  ch26:ch_26,
+  ch27:ch_27,
+  ch28:ch_28,
+  ch29:ch_29,
+  ch30:ch_30,
+  ch31:ch_31,
+  ch32:ch_32,
+  ch33:ch_33,
+  ch34:ch_34,
+  ch35:ch_35,
+  ch36:ch_36,
+  ch37:ch_37,
+  ch38:ch_38,
+  ch39:ch_39,
+  ch40:ch_40,
+  ch41:ch_41,
+  ch42:ch_42,
+  ch43:ch_43,
+  ch44:ch_44,
+  ch45:ch_45,
+  ch46:ch_46,
+  ch47:ch_47,
+  ch48:ch_48,
+  ch49:ch_49,
+  ch50:ch_50,
+  ch51:ch_51,
+  ch52:ch_52,
+  ch53:ch_53,
+  ch54:ch_54,
+  ch55:ch_55,
+  ch56:ch_56,
+  ch60:ch_60,
+  ch61:ch_61,
+  ch62:ch_62,
+  ch63:ch_63,
+  ch64:ch_64,
+};
+const chsGroup = {
+  chs0:chs_0,
+  chs1:chs_1,
+  chs2:chs_2,
+  chs3:chs_3,
+  chs4:chs_4,
+  chs5:chs_5,
+  chs6:chs_6,
+  chs7:chs_7,
+  chs8:chs_8,
+  chs9:chs_9,
+  chs10:chs_10,
+  chs11:chs_11,
+  chs12:chs_12,
+  chs13:chs_13,
+  chs14:chs_14,
+  chs15:chs_15,
+  chs16:chs_16,
+  chs17:chs_17,
+  chs18:chs_18,  
+  chs19:chs_19,
+  chs20:chs_20,
+  chs21:chs_21,
+  chs22:chs_22,
+  chs23:chs_23,
+  chs24:chs_24,
+  chs25:chs_25,
+  chs26:chs_26,
+  chs27:chs_27,
+  chs28:chs_28,
+  chs29:chs_29,
+  chs30:chs_30,
+  chs31:chs_31,
+  chs32:chs_32,
+  chs33:chs_33,
+  chs34:chs_34,
+  chs35:chs_35,
+  chs36:chs_36,
+  chs37:chs_37,
+  chs38:chs_38,
+  chs39:chs_39,
+  chs40:chs_40,
+  chs41:chs_41,
+  chs42:chs_42,
+  chs43:chs_43,
+  chs44:chs_44,
+  chs45:chs_45,
+  chs46:chs_46,
+  chs47:chs_47,
+  chs48:chs_48,
+  chs49:chs_49,
+  chs50:chs_50,
+  chs51:chs_51,
+  chs52:chs_52,
+  chs53:chs_53,
+  chs54:chs_54,
+  chs55:chs_55,
+  chs56:chs_56,
+  chs60:chs_60,
+  chs61:chs_61,
+  chs62:chs_62,
+  chs63:chs_63,
+  chs64:chs_64,
+};
 export const effect = {
   slash0:{img:slash0,frame:8,used:'공격'},slash1:{img:slash1,frame:25},slash2:{img:slash2,frame:25,used:'십자베기'},slash3:{img:slash3,frame:13,used:'사선베기'},slash4:{img:slash4,frame:14,used:'목공격'},slash5:{img:slash5,frame:10,used:'발도'},slash6:{img:slash6,frame:14,used:'돌진'},slash7:{img:slash7,frame:11,used:'할퀴기'},slash8:{img:aniPack4_2,frame:8,used:'후려치기'},slash9:{img:aniPack4_3,frame:11},slash10:{img:aniPack4_11,frame:6,used:'조준사격'},
   slash11:{img:aniPack4_15,frame:5,used:'물기'},
@@ -603,7 +856,9 @@ export const effect = {
   buff40:{img:buff40,frame:30,used:'조개선물'},buff41:{img:buff41,frame:30},buff42:{img:aniPack4_6,frame:15},custom01:{img:custom01,frame:24,used:'무거운한방'},
 };
 export const images = {
-  ch:ch,ch_s:ch_s,card:card,card_s:card_s,country:country,areaBack:areaBack,skill:skill,icon100:icon100,icon150:icon150,icon200:icon200,img400:img400,img800:img800,map800:map800,itemEtc:itemEtc,
+  ...chGroup,
+  ...chsGroup,
+  card:card,card_s:card_s,country:country,areaBack:areaBack,skill:skill,icon100:icon100,icon150:icon150,icon200:icon200,img400:img400,img800:img800,map800:map800,itemEtc:itemEtc,
   frame0:frame0,
   transparent:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAAtJREFUGFdjYAACAAAFAAGq1chRAAAAAElFTkSuQmCC',
   red:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDYuMC1jMDA2IDc5LmRhYmFjYmIsIDIwMjEvMDQvMTQtMDA6Mzk6NDQgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCAyMi40IChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjVFM0Q0RkMwMDE5OTExRUZCMkY4QzZDM0YyRDUzRjBBIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjVFM0Q0RkMxMDE5OTExRUZCMkY4QzZDM0YyRDUzRjBBIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MkIzRTE2NjEwMTc3MTFFRkIyRjhDNkMzRjJENTNGMEEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MkIzRTE2NjIwMTc3MTFFRkIyRjhDNkMzRjJENTNGMEEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz72wd/gAAAADklEQVR42mL4b8oAEGAAA2sBNUl4lb4AAAAASUVORK5CYII=',

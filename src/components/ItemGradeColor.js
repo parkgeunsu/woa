@@ -15,7 +15,7 @@ const ItemContainer = styled.div`
   ${({sealed, impossible}) => {
       if (sealed) {
         return `
-          svg {
+          svg, span {
             filter:brightness(0.3) drop-shadow(0px 0px 1px #fff) ${impossible ? 'invert(1)' : ''};
           }
           &:before {

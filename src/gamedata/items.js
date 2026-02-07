@@ -1,5 +1,10 @@
+//hole 1방어, 4체력, 7행운, 10공격, 13술법공격, 16술법방어, 19속도, 22행ehd
+// 101백색~115군청색, 121~135, 141~155
+// 망치0~5,숫돌6~11
 export const items = {
-  slotModifier:{ko:['','사파이어의','에메랄드의','루비의','다이아몬드의'],en:['','Sapphire\'s','Emerald\'s','Ruby\'s','Diamond\'s'],jp:['','サファイアの','エメラルドの','ルビーの','ダイヤモンドの'],},
+  quality:{ko:['투명한','빛이나는','어두운'],en:['Transparent','Shiny','Dark'],jp:['透明な','輝く','暗い']},
+  condition:{ko:['낡은','','고급','완벽한'],en:['Worn','Advanced','Perfect'],jp:['古びた','高級','完璧な']},
+  slotModifier:{ko:['','사파이어의','에메랄드의','루비의','다이아몬드의'],en:['','Sapphire\'s','Emerald\'s','Ruby\'s','Diamond\'s'],jp:['','サファイアの','エメラルドの','ルビーの','ダイヤモンドの']},
   markModifier:{ko:['','','두마리','세마리','네마리'],en:['','a','two','three','four'],jp:['','','二匹','三匹','四匹']},
   item_point_light:['#ffdf8b','#00ff00','#d9e506','#ff00bf','#f00a36','#ed3b21','#ff6908','#ffc719','#ae9a64','#8ba753','#598c14','#dbe0e3','#fff','#FFD1D8','#FFFFD1','#FFE39B','#9CFFE6','#b0a696','#2dde98','#4a8594','#1fb3e0','#2e9df7'],
   item_point_dark:['#8e43e7','#52057f','#cd3292','#bf033b','#335238','#213e97','#003666','#051736','#706357'],
@@ -27,6 +32,178 @@ export const items = {
       {idx:1,na:{ko:'얼룩덜룩',en:'Mottled',jp:'斑点'},socket:['000','fff','000','fff','000'],eff:[{type:4,num:['300']}],color:['#000'],svgColor:'Mottled'},
     ],
   },
+  enemyItem:{
+    armor10:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:0,num:['1000']},{type:4,num:['100']},{type:6,num:['100']}
+      ],addEff:[]
+    },
+    armor20:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:0,num:['2000']},{type:4,num:['200']},{type:6,num:['200']}
+      ],addEff:[]
+    },
+    armor30:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:0,num:['3000']},{type:4,num:['300']},{type:6,num:['300']}
+      ],addEff:[]
+    },
+    armor40:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:0,num:['4000']},{type:4,num:['400']},{type:6,num:['400']}
+      ],addEff:[]
+    },
+    armor50:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:0,num:['5000']},{type:4,num:['500']},{type:6,num:['500']}
+      ],addEff:[]
+    },
+    armor60:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:0,num:['6000']},{type:4,num:['600']},{type:6,num:['600']}
+      ],addEff:[]
+    },
+    armor70:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:0,num:['7000']},{type:4,num:['700']},{type:6,num:['700']}
+      ],addEff:[]
+    },
+    armor80:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:0,num:['8000']},{type:4,num:['800']},{type:6,num:['800']}
+      ],addEff:[]
+    },
+    armor90:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:0,num:['9000']},{type:4,num:['900']},{type:6,num:['900']}
+      ],addEff:[]
+    },
+    armor100:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:0,num:['10000']},{type:4,num:['1000']},{type:6,num:['1000']}
+      ],addEff:[]
+    },
+    weapon10:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:3,num:['100']},{type:5,num:['100']}
+      ],addEff:[]
+    },
+    weapon20:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:3,num:['200']},{type:5,num:['200']}
+      ],addEff:[]
+    },
+    weapon30:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:3,num:['300']},{type:5,num:['300']}
+      ],addEff:[]
+    },
+    weapon40:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:3,num:['400']},{type:5,num:['400']}
+      ],addEff:[]
+    },
+    weapon50:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:3,num:['500']},{type:5,num:['500']}
+      ],addEff:[]
+    },
+    weapon60:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:3,num:['600']},{type:5,num:['600']}
+      ],addEff:[]
+    },
+    weapon70:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:3,num:['700']},{type:5,num:['700']}
+      ],addEff:[]
+    },
+    weapon80:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:3,num:['800']},{type:5,num:['800']}
+      ],addEff:[]
+    },
+    weapon90:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:3,num:['900']},{type:5,num:['900']}
+      ],addEff:[]
+    },
+    weapon100:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:3,num:['1000']},{type:5,num:['1000']}
+      ],addEff:[]
+    },
+    accessory0:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:8,num:['10']}
+      ],addEff:[]
+    },
+    accessory1:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:9,num:['10']}
+      ],addEff:[]
+    },
+    accessory2:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:10,num:['10']}
+      ],addEff:[]
+    },
+    accessory3:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:11,num:['10']}
+      ],addEff:[]
+    },
+    accessory4:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:12,num:['10']}
+      ],addEff:[]
+    },
+    accessory5:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:13,num:['10']}
+      ],addEff:[]
+    },
+    accessory6:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:14,num:['10']}
+      ],addEff:[]
+    },
+    accessory7:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:15,num:['10']}
+      ],addEff:[]
+    },
+    accessory8:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:21,num:['10']}
+      ],addEff:[]
+    },
+    accessory9:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:22,num:['10']}
+      ],addEff:[]
+    },
+    accessory10:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:23,num:['10']}
+      ],addEff:[]
+    },
+    accessory11:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:24,num:['10']}
+      ],addEff:[]
+    },
+    accessory12:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:25,num:['10']}
+      ],addEff:[]
+    },
+    accessory13:{
+      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:26,num:['10']}
+      ],addEff:[]
+    },
+  },
   equip:{//part 부위 head1, body2, weapon3, ring4, necklace5, baggage짐, 보석11, 업그레이드12, 기타13, 재료14
   //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동력SP(1), 행동회복력RSP(2), 공격력ATK(3), 방어력DEF(4), 술법공격력MAK(5), 술법방어력MDF(6), 회복력RCV(7), 속도SPD(8), 행운LUK(9), 쪼기(10),할퀴기(11),물기(12),치기(13),누르기(14),던지기(15), 빛(21),어둠(22),물(23),불(24),바람(25),땅(26), 진형(100)
   //action 아이템 동작 아이디변경(1), 홀장착(9), 장비강화(10), 스킬제거(11), 골드변경(99), 랜덤뽑기(100)
@@ -41,13 +218,13 @@ export const items = {
     1:[//모자
       [
         [//normal,magic,rare,epic
-          {idx:0,part:1,grade:1,display:0,na:{ko:'터번',en:'Turban',jp:'ターバン'},kg:0.1,price:100,color:["#fff"],socket:2,txt:{ko:'머리에 둘둘 감고 다니는 천',en:'A cloth wrapped around one\'s head',jp:'頭に巻いて持ち歩く布'},eff:[{type:4,num:['5','50']},{type:6,num:['50','100']},{type:8,num:['1','10']}],actionType:"",requiredSlot:1,limit:[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true],country:'',set:0},
+          {idx:0,part:1,grade:1,display:0,na:{ko:'터번',en:'Turban',jp:'ターバン'},kg:0.1,price:100,color:["#fff"],socket:2,txt:{ko:'머리에 둘둘 감고 다니는 천',en:'A cloth wrapped around one\'s head',jp:'頭に巻いて持ち歩く布'},eff:[{type:4,num:['5','50']},{type:6,num:['50','100']},{type:8,num:['1','10']}],actionType:"",requiredSlot:1,limit:[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true],country:[],set:0},
           
-          {idx:1,part:1,grade:1,display:1,na:{ko:'두정투',en:'\'Doojung\' Helm',jp:'頭釘鬪'},kg:3,price:1000,color:["#fff","#e2ae37"],socket:3,txt:{ko:'가죽에 옻칠을 한 투구',en:'A leather-lacquered helmet',jp:'革に漆を塗った兜'},eff:[{type:4,num:['50','200']},{type:6,num:['50','250']},{type:8,num:['1','5']}],actionType:"",requiredSlot:1,limit:[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true],country:'',set:0},
+          {idx:1,part:1,grade:1,display:1,na:{ko:'두정투',en:'\'Doojung\' Helm',jp:'頭釘鬪'},kg:3,price:1000,color:["#fff","#e2ae37"],socket:3,txt:{ko:'가죽에 옻칠을 한 투구',en:'A leather-lacquered helmet',jp:'革に漆を塗った兜'},eff:[{type:4,num:['50','200']},{type:6,num:['50','250']},{type:8,num:['1','5']}],actionType:"",requiredSlot:1,limit:[true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true],country:[1],set:0},
 
-          {idx:2,part:1,grade:1,display:10,na:{ko:'스컬 캡',en:'Skull Cap',jp:'スカルキャップ'},kg:3,price:500,color:["#fff"],socket:2,txt:{ko:'반구 형태의 철제 투구',en:'A hemispherical iron helmet',jp:'半球型の鉄製の兜'},eff:[{type:4,num:['50','100']},{type:6,num:['100','200']}],actionType:"",requiredSlot:1,limit:[true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,true,true],country:'',set:0},
+          {idx:2,part:1,grade:1,display:10,na:{ko:'스컬 캡',en:'Skull Cap',jp:'スカルキャップ'},kg:3,price:500,color:["#fff"],socket:2,txt:{ko:'반구 형태의 철제 투구',en:'A hemispherical iron helmet',jp:'半球型の鉄製の兜'},eff:[{type:4,num:['50','100']},{type:6,num:['100','200']}],actionType:"",requiredSlot:1,limit:[true,true,true,true,true,true,true,true,true,true,true,true,false,true,true,true,true],country:[],set:0},
 
-          {idx:3,part:1,grade:1,display:2,na:{ko:'코니컬 헬름',en:'Conical Helm',jp:'コニカルヘルム'},kg:5,price:500,color:["#fff"],socket:2,txt:{ko:'원뿔형태의 철제 투구',en:'A conical iron helmet',jp:'円錐形の鉄製ヘルメット'},eff:[{type:4,num:['100','150']},{type:6,num:['50','200']}],actionType:"",requiredSlot:1,limit:[true,true,true,true,false,true,false,false,false,true,true,true,false,true,true,true,true],country:'',set:0},
+          {idx:3,part:1,grade:1,display:2,na:{ko:'코니컬 헬름',en:'Conical Helm',jp:'コニカルヘルム'},kg:5,price:500,color:["#fff"],socket:2,txt:{ko:'원뿔형태의 철제 투구',en:'A conical iron helmet',jp:'円錐形の鉄製ヘルメット'},eff:[{type:4,num:['100','150']},{type:6,num:['50','200']}],actionType:"",requiredSlot:1,limit:[true,true,true,true,false,true,false,false,false,true,true,true,false,true,true,true,true],country:[],set:0},
 
           {idx:4,part:1,grade:1,display:7,na:{ko:'풀 헬름',en:'Full Helm',jp:'フルヘルム'},kg:7,price:700,color:["#fff"],socket:3,txt:{ko:'헬름을 강화시킨 투구',en:'A helmet reinforced with Helm',jp:'ヘルムを強化した兜'},eff:[{type:4,num:['150','250']},{type:6,num:['100','200']}],actionType:"",requiredSlot:1,limit:[true,true,true,true,false,true,false,false,false,true,true,true,false,true,true,true,true],country:'',set:0},
 
@@ -357,53 +534,53 @@ export const items = {
     //stone 아이템창 색상
     {idx:0,grade:0,imgCate:'itemHole',display:0,na:'',color:'transparent',kg:0,price:0,action:9,eff:[]},
 
-    {idx:1,grade:3,imgCate:'itemHole',display:1,na:{ko:'큰 다이아몬드',en:'Large Diamond',jp:'大きなダイヤモンド'},colorSet:'fff',color:'rgba(255,255,255,.8)',kg:0.1,price:100,txt:{ko:'다이아몬드는 단순히 아름다움 뿐만 아니라, 독특한 물성으로 다양한 분야에서 높은 가치를 지닌다.',en:'Diamonds aren\'t just beautiful, their unique properties make them highly valued in a variety of fields.',jp:'ダイヤモンドは単に美しさだけでなく、独特の物性で様々な分野で高い価値を持つ。'},action:9,eff:[{type:4,num:['30']}, {type:21,num:['2']}]},//방어, 빛
+    {idx:1,grade:1,imgCate:'itemHole',display:3,na:{ko:'작은 다이아몬드',en:'Small Diamond',jp:'小さなダイヤモンド'},colorSet:'fff',color:'rgba(255,255,255,.4)',kg:0.4,price:400,txt:{ko:'다이아몬드는 단순히 아름다움 뿐만 아니라, 독특한 물성으로 다양한 분야에서 높은 가치를 지닌다.',en:'Diamonds aren\'t just beautiful, their unique properties make them highly valued in a variety of fields.',jp:'ダイヤモンドは単に美しさだけでなく、独特の物性で様々な分野で高い価値を持つ。'},action:9,eff:[{type:4,num:['10']}]},//방어
 
     {idx:2,grade:2,imgCate:'itemHole',display:2,na:{ko:'다이아몬드',en:'Diamond',jp:'ダイヤモンド'},colorSet:'fff',color:'rgba(255,255,255,.6)',kg:0.2,price:200,txt:{ko:'다이아몬드는 단순히 아름다움 뿐만 아니라, 독특한 물성으로 다양한 분야에서 높은 가치를 지닌다.',en:'Diamonds aren\'t just beautiful, their unique properties make them highly valued in a variety of fields.',jp:'ダイヤモンドは単に美しさだけでなく、独特の物性で様々な分野で高い価値を持つ。'},action:9,eff:[{type:4,num:['20']}]},//방어
+  
+    {idx:3,grade:3,imgCate:'itemHole',display:1,na:{ko:'큰 다이아몬드',en:'Large Diamond',jp:'大きなダイヤモンド'},colorSet:'fff',color:'rgba(255,255,255,.8)',kg:0.1,price:100,txt:{ko:'다이아몬드는 단순히 아름다움 뿐만 아니라, 독특한 물성으로 다양한 분야에서 높은 가치를 지닌다.',en:'Diamonds aren\'t just beautiful, their unique properties make them highly valued in a variety of fields.',jp:'ダイヤモンドは単に美しさだけでなく、独特の物性で様々な分野で高い価値を持つ。'},action:9,eff:[{type:4,num:['30']}, {type:21,num:['2']}]},//방어, 빛
 
-    {idx:3,grade:1,imgCate:'itemHole',display:3,na:{ko:'작은 다이아몬드',en:'Small Diamond',jp:'小さなダイヤモンド'},colorSet:'fff',color:'rgba(255,255,255,.4)',kg:0.4,price:400,txt:{ko:'다이아몬드는 단순히 아름다움 뿐만 아니라, 독특한 물성으로 다양한 분야에서 높은 가치를 지닌다.',en:'Diamonds aren\'t just beautiful, their unique properties make them highly valued in a variety of fields.',jp:'ダイヤモンドは単に美しさだけでなく、独特の物性で様々な分野で高い価値を持つ。'},action:9,eff:[{type:4,num:['10']}]},//방어
-
-    {idx:4,grade:3,imgCate:'itemHole',display:4,na:{ko:'큰 에메랄드',en:'Large Emerald',jp:'大きなエメラルド'},colorSet:'0f0',color:'rgba(0,255,0,.8)',kg:0.4,price:1000,txt:{ko:'녹주옥, 취옥이라고도 하며 베릴륨 보석의 일종으로서, 녹주석 중 청록색을 띠는 종을 일컫는다.',en:'A type of beryllium gemstone, also known as chalcedony or jadeite, it refers to the blue-green color of a species of green gemstone.',jp:'緑珠玉、翠玉とも呼ばれ、ベリリウム宝石の一種で、緑珠石の中でも青緑色を帯びた種を指す。'},action:9,eff:[{type:0,num:['30']}, {type:26,num:['2']}]},//체력, 땅
+    {idx:4,grade:1,imgCate:'itemHole',display:6,na:{ko:'작은 에메랄드',en:'Small Emerald',jp:'小さなエメラルド'},colorSet:'0f0',color:'rgba(0,255,0,.4)',kg:0.1,price:200,txt:{ko:'녹주옥, 취옥이라고도 하며 베릴륨 보석의 일종으로서, 녹주석 중 청록색을 띠는 종을 일컫는다.',en:'A type of beryllium gemstone, also known as chalcedony or jadeite, it refers to the blue-green color of a species of green gemstone.',jp:'緑珠玉、翠玉とも呼ばれ、ベリリウム宝石の一種で、緑珠石の中でも青緑色を帯びた種を指す。'},action:9,eff:[{type:0,num:['10']}]},//체력
 
     {idx:5,grade:2,imgCate:'itemHole',display:5,na:{ko:'에메랄드',en:'Emerald',jp:'エメラルド'},colorSet:'0f0',color:'rgba(0,255,0,.6)',kg:0.2,price:100,txt:{ko:'녹주옥, 취옥이라고도 하며 베릴륨 보석의 일종으로서, 녹주석 중 청록색을 띠는 종을 일컫는다.',en:'A type of beryllium gemstone, also known as chalcedony or jadeite, it refers to the blue-green color of a species of green gemstone.',jp:'緑珠玉、翠玉とも呼ばれ、ベリリウム宝石の一種で、緑珠石の中でも青緑色を帯びた種を指す。'},action:9,eff:[{type:0,num:['20']}]},//체력
 
-    {idx:6,grade:1,imgCate:'itemHole',display:6,na:{ko:'작은 에메랄드',en:'Small Emerald',jp:'小さなエメラルド'},colorSet:'0f0',color:'rgba(0,255,0,.4)',kg:0.1,price:200,txt:{ko:'녹주옥, 취옥이라고도 하며 베릴륨 보석의 일종으로서, 녹주석 중 청록색을 띠는 종을 일컫는다.',en:'A type of beryllium gemstone, also known as chalcedony or jadeite, it refers to the blue-green color of a species of green gemstone.',jp:'緑珠玉、翠玉とも呼ばれ、ベリリウム宝石の一種で、緑珠石の中でも青緑色を帯びた種を指す。'},action:9,eff:[{type:0,num:['10']}]},//체력
+    {idx:6,grade:3,imgCate:'itemHole',display:4,na:{ko:'큰 에메랄드',en:'Large Emerald',jp:'大きなエメラルド'},colorSet:'0f0',color:'rgba(0,255,0,.8)',kg:0.4,price:1000,txt:{ko:'녹주옥, 취옥이라고도 하며 베릴륨 보석의 일종으로서, 녹주석 중 청록색을 띠는 종을 일컫는다.',en:'A type of beryllium gemstone, also known as chalcedony or jadeite, it refers to the blue-green color of a species of green gemstone.',jp:'緑珠玉、翠玉とも呼ばれ、ベリリウム宝石の一種で、緑珠石の中でも青緑色を帯びた種を指す。'},action:9,eff:[{type:0,num:['30']}, {type:26,num:['2']}]},//체력, 땅
 
-    {idx:7,grade:3,imgCate:'itemHole',display:7,na:{ko:'큰 토파즈',en:'Large Topaz',jp:'大きなトパーズ'},colorSet:'ff0',color:'rgba(255,255,0,.8)',kg:0.4,price:2000,txt:{ko:'일반적인 무색 내지는 노르스름한 색 이외에도 토파즈는 다채로운 색을 가지고 있다.',en:'In addition to its typical colorless interior, topaz has a wide range of colors.',jp:'一般的な無色または黄色がかった色以外にも、トパーズは多彩な色を持つ。'},action:9,eff:[{type:9,num:['20']}, {type:25,num:['2']}]},//행운, 바람
+    {idx:7,grade:1,imgCate:'itemHole',display:9,na:{ko:'작은 토파즈',en:'Small Topaz',jp:'小さなトパーズ'},colorSet:'ff0',color:'rgba(255,255,0,.4)',kg:0.1,price:500,txt:{ko:'일반적인 무색 내지는 노르스름한 색 이외에도 토파즈는 다채로운 색을 가지고 있다.',en:'In addition to its typical colorless interior, topaz has a wide range of colors.',jp:'一般的な無色または黄色がかった色以外にも、トパーズは多彩な色を持つ。'},action:9,eff:[{type:6,num:['5']}]},//행운
 
     {idx:8,grade:2,imgCate:'itemHole',display:8,na:{ko:'토파즈',en:'Topaz',jp:'トパーズ'},colorSet:'ff0',color:'rgba(255,255,0,.6)',kg:0.2,price:1000,txt:{ko:'일반적인 무색 내지는 노르스름한 색 이외에도 토파즈는 다채로운 색을 가지고 있다.',en:'In addition to its typical colorless interior, topaz has a wide range of colors.',jp:'一般的な無色または黄色がかった色以外にも、トパーズは多彩な色を持つ。'},action:9,eff:[{type:9,num:['10']}]},//행운
 
-    {idx:9,grade:1,imgCate:'itemHole',display:9,na:{ko:'작은 토파즈',en:'Small Topaz',jp:'小さなトパーズ'},colorSet:'ff0',color:'rgba(255,255,0,.4)',kg:0.1,price:500,txt:{ko:'일반적인 무색 내지는 노르스름한 색 이외에도 토파즈는 다채로운 색을 가지고 있다.',en:'In addition to its typical colorless interior, topaz has a wide range of colors.',jp:'一般的な無色または黄色がかった色以外にも、トパーズは多彩な色を持つ。'},action:9,eff:[{type:6,num:['5']}]},//행운
+    {idx:9,grade:3,imgCate:'itemHole',display:7,na:{ko:'큰 토파즈',en:'Large Topaz',jp:'大きなトパーズ'},colorSet:'ff0',color:'rgba(255,255,0,.8)',kg:0.4,price:2000,txt:{ko:'일반적인 무색 내지는 노르스름한 색 이외에도 토파즈는 다채로운 색을 가지고 있다.',en:'In addition to its typical colorless interior, topaz has a wide range of colors.',jp:'一般的な無色または黄色がかった色以外にも、トパーズは多彩な色を持つ。'},action:9,eff:[{type:9,num:['20']}, {type:25,num:['2']}]},//행운, 바람
 
-    {idx:10,grade:3,imgCate:'itemHole',display:10,na:{ko:'큰 루비',en:'Large Ruby',jp:'大きなルビー'},colorSet:'f00',color:'rgba(255,0,0,.8)',kg:0.4,price:2000,txt:{ko:'보석의 왕. 루비는 예나 지금이나 최고급의 보석으로 이전에는 다이아몬드보다 값이 나갔다.',en:'The king of gems. Rubies have always been the most expensive gemstone, and used to cost more than diamonds.',jp:'宝石の王様。ルビーは今も昔も最高級の宝石で、以前はダイヤモンドよりも高価でした。'},action:9,eff:[{type:3,num:['30']}, {type:24,num:['2']}]},//공격, 불
+    {idx:10,grade:1,imgCate:'itemHole',display:12,na:{ko:'작은 루비',en:'Small Ruby',jp:'小さなルビー'},colorSet:'f00',color:'rgba(255,0,0,.4)',kg:0.1,price:500,txt:{ko:'보석의 왕. 루비는 예나 지금이나 최고급의 보석으로 이전에는 다이아몬드보다 값이 나갔다.',en:'The king of gems. Rubies have always been the most expensive gemstone, and used to cost more than diamonds.',jp:'宝石の王様。ルビーは今も昔も最高級の宝石で、以前はダイヤモンドよりも高価でした。'},action:9,eff:[{type:3,num:['10']}]},//공격
 
     {idx:11,grade:2,imgCate:'itemHole',display:11,na:{ko:'루비',en:'Ruby',jp:'ルビー'},colorSet:'f00',color:'rgba(255,0,0,.6)',kg:0.2,price:1000,txt:{ko:'보석의 왕. 루비는 예나 지금이나 최고급의 보석으로 이전에는 다이아몬드보다 값이 나갔다.',en:'The king of gems. Rubies have always been the most expensive gemstone, and used to cost more than diamonds.',jp:'宝石の王様。ルビーは今も昔も最高級の宝石で、以前はダイヤモンドよりも高価でした。'},action:9,eff:[{type:3,num:['20']}]},//공격
 
-    {idx:12,grade:1,imgCate:'itemHole',display:12,na:{ko:'작은 루비',en:'Small Ruby',jp:'小さなルビー'},colorSet:'f00',color:'rgba(255,0,0,.4)',kg:0.1,price:500,txt:{ko:'보석의 왕. 루비는 예나 지금이나 최고급의 보석으로 이전에는 다이아몬드보다 값이 나갔다.',en:'The king of gems. Rubies have always been the most expensive gemstone, and used to cost more than diamonds.',jp:'宝石の王様。ルビーは今も昔も最高級の宝石で、以前はダイヤモンドよりも高価でした。'},action:9,eff:[{type:3,num:['10']}]},//공격
+    {idx:12,grade:3,imgCate:'itemHole',display:10,na:{ko:'큰 루비',en:'Large Ruby',jp:'大きなルビー'},colorSet:'f00',color:'rgba(255,0,0,.8)',kg:0.4,price:2000,txt:{ko:'보석의 왕. 루비는 예나 지금이나 최고급의 보석으로 이전에는 다이아몬드보다 값이 나갔다.',en:'The king of gems. Rubies have always been the most expensive gemstone, and used to cost more than diamonds.',jp:'宝石の王様。ルビーは今も昔も最高級の宝石で、以前はダイヤモンドよりも高価でした。'},action:9,eff:[{type:3,num:['30']}, {type:24,num:['2']}]},//공격, 불
 
-    {idx:13,grade:3,imgCate:'itemHole',display:13,na:{ko:'큰 자수정',en:'Large Amethyst',jp:'大きなアメジスト'},colorSet:'f0f',color:'rgba(255,0,255,.8)',kg:0.4,price:2000,txt:{ko:'보석 계열의 보석으로 다른 고가의 보석에 비하면 그렇게 비싼 편은 아니다.',en:'As a gemstone, it\'s not as expensive as other more expensive gems.',jp:'宝石系の宝石で、他の高価な宝石に比べるとそれほど高価な方ではありません。'},action:9,eff:[{type:5,num:['30']}]},//술법공격
+    {idx:13,grade:1,imgCate:'itemHole',display:15,na:{ko:'작은 자수정',en:'Small Amethyst',jp:'小さなアメジスト'},colorSet:'f0f',color:'rgba(255,0,255,.4)',kg:0.1,price:500,txt:{ko:'보석 계열의 보석으로 다른 고가의 보석에 비하면 그렇게 비싼 편은 아니다.',en:'As a gemstone, it\'s not as expensive as other more expensive gems.',jp:'宝石系の宝石で、他の高価な宝石に比べるとそれほど高価な方ではありません。'},action:9,eff:[{type:5,num:['10']}]},//술법공격
 
     {idx:14,grade:2,imgCate:'itemHole',display:14,na:{ko:'자수정',en:'Amethyst',jp:'アメジスト'},colorSet:'f0f',color:'rgba(255,0,255,.6)',kg:0.2,price:1000,txt:{ko:'보석 계열의 보석으로 다른 고가의 보석에 비하면 그렇게 비싼 편은 아니다.',en:'As a gemstone, it\'s not as expensive as other more expensive gems.',jp:'宝石系の宝石で、他の高価な宝石に比べるとそれほど高価な方ではありません。'},action:9,eff:[{type:5,num:['20']}]},//술법공격
 
-    {idx:15,grade:1,imgCate:'itemHole',display:15,na:{ko:'작은 자수정',en:'Small Amethyst',jp:'小さなアメジスト'},colorSet:'f0f',color:'rgba(255,0,255,.4)',kg:0.1,price:500,txt:{ko:'보석 계열의 보석으로 다른 고가의 보석에 비하면 그렇게 비싼 편은 아니다.',en:'As a gemstone, it\'s not as expensive as other more expensive gems.',jp:'宝石系の宝石で、他の高価な宝石に比べるとそれほど高価な方ではありません。'},action:9,eff:[{type:5,num:['10']}]},//술법공격
+    {idx:15,grade:3,imgCate:'itemHole',display:13,na:{ko:'큰 자수정',en:'Large Amethyst',jp:'大きなアメジスト'},colorSet:'f0f',color:'rgba(255,0,255,.8)',kg:0.4,price:2000,txt:{ko:'보석 계열의 보석으로 다른 고가의 보석에 비하면 그렇게 비싼 편은 아니다.',en:'As a gemstone, it\'s not as expensive as other more expensive gems.',jp:'宝石系の宝石で、他の高価な宝石に比べるとそれほど高価な方ではありません。'},action:9,eff:[{type:5,num:['30']}]},//술법공격
 
-    {idx:16,grade:3,imgCate:'itemHole',display:13,na:{ko:'큰 사파이어',en:'Large Sapphire',jp:'大きなサファイア'},colorSet:'00f',color:'rgba(0,0,255,.8)',kg:0.4,price:2000,txt:{ko:'루비와 마찬가지로 강옥의 일종으로, 섞인 것이 달라 색깔이 다르게 나왔을 뿐이다.',en:'Like ruby, it\'s a type of corundum, just with a different mix of colors.',jp:'ルビーと同じく鋼玉石の一種で、混ざり合うものが違い、色が違うだけです。'},action:9,eff:[{type:6,num:['30']}, {type:23,num:['2']}]},//술법방어, 물
+    {idx:16,grade:1,imgCate:'itemHole',display:15,na:{ko:'작은 사파이어',en:'Small Sapphire',jp:'小さなサファイア'},colorSet:'00f',color:'rgba(0,0,255,.4)',kg:0.1,price:500,txt:{ko:'루비와 마찬가지로 강옥의 일종으로, 섞인 것이 달라 색깔이 다르게 나왔을 뿐이다.',en:'Like ruby, it\'s a type of corundum, just with a different mix of colors.',jp:'ルビーと同じく鋼玉石の一種で、混ざり合うものが違い、色が違うだけです。'},action:9,eff:[{type:6,num:['10']}]},//술법방어
 
     {idx:17,grade:2,imgCate:'itemHole',display:14,na:{ko:'사파이어',en:'Sapphire',jp:'サファイア'},colorSet:'00f',color:'rgba(0,0,255,.6)',kg:0.2,price:1000,txt:{ko:'루비와 마찬가지로 강옥의 일종으로, 섞인 것이 달라 색깔이 다르게 나왔을 뿐이다.',en:'Like ruby, it\'s a type of corundum, just with a different mix of colors.',jp:'ルビーと同じく鋼玉石の一種で、混ざり合うものが違い、色が違うだけです。'},action:9,eff:[{type:6,num:['20']}]},//술법방어
 
-    {idx:18,grade:1,imgCate:'itemHole',display:15,na:{ko:'작은 사파이어',en:'Small Sapphire',jp:'小さなサファイア'},colorSet:'00f',color:'rgba(0,0,255,.4)',kg:0.1,price:500,txt:{ko:'루비와 마찬가지로 강옥의 일종으로, 섞인 것이 달라 색깔이 다르게 나왔을 뿐이다.',en:'Like ruby, it\'s a type of corundum, just with a different mix of colors.',jp:'ルビーと同じく鋼玉石の一種で、混ざり合うものが違い、色が違うだけです。'},action:9,eff:[{type:6,num:['10']}]},//술법방어
-    
-    {idx:19,grade:3,imgCate:'itemHole',display:13,na:{ko:'큰 진주',en:'Large Pearl',jp:'大きな真珠'},colorSet:'7f7f7f',color:'rgba(127,127,127,.8)',kg:0.4,price:2000,txt:{ko:'보석의 한 종류로서 조개에서 낮은 확률로 발견된다.',en:'It is a type of gemstone that is found in low probability in shells.',jp:'宝石の一種として貝殻から低確率で発見される。'},action:9,eff:[{type:8,num:['5']}]},//속도
+    {idx:18,grade:3,imgCate:'itemHole',display:13,na:{ko:'큰 사파이어',en:'Large Sapphire',jp:'大きなサファイア'},colorSet:'00f',color:'rgba(0,0,255,.8)',kg:0.4,price:2000,txt:{ko:'루비와 마찬가지로 강옥의 일종으로, 섞인 것이 달라 색깔이 다르게 나왔을 뿐이다.',en:'Like ruby, it\'s a type of corundum, just with a different mix of colors.',jp:'ルビーと同じく鋼玉石の一種で、混ざり合うものが違い、色が違うだけです。'},action:9,eff:[{type:6,num:['30']}, {type:23,num:['2']}]},//술법방어, 물
+
+    {idx:19,grade:1,imgCate:'itemHole',display:15,na:{ko:'작은 진주',en:'Small Pearl',jp:'小さな真珠'},colorSet:'7f7f7f',color:'rgba(0,0,0,.4)',kg:0.1,price:500,txt:{ko:'보석의 한 종류로서 조개에서 낮은 확률로 발견된다.',en:'It is a type of gemstone that is found in low probability in shells.',jp:'宝石の一種として貝殻から低確率で発見される。'},action:9,eff:[{type:8,num:['1']}]},//속도
 
     {idx:20,grade:2,imgCate:'itemHole',display:14,na:{ko:'진주',en:'Pearl',jp:'真珠'},colorSet:'7f7f7f',color:'rgba(127,127,127,.6)',kg:0.2,price:1000,txt:{ko:'보석의 한 종류로서 조개에서 낮은 확률로 발견된다.',en:'It is a type of gemstone that is found in low probability in shells.',jp:'宝石の一種として貝殻から低確率で発見される。'},action:9,eff:[{type:8,num:['3']}]},//속도
+    
+    {idx:21,grade:3,imgCate:'itemHole',display:13,na:{ko:'큰 진주',en:'Large Pearl',jp:'大きな真珠'},colorSet:'7f7f7f',color:'rgba(127,127,127,.8)',kg:0.4,price:2000,txt:{ko:'보석의 한 종류로서 조개에서 낮은 확률로 발견된다.',en:'It is a type of gemstone that is found in low probability in shells.',jp:'宝石の一種として貝殻から低確率で発見される。'},action:9,eff:[{type:8,num:['5']}]},//속도
 
-    {idx:21,grade:1,imgCate:'itemHole',display:15,na:{ko:'작은 진주',en:'Small Pearl',jp:'小さな真珠'},colorSet:'7f7f7f',color:'rgba(0,0,0,.4)',kg:0.1,price:500,txt:{ko:'보석의 한 종류로서 조개에서 낮은 확률로 발견된다.',en:'It is a type of gemstone that is found in low probability in shells.',jp:'宝石の一種として貝殻から低確率で発見される。'},action:9,eff:[{type:8,num:['1']}]},//속도
+    {idx:22,grade:1,imgCate:'itemHole',display:15,na:{ko:'작은 블랙오팔',en:'Small Black Opal',jp:'小さなブラックオパール'},colorSet:'000',color:'rgba(0,0,0,.4)',kg:0.1,price:500,txt:{ko:'검은색을 띈 보석으로 고대 로마인은 오팔을 힘의 상징으로 여겼으나, 이후 불길한 보석이라고 여겨졌다.',en:'A black gemstone, opal was considered a symbol of power by the ancient Romans, but was later considered ominous.',jp:'黒色を帯びた宝石で、古代ローマ人はオパールを力の象徴と見なしたが、その後不吉な宝石とされるようになった。'},action:22,eff:[{type:1,num:['5']}]},//행동SP
 
-    {idx:22,grade:3,imgCate:'itemHole',display:13,na:{ko:'큰 블랙오팔',en:'Large Black Opal',jp:'大きなブラックオパール'},colorSet:'000',color:'rgba(0,0,0,.8)',kg:0.4,price:2000,txt:{ko:'검은색을 띈 보석으로 고대 로마인은 오팔을 힘의 상징으로 여겼으나, 이후 불길한 보석이라고 여겨졌다.',en:'A black gemstone, opal was considered a symbol of power by the ancient Romans, but was later considered ominous.',jp:'黒色を帯びた宝石で、古代ローマ人はオパールを力の象徴と見なしたが、その後不吉な宝石とされるようになった。'},action:9,eff:[{type:22,num:['5']}]},//어둠
+    {idx:23,grade:2,imgCate:'itemHole',display:14,na:{ko:'블랙오팔',en:'Black Opal',jp:'ブラックオパール'},colorSet:'000',color:'rgba(0,0,0,.6)',kg:0.2,price:1000,txt:{ko:'검은색을 띈 보석으로 고대 로마인은 오팔을 힘의 상징으로 여겼으나, 이후 불길한 보석이라고 여겨졌다.',en:'A black gemstone, opal was considered a symbol of power by the ancient Romans, but was later considered ominous.',jp:'黒色を帯びた宝石で、古代ローマ人はオパールを力の象徴と見なしたが、その後不吉な宝石とされるようになった。'},action:9,eff:[{type:1,num:['10']}]},//행동SP
 
-    {idx:23,grade:2,imgCate:'itemHole',display:14,na:{ko:'블랙오팔',en:'Black Opal',jp:'ブラックオパール'},colorSet:'000',color:'rgba(0,0,0,.6)',kg:0.2,price:1000,txt:{ko:'검은색을 띈 보석으로 고대 로마인은 오팔을 힘의 상징으로 여겼으나, 이후 불길한 보석이라고 여겨졌다.',en:'A black gemstone, opal was considered a symbol of power by the ancient Romans, but was later considered ominous.',jp:'黒色を帯びた宝石で、古代ローマ人はオパールを力の象徴と見なしたが、その後不吉な宝石とされるようになった。'},action:9,eff:[{type:22,num:['3']}]},//어둠
-
-    {idx:24,grade:1,imgCate:'itemHole',display:15,na:{ko:'작은 블랙오팔',en:'Small Black Opal',jp:'小さなブラックオパール'},colorSet:'000',color:'rgba(0,0,0,.4)',kg:0.1,price:500,txt:{ko:'검은색을 띈 보석으로 고대 로마인은 오팔을 힘의 상징으로 여겼으나, 이후 불길한 보석이라고 여겨졌다.',en:'A black gemstone, opal was considered a symbol of power by the ancient Romans, but was later considered ominous.',jp:'黒色を帯びた宝石で、古代ローマ人はオパールを力の象徴と見なしたが、その後不吉な宝石とされるようになった。'},action:22,eff:[{type:8,num:['1']}]},//어둠
+    {idx:24,grade:3,imgCate:'itemHole',display:13,na:{ko:'큰 블랙오팔',en:'Large Black Opal',jp:'大きなブラックオパール'},colorSet:'000',color:'rgba(0,0,0,.8)',kg:0.4,price:2000,txt:{ko:'검은색을 띈 보석으로 고대 로마인은 오팔을 힘의 상징으로 여겼으나, 이후 불길한 보석이라고 여겨졌다.',en:'A black gemstone, opal was considered a symbol of power by the ancient Romans, but was later considered ominous.',jp:'黒色を帯びた宝石で、古代ローマ人はオパールを力の象徴と見なしたが、その後不吉な宝石とされるようになった。'},action:9,eff:[{type:1,num:['15']}]},//행동SP
 
     '','','','','','',
     '','','','','','','','','','',
@@ -495,7 +672,7 @@ export const items = {
   material:[//재료
     {idx:0,grade:1,imgCate:'itemMaterial',display:0,na:{ko:'식량',en:'Food',jp:'食料'},kg:10,price:100,action:'',invenUse:false,txt:{ko:'항해 할때 먹는 식량.',en:'Food to eat when sailing.',jp:'航海時に食べる食料。'},eff:['?']},
     {idx:1,grade:1,imgCate:'itemMaterial',display:1,na:{ko:'물',en:'Water',jp:'水'},kg:10,price:100,action:'',invenUse:false,txt:{ko:'항해 할때 마시는 물.',en:'Water to drink when sailing.',jp:'航海時に飲む水。'},eff:['?']},
-    {idx:2,grade:1,imgCate:'itemMaterial',display:2,na:{ko:'보리',en:'Barley',jp:'大麦'},kg:10,price:500,action:'',invenUse:false,txt:{ko:'보리는 밀보다 값이 싸서 경제적이고 가축의 사료로 사용되기도 한다.',en:'Barley is cheaper than wheat, making it economical and often used as feed for livestock.',jp:'大麦は小麦より安いので経済的で、家畜の飼料として使われることもある。'},eff:['?']},
+    {idx:2,grade:1,country:8,imgCate:'itemMaterial',display:2,na:{ko:'보리',en:'Barley',jp:'大麦'},kg:10,price:500,action:'',invenUse:false,txt:{ko:'보리는 밀보다 값이 싸서 경제적이고 가축의 사료로 사용되기도 한다.',en:'Barley is cheaper than wheat, making it economical and often used as feed for livestock.',jp:'大麦は小麦より安いので経済的で、家畜の飼料として使われることもある。'},eff:['?']},
     {idx:3,grade:1,imgCate:'itemMaterial',display:3,na:{ko:'쌀',en:'Rice',jp:'お米'},kg:10,price:1000,action:'',invenUse:false,txt:{ko:'벼의 씨앗에서 껍질을 벗겨 낸 식량이다.',en:'It is a food product that is hulled from the seeds of rice.',jp:'稲の種から籾殻を取り除いた食料である。'},eff:['?']},
     {idx:4,grade:1,imgCate:'itemMaterial',display:4,na:{ko:'밀가루',en:'Wheat Flour',jp:'小麦粉'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'밀의 배유부분을 가루로 만든 것이다.',en:'The endosperm of wheat is ground into flour.',jp:'小麦の胚乳部分を粉末にしたもの。'},eff:['?']},
     {idx:5,grade:1,imgCate:'itemMaterial',display:5,na:{ko:'커피',en:'Coffee Bean',jp:'コーヒー'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'커피나무의 씨앗이며 음용 커피의 재료이다.',en:'The seed of the coffee plant and the ingredient in drinking coffee.',jp:'コーヒーの木の種子であり、飲用コーヒーの材料である。'},eff:['?']},
@@ -512,44 +689,45 @@ export const items = {
     {idx:16,grade:1,imgCate:'itemMaterial',display:16,na:{ko:'아보카도',en:'Avocado',jp:'アボカド'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'악어의 등처럼 울퉁불퉁한 껍질 때문에 악어배라 불리는 과일.',en:'A fruit called an alligator pear because of its bumpy skin, like an alligator\'s back.',jp:'ワニの背中のようにゴツゴツした皮があることからワニ梨と呼ばれるフルーツ。'},eff:['?']},
     {idx:17,grade:1,imgCate:'itemMaterial',display:17,na:{ko:'코코넛',en:'Coconut',jp:'ココナッツ'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'연한 녹색의 열대과일로서 즙이 많아 음료로는 과일.',en:'A light green, tropical, succulent fruit used as a beverage.',jp:'薄緑色のトロピカルフルーツで果汁が多く、飲み物としてはフルーツ。'},eff:['?']},
     {idx:18,grade:1,imgCate:'itemMaterial',display:18,na:{ko:'두리안',en:'Durian',jp:'ドリアン'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'천국의 맛과 지옥의 냄새를 모두 가지고 있는 과일.',en:'A fruit that tastes like heaven and smells like hell.',jp:'天国の味と地獄の匂いの両方を持つ果物。'},eff:['?']},
-    {idx:19,grade:1,imgCate:'itemMaterial',display:19,na:{ko:'사탕수수',en:'Sugar Cane',jp:'サトウキビ'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'설탕의 원료로 높이 2∼6m까지 열대지방에서 자란다.',en:'A source of sugar, it grows in the tropics up to 2-6 meters tall.',jp:'砂糖の原料として高さ2～6mまで熱帯地方で育つ。'},eff:['?']},
-    {idx:20,grade:1,imgCate:'itemMaterial',display:20,na:{ko:'완두콩',en:'Garden Bean',jp:'エンドウ豆'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'초록 빛깔과 귀여운 모양으로 사랑받는 식이섬유소가 풍부한 콩 중의 왕이다.',en:'Loved for its green color and cute shape, it\'s the king of fiber-rich beans.',jp:'緑色と可愛らしい形で愛されている食物繊維が豊富な豆の王様。'},eff:['?']},
-    {idx:21,grade:1,imgCate:'itemMaterial',display:21,na:{ko:'강낭콩',en:'Kidney Bean',jp:'インゲン豆'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'단백질뿐 아니라 다양한 무기질과 비타민과 같은 영양분을 고루 함유한 붉은빛을 띠는 콩이다.',en:'It\'s a reddish-colored bean that\'s packed with nutrients like protein, as well as a variety of minerals and vitamins.',jp:'タンパク質だけでなく、様々なミネラルやビタミンなどの栄養素をまんべんなく含む赤みを帯びた豆である。'},eff:['?']},
-    {idx:22,grade:1,imgCate:'itemMaterial',display:22,na:{ko:'팥',en:'Red Bean',jp:'小豆'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'붉은색을 띠고 사포닌이 풍부하고 곡류에 부족한 라이신과 트립토판이 함유되어 콩의 한종류이다.',en:'It is a type of bean that is red in color, rich in saponins, and contains lysine and tryptophan, which are lacking in grains.',jp:'赤みを帯び、サポニンが豊富で、穀物に不足しているリジンとトリプトファンを含む豆の一種である。'},eff:['?']},
-    {idx:23,grade:1,imgCate:'itemMaterial',display:23,na:{ko:'수수',en:'Sorghum',jp:'ソルガム'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'흰색·노란색·갈색·붉은 갈색등 다양한 색을 가지고 있는 작은 알갱이로 구성된 식용가능한 식물이다.',en:'It is an edible plant that consists of small kernels that come in a variety of colors, including white, yellow, brown, and reddish brown.',jp:'白・黄・茶色・赤褐色など様々な色を持つ小さな粒で構成された食用可能な植物です。'},eff:['?']},
-    {idx:24,grade:1,imgCate:'itemMaterial',display:24,na:{ko:'치즈',en:'Cheese',jp:'チーズ'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'우유 속에 있는 카세인(casein)을 뽑아 응고·발효시킨 식품이다.',en:'The casein in milk is extracted, coagulated, and fermented.',jp:'牛乳の中にあるカゼイン（カゼイン）を抽出して凝固・発酵させた食品です。'},eff:['?']},
-    {idx:25,grade:1,imgCate:'itemMaterial',display:25,na:{ko:'위스키',en:'Whisky',jp:'ウイスキー'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'엿기름 또는 곡류 따위를 효모로 알코올 발효하여 증류하고 오크통에 저장하여 숙성한 술이다.',en:'It is an alcoholic fermentation of malt or grain with yeast, distilled, and aged in oak barrels.',jp:'麦芽や穀物などを酵母でアルコール発酵させて蒸留し、オーク樽に貯蔵して熟成させたお酒。'},eff:['?']},
-    {idx:26,grade:1,imgCate:'itemMaterial',display:26,na:{ko:'데낄라',en:'Tequila',jp:'テキーラ'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'멕시코 특산의 다육식물인 용설란(龍舌蘭)의 수액을 채취해서 증류한 것이 테킬라이다.',en:'Tequila is distilled from the sap of the agave plant, a succulent native to Mexico.',jp:'メキシコ特産の多肉植物であるリュウゼツランの樹液を採取して蒸留したものがテキーラである。'},eff:['?']},
-    {idx:27,grade:1,imgCate:'itemMaterial',display:27,na:{ko:'와인',en:'Wine',jp:'ワイン'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'포도를 발효시켜 제조한 알코올 음료이다.',en:'An alcoholic beverage made by fermenting grapes.',jp:'ブドウを発酵させて製造したアルコール飲料です。'},eff:['?']},
-    {idx:28,grade:1,imgCate:'itemMaterial',display:28,na:{ko:'럼',en:'Rum',jp:'ラム酒'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'당밀이나 사탕수수의 즙을 발효시켜서 증류한 술이며 화이트 럼과 다크 럼이 있다.',en:'Distilled from the fermented juice of molasses or sugar cane, it comes in both white and dark rums.',jp:'糖蜜やサトウキビの果汁を発酵させて蒸留したお酒で、ホワイトラムとダークラムがある。'},eff:['?']},
-    {idx:29,grade:1,imgCate:'itemMaterial',display:29,na:{ko:'산호',en:'Coral',jp:'サンゴ'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'겉은 무르고 속은 단단한 석회질로 된 나뭇가지 모양의 산호. 모양과 색깔이 아름다워 보석으로 취급했다.',en:'A twig-like coral with a soft exterior and a hard calcareous interior. They were treated as jewelry because of their beautiful shape and color.',jp:'外側は柔らかく、内側は硬い石灰質の小枝状のサンゴ。形や色が美しく、宝石として扱われた。'},eff:['?']},
-    {idx:30,grade:1,imgCate:'itemMaterial',display:30,na:{ko:'동광석',en:'Copper Ore',jp:'銅鉱石'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'구리를 함유한 광석의 총칭으로서, 동광 혹은 동광석이라고도 부른다.',en:'A generic term for ores containing copper, also known as copper ore or cassiterite.',jp:'銅を含む鉱石の総称で、銅鉱または銅鉱石とも呼ばれる。'},eff:['?']},
-    {idx:31,grade:1,imgCate:'itemMaterial',display:31,na:{ko:'석탄',en:'Coal',jp:'石炭'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'땅속에서 얻은 숯. 식물이 땅에 묻힌 다음, 열과 압력을 받으면서 만들어진 고체 상태의 물질이다.',en:'Charcoal from the ground. It is a solid substance formed when plants are buried in the ground and then subjected to heat and pressure.',jp:'地中から得られる木炭。植物が地中に埋められた後、熱と圧力を受けて作られた固体状態の物質である。'},eff:['?']},
-    {idx:32,grade:1,imgCate:'itemMaterial',display:32,na:{ko:'은광석',en:'Silver Ore',jp:'銀鉱石'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'은을 함유한 광석을 총칭한다.',en:'Refers to ores that contain silver.',jp:'銀を含む鉱石の総称。'},eff:['?']},
-    {idx:33,grade:1,imgCate:'itemMaterial',display:33,na:{ko:'금광석',en:'Gold Ore',jp:'金鉱石'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'금을 함유한 광석의 총칭이다.',en:'A generic term for gold-bearing ores.',jp:'金を含む鉱石の総称である。'},eff:['?']},
-    {idx:34,grade:1,imgCate:'itemMaterial',display:34,na:{ko:'주석',en:'Cassiterite',jp:'錫石'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'정방정계 결정형을 가지는 산화 주석 광물이다.',en:'A tin oxide mineral with a tetragonal crystal form.',jp:'正方晶系結晶形を持つ酸化スズ鉱物である。'},eff:['?']},
-    {idx:35,grade:1,imgCate:'itemMaterial',display:35,na:{ko:'월계수잎',en:'Bay Leaf',jp:'月桂樹の葉'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'녹색을 띠며, 말린 잎의 경우에 강한 향과 쓴맛이 난다.',en:'It is green in color and has a strong aroma and bitter taste in dried leaves.',jp:'緑色を帯び、乾燥した葉の場合、強い香りと苦味がある。'},eff:['?']},
-    {idx:36,grade:1,imgCate:'itemMaterial',display:36,na:{ko:'벌꿀',en:'Honey',jp:'ハチミツ'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'꿀벌이 꽃의 밀선에서 빨아내어 축적한 감미료(당분)이다.',en:'It is a sweetener (sugar) that bees have accumulated by sucking it out of the stigma of the flower.',jp:'ミツバチが花の蜜線から吸い取って蓄積した甘味料（糖分）である。'},eff:['?']},
-    {idx:37,grade:1,imgCate:'itemMaterial',display:37,na:{ko:'올리브',en:'Olive',jp:'オリーブ'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'열매를 생으로 혹은 절여 먹거나 압착해서 기름으로 만든다.',en:'The fruit is eaten raw, pickled, or pressed into oil.',jp:'果実を生で食べたり、漬けたり、搾油して油にする。'},eff:['?']},
-    {idx:38,grade:1,imgCate:'itemMaterial',display:38,na:{ko:'고추',en:'Chili pepper',jp:'唐辛子'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'익어 가면서 점점 빨갛게 되며 껍질과 씨는 캡사이신을 함유하고 있어 매운 맛이 난다.',en:'As they ripen, they become increasingly red, and the skin and seeds contain capsaicin, which gives them a spicy flavor.',jp:'熟すにつれてどんどん赤くなり、皮と種はカプサイシンを含んでいるので辛味があります。'},eff:['?']},
-    {idx:39,grade:1,imgCate:'itemMaterial',display:39,na:{ko:'맥주',en:'Beer',jp:'ビール'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'보리를 가공한 맥아(Malt)를 발효시키고 이를 주재료로 향신료인 홉(hop)을 첨가하여 맛을 낸 술이다.',en:'Malt, a processed barley malt, is fermented and flavored with hops, a spice.',jp:'大麦を加工した麦芽(Malt)を発酵させ、これを主原料に香辛料であるホップ(hop)を加えて味をつけたお酒です。'},eff:['?']},
-    {idx:40,grade:1,imgCate:'itemMaterial',display:40,na:{ko:'상아',en:'Ivory',jp:'象牙'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'조각 및 장식품 재료의 일종으로, 넓게는 예술적 용도로 쓰기에 충분할 정도로 크게 자란 포유류 치아의 총칭이다.',en:'A type of carving and ornamental material, broadly speaking, any mammalian tooth that has grown large enough for artistic use.',jp:'彫刻や装飾品の材料の一種で、広くは芸術的用途に使えるほど大きく成長した哺乳類の歯の総称である。'},eff:['?']},
-    {idx:41,grade:1,imgCate:'itemMaterial',display:41,na:{ko:'진주',en:'Pearl',jp:'真珠'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'조개 내부로 이물질이 유입되면 격리시키고자 탄산칼슘으로 감싸면서 생기는 것으로 장신구 및 악세사리를 만들때 쓰인다.',en:'It\'s used to make jewelry and accessories by wrapping the shells in calcium carbonate to isolate any foreign matter that gets inside.',jp:'貝殻の内部に異物が侵入すると隔離しようと炭酸カルシウムで包むことで生じるもので、装身具やアクセサリーを作るときに使われる。'},eff:['?']},
-    {idx:42,grade:1,imgCate:'itemMaterial',display:42,na:{ko:'공작석',en:'Malachite',jp:'マラカイト'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'구리가 양이온으로 들어가고, 수화 상태인 탄산염 광물로 장신구 및 악세사리를 만들때 쓰인다.',en:'A hydrated carbonate mineral that contains copper as a cation and is used to make jewelry and accessories.',jp:'銅が陽イオンとして入り、水和状態の炭酸塩鉱物で装身具やアクセサリーを作る時に使われます。'},eff:['?']},
-    {idx:43,grade:1,imgCate:'itemMaterial',display:43,na:{ko:'호박석',en:'Amber',jp:'琥珀石'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'보통 송진(수액이라고도 함)이 굳어서 100만 년 정도 지나면 호박이 되고 장신구 및 악세사리를 만들때 쓰인다.',en:'Usually, the rosin (also known as sap) hardens into a pumpkin after a million years or so and is used to make jewelry and accessories.',jp:'通常、松脂（樹液とも呼ばれる）が固まって100万年ほど経つとカボチャになり、装身具やアクセサリーを作るときに使われます。'},eff:['?']},
-    {idx:44,grade:1,imgCate:'itemMaterial',display:44,na:{ko:'유리공예품',en:'Glass Crafts',jp:'ガラス工芸品'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'유리를 가공해서 만든 물건이나 장식품이다.',en:'An object or ornament made from processed glass.',jp:'ガラスを加工して作ったものや装飾品です。'},eff:['?']},
-    {idx:45,grade:1,imgCate:'itemMaterial',display:45,na:{ko:'도자기공예품',en:'Pottery Crafts',jp:'陶磁器工芸品'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'토기, 도자기, 석기 등을 만드는 물건이나 장식품이다.',en:'An object or decoration for making earthenware, pottery, stoneware, etc.',jp:'土器、陶器、石器などを作るものや装飾品である。'},eff:['?']},
-    {idx:46,grade:1,imgCate:'itemMaterial',display:46,na:{ko:'미술품',en:'Work of Art',jp:'美術品'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'공간적 또는 시각적 아름다움을 표현하여 만들어진 작품이다.',en:'An artwork created to express spatial or visual beauty.',jp:'空間的または視覚的な美しさを表現して作られた作品である。'},eff:['?']},
-    {idx:47,grade:1,imgCate:'itemMaterial',display:47,na:{ko:'금주괴',en:'Gold Ingot',jp:'金インゴット'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'금을 가공하기 좋게 주물로 뜬 사각모양의 주괴이다.',en:'A square-shaped ingot that has been cast to make it easier to work with gold.',jp:'金を加工しやすいように鋳物で浮かせた四角い形のインゴットである。'},eff:['?']},
-    {idx:48,grade:1,imgCate:'itemMaterial',display:48,na:{ko:'은주괴',en:'Silver Ingot',jp:'銀インゴット'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'은을 가공하기 좋게 주물로 뜬 사각모양의 주괴이다.',en:'A square-shaped ingot cast from silver to make it easier to work with.',jp:'銀を加工しやすいように鋳物で浮かせた四角い形のインゴットである。'},eff:['?']},
-    {idx:49,grade:1,imgCate:'itemMaterial',display:49,na:{ko:'동주괴',en:'Copper Ingot',jp:'銅インゴット'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'동을 가공하기 좋게 주물로 뜬 사각모양의 주괴이다.',en:'A square-shaped ingot that has been cast to make it easier to work copper.',jp:'銅を加工しやすいように鋳物で浮かせた正方形の鋳塊である。'},eff:['?']},
-    {idx:50,grade:1,imgCate:'itemMaterial',display:50,na:{ko:'청동주괴',en:'Bronze Ingot',jp:'ブロンズインゴット'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'청동을 가공하기 좋게 주물로 뜬 사각모양의 주괴이다.',en:'A square-shaped ingot cast in bronze to make it easier to work with.',jp:'青銅を加工しやすいように鋳物で浮かせた正方形の鋳塊である。'},eff:['?']},
-    {idx:51,grade:1,imgCate:'itemMaterial',display:51,na:{ko:'주석주괴',en:'Tin Ingot',jp:'錫インゴット'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'주석을 가공하기 좋게 주물로 뜬 사각모양의 주괴이다.',en:'A square-shaped ingot that has been cast to make tin easier to work with.',jp:'錫を加工しやすいように鋳物で浮かせた正方形の鋳塊である。'},eff:['?']},
-    {idx:52,grade:1,imgCate:'itemMaterial',display:52,na:{ko:'대리석',en:'Marble',jp:'大理石'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'탄산염 광물로 이루어진 변성암으로 주로 저각상이나 건축재료로 쓰인다.',en:'It is a metamorphic rock composed of carbonate minerals and is often used for low-angle sculptures and building materials.',jp:'炭酸塩鉱物からなる変成岩で、主に低角相や建築材料として使われる。'},eff:['?']},
-    {idx:53,grade:1,imgCate:'itemMaterial',display:53,na:{ko:'목재',en:'Wood',jp:'木材'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'나무를 이용한 건축재료이다.',en:'Wood is a building material.',jp:'木を利用した建築材料である。'},eff:['?']},
-    {idx:54,grade:1,imgCate:'itemMaterial',display:54,na:{ko:'석재',en:'Stone',jp:'石材'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'돌을 이용한 건축재료이다.',en:'Stone is a building material.',jp:'石を利用した建築材料である。'},eff:['?']},
-    {idx:55,grade:1,imgCate:'itemMaterial',display:55,na:{ko:'융단',en:'Carpet',jp:'カーペット'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'양털, 목화 혹은 비단 등으로 만든 직물로 바닥에 깔거나 벽에 거는 용도로 사용하는 천을 말한다.',en:'A fabric made of wool, cotton, or silk that is used to cover floors or hang on walls.',jp:'羊毛や綿、あるいは絹などで作られた生地で、床に敷いたり、壁に掛けたりする目的で使用する布をいう。'},eff:['?']},
-    {idx:56,grade:1,imgCate:'itemMaterial',display:56,na:{ko:'민트',en:'Mint',jp:'ミント'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'박하과 식물이고 식용, 화장품등에 쓰인다.',en:'It is a member of the mint family and is used for food, cosmetics, and more.',jp:'ミント科の植物で、食用、化粧品などに使われます。'},eff:['?']},
+    {idx:19,grade:1,imgCate:'itemMaterial',display:19,na:{ko:'완두콩',en:'Garden Bean',jp:'エンドウ豆'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'초록 빛깔과 귀여운 모양으로 사랑받는 식이섬유소가 풍부한 콩 중의 왕이다.',en:'Loved for its green color and cute shape, it\'s the king of fiber-rich beans.',jp:'緑色と可愛らしい形で愛されている食物繊維が豊富な豆の王様。'},eff:['?']},
+    {idx:20,grade:1,imgCate:'itemMaterial',display:20,na:{ko:'강낭콩',en:'Kidney Bean',jp:'インゲン豆'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'단백질뿐 아니라 다양한 무기질과 비타민과 같은 영양분을 고루 함유한 붉은빛을 띠는 콩이다.',en:'It\'s a reddish-colored bean that\'s packed with nutrients like protein, as well as a variety of minerals and vitamins.',jp:'タンパク質だけでなく、様々なミネラルやビタミンなどの栄養素をまんべんなく含む赤みを帯びた豆である。'},eff:['?']},
+    {idx:21,grade:1,imgCate:'itemMaterial',display:21,na:{ko:'팥',en:'Red Bean',jp:'小豆'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'붉은색을 띠고 사포닌이 풍부하고 곡류에 부족한 라이신과 트립토판이 함유되어 콩의 한종류이다.',en:'It is a type of bean that is red in color, rich in saponins, and contains lysine and tryptophan, which are lacking in grains.',jp:'赤みを帯び、サポニンが豊富で、穀物に不足しているリジンとトリプトファンを含む豆の一種である。'},eff:['?']},
+    {idx:22,grade:1,imgCate:'itemMaterial',display:22,na:{ko:'수수',en:'Sorghum',jp:'ソルガム'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'흰색·노란색·갈색·붉은 갈색등 다양한 색을 가지고 있는 작은 알갱이로 구성된 식용가능한 식물이다.',en:'It is an edible plant that consists of small kernels that come in a variety of colors, including white, yellow, brown, and reddish brown.',jp:'白・黄・茶色・赤褐色など様々な色を持つ小さな粒で構成された食用可能な植物です。'},eff:['?']},
+    {idx:23,grade:1,imgCate:'itemMaterial',display:23,na:{ko:'치즈',en:'Cheese',jp:'チーズ'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'우유 속에 있는 카세인(casein)을 뽑아 응고·발효시킨 식품이다.',en:'The casein in milk is extracted, coagulated, and fermented.',jp:'牛乳の中にあるカゼイン（カゼイン）を抽出して凝固・発酵させた食品です。'},eff:['?']},
+    {idx:24,grade:1,imgCate:'itemMaterial',display:24,na:{ko:'위스키',en:'Whisky',jp:'ウイスキー'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'엿기름 또는 곡류 따위를 효모로 알코올 발효하여 증류하고 오크통에 저장하여 숙성한 술이다.',en:'It is an alcoholic fermentation of malt or grain with yeast, distilled, and aged in oak barrels.',jp:'麦芽や穀物などを酵母でアルコール発酵させて蒸留し、オーク樽に貯蔵して熟成させたお酒。'},eff:['?']},
+    {idx:25,grade:1,imgCate:'itemMaterial',display:25,na:{ko:'데낄라',en:'Tequila',jp:'テキーラ'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'멕시코 특산의 다육식물인 용설란(龍舌蘭)의 수액을 채취해서 증류한 것이 테킬라이다.',en:'Tequila is distilled from the sap of the agave plant, a succulent native to Mexico.',jp:'メキシコ特産の多肉植物であるリュウゼツランの樹液を採取して蒸留したものがテキーラである。'},eff:['?']},
+    {idx:26,grade:1,imgCate:'itemMaterial',display:26,na:{ko:'와인',en:'Wine',jp:'ワイン'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'포도를 발효시켜 제조한 알코올 음료이다.',en:'An alcoholic beverage made by fermenting grapes.',jp:'ブドウを発酵させて製造したアルコール飲料です。'},eff:['?']},
+    {idx:27,grade:1,imgCate:'itemMaterial',display:27,na:{ko:'럼',en:'Rum',jp:'ラム酒'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'당밀이나 사탕수수의 즙을 발효시켜서 증류한 술이며 화이트 럼과 다크 럼이 있다.',en:'Distilled from the fermented juice of molasses or sugar cane, it comes in both white and dark rums.',jp:'糖蜜やサトウキビの果汁を発酵させて蒸留したお酒で、ホワイトラムとダークラムがある。'},eff:['?']},
+    {idx:28,grade:1,imgCate:'itemMaterial',display:28,na:{ko:'산호',en:'Coral',jp:'サンゴ'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'겉은 무르고 속은 단단한 석회질로 된 나뭇가지 모양의 산호. 모양과 색깔이 아름다워 보석으로 취급했다.',en:'A twig-like coral with a soft exterior and a hard calcareous interior. They were treated as jewelry because of their beautiful shape and color.',jp:'外側は柔らかく、内側は硬い石灰質の小枝状のサンゴ。形や色が美しく、宝石として扱われた。'},eff:['?']},
+    {idx:29,grade:1,imgCate:'itemMaterial',display:29,na:{ko:'동광석',en:'Copper Ore',jp:'銅鉱石'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'구리를 함유한 광석의 총칭으로서, 동광 혹은 동광석이라고도 부른다.',en:'A generic term for ores containing copper, also known as copper ore or cassiterite.',jp:'銅を含む鉱石の総称で、銅鉱または銅鉱石とも呼ばれる。'},eff:['?']},
+    {idx:30,grade:1,imgCate:'itemMaterial',display:30,na:{ko:'석탄',en:'Coal',jp:'石炭'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'땅속에서 얻은 숯. 식물이 땅에 묻힌 다음, 열과 압력을 받으면서 만들어진 고체 상태의 물질이다.',en:'Charcoal from the ground. It is a solid substance formed when plants are buried in the ground and then subjected to heat and pressure.',jp:'地中から得られる木炭。植物が地中に埋められた後、熱と圧力を受けて作られた固体状態の物質である。'},eff:['?']},
+    {idx:31,grade:1,imgCate:'itemMaterial',display:31,na:{ko:'은광석',en:'Silver Ore',jp:'銀鉱石'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'은을 함유한 광석을 총칭한다.',en:'Refers to ores that contain silver.',jp:'銀を含む鉱石の総称。'},eff:['?']},
+    {idx:32,grade:1,imgCate:'itemMaterial',display:32,na:{ko:'금광석',en:'Gold Ore',jp:'金鉱石'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'금을 함유한 광석의 총칭이다.',en:'A generic term for gold-bearing ores.',jp:'金を含む鉱石の総称である。'},eff:['?']},
+    {idx:33,grade:1,imgCate:'itemMaterial',display:33,na:{ko:'주석',en:'Cassiterite',jp:'錫石'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'정방정계 결정형을 가지는 산화 주석 광물이다.',en:'A tin oxide mineral with a tetragonal crystal form.',jp:'正方晶系結晶形を持つ酸化スズ鉱物である。'},eff:['?']},
+    {idx:34,grade:1,imgCate:'itemMaterial',display:34,na:{ko:'월계수잎',en:'Bay Leaf',jp:'月桂樹の葉'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'녹색을 띠며, 말린 잎의 경우에 강한 향과 쓴맛이 난다.',en:'It is green in color and has a strong aroma and bitter taste in dried leaves.',jp:'緑色を帯び、乾燥した葉の場合、強い香りと苦味がある。'},eff:['?']},
+    {idx:35,grade:1,imgCate:'itemMaterial',display:35,na:{ko:'벌꿀',en:'Honey',jp:'ハチミツ'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'꿀벌이 꽃의 밀선에서 빨아내어 축적한 감미료(당분)이다.',en:'It is a sweetener (sugar) that bees have accumulated by sucking it out of the stigma of the flower.',jp:'ミツバチが花の蜜線から吸い取って蓄積した甘味料（糖分）である。'},eff:['?']},
+    {idx:36,grade:1,imgCate:'itemMaterial',display:36,na:{ko:'올리브',en:'Olive',jp:'オリーブ'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'열매를 생으로 혹은 절여 먹거나 압착해서 기름으로 만든다.',en:'The fruit is eaten raw, pickled, or pressed into oil.',jp:'果実を生で食べたり、漬けたり、搾油して油にする。'},eff:['?']},
+    {idx:37,grade:1,imgCate:'itemMaterial',display:37,na:{ko:'고추',en:'Chili pepper',jp:'唐辛子'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'익어 가면서 점점 빨갛게 되며 껍질과 씨는 캡사이신을 함유하고 있어 매운 맛이 난다.',en:'As they ripen, they become increasingly red, and the skin and seeds contain capsaicin, which gives them a spicy flavor.',jp:'熟すにつれてどんどん赤くなり、皮と種はカプサイシンを含んでいるので辛味があります。'},eff:['?']},
+    {idx:38,grade:1,imgCate:'itemMaterial',display:38,na:{ko:'맥주',en:'Beer',jp:'ビール'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'보리를 가공한 맥아(Malt)를 발효시키고 이를 주재료로 향신료인 홉(hop)을 첨가하여 맛을 낸 술이다.',en:'Malt, a processed barley malt, is fermented and flavored with hops, a spice.',jp:'大麦を加工した麦芽(Malt)を発酵させ、これを主原料に香辛料であるホップ(hop)を加えて味をつけたお酒です。'},eff:['?']},
+    {idx:39,grade:1,imgCate:'itemMaterial',display:39,na:{ko:'상아',en:'Ivory',jp:'象牙'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'조각 및 장식품 재료의 일종으로, 넓게는 예술적 용도로 쓰기에 충분할 정도로 크게 자란 포유류 치아의 총칭이다.',en:'A type of carving and ornamental material, broadly speaking, any mammalian tooth that has grown large enough for artistic use.',jp:'彫刻や装飾品の材料の一種で、広くは芸術的用途に使えるほど大きく成長した哺乳類の歯の総称である。'},eff:['?']},
+    {idx:40,grade:1,imgCate:'itemMaterial',display:40,na:{ko:'진주',en:'Pearl',jp:'真珠'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'조개 내부로 이물질이 유입되면 격리시키고자 탄산칼슘으로 감싸면서 생기는 것으로 장신구 및 악세사리를 만들때 쓰인다.',en:'It\'s used to make jewelry and accessories by wrapping the shells in calcium carbonate to isolate any foreign matter that gets inside.',jp:'貝殻の内部に異物が侵入すると隔離しようと炭酸カルシウムで包むことで生じるもので、装身具やアクセサリーを作るときに使われる。'},eff:['?']},
+    {idx:41,grade:1,imgCate:'itemMaterial',display:41,na:{ko:'공작석',en:'Malachite',jp:'マラカイト'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'구리가 양이온으로 들어가고, 수화 상태인 탄산염 광물로 장신구 및 악세사리를 만들때 쓰인다.',en:'A hydrated carbonate mineral that contains copper as a cation and is used to make jewelry and accessories.',jp:'銅が陽イオンとして入り、水和状態の炭酸塩鉱物で装身具やアクセサリーを作る時に使われます。'},eff:['?']},
+    {idx:42,grade:1,imgCate:'itemMaterial',display:42,na:{ko:'호박석',en:'Amber',jp:'琥珀石'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'보통 송진(수액이라고도 함)이 굳어서 100만 년 정도 지나면 호박이 되고 장신구 및 악세사리를 만들때 쓰인다.',en:'Usually, the rosin (also known as sap) hardens into a pumpkin after a million years or so and is used to make jewelry and accessories.',jp:'通常、松脂（樹液とも呼ばれる）が固まって100万年ほど経つとカボチャになり、装身具やアクセサリーを作るときに使われます。'},eff:['?']},
+    {idx:43,grade:1,imgCate:'itemMaterial',display:43,na:{ko:'유리공예품',en:'Glass Crafts',jp:'ガラス工芸品'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'유리를 가공해서 만든 물건이나 장식품이다.',en:'An object or ornament made from processed glass.',jp:'ガラスを加工して作ったものや装飾品です。'},eff:['?']},
+    {idx:44,grade:1,imgCate:'itemMaterial',display:44,na:{ko:'도자기공예품',en:'Pottery Crafts',jp:'陶磁器工芸品'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'토기, 도자기, 석기 등을 만드는 물건이나 장식품이다.',en:'An object or decoration for making earthenware, pottery, stoneware, etc.',jp:'土器、陶器、石器などを作るものや装飾品である。'},eff:['?']},
+    {idx:45,grade:1,imgCate:'itemMaterial',display:45,na:{ko:'미술품',en:'Work of Art',jp:'美術品'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'공간적 또는 시각적 아름다움을 표현하여 만들어진 작품이다.',en:'An artwork created to express spatial or visual beauty.',jp:'空間的または視覚的な美しさを表現して作られた作品である。'},eff:['?']},
+    {idx:46,grade:1,imgCate:'itemMaterial',display:46,na:{ko:'금주괴',en:'Gold Ingot',jp:'金インゴット'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'금을 가공하기 좋게 주물로 뜬 사각모양의 주괴이다.',en:'A square-shaped ingot that has been cast to make it easier to work with gold.',jp:'金を加工しやすいように鋳物で浮かせた四角い形のインゴットである。'},eff:['?']},
+    {idx:47,grade:1,imgCate:'itemMaterial',display:47,na:{ko:'은주괴',en:'Silver Ingot',jp:'銀インゴット'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'은을 가공하기 좋게 주물로 뜬 사각모양의 주괴이다.',en:'A square-shaped ingot cast from silver to make it easier to work with.',jp:'銀を加工しやすいように鋳物で浮かせた四角い形のインゴットである。'},eff:['?']},
+    {idx:48,grade:1,imgCate:'itemMaterial',display:48,na:{ko:'동주괴',en:'Copper Ingot',jp:'銅インゴット'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'동을 가공하기 좋게 주물로 뜬 사각모양의 주괴이다.',en:'A square-shaped ingot that has been cast to make copper easier to work with.',jp:'銅を加工しやすいように鋳物で浮かせた正方形の鋳塊である。'},eff:['?']},
+    {idx:49,grade:1,imgCate:'itemMaterial',display:49,na:{ko:'청동주괴',en:'Bronze Ingot',jp:'ブロンズインゴット'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'청동을 가공하기 좋게 주물로 뜬 사각모양의 주괴이다.',en:'A square-shaped ingot cast in bronze to make it easier to work with.',jp:'青銅を加工しやすいように鋳物で浮かせた正方形の鋳塊である。'},eff:['?']},
+    {idx:50,grade:1,imgCate:'itemMaterial',display:50,na:{ko:'주석주괴',en:'Tin Ingot',jp:'錫インゴット'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'주석을 가공하기 좋게 주물로 뜬 사각모양의 주괴이다.',en:'A square-shaped ingot that has been cast to make tin easier to work with.',jp:'錫を加工しやすいように鋳物で浮かせた正方形の鋳塊である。'},eff:['?']},
+    {idx:51,grade:1,imgCate:'itemMaterial',display:51,na:{ko:'대리석',en:'Marble',jp:'大理石'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'탄산염 광물로 이루어진 변성암으로 주로 저각상이나 건축재료로 쓰인다.',en:'It is a metamorphic rock composed of carbonate minerals and is often used for low-angle sculptures and building materials.',jp:'炭酸塩鉱物からなる変成岩で、主に低角相や建築材料として使われる。'},eff:['?']},
+    {idx:52,grade:1,imgCate:'itemMaterial',display:52,na:{ko:'목재',en:'Wood',jp:'木材'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'나무를 이용한 건축재료이다.',en:'Wood is a building material.',jp:'木を利用した建築材料である。'},eff:['?']},
+    {idx:53,grade:1,imgCate:'itemMaterial',display:53,na:{ko:'석재',en:'Stone',jp:'石材'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'돌을 이용한 건축재료이다.',en:'Stone is a building material.',jp:'石を利用した建築材料である。'},eff:['?']},
+    {idx:54,grade:1,imgCate:'itemMaterial',display:54,na:{ko:'융단',en:'Carpet',jp:'カーペット'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'양털, 목화 혹은 비단 등으로 만든 직물로 바닥에 깔거나 벽에 거는 용도로 사용하는 천을 말한다.',en:'A fabric made of wool, cotton, or silk that is used to cover floors or hang on walls.',jp:'羊毛や綿、あるいは絹などで作られた生地で、床に敷いたり、壁に掛けたりする目的で使用する布をいう。'},eff:['?']},
+    {idx:55,grade:1,imgCate:'itemMaterial',display:55,na:{ko:'민트',en:'Mint',jp:'ミント'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'박하과 식물이고 식용, 화장품등에 쓰인다.',en:'It is a member of the mint family and is used for food, cosmetics, and more.',jp:'ミント科の植物で、食用、化粧品などに使われます。'},eff:['?']},
+  
+    // {idx:19,grade:1,imgCate:'itemMaterial',display:19,na:{ko:'사탕수수',en:'Sugar Cane',jp:'サトウキビ'},kg:5,price:1000,action:'',invenUse:false,txt:{ko:'설탕의 원료로 높이 2∼6m까지 열대지방에서 자란다.',en:'A source of sugar, it grows in the tropics up to 2-6 meters tall.',jp:'砂糖の原料として高さ2～6mまで熱帯地方で育つ。'},eff:['?']},
     //밀,쌀,보리,현미,수수,팥,콩,커피,카카오,꿀
     //사탕수수,코코넛,치즈,레몬,올리브,월계수,민트
     //와인,데킬라,양주,맥주
@@ -567,13 +745,13 @@ export const items = {
     //무궁화, 튤립, 장미
   ],
   etc:[
-    {idx:0,grade:1,imgCate:'itemEtc',display:2,na:{ko:'동전더미(동)',en:'Stack of Coins (Copper)',jp:'コイン山(銅)'},kg:10,price:1000,
+    {idx:0,grade:1,imgCate:'itemEtc',display:0,na:{ko:'동전더미(동)',en:'Stack of Coins (Copper)',jp:'コイン山(銅)'},kg:10,price:1000,
     action:99,invenUse:true,txt:{ko:'G조각 1000개로 판매할 수 있다.',en:'G can be sold for 1000 pieces.',jp:'Gピース1000個で販売できる。'},eff:1000},
     
     {idx:1,grade:2,imgCate:'itemEtc',display:1,na:{ko:'동전더미(은)',en:'Stack of Coins (Silver)',jp:'コインの山(銀)'},kg:20,price:5000,
     action:99,invenUse:true,txt:{ko:'G조각 5000개로 판매할 수 있다.',en:'G can be sold for 5000 pieces.',jp:'Gピース5000個で販売できる。'},eff:5000},
 
-    {idx:2,grade:3,imgCate:'itemEtc',display:0,na:{ko:'동전더미(금)',en:'Stack of Coins (Gold)',jp:'コイン山(金)'},kg:30,price:10000,
+    {idx:2,grade:3,imgCate:'itemEtc',display:2,na:{ko:'동전더미(금)',en:'Stack of Coins (Gold)',jp:'コイン山(金)'},kg:30,price:10000,
     action:99,invenUse:true,txt:{ko:'G조각 10000개로 판매할 수 있다.',en:'G can be sold for 10000 pieces.',jp:'Gピース10000個で販売できる。'},eff:10000},
 
     {idx:3,grade:4,imgCate:'itemEtc',displayText:'I',display:22,na:{ko:'경험의 서I',en:'Book of ExperiencesI',jp:'経験の書I'},kg:0.1,price:100,
@@ -616,17 +794,17 @@ export const items = {
     '','','','','',
   
     {idx:31,grade:1,imgCate:'itemEtc',display:41,na:{ko:'일본입장 티켓',en:'Japan Entrance Ticket',jp:'日本入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'10개를 합치면 보물지도를 만들 수 있다.',en:'Entrance tickets required to enter Japan (required for the number of people)',jp:'日本に入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
-    {idx:32,grade:1,imgCate:'itemEtc',display:40,na:{ko:'한국입장 티켓',en:'Korea Entrance Ticket',jp:'韓国入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'한국으로 들어갈때 필요한 입장티켓(마릿수 만큼 필요).',en:'Entrance tickets required to enter Korea (required for the number of people)',jp:'韓国に入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
-    {idx:33,grade:1,imgCate:'itemEtc',display:42,na:{ko:'몽골입장 티켓',en:'Mongolia Entrance Ticket',jp:'モンゴル入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'10개를 합치면 보물지도를 만들 수 있다.',en:'Entrance tickets required to enter Mongolia (required for the number of people)',jp:'モンゴルに入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
-    {idx:34,grade:1,imgCate:'itemEtc',display:43,na:{ko:'중국입장 티켓',en:'China Entrance Ticket',jp:'中国入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'10개를 합치면 보물지도를 만들 수 있다.',en:'Entrance tickets required to enter China (required for the number of people)',jp:'中国に入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
-    {idx:35,grade:1,imgCate:'itemEtc',display:44,na:{ko:'사우디아라비아입장 티켓',en:'SaudiArabia Entrance Ticket',jp:'サウジアラビア入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'10개를 합치면 보물지도를 만들 수 있다.',en:'Entrance tickets required to enter SaudiArabia (required for the number of people)',jp:'サウジアラビアに入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
-    {idx:36,grade:1,imgCate:'itemEtc',display:45,na:{ko:'이집트입장 티켓',en:'Egypt Entrance Ticket',jp:'エジプト入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'10개를 합치면 보물지도를 만들 수 있다.',en:'Entrance tickets required to enter Egypt (required for the number of people)',jp:'エジプトに入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
-    {idx:37,grade:1,imgCate:'itemEtc',display:46,na:{ko:'그리스입장 티켓',en:'Greece Entrance Ticket',jp:'ギリシャ入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'10개를 합치면 보물지도를 만들 수 있다.',en:'Entrance tickets required to enter Greece (required for the number of people)',jp:'ギリシャに入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
-    {idx:38,grade:1,imgCate:'itemEtc',display:47,na:{ko:'이탈리아입장 티켓',en:'Italy Entrance Ticket',jp:'イタリア入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'10개를 합치면 보물지도를 만들 수 있다.',en:'Entrance tickets required to enter Italy (required for the number of people)',jp:'イタリアに入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
-    {idx:39,grade:1,imgCate:'itemEtc',display:48,na:{ko:'프랑스입장 티켓',en:'France Entrance Ticket',jp:'フランス入場チケット'},price:100,action:'',invenUse:false,txt:{ko:'10개를 합치면 보물지도를 만들 수 있다.',en:'Entrance tickets required to enter France (required for the number of people)',jp:'フランスに入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
-    {idx:40,grade:1,imgCate:'itemEtc',display:49,na:{ko:'스페인입장 티켓',en:'Spain Entrance Ticket',jp:'スペイン入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'10개를 합치면 보물지도를 만들 수 있다.',en:'Entrance tickets required to enter Spain (required for the number of people)',jp:'スペインに入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
-    {idx:41,grade:1,imgCate:'itemEtc',display:50,na:{ko:'포루투갈입장 티켓',en:'Portugal Entrance Ticket',jp:'ポルトガル入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'10개를 합치면 보물지도를 만들 수 있다.',en:'Entrance tickets required to enter Portugal (required for the number of people)',jp:'ポルトガルに入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
-    {idx:42,grade:1,imgCate:'itemEtc',display:51,na:{ko:'영국입장 티켓',en:'UK Entrance Ticket',jp:'イギリス入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'10개를 합치면 보물지도를 만들 수 있다.',en:'Entrance tickets required to enter UK (required for the number of people)',jp:'イギリスに入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
+    {idx:32,grade:1,imgCate:'itemEtc',display:40,na:{ko:'한국입장 티켓',en:'Korea Entrance Ticket',jp:'韓国入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'한국으로 들어갈때 필요한 입장티켓 (마릿수 만큼 필요).',en:'Entrance tickets required to enter Korea (required for the number of people)',jp:'韓国に入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
+    {idx:33,grade:1,imgCate:'itemEtc',display:42,na:{ko:'몽골입장 티켓',en:'Mongolia Entrance Ticket',jp:'モンゴル入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'몽골로 들어갈때 필요한 입장티켓 (마릿수 만큼 필요).',en:'Entrance tickets required to enter Mongolia (required for the number of people)',jp:'モンゴルに入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
+    {idx:34,grade:1,imgCate:'itemEtc',display:43,na:{ko:'중국입장 티켓',en:'China Entrance Ticket',jp:'中国入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'중국으로 들어갈때 필요한 입장티켓 (마릿수 만큼 필요).',en:'Entrance tickets required to enter China (required for the number of people)',jp:'中国に入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
+    {idx:35,grade:1,imgCate:'itemEtc',display:44,na:{ko:'사우디아라비아입장 티켓',en:'SaudiArabia Entrance Ticket',jp:'サウジアラビア入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'사우디아라비아로 들어갈때 필요한 입장티켓 (마릿수 만큼 필요).',en:'Entrance tickets required to enter SaudiArabia (required for the number of people)',jp:'サウジアラビアに入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
+    {idx:36,grade:1,imgCate:'itemEtc',display:45,na:{ko:'이집트입장 티켓',en:'Egypt Entrance Ticket',jp:'エジプト入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'이집트로 들어갈때 필요한 입장티켓 (마릿수 만큼 필요).',en:'Entrance tickets required to enter Egypt (required for the number of people)',jp:'エジプトに入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
+    {idx:37,grade:1,imgCate:'itemEtc',display:46,na:{ko:'그리스입장 티켓',en:'Greece Entrance Ticket',jp:'ギリシャ入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'그리스로 들어갈때 필요한 입장티켓 (마릿수 만큼 필요).',en:'Entrance tickets required to enter Greece (required for the number of people)',jp:'ギリシャに入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
+    {idx:38,grade:1,imgCate:'itemEtc',display:47,na:{ko:'이탈리아입장 티켓',en:'Italy Entrance Ticket',jp:'イタリア入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'이탈리아로 들어갈때 필요한 입장티켓 (마릿수 만큼 필요).',en:'Entrance tickets required to enter Italy (required for the number of people)',jp:'イタリアに入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
+    {idx:39,grade:1,imgCate:'itemEtc',display:48,na:{ko:'프랑스입장 티켓',en:'France Entrance Ticket',jp:'フランス入場チケット'},price:100,action:'',invenUse:false,txt:{ko:'프랑스로 들어갈때 필요한 입장티켓 (마릿수 만큼 필요).',en:'Entrance tickets required to enter France (required for the number of people)',jp:'フランスに入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
+    {idx:40,grade:1,imgCate:'itemEtc',display:49,na:{ko:'스페인입장 티켓',en:'Spain Entrance Ticket',jp:'スペイン入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'스페인으로 들어갈때 필요한 입장티켓 (마릿수 만큼 필요).',en:'Entrance tickets required to enter Spain (required for the number of people)',jp:'スペインに入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
+    {idx:41,grade:1,imgCate:'itemEtc',display:50,na:{ko:'포루투갈입장 티켓',en:'Portugal Entrance Ticket',jp:'ポルトガル入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'포루투갈로 들어갈때 필요한 입장티켓 (마릿수 만큼 필요).',en:'Entrance tickets required to enter Portugal (required for the number of people)',jp:'ポルトガルに入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
+    {idx:42,grade:1,imgCate:'itemEtc',display:51,na:{ko:'영국입장 티켓',en:'UK Entrance Ticket',jp:'イギリス入場チケット'},price:3000,action:'',invenUse:false,txt:{ko:'영국으로 들어갈때 필요한 입장티켓 (마릿수 만큼 필요).',en:'Entrance tickets required to enter UK (required for the number of people)',jp:'イギリスに入るときに必要な入場チケット（数だけ必要）'},kg:0.1,eff:['?']},
 
     // {idx:25,grade:1,imgCate:'itemEtc',display:31,na:{ko:'선박 설계도',en:'Ship Blueprints',jp:'船舶設計図'},price:100,action:0,invenUse:false,txt:{ko:'선박 설계도 소형, 중형, 대형 중 한개의 설계도를 얻을 수 있다.',en:'Ship Blueprints You can get one of the following blueprints: small, medium, or large.',jp:'船舶設計図 小型、中型、大型のいずれかの設計図が入手できます。'},kg:0.3,eff:['?']},
 
@@ -663,5 +841,66 @@ export const items = {
 
     // {idx:42,grade:3,imgCate:'itemEtc',displayText:'III',display:25,na:{ko:'용 선수상 설계도',en:'Dragon Statue Blueprint',jp:'ドラゴン選手像の設計図'},price:100,action:0,invenUse:false,txt:{ko:'용 선수상을 제조 할 수 있는 설계도.',en:'A blueprint for a dragon statue that can be manufactured.',jp:'ドラゴン選手像を製造できる設計図。'},kg:0.1,eff:['?']},
 
-  ]
+  ],
 }
+
+/*
+Index	Item (KR)	Item (EN)	Proposed Country	Logic/Reason
+0	식량	Food	0 (Japan)	Generic/Rice-based?
+1	물	Water	0 (Japan)	clean water
+2	보리	Barley	8 (France)	Wheat/Barley fields
+3	쌀	Rice	3 (China)	Major producer
+4	밀가루	Wheat Flour	8 (France)	Baguette/Bread
+5	커피	Coffee Bean	4 (Saudi Arabia)	Mocha/Origin
+6	카카오	Cacao	9 (Spain)	Brought from Americas
+7	레몬	Lemon	7 (Italy)	Sicily/Amalfi
+8	오렌지	Orange	9 (Spain)	Valencia
+9	키위	Kiwi	3 (China)	Origin (Yangtao)
+10	석류	Pomegranate	5 (Egypt)	Ancient cultivation
+11	체리	Cherry	8 (France)	Famous producer
+12	파인애플	Pineapple	10 (Portugal)	Traded from Americas/Hawaii
+13	블루베리	Blueberry	11 (UK)	Western/Northern Europe?
+14	포도	Grape	8 (France)	Wine
+15	바나나	Banana	10 (Portugal)	Tropical colonies
+16	아보카도	Avocado	9 (Spain)	Americas
+17	코코넛	Coconut	10 (Portugal)	Tropical colonies
+18	두리안	Durian	3 (China)	SE Asia influence? (Guessing)
+19	사탕수수	Sugar Cane	10 (Portugal)	Brazil/Madeira
+20	완두콩	Garden Bean	11 (UK)	Mushy peas?
+21	강낭콩	Kidney Bean	9 (Spain)	Americas
+22	팥	Red Bean	1 (Korea)	Popular ingredient
+23	수수	Sorghum	3 (China)	Kaoliang
+24	치즈	Cheese	8 (France)	Famous for cheese
+25	위스키	Whisky	11 (UK)	Scotch
+26	데낄라	Tequila	9 (Spain)	Mexico (Spanish colony)
+27	와인	Wine	8 (France)	Famous for wine
+28	럼	Rum	11 (UK)	Royal Navy/Caribbean
+29	산호	Coral	7 (Italy)	Mediterranean
+30	동광석	Copper Ore	0 (Japan)	Famous mines
+31	석탄	Coal	11 (UK)	Industrial revolution
+32	은광석	Silver Ore	9 (Spain)	Potosi
+33	금광석	Gold Ore	9 (Spain)	New World gold
+34	주석	Cassiterite	11 (UK)	Cornish tin
+35	월계수잎	Bay Leaf	6 (Greece)	Laurel wreaths
+36	벌꿀	Honey	6 (Greece)	Hymettus honey
+37	올리브	Olive	6 (Greece)	Famous producer
+38	고추	Chili pepper	1 (Korea)	Kimchi/Spicy food
+39	맥주	Beer	11 (UK)	Pub culture (or Germany but not in list)
+40	상아	Ivory	10 (Portugal)	African trade
+41	진주	Pearl	0 (Japan)	Akoya pearls
+42	공작석	Malachite	2 (Mongolia)	Central Asian deposits?
+43	호박석	Amber	11 (UK)	Baltic/North Sea trade
+44	유리공예품	Glass Crafts	7 (Italy)	Murano
+45	도자기공예품	Pottery Crafts	3 (China)	Porcelain
+46	미술품	Work of Art	7 (Italy)	Renaissance
+47	금주괴	Gold Ingot	9 (Spain)	
+48	은주괴	Silver Ingot	9 (Spain)	
+49	동주괴	Copper Ingot	0 (Japan)	
+50	청동주괴	Bronze Ingot	6 (Greece)	Bronze age?
+51	주석주괴	Tin Ingot	11 (UK)	
+52	대리석	Marble	6 (Greece)	Parthenon etc.
+53	목재	Wood	11 (UK)	Oak? Or 0 (Japan) Cypress? (Let's go UK for ships)
+54	석재	Stone	5 (Egypt)	Pyramids
+55	융단	Carpet	4 (Saudi Arabia)	Persian/Arabian rugs
+56	민트	Mint	11 (UK)	Mint sauce/tea
+*/

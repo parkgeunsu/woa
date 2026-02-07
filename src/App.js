@@ -1,5 +1,5 @@
 import { FlexBox } from 'components/Container';
-import { ChPic } from 'components/ImagePic';
+import { MergedPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import { ColorSet, FontSet } from 'components/Theme';
 import 'css/keyFrameAnimation.css';
@@ -52,7 +52,7 @@ const Wrapper = styled.div`
     ${({location}) => location === "" ? `background: linear-gradient(#000, rgba(0,0,0,0), #000);` : ''}
   }
 `;
-const CountryBackground = styled(ChPic)`
+const CountryBackground = styled(MergedPic)`
   margin: auto;
   padding-top: 175%;
   width: 100%;
@@ -196,6 +196,78 @@ const setCity = (data, lang) => {
   cityD[0].shop.weapon = items[2];
   return cityD;
 }
+const setDifficultLv = (gameData) => {
+  const difficultLv = [],
+    difficultCount = Math.floor(Math.random()*4);
+  const level = [[
+    50,50,
+    40,40,40,40,
+    30,30,30,30,30,
+    20,20,20,20,20,20,20,20,
+    10,10,10,10,10,10,10,10,10],
+    [
+    50,50,50,50,
+    40,40,40,40,40,
+    30,30,30,30,30,30,
+    20,20,20,20,20,20,
+    10,10,10,10,10,10,10],
+    [
+    50,50,50,50,50,50,50,
+    40,40,40,40,40,40,
+    30,30,30,30,30,30,
+    20,20,20,20,20,
+    10,10,10,10],
+    [
+    50,50,50,50,50,50,50,50,50,
+    40,40,40,40,40,40,40,40,
+    30,30,30,30,30,
+    20,20,20,20,
+    10,10]];
+  gameData.country.regions.forEach((countryData, idx) => {
+    const lvCount = Math.floor(Math.random()* level[difficultCount].length);//countryData.difficultLv;
+    difficultLv[idx] = level[difficultCount][lvCount];
+    level[difficultCount].splice(lvCount,1);
+  });
+  return difficultLv;
+}
+const classification = (gameData) => {
+  const classification = {
+    grade: [],
+    country: [],
+    job: [],
+    cost: [],
+    region: [],
+  };
+  gameData.ch.forEach((chData) => {
+    if (!classification.grade[chData.grade]) {
+      classification.grade[chData.grade] = [];
+    }
+    classification.grade[chData.grade].push(chData.idx);
+
+    const chCountry = util.getCountryToIdx(chData.region);
+    if (!classification.country[chCountry]) {
+      classification.country[chCountry] = [];
+    }
+    classification.country[chCountry].push(chData.idx);
+
+    const chRegion = util.getRegionToIdx(chData.region);
+    if (!classification.region[chRegion]) {
+      classification.region[chRegion] = [];
+    }
+    classification.region[chRegion].push(chData.idx);
+
+    if (!classification.job[chData.job[0]]) {
+      classification.job[chData.job[0]] = [];
+    }
+    classification.job[chData.job[0]].push(chData.idx);
+
+    if (!classification.cost[chData.cost]) {
+      classification.cost[chData.cost] = [];
+    }
+    classification.cost[chData.cost].push(chData.idx);
+  });
+  return classification;
+}
 const App = ({
   loadData,
 }) => {
@@ -224,8 +296,10 @@ const App = ({
       efm: true,
       resolution: 1,
       bge: false,
-      speed: 1,
-    }
+      speed: 2,
+    },
+    classification: classification(gameData),
+    difficultLv: setDifficultLv(gameData),
   });
   const setBack = (location) => {
     switch(location) {
@@ -315,12 +389,12 @@ const App = ({
       case "setup":
         return {
           pic:"country",
-          idx:location === "" ? Math.floor(Math.random() * 28) : util.getCountryToIdx(saveData?.info?.stay)
+          idx:location === "" ? Math.floor(Math.random() * 28) : util.getRegionToIdx(saveData?.info?.stay)
         };
       default:
         return {
           pic:"country",
-          idx:location === "" ? Math.floor(Math.random() * 28) : util.getCountryToIdx(saveData?.info?.stay)
+          idx:location === "" ? Math.floor(Math.random() * 28) : util.getRegionToIdx(saveData?.info?.stay)
         };
     }
   }
@@ -338,10 +412,10 @@ const App = ({
   }
   const setSpeed = (data) => {
     const setting = util.loadData('setting');
-    setting.speed = data;
+    setting.speed = data * 2;
     util.saveData('setting', setting);
     let cloneContextData = {...contextData};
-    cloneContextData.setting.speed = data;
+    cloneContextData.setting.speed = data * 2;
     setContextData(cloneContextData);
   }
   const setBgm = (data) => {
@@ -382,38 +456,13 @@ const App = ({
   useEffect(() => {
     // setContextData();
     const storageVer = util.loadData('version'),
-      continueGame = util.loadData('continueGame');
+      continueGame = util.loadData('continueGame'),
+      saveData = util.loadData('saveData');
     let useSaveData = {}
-    if (!continueGame) { //신규 게임
+    if (!continueGame || saveData === null) { //신규 게임
       if (location !== '') {
         navigate('../');
       }
-      //카드 정리 데이터 구성
-      // const classification = {
-      //   grade: [],
-      //   country: [],
-      //   job: [],
-      //   cost: [],
-      // };
-      // gameData.ch.forEach((chData) => {
-      //   if (!classification.grade[chData.grade]) {
-      //     classification.grade[chData.grade] = [];
-      //   }
-      //   classification.grade[chData.grade].push(chData.idx);
-      //   if (!classification.country[chData.country]) {
-      //     classification.country[chData.country] = [];
-      //   }
-      //   classification.country[chData.country].push(chData.idx);
-      //   if (!classification.job[chData.job[0]]) {
-      //     classification.job[chData.job[0]] = [];
-      //   }
-      //   classification.job[chData.job[0]].push(chData.idx);
-      //   if (!classification.cost[chData.cost]) {
-      //     classification.cost[chData.cost] = [];
-      //   }
-      //   classification.cost[chData.cost].push(chData.idx);
-      // });
-      //save 는 가상데이터
       saveNew.city = setCity(gameData.city.port, contextData.setting.lang);
       useSaveData = saveNew;
       util.saveData("saveData", saveNew);
@@ -425,35 +474,9 @@ const App = ({
         resolution: 1,
         speed: 2,
       });
-      // util.saveData("classification", classification);
       util.saveData("history",[]);
       setSaveData(saveNew);
     } else {
-      const classification = {
-        grade: [],
-        country: [],
-        job: [],
-        cost: [],
-      };
-      gameData.ch.forEach((chData) => {
-        if (!classification.grade[chData.grade]) {
-          classification.grade[chData.grade] = [];
-        }
-        classification.grade[chData.grade].push(chData.idx);
-        if (!classification.country[chData.country]) {
-          classification.country[chData.country] = [];
-        }
-        classification.country[chData.country].push(chData.idx);
-        if (!classification.job[chData.job[0]]) {
-          classification.job[chData.job[0]] = [];
-        }
-        classification.job[chData.job[0]].push(chData.idx);
-        if (!classification.cost[chData.cost]) {
-          classification.cost[chData.cost] = [];
-        }
-        classification.cost[chData.cost].push(chData.idx);
-      });
-      util.saveData("classification", classification);
       if (storageVer !== version) { //데이터 버전이 다를 경우
         //버전 업데이트 통신
         useSaveData = util.loadData("saveData");
@@ -466,7 +489,7 @@ const App = ({
       cloneContextData.setting = setting;
       setContextData(cloneContextData);
       setSaveData(() => {
-        if (useSaveData.ch[0].bSt0) { //캐릭 전투능력치 설정이 안되어 있을 경우
+        if (useSaveData?.ch[0]?.bSt0) { //캐릭 전투능력치 설정이 안되어 있을 경우
           util.saveData('saveData', useSaveData);
           return useSaveData;
         } else {

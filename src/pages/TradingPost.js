@@ -102,22 +102,28 @@ const TradingPost = ({
 	const [actionCh, setActionCh] = useState({});//행동할 캐릭터 데이터
 	const actionRef = useRef();//행동할 캐릭터 선택자
 	useEffect(() => {
-		if (Object.keys(saveData).length !== 0) {
+		if (saveData && Object.keys(saveData).length !== 0) {
 			let items = [[],[]];
-			const cityData = saveData.city[cityIdx];
-			for (const [idx, item] of cityData.tradingPost.entries()) {
-				items[0][idx] = item;
+			const cityData = saveData.city?.[cityIdx];
+			if (cityData?.tradingPost) {
+				for (const [idx, item] of cityData.tradingPost.entries()) {
+					items[0][idx] = item;
+				}
 			}
-			for (const [idx, item] of saveData.ship.entries()) {
-				items[1][idx] = item;
+			if (saveData.ship) {
+				for (const [idx, item] of saveData.ship.entries()) {
+					items[1][idx] = item;
+				}
 			}
 			setItem(items);
-			setActionCh(saveData.actionCh.tradingPost);
-			setPopupInfo({
-				ch:saveData.ch,
-				actionCh:saveData.actionCh.tradingPost.idx,
-				type:'tradingPost'
-			})
+			if (saveData.actionCh?.tradingPost) {
+				setActionCh(saveData.actionCh.tradingPost);
+				setPopupInfo({
+					ch:saveData.ch,
+					actionCh:saveData.actionCh.tradingPost.idx,
+					type:'tradingPost'
+				})
+			}
 		}
 	}, [saveData]);
   return (
@@ -137,9 +143,9 @@ const TradingPost = ({
 						{item[selectTab] && item[selectTab].map((data, idx) => {
 							if (selectTab === 0) {
 								const items = gameItem.material[data.idx];
-								const grade = data.grade || items.grade;
+								const grade = data.grade || items?.grade;
 								return (
-									<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${selectItem.selectTab === selectTab && selectItem.select === idx ? 'select1' : ''}`} key={`items${idx}`} onClick={() => {
+									<div className={`item_layout ${gameData.itemGrade?.txt_e[grade]?.toLowerCase()} ${selectItem.selectTab === selectTab && selectItem.select === idx ? 'select1' : ''}`} key={`items${idx}`} onClick={() => {
 										let button = ['buy','bargaining'];
 										setSelectItem({
 											save:data,
@@ -163,10 +169,10 @@ const TradingPost = ({
 							} else {
 								if (data.stay === saveData.info.stay && idx === selectShip) {
 									return data.loadedItem.map((itemData, itemIdx) => {
-										const items = gameItem.material[itemData.idx];
-										const grade = items.grade;
+										const items = gameItem.material?.[itemData.idx];
+										const grade = items?.grade;
 										return (
-											<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${selectItem.selectTab === selectTab && selectItem.selectShip === selectShip && selectItem.select === itemIdx ? 'select2' : ''}`} key={`shipitems${itemIdx}`} onClick={() => {
+											<div className={`item_layout ${gameData.itemGrade?.txt_e?.[grade]?.toLowerCase()} ${selectItem.selectTab === selectTab && selectItem.selectShip === selectShip && selectItem.select === itemIdx ? 'select2' : ''}`} key={`shipitems${itemIdx}`} onClick={() => {
 												let button = ['sell','bargaining'];
 												setSelectItem({
 													save:itemData,
@@ -221,8 +227,8 @@ const TradingPost = ({
 									setSelectItem({save:{},game:{},select:'',selectTab:'',selectShip:'',buttonType:[]});
 								}}>
 									<div className={`ship_display size${shipSize(shipD.shipIdx)} ship${shipD.shipIdx}`}>
-										<svg className="ship_body" xmlns="http://www.w3.org/2000/svg" width="320px" height="600px" viewBox="0 0 320 600" dangerouslySetInnerHTML={{__html: util.setShipColor(gameData.shipSvg[shipD.shipIdx], imgSet.wood[shipD.wood] || imgSet.images.transparent, gameData.ships.woodColor[gameData.ships.wood[shipD.wood]?.woodColor ?? 4], Math.random().toString(36).substring(2, 11), [gameData.sailSvg[shipSail[0]], gameData.sailSvg[shipSail[1]], gameData.sailSvg[shipSail[2]]], [shipSailColor[0], shipSailColor[1], shipSailColor[2]], [gameData.cannonSvg[shipCannon[0]], gameData.cannonSvg[shipCannon[1]], gameData.cannonSvg[shipCannon[2]]])}}></svg>
-										{shipD.figure !== '' && <svg className="ship_face" style={{filter:`drop-shadow(0 0 7px ${gameData.ships.figureColor[gameData.ships.figurehead[shipD.figure].color][2]})`}} xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg[gameData.ships.figurehead[shipD.figure].display], gameData.ships.figureColor, gameData.ships.figurehead[shipD.figure].color)}}></svg>}
+										<svg className="ship_body" xmlns="http://www.w3.org/2000/svg" width="320px" height="600px" viewBox="0 0 320 600" dangerouslySetInnerHTML={{__html: util.setShipColor(gameData.shipSvg?.[shipD.shipIdx], imgSet.wood?.[shipD.wood] || imgSet.images?.transparent, gameData.ships?.woodColor?.[gameData.ships?.wood?.[shipD.wood]?.woodColor ?? 4], Math.random().toString(36).substring(2, 11), [gameData.sailSvg?.[shipSail[0]], gameData.sailSvg?.[shipSail[1]], gameData.sailSvg?.[shipSail[2]]], [shipSailColor[0], shipSailColor[1], shipSailColor[2]], [gameData.cannonSvg?.[shipCannon[0]], gameData.cannonSvg?.[shipCannon[1]], gameData.cannonSvg?.[shipCannon[2]]])}}></svg>
+										{shipD.figure !== '' && <svg className="ship_face" style={{filter:`drop-shadow(0 0 7px ${gameData.ships?.figureColor?.[gameData.ships?.figurehead?.[shipD.figure]?.color]?.[2]})`}} xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg?.[gameData.ships?.figurehead?.[shipD.figure]?.display], gameData.ships?.figureColor, gameData.ships?.figurehead?.[shipD.figure]?.color)}}></svg>}
 									</div>
 									<div className="ship_storage">{storageCheck(shipD.loadedItem)} / <br/>{shipD.resource.loadage}</div>
 								</ShipContainer>
@@ -232,20 +238,20 @@ const TradingPost = ({
 				</div>
 				<div className="shop_bottom trading">
 					{Object.keys(selectItem.save).length !== 0 ? (
-						<ItemContainer className={`item_select items ${selectTab === 0 ? 'tab1' : 'tab2'}`} color={gameData.itemGrade.color[selectItem.save.grade]}>
-							<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem.game.na[lang]}`}}></span></li>
+						<ItemContainer className={`item_select items ${selectTab === 0 ? 'tab1' : 'tab2'}`} color={gameData.itemGrade?.color?.[selectItem.save.grade]}>
+							<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem.game.na?.[lang] || ''}`}}></span></li>
 							<li className="item_fix" flex="true">
-								<div className={`item ${gameData.itemGrade.txt_e[selectItem.save.grade || selectItem.game.grade].toLowerCase()}`}>
+								<div className={`item ${gameData.itemGrade?.txt_e?.[selectItem.save.grade || selectItem.game.grade]?.toLowerCase()}`}>
 									<ItemPic className="pic" pic="itemEtc" type="material" idx={selectItem.game.display} />
 								</div>
 								<div flex-h="true" style={{flex: 1}}>
-									<ItemName className="item_cont" color={gameData.itemGrade.color[selectItem.save.grade]}>
+									<ItemName className="item_cont" color={gameData.itemGrade?.color?.[selectItem.save.grade]}>
 										<div className="item_top">
-											<span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[selectItem.save.grade] : gameData.itemGrade.txt_e[selectItem.save.grade]}</span>
+											<span className="item_grade">{lang === 'ko' ? gameData.itemGrade?.txt_k?.[selectItem.save.grade] : gameData.itemGrade?.txt_e?.[selectItem.save.grade]}</span>
 										</div>
-										<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectItem.game.txt[lang]}"`}}></div>
+										<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectItem.game.txt?.[lang]}"`}}></div>
 										<div flex="true" style={{justifyContent:'space-between'}}>
-											<div className="item_price"><span>{gameData.msg.itemInfo.buyPrice[lang]}</span><em>{`₩${util.comma(selectItem.game.price < 1000 ? 1000 : selectItem.game.price)}`}</em></div>
+											<div className="item_price"><span>{gameData.msg?.itemInfo?.buyPrice?.[lang]}</span><em>{`₩${util.comma(selectItem.game.price < 1000 ? 1000 : selectItem.game.price)}`}</em></div>
 											<div className="item_kg">{selectItem.game.kg}kg</div>
 										</div>
 									</ItemName>
@@ -259,19 +265,20 @@ const TradingPost = ({
 											return (
 												<div className="item_button" key={`button${idx}`} flex="true">
 													<button text="true" className="button_small" onClick={(e) => {
-														if (actionCh.idx === '') {
+														if (actionCh.idx === '' || actionCh.idx === undefined) {
 															setMsgOn(true);
-															setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[201].na));
+															setMsg(gameData.msg?.sentenceFn?.selectSkillCh?.(lang,gameData.skill?.[201]?.na) || "Select Character");
 															return;
 														}
-														let saveD = {...saveData};
-														if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemBuy) {//행동력 지불
+														let saveD = JSON.parse(JSON.stringify(saveData));
+														const charData = saveD.ch?.[actionCh.idx];
+														if (charData && charData.actionPoint >= (gameData.actionPoint?.itemBuy || 0)) {//행동력 지불
 															if (saveD.info.money >= rangeValue[0] * selectItem.game.price) {//소유금이 더 많을경우
-																if (typeof saveD.city[cityIdx].tradingPost[selectItem.select].num === 'number') { //수량이 정해져 있을경우
+																if (saveD.city[cityIdx]?.tradingPost?.[selectItem.select] && typeof saveD.city[cityIdx].tradingPost[selectItem.select].num === 'number') { //수량이 정해져 있을경우
 																	saveD.city[cityIdx].tradingPost[selectItem.select].num -= rangeValue[0];
 																	changeSaveData(saveD);
 																}
-																saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemBuy;
+																charData.actionPoint -= (gameData.actionPoint?.itemBuy || 0);
 																util.buttonEvent({
 																	event: e,
 																	type: 'itemBuy',
@@ -293,23 +300,29 @@ const TradingPost = ({
 																setRangeValue(0);
 															} else {
 																setMsgOn(true);
-																setMsg(gameData.msg.sentence.lackMoney[lang]);
+																setMsg(gameData.msg?.sentence?.lackMoney?.[lang] || "Not enough money");
 															}
 														} else {
 															setMsgOn(true);
-															setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
+															setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
 														}
-													}} data-buttontype="itemBuy">{gameData.msg.button.buy[lang]}</button>
+													}} data-buttontype="itemBuy">{gameData.msg?.button?.buy?.[lang] || "Buy"}</button>
 												</div>
 											)
 										case 'sell':
 											return (
 												<div className="item_button" key={`button${idx}`} flex="true">
 													<button text="true" className="button_small" onClick={(e) => {
-														let saveD = {...saveData};
-														if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemSell) {//행동력 지불
+														if (actionCh.idx === '' || actionCh.idx === undefined) {
+															setMsgOn(true);
+															setMsg(gameData.msg?.sentenceFn?.selectSkillCh?.(lang,gameData.skill?.[201]?.na) || "Select Character");
+															return;
+														}
+														let saveD = JSON.parse(JSON.stringify(saveData));
+														const charData = saveD.ch?.[actionCh.idx];
+														if (charData && charData.actionPoint >= (gameData.actionPoint?.itemSell || 0)) {//행동력 지불
 															if (rangeValue) {
-																saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemSell;
+																charData.actionPoint -= (gameData.actionPoint?.itemSell || 0);
 																util.buttonEvent({
 																	event: e,
 																	type: 'itemSell',
@@ -331,13 +344,13 @@ const TradingPost = ({
 																setSelectItem({save:{},game:{},select:'',selectTab:'',selectShip:'',buttonType:[]});
 															} else {
 																setMsgOn(true);
-																setMsg(gameData.msg.sentence.selectQuantity[lang]);
+																setMsg(gameData.msg?.sentence?.selectQuantity?.[lang] || "Select Quantity");
 															}
 														} else {
 															setMsgOn(true);
-															setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
+															setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
 														}
-													}} data-buttontype="itemSell">{gameData.msg.button.sell[lang]}</button>
+													}} data-buttontype="itemSell">{gameData.msg?.button?.sell?.[lang] || "Sell"}</button>
 												</div>
 											)
 										default:

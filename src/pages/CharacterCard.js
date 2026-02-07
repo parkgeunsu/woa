@@ -1,6 +1,6 @@
 import { AppContext } from 'App';
 import { Text } from 'components/Atom';
-import { ChPic, IconPic } from 'components/ImagePic';
+import { ChPic, IconPic, MergedPic } from 'components/ImagePic';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
@@ -223,12 +223,12 @@ const StyledIconPic = styled(IconPic)`
   left: 0;
   top: 0;
 `;
-const ListChElement = styled(ChPic)`
+const ListChElement = styled(MergedPic)`
   position: absolute;
   top: 0;
   z-index: 5;
 `;
-const ListChElement1 = styled(ChPic)`
+const ListChElement1 = styled(MergedPic)`
   position: absolute;
   left: -10%;
   top: -10%;
@@ -238,7 +238,7 @@ const ListChElement1 = styled(ChPic)`
   z-index: 5;
   animation: rotate_ring linear ${({gameSpd}) => 22.5 / gameSpd}s infinite;
 `;
-const ListElementSmall = styled(ChPic)`
+const ListElementSmall = styled(MergedPic)`
   ${({usedType}) => usedType === 'battle' ? `
     left: 5%;
     top: 5%;
@@ -251,7 +251,7 @@ const ListElementSmall = styled(ChPic)`
   z-index: 4;
   border-radius: 10%;
 `;
-const ListChFrame = styled(ChPic)`
+const ListChFrame = styled(MergedPic)`
   position: absolute;
   top: 0;
   z-index: 4;
@@ -311,7 +311,7 @@ const ListChCost = styled(Text)`
   line-height: 1.25rem;
   z-index:7;
 `;
-const ChracterCard = ({
+const CharacterCard = ({
   size,
   equalSize,
   isShowCard,
@@ -326,16 +326,10 @@ const ChracterCard = ({
   ...rest
 }) => {
   const context = useContext(AppContext);
-  // const lang = React.useMemo(() => {
-  //   return context.setting.lang;
-  // }, [context]);
-  // const imgSet = React.useMemo(() => {
-  //   return context.images;
-  // }, [context]);
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  // const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
+
   const saveCh = React.useMemo(() => {
     return saveCharacter
       ? saveCharacter 
@@ -343,9 +337,11 @@ const ChracterCard = ({
         ? saveData.ch[slotIdx]
         : '';
   }, [saveData, slotIdx, saveCharacter]);
+
   const chData = React.useMemo(() => {
-    return saveData ? gameData.ch[saveCh?.idx] : '';
+    return saveData && saveCh?.idx !== undefined ? gameData.ch[saveCh.idx] : '';
   }, [saveData, gameData, saveCh]);
+
   const sizeH = React.useMemo(() => equalSize ? size : size * 1.48, [equalSize, size]);
   if (!saveData) { // 새로운 게임 startGame
     return (
@@ -359,35 +355,35 @@ const ChracterCard = ({
     if (usedType === 'battle') { //battle 말판
       return (
         <>
-          <ListCh className="card_ch" usedType={usedType} isRound={10} pic="ch_s" idx={chData?.display} element={chData?.element[0] - 6}/>
+          <ListCh className="card_ch" usedType={usedType} isRound={10} pic={`chs${chData?.display}`} element={(chData?.element?.[0] || 6) - 6}/>
           <ListElementSmall usedType={usedType} />
-          {saveCh?.lv > 49 && <ListChElement1 pic="icon200" type="cardRing" idx={chData?.element[0] - 7} gameSpd={gameSpd} />}
+          {saveCh?.lv > 49 && <ListChElement1 pic="icon200" type="cardRing" idx={(chData?.element?.[0] || 7) - 7} gameSpd={gameSpd} />}
         </>
       )
     }
     if (usedType === 'conversation') { //battle 시나리오
       return (
         <>
-          <ListCh isRound={10} pic="ch_s" idx={chData?.display} />
+          <ListCh isRound={10} pic={`chs${chData?.display}`} />
         </>
       )
     }
     if (usedType === 'timeline') { //battle 타임라인
       return (
         <>
-          <ListCh isRound={10} pic="ch_s" idx={chData?.display} />
+          <ListCh isRound={10} pic={`chs${chData?.display}`} />
         </>
       )
     }
     if (usedType === 'list') { //list 사용
       return (
         <>
-          <ListCh isRound={10} pic="ch_s" idx={chData.display} element={chData?.element[0] - 6} />
+          <ListCh isRound={10} pic={`chs${chData?.display}`} element={chData?.element?.[0] - 6} />
           <ListJobActionListType>
             <ListChJobListType>
-              <IconPic type="job" isAbsolute={true} pic="icon100" idx={saveCh.job} />
+              <IconPic type="job" isAbsolute={true} pic="icon100" idx={saveCh?.job} />
             </ListChJobListType>
-            {saveCh.newActionType.map((data, idx) => {
+            {saveCh?.newActionType?.map((data, idx) => {
               return (
                 <ListChActionTypeListType key={'action'+idx}>
                   <StyledIconPic type="element" pic="icon100" idx={data + 1} />
@@ -395,15 +391,15 @@ const ChracterCard = ({
               )
             })}
           </ListJobActionListType>
-          {saveCh?.lv > 49 && <ListElementSmall type="elementBack" pic="card_s" idx={chData?.element[0] - 6} />}
-          <ListActionPoint>{`${saveCh.actionPoint} / ${saveCh.actionMax}`}</ListActionPoint>
+          {saveCh?.lv > 49 && <ListElementSmall type="elementBack" pic="card_s" idx={chData?.element?.[0] - 6} />}
+          <ListActionPoint>{`${saveCh?.actionPoint} / ${saveCh?.actionMax}`}</ListActionPoint>
         </>
       )
     }
     if (usedType === 'paging') { //paging 사용
       return (
         <>
-          <ListCh pic="ch_s" idx={chData.display} />
+          <ListCh pic={`chs${chData?.display}`} />
         </>
       )
     }
@@ -412,13 +408,13 @@ const ChracterCard = ({
         <>
           {noInfo ? (
             <>
-              <ListCh isRound={10} pic="ch_s" idx={chData?.display} />
+              <ListCh isRound={10} pic={`chs${chData?.display}`} />
               <ListElementSmall type="elementBack" pic="card_s" idx={chData?.element[0] - 6 + (saveCh?.lv > 29 ? 20 : 0)} />
             </>
           ) : (
             <>
               <ListNameLv code="t1" color="main" weight="600" isThumb={true} backColor={gameData.chGradeColor[saveCh?.grade]}>Lv.{saveCh?.lv}</ListNameLv>
-              <ListCh isRound={10} pic="ch_s" idx={chData?.display} />
+              <ListCh isRound={10} pic={`chs${chData?.display}`} />
               <ListElementSmall type="elementBack" pic="card_s" idx={chData?.element[0] - 6} />
               {saveCh?.lv > 49 && <ListChElement1 pic="icon200" type="cardRing" idx={chData?.element[0] - 7} gameSpd={gameSpd} />}
               {saveCh?.newActionType.map((data, idx) => {
@@ -438,7 +434,7 @@ const ChracterCard = ({
       const starArr = Array.from({length: saveCh?.gradeMax}, () => ''); 
       return (
         <ChCard size={size} className="ch_detail">
-          <ListCh isRound={10} pic="ch_s" idx={chData?.display} />
+          <ListCh isRound={10} pic={`chs${chData?.display}`} />
           <ListJobAction style={{
             left: '3px',
             top: '3px',
@@ -456,8 +452,8 @@ const ChracterCard = ({
               )
             })}
           </ListJobAction>
-          <ListElementSmall type="elementBack" pic="card_s" idx={chData?.element[0] - 6} />
-          {saveCh?.lv > 49 && <ListChElement1 pic="icon200" type="cardRing" idx={chData?.element[0] - 7} gameSpd={gameSpd} />}
+          <ListElementSmall type="elementBack" pic="card_s" idx={(chData?.element?.[0] || 6) - 6} />
+          {saveCh?.lv > 49 && <ListChElement1 pic="icon200" type="cardRing" idx={(chData?.element?.[0] || 7) - 7} gameSpd={gameSpd} />}
           <ListChStar usedType="gacha">
             {starArr.map((star, idx) => {
               return <Star idx={saveCh?.grade >= idx + 1 ? idx + 1 : 0} type={saveCh?.gradeUp ? `star${saveCh?.gradeUp}` : 'star'} pic="icon100" key={`start${idx}`} />;
@@ -471,7 +467,7 @@ const ChracterCard = ({
       return (
         <CardContainer size={size} sizeH={sizeH}>
           <ChCard size={size} className="ch_detail">
-            <ListCh isRound={10} pic="ch_s" idx={chData?.display} />
+            <ListCh isRound={10} pic={`chs${chData?.display}`} />
             <ListJobAction style={{
               left: '3px',
               top: '3px',
@@ -489,8 +485,8 @@ const ChracterCard = ({
                 )
               })}
             </ListJobAction>
-            <ListElementSmall type="elementBack" pic="card_s" idx={chData?.element[0] - 6} />
-            {saveCh?.lv > 49 && <ListChElement1 pic="icon200" type="cardRing" idx={chData?.element[0] - 7} gameSpd={gameSpd} />}
+            <ListElementSmall type="elementBack" pic="card_s" idx={(chData?.element?.[0] || 6) - 6} />
+            {saveCh?.lv > 49 && <ListChElement1 pic="icon200" type="cardRing" idx={(chData?.element?.[0] || 7) - 7} gameSpd={gameSpd} />}
             <ListChStar usedType="gacha">
               {starArr.map((star, idx) => {
                 return <Star idx={saveCh?.grade >= idx + 1 ? idx + 1 : 0} type={saveCh?.gradeUp ? `star${saveCh?.gradeUp}` : 'star'} pic="icon100" key={`start${idx}`} />;
@@ -506,7 +502,7 @@ const ChracterCard = ({
         size ? (
           <CardContainer size={size} sizeH={sizeH}>
             <ChCard size={size} className="ch_detail">
-              <ListCh type="profile" isRound={10} pic="ch_s" idx={chData?.display} />
+              <ListCh type="profile" isRound={10} pic={`chs${chData?.display}`} />
               <ListJobAction>
                 <ListChJob className="job">
                   <IconPic type={saveCh?.gradeUp ? `job${saveCh?.gradeUp}` : 'job'} isAbsolute={true} pic="icon100" idx={saveCh?.job} />
@@ -533,9 +529,9 @@ const ChracterCard = ({
             {!isShowCard && <ListNameLv elementType={chData?.element[0] - 6} className="name_lv">
               <Lv code="t8" color="main">{saveCh?.lv}</Lv>
               <SubName code="t2" color="main">{chData?.na3}</SubName>
-              <Name code="t5" color="main">{`${chData?.na1} ${chData?.na2}`}</Name>
+              <Name code="t5" color="main">{`${chData?.na1} (${chData?.na2})`}</Name>
             </ListNameLv>}
-            <ListCh type="profile" isRound={0} pic="ch" idx={chData?.display} />
+            <ListCh type="profile" isRound={0} pic={`ch${chData?.display}`} />
             {!isShowCard && <ListJobAction>
               <ListChJob className="job">
                 <IconPic type={saveCh?.gradeUp ? `job${saveCh?.gradeUp}` : 'job'} isAbsolute={true} pic="icon100" idx={saveCh?.job} />
@@ -570,9 +566,9 @@ const ChracterCard = ({
   }
 }
 
-ChracterCard.defaultProps = {
+CharacterCard.defaultProps = {
   equalSize: false,
   noInfo: false,
   gameSpd: 1,
 }
-export default ChracterCard;
+export default CharacterCard;

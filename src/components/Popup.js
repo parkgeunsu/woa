@@ -268,6 +268,7 @@ const PopupItemList = styled.li`
     font-weight: 600;
   }
 `;
+const PopupItemCoin = styled(FlexBox)``;
 const PopupItemSlot = styled(FlexBox)`
   .item_holes {
     margin: 0;
@@ -513,13 +514,14 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
 		return (
 			<PopupRelation flex-center="true" className="people">
         {member && member.map((data ,idx) => {
-          const chData = gameData.ch[idx];
+          const chData = gameData.ch?.[idx];
+          if (!chData) return null;
           return (
             <PopupRelationList className="people_list" key={idx} gameData={gameData} chData={chData} >
             {/* ringDisplay={ringImg[chData.element]} */}
-              <Img imgurl={imgSet.images.transparent800} />
+              <Img imgurl={imgSet?.images?.transparent800} />
               <PopupRelationListCh>
-                <ChPic pic="ch" idx={chData.display} />
+                <ChPic pic={`ch${chData?.display}`} />
               </PopupRelationListCh>
               <span className="name">{chData.na1}</span>
             </PopupRelationList>
@@ -530,12 +532,13 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
 	} else if (type === 'applyState') {
     return (
       <PopupApplyState>
-        {gameData.battleStateName.map((bData, idx) => {
+        {gameData.battleStateName?.map((bData, idx) => {
+          const chStats = saveData.ch?.[dataObj.chSlotIdx] || {};
           return (
             <StateList key={idx} className={bData}>
-              <span className="name">{gameData.msg.state[bData][lang]}<b>{gameData.msg.state[bData].en}</b></span>
-              <span className="current">{`${saveData.ch[dataObj.chSlotIdx]['bSt'+idx]} + `}<b>{`${saveData.ch[dataObj.chSlotIdx]['iSt'+idx]}`}</b></span>
-              <span className="total">{saveData.ch[dataObj.chSlotIdx]['bSt'+idx] + saveData.ch[dataObj.chSlotIdx]['iSt'+idx]}</span>
+              <span className="name">{gameData.msg?.state?.[bData]?.[lang]}<b>{gameData.msg?.state?.[bData]?.en}</b></span>
+              <span className="current">{`${chStats['bSt'+idx] || 0} + `}<b>{`${chStats['iSt'+idx] || 0}`}</b></span>
+              <span className="total">{(chStats['bSt'+idx] || 0) + (chStats['iSt'+idx] || 0)}</span>
             </StateList>
           )
         })}
@@ -543,10 +546,15 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     )
   } else if (type === 'equip') {
     const itemsGrade = dataObj.saveItemData.grade < 5 ? 0 : dataObj.saveItemData.grade - 5;
-    const items = dataObj.saveItemData.part === 3 ? gameData.items.equip[dataObj.saveItemData.part][dataObj.saveItemData.weaponType][itemsGrade][dataObj.saveItemData.idx] : gameData.items.equip[dataObj.saveItemData.part][0][itemsGrade][dataObj.saveItemData.idx];
+    const items = dataObj.saveItemData.part === 3 ? 
+      gameData.items?.equip?.[dataObj.saveItemData.part]?.[dataObj.saveItemData.weaponType]?.[itemsGrade]?.[dataObj.saveItemData.idx] : 
+      gameData.items?.equip?.[dataObj.saveItemData.part]?.[0]?.[itemsGrade]?.[dataObj.saveItemData.idx];
+    
+    if (!items) return null;
+
     const saveItems = dataObj.saveItemData;
     const grade = saveItems.grade || items.grade;
-    const setsInfo = gameData.items.set_type[items.set];
+    const setsInfo = gameData.items?.set_type?.[items.set] || {};
     const totalEff = util.getTotalEff(saveItems, gameData);
 		return (
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack}>
@@ -572,11 +580,11 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
           </div>
         </PopupItemList>
-        <PopupItemList className="item_typeSlot" type="animalCoin_slot">
-          <div className="item_type">
+        <PopupItemList type="animalCoin_slot">
+          <PopupItemCoin justifyContent="flex-start">
             <MarkPic length={saveItems.markNum} pic="icon100" idx={saveItems.mark} />
-          </div>
-          <PopupItemSlot>
+          </PopupItemCoin>
+          <PopupItemSlot justifyContent="flex-end">
             {saveItems.hole.map((holeData, idx) => {
               const holePic = holeData !== 0 ? gameData.items.hole[holeData.idx].display : 0;
               return (
@@ -598,7 +606,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                   <span className="cate">{util.getEffectType(eff.type, lang)}</span>
                   {eff.skList.map((sk, skIndex) => {
                     return (
-                      <span key={`skIndex${skIndex}`} className="total">{`${gameData.skill[sk.idx].na[lang]} LV.${sk.lv}`}</span>
+                      <span key={`skIndex${skIndex}`} className="total">{`${gameData.skill?.[sk.idx]?.na?.[lang]} LV.${sk.lv}`}</span>
                     )
                   })}
                 </PopupItemEffs>
@@ -661,7 +669,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             <div className="item_setNa">{setsInfo.na}</div>
             {setsInfo.part && setsInfo.part.map((data, idx) => {
               return (
-                <div key={idx} className={`item_set_piece ${dataObj.chSlotIdx ? getSetChk(saveData.ch[dataObj.chSlotIdx].items, data) : ''}`}>{gameData.items.equip[data].na}</div>
+                <div key={idx} className={`item_set_piece ${dataObj.chSlotIdx ? getSetChk(saveData.ch?.[dataObj.chSlotIdx]?.items || [], data) : ''}`}>{gameData.items?.equip?.[data]?.na}</div>
               ) 
             })}
           </PopupItemList>
@@ -699,10 +707,15 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
 		);
 	} else if (type === 'hequip') {
     const itemsGrade = dataObj.saveItemData.grade < 5 ? 0 : dataObj.saveItemData.grade - 5;
-    const items = dataObj.saveItemData.part === 3 ? gameData.items.equip[dataObj.saveItemData.part][dataObj.saveItemData.weaponType][itemsGrade][dataObj.saveItemData.idx] : gameData.items.equip[dataObj.saveItemData.part][0][itemsGrade][dataObj.saveItemData.idx];
+    const items = dataObj.saveItemData.part === 3 ? 
+      gameData.items?.equip?.[dataObj.saveItemData.part]?.[dataObj.saveItemData.weaponType]?.[itemsGrade]?.[dataObj.saveItemData.idx] : 
+      gameData.items?.equip?.[dataObj.saveItemData.part]?.[0]?.[itemsGrade]?.[dataObj.saveItemData.idx];
+    
+    if (!items) return null;
+
     const saveItems = dataObj.saveItemData;
     const grade = saveItems.grade || items.grade;
-    const setsInfo = gameData.items.set_type[items.set];
+    const setsInfo = gameData.items?.set_type?.[items.set] || {};
     const sealed = dataObj.saveItemData.sealed;
     const hasSocket = dataObj.saveItemData.slot;
     //아이템 기본, 추가, 홀 효과
@@ -730,11 +743,11 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
           </div>
         </PopupItemList>
-        <PopupItemList className="item_typeSlot" type="animalCoin_slot">
-          <div className="item_type">
+        <PopupItemList type="animalCoin_slot">
+          <PopupItemCoin justifyContent="flex-start">
             <MarkPic length={saveItems.markNum} pic="icon100" idx={saveItems.mark} />
-          </div>
-          <PopupItemSlot>
+          </PopupItemCoin>
+          <PopupItemSlot justifyContent="flex-end">
             {saveItems.hole.map((holeData, idx) => {
               const holePic = holeData !== 0 ? gameData.items.hole[holeData.idx].display : 0;
               return (
@@ -819,7 +832,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             <div className="item_setNa">{setsInfo.na}</div>
             {setsInfo.part && setsInfo.part.map((data, idx) => {
               return (
-                <div key={idx} className={`item_set_piece ${dataObj.chSlotIdx ? getSetChk(saveData.ch[dataObj.chSlotIdx].items, data) : ''}`}>{gameData.items.equip[data].na}</div>
+                <div key={idx} className={`item_set_piece ${dataObj.chSlotIdx ? getSetChk(saveData.ch?.[dataObj.chSlotIdx]?.items || [], data) : ''}`}>{gameData.items?.equip?.[data]?.na}</div>
               ) 
             })}
           </PopupItemList>
@@ -998,7 +1011,8 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
       </PopupItemContainer>
     );
   } else if (type === 'hole') {
-    const items = gameData.items.hole[dataObj.saveItemData.idx];
+    const items = gameData.items?.hole?.[dataObj.saveItemData.idx];
+    if (!items) return null;
     const saveItems = dataObj.saveItemData;
     return (
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack}>
@@ -1111,7 +1125,8 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
       </PopupItemContainer>
     )
   } else if (type === 'upgrade') {
-    const items = gameData.items.upgrade[dataObj.saveItemData.idx];
+    const items = gameData.items?.upgrade?.[dataObj.saveItemData.idx];
+    if (!items) return null;
     return (
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack}>
         <PopupItemList type="header" frameBack={imgSet.etc.frameChBack}>
@@ -1205,7 +1220,8 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
       </PopupItemContainer>
     )
   } else if (type === 'material') {
-    const items = gameData.items.material[dataObj.saveItemData.idx];
+    const items = gameData.items?.material?.[dataObj.saveItemData.idx];
+    if (!items) return null;
     return (
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack}>
         <PopupItemList type="header" frameBack={imgSet.etc.frameChBack}>
@@ -1263,7 +1279,8 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
       </PopupItemContainer>
     )
   } else if (type === 'etc') {
-    const items = gameData.items.etc[dataObj.saveItemData.idx];
+    const items = gameData.items?.etc?.[dataObj.saveItemData.idx];
+    if (!items) return null;
     return (
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack}>
         <PopupItemList type="header" frameBack={imgSet.etc.frameChBack}>
@@ -1339,11 +1356,11 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
       </PopupItemContainer>
     )
   } else if (type === 'guide') {
-    const guide_txt = dataObj.data.txt[lang];
+    const guide_txt = dataObj.data?.txt?.[lang];
     return (
       <PopupGuide>
         <dl>
-          <dt className="guide_title">{dataObj.data.title[lang]}</dt>
+          <dt className="guide_title">{dataObj.data?.title?.[lang]}</dt>
           <dd className="guide_cont">
             <ul>
             {guide_txt && guide_txt.map((txt, idx) => {
@@ -1377,12 +1394,12 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           <dl>
             <dt>
               {(skillLv <= 0 && activeRequired && chLv >= skillLimit) && <SkillLimit code="t2" color="grey">
-                {gameData.msg.sentence.learnSkillPossible[lang]}
+                {gameData.msg.sentence?.learnSkillPossible?.[lang]}
               </SkillLimit>}
               {(skillLv <= 0 && !activeRequired && !requiredSkillName && chLv >= skillLimit) && 
                 <>
                   <SkillLimit code="t2" color="grey">
-                    {gameData.msg.sentence.learnSkillPossible[lang]}
+                    {gameData.msg.sentence?.learnSkillPossible?.[lang]}
                   </SkillLimit>
                 </>
               }
@@ -1556,7 +1573,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           </div>
           <div className="select_rBox" flex-v="true">
             {/* <Img imgurl={imgSet.passive[gameData.skill[skillIdx].effAnimation]} /> */}
-            {dataObj.selectIdx !== '' ? <ul className="select_chState">
+            {dataObj.selectIdx !== '' && saveData.ch?.[dataObj.selectIdx] ? <ul className="select_chState">
               <li>통솔: {saveData.ch[dataObj.selectIdx].rSt0}</li>
               <li>체력: {saveData.ch[dataObj.selectIdx].rSt1}</li>
               <li>완력: {saveData.ch[dataObj.selectIdx].rSt2}</li>
@@ -1608,9 +1625,12 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         <div className="item_button" flex="true">
           <button className="button_big" text="true" onClick={(e) => {
             e.stopPropagation();
-            let sData = {...saveData};
-            sData.actionCh[dataObj.type].idx = dataObj.selectIdx;
-            changeSaveData(sData);
+            e.stopPropagation();
+            let sData = JSON.parse(JSON.stringify(saveData));
+            if (sData.actionCh?.[dataObj.type]) {
+              sData.actionCh[dataObj.type].idx = dataObj.selectIdx;
+              changeSaveData(sData);
+            }
             showPopup(false);
           }} data-buttontype="itemUse">{gameData.msg.button.confirm[lang]}</button>
         </div>

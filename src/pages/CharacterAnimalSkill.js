@@ -174,21 +174,18 @@ const CharacterAnimalSkill = ({
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
-  // const imgSet = React.useMemo(() => {
-  //   return context.images;
-  // }, [context]);
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
   const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
-  const chName = React.useMemo(() => gameData.ch[saveCh.idx].na1, [saveData, slotIdx]);
+  const chName = React.useMemo(() => gameData.ch[saveCh.idx].na1, [gameData, saveCh]);
   const animalPoint = React.useMemo(() => {
     return saveCh.animalBadge;
-  }, [saveData, slotIdx]);
+  }, [saveCh]);
   const animalSkill = React.useMemo(() => {
     return saveCh.animalSkill;
-  }, [saveData, slotIdx]);
-  const itemPoint = React.useMemo(() => saveCh.items, [saveData, slotIdx]);
+  }, [saveCh]);
+  const itemPoint = React.useMemo(() => saveCh.items, [saveCh]);
   const animalType = React.useMemo(() => gameData.ch[saveCh.idx].animal_type, [gameData, saveCh]);
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
@@ -200,7 +197,6 @@ const CharacterAnimalSkill = ({
     <>
       <Wrap className="skillAnimal scroll-y">
         <InfoGroup pointTitle={chName} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.animalSkill[lang]}`} guideClick={() => {
-          console.log("aa");
           setPopupType('guide');
           setPopupOn(true);
           setPopupInfo({
@@ -209,23 +205,33 @@ const CharacterAnimalSkill = ({
         }}>
           <SkillHeader>
             <div onClick={() => {
-              const sData = {...saveData};
-              sData.ch[slotIdx].animalBadge = util.getAnimalPoint(itemPoint, animalType, saveData.ch[slotIdx].mark);
-              sData.ch[slotIdx].animalSkill = saveCh.animalSkill.map((skGroup) => {
+              const updatedAnimalSkill = saveCh.animalSkill.map((skGroup) => {
                 return skGroup.map((skData) => {
                   if (skData.idx === "") {
                     return {idx: ""}
                   } else {
                     return {
                       idx: skData.idx,
-                      lv:0,
+                      lv: 0,
                       lvLimit: skData.lvLimit,
                     }
                   }
                 });
               });
-              saveCh.hasSkill = [...saveCh.sk];
-              changeSaveData(sData);
+
+              const newSaveData = {
+                ...saveData,
+                ch: saveData.ch.map((ch, idx) => 
+                  idx === slotIdx ? {
+                    ...ch,
+                    animalBadge: util.getAnimalPoint(itemPoint, animalType, ch.mark),
+                    animalSkill: updatedAnimalSkill,
+                    hasSkill: [...ch.sk]
+                  } : ch
+                )
+              };
+
+              changeSaveData(newSaveData);
               setMsgOn(true);
               setMsg(gameData.msg.sentence.resetAnimalSkill[lang]);
             }}>{gameData.msg.button.skillReset[lang]}</div>
@@ -244,6 +250,7 @@ const CharacterAnimalSkill = ({
                       const sk = gameData.skill[skData.idx],
                         requiredSkill = groupIdx !== 0 && gameData.skill[animalSkill[groupIdx - 1][skIdx].idx];
                       const activeRequired = groupIdx === 0 || (groupIdx !== 0 && animalSkill[groupIdx - 1][skIdx].lv > 0);
+                      console.log(sk);
                       //const skillCate = sk.cate;
                       return (
                         <SkillList key={skIdx} pos={skIdx % 4}>
@@ -252,7 +259,6 @@ const CharacterAnimalSkill = ({
                             {/* <div className="limitLv">{`${skData.lv} / ${groupIdx + 1}`}</div> */}
                             <SkillLv code="t3" weight="600" color="sub" 
                             onClick={() => {
-                              let sData = {...saveData};
                               if (saveCh.animalBadge <= 0) {
                                 setMsgOn(true);
                                 setMsg(gameData.msg.sentence.lackBadges[lang]);
@@ -273,20 +279,38 @@ const CharacterAnimalSkill = ({
                                   setMsg(gameData.msg.sentence.lackLv[lang]);
                                   return;
                                 }
-                                saveCh.animalBadge -= 1;
-                                saveCh.animalSkill[groupIdx][skIdx].lv += 1;
+
                                 const animalIdx = saveCh.animalSkill[groupIdx][skIdx].idx;
-                                const overlapIdx = saveCh.hasSkill.findIndex((hSkill, idx) => {
-                                  if (hSkill.idx === animalIdx) {
-                                    return idx;
-                                  }
-                                });
+                                const newLv = saveCh.animalSkill[groupIdx][skIdx].lv + 1;
+                                
+                                const updatedAnimalSkill = saveCh.animalSkill.map((group, gIdx) => 
+                                  gIdx === groupIdx ? group.map((sk, sIdx) => 
+                                    sIdx === skIdx ? { ...sk, lv: newLv } : sk
+                                  ) : group
+                                );
+
+                                let updatedHasSkill = [...saveCh.hasSkill];
+                                const overlapIdx = updatedHasSkill.findIndex(hSkill => hSkill.idx === animalIdx);
+
                                 if (overlapIdx >= 0) {
-                                  saveCh.hasSkill[overlapIdx].lv = saveCh.animalSkill[groupIdx][skIdx].lv;
+                                  updatedHasSkill[overlapIdx] = { ...updatedHasSkill[overlapIdx], lv: newLv };
                                 } else {
-                                  saveCh.hasSkill.push(saveCh.animalSkill[groupIdx][skIdx]);
+                                  updatedHasSkill.push({ ...saveCh.animalSkill[groupIdx][skIdx], lv: newLv });
                                 }
-                                changeSaveData(sData);
+
+                                const newSaveData = {
+                                  ...saveData,
+                                  ch: saveData.ch.map((ch, idx) => 
+                                    idx === slotIdx ? {
+                                      ...ch,
+                                      animalBadge: ch.animalBadge - 1,
+                                      animalSkill: updatedAnimalSkill,
+                                      hasSkill: updatedHasSkill
+                                    } : ch
+                                  )
+                                };
+
+                                changeSaveData(newSaveData);
                               }
                             }}>{skData.lv}</SkillLv>
                             <IconPic pic="skill" idx={skData.idx} 
@@ -324,22 +348,6 @@ const CharacterAnimalSkill = ({
   );
 }
 
-// {groupIdx < animalSkill.length - 1 && (
-//   <SkillLine justifyContent="flex-start">
-//     {skGroup.map((skData, skIdx) => {
-//       if (skData.idx !== ""){
-//         let used = '';
-//         if (saveCh.animalSkill[groupIdx + 1]) {
-//           used = animalSkill[groupIdx + 1][skIdx].lv > 0 ? 'used' : '';
-//         }
-//         if (saveCh.animalSkill[groupIdx + 1] && Object.keys(saveCh.animalSkill[groupIdx + 1][skIdx]).length !== 0) {
-//           return <span key={skIdx} className={`line ${used}`}></span>;
-//         } else {
-//           return <span key={skIdx} ></span>;
-//         }
-//       }
-//     })}
-//   </SkillLine>
-// )}
+
 
 export default CharacterAnimalSkill;

@@ -20,49 +20,18 @@ const ChLi = styled.li`
   transform: translate(0, calc(50% + 2vh));
   transition: all 0.3s;
 `;
-// const timer = (currentTime, setCurrentTime, saveData, changeSaveData) => {
-//   if (currentTime > 49) {
-//     let sData = {...saveData};
-//     sData.ch.forEach((data) => {
-//       data.actionPoint += 1;
-//       data.pointTime -= 50;
-//     })
-//     changeSaveData(sData);
-//     setCurrentTime(1);
-//     localStorage.setItem('closeTime', new Date());
-//   } else {
-//     setCurrentTime(currentTime + 1);
-//   };
-// };
-const ChracterPaging = ({
+const CharacterPaging = ({
   chLength,
   saveData,
   slotIdx,
   changeChSlot,
 }) => {
-  // const context = useContext(AppContext);
-  // const lang = React.useMemo(() => {
-  //   return context.setting.lang;
-  // }, [context]);
-  // const imgSet = React.useMemo(() => {
-  //   return context.images;
-  // }, [context]);
-  // const gameData = React.useMemo(() => {
-  //   return context.gameData;
-  // }, [context]);
   const sData = React.useMemo(() => {
     return Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData;
   }, [saveData]);
+
   const cardWidth = React.useMemo(() => window.innerWidth * 0.1, []);
 
-  //const timerRef = useRef(null); //시간계산
-  //const [currentTime, setCurrentTime] = useState(1);
-  // useEffect(() => {
-  //   Math.floor(currentTime / 50)
-  //   timerRef.current = setTimeout(() => {
-  //     timer(currentTime, setCurrentTime, saveData, changeSaveData);
-  //   }, 1000);
-  // }, [currentTime]);
   const scrollMove = useCallback((node) => {
     if (node !== null) {
       const listHalfSize = node.getBoundingClientRect().width * .5;
@@ -75,10 +44,12 @@ const ChracterPaging = ({
     <ChList ref={scrollMove} type="paging">
       <ChUl chSize={cardWidth} chLength={chLength}>
         {sData.ch && sData.ch.map((data, idx) => {
+          const charKey = data.id || `paging-${data.idx}-${idx}`;
           return (
-            <ChLi className={`g${data.grade} ${slotIdx === idx ? 'on' : ''}`} key={idx} onClick={() => {
+            <ChLi className={`g${data.grade} ${slotIdx === idx ? 'on' : ''}`} key={charKey} onClick={() => {
+              const currentHistory = util.loadData('historyParam') || {};
               util.saveData('historyParam', {
-                ...util.loadData('historyParam'),
+                ...currentHistory,
                 cards: {
                   selectIdx: idx,
                 }
@@ -94,4 +65,4 @@ const ChracterPaging = ({
   );
 }
 
-export default ChracterPaging;
+export default CharacterPaging;

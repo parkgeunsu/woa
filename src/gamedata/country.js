@@ -1,6 +1,6 @@
 export const country = {
   regions: [
-    {
+    {//0
       id:'japan0',
       pos:[1336,160.5],
       movePossible:['japan1'],
@@ -11,8 +11,9 @@ export const country = {
         en:'Eastern Japan',
         jp:'日本東部',
       },
+      difficultLv: 10,
     },
-    {
+    {//1
       id:'japan1',
       pos:[1325.5,195.5],
       movePossible:['japan0','japan2'],
@@ -23,8 +24,9 @@ export const country = {
         en:'Central Japan',
         jp:'日本中部',
       },
+      difficultLv: 10,
     },
-    {
+    {//2
       id:'japan2',
       pos:[1310,220],
       movePossible:['japan1'],
@@ -35,8 +37,9 @@ export const country = {
         en:'Western Japan',
         jp:'日本西部',
       },
+      difficultLv: 10,
     },
-    {
+    {//3
       id:'korea0',
       pos:[1267,169.5],
       movePossible:['mongolia1','korea1','korea2'],
@@ -47,8 +50,9 @@ export const country = {
         en:'North Korea',
         jp:'韓国北部',
       },
+      difficultLv: 10,
     },
-    {
+    {//4
       id:'korea1',
       pos:[1280.5,192.5],
       movePossible:['korea0','korea2'],
@@ -59,8 +63,9 @@ export const country = {
         en:'Eastern Korea',
         jp:'韓国東部',
       },
+      difficultLv: 10,
     },
-    {
+    {//5
       id:'korea2',
       pos:[1271,201],
       movePossible:['korea0','korea1'],
@@ -71,8 +76,9 @@ export const country = {
         en:'Western Korea',
         jp:'韓国西部',
       },
+      difficultLv: 10,
     },
-    {
+    {//6
       id:'mongolia0',
       pos:[1172.5,104.5],
       movePossible:['mongolia1','mongolia2','mongolia3','china1','china2'],
@@ -83,8 +89,9 @@ export const country = {
         en:'Northeast Mongolia',
         jp:'モンゴル北東部',
       },
+      difficultLv: 10,
     },
-    {
+    {//7
       id:'mongolia1',
       pos:[1238.5,148],
       movePossible:['korea0','china0','china1','mongolia0'],
@@ -95,8 +102,9 @@ export const country = {
         en:'Southeast Mongolia',
         jp:'モンゴル南東部',
       },
+      difficultLv: 10,
     },
-    {
+    {//8
       id:'mongolia2',
       pos:[988,152],
       movePossible:['mongolia0','mongolia3','mongolia4','china2'],
@@ -107,8 +115,9 @@ export const country = {
         en:'Central Mongolia',
         jp:'モンゴル中部',
       },
+      difficultLv: 10,
     },
-    {
+    {//9
       id:'mongolia3',
       pos:[862,101],
       movePossible:['mongolia0','mongolia2','mongolia4'],
@@ -119,8 +128,9 @@ export const country = {
         en:'Northwest Mongolia',
         jp:'モンゴル西北部',
       },
+      difficultLv: 10,
     },
-    {
+    {//10
       id:'mongolia4',
       pos:[842.5,208],
       movePossible:['mongolia2','mongolia3'],
@@ -131,8 +141,9 @@ export const country = {
         en:'Southwest Mongolia',
         jp:'モンゴル西南部',
       },
+      difficultLv: 10,
     },
-    {
+    {//11
       id:'china0',
       pos:[1220.5,189],
       movePossible:['mongolia1','china1','china3','china4'],
@@ -143,8 +154,9 @@ export const country = {
         en:'Northeast China',
         jp:'中国東北部',
       },
+      difficultLv: 10,
     },
-    {
+    {//12
       id:'china1',
       pos:[1158.5,189],
       movePossible:['mongolia0','mongolia1','china0','china2','china4','china5'],
@@ -155,8 +167,9 @@ export const country = {
         en:'North China',
         jp:'中国北部',
       },
+      difficultLv: 10,
     },
-    {
+    {//13
       id:'china2',
       pos:[1088.5,218.5],
       movePossible:['mongolia0','mongolia2','china1','china5'],
@@ -167,8 +180,9 @@ export const country = {
         en:'Northwest China',
         jp:'中国西北部',
       },
+      difficultLv: 10,
     },
-    {
+    {//14
       id:'china3',
       pos:[1235,212.5],
       movePossible:['china0','china4','china6'],
@@ -179,8 +193,9 @@ export const country = {
         en:'Eastern China',
         jp:'中国東部',
       },
+      difficultLv: 10,
     },
-    {
+    {//15
       id:'china4',
       pos:[1209,243],
       movePossible:['china0','china1','china3','china5','china6','china7'],
@@ -191,8 +206,9 @@ export const country = {
         en:'Central China',
         jp:'中国中部',
       },
+      difficultLv: 10,
     },
-    {
+    {//16
       id:'china5',
       pos:[1167,243],
       movePossible:['china1','china2','china4','china7'],
@@ -203,8 +219,9 @@ export const country = {
         en:'Western China',
         jp:'中国西部',
       },
+      difficultLv: 10,
     },
-    {
+    {//17
       id:'china6',
       pos:[1247.5,255.5],
       movePossible:['china3','china4','china7'],
@@ -215,8 +232,9 @@ export const country = {
         en:'Southeast China',
         jp:'中国南東部',
       },
+      difficultLv: 10,
     },
-    {
+    {//18
       id:'china7',
       pos:[1208.5,292],
       movePossible:['china4','china5','china6'],
@@ -227,8 +245,9 @@ export const country = {
         en:'Southern China',
         jp:'中国南部',
       },
+      difficultLv: 10,
     },
-    {
+    {//19
       id:'saudiArabia0',
       pos:[828.5,283],
       movePossible:['egypt0','mongolia4'],
@@ -239,8 +258,9 @@ export const country = {
         en:'Saudi Arabia',
         jp:'サウジアラビア',
       },
+      difficultLv: 10,
     },
-    {
+    {//20
       id:'egypt0',
       pos:[746,263],
       movePossible:['saudiArabia0'],
@@ -251,8 +271,9 @@ export const country = {
         en:'Egypt',
         jp:'エジプト',
       },
+      difficultLv: 10,
     },
-    {
+    {//21
       id:'greece0',
       pos:[702.5,183.5],
       movePossible:['mongolia4','italy0'],
@@ -263,8 +284,9 @@ export const country = {
         en:'Greece',
         jp:'ギリシャ',
       },
+      difficultLv: 10,
     },
-    {
+    {//22
       id:'italy0',
       pos:[644.5,160],
       movePossible:['greece0','france0'],
@@ -275,8 +297,9 @@ export const country = {
         en:'Italy',
         jp:'イタリア',
       },
+      difficultLv: 10,
     },
-    {
+    {//23
       id:'france0',
       pos:[582.5,129.5],
       movePossible:['italy0','unitedKingdom0','spain0'],
@@ -287,8 +310,9 @@ export const country = {
         en:'France',
         jp:'フランス',
       },
+      difficultLv: 10,
     },
-    {
+    {//24
       id:'spain0',
       pos:[555.5,169],
       movePossible:['france0','portugal0'],
@@ -299,8 +323,9 @@ export const country = {
         en:'Spain',
         jp:'スペイン',
       },
+      difficultLv: 10,
     },
-    {
+    {//25
       id:'portugal0',
       pos:[531.5,169],
       movePossible:['spain0'],
@@ -311,8 +336,9 @@ export const country = {
         en:'Portugal',
         jp:'ポルトガル',
       },
+      difficultLv: 10,
     },
-    {
+    {//26
       id:'unitedKingdom0',
       pos:[561,74.5],
       movePossible:['france0','unitedKingdom1'],
@@ -323,8 +349,9 @@ export const country = {
         en:'Eastern United Kingdom',
         jp:'イギリス東部',
       },
+      difficultLv: 10,
     },
-    {
+    {//27
       id:'unitedKingdom1',
       pos:[539,83],
       movePossible:['unitedKingdom0'],
@@ -335,6 +362,7 @@ export const country = {
         en:'Western United Kingdom',
         jp:'イギリス西部',
       },
+      difficultLv: 10,
     }
   ],
 }

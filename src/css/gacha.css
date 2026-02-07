@@ -1,24 +1,4 @@
 @charset "utf-8";
-.gacha_cards.pos .gacha_card:first-of-type{transform:translate(10%,10%) !important;}
-.gacha_cards.pos .gacha_card:nth-of-type(2){transform:translate(130%,10%) !important;}
-.gacha_cards.pos .gacha_card:nth-of-type(3){transform:translate(250%,10%) !important;}
-.gacha_cards.pos .gacha_card:nth-of-type(4){transform:translate(70%,100%) !important;}
-.gacha_cards.pos .gacha_card:nth-of-type(5){transform:translate(190%,100%) !important;}
-.gacha_cards.pos .gacha_card:nth-of-type(6){transform:translate(10%,190%) !important;}
-.gacha_cards.pos .gacha_card:nth-of-type(7){transform:translate(130%,190%) !important;}
-.gacha_cards.pos .gacha_card:nth-of-type(8){transform:translate(250%,190%) !important;}
-.gacha_cards.pos .gacha_card:nth-of-type(9){transform:translate(70%,280%) !important;}
-.gacha_cards.pos .gacha_card:last-of-type{transform:translate(190%,280%) !important;}
-.gacha_cards.begin1 .gacha_card{left:50%;top:20%;transform:translate(-50%, -50%) !important;}
-.gacha_cards.begin3 .gacha_card:first-of-type{left:50%;top:20%;transform:translate(-50%, -50%) !important;}
-.gacha_cards.begin3 .gacha_card:nth-of-type(2){left:20%;top:50%;transform:translate(-50%, -50%) !important;}
-.gacha_cards.begin3 .gacha_card:nth-of-type(3){left:80%;top:50%;transform:translate(-50%, -50%) !important;}
-.gacha_cards.begin4 .gacha_card:first-of-type{left:50%;top:20%;transform:translate(-50%, -50%) !important;}
-.gacha_cards.begin4 .gacha_card:nth-of-type(2){left:20%;top:50%;transform:translate(-50%, -50%) !important;}
-.gacha_cards.begin4 .gacha_card:nth-of-type(3){left:80%;top:50%;transform:translate(-50%, -50%) !important;}
-.gacha_cards.begin4 .gacha_card:last-of-type{left:50%;top:80%;transform:translate(-50%, -50%) !important;}
-.gacha_cards.posOne .gacha_card{left:0 !important;top:0 !important;transform:scale(1.5) translate(80%,80%) !important;}
-
 .gacha_info{display:none;position:absolute;left:0;right:0;top:0;bottom:0;z-index:3;}
 .gacha_info.on {display:block;}
 .gacha_info:after{content:'';position:absolute;left:0;right:0;top:0;bottom:0;background:rgba(0,0,0,.7);}

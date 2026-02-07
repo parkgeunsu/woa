@@ -1,4 +1,4 @@
-import { ChPic, IconPic } from 'components/ImagePic';
+import { ChPic, IconPic, MergedPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import { useState } from 'react';
 import { Range, getTrackBackground } from 'react-range';
@@ -252,18 +252,18 @@ const ListJob = styled.span`
 const ListActionType = styled.span`
   background-image:url(${({actionType}) => actionType});background-size:100%;
 `;
-const ListRing = styled(ChPic)`
+const ListRing = styled(MergedPic)`
   position:absolute;
   top:0;
   background-position:center 55%;
   z-index:1;
   ${'' /* background-size:85%; */}
 `;
-const ListElement = styled(ChPic)`
+const ListElement = styled(MergedPic)`
   position: absolute;
   bottom: 20%;
 `;
-const ListFrame = styled(ChPic)`
+const ListFrame = styled(MergedPic)`
   position: absolute;
   top: 0;
 `;
@@ -308,11 +308,12 @@ export const ActionChDisplay = ({
     hasSkill = '';
   }
   if (hasSkill) {
+    const displayIdx = gameData.ch[saveData.ch[actionCh.idx].idx].display;
     return (
       <div className={`action_ch g${saveData.ch[actionCh.idx].grade}`}>
         <ListRing type="cardBack" pic="card" idx={0} />
         <ListElement type="elementBack" pic="card" idx={gameData.ch[saveData.ch[actionCh.idx].idx].element} />
-        <ListCh className="transition" pic="ch" idx={gameData.ch[saveData.ch[actionCh.idx].idx].display} />
+        <ListCh className="transition" pic={`ch${util.chIdxToGroup(displayIdx)}`} idx={displayIdx} />
         <div className="list_job_actiontype">
           <ListJob jobIcon={imgSet.job[saveData.ch[actionCh.idx].job]} className="list_job"/>
           {saveData.ch[actionCh.idx].newActionType.map((data, idx) => {

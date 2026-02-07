@@ -228,16 +228,19 @@ const colorantSetColor = (color) => {
 	}
 };
 const removeSocket = (data, saveData, gameData, changeSaveData, lang) => {
-	let sData = {...saveData};
-	const removeIdx = sData.items.etc.findIndex((itemEtc) => itemEtc.idx === 22);
+	const removeIdx = saveData.items.etc.findIndex((itemEtc) => itemEtc.idx === 22);
 	if (removeIdx >= 0) {//보석제거 집게(22) 있을 경우
-		sData.items.etc.splice(removeIdx,1);
-		sData.info.money -= gameData.prices.enhancingStickers.socketRemove[0].price;
-		sData.items.equip[data.item.select].hole.splice(data.socketIdx,1,0);
-		delete sData.items.equip[data.item.select].colorantSet;
-		delete sData.items.equip[data.item.select].colorantColor;
-		delete sData.items.equip[data.item.select].colorEff;
-		delete sData.items.equip[data.item.select].svgColor;
+		const updatedEtc = saveData.items.etc.filter((_, i) => i !== removeIdx);
+		const updatedEquipHole = [...saveData.items.equip[data.item.select].hole];
+		updatedEquipHole[data.socketIdx] = 0;
+
+		const targetEquip = { ...saveData.items.equip[data.item.select], hole: updatedEquipHole };
+		delete targetEquip.colorantSet;
+		delete targetEquip.colorantColor;
+		delete targetEquip.colorEff;
+		delete targetEquip.svgColor;
+
+		const updatedEquip = saveData.items.equip.map((eq, i) => i === data.item.select ? targetEquip : eq);
 
 		let cloneColor = data.socket.game.map((data) => {
 			return data.color
@@ -248,23 +251,30 @@ const removeSocket = (data, saveData, gameData, changeSaveData, lang) => {
 		data.setMainColor(saveColor);
 		
 		data.showMsg(true);
-    data.msgText(`<span remove>-500</span><br/><span remove>-1 ${gameData.items.etc[22].na[lang]}</span>`);
-		changeSaveData(sData);
+		data.msgText(`<span remove>-500</span><br/><span remove>-1 ${gameData.items.etc[22].na[lang]}</span>`);
+
+		const finalSaveData = {
+			...saveData,
+			info: { ...saveData.info, money: saveData.info.money - gameData.prices.enhancingStickers.socketRemove[0].price },
+			items: { ...saveData.items, etc: updatedEtc, equip: updatedEquip }
+		};
+		changeSaveData(finalSaveData);
 	} else {
 		data.showMsg(true);
-		//여기 요기 작업 수정
-    data.msgText(gameData.msg.sentenceFn.lackItem(lang, gameData.items.etc[22].na));
+		data.msgText(gameData.msg.sentenceFn.lackItem(lang, gameData.items.etc[22].na));
 	}
 	console.log(data);
 }
 const upgrade = (data, saveData, gameData, changeSaveData, lang) => {
-	let sData = {...saveData};
-	const removeIdx = sData.items.etc.findIndex((itemEtc) => itemEtc.idx === (7 + data.upgradeItem.game.grade));
+	const upgradeItemIdx = 7 + data.upgradeItem.game.grade;
+	const removeIdx = saveData.items.etc.findIndex((itemEtc) => itemEtc.idx === upgradeItemIdx);
 	if (removeIdx >= 0) {//아이템 강화책(8-10) 있을 경우
-		sData.items.etc.splice(removeIdx,1);
-		sData.info.money -= gameData.prices.enhancingStickers[`upgrade${data.item.save.grade - 1}`][0].price;
-		const removeIdx2 = sData.items.upgrade.findIndex((itemUpgrade) => itemUpgrade.idx === data.upgradeItem.save.idx);
-		sData.items.upgrade.splice(removeIdx2,1);
+		const updatedEtc = saveData.items.etc.filter((_, i) => i !== removeIdx);
+		const price = gameData.prices.enhancingStickers[`upgrade${data.item.save.grade - 1}`][0].price;
+		
+		const removeIdx2 = saveData.items.upgrade.findIndex((itemUpgrade) => itemUpgrade.idx === data.upgradeItem.save.idx);
+		const updatedUpgrade = saveData.items.upgrade.filter((_, i) => i !== removeIdx2);
+
 		if (typeof data.upgradeItem.select === 'number') {
 			data.setUpgradeOn('upgradeAnimation');
 			data.timeoutRef.current = setTimeout(() => {
@@ -272,14 +282,26 @@ const upgrade = (data, saveData, gameData, changeSaveData, lang) => {
 				data.setUpgradeItem({save:{},select:'',game:{}});
 				if (Math.random() < data.upgradePercent / 100) {
 					console.log(data.upgradePercent / 100);
-					sData.items.equip[data.item.select].grade += 1;
-					changeSaveData(sData);
+					const updatedEquipGrade = saveData.items.equip.map((eq, i) => i === data.item.select ? { ...eq, grade: eq.grade + 1 } : eq);
+					const finalSaveData = {
+						...saveData,
+						info: { ...saveData.info, money: saveData.info.money - price },
+						items: { ...saveData.items, etc: updatedEtc, upgrade: updatedUpgrade, equip: updatedEquipGrade }
+					};
+					changeSaveData(finalSaveData);
+				} else {
+					const finalSaveDataFail = {
+						...saveData,
+						info: { ...saveData.info, money: saveData.info.money - price },
+						items: { ...saveData.items, etc: updatedEtc, upgrade: updatedUpgrade }
+					};
+					changeSaveData(finalSaveDataFail);
 				}
 			}, 3000);
 		}
 	} else {
 		data.showMsg(true);
-    data.msgText(gameData.msg.sentenceFn.lackItem(lang, gameData.items.etc[7 + data.upgradeItem.game.grade].na));
+		data.msgText(gameData.msg.sentenceFn.lackItem(lang, gameData.items.etc[7 + data.upgradeItem.game.grade].na));
 	}
 	console.log(data, data.upgradeItem.save.grade)
 }
@@ -358,8 +380,16 @@ const EnhancingStickers = ({
 	const [item, setItem] = useState({...saveData.items});
 	const [selectItem1, setSelectItem1] = useState(selectItemFn(state, item, gameItem));//좌측 장비 save, game
 	const [possibleHole, setPossibleHole] = useState([]);
-	const [selectItem2, setSelectItem2] = useState({save:[],select:[],game:[]});//탭1 우측 홀 save, game
-	const [selectItem3, setSelectItem3] = useState({save:{},select:'',game:{}});//탭2 우측 홀 save, game
+	const [selectItem2, setSelectItem2] = useState({
+		save: Array.from({ length: 16 }, () => ({})),
+		select: Array.from({ length: 16 }, () => ('')),
+		game: Array.from({ length: 16 }, () => ({})),
+	});//탭1 우측 홀 save, game
+	const [selectItem3, setSelectItem3] = useState({
+		save:{},
+		select:'',
+		game:{}
+	});//탭2 우측 홀 save, game
 	const [colorantIdx, setColorantIdx] = useState(0);
 	useEffect(() => {
 		selectTabFn(state);
@@ -506,37 +536,37 @@ const EnhancingStickers = ({
 											setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[203].na));
 											return;
 										}
-										let sData = {...saveData};
 										let holeArr = [];
-										gameData.items.colorant[selectItem1.save.slot].forEach((colorant, setIdx) => {
-											let colorantSet = '';
-											colorant.socket.forEach((color,idx) => {
-												if (selectItem2.save[idx]) {
-													if (color !== gameData.items.hole[selectItem2.save[idx].idx].colorSet) {
-														colorantSet += 'N';
-													} else {
-														colorantSet += 'Y';
+										let colorantData = {
+											colorantSet: selectItem1.save.colorantSet,
+											colorEff: selectItem1.save.colorEff,
+											svgColor: selectItem1.save.svgColor,
+											colorantColor: selectItem1.save.colorantColor
+										};
+
+										if (gameData.items.colorant[selectItem1.save.slot]) {
+											gameData.items.colorant[selectItem1.save.slot].forEach((colorant, setIdx) => {
+												let allMatched = colorant.socket.every((color, idx) => {
+													if (selectItem2.save[idx] && Object.keys(selectItem2.save[idx]).length > 0) {
+														return color === gameData.items.hole[selectItem2.save[idx].idx].colorSet;
 													}
-												} else {
-													colorantSet += 'N';
+													return false;
+												});
+
+												if (allMatched) {
+													colorantData.colorantSet = `${selectItem1.save.slot}_${setIdx}`;
+													colorantData.colorEff = gameData.items.colorant[selectItem1.save.slot][setIdx].eff;
+													colorantData.svgColor = gameData.items.colorant[selectItem1.save.slot][setIdx].svgColor;
+													
+													let cColor = [...selectItem1.save.color];
+													cColor[0] = gameData.items.colorant[selectItem1.save.slot][setIdx].color[0];
+													colorantData.colorantColor = cColor;
 												}
 											});
-											if (colorantSet.indexOf('N') >= 0) {
-												return;
-											} else {
-												sData.items.equip[selectItem1.select].colorantSet = `${selectItem1.save.slot}_${setIdx}`;
-												sData.items.equip[selectItem1.select].colorEff = gameData.items.colorant[selectItem1.save.slot][setIdx].eff;
+										}
 
-												sData.items.equip[selectItem1.select].svgColor = gameData.items.colorant[selectItem1.save.slot][setIdx].svgColor;
-
-												let cColor = [...selectItem1.save.color];
-
-												cColor[0] = gameData.items.colorant[selectItem1.save.slot][setIdx].color[0];
-												sData.items.equip[selectItem1.select].colorantColor = cColor;
-											}
-										});
 										for(let i = 0; i < selectItem1.save.hole.length; ++i) {
-											if (selectItem2.save[i]) {
+											if (selectItem2.save[i] && Object.keys(selectItem2.save[i]).length > 0) {
 												holeArr[i] = selectItem2.save[i];
 												pHole[i] = false;
 											} else {
@@ -547,14 +577,22 @@ const EnhancingStickers = ({
 												}
 											}
 										}
-										const selectSort = selectItem2.select.sort((a,b) => {
-											return b - a;
-										});
-										selectSort.forEach((data) => {
-											sData.items.hole.splice(data,1);
-										})
-										sData.items.equip[selectItem1.select].hole = holeArr;
-										changeSaveData(sData);
+										const selectSort = [...selectItem2.select].filter(s => s !== '').sort((a,b) => b - a);
+										const updatedHole = saveData.items.hole.filter((_, i) => !selectSort.includes(i));
+										
+										const finalSaveData = {
+											...saveData,
+											items: {
+												...saveData.items,
+												equip: saveData.items.equip.map((eq, i) => i === selectItem1.select ? {
+													...eq,
+													hole: holeArr,
+													...colorantData
+												} : eq),
+												hole: updatedHole
+											}
+										};
+										changeSaveData(finalSaveData);
 										setPossibleHole(pHole);
 										setColorantIdx(possibleColorantIdx);
 									}}>{gameData.msg.button.confirm[lang]}</button>

@@ -6,6 +6,9 @@ const StyledText = styled.div`
   color: ${({theme, isRgbColor, color}) => isRgbColor ? color : theme.color[color] || theme.color.sub};
   font-weight: ${({weight}) => weight};
   text-align: ${({align}) => align};
+  ${({isDynamic}) => isDynamic && `
+    white-space: pre-wrap;
+  `}
   ${({theme, borderColor}) => borderColor ? `
     text-shadow: -1px 0 ${theme.color[borderColor]},
     0 1px ${theme.color[borderColor]},
@@ -21,11 +24,12 @@ const Text = ({
   weight,
   children,
   borderColor,
+  isDynamic,
   ...rest
 }) => {
   const isRgbColor = color.indexOf('#') >= 0 || color.indexOf('rgb') >= 0 || color.indexOf('hsl') >= 0; 
   return (
-    <StyledText code={code} isRgbColor={isRgbColor} color={color} borderColor={borderColor} align={align} weight={weight} {...rest}>{children}</StyledText>
+    <StyledText code={code} isRgbColor={isRgbColor} color={color} borderColor={borderColor} align={align} weight={weight} isDynamic={isDynamic} {...rest}>{children}</StyledText>
   )
 }
 

@@ -2563,7 +2563,7 @@
 }
 @keyframes grade_animation{
   0%{opacity:0;left:-50px;top:-50px;transform:rotate(-35deg) scale(6);}
-  100%{opacity:0.8;left:-15px;top:-25px;transform:rotate(-35deg) scale(3);}
+  100%{opacity:0.8;left:-15px;top:-5px;transform:rotate(0deg) scale(3);}
 }
 .sakura {
   background:linear-gradient(120deg, rgba(255, 183, 197, 0.9), rgba(255, 197, 208, 0.9));

@@ -228,14 +228,15 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
 
   const saveItems = React.useMemo(() => {
     return saveCh.items;
-  }, [saveCh, saveData]);
+  }, [saveCh]);
   const gameItem = React.useMemo(() => gameData.items, [gameData]);
-  const possibleKg = React.useMemo(() => {
-    let kg = 0;
+  
+  const possibleKgStatus = React.useMemo(() => {
+    let currentKg = 0;
     saveItems.forEach((itemData) => {
-      if (Object.keys(itemData).length !== 0) {
+      if (itemData && Object.keys(itemData).length !== 0) {
         const itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5;
-        kg +=
+        currentKg +=
           itemData.part === 3
             ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][
                 itemData.idx
@@ -243,18 +244,28 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
             : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx].kg;
       }
     });
-    return [kg.toFixed(1), Math.floor(chData.st1 / 0.3 + (saveCh.kg / gameData.animal_size.kg[chData.animal_type][1] - 1) * 100) / 10];
-  }, [saveCh, chData, gameItem, saveItems]);
+    
+    const maxKg = Math.floor(chData.st1 / 0.3 + (saveCh.kg / gameData.animal_size.kg[chData.animal_type][1] - 1) * 100) / 10;
+    
+    return {
+      current: currentKg,
+      max: maxKg,
+      percent: (currentKg / maxKg) * 100
+    };
+  }, [saveCh, chData, gameItem, saveItems, gameData.animal_size.kg]);
+
   const animalPic = useCallback((node) => {
     if (node !== null) {
       node.setAttribute("size", node.getBoundingClientRect().width);
     }
   }, []);
+  
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState("");
   const [popupInfo, setPopupInfo] = useState({});
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
+
   const handlePopup = useCallback(
     (itemType, itemIdx, itemSaveSlot, itemPart, itemGrade, itemWeaponType) => {
       if (itemType) {
@@ -280,8 +291,18 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
       }
       setPopupOn((prev) => !prev);
     },
-    [saveItems, slotIdx]
+    [saveItems, slotIdx, gameItem]
   );
+
+  const emptyIconMap = {
+    1: 0,
+    2: 1,
+    3: 2,
+    4: 8,
+    5: 9,
+    10: 3
+  };
+
   return (
     <>
       <Wrap className="items">
@@ -304,13 +325,13 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
             <PossibleKgBar>
               <PossibleKgCurrentBar
                 className="gradient_dark_g"
-                percent={(possibleKg[0] / possibleKg[1]) * 100}
+                percent={possibleKgStatus.percent}
               />
             </PossibleKgBar>
             <Text
               code="t2"
               color="main"
-            >{`${possibleKg[0]}kg / ${possibleKg[1]}kg`}</Text>
+            >{`${possibleKgStatus.current.toFixed(1)}kg / ${possibleKgStatus.max.toFixed(1)}kg`}</Text>
           </PossibleKg>
           <AnimalItemPic
             ref={animalPic}
@@ -330,8 +351,8 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
             <EquipItem className="e_items">
               {saveItems &&
                 saveItems.map((data, idx) => {
-                  const itemChk = Object.keys(data).length;
-                  if (itemChk !== 0) {
+                  const itemChk = data && Object.keys(data).length;
+                  if (itemChk) {
                     const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
                     const items =
                       data.part === 3
@@ -403,48 +424,17 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
                       </ItemList>
                     );
                   } else {
-                    const emptyItem =
-                      gameData.animal_type[animalIdx].equip[idx];
-                    switch (emptyItem) {
-                      case 1:
-                        return (
-                          <ItemList empty={true} key={idx}>
-                            <EmptyIconPic type="item" pic="icon100" idx={0} />
-                          </ItemList>
-                        );
-                      case 2:
-                        return (
-                          <ItemList empty={true} key={idx}>
-                            <EmptyIconPic type="item" pic="icon100" idx={1} />
-                          </ItemList>
-                        );
-                      case 3:
-                        return (
-                          <ItemList empty={true} key={idx}>
-                            <EmptyIconPic type="item" pic="icon100" idx={2} />
-                          </ItemList>
-                        );
-                      case 4:
-                        return (
-                          <ItemList empty={true} key={idx}>
-                            <EmptyIconPic type="item" pic="icon100" idx={8} />
-                          </ItemList>
-                        );
-                      case 5:
-                        return (
-                          <ItemList empty={true} key={idx}>
-                            <EmptyIconPic type="item" pic="icon100" idx={9} />
-                          </ItemList>
-                        );
-                      case 10:
-                        return (
-                          <ItemList empty={true} key={idx}>
-                            <EmptyIconPic type="item" pic="icon100" idx={3} />
-                          </ItemList>
-                        );
-                      default:
-                        break;
+                    const emptyItemType = gameData.animal_type[animalIdx].equip[idx];
+                    const iconIdx = emptyIconMap[emptyItemType];
+                    
+                    if (iconIdx !== undefined) {
+                      return (
+                        <ItemList empty={true} key={idx}>
+                          <EmptyIconPic type="item" pic="icon100" idx={iconIdx} />
+                        </ItemList>
+                      );
                     }
+                    return null;
                   }
                 })}
             </EquipItem>
@@ -457,7 +447,7 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
                         {gameData.msg.state[bData].en}
                       </StateText>
                       <Text code="t4" color="set">
-                        {saveCh["bSt" + idx] + saveCh["iSt" + idx]}
+                        {(saveCh["bSt" + idx] || 0) + (saveCh["iSt" + idx] || 0)}
                       </Text>
                     </StateList>
                   );

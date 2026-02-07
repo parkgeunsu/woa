@@ -31,6 +31,9 @@ const Map = styled.div`
   height: 20%;
   font-size: 0;
   box-sizing: border-box;
+  left: ${({idx}) => (idx % 5) * 20}%;
+  top: ${({idx}) => Math.floor(idx / 5) * 20}%;
+
   &:before {
     position: absolute;
     content: '';
@@ -49,31 +52,7 @@ const Map = styled.div`
     height: 100%;
     background: #000;
   }
-  &:nth-of-type(1) {left: 0%;top: 0%;}
-  &:nth-of-type(2) {left:20%;top:0%;}
-  &:nth-of-type(3) {left:40%;top:0%;}
-  &:nth-of-type(4) {left:60%;top:0%;}
-  &:nth-of-type(5) {left:80%;top:0%;}
-  &:nth-of-type(6) {left:0%;top:20%;}
-  &:nth-of-type(7) {left:20%;top:20%;}
-  &:nth-of-type(8) {left:40%;top:20%;}
-  &:nth-of-type(9) {left:60%;top:20%;}
-  &:nth-of-type(10) {left:80%;top:20%;}
-  &:nth-of-type(11) {left:0%;top:40%;}
-  &:nth-of-type(12) {left:20%;top:40%;}
-  &:nth-of-type(13) {left:40%;top:40%;}
-  &:nth-of-type(14) {left:60%;top:40%;}
-  &:nth-of-type(15) {left:80%;top:40%;}
-  &:nth-of-type(16) {left:0%;top:60%;}
-  &:nth-of-type(17) {left:20%;top:60%;}
-  &:nth-of-type(18) {left:40%;top:60%;}
-  &:nth-of-type(19) {left:60%;top:60%;}
-  &:nth-of-type(20) {left:80%;top:60%;}
-  &:nth-of-type(21) {left:0%;top:80%;}
-  &:nth-of-type(22) {left:20%;top:80%;}
-  &:nth-of-type(23) {left:40%;top:80%;}
-  &:nth-of-type(24) {left:60%;top:80%;}
-  &:nth-of-type(25) {left:80%;top:80%;}
+  
   div {
     position: absolute;
     font-size: 0.625rem;
@@ -83,178 +62,90 @@ const Map = styled.div`
   }
 `;
 const MapEff = styled.div`
+  position: absolute;
   left: 0;
-  right: 0;
   top: 0;
-  bottom: 0;
-  z-index: 3;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 `;
 const MapCh = styled.div`
+  position: absolute;
   left: 10%;
   top: 10%;
   width: 80%;
   height: 80%;
-  box-sizing: border-box;
-  border-radius: 30%;
-  overflow: hidden;
   z-index: 2;
-  li{
-    position: absolute;
-    color: #fff;
-  }
-  ${({selected, noneCh}) => (selected && noneCh) ? `
-    border: 1px solid #fff;
-    border-radius: 10%;
+  ${({noneCh, selected}) => noneCh && selected ? `
+    outline: 2px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #fff;
   ` : ''}
 `;
+const ChBoxWrap = styled.div`
+  position: absolute;
+  left: 10%;
+  top: 10%;
+  width: 80%;
+  height: 80%;
+  z-index: 2;
+  ${({selected}) => selected ? `
+    outline: 2px solid #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #fff;
+  ` : ''}
+`;
+
+const mapPointStyles = {
+  1: { size: '10%', color: '#00a90c', shadow: '#00a90c' },
+  2: { size: '15%', color: '#0090ff', shadow: '#0090ff' },
+  3: { size: '20%', color: '#ffcc15', shadow: '#ffcc15' },
+  4: { size: '30%', color: '#ff2a00', shadow: '#ff2a00' },
+};
+
 const MapPoint = styled.div`
   pointer-events: none;
   z-index: 1;
   ${({type, selected, noneCh}) => {
+    const style = mapPointStyles[type];
+    
     if (noneCh) {
-      switch(type) {
-        case 1:
-          return `
-            left: 45%;
-            top: 45%;
-            width: 10%;
-            height: 10%;
-            border-radius: 50%;
-            background: #00a90c;
-            box-shadow: 0 0 2px #00a90c, 0 0 5px #00a90c, 0 0 10px #00a90c; 
-          `;
-        case 2:
-          return `
-            left: 42.5%;
-            top: 42.5%;
-            width: 15%;
-            height: 15%;
-            border-radius: 50%;
-            background: #0090ff;
-            box-shadow: 0 0 2px #0090ff, 0 0 5px #0090ff, 0 0 10px #0090ff; 
-          `;
-        case 3:
-          return `
-            left: 40%;
-            top: 40%;
-            width: 20%;
-            height: 20%;
-            border-radius: 50%;
-            background: #ffcc15;
-            box-shadow: 0 0 2px #ffcc15, 0 0 5px #ffcc15, 0 0 10px #ffcc15; 
-          `;
-        case 4:
-          return `
-            left: 35%;
-            top: 35%;
-            width: 30%;
-            height: 30%;
-            border-radius: 50%;
-            background: #ff2a00;
-            box-shadow: 0 0 2px #ff2a00, 0 0 5px #ff2a00, 0 0 10px #ff2a00; 
-          `;
-        default:
-          return '';
-      }
+      if (!style) return '';
+      const offset = (100 - parseInt(style.size)) / 2;
+      return `
+        left: ${offset}%;
+        top: ${offset}%;
+        width: ${style.size};
+        height: ${style.size};
+        border-radius: 50%;
+        background: ${style.color};
+        box-shadow: 0 0 2px ${style.shadow}, 0 0 5px ${style.shadow}, 0 0 10px ${style.shadow}; 
+      `;
     } else {
       if (selected) {
-        switch(type) {
-          case 1:
-            return `
-              left: 10%;
-              top: 10%;
-              width: 80%;
-              height: 80%;
-              background: #00a90c;
-              box-shadow: 0 0 2px #00a90c, 0 0 5px #00a90c, 0 0 10px #00a90c;
-              z-index: 3;
-              opacity: 0.7;
-            `;
-          case 2:
-            return `
-              left: 10%;
-              top: 10%;
-              width: 80%;
-              height: 80%;
-              background: #0090ff;
-              box-shadow: 0 0 2px #0090ff, 0 0 5px #0090ff, 0 0 10px #0090ff;
-              z-index: 3;
-              opacity: 0.7;
-            `;
-          case 3:
-            return `
-              left: 10%;
-              top: 10%;
-              width: 80%;
-              height: 80%;
-              background: #ffcc15;
-              box-shadow: 0 0 2px #ffcc15, 0 0 5px #ffcc15, 0 0 10px #ffcc15;
-              z-index: 3;
-              opacity: 0.7;
-            `;
-          case 4:
-            return `
-              left: 10%;
-              top: 10%;
-              width: 80%;
-              height: 80%;
-              background: #ff2a00;
-              box-shadow: 0 0 2px #ff2a00, 0 0 5px #ff2a00, 0 0 10px #ff2a00;
-              z-index: 3;
-              opacity: 0.7;
-            `;
-          default:
-            return `
-              left: 10%;
-              top: 10%;
-              width: 80%;
-              height: 80%;
-              background: #fff;
-              box-shadow: 0 0 2px #fff, 0 0 5px #fff, 0 0 10px #fff;
-              z-index: 3;
-              opacity: 0.5;`;
-        }
+        const color = style?.color || '#fff';
+        const shadow = style?.shadow || '#fff';
+        const opacity = style ? 0.7 : 0.5;
+        return `
+          left: 10%;
+          top: 10%;
+          width: 80%;
+          height: 80%;
+          background: ${color};
+          box-shadow: 0 0 2px ${shadow}, 0 0 5px ${shadow}, 0 0 10px ${shadow};
+          z-index: 3;
+          opacity: ${opacity};
+        `;
       } else {
-        switch(type) {
-          case 1:
-            return `
-              left: 10%;
-              top: 10%;
-              width: 80%;
-              height: 80%;
-              background: #00a90c;
-              box-shadow: 0 0 2px #00a90c, 0 0 5px #00a90c, 0 0 10px #00a90c; 
-            `;
-          case 2:
-            return `
-              left: 10%;
-              top: 10%;
-              width: 80%;
-              height: 80%;
-              background: #0090ff;
-              box-shadow: 0 0 2px #0090ff, 0 0 5px #0090ff, 0 0 10px #0090ff; 
-            `;
-          case 3:
-            return `
-              left: 10%;
-              top: 10%;
-              width: 80%;
-              height: 80%;
-              background: #ffcc15;
-              box-shadow: 0 0 2px #ffcc15, 0 0 5px #ffcc15, 0 0 10px #ffcc15; 
-            `;
-          case 4:
-            return `
-              left: 10%;
-              top: 10%;
-              width: 80%;
-              height: 80%;
-              background: #ff2a00;
-              box-shadow: 0 0 2px #ff2a00, 0 0 5px #ff2a00, 0 0 10px #ff2a00; 
-            `;
-          default:
-            return '';
-        }
+        if (!style) return '';
+        return `
+          left: 10%;
+          top: 10%;
+          width: 80%;
+          height: 80%;
+          background: ${style.color};
+          box-shadow: 0 0 2px ${style.shadow}, 0 0 5px ${style.shadow}, 0 0 10px ${style.shadow}; 
+        `;
       }
     }
   }}
@@ -272,30 +163,39 @@ const clickListupMap = ({
   leaderIdx,
   setLeaderIdx,
   isMoveEvent,
+  setInfoShow,
   idx
 }) => {//맵 캐릭터 클릭
   setSelectFormationPosition(idx);
   const saveUseList = [...useList];
   let leader = leaderIdx;
+  let newSelectLineup = selectLineup;
+
   if (selectFormationPosition === idx) {
     saveUseList[idx] = '';
     if (gameData.lineup[selectLineup].entry[0][0] === idx) {
       leader = "";
+      newSelectLineup = 0;
       setLeaderIdx("");
-      const cloneSData = {...saveData};
-      cloneSData.lineup.save_slot[selectSave].leader = "";
-      cloneSData.lineup.save_slot[selectSave].no = 0;
-      changeSaveData(cloneSData);
     }
+  } else {
+    setInfoShow && setInfoShow(true);
   }
-  setUseList(saveUseList);
-  util.setLineupSt({
+
+  const currentSaveData = isMoveEvent ? 
+    { ...saveData, eventLineup: { ...saveData.eventLineup, save_slot: saveData.eventLineup.save_slot.map((slot, sIdx) => sIdx === selectSave ? { ...slot, leader: leader, no: newSelectLineup, entry: [...saveUseList] } : slot) } } :
+    { ...saveData, lineup: { ...saveData.lineup, save_slot: saveData.lineup.save_slot.map((slot, sIdx) => sIdx === selectSave ? { ...slot, leader: leader, no: newSelectLineup, entry: [...saveUseList] } : slot) } };
+
+  const finalSaveData = util.setLineupSt({
     saveSlot: selectSave, 
-    lineupType: selectLineup,
-    useList: useList,
+    lineupType: newSelectLineup,
+    useList: saveUseList,
     leaderIdx: leader,
     isMoveEvent: isMoveEvent,
-  }, gameData, saveData, changeSaveData);
+  }, gameData, currentSaveData);
+
+  setUseList(saveUseList);
+  changeSaveData(finalSaveData);
 }
 
 const ChLineup = ({
@@ -311,6 +211,7 @@ const ChLineup = ({
   leaderIdx,
   setLeaderIdx,
   isMoveEvent,
+  setInfoShow,
   onClick,
 }) => {
   // const imgSet = useContext(AppContext).images;
@@ -326,16 +227,17 @@ const ChLineup = ({
         onClick && onClick();
       }} >
         {useList && useList.map((slotIdx, idx) => {
+          const itemKey = slotIdx !== "" ? `slot-${slotIdx}-${idx}` : `empty-${idx}`;
           if (slotIdx === "") {
             return (
-              <Map key={idx} data-mapnum={idx}>
+              <Map key={itemKey} idx={idx} data-mapnum={idx}>
                 <MapEff />
                 <MapCh />
               </Map>
             )
           } else {
             return (
-              <Map key={idx} className={`has`} data-mapnum={idx} >
+              <Map key={itemKey} idx={idx} className={`has`} data-mapnum={idx} >
                 <MapEff />
                 <MapCh>
                   <CharacterCard usedType="thumb" saveData={saveData} gameData={gameData} slotIdx={slotIdx} />
@@ -348,9 +250,10 @@ const ChLineup = ({
       <LineupMap>
         {useList && useList.map((slotIdx, idx) => {
           const selected = selectFormationPosition === idx;
+          const itemKey = slotIdx !== "" ? `slot-${slotIdx}-${idx}` : `empty-edit-${idx}`;
           if (slotIdx === "") {
             return (
-              <Map selected={selected} key={idx} data-mapnum={idx} onClick={() => {
+              <Map key={itemKey} idx={idx} selected={selected} data-mapnum={idx} onClick={() => {
                 clickListupMap({
                   saveData: saveData, 
                   changeSaveData: changeSaveData,
@@ -373,10 +276,8 @@ const ChLineup = ({
               </Map>
             );
           } else {
-            //const saveCh = saveData.ch[slotIdx];
-            //const chData = gameData.ch[saveCh.idx];
             return (
-              <Map type={lineupMap[idx]} selected={selected} key={idx} data-mapnum={idx} onClick={() => {
+              <Map key={itemKey} idx={idx} type={lineupMap[idx]} selected={selected} data-mapnum={idx} onClick={() => {
                 clickListupMap({
                   saveData: saveData, 
                   changeSaveData: changeSaveData,
@@ -389,13 +290,14 @@ const ChLineup = ({
                   setUseList: setUseList,
                   leaderIdx: leaderIdx,
                   setLeaderIdx: setLeaderIdx,
+                  setInfoShow: setInfoShow,
                   idx:idx
                 });
               }}>
                 <MapEff />
-                <MapCh selected={selected}>
-                  <CharacterCard usedType="thumb" saveData={saveData} gameData={gameData} slotIdx={slotIdx} />
-                </MapCh>
+                <ChBoxWrap selected={selected}>
+                   <CharacterCard usedType="thumb" saveData={saveData} gameData={gameData} slotIdx={slotIdx} />
+                </ChBoxWrap>
                 <MapPoint type={lineupMap[idx]} selected={selected} />
               </Map>
             );

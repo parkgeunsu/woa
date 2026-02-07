@@ -4,6 +4,8 @@ import { FlexBox } from 'components/Container';
 import GuideQuestion from 'components/GuideQuestion';
 import { IconPic, ItemPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
+import Msg from 'components/Msg';
+import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import Tooltip from 'components/Tooltip';
@@ -23,7 +25,7 @@ const Wrap = styled(FlexBox)`
   background: linear-gradient(transparent 0%, rgba(0,0,0,.8) 10%, rgba(0,0,0,.8) 90%, transparent 100%);
 `;
 const ScrollWrap = styled.div`
-  margin: 20% 0;
+  margin: 20% 0 10%;
   padding: 0 20px;
   width: 100%;
   overflow: hidden;
@@ -31,15 +33,6 @@ const ScrollWrap = styled.div`
 `;
 const CountryContainer = styled.div`
   margin:0 0 10px 0;
-`;
-const CountryName = styled.div`
-  position: relative;
-  margin: 0 0 5px 0;
-  padding: 0 0 0 10px;
-  font-size: ${({theme}) => theme.font.t6};
-  color: ${({theme}) => theme.color.red};
-  text-align: left;
-  font-weight: 700;
 `;
 const CountryScenario = styled.div`
   margin: 0 0 10px 0;
@@ -97,7 +90,7 @@ const ScenarioName = styled.div`
 `;
 const ScenarioStage = styled.div`
   margin: 10px 0 0 0;
-  padding: 0 0 0 10px
+  padding: 0 0 0 10px;
 `;
 const StageName = styled(FlexBox)`
   position: relative;
@@ -106,6 +99,7 @@ const StageName = styled(FlexBox)`
   background: url(${({btnBack}) => btnBack}) no-repeat left center;
   background-size: 100% 100%;
   box-sizing: border-box;
+  ${({currentStage}) => !currentStage && "filter: grayscale(100%);"}
 `;
 const StageNewIcon = styled.div`
   position: absolute;
@@ -143,15 +137,12 @@ const IconSmile = styled.div`
   }}
   background-size: 100%;
 `;
-const IconDash = styled.div`
+const IconLock = styled(IconPic)`
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 150%;
-  height: 3px;
-  background: #f00;
-  transform: translate(-50%, -50%) rotate(45deg);
-  z-index: 2;
+`;
+const StageIconLock = styled(IconPic)`
+  background-color: ${({theme}) => theme.color.main};
+  border-radius: 50%;
 `;
 const IconClear = styled.div`
   position: absolute;
@@ -178,7 +169,8 @@ const DifficultIcon = ({
     {clear && <IconClear>
       <IconPic type="scenario" pic="icon100" idx={4} />
     </IconClear>}
-    {!possibleStageNum && <IconDash />}
+    {!possibleStageNum && <IconLock type="commonBtn" pic="icon100" idx={4} />
+    }
   </DifficultContainer>
 }
 
@@ -209,7 +201,7 @@ const MapPieces = styled.div`
   width: 20px;
   height: 20px;
   background: ${({theme, mapColor}) => theme.color[`land${mapColor}`]};
-  ${({enemy, idx}) => {
+  ${({theme, enemy, idx}) => {
     return enemy && enemy.idx !== '' && idx < 25 ? `
       &:before{
         content:'';
@@ -218,14 +210,14 @@ const MapPieces = styled.div`
         top: 50%;
         width: 10px;
         height: 10px;
-        background: #000;
-        box-shadow: 0 0 5px #000, 0 0 10px #fff;
-        border-radius: 3px;
+        background: ${theme.color.red};
+        border: 2px solid ${theme.color.main};
+        border-radius: 50%;
         transform: translate(-50%, -50%);
       }
     ` : '';
   }}
-  ${({ally, idx}) => {
+  ${({theme, ally, idx}) => {
     return typeof ally === 'number' && ally !== '' && idx >= 25 ? `
       &:before{
         content:'';
@@ -234,9 +226,9 @@ const MapPieces = styled.div`
         top: 50%;
         width: 10px;
         height: 10px;
-        background: #fff;
-        box-shadow: 0 0 5px #fff, 0 0 10px #000;
-        border-radius: 3px;
+        background: ${theme.color.blue};
+        border: 2px solid ${theme.color.main};
+        border-radius: 50%;
         transform: translate(-50%, -50%);
       }
     ` : '';
@@ -276,9 +268,9 @@ const DropItems = styled(FlexBox)`
 const StageHistory = styled.div`
   padding: 5px;
   height: 100%;
-  line-height: 1.5;
+  line-height: 1.2;
   border-radius: 5px;
-  font-size: ${({theme}) =>  theme.font.t2};
+  font-size: ${({theme}) =>  theme.font.t1};
   background: ${({theme}) => theme.color.shadowL};
 `;
 const difficultCurrent = (gameData, openCount) => {
@@ -307,13 +299,17 @@ const ScenarioList = ({
   setTooltip,
   setTooltipOn,
   setTooltipPos,
+  setMsgOn,
+  setMsg,
   lang,
 }) => {
   const saveStage = React.useMemo(() => {
-    return saveData.scenario[stay][dynastyIdx].scenarioList[dynastyScenarioIdx];
+    if (typeof stay !== 'string') return { open: 0, stage: [] };
+    const stayKey = stay.replace(/[0-9]/g, "");
+    return saveData.scenario?.[stayKey]?.[dynastyIdx]?.scenarioList?.[dynastyScenarioIdx] || { open: 0, stage: [] };
   }, [saveData, stay, dynastyIdx, dynastyScenarioIdx]);
   useEffect(() => {
-    saveStage.stage.forEach((stageData) => {
+    saveStage.stage?.forEach((stageData) => {
       if (stageData.first) { //최초 접근인지 체크
         setNewGroup(true);
         return;
@@ -326,13 +322,21 @@ const ScenarioList = ({
   const [selectDifficult, setSelectDifficult] = useState(difficultCurrent(gameData, saveStage.open));
   const stageIdxRef = useRef(0);
   const difficultRef = useRef(saveStage.open);
-  const difficultClick = useCallback((possible, stageIdx, idx) => {
-    if (!possible) {
+  const difficultClick = useCallback(({
+    possible, stageIdx, idx
+  }) => {
+    if (!possible || typeof stay !== 'string') {
       return;
     }
-    const sData = {...saveData}
-    sData.scenario[stay][dynastyIdx].scenarioList[dynastyScenarioIdx].stage[stageIdx].select = idx;
-    changeSaveData(sData);
+    const dynastyKey = stay.replace(/[0-9]/g, "");
+    const cloneSaveData = JSON.parse(JSON.stringify(saveData));
+    
+    console.log(saveData.scenario[dynastyKey]?.[dynastyIdx]?.scenarioList?.[dynastyScenarioIdx]?.stage?.[stageIdx], idx);
+    if (cloneSaveData.scenario?.[dynastyKey]?.[dynastyIdx]?.scenarioList?.[dynastyScenarioIdx]?.stage?.[stageIdx]) {
+      cloneSaveData.scenario[dynastyKey][dynastyIdx].scenarioList[dynastyScenarioIdx].stage[stageIdx].select = idx;
+      changeSaveData(cloneSaveData);
+    }
+
     setSelectScenario({
       dynastyIdx: dynastyIdx,
       dynastyScenarioIdx: dynastyScenarioIdx,
@@ -340,7 +344,7 @@ const ScenarioList = ({
       stageDifficult: idx,
     });
     setSelectDifficult(idx);
-  }, [saveData, stay, dynastyIdx, dynastyScenarioIdx, stageIdxRef]);
+  }, [saveData, stay, dynastyIdx, dynastyScenarioIdx, stageIdxRef, changeSaveData]);
   return <ScenarioContainer>
     <ScenarioNameBox justifyContent="flex-start" onClick={() => {
         setOpen(prev => !prev);
@@ -350,7 +354,7 @@ const ScenarioList = ({
         <StageNewIcon>
           <IconPic type="scenario" pic="icon100" idx={6} />
         </StageNewIcon>
-        {dynastyScenario.name[lang]}
+        {dynastyScenario?.name?.[lang] || ""}
       </ScenarioName>
       <DropDownArrow btnBack={imgSet.button.btnArrowL}  isOpen={isOpen} />
       <ScenarioCards code="t5">
@@ -373,8 +377,14 @@ const ScenarioList = ({
           stageInfo.nums ++;
         }
       });
-      return <ScenarioStage key={`stageData${stageIdx}`}>
-        <StageName key={`stageData${stageIdx}`} btnBack={imgSet.button.btnLL} justifyContent={'space-between'} onClick={() => {
+      const currentStage = saveStage.currentStage >= stageIdx;
+      return <ScenarioStage key={`stageGroup${stageIdx}`}>
+        <StageName key={`stageName${stageIdx}`} currentStage={currentStage} btnBack={imgSet.button.btnLL} justifyContent={'space-between'} onClick={() => {
+          if (!currentStage) {
+            setMsgOn(true);
+            setMsg(gameData.msg.sentence.prevStageClear[lang]);
+            return;
+          }
           if (showStageIdx === stageIdx) {
             stageIdxRef.current = '';
             setSelectScenario({});
@@ -388,28 +398,38 @@ const ScenarioList = ({
             });
           }
           setShowStageIdx(prev => prev === stageIdx ? '' : stageIdx);
+          ;
         }}>
-          <StageNewIcon>
-            <IconPic type="scenario" pic="icon100" idx={6} />
-          </StageNewIcon>
-          <StageTitle alignItems={'center'} justifyContent={'flex-start'}>{stageData.title[lang]}</StageTitle>
+          {saveStage.stage[stageIdx].first && <StageNewIcon>
+            {currentStage ? <IconPic type="scenario" pic="icon100" idx={6} /> : <StageIconLock type="commonBtn" pic="icon100" idx={4} />}
+          </StageNewIcon>}
+          <StageTitle alignItems={'center'} justifyContent={'flex-start'}>{stageData?.title?.[lang] || ""}</StageTitle>
           {stageIdx === showStageIdx && <StageDifficult>
             {gameData.possibleStageNum.map((possibleStage, possibleIdx) => {
               return (
                 <DifficultIcon key={`possibleStage${possibleIdx}`} 
-                  selected={saveStage.stage[stageIdx].select === possibleIdx}
-                  clear={saveStage.stage[stageIdx].clear[possibleIdx]}
+                  selected={saveStage.stage?.[stageIdx]?.select === possibleIdx}
+                  clear={saveStage.stage?.[stageIdx]?.clear?.[possibleIdx]}
                   possibleStageNum={difficultRef.current >= possibleStage}
                   iconIdx={possibleIdx}
                   onClick={(e) => {
-                    difficultClick(difficultRef.current >= possibleStage, stageIdx, possibleIdx);
+                    if (difficultRef.current < possibleStage) {
+                      setMsgOn(true);
+                      setMsg(gameData.msg.sentence.needMoreHero[lang]);
+                      return;
+                    }
+                    difficultClick({
+                      possible: difficultRef.current >= possibleStage,
+                      stageIdx: stageIdx,
+                      idx: possibleIdx,
+                    });
                   }}
                 />
               )
             })}
           </StageDifficult>}
         </StageName>
-        <StageDetail isShow={showStageIdx === stageIdx}>
+        <StageDetail currentStage={currentStage} isShow={showStageIdx === stageIdx}>
           <StageInfoWrap direction="column">
             <StageInfo justifyContent="flex-start" alignItems="flex-start">
               <StageMap onClick={() => {
@@ -417,8 +437,9 @@ const ScenarioList = ({
                   location: 'cardPlacement',
                   navigate: navigate,
                   callback: () => {
+                    const historyP = JSON.parse(JSON.stringify(util.loadData('historyParam') || {}));
                     util.saveData('historyParam', {
-                      ...util.loadData('historyParam'),
+                      ...historyP,
                       scenario: selectScenario
                     });
                   },
@@ -428,42 +449,44 @@ const ScenarioList = ({
                   isNavigate: true,
                 });//히스토리 저장
               }}>
-              {stageData.map.map((mapData, mapIdx) => {
-                return <MapPieces key={`map${mapIdx}`} idx={mapIdx} enemy={stageData.entry[mapIdx]} ally={mapIdx >= 25 && saveData.lineup.save_slot[saveData.lineup.select].entry[mapIdx - 25]} mapColor={mapData} />
-              })}
+                  {stageData.map.map((mapData, mapIdx) => {
+                    const slotEntry = saveData.lineup?.save_slot?.[saveData.lineup?.select]?.entry;
+                    return <MapPieces key={`map${mapIdx}`} idx={mapIdx} enemy={stageData.entry[mapIdx]} ally={mapIdx >= 25 && slotEntry?.[mapIdx - 25]} mapColor={mapData} />
+                  })}
               </StageMap>
               <StageLvHistory direction="column">
                 <StageLv direction="column" alignItems="flex-start">
-                  <Text color="main" code="t3">{gameData.msg.title['wildlife'][lang]}: {stageInfo.nums}</Text>
-                  <Text color="main" code="t3">{gameData.msg.title['animals'][lang]} Lv: {stageInfo.minLv === stageInfo.maxLv ? `${stageInfo.minLv}` : `${stageInfo.minLv} - ${stageInfo.maxLv}`}</Text>
+                  <Text color="main" code="t2">{gameData.msg.title?.['wildlife']?.[lang] || "Wildlife"}: {stageInfo.nums}</Text>
+                  <Text color="main" code="t2">{gameData.msg.title?.['animals']?.[lang] || "Animals"} Lv: {stageInfo.minLv === stageInfo.maxLv ? `${stageInfo.minLv}` : `${stageInfo.minLv} - ${stageInfo.maxLv}`}</Text>
                 </StageLv>
                 <StageHistory className="scroll-y">
-                  {stageData.history[lang]}
+                  {stageData?.history?.[lang] || ""}
                 </StageHistory>
               </StageLvHistory>
             </StageInfo>
             <DropItemsInfo direction="column" alignItems="flex-start">
-              <Text color="main" code="t2">{gameData.msg.title['dropItem'][lang]}:</Text>
-              <Text color="main" code="t1">({gameData.msg.title['dropFirst'][lang]})</Text>
+              <Text color="main" code="t2">{gameData.msg.title?.['dropItem']?.[lang] || "Drop Item"}:</Text>
+              <Text color="main" code="t1">({gameData.msg.title?.['dropFirst']?.[lang] || "First Time Only"})</Text>
               <DropItems justifyContent="flex-start">
                 {stageData.drop?.first[selectDifficult]?.map((dropFirst, dropFirstIdx) => {
                   if (dropFirst.type === 'Gold') {
                     return <span className="item_layout normal" key={`dropFirst${dropFirstIdx}`} onClick={(e) => {
                       setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([gameData.msg.title['gold'][lang], util.comma(dropFirst.num), gameData.msg.title['firstGet'][lang]]);
+                      setTooltip([gameData.msg.title?.['gold']?.[lang] || "Gold", util.comma(dropFirst.num), gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
                       setTooltipOn(true);
                     }}>
                       <ItemPic className="pic" pic="itemEtc" type="etc" idx={0}>
                         {<span className="display_text">{dropFirst.num}</span>}
                       </ItemPic>
                     </span>
-                  } else if (dropFirst.type === 'Equip'){
+                  } else if (dropFirst.type === 'Equip' && typeof dropFirst.idx === 'string'){
                     const itemSeparate = dropFirst.idx.split('-');
                     const dropType = dropFirst.type.toLowerCase(),
-                      items = gameData.items[dropType][itemSeparate[0]][itemSeparate[1]][itemSeparate[2]][itemSeparate[3]];
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e[dropFirst.grade].toLowerCase()}`} key={`dropFirst${dropFirstIdx}`} onClick={(e) => {
+                      items = gameData.items?.[dropType]?.[itemSeparate[0]]?.[itemSeparate[1]]?.[itemSeparate[2]]?.[itemSeparate[3]];
+                    if (!items) return null;
+                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[dropFirst.grade]?.toLowerCase() || "normal"}`} key={`dropFirst${dropFirstIdx}`} onClick={(e) => {
                       setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na[lang], '', gameData.msg.title['firstGet'][lang]]);
+                      setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
                       setTooltipOn(true);
                     }}>
                       <span className="pic">
@@ -474,10 +497,11 @@ const ScenarioList = ({
                     </span>
                   } else if (dropFirst.type === 'Etc') {
                     const dropType = dropFirst.type.toLowerCase(),
-                      items = gameData.items[dropType][dropFirst.idx];
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e[items.grade].toLowerCase()}`} key={`dropFirst${dropFirstIdx}`} onClick={(e) => {
+                      items = gameData.items?.[dropType]?.[dropFirst.idx];
+                    if (!items) return null;
+                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[items.grade]?.toLowerCase() || "normal"}`} key={`dropFirst${dropFirstIdx}`} onClick={(e) => {
                       setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na[lang], '', gameData.msg.title['firstGet'][lang]]);
+                      setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
                       setTooltipOn(true);
                     }}>
                       <ItemPic className="pic" pic="itemEtc" type={dropType} idx={items.display}>
@@ -486,10 +510,11 @@ const ScenarioList = ({
                     </span>
                   } else if (dropFirst.type === 'Material'){
                     const dropType = dropFirst.type.toLowerCase(),
-                      items = gameData.items[dropType][dropFirst.idx];
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e[items.grade].toLowerCase()}`} key={`dropFirst${dropFirstIdx}`} onClick={(e) => {
+                      items = gameData.items?.[dropType]?.[dropFirst.idx];
+                    if (!items) return null;
+                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[items.grade]?.toLowerCase() || "normal"}`} key={`dropFirst${dropFirstIdx}`} onClick={(e) => {
                       setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na[lang], dropFirst.num, gameData.msg.title['firstGet'][lang]]);
+                      setTooltip([items.na?.[lang] || "", dropFirst.num, gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
                       setTooltipOn(true);
                     }}>
                       <ItemPic className="pic" pic="itemEtc" type={dropType} idx={items.display}>
@@ -498,20 +523,22 @@ const ScenarioList = ({
                     </span>
                   } else if (dropFirst.type === 'Upgrade'){
                     const dropType = dropFirst.type.toLowerCase(),
-                      items = gameData.items[dropType][dropFirst.idx];
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e[items.grade].toLowerCase()}`} key={`dropFirst${dropFirstIdx}`} onClick={(e) => {
+                      items = gameData.items?.[dropType]?.[dropFirst.idx];
+                    if (!items) return null;
+                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[items.grade]?.toLowerCase() || "normal"}`} key={`dropFirst${dropFirstIdx}`} onClick={(e) => {
                       setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na[lang], '', gameData.msg.title['firstGet'][lang]]);
+                      setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
                       setTooltipOn(true);
                     }}>
                       <ItemPic className="pic" pic="itemEtc" type={dropType} idx={items.display} />
                     </span>
                   } else if (dropFirst.type === 'Hole'){
                     const dropType = dropFirst.type.toLowerCase(),
-                      items = gameData.items[dropType][dropFirst.idx];
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e[items.grade].toLowerCase()}`} key={`dropFirst${dropFirstIdx}`} onClick={(e) => {
+                      items = gameData.items?.[dropType]?.[dropFirst.idx];
+                    if (!items) return null;
+                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[items.grade]?.toLowerCase() || "normal"}`} key={`dropFirst${dropFirstIdx}`} onClick={(e) => {
                       setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na[lang], '', gameData.msg.title['firstGet'][lang]]);
+                      setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
                       setTooltipOn(true);
                     }}>
                       <ItemPic className="pic" pic="itemEtc" type={dropType} idx={items.display} />
@@ -527,7 +554,7 @@ const ScenarioList = ({
                   if (dropAlways.type === 'Gold') {
                     return <span className="item_layout normal" key={`dropAlways${dropAlwaysIdx}`} onClick={(e) => {
                       setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([gameData.msg.title['gold'][lang], util.comma(dropAlways.num), '100%']);
+                      setTooltip([gameData.msg.title?.['gold']?.[lang] || "Gold", util.comma(dropAlways.num), '100%']);
                       setTooltipOn(true);
                     }}>
                       <ItemPic className="pic" pic="itemEtc" type="etc"
@@ -535,12 +562,13 @@ const ScenarioList = ({
                         {<span className="display_text">{dropAlways.num}</span>}
                       </ItemPic>
                     </span>
-                  } else if (dropAlways.type === 'Equip'){
+                  } else if (dropAlways.type === 'Equip' && typeof dropAlways.idx === 'string'){
                     const itemSeparate = dropAlways.idx.split('-');
-                    const items = gameData.items[dropAlways.type.toLowerCase()][itemSeparate[0]][itemSeparate[1]][itemSeparate[2]][itemSeparate[3]];
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e[dropAlways.grade].toLowerCase()}`} key={`dropAlways${dropAlwaysIdx}`} onClick={(e) => {
+                    const items = gameData.items?.[dropAlways.type.toLowerCase()]?.[itemSeparate[0]]?.[itemSeparate[1]]?.[itemSeparate[2]]?.[itemSeparate[3]];
+                    if (!items) return null;
+                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[dropAlways.grade]?.toLowerCase() || "normal"}`} key={`dropAlways${dropAlwaysIdx}`} onClick={(e) => {
                       setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na[lang], '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
+                      setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
                       setTooltipOn(true);
                     }}>
                       <span className="pic">
@@ -550,10 +578,11 @@ const ScenarioList = ({
                     </span>
                   } else if (dropAlways.type === 'Etc') {
                     const dropType = dropAlways.type.toLowerCase(),
-                      items = gameData.items[dropType][dropAlways.idx];
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e[items.grade].toLowerCase()}`} key={`dropAlways${dropAlwaysIdx}`} onClick={(e) => {
+                      items = gameData.items?.[dropType]?.[dropAlways.idx];
+                    if (!items) return null;
+                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[items.grade]?.toLowerCase() || "normal"}`} key={`dropAlways${dropAlwaysIdx}`} onClick={(e) => {
                       setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na[lang], '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
+                      setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
                       setTooltipOn(true);
                     }}>
                       <ItemPic className="pic" pic="itemEtc" type={dropType} idx={items.display}>
@@ -562,10 +591,11 @@ const ScenarioList = ({
                     </span>
                   } else if (dropAlways.type === 'Material'){
                     const dropType = dropAlways.type.toLowerCase(),
-                      items = gameData.items[dropType][dropAlways.idx];
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e[items.grade].toLowerCase()}`} key={`dropAlways${dropAlwaysIdx}`} onClick={(e) => {
+                      items = gameData.items?.[dropType]?.[dropAlways.idx];
+                    if (!items) return null;
+                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[items.grade]?.toLowerCase() || "normal"}`} key={`dropAlways${dropAlwaysIdx}`} onClick={(e) => {
                       setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na[lang], dropAlways.num, dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
+                      setTooltip([items.na?.[lang] || "", dropAlways.num, dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
                       setTooltipOn(true);
                     }}>
                       <ItemPic className="pic" pic="itemEtc" type={dropType} idx={items.display}>
@@ -574,20 +604,22 @@ const ScenarioList = ({
                     </span>
                   } else if (dropAlways.type === 'Upgrade'){
                     const dropType = dropAlways.type.toLowerCase(),
-                      items = gameData.items[dropType][dropAlways.idx];
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e[items.grade].toLowerCase()}`} key={`dropAlways${dropAlwaysIdx}`} onClick={(e) => {
+                      items = gameData.items?.[dropType]?.[dropAlways.idx];
+                    if (!items) return null;
+                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[items.grade]?.toLowerCase() || "normal"}`} key={`dropAlways${dropAlwaysIdx}`} onClick={(e) => {
                       setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na[lang], '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
+                      setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
                       setTooltipOn(true);
                     }}>
                       <ItemPic className="pic" pic="itemEtc" type={dropType} idx={items.display} />
                     </span>
                   } else if (dropAlways.type === 'Hole'){
                     const dropType = dropAlways.type.toLowerCase(),
-                      items = gameData.items[dropType][dropAlways.idx];
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e[items.grade].toLowerCase()}`} key={`dropAlways${dropAlwaysIdx}`} onClick={(e) => {
+                      items = gameData.items?.[dropType]?.[dropAlways.idx];
+                    if (!items) return null;
+                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[items.grade]?.toLowerCase() || "normal"}`} key={`dropAlways${dropAlwaysIdx}`} onClick={(e) => {
                       setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na[lang], '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
+                      setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
                       setTooltipOn(true);
                     }}>
                       <ItemPic className="pic" pic="itemEtc" type={dropType} idx={items.display} />
@@ -627,7 +659,22 @@ const Scenario = ({
   const [tooltipPos, setTooltipPos] = useState([0,0]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupInfo, setPopupInfo] = useState({});
+  const [msgOn, setMsgOn] = useState(false);
+  const [msg, setMsg] = useState("");
   const [scenarioData, setScenarioData] = useState([]);
+  const hasPeriodScenario = React.useMemo(() => {
+    return saveData.ch.reduce((acc, sData) => {
+      const regionList = gameData.ch[sData.idx].scenarioRegion;
+      if (regionList && regionList.length > 0) {
+        regionList.forEach((sData_) => {
+          if (sData_.indexOf(stay) >= 0) {
+            acc.push(sData_);
+          }
+        })
+      }
+      return acc;
+    }, []);
+  }, [saveData]);
   useEffect(() => {
     setScenarioData(gameData.scenario[stay]);
   }, [gameData]);
@@ -637,26 +684,28 @@ const Scenario = ({
         <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
           setPopupOn(true);
           setPopupInfo({
-            data:gameData.guide['scenarioHero'],
+            data: gameData.guide?.['scenarioHero'],
           });
         }} />
         <ScrollWrap className="scroll-y">
+          {hasPeriodScenario.length === 0 ? <FlexBox justifyContent={"center"} alignItems={"center"}>
+            <Text code="t2" color="main" weight="600">{gameData?.msg?.sentence?.nodata_scenario?.[lang]}</Text>
+          </FlexBox> : 
           <CountryContainer>
-            <CountryName>
-              {gameData.country.regions[util.getCountryToIdx(stay)][lang]}
-            </CountryName>
-            {scenarioData.map((dynastyData, dynastyIdx) => {
-              return <CountryScenario key={`countryData${dynastyIdx}`}>
-                {dynastyData.scenarioList?.length > 0 && 
-                  <CountryPeriod btnBack={imgSet.button.btnLD}>{gameData.msg.regions[dynastyData.name][lang]}</CountryPeriod>}
-                  {dynastyData.scenarioList?.map((dynastyScenario, dynastyScenarioIdx) => {
-                    const saveStage = saveData.scenario[stay.replace(/[0-9]/g, "")][dynastyIdx].scenarioList[dynastyScenarioIdx],
-                      stageDifficult = saveStage?.open;
-                    return (stageDifficult > 0 && <ScenarioList key={`scenarios${dynastyScenarioIdx}`} navigate={navigate} gameData={gameData} saveData={saveData} changeSaveData={changeSaveData} stay={stay} dynastyIdx={dynastyIdx} dynastyScenarioIdx={dynastyScenarioIdx} dynastyScenario={dynastyScenario} imgSet={imgSet} selectScenario={selectScenario} setSelectScenario={setSelectScenario} setTooltip={setTooltip} setTooltipOn={setTooltipOn} setTooltipPos={setTooltipPos} lang={lang} />)
-                  })}
+            {hasPeriodScenario.map((scenarioData, scenarioIdx) => {
+              const scenarioInfo = scenarioData.split("-");
+              const stayKey = typeof stay === 'string' ? stay.replace(/[0-9]/g, "") : "";
+              const dynastyScenario = gameData.scenario?.[scenarioInfo[0]]?.[scenarioInfo[1]],
+                scenarioList = dynastyScenario?.scenarioList?.[scenarioInfo[2]],
+                saveStage = saveData.scenario?.[stayKey]?.[scenarioInfo[1]]?.scenarioList?.[scenarioInfo[2]],
+                stageDifficult = saveStage?.open;
+              return <CountryScenario key={`countryData${scenarioIdx}`}>
+                <CountryPeriod btnBack={imgSet.button?.btnLD}>{gameData.msg.regions?.[dynastyScenario?.name]?.[lang] || ""}</CountryPeriod>
+                {stageDifficult >= 0 && <ScenarioList navigate={navigate} gameData={gameData} saveData={saveData} changeSaveData={changeSaveData} stay={stay} dynastyIdx={scenarioInfo[1]} dynastyScenarioIdx={scenarioInfo[2]} dynastyScenario={scenarioList} imgSet={imgSet} selectScenario={selectScenario} setSelectScenario={setSelectScenario} setTooltip={setTooltip} setTooltipOn={setTooltipOn} setTooltipPos={setTooltipPos} setMsg={setMsg} setMsgOn={setMsgOn} lang={lang} />
+                }
               </CountryScenario>
             })}
-          </CountryContainer>
+          </CountryContainer>}
         </ScrollWrap>
       </Wrap>
 			<TooltipContainer>
@@ -665,6 +714,9 @@ const Scenario = ({
       <PopupContainer>
         {popupOn && <Popup type={'guide'} dataObj={popupInfo} showPopup={setPopupOn} />}
       </PopupContainer>
+      <MsgContainer>
+        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+      </MsgContainer>
     </>
   )
 }

@@ -2,7 +2,7 @@ import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { Button } from 'components/Button';
 import { FlexBox } from 'components/Container';
-import { ChPic, IconPic } from 'components/ImagePic';
+import { IconPic, MergedPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
@@ -18,7 +18,7 @@ const Wrap = styled.div`
   height: 100%;
   background-color: var(--color-b);
 `;
-const MoveEventBack = styled(ChPic)`
+const MoveEventBack = styled(MergedPic)`
   position: absolute;
   top: 50%;
   margin: auto;
@@ -158,7 +158,7 @@ const EventView = styled.div`
   box-sizing: border-box;
   z-index: 91;
 `;
-const EventBack = styled(ChPic)`
+const EventBack = styled(MergedPic)`
   margin: auto;
   padding-top: 100%;
   width: 100%;
@@ -194,69 +194,64 @@ const action = ({
     case "attack":
       let lv = 2,
         enemyNum = 0;
-      if (paramData.moveEvent.blockArr.type[paramData.moveEvent.currentStep] === 0) {
-        lv = Math.max(saveData.info.lv + Math.round(Math.random() * 10 - 5), 2);
+      const currentMoveEvent = paramData && paramData.moveEvent;
+      if (!currentMoveEvent) return;
+
+      if (currentMoveEvent.blockArr?.type?.[currentMoveEvent.currentStep] === 0) {
+        lv = Math.max((saveData.info?.lv || 1) + Math.round(Math.random() * 10 - 5), 2);
         enemyNum = util.battleEnemyNum(3);
       } else {
-        lv = saveData.info.lv + Math.round(Math.random() * 5 + 5);
+        lv = (saveData.info?.lv || 1) + Math.round(Math.random() * 5 + 5);
         enemyNum = util.battleEnemyNum(7);
       }
       console.log("attack");
       const lv1Hero = util.appearedLv1Hero("moveEvent"),
         enemyPenalty = util.battlePenalty();
+      
+      const battleDataObj = {
+        type: "moveEvent",
+        title: gameData.msg.moveEvent[ currentMoveEvent.currentStep === 0 ? "enemy" : "sEnemy"]?.[lang] || "Battle",
+        country: currentMoveEvent.moveTo,
+        enemy: {
+          lv: lv,
+          lv1Hero: lv1Hero,
+          enemyNum: enemyNum,
+          enemyPenalty: enemyPenalty,
+          allyPenalty: "",
+          helper: [],
+        },
+      };
+
       util.saveHistory({
         location: 'battle',
         navigate: navigate,
         callback: () => {
+          const historyP = JSON.parse(JSON.stringify(util.loadData('historyParam') || {}));
           util.saveData('historyParam', {
-            ...util.loadData('historyParam'),
-            battle: {
-              type: "moveEvent",
-              title: gameData.msg.moveEvent[ paramData.moveEvent.currentStep === 0 ? "enemy" : "sEnemy"][lang],
-              country: paramData.moveEvent.moveTo,
-              enemy: {
-                lv: lv,
-                lv1Hero: lv1Hero,
-                enemyNum: enemyNum,
-                enemyPenalty: enemyPenalty,
-                allyPenalty: "",
-                helper: [],
-              },
-            }
+            ...historyP,
+            battle: battleDataObj
           });
         },
         state: {
-          battle: {
-            type: "moveEvent",
-            title: gameData.msg.moveEvent[ paramData.moveEvent.currentStep === 0 ? "enemy" : "sEnemy"][lang],
-            country: paramData.moveEvent.moveTo,
-            enemy: {
-              lv: lv,
-              lv1Hero: lv1Hero,
-              enemyNum: enemyNum,
-              enemyPenalty: enemyPenalty,
-              allyPenalty: "",
-              helper: [],
-            },
-          }
+          battle: battleDataObj
         },
         isNavigate: true,
       });
       break;
     case "save":
-      if (saveData.info.morality + Math.random() * 100 > 100) {
+      if ((saveData.info?.morality || 0) + Math.random() * 100 > 100) {
         //setEventBack(21);
         //timeoutRef = setTimeout(() => {
-          const cloneSaveData = {...saveData};
-          saveData.info.morality += 1;
-          setMsg(gameData.msg.sentenceFn.increaseDecrease(lang, gameData.msg.info.moral[lang], 1));
+          const cloneSaveData = JSON.parse(JSON.stringify(saveData));
+          if (cloneSaveData.info) cloneSaveData.info.morality += 1;
+          setMsg(gameData.msg.sentenceFn.increaseDecrease(lang, gameData.msg.info.moral?.[lang] || "Morality", 1));
           setMsgOn(true);
           changeSaveData(cloneSaveData);
         //}, 2000);
       } else {
         setEventPhase(1);
       }
-      console.log(saveData.info.morality)
+      console.log(saveData.info?.morality)
       break;
     case "run":
       increaseStep();
@@ -312,17 +307,30 @@ const MoveEvent = ({
     return context.gameData;
   }, [context]);
   const paramData = React.useMemo(() => {
-    return util.loadData('historyParam');
+    const rawData = util.loadData('historyParam') || {};
+    return {
+      ...rawData,
+      moveEvent: rawData.moveEvent || { 
+        blockArr: { type: [] }, 
+        currentStep: 0, 
+        distance: 0, 
+        spBlockArr: [], 
+        moveTo: 'korea' 
+      }
+    };
   }, []);
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
   const [currentStep, setCurrentStep] = useState(paramData.moveEvent.currentStep);
-  const blockType = paramData.moveEvent.blockArr.type[currentStep];
+  const blockType = paramData.moveEvent.blockArr?.type?.[currentStep] || 0;
   const [eventPhase, setEventPhase] = useState(0);
   const actionData = React.useMemo(() => {
-    return currentStep + 1 === paramData.moveEvent.distance ? gameData.events.lastEvent : gameData.events.eventProcess[blockType];
+    if (currentStep + 1 === paramData.moveEvent.distance) {
+      return gameData.events.lastEvent;
+    }
+    return gameData.events.eventProcess?.[blockType] || gameData.events.eventProcess[0];
   }, [gameData, blockType, currentStep, paramData]);
-  const [eventBack, setEventBack] = useState(paramData.moveEvent.blockArr.type[currentStep]);
+  const [eventBack, setEventBack] = useState(paramData.moveEvent.blockArr?.type?.[currentStep] || 0);
   const [showEvent, setShowEvent] = useState(true);
   const timeoutRef = useRef(null);
   // useLayoutEffect(() => {
@@ -334,10 +342,12 @@ const MoveEvent = ({
   //   }
   // }, []);
   const increaseStep = () => {
-    const cloneParam = util.loadData('historyParam');
-    cloneParam.moveEvent.currentStep = cloneParam.moveEvent.currentStep + 1;
-    util.saveData('historyParam', cloneParam);
-    setCurrentStep(cloneParam.moveEvent.currentStep);
+    const historyP = JSON.parse(JSON.stringify(util.loadData('historyParam') || {}));
+    if (historyP.moveEvent) {
+      historyP.moveEvent.currentStep = (historyP.moveEvent.currentStep || 0) + 1;
+      util.saveData('historyParam', historyP);
+      setCurrentStep(historyP.moveEvent.currentStep);
+    }
     setEventPhase(0);
   }
   const events = React.useMemo(() => {
@@ -362,8 +372,8 @@ const MoveEvent = ({
         <EventShadow completeStep={(currentStep + 1) / (paramData.moveEvent.distance + 1)} />
         {events.map((eventData, eventIdx) => {
           //(한국0, 일본1, 중국2, 몽골3, 사우디아라비아4, 이집트5, 그리스6, 이탈리아7, 영국8, 프랑스9, 스페인10, 포르투칼11)
-          const blockHead = gameData.eventsHead[util.getStringToCountryIdx(paramData.moveEvent.moveTo)],
-            blockType = paramData.moveEvent.blockArr.type[eventIdx];
+          const blockHead = gameData.eventsHead[util.getStringToCountryIdx(paramData.moveEvent.moveTo || 'korea')],
+            blockType = paramData.moveEvent.blockArr?.type?.[eventIdx] || 0;
           //idx={eventIdx}
           return <MapPiece idx={eventIdx} size={EVENT_HEIGHT} key={`event${eventIdx}`}>
             <Block type="moveEventBlock" pic="icon200" isAbsolute={true} idx={0} />
@@ -373,12 +383,12 @@ const MoveEvent = ({
         })}
         <MapPiece last idx={paramData.moveEvent.distance} size={EVENT_HEIGHT}>
           <Block last type="moveEventBlock" pic="icon200" isAbsolute={true} idx={0} />
-          <BlockHead last type="moveEventBlockHead" pic="icon200" isAbsolute={true} idx={gameData.eventsHead[util.getStringToCountryIdx(paramData.moveEvent.moveTo)]} nowIdx={paramData.moveEvent.distance} />
-          <BlockType last type="moveEventFinish" pic="img400" isAbsolute={true} currentStep={currentStep} nowIdx={paramData.moveEvent.distance} idx={util.getStringToCountryIdx(paramData.moveEvent.moveTo)} />
+          <BlockHead last type="moveEventBlockHead" pic="icon200" isAbsolute={true} idx={gameData.eventsHead[util.getStringToCountryIdx(paramData.moveEvent.moveTo || 'korea')]} nowIdx={paramData.moveEvent.distance} />
+          <BlockType last type="moveEventFinish" pic="img400" isAbsolute={true} currentStep={currentStep} nowIdx={paramData.moveEvent.distance} idx={util.getStringToCountryIdx(paramData.moveEvent.moveTo || 'korea')} />
         </MapPiece>
-        {paramData.moveEvent.spBlockArr.map((spEvent, spEventIdx) => {
+        {paramData.moveEvent.spBlockArr?.map((spEvent, spEventIdx) => {
           return (
-            <EventStatue key={`spEvent${spEventIdx}`} size={EVENT_HEIGHT} idx={spEventIdx} currentStep={currentStep}  backPos={[gameData.eventsHead[paramData.moveEvent.moveTo], 1]}>
+            <EventStatue key={`spEvent${spEventIdx}`} size={EVENT_HEIGHT} idx={spEventIdx} currentStep={currentStep}  backPos={[gameData.eventsHead[paramData.moveEvent.moveTo || 'korea'], 1]}>
               <RewardBlockHead type="moveEventReward" pic="img400" isAbsolute={true} idx={19} />
               <RewardBlockType type="moveEventReward" pic="img400" isAbsolute={true} idx={spEvent.get ? spEvent.type + 1 : 0} distance={paramData.moveEvent.distance} nowIdx={spEventIdx} currentStep={currentStep} eventClear={spEvent.get} />
             </EventStatue>

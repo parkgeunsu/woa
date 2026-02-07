@@ -22,19 +22,9 @@ const ChEnhance = styled.div`
   }
 `;
 
-const CharacterItemEnhance = ({
+const CharacterChEnhance = ({
 
 }) => {
-  // const context = useContext(AppContext);
-  // const lang = React.useMemo(() => {
-  //   return context.setting.lang;
-  // }, [context]);
-  // const imgSet = React.useMemo(() => {
-  //   return context.images;
-  // }, [context]);
-  // const gameData = React.useMemo(() => {
-  //   return context.gameData;
-  // }, [context]);
   return (
     <>
       <ChEnhance frameBack={frameChBack} className="ch_enhance">
@@ -47,4 +37,4 @@ const CharacterItemEnhance = ({
   );
 }
 
-export default CharacterItemEnhance;
+export default CharacterChEnhance;
