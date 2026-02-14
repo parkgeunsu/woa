@@ -702,7 +702,7 @@ const ShopFooter = ({
 										setSelectItem(cloneSelectItem);
 										// } else {
 										// 	setMsgOn(true);
-										// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
+										// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1[lang]));
 										// }
 									} else {
 										setMsgOn(true);
@@ -789,7 +789,7 @@ const ShopFooter = ({
 											setSelectItem(cloneSelectItem);
 										// } else {
 										// 	setMsgOn(true);
-										// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
+										// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1[lang]));
 										// }
 									}
 								}	else if (shopType === 'inven') {
@@ -865,7 +865,7 @@ const ShopFooter = ({
 											});
 											// } else {
 											// 	setMsgOn(true);
-											// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
+											// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1[lang]));
 											// }
 										} else {
 											setMsgOn(true);
@@ -988,7 +988,7 @@ const ShopFooter = ({
 											});
 											// } else {
 											// 	setMsgOn(true);
-											// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
+											// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1[lang]));
 										}
 									} else { //기타 도구이면
 										// if (actionCh.idx === '') {
@@ -1044,7 +1044,7 @@ const ShopFooter = ({
 										});
 										// } else {
 										// 	setMsgOn(true);
-										// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1));
+										// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1[lang]));
 									}
 								} else if (shopType === 'inven') {
 									if (typeof selectedItem.gameItem?.part === 'number') { //장비면

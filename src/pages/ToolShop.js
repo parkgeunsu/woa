@@ -454,7 +454,7 @@ const ToolShop = ({
 																		setSelectItem1({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 																	} else {
 																		setMsgOn(true);
-																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
+																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1[lang]) || "Not enough Action Point");
 																	}
 																}} data-buttontype="itemBuy">{gameData.msg?.button?.buy?.[lang] || "Buy"}</button>
 															</div>
@@ -492,7 +492,7 @@ const ToolShop = ({
 																		setSelectItem1({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 																	} else {
 																		setMsgOn(true);
-																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
+																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1[lang]) || "Not enough Action Point");
 																	}
 																}} data-buttontype="itemSell">{gameData.msg?.button?.sell?.[lang] || "Sell"}</button>
 															</div>
@@ -568,7 +568,7 @@ const ToolShop = ({
 																		setSelectItem1({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 																	} else {
 																		setMsgOn(true);
-																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
+																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1[lang]) || "Not enough Action Point");
 																	}
 																}} data-buttontype="itemBuy">{gameData.msg?.button?.buy?.[lang] || "Buy"}</button>
 															</div>
@@ -606,7 +606,7 @@ const ToolShop = ({
 																		setSelectItem1({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 																	} else {
 																		setMsgOn(true);
-																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
+																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1[lang]) || "Not enough Action Point");
 																	}
 																}} data-buttontype="itemSell">{gameData.msg?.button?.sell?.[lang] || "Sell"}</button>
 															</div>
@@ -745,7 +745,7 @@ const ToolShop = ({
 																		setSelectItem2({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 																	} else {
 																		setMsgOn(true);
-																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
+																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1[lang]) || "Not enough Action Point");
 																	}
 																}} data-buttontype="itemRelease">{gameData.msg?.button?.buy?.[lang] || "Buy"}</button>
 															</div>
@@ -783,7 +783,7 @@ const ToolShop = ({
 																		setSelectItem2({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 																	} else {
 																		setMsgOn(true);
-																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
+																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1[lang]) || "Not enough Action Point");
 																	}
 																}} data-buttontype="itemSell">{gameData.msg?.button?.sell?.[lang] || "Sell"}</button>
 															</div>
@@ -859,7 +859,7 @@ const ToolShop = ({
 																		setSelectItem2({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 																	} else {
 																		setMsgOn(true);
-																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
+																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1[lang]) || "Not enough Action Point");
 																	}
 																}} data-buttontype="itemRelease">{gameData.msg?.button?.buy?.[lang] || "Buy"}</button>
 															</div>
@@ -897,7 +897,7 @@ const ToolShop = ({
 																		setSelectItem2({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 																	} else {
 																		setMsgOn(true);
-																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
+																		setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1[lang]) || "Not enough Action Point");
 																	}
 																}} data-buttontype="itemSell">{gameData.msg?.button?.sell?.[lang] || "Sell"}</button>
 															</div>

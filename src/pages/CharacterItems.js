@@ -307,7 +307,7 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
     <>
       <Wrap className="items">
         <InfoGroup
-          pointTitle={chData.na1}
+          pointTitle={chData.na1[lang]}
           title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.equipment[lang]}`}
           guideClick={() => {
             setPopupType("guide");

@@ -234,27 +234,39 @@ const classification = (gameData) => {
   const classification = {
     grade: [],
     country: [],
+    countryGrade: [[],[],[],[],[],[],[],[],[],[],[],[]],
     job: [],
     cost: [],
     region: [],
+    regionGrade:[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
   };
   gameData.ch.forEach((chData) => {
+    if (!chData?.na1) return;
     if (!classification.grade[chData.grade]) {
       classification.grade[chData.grade] = [];
     }
     classification.grade[chData.grade].push(chData.idx);
 
     const chCountry = util.getCountryToIdx(chData.region);
+    if (!chCountry) return;
     if (!classification.country[chCountry]) {
       classification.country[chCountry] = [];
     }
     classification.country[chCountry].push(chData.idx);
+    if (!classification.countryGrade[chCountry][chData.grade]) {
+      classification.countryGrade[chCountry][chData.grade] = [];
+    }
+    classification.countryGrade[chCountry][chData.grade].push(chData.idx);
 
     const chRegion = util.getRegionToIdx(chData.region);
     if (!classification.region[chRegion]) {
       classification.region[chRegion] = [];
     }
     classification.region[chRegion].push(chData.idx);
+    if (!classification.regionGrade[chRegion][chData.grade]) {
+      classification.regionGrade[chRegion][chData.grade] = [];
+    }
+    classification.regionGrade[chRegion][chData.grade].push(chData.idx);
 
     if (!classification.job[chData.job[0]]) {
       classification.job[chData.job[0]] = [];
@@ -459,7 +471,7 @@ const App = ({
       continueGame = util.loadData('continueGame'),
       saveData = util.loadData('saveData');
     let useSaveData = {}
-    if (!continueGame || saveData === null) { //신규 게임
+    if (!continueGame || (typeof continueGame === 'object' && Object.keys(continueGame).length === 0) || saveData === null) { //신규 게임
       if (location !== '') {
         navigate('../');
       }

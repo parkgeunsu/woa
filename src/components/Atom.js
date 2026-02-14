@@ -18,25 +18,21 @@ const StyledText = styled.div`
 `;
 
 const Text = ({
-  code,
-  color,
-  align,
+  code="t1",
+  color="sub",
+  align="center",
   weight,
   children,
   borderColor,
   isDynamic,
   ...rest
 }) => {
-  const isRgbColor = color.indexOf('#') >= 0 || color.indexOf('rgb') >= 0 || color.indexOf('hsl') >= 0; 
+  const isRgbColor = (typeof color === 'string') &&
+  (color.includes('#') || color.includes('rgb') || color.includes('hsl'));
+
   return (
     <StyledText code={code} isRgbColor={isRgbColor} color={color} borderColor={borderColor} align={align} weight={weight} isDynamic={isDynamic} {...rest}>{children}</StyledText>
   )
-}
-
-Text.defaultProps = {
-  code: 't1',
-  color: 'sub',
-  align: 'center',
 }
 
 export { Text };

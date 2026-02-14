@@ -28,7 +28,7 @@ const InfoContent = styled.dd`
 `;
 
 const InfoGroup = ({
-  hasGuide,
+  hasGuide=true,
   children,
   title,
   pointTitle,
@@ -51,9 +51,5 @@ const InfoGroup = ({
     </InfoGroupContainer>
   );
 }
-
-InfoGroup.defaultProps = {
-  hasGuide: true,
-};
 
 export default InfoGroup;

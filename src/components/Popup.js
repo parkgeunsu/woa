@@ -523,7 +523,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               <PopupRelationListCh>
                 <ChPic pic={`ch${chData?.display}`} />
               </PopupRelationListCh>
-              <span className="name">{chData.na1}</span>
+              <span className="name">{chData.na1[lang]}</span>
             </PopupRelationList>
           )
         })}

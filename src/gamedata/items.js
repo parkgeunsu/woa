@@ -33,103 +33,113 @@ export const items = {
     ],
   },
   enemyItem:{
-    armor10:{
+    armor0:{
       idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:0,num:['500']},{type:4,num:['50']},{type:6,num:['100']}
+      ],addEff:[]
+    },
+    armor10:{
+      idx:1, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:0,num:['1000']},{type:4,num:['100']},{type:6,num:['100']}
       ],addEff:[]
     },
     armor20:{
-      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+      idx:2, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:0,num:['2000']},{type:4,num:['200']},{type:6,num:['200']}
       ],addEff:[]
     },
     armor30:{
-      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+      idx:3, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:0,num:['3000']},{type:4,num:['300']},{type:6,num:['300']}
       ],addEff:[]
     },
     armor40:{
-      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+      idx:4, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:0,num:['4000']},{type:4,num:['400']},{type:6,num:['400']}
       ],addEff:[]
     },
     armor50:{
-      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+      idx:5, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:0,num:['5000']},{type:4,num:['500']},{type:6,num:['500']}
       ],addEff:[]
     },
     armor60:{
-      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+      idx:6, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:0,num:['6000']},{type:4,num:['600']},{type:6,num:['600']}
       ],addEff:[]
     },
     armor70:{
-      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+      idx:7, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:0,num:['7000']},{type:4,num:['700']},{type:6,num:['700']}
       ],addEff:[]
     },
     armor80:{
-      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+      idx:8, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:0,num:['8000']},{type:4,num:['800']},{type:6,num:['800']}
       ],addEff:[]
     },
     armor90:{
-      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+      idx:9, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:0,num:['9000']},{type:4,num:['900']},{type:6,num:['900']}
       ],addEff:[]
     },
     armor100:{
-      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+      idx:10, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:0,num:['10000']},{type:4,num:['1000']},{type:6,num:['1000']}
       ],addEff:[]
     },
-    weapon10:{
+    weapon0:{
       idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+        {type:3,num:['50']},{type:5,num:['50']}
+      ],addEff:[]
+    },
+    weapon10:{
+      idx:1, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:3,num:['100']},{type:5,num:['100']}
       ],addEff:[]
     },
     weapon20:{
-      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+      idx:2, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:3,num:['200']},{type:5,num:['200']}
       ],addEff:[]
     },
     weapon30:{
-      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+      idx:3, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:3,num:['300']},{type:5,num:['300']}
       ],addEff:[]
     },
     weapon40:{
-      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+      idx:4, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:3,num:['400']},{type:5,num:['400']}
       ],addEff:[]
     },
     weapon50:{
-      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+      idx:5, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:3,num:['500']},{type:5,num:['500']}
       ],addEff:[]
     },
     weapon60:{
-      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+      idx:6, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:3,num:['600']},{type:5,num:['600']}
       ],addEff:[]
     },
     weapon70:{
-      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+      idx:7, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:3,num:['700']},{type:5,num:['700']}
       ],addEff:[]
     },
     weapon80:{
-      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+      idx:8, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:3,num:['800']},{type:5,num:['800']}
       ],addEff:[]
     },
     weapon90:{
-      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+      idx:9, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:3,num:['900']},{type:5,num:['900']}
       ],addEff:[]
     },
     weapon100:{
-      idx:0, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
+      idx:10, slot:0, hole:[],grade:1,color:["#fff","#fff"],baseEff:[
         {type:3,num:['1000']},{type:5,num:['1000']}
       ],addEff:[]
     },

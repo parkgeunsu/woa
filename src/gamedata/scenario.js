@@ -1,3 +1,4 @@
+import { items } from 'gamedata/items';
 //cate(스킬종류, 배열) 중복가능 passive1, active3, buff5
 //dmg_type 무(0),독(1),빛(2),암(3),물(4),불(5),바람(6),땅(7),치기(8),쪼기(9),할퀴기(10),물기(11),누르기(12),
 //eff type(효과 dmg_type&buff_type) 체력HP(0), 행동SP(1), 행동회복RSP(2), 공ATK(3), 방DEF(4), 술공MAK(5), 술방MDF(6), 회복RCV(7), 속도SPD(8), 쪼기(10),할퀴기(11),물기(12),치기(13),누르기(14), 명(20),암(21),수(22),화(23),풍(24),지(25), 진형(100)
@@ -333,26 +334,44 @@ export const scenario = {
 							entry:[
 								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
 								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
-								{idx:'', lv:1, },{idx:'', lv:1, },{pos:1,idx:28, lv:50, grade:4, items: [
-									{idx:0, part:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
-									{idx:1, part:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
-									{idx:2, part:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
-									{idx:4, part:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
-									{},
-									{},
-									{},
-									{},
-								]},{pos:2,idx:54, lv:50, grade:4, items: [
-									{idx:0, part:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
-									{idx:1, part:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
-									{idx:2, part:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
-									{idx:4, part:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['12']}],addEff:[]},
-									{},
-									{},
-									{},
-									{},
+								{idx:'', lv:1, },{pos:3,idx:200, lv:1, grade:1, items: [
+									items.enemyItem[`armor${0}`],
+									items.enemyItem[`weapon${0}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+								]},{pos:1,idx:28, lv:1, grade:4, items: [
+									items.enemyItem[`armor${0}`],
+									items.enemyItem[`weapon${0}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+								]},{pos:4,idx:201, lv:1, grade:1, items: [
+									items.enemyItem[`armor${0}`],
+									items.enemyItem[`weapon${0}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
 								]},{idx:'', lv:1, },
-								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
+								{idx:'', lv:1, },{idx:'', lv:1, },{pos:2,idx:54, lv:1, grade:4, items: [
+									items.enemyItem[`armor${0}`],
+									items.enemyItem[`weapon${0}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+									items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+								]},{idx:'', lv:1, },{idx:'', lv:1, },
 								{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },{idx:'', lv:1, },
 							],
 							drop:{

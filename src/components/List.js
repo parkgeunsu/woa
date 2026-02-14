@@ -34,7 +34,7 @@ const ListCont = styled.div`
   font-size: 12px;
 `;
 const ListWrap = ({
-  type,
+  type="normal",
   children,
   transparentBack,
   ...rest
@@ -45,9 +45,6 @@ const ListWrap = ({
       {children}
     </ListContainer>
   );
-}
-ListWrap.defaultProps = {
-  type: 'normal',
 }
 
 const ListItem = ({
@@ -62,4 +59,5 @@ const ListItem = ({
     </List>
   )
 }
-export { ListWrap, ListItem };
+export { ListItem, ListWrap };
+

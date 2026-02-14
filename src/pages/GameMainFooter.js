@@ -230,7 +230,7 @@ const GameMainFooter = ({
                 }} onClick={() => {
                 console.log('전투개시');
                 let isEmptyEntry = true;
-                  saveData.lineup.save_slot[saveData.lineup.select].entry.forEach((entryData) => {
+                  (props.selectScenario?.type === 'scenario' ? saveData.ch[props.selectScenario?.slotIdx].scenario[props.selectScenario?.chScenarioIdx]?.stage[props.selectScenario?.stageIdx].lineup.slot : saveData.lineup.save_slot[saveData.lineup.select]).entry.forEach((entryData) => {
                     if (entryData !== '') {
                       isEmptyEntry = false;
                     }
@@ -252,10 +252,13 @@ const GameMainFooter = ({
                           country: util.getRegionToIdx(stay),
                           scenario: {
                             stay: stay,
+                            slotIdx: props.selectScenario.slotIdx,
                             dynastyIdx: props.selectScenario.dynastyIdx,
                             dynastyScenarioIdx: props.selectScenario.dynastyScenarioIdx,
                             stageIdx: props.selectScenario.stageIdx,
                             stageDifficult: props.selectScenario.stageDifficult,
+                            chScenarioIdx: props.selectScenario.chScenarioIdx,
+                            type: 'scenario',
                           },
                         }
                       });
@@ -267,11 +270,13 @@ const GameMainFooter = ({
                       dynastyScenarioIdx: props.selectScenario.dynastyScenarioIdx,
                       stageIdx: props.selectScenario.stageIdx,
                       stageDifficult: props.selectScenario.stageDifficult,
+                      chScenarioIdx: props.selectScenario.chScenarioIdx,
+                      type: 'scenario',
                     }
                   },
                   isNavigate: true,
                 });
-              }}>{gameData?.scenario[stay][props.selectScenario.dynastyIdx]?.scenarioList[props.selectScenario.dynastyScenarioIdx].stage?.[props.selectScenario.stageIdx]?.title[lang]} {gameData.msg.button['startBattle'][lang] || ''}</StyledButton>
+              }}>{`${gameData?.scenario[stay][props.selectScenario.dynastyIdx]?.scenarioList[props.selectScenario.dynastyScenarioIdx].stage?.[props.selectScenario.stageIdx]?.title[lang]} ${gameData.msg.button['startBattle'][lang]}` || ''}</StyledButton>
           }
           </>}
         </ButtonWrap>}

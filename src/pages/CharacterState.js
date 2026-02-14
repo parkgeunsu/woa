@@ -181,7 +181,7 @@ const CharacterState = ({
     () => gameData.ch?.[saveCh.idx] || {},
     [gameData.ch, saveCh.idx]
   );
-  const chName = React.useMemo(() => chData.na1 || "", [chData.na1]);
+  const chName = React.useMemo(() => chData.na1[lang] || "", [chData.na1, lang]);
 
   const saveExp = React.useMemo(() => {
     const gradeKey = 'grade' + saveCh.grade;

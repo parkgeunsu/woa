@@ -577,9 +577,16 @@ import ch_61 from 'images/ch/ch_61.png';
 import ch_62 from 'images/ch/ch_62.png';
 import ch_63 from 'images/ch/ch_63.png';
 import ch_64 from 'images/ch/ch_64.png';
+import ch_65 from 'images/ch/ch_65.png';
+import ch_66 from 'images/ch/ch_66.png';
 import ch_7 from 'images/ch/ch_7.png';
 import ch_8 from 'images/ch/ch_8.png';
 import ch_9 from 'images/ch/ch_9.png';
+import ch_200 from 'images/ch/common_0.png';
+import ch_201 from 'images/ch/common_1.png';
+import ch_202 from 'images/ch/common_2.png';
+import ch_203 from 'images/ch/common_3.png';
+import ch_204 from 'images/ch/common_4.png';
 
 import chs_0 from 'images/chs/ch_0.png'; //200 x 200
 import chs_1 from 'images/chs/ch_1.png';
@@ -640,9 +647,16 @@ import chs_61 from 'images/chs/ch_61.png';
 import chs_62 from 'images/chs/ch_62.png';
 import chs_63 from 'images/chs/ch_63.png';
 import chs_64 from 'images/chs/ch_64.png';
+import chs_65 from 'images/chs/ch_65.png';
+import chs_66 from 'images/chs/ch_66.png';
 import chs_7 from 'images/chs/ch_7.png';
 import chs_8 from 'images/chs/ch_8.png';
 import chs_9 from 'images/chs/ch_9.png';
+import chs_200 from 'images/chs/common_0.png';
+import chs_201 from 'images/chs/common_1.png';
+import chs_202 from 'images/chs/common_2.png';
+import chs_203 from 'images/chs/common_3.png';
+import chs_204 from 'images/chs/common_4.png';
 
 import country from 'images/country.png'; //8192 x 8960, 10, 5(1024 x 1792)
 import icon100 from 'images/icon100.png'; //1000, 10, 25
@@ -752,6 +766,13 @@ const chGroup = {
   ch62:ch_62,
   ch63:ch_63,
   ch64:ch_64,
+  ch65:ch_65,
+  ch66:ch_66,
+  ch200:ch_200,
+  ch201:ch_201,
+  ch202:ch_202,
+  ch203:ch_203,
+  ch204:ch_204,
 };
 const chsGroup = {
   chs0:chs_0,
@@ -816,6 +837,13 @@ const chsGroup = {
   chs62:chs_62,
   chs63:chs_63,
   chs64:chs_64,
+  chs65:chs_65,
+  chs66:chs_66,
+  chs200:chs_200,
+  chs201:chs_201,
+  chs202:chs_202,
+  chs203:chs_203,
+  chs204:chs_204,
 };
 export const effect = {
   slash0:{img:slash0,frame:8,used:'공격'},slash1:{img:slash1,frame:25},slash2:{img:slash2,frame:25,used:'십자베기'},slash3:{img:slash3,frame:13,used:'사선베기'},slash4:{img:slash4,frame:14,used:'목공격'},slash5:{img:slash5,frame:10,used:'발도'},slash6:{img:slash6,frame:14,used:'돌진'},slash7:{img:slash7,frame:11,used:'할퀴기'},slash8:{img:aniPack4_2,frame:8,used:'후려치기'},slash9:{img:aniPack4_3,frame:11},slash10:{img:aniPack4_11,frame:6,used:'조준사격'},

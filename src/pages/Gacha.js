@@ -308,6 +308,9 @@ const Gacha = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
+	const classification = React.useMemo(() => {
+		return context.classification;
+	}, [context]);
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
@@ -333,6 +336,7 @@ const Gacha = ({
 				sData.info.money -= data.price; //돈 계산
 			}
 			const cardList = util.makeCard({
+				heroArr: classification,
 				gachaNum: data.num,
 				gachaType: data.type,
 				gameData: gameData,
@@ -380,7 +384,9 @@ const Gacha = ({
 				const sData = JSON.parse(JSON.stringify(saveData));
 				const startingGrade = paramData.recruitment.cardArr.arr; //최초 시작 영웅들 등급
 				const cardList = util.makeCard({
-					gachaNum: startingGrade,
+					heroArr: classification,
+					gachaNum: startingGrade.length,
+					heroIdxArr: startingGrade,
 					gachaType: 'p',
 					gameData: gameData,
 					saveData: sData,
@@ -659,10 +665,10 @@ const Gacha = ({
 									el.classList.remove('special');
 									el.classList.remove('open');
 								});
-								const sData = {...saveData}
 								const startingGrade = paramData.recruitment.cardArr.arr; //최초 시작 영웅들 등급
 								const cardList = util.makeCard({
-									gachaNum: startingGrade,
+									heroArr: classification,
+									gachaNum: startingGrade.length,
 									gachaType: 'p',
 									gameData: gameData,
 									saveData: saveData,
@@ -706,7 +712,7 @@ const Gacha = ({
 						{/* <ul className="ch_detail">
 							<CardLvName className="gacha_name_lv" cardLv={imgSet.etc.imgCardLv}>
 								<Img className="img" imgurl={imgSet.etc.iconCardName} />
-								<span className="lv">1</span><span className="name_">{gameData.ch[infoIdx].na}</span><span className="name">{gameData.ch[infoIdx].na1}</span>
+								<span className="lv">1</span><span className="name_">{gameData.ch[infoIdx].na}</span><span className="name">{gameData.ch[infoIdx].na1[lang]}</span>
 							</CardLvName>
 							<CardDisplay>
 								<ChPic pic={`ch${gameData.ch[infoIdx].display}`} />

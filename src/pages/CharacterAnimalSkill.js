@@ -178,7 +178,7 @@ const CharacterAnimalSkill = ({
     return context.gameData;
   }, [context]);
   const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
-  const chName = React.useMemo(() => gameData.ch[saveCh.idx].na1, [gameData, saveCh]);
+  const chName = React.useMemo(() => gameData.ch[saveCh.idx].na1[lang], [gameData, saveCh]);
   const animalPoint = React.useMemo(() => {
     return saveCh.animalBadge;
   }, [saveCh]);

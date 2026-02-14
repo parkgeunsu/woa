@@ -1,7 +1,7 @@
 // heros country 값으로 국가 판단 country 국가(일본0, 한국1, 몽골2, 중국3, 사우디아라비아4, 이집트5, 그리스6, 이탈리아7, 프랑스8, 스페인9, 포르투칼10, 영국11)
 //hole 1방어, 4체력, 7행운, 10공격, 13술법공격, 16술법방어, 19속도, 22행동, 
 export const drop = {
-  itemNum: {
+  itemNum: {//획득 아이템 갯수
     exploring: 1,
     scenarioRegion: 2,
     regionMove: 2,

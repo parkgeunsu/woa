@@ -7,6 +7,7 @@ import MsgContainer from 'components/MsgContainer';
 import ChLineup from 'pages/ChLineup';
 import CharacterCard from 'pages/CharacterCard';
 import React, { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 const ArrowIcon = styled(IconPic)`
@@ -249,6 +250,11 @@ const CardPlacement = ({
   changeSaveData,
 }) => {
   const context = useContext(AppContext);
+	util.saveData('historyParam', {
+		...util.loadData('historyParam'),
+		type: useLocation()?.state?.type,
+	});
+	const scenarioState = util.loadData('historyParam').scenario;
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -289,14 +295,21 @@ const CardPlacement = ({
 		};
 	}, [sData.ch, isMoveEvent]);
 	const lineupData = React.useMemo(() => {
-		return isMoveEvent ? sData?.eventLineup : sData?.lineup;
+		return isMoveEvent ? sData?.eventLineup : 
+			scenarioState?.type === "scenario" ? sData?.ch[scenarioState?.slotIdx].scenario[scenarioState?.chScenarioIdx]?.stage[scenarioState?.stageIdx].lineup : sData?.lineup;
 	}, [sData, isMoveEvent]);
 	const [selectSave, setSelectSave] = useState(lineupData.select); // 선택된 진형슬롯
+	const lineupEff = React.useMemo(() => {
+		return (scenarioState?.type === "scenario" ? lineupData.slot.eff : lineupData.save_slot[selectSave]?.eff) || [];
+	}, [sData, isMoveEvent, lineupData, scenarioState]);
+	const lineupNo = React.useMemo(() => {
+		return scenarioState?.type === "scenario" ? lineupData.slot.no : lineupData.save_slot[selectSave].no;
+	}, [lineupData, selectSave, scenarioState]);
 	const [leaderIdx, setLeaderIdx] = useState(() => {
-		return lineupData.save_slot[selectSave].leader;
+		return scenarioState?.type === "scenario" ? lineupData.slot.leader || 0 : lineupData.save_slot[selectSave].leader;
 	});
 	const makeLeaderformationArr = (lIdx) => {
-		if (lIdx === "") {
+		if (lIdx === "" || lIdx === undefined) {
 			return [0];
 		}
 		let formationSkill = [];
@@ -310,11 +323,11 @@ const CardPlacement = ({
 	};
 	const [leaderformationArr, setLeaderformationArr] = useState(makeLeaderformationArr(leaderIdx));
 	
-	const [selectLineup, setSelectLineup] = useState(lineupData.save_slot[selectSave].no); // 저장된 슬롯에 선택된 진형
+	const [selectLineup, setSelectLineup] = useState(lineupNo); // 저장된 슬롯에 선택된 진형
 	const [formationLeaderIdx, setFormationLeaderIdx] = useState(gameData.lineup[selectLineup].entry[0][0]);
 
 	const [useList, setUseList] = useState(() => {
-		const selectEntry = JSON.parse(JSON.stringify(lineupData.save_slot[selectSave].entry || []));
+		const selectEntry = scenarioState?.type === "scenario" ? lineupData.slot.entry : JSON.parse(JSON.stringify(lineupData.save_slot[selectSave].entry || []));
 		if (formationLeaderIdx !== undefined && selectEntry[formationLeaderIdx] !== undefined) {
 			selectEntry[formationLeaderIdx] = leaderIdx;
 		}
@@ -337,11 +350,12 @@ const CardPlacement = ({
 
 	const lineupInfo = ["HP","SP","RSP","ATK","DEF","MAK","MDF","RCV","SPD","LUK"];
 	const lineupSlot = [1,2,3,4,5,6,7,8];
-
 	const clickSelectSlot = (idx) => {//세이브 슬롯 선택
 		setSelectSave(idx);
-		setSelectLineup(lineupData.save_slot[idx].no);
-		let updatedEntry = JSON.parse(JSON.stringify(lineupData.save_slot[idx].entry || []));
+		const selectLineup = scenarioState?.type === "scenario" ? lineupData.slot.no : lineupData.save_slot[idx].no;
+		setSelectLineup(selectLineup);
+		const lineupSlotData = scenarioState?.type === "scenario" ? lineupData.slot : lineupData.save_slot[idx];
+		let updatedEntry = JSON.parse(JSON.stringify(lineupSlotData.entry || []));
 
 		if (isMoveEvent) {
 			const moveNotChIdxs = new Set(chData.moveNotCh.map(c => c.partyIdx));
@@ -350,21 +364,26 @@ const CardPlacement = ({
 				updatedEntry[removeIdx] = "";
 			}
 		}
-
-		setUseList(updatedEntry);
-		const currentSaveData = JSON.parse(JSON.stringify(Object.keys(saveData).length !== 0 ? saveData : util.loadData('saveData')));
 		const newSaveData = util.setLineupSt({
 			saveSlot: idx,
-			lineupType: lineupData.save_slot[idx].no,
+			lineupType: lineupSlotData.no,
 			useList: updatedEntry,
 			leaderIdx: leaderIdx,
 			isMoveEvent: isMoveEvent,
-		}, gameData, currentSaveData);
+			scenarioState: scenarioState,
+			selectSave: selectSave,
+			lineupIdx: selectLineup,
+			cloneUseList: updatedEntry,
+		}, gameData, Object.keys(saveData).length !== 0 ? saveData : util.loadData('saveData'));
+		setUseList(updatedEntry);
 		changeSaveData(newSaveData);
 	}
 
 	useEffect(() => {
 		clickSelectSlot(selectSave);
+		return () => {
+			util.saveData('historyParam', {});
+		}
 	}, []);
   return (
     <>
@@ -388,7 +407,7 @@ const CardPlacement = ({
 							setSelectFormationPosition(formationLeaderIdx);
 							if (useList[formationLeaderIdx] !== "") {
 								setMsgOn(true);
-								setMsg(gameData.msg.sentenceFn.selectedLeader(lang, gameData.ch[sData.ch[useList[formationLeaderIdx]].idx].na1));
+								setMsg(gameData.msg.sentenceFn.selectedLeader(lang, gameData.ch[sData.ch[useList[formationLeaderIdx]].idx].na1[lang]));
 							} else {
 								setMsgOn(true);
 								setMsg(gameData.msg.sentence.selectLeader[lang]);
@@ -410,17 +429,61 @@ const CardPlacement = ({
 										setFormationLeaderIdx(formationIdx);
 										setSelectFormationPosition(formationIdx);
 
-										const currentSaveData = isMoveEvent ? 
-											{ ...saveData, eventLineup: { ...saveData.eventLineup, save_slot: saveData.eventLineup.save_slot.map((slot, sIdx) => sIdx === selectSave ? { ...slot, no: lineupIdx, entry: [...cloneUseList] } : slot) } } :
-											{ ...saveData, lineup: { ...saveData.lineup, save_slot: saveData.lineup.save_slot.map((slot, sIdx) => sIdx === selectSave ? { ...slot, no: lineupIdx, entry: [...cloneUseList] } : slot) } };
-
+										// const currentSaveData = isMoveEvent ? 
+										// 	{ ...saveData, 
+										// 		eventLineup: { ...saveData.eventLineup, save_slot: saveData.eventLineup.save_slot.map((slot, sIdx) => sIdx === selectSave ? { ...slot, no: lineupIdx, entry: [...cloneUseList] } : slot) } 
+										// 	} :
+										// 	{ ...saveData,
+										// 		...(scenarioState?.type === "scenario" ? {
+										// 			ch: saveData.ch.map((ch, chIdx) =>                           // ① saveData.ch 가 배열이 아니면 TypeError
+										// 			chIdx === scenarioState?.slotIdx
+										// 				? { 
+										// 						...ch,
+										// 						scenario: ch.scenario.map((scenario, scenarioIdx) =>   // ② ch.scenario 가 배열이 아니면 TypeError
+										// 							scenarioIdx === scenarioState?.chScenarioIdx
+										// 								? { 
+										// 										...scenario,
+										// 										stage: scenario.stage.map((stage, stageIdx) => // ③ scenario.stage 가 배열이 아니면 TypeError
+										// 											stageIdx === scenarioState?.stageIdx
+										// 												? { 
+										// 														...stage,
+										// 														lineup: {
+										// 															...stage.lineup,                     // ④ stage.lineup 이 객체가 아니면 TypeError
+										// 															save_slot: stage.lineup.save_slot.map((slot, sIdx) => // ⑤ save_slot 이 배열이 아니면 TypeError
+										// 																sIdx === selectSave
+										// 																	? { 
+										// 																			...slot,
+										// 																			no: lineupIdx,
+										// 																			entry: [...cloneUseList],     // ⑥ saveUseList 가 iterable 이 아니면 TypeError
+										// 																		}
+										// 																	: slot
+										// 															)
+										// 														}
+										// 													}
+										// 												: stage
+										// 										)
+										// 									}
+										// 								: scenario
+										// 						)
+										// 					}
+										// 				: ch
+										// 			)
+										// 		} : {
+										// 			lineup: { ...saveData.lineup, save_slot: saveData.lineup.save_slot.map((slot, sIdx) => sIdx === selectSave ? { ...slot, no: lineupIdx, entry: [...cloneUseList] } : slot) } 
+										// 		})
+										// 	};
 										const finalSaveData = util.setLineupSt({
+											saveData: saveData,
 											saveSlot: selectSave, 
 											lineupType: lineupIdx,
 											useList: cloneUseList,
 											leaderIdx: leaderIdx,
 											isMoveEvent: isMoveEvent,
-										}, gameData, JSON.parse(JSON.stringify(currentSaveData)));
+											scenarioState: scenarioState,
+											selectSave: selectSave,
+											lineupIdx: lineupIdx,
+											cloneUseList: cloneUseList,
+										}, gameData, saveData);
 										changeSaveData(finalSaveData);
 									}} key={`lineupCate_${idx}`}>
 										<LineupCateText color="main" code="t2">{gameData.msg.lineup[`lineup${lineupIdx}`][lang]}</LineupCateText>
@@ -436,15 +499,14 @@ const CardPlacement = ({
 								{`${limitLeadership} / ${leadership}`}
 							</LineupCost>
 						</LineupInfo>
-						<ChLineup saveData={sData} changeSaveData={changeSaveData} selectSave={selectSave} selectLineup={selectLineup} useList={useList} setUseList={setUseList} selectFormationPosition={selectFormationPosition} setSelectFormationPosition={setSelectFormationPosition} leaderIdx={leaderIdx} setLeaderIdx={setLeaderIdx} isMoveEvent={isMoveEvent} setInfoShow={setInfoShow}/>
+						<ChLineup saveData={sData} changeSaveData={changeSaveData} selectSave={selectSave} selectLineup={selectLineup} useList={useList} setUseList={setUseList} selectFormationPosition={selectFormationPosition} setSelectFormationPosition={setSelectFormationPosition} leaderIdx={leaderIdx} setLeaderIdx={setLeaderIdx} isMoveEvent={isMoveEvent} setInfoShow={setInfoShow} scenarioState={scenarioState}/>
 						<LineupChInfo infoShow={infoShow} className="lineup_chInfo scroll-y" frameImg={imgSet.images.frame0} onClick={() => {
 							setInfoShow(prev => !prev);
 						}}>
 							<LineupChUl>
-								{lineupInfo && sData.ch?.[useList[selectFormationPosition]] && lineupData.save_slot[selectSave]?.eff?.[selectFormationPosition] && lineupInfo.map((stateName, idx) => {
+								{lineupInfo && sData.ch?.[useList[selectFormationPosition]] && lineupEff[selectFormationPosition] && lineupInfo.map((stateName, idx) => {
 									const saveCh = sData.ch[useList[selectFormationPosition]];
-									const lineupEff = lineupData.save_slot[selectSave].eff[selectFormationPosition];
-									const effData = lineupEff[idx] || [0, 0];
+									const effData = lineupEff[selectFormationPosition][idx] || [0, 0];
 									const arrow = effData[0] > 0 ? 'up' : (effData[0] < 0 ? 'down' : 'none');
 									return (
 										<LineupChLi key={`li_${idx}`}>
@@ -524,23 +586,26 @@ const CardPlacement = ({
 										}
 									}
 
-									const currentSaveData = JSON.parse(JSON.stringify(saveData));
-									if (currentSaveData.lineup) {
-										currentSaveData.lineup.save_slot[selectSave] = {
-											...currentSaveData.lineup.save_slot[selectSave],
-											leader: leader,
-											entry: [...cloneUseList],
-											no: newSelectLineup
-										};
-									}
-									
+									// const currentSaveData = JSON.parse(JSON.stringify(saveData));
+									// if (currentSaveData.lineup) {
+									// 	currentSaveData.lineup.save_slot[selectSave] = {
+									// 		...currentSaveData.lineup.save_slot[selectSave],
+									// 		leader: leader,
+									// 		entry: [...cloneUseList],
+									// 		no: newSelectLineup
+									// 	};
+									// }
 									const finalSaveData = util.setLineupSt({
 										saveSlot: selectSave, 
 										lineupType: newSelectLineup,
 										useList: cloneUseList,
 										leaderIdx: leader,
 										isMoveEvent: isMoveEvent,
-									}, gameData, currentSaveData);
+										scenarioState: scenarioState,
+										selectSave: selectSave,
+										lineupIdx: newSelectLineup,
+										cloneUseList: cloneUseList,
+									}, gameData, saveData);
 
 									setUseList(cloneUseList);
 									changeSaveData(finalSaveData);
@@ -596,17 +661,17 @@ const CardPlacement = ({
 												cloneUseList[formationLeaderIdx] = data.partyIdx;
 											}
 										}
-										const currentSaveData = isMoveEvent ? 
-											{ ...saveData, eventLineup: { ...saveData.eventLineup, save_slot: saveData.eventLineup.save_slot.map((slot, sIdx) => sIdx === selectSave ? { ...slot, leader: leader, entry: [...cloneUseList], no: newSelectLineup } : slot) } } :
-											{ ...saveData, lineup: { ...saveData.lineup, save_slot: saveData.lineup.save_slot.map((slot, sIdx) => sIdx === selectSave ? { ...slot, leader: leader, entry: [...cloneUseList], no: newSelectLineup } : slot) } };
-										
 										const finalSaveData = util.setLineupSt({
 											saveSlot: selectSave, 
 											lineupType: newSelectLineup,
 											useList: cloneUseList,
 											leaderIdx: leader,
 											isMoveEvent: isMoveEvent,
-										}, gameData, currentSaveData);
+											scenarioState: scenarioState,
+											selectSave: selectSave,
+											lineupIdx: newSelectLineup,
+											cloneUseList: cloneUseList,
+										}, gameData, saveData);
 
 										setUseList(cloneUseList);
 										changeSaveData(finalSaveData);

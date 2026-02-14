@@ -55,6 +55,9 @@ const GameMain = ({
     return context.gameData;
   }, [context]);
   const sData = React.useMemo(() => {
+    // if (Object.keys(saveData).length === 0) {
+    //   util.saveData('continueGame', false);
+    // }
     return (Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData) || {};
   }, [saveData]);
   const stay = React.useMemo(() => sData?.info?.stay, [sData]);

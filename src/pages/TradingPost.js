@@ -304,7 +304,7 @@ const TradingPost = ({
 															}
 														} else {
 															setMsgOn(true);
-															setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
+															setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1[lang]) || "Not enough Action Point");
 														}
 													}} data-buttontype="itemBuy">{gameData.msg?.button?.buy?.[lang] || "Buy"}</button>
 												</div>
@@ -348,7 +348,7 @@ const TradingPost = ({
 															}
 														} else {
 															setMsgOn(true);
-															setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1) || "Not enough Action Point");
+															setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1[lang]) || "Not enough Action Point");
 														}
 													}} data-buttontype="itemSell">{gameData.msg?.button?.sell?.[lang] || "Sell"}</button>
 												</div>

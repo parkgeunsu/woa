@@ -190,11 +190,38 @@ const StageInfoWrap = styled(FlexBox)`
 const StageInfo = styled(FlexBox)`
 `;
 const StageMap = styled.div`
+  position: relative;
   flex-basis: 102px;
   font-size: 0;
   border: 1px solid #fff;
   box-sizing: border-box;
 `;
+const EntriesEmpty = styled(Text)`
+  position: absolute;
+  left: 0%;
+  top: 50%;
+  width: 100%;
+  height: 50%;
+  span {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    word-break: keep-all;
+    color: ${({theme}) => theme.color.point2};
+    z-index: 1;
+  }
+  &:after {
+    content:'';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: ${({theme}) => theme.color.sub};
+    opacity: 0.8;
+  }
+`
 const MapPieces = styled.div`
   display: inline-block;
   position: relative;
@@ -273,12 +300,12 @@ const StageHistory = styled.div`
   font-size: ${({theme}) =>  theme.font.t1};
   background: ${({theme}) => theme.color.shadowL};
 `;
-const difficultCurrent = (gameData, openCount) => {
-  if (openCount <= gameData.possibleStageNum[0]) {
+const difficultCurrent = (gameData, heroNum) => {
+  if (heroNum <= gameData.possibleStageNum[0]) {
     return 0;
-  } else if (openCount <= gameData.possibleStageNum[1]) {
+  } else if (heroNum <= gameData.possibleStageNum[1]) {
     return 1;
-  } else if (openCount <= gameData.possibleStageNum[2]) {
+  } else if (heroNum <= gameData.possibleStageNum[2]) {
     return 2;
   } else {
     return 3;
@@ -286,6 +313,8 @@ const difficultCurrent = (gameData, openCount) => {
 }
 const ScenarioList = ({
   gameData,
+  slotIdx,
+  chScenarioIdx,
   imgSet,
   navigate,
   saveData,
@@ -304,36 +333,37 @@ const ScenarioList = ({
   lang,
 }) => {
   const saveStage = React.useMemo(() => {
-    if (typeof stay !== 'string') return { open: 0, stage: [] };
+    if (typeof stay !== 'string') return { heroNum: 0, progressedStage: 0 };
     const stayKey = stay.replace(/[0-9]/g, "");
-    return saveData.scenario?.[stayKey]?.[dynastyIdx]?.scenarioList?.[dynastyScenarioIdx] || { open: 0, stage: [] };
+    return saveData.scenario?.[stayKey]?.[dynastyIdx]?.scenarioList?.[dynastyScenarioIdx];
+  }, [saveData]);
+  const saveChStage = React.useMemo(() => {
+    return saveData.ch[slotIdx].scenario[chScenarioIdx] || { currentStage: 0,stage: [] };
   }, [saveData, stay, dynastyIdx, dynastyScenarioIdx]);
+  const [newGroup, setNewGroup] = useState(false);
   useEffect(() => {
-    saveStage.stage?.forEach((stageData) => {
+    saveChStage.stage?.forEach((stageData) => {
       if (stageData.first) { //최초 접근인지 체크
         setNewGroup(true);
         return;
       }
     });
-  }, [saveStage.stage]);
+  }, [saveChStage.stage]);
   const [isOpen, setOpen] = useState(Object.keys(selectScenario).length !== 0 ? true : false);
   const [showStageIdx, setShowStageIdx] = useState(Object.keys(selectScenario).length !== 0 ? selectScenario.stageIdx : '');
-  const [newGroup, setNewGroup] = useState(false);
-  const [selectDifficult, setSelectDifficult] = useState(difficultCurrent(gameData, saveStage.open));
+  const [selectDifficult, setSelectDifficult] = useState(difficultCurrent(gameData, saveStage.heroNum));
   const stageIdxRef = useRef(0);
-  const difficultRef = useRef(saveStage.open);
+  console.log(saveStage, saveChStage);
   const difficultClick = useCallback(({
     possible, stageIdx, idx
   }) => {
     if (!possible || typeof stay !== 'string') {
       return;
     }
-    const dynastyKey = stay.replace(/[0-9]/g, "");
     const cloneSaveData = JSON.parse(JSON.stringify(saveData));
-    
-    console.log(saveData.scenario[dynastyKey]?.[dynastyIdx]?.scenarioList?.[dynastyScenarioIdx]?.stage?.[stageIdx], idx);
-    if (cloneSaveData.scenario?.[dynastyKey]?.[dynastyIdx]?.scenarioList?.[dynastyScenarioIdx]?.stage?.[stageIdx]) {
-      cloneSaveData.scenario[dynastyKey][dynastyIdx].scenarioList[dynastyScenarioIdx].stage[stageIdx].select = idx;
+
+    if (saveChStage?.stage?.[stageIdx]) {
+      saveChStage.stage[stageIdx].select = idx;
       changeSaveData(cloneSaveData);
     }
 
@@ -341,7 +371,10 @@ const ScenarioList = ({
       dynastyIdx: dynastyIdx,
       dynastyScenarioIdx: dynastyScenarioIdx,
       stageIdx: stageIdxRef.current,
+      slotIdx: slotIdx,
       stageDifficult: idx,
+      chScenarioIdx: chScenarioIdx,
+      type: 'scenario',
     });
     setSelectDifficult(idx);
   }, [saveData, stay, dynastyIdx, dynastyScenarioIdx, stageIdxRef, changeSaveData]);
@@ -361,7 +394,7 @@ const ScenarioList = ({
         <CardContainer>
           <CharacterCard usedType="thumb" noInfo={true} saveData={saveData} gameData={gameData} slotIdx={0} />
         </CardContainer>
-        <Text code="t5" color="main">{`x ${difficultRef.current}`}</Text>
+        <Text code="t5" color="main">{`x ${saveStage.heroNum}`}</Text>
       </ScenarioCards>
     </ScenarioNameBox>
     {isOpen && dynastyScenario.stage.map((stageData, stageIdx) => {
@@ -377,7 +410,13 @@ const ScenarioList = ({
           stageInfo.nums ++;
         }
       });
-      const currentStage = saveStage.currentStage >= stageIdx;
+      let currentEntries = [];
+      let isPreparedEntries = false;
+      if (showStageIdx === stageIdx) {
+        currentEntries = saveChStage.stage[stageIdx]?.lineup?.slot.entry;
+        isPreparedEntries = currentEntries?.length > 0 &&  currentEntries?.filter((entry) => entry !== '').length > 0;
+      }
+      const currentStage = saveChStage.currentStage >= stageIdx;
       return <ScenarioStage key={`stageGroup${stageIdx}`}>
         <StageName key={`stageName${stageIdx}`} currentStage={currentStage} btnBack={imgSet.button.btnLL} justifyContent={'space-between'} onClick={() => {
           if (!currentStage) {
@@ -395,12 +434,15 @@ const ScenarioList = ({
               dynastyScenarioIdx: dynastyScenarioIdx,
               stageIdx: stageIdx,
               stageDifficult: 0,
+              slotIdx: slotIdx,
+              chScenarioIdx: chScenarioIdx,
+              type: 'scenario',
             });
           }
           setShowStageIdx(prev => prev === stageIdx ? '' : stageIdx);
           ;
         }}>
-          {saveStage.stage[stageIdx].first && <StageNewIcon>
+          {saveChStage.stage[stageIdx].first && <StageNewIcon>
             {currentStage ? <IconPic type="scenario" pic="icon100" idx={6} /> : <StageIconLock type="commonBtn" pic="icon100" idx={4} />}
           </StageNewIcon>}
           <StageTitle alignItems={'center'} justifyContent={'flex-start'}>{stageData?.title?.[lang] || ""}</StageTitle>
@@ -408,18 +450,18 @@ const ScenarioList = ({
             {gameData.possibleStageNum.map((possibleStage, possibleIdx) => {
               return (
                 <DifficultIcon key={`possibleStage${possibleIdx}`} 
-                  selected={saveStage.stage?.[stageIdx]?.select === possibleIdx}
-                  clear={saveStage.stage?.[stageIdx]?.clear?.[possibleIdx]}
-                  possibleStageNum={difficultRef.current >= possibleStage}
+                  selected={saveChStage.stage?.[stageIdx]?.select === possibleIdx}
+                  clear={saveChStage.stage?.[stageIdx]?.clear?.[possibleIdx]}
+                  possibleStageNum={saveStage.heroNum >= possibleStage}
                   iconIdx={possibleIdx}
                   onClick={(e) => {
-                    if (difficultRef.current < possibleStage) {
+                    if (saveStage.heroNum < possibleStage) {
                       setMsgOn(true);
                       setMsg(gameData.msg.sentence.needMoreHero[lang]);
                       return;
                     }
                     difficultClick({
-                      possible: difficultRef.current >= possibleStage,
+                      possible: saveStage.heroNum >= possibleStage,
                       stageIdx: stageIdx,
                       idx: possibleIdx,
                     });
@@ -444,15 +486,15 @@ const ScenarioList = ({
                     });
                   },
                   state: {
-                    scenario: selectScenario
+                    scenario: selectScenario,
                   },
                   isNavigate: true,
                 });//히스토리 저장
               }}>
                   {stageData.map.map((mapData, mapIdx) => {
-                    const slotEntry = saveData.lineup?.save_slot?.[saveData.lineup?.select]?.entry;
-                    return <MapPieces key={`map${mapIdx}`} idx={mapIdx} enemy={stageData.entry[mapIdx]} ally={mapIdx >= 25 && slotEntry?.[mapIdx - 25]} mapColor={mapData} />
+                    return <MapPieces key={`map${mapIdx}`} idx={mapIdx} enemy={stageData.entry[mapIdx]} ally={mapIdx >= 25 && currentEntries?.[mapIdx - 25]} mapColor={mapData} />
                   })}
+                  {!isPreparedEntries && <EntriesEmpty code="t2" color="main"><span>{gameData.msg.title?.['noEntry']?.[lang] || "No Entry"}</span></EntriesEmpty>}
               </StageMap>
               <StageLvHistory direction="column">
                 <StageLv direction="column" alignItems="flex-start">
@@ -663,18 +705,25 @@ const Scenario = ({
   const [msg, setMsg] = useState("");
   const [scenarioData, setScenarioData] = useState([]);
   const hasPeriodScenario = React.useMemo(() => {
+    let slotIdx = 0;
     return saveData.ch.reduce((acc, sData) => {
       const regionList = gameData.ch[sData.idx].scenarioRegion;
       if (regionList && regionList.length > 0) {
-        regionList.forEach((sData_) => {
+        regionList.forEach((sData_, idx) => {
           if (sData_.indexOf(stay) >= 0) {
-            acc.push(sData_);
+            acc.push({
+              slotIdx: slotIdx,
+              scenarioIdx: idx,
+              data: sData_,
+            });
           }
         })
       }
+      slotIdx ++;
       return acc;
     }, []);
   }, [saveData]);
+  console.log(hasPeriodScenario);
   useEffect(() => {
     setScenarioData(gameData.scenario[stay]);
   }, [gameData]);
@@ -693,15 +742,15 @@ const Scenario = ({
           </FlexBox> : 
           <CountryContainer>
             {hasPeriodScenario.map((scenarioData, scenarioIdx) => {
-              const scenarioInfo = scenarioData.split("-");
+              const scenarioInfo = scenarioData.data.split("-");
               const stayKey = typeof stay === 'string' ? stay.replace(/[0-9]/g, "") : "";
               const dynastyScenario = gameData.scenario?.[scenarioInfo[0]]?.[scenarioInfo[1]],
                 scenarioList = dynastyScenario?.scenarioList?.[scenarioInfo[2]],
                 saveStage = saveData.scenario?.[stayKey]?.[scenarioInfo[1]]?.scenarioList?.[scenarioInfo[2]],
-                stageDifficult = saveStage?.open;
+                stageDifficult = saveStage?.heroNum;
               return <CountryScenario key={`countryData${scenarioIdx}`}>
                 <CountryPeriod btnBack={imgSet.button?.btnLD}>{gameData.msg.regions?.[dynastyScenario?.name]?.[lang] || ""}</CountryPeriod>
-                {stageDifficult >= 0 && <ScenarioList navigate={navigate} gameData={gameData} saveData={saveData} changeSaveData={changeSaveData} stay={stay} dynastyIdx={scenarioInfo[1]} dynastyScenarioIdx={scenarioInfo[2]} dynastyScenario={scenarioList} imgSet={imgSet} selectScenario={selectScenario} setSelectScenario={setSelectScenario} setTooltip={setTooltip} setTooltipOn={setTooltipOn} setTooltipPos={setTooltipPos} setMsg={setMsg} setMsgOn={setMsgOn} lang={lang} />
+                {stageDifficult >= 0 && <ScenarioList navigate={navigate} gameData={gameData} saveData={saveData} slotIdx={scenarioData.slotIdx} chScenarioIdx={scenarioData.scenarioIdx} changeSaveData={changeSaveData} stay={stay} dynastyIdx={scenarioInfo[1]} dynastyScenarioIdx={scenarioInfo[2]} dynastyScenario={scenarioList} imgSet={imgSet} selectScenario={selectScenario} setSelectScenario={setSelectScenario} setTooltip={setTooltip} setTooltipOn={setTooltipOn} setTooltipPos={setTooltipPos} setMsg={setMsg} setMsgOn={setMsgOn} lang={lang} />
                 }
               </CountryScenario>
             })}

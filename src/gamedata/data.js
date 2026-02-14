@@ -1,5 +1,4 @@
 import { animals } from 'gamedata/animals';
-import { chArr } from 'gamedata/chArr';
 import { city } from 'gamedata/city';
 import { colorSvg } from 'gamedata/colorSvg';
 import { country } from 'gamedata/country';
@@ -44,7 +43,7 @@ export const gameData = {
     addGradeArr: [1,1.1,1.25,1.35,1.5,1.7,2],//등급에 따른 추가 능력치
     possibleStageNum: [1,3,5,10],//시나리오 난이도 진행 가능한 카드영웅 갯수
     animal_type: animals,
-    animal_size: {
+    animal_size: {//[최소, 최대, 극최대]
       kg:[
         [2,9,20],//고양이
         [100,200,300],//사자
@@ -75,11 +74,11 @@ export const gameData = {
         [45,160,250],//양
         [1000,4500,6000],//하마
         [150,1000,1500],//악어
-      ],//[최소, 최대, 극최대]
+        [30,60,100],//하이에나
+      ],
       size:[80,500],//[소,중]
     },
-    ch: ch,//face_d 얼굴방향, awaken 각성속성
-    chArr: chArr,
+    ch: ch,
     job: job,//직업
     items: items,
     ships: ships,

@@ -687,7 +687,7 @@ const Shipyard = ({
 								{selectShip.cannon0 !== '' && <li>{`${gameData.msg.ship?.cannon?.[lang] || "Cannon"}1: ${shipInfo.cannon?.[0] || 0}`}</li>}
 								{selectShip.cannon1 !== '' && <li>{`${gameData.msg.ship?.cannon?.[lang] || "Cannon"}2: ${shipInfo.cannon?.[1] || 0}`}</li>}
 								{selectShip.cannon2 !== '' && <li>{`${gameData.msg.ship?.cannon?.[lang] || "Cannon"}3: ${shipInfo.cannon?.[2] || 0}`}</li>}
-								<li className="ship_buildCh">{`${gameData.msg.info?.shipBuilder?.[lang] || "Shipwright"}: ${actionCh.idx !== '' ? gameData.ch?.[saveData.ch?.[actionCh.idx]?.idx]?.na1 || "" : gameData.msg.info?.undefined?.[lang] || ""}`}</li>
+								<li className="ship_buildCh">{`${gameData.msg.info?.shipBuilder?.[lang] || "Shipwright"}: ${actionCh.idx !== '' ? gameData.ch?.[saveData.ch?.[actionCh.idx]?.idx]?.na1[lang] || "" : gameData.msg.info?.undefined?.[lang] || ""}`}</li>
 								<li className="ship_buildPrice">{`₩ ${util.comma(shipInfo.price)}`}</li>
 							</ul>
 							<button text="true" className="button_sign" onClick={(e) => {

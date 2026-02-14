@@ -88,7 +88,7 @@ const IconPic = forwardRef(({
   idx,
   pic,
   urlImg,
-  isAbsolute,
+  isAbsolute=false,
   children,
   ...rest
 }, ref) => {
@@ -108,9 +108,6 @@ const IconPic = forwardRef(({
     </StyledIconPic>
   )
 });
-IconPic.defaultProps = {
-  isAbsolute: false,
-}
 
 const StyledMergedPic = styled.div`
   width: 100%;
@@ -130,8 +127,10 @@ const StyledMergedPic = styled.div`
 const MergedPic = ({//merged 된 이미지에서 좌표를 찾는 방식
   idx,
   pic,
-  type,
-  isThumb,
+  type="",
+  wNum=10,
+  hNum=6,
+  isThumb=false,
   absoluteSize,
   children,
   ...rest
@@ -150,12 +149,6 @@ const MergedPic = ({//merged 된 이미지에서 좌표를 찾는 방식
       {children}
     </StyledMergedPic>
   )
-}
-MergedPic.defaultProps = {
-  isThumb: false,
-  wNum: 10,
-  hNum: 6,
-  type: '',
 }
 
 const StyledPic = styled.div`
@@ -186,8 +179,6 @@ const ChPic = ({//merged 된 이미지에서 좌표를 찾는 방식
   return <StyledPic whNum={whNum} chPic={imgSet.images[pic]} {...rest}>
     {children}
   </StyledPic>
-}
-ChPic.defaultProps = {
 }
 
 const MarkWrap = styled.div`

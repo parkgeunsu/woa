@@ -57,7 +57,7 @@ const TabIcon = styled.div`
 
 const TabMenu = ({
   list,
-  type,
+  type="normal",
   selectTab,
   setSelectTab,
   direction,
@@ -95,10 +95,6 @@ const TabMenu = ({
       {children}
     </TabMenuContainer>
   ) 
-}
-
-TabMenu.defaultProps = {
-  type: 'normal',
 }
 
 export default TabMenu;

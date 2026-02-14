@@ -164,16 +164,17 @@ const clickListupMap = ({
   setLeaderIdx,
   isMoveEvent,
   setInfoShow,
+  scenarioState,
+  emptySlot,
   idx
 }) => {//맵 캐릭터 클릭
   setSelectFormationPosition(idx);
   const saveUseList = [...useList];
   let leader = leaderIdx;
   let newSelectLineup = selectLineup;
-
-  if (selectFormationPosition === idx) {
+  if (selectFormationPosition === idx) {//같은 위치 클릭 시
     saveUseList[idx] = '';
-    if (gameData.lineup[selectLineup].entry[0][0] === idx) {
+    if (gameData.lineup[selectLineup].entry[0][0] === idx) {//리더 클릭 시
       leader = "";
       newSelectLineup = 0;
       setLeaderIdx("");
@@ -181,25 +182,24 @@ const clickListupMap = ({
   } else {
     setInfoShow && setInfoShow(true);
   }
-
-  const currentSaveData = isMoveEvent ? 
-    { ...saveData, eventLineup: { ...saveData.eventLineup, save_slot: saveData.eventLineup.save_slot.map((slot, sIdx) => sIdx === selectSave ? { ...slot, leader: leader, no: newSelectLineup, entry: [...saveUseList] } : slot) } } :
-    { ...saveData, lineup: { ...saveData.lineup, save_slot: saveData.lineup.save_slot.map((slot, sIdx) => sIdx === selectSave ? { ...slot, leader: leader, no: newSelectLineup, entry: [...saveUseList] } : slot) } };
-
+  if (emptySlot) return;//슬롯이 비었을때는 리턴
   const finalSaveData = util.setLineupSt({
     saveSlot: selectSave, 
     lineupType: newSelectLineup,
     useList: saveUseList,
     leaderIdx: leader,
     isMoveEvent: isMoveEvent,
-  }, gameData, currentSaveData);
-
+    scenarioState: scenarioState,
+    selectSave: selectSave,
+    lineupIdx: newSelectLineup,
+    cloneUseList: saveUseList,
+  }, gameData, saveData);
   setUseList(saveUseList);
   changeSaveData(finalSaveData);
 }
 
 const ChLineup = ({
-  showMode,
+  showMode=false,
   saveData,
   changeSaveData,
   selectSave,
@@ -212,6 +212,7 @@ const ChLineup = ({
   setLeaderIdx,
   isMoveEvent,
   setInfoShow,
+  scenarioState,
   onClick,
 }) => {
   // const imgSet = useContext(AppContext).images;
@@ -251,10 +252,10 @@ const ChLineup = ({
         {useList && useList.map((slotIdx, idx) => {
           const selected = selectFormationPosition === idx;
           const itemKey = slotIdx !== "" ? `slot-${slotIdx}-${idx}` : `empty-edit-${idx}`;
-          if (slotIdx === "") {
             return (
-              <Map key={itemKey} idx={idx} selected={selected} data-mapnum={idx} onClick={() => {
+              <Map key={itemKey} idx={idx} selected={selected} data-mapnum={idx} {...(slotIdx !== "" && {type:lineupMap[idx]})} onClick={() => {
                 clickListupMap({
+                  emptySlot: slotIdx === "",
                   saveData: saveData, 
                   changeSaveData: changeSaveData,
                   selectSave: selectSave,
@@ -267,48 +268,26 @@ const ChLineup = ({
                   leaderIdx: leaderIdx,
                   setLeaderIdx: setLeaderIdx,
                   isMoveEvent: isMoveEvent,
-                  idx:idx
+                  scenarioState: scenarioState,
+                  idx:idx,
+                  ...(slotIdx !== "" && {setInfoShow: setInfoShow})
                 });
               }}>
                 <MapEff />
-                <MapCh noneCh={true} selected={selected} />
-                <MapPoint type={lineupMap[idx]} noneCh={true} selected={selected} />
-              </Map>
-            );
-          } else {
-            return (
-              <Map key={itemKey} idx={idx} type={lineupMap[idx]} selected={selected} data-mapnum={idx} onClick={() => {
-                clickListupMap({
-                  saveData: saveData, 
-                  changeSaveData: changeSaveData,
-                  selectSave: selectSave,
-                  selectLineup: selectLineup,
-                  gameData: gameData, 
-                  setSelectFormationPosition: setSelectFormationPosition,
-                  selectFormationPosition: selectFormationPosition,
-                  useList: useList, 
-                  setUseList: setUseList,
-                  leaderIdx: leaderIdx,
-                  setLeaderIdx: setLeaderIdx,
-                  setInfoShow: setInfoShow,
-                  idx:idx
-                });
-              }}>
-                <MapEff />
-                <ChBoxWrap selected={selected}>
+                {slotIdx === "" ? <>
+                  <MapCh noneCh={true} selected={selected} />
+                  <MapPoint type={lineupMap[idx]} noneCh={true} selected={selected} />
+                </> : <>
+                  <ChBoxWrap selected={selected}>
                    <CharacterCard usedType="thumb" saveData={saveData} gameData={gameData} slotIdx={slotIdx} />
-                </ChBoxWrap>
-                <MapPoint type={lineupMap[idx]} selected={selected} />
+                  </ChBoxWrap>
+                  <MapPoint type={lineupMap[idx]} selected={selected} />
+                </>}
               </Map>
             );
-          }
         })}
       </LineupMap>}
   </LineupArea>)
 };
-
-ChLineup.defaultProps = {
-  showMode: false,
-}
 
 export default ChLineup;

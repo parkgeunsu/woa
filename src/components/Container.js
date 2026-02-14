@@ -13,9 +13,9 @@ const FlexContainer = styled.div`
 `;
 
 const FlexBox = ({
-  alignItems,
-  justifyContent,
-  direction,
+  alignItems="center",
+  justifyContent="center",
+  direction="row",
   children,
   ...rest
 }) => {
@@ -24,15 +24,6 @@ const FlexBox = ({
       {children}
     </FlexContainer>
   )
-}
-
-FlexBox.propTypes = {
-
-}
-FlexBox.defaultProps = {
-  direction: 'row',
-  alignItems: 'center',
-  justifyContent: 'center',
 }
 
 const TitleContainer = styled.div`

@@ -266,6 +266,9 @@ const Cards = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
+  const classification = React.useMemo(() => {
+    return context.classification;
+  }, [context]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
@@ -350,6 +353,7 @@ const Cards = ({
             }}>아이템 추가</button><br/>
             <button onClick={() => {
               const card = util.makeCard({
+                heroArr: classification,
                 gachaNum: 1,
                 gachaType: "p",
                 gameData: gameData,

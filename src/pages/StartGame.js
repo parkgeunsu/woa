@@ -45,7 +45,7 @@ const ChCard = styled(FlexBox)`
 `;
 const ChName = styled.div`
   margin: 10px 0 0 0;
-  font-size: ${({theme}) => theme.font.t2};
+  font-size: ${({theme}) => theme.font.t1};
   color: ${({theme}) => theme.color.sub};
   word-break: keep-all;
   text-align: center;
@@ -71,10 +71,13 @@ const StartGame = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
+  const classification = React.useMemo(() => {
+    return context.classification;
+  }, [context]);
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
-  const [selectCard, setSelectCard] = useState(!util.loadData('continueGame') ? paramData?.start?.card : []);
+  const [selectCard, setSelectCard] = useState(paramData?.start?.card);
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
   const [selectGradeArr, setSelectGradeArr] = useState([]); //시작 카드 유형 배열
@@ -95,7 +98,7 @@ const StartGame = ({
   }, [paramData]);
   useEffect(() => {
     setSelectList([
-      `${gameData.msg.sentence?.['card0']?.[lang] || "Starting Card 0"} (${gameData.ch?.[gameData.startCardArr?.[0]?.fix?.[0]]?.na1 || "Unknown"})`,
+      `${gameData.msg.sentence?.['card0']?.[lang] || "Starting Card 0"} (${gameData.ch?.[gameData.startCardArr?.[0]?.fix?.[0]]?.na1?.[lang] || "Unknown"})`,
       gameData.msg.sentence?.['card1']?.[lang] || "Starting Card 1",
       gameData.msg.sentence?.['card2']?.[lang] || "Starting Card 2",
       gameData.msg.sentence?.['card3']?.[lang] || "Starting Card 3",
@@ -160,31 +163,31 @@ const StartGame = ({
                 changeSaveData(newSaveData);
               }} justifyContent={(selectGradeArr?.fix?.length || 0) + (selectGradeArr?.arr?.length || 0) === 1 ? 'center' : 'space-between'} >
               {(selectGradeArr?.fix?.length || 0) > 0 && selectGradeArr.fix.map((fixData, fixIdx) => {
-                    const cardData = gameData.ch?.[fixData];
-                    const name = cardData?.na1 || "Unknown";
-                    return (
-                      <ChCard  key={`fixCard${fixIdx}`} direction="column">
-                        <CharacterCard usedType="small" size="60" equalSize={true} saveData={saveData} saveCharacter={cardData} slotIdx={fixIdx}/>
-                        <ChName>{name}</ChName>
-                      </ChCard>
-                    )
-                    })}
-                {selectCard && selectCard[0]?.idx ? selectCard.map((cardData, idx) => {
-                  const name = gameData.ch?.[cardData.idx]?.na1 || "Unknown";
+                const cardData = gameData.ch?.[fixData];
+                const name = cardData?.na1[lang] || "Unknown";
+                return (
+                  <ChCard  key={`fixCard${fixIdx}`} direction="column">
+                    <CharacterCard usedType="small" size="60" equalSize={true} saveData={saveData} saveCharacter={cardData} slotIdx={fixIdx}/>
+                    <ChName>{name}</ChName>
+                  </ChCard>
+                )
+              })}
+              {selectCard && selectCard[0]?.idx ? selectCard.map((cardData, idx) => {
+                const name = gameData.ch?.[cardData.idx]?.na1[lang] || "Unknown";
+                return (
+                  <ChCard key={`chCard${idx}`} direction="column">
+                    <CharacterCard usedType="small" size="60" equalSize={true} saveData={saveData} saveCharacter={cardData} slotIdx={idx}/>
+                    <ChName>{name}</ChName>
+                  </ChCard>
+                )
+              }) : 
+                selectGradeArr?.arr?.map((cardData, idx) => {
                   return (
                     <ChCard key={`chCard${idx}`} direction="column">
-                      <CharacterCard usedType="small" size="60" equalSize={true} saveData={saveData} saveCharacter={cardData} slotIdx={idx}/>
-                      <ChName>{name}</ChName>
+                      <CharacterCard grade={cardData} size="60" equalSize={true} />
                     </ChCard>
-                  )
-                }) : 
-                  selectGradeArr?.arr?.map((cardData, idx) => {
-                    return (
-                      <ChCard key={`chCard${idx}`} direction="column">
-                        <CharacterCard grade={cardData} size="60" equalSize={true} />
-                      </ChCard>
-                  )
-                })}
+                )
+              })}
               </CardBox>
             </StyledListItem>
             <StyledListItem title={gameData.msg.title?.['money']?.[lang] || "Money"}>
@@ -226,47 +229,30 @@ const StartGame = ({
             <Button size="large" width={100} onClick={() => {
               localStorage.removeItem('historyParam');//게임기록 삭제
               //시나리오 개방
-              let updatedSaveData = JSON.parse(JSON.stringify(saveData || {}));
-              let updatedCh = updatedSaveData.ch || [];
-              let updatedScenario = updatedSaveData.scenario || {};
+              const updatedSaveData = JSON.parse(JSON.stringify(saveData || {}));
 
               if (selectGradeArr?.fix?.length > 0) {
                 const cardList = util.makeCard({
-                  gachaNum: selectGradeArr.fix,
+                  heroArr: classification,
+                  gachaNum: 1,
                   gachaType: "fix",
+                  heroIdxArr: selectGradeArr.fix,
                   gameData: gameData,
                   saveData: saveData,
+                  isStart: true,
                 });
-                updatedCh = [...(cardList.chDataArr || []), ...updatedCh];
+                updatedSaveData.ch = [...(cardList.chDataArr || []), ...updatedSaveData.ch];
               }
-
-              updatedCh.forEach((chData) => {
-                const chScenario = gameData.ch?.[chData.idx]?.scenarioRegion;
-                if (chScenario && chScenario !== '') { //인물 전기가 있다면
-                  chScenario.forEach((scenarioData) => {
-                    if (!scenarioData) return;
-                    const chScenarioInfo = scenarioData.split("-");
-                    if (chScenarioInfo.length < 3) return;
-                    const category = chScenarioInfo[0].replace(/[0-9]/g, "");
-                    const regionIdx = chScenarioInfo[1];
-                    const scenarioIdx = chScenarioInfo[2];
-
-                    if (updatedScenario[category]?.[regionIdx]) {
-                      updatedScenario[category][regionIdx].scenarioList = (updatedScenario[category][regionIdx].scenarioList || []).map((s, si) => 
-                        si === Number(scenarioIdx) ? { ...s, open: (s.open || 0) + 1 } : s
-                      );
-                    }
-                  });
-                }
+              const sData = util.updateScenarioHeroNum({
+                gameData: gameData,
+                saveData: updatedSaveData,
               });
 
-              updatedSaveData.ch = updatedCh;
-              updatedSaveData.scenario = updatedScenario;
-              if (updatedSaveData.info) {
-                updatedSaveData.info.money = Number(util.removeComma(hasMoney) || 0);
-                updatedSaveData.info.morality = gameData.startMorality || 0;
+              if (sData.info) {
+                sData.info.money = Number(util.removeComma(hasMoney) || 0);
+                sData.info.morality = gameData.startMorality || 0;
               }
-              changeSaveData(updatedSaveData);
+              changeSaveData(sData);
 
               //필드 유효성 검사
               if (!saveData.info?.id) {

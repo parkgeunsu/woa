@@ -311,21 +311,25 @@ const ListChCost = styled(Text)`
   line-height: 1.25rem;
   z-index:7;
 `;
+
 const CharacterCard = ({
   size,
-  equalSize,
+  equalSize=false,
   isShowCard,
   saveData,
   slotIdx,
   saveCharacter,
   usedType,
-  noInfo,
-  gameSpd,
+  noInfo=false,
+  gameSpd=1,
   grade, 
   showCost,
   ...rest
 }) => {
   const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
@@ -528,8 +532,8 @@ const CharacterCard = ({
           <ChCard size={size} className="ch_detail" {...rest}>
             {!isShowCard && <ListNameLv elementType={chData?.element[0] - 6} className="name_lv">
               <Lv code="t8" color="main">{saveCh?.lv}</Lv>
-              <SubName code="t2" color="main">{chData?.na3}</SubName>
-              <Name code="t5" color="main">{`${chData?.na1} (${chData?.na2})`}</Name>
+              <SubName code="t2" color="main">{chData?.na3[lang]}</SubName>
+              <Name code="t5" color="main">{`${chData?.na1[lang]} ${chData?.na2?.[lang] ? `(${chData?.na2[lang]})` : ''}`}</Name>
             </ListNameLv>}
             <ListCh type="profile" isRound={0} pic={`ch${chData?.display}`} />
             {!isShowCard && <ListJobAction>
@@ -566,9 +570,4 @@ const CharacterCard = ({
   }
 }
 
-CharacterCard.defaultProps = {
-  equalSize: false,
-  noInfo: false,
-  gameSpd: 1,
-}
 export default CharacterCard;

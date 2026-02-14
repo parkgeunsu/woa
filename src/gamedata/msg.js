@@ -401,6 +401,16 @@ export const msg = {
 		},
 	},
 	title:{
+		noEntry:{
+			ko:'엔트리 없음',
+			en:'No Entry',
+			jp:'エンターなし',
+		},
+		getHero:{
+			ko:'획득 영웅',
+			en:'Obtained Hero',
+			jp:'獲得英雄',
+		},
 		getItem:{
 			ko:'획득 아이템',
 			en:'Obtained Item',
@@ -1734,6 +1744,16 @@ export const msg = {
 			ko:'이전 스테이지를 클리어 해야 합니다.',
 			en:'You must clear the previous stage.',
 			jp:'前のステージをクリアする必要があります。',
+		},
+		nodata_getHero:{
+			ko:'획득한 영웅이 없습니다.',
+			en:'You have no heroes.',
+			jp:'獲得した英雄がいません。',
+		},
+		nodata_getItem:{
+			ko:'획득한 아이템이 없습니다.',
+			en:'You have no items.',
+			jp:'獲得したアイテムがありません。',
 		},
 		nodata_relation:{
 			ko:'인물의 인연 데이터가 없습니다.',

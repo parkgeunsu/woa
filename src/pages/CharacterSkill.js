@@ -34,6 +34,7 @@ const Skill = styled(FlexBox)`
   border-radius: 5px;
   opacity: .3;
   box-sizing: border-box;
+  flex-basis: 0;
   ${({possible}) => possible ? `
     border-color: var(--color-magic);
     opacity: 1;
@@ -184,7 +185,7 @@ const CharacterSkill = ({
   }, [context]);
 
   const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
-  const chName = React.useMemo(() => gameData.ch[saveCh.idx]?.na1, [gameData, saveCh]);
+  const chName = React.useMemo(() => gameData.ch[saveCh.idx]?.na1[lang], [gameData, saveCh]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});

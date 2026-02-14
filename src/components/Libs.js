@@ -50,6 +50,7 @@ export const util = { //this.loadImage();
     localStorage.setItem(key, JSON.stringify(data));
   },
   loadData: (key) => {
+    if (localStorage.getItem(key) === "undefined" || localStorage.getItem(key) === null) return {};
     return JSON.parse(localStorage.getItem(key));
   },
   removeData: (key) => {
@@ -404,17 +405,53 @@ export const util = { //this.loadImage();
     }
     return effArr;
   },
-  setLineupSt: (dataObj, gameData, saveData) => {
-    const isMoveEvent = dataObj.isMoveEvent;
-    const lineupType = dataObj.lineupType;
+  setLineupSt: ({
+    isMoveEvent, lineupType, saveSlot, useList, leaderIdx, scenarioState,
+    selectSave, lineupIdx, cloneUseList
+  }, gameData, saveData) => {
     const lineupArea = gameData.lineup[lineupType];
-    const saveSlotIdx = dataObj.saveSlot;
+    const saveSlotIdx = saveSlot;
     
     let peopleLength = 0;
     let lineNum = [];
-    
-    if(dataObj.leaderIdx !== "") {
-      for (const [entry_idx, entry_data] of dataObj.useList.entries()) {
+    const currenSaveData = isMoveEvent ? 
+      { ...saveData, 
+        eventLineup: { ...saveData.eventLineup, save_slot: saveData.eventLineup.save_slot.map((slot, sIdx) => sIdx === selectSave ? { ...slot, no: lineupIdx, entry: [...cloneUseList] } : slot) } 
+      } :
+      { ...saveData,
+        ...(scenarioState?.type === "scenario" ? {
+          ch: saveData.ch.map((ch, chIdx) => chIdx === scenarioState?.slotIdx
+            ? { 
+                ...ch,
+                scenario: ch.scenario.map((scenario, scenarioIdx) => scenarioIdx === scenarioState?.chScenarioIdx
+                    ? { 
+                      ...scenario,
+                      stage: scenario.stage.map((stage, stageIdx) => stageIdx === scenarioState?.stageIdx
+                        ? { 
+                            ...stage,
+                            lineup: {
+                              ...stage.lineup,
+                              slot: { 
+                                ...stage.lineup.slot,
+                                no: lineupIdx,
+                                entry: [...cloneUseList],
+                              }
+                            }
+                          }
+                        : stage
+                      )
+                    }
+                  : scenario
+                )
+              }
+            : ch
+          )
+        } : {
+          lineup: { ...saveData.lineup, save_slot: saveData.lineup.save_slot.map((slot, sIdx) => sIdx === selectSave ? { ...slot, no: lineupIdx, entry: [...cloneUseList] } : slot) } 
+        })
+      };
+    if(leaderIdx !== "") {
+      for (const [entry_idx, entry_data] of useList.entries()) {
         if (entry_data !== '') {
           let found = false;
           for (const [line_idx, line_data] of lineupArea.entry.entries()) {
@@ -439,8 +476,8 @@ export const util = { //this.loadImage();
 
     let eff = [];
     lineNum.forEach((lGrade, lineupIdx) => {
-      const chIdx = dataObj.useList[lineupIdx];
-      const ch = saveData.ch[chIdx];
+      const chIdx = useList[lineupIdx];
+      const ch = currenSaveData.ch[chIdx];
       eff.push(...util.getLineupSt({
         lineupType: lineupType,
         lineupGrade: lGrade,
@@ -449,37 +486,47 @@ export const util = { //this.loadImage();
         gameData: gameData,
       }));
     });
-
     const updateSlot = (slot, idx) => {
       if (idx === saveSlotIdx) {
         return {
           ...slot,
           no: lineupType,
-          entry: [...dataObj.useList],
+          entry: [...useList],
           num: peopleLength,
           eff: eff,
-          leader: dataObj.leaderIdx
+          leader: leaderIdx,
         };
       }
       return slot;
     };
-
     if (isMoveEvent) {
       return {
-        ...saveData,
+        ...currenSaveData,
         eventLineup: {
-          ...saveData.eventLineup,
-          save_slot: saveData.eventLineup.save_slot.map(updateSlot)
+          ...currenSaveData.eventLineup,
+          save_slot: currenSaveData.eventLineup.save_slot.map(updateSlot)
         }
       };
     } else {
-      return {
-        ...saveData,
-        lineup: {
-          ...saveData.lineup,
-          save_slot: saveData.lineup.save_slot.map(updateSlot)
-        }
-      };
+      if (scenarioState?.type === "scenario") {
+        currenSaveData.ch[scenarioState.slotIdx].scenario[scenarioState.chScenarioIdx].stage[scenarioState.stageIdx].lineup.slot = {
+          no: lineupType,
+          entry: [...useList],
+          num: peopleLength,
+          eff: eff,
+          leader: leaderIdx,
+        };
+        console.log(currenSaveData.ch[scenarioState.slotIdx].scenario[scenarioState.chScenarioIdx].stage[scenarioState.stageIdx].lineup.slot);
+        return currenSaveData;
+      } else {
+        return {
+          ...currenSaveData,
+          lineup: {
+            ...currenSaveData.lineup,
+            save_slot: currenSaveData.lineup.save_slot.map(updateSlot)
+          }
+        };
+      }
     }
   },
   compileState: (currentState, itemState) => {
@@ -3894,26 +3941,52 @@ export const util = { //this.loadImage();
         return 0;
     }
   },
+  updateScenarioHeroNum: ({gameData, saveData}) => {
+    const updatedScenario = saveData.scenario || {};
+    saveData.ch.forEach((chData) => {
+      const chScenario = gameData.ch?.[chData.idx]?.scenarioRegion;
+      if (chScenario && chScenario !== '') { //인물 전기가 있다면
+        chScenario.forEach((scenarioData) => {
+          if (!scenarioData) return;
+          const chScenarioInfo = scenarioData.split("-");
+          if (chScenarioInfo.length < 3) return;
+          const category = chScenarioInfo[0].replace(/[0-9]/g, "");
+          const regionIdx = chScenarioInfo[1];
+          const scenarioIdx = chScenarioInfo[2];
+
+          if (updatedScenario[category]?.[regionIdx]) {
+            updatedScenario[category][regionIdx].scenarioList = (updatedScenario[category][regionIdx].scenarioList || []).map((s, si) => 
+              si === Number(scenarioIdx) ? { ...s, heroNum: (s.heroNum || 0) + 1 } : s
+            );
+          }
+        });
+      }
+    });
+    saveData.scenario = updatedScenario;
+    return saveData;
+  },
   makeCard: ({
-    gachaNum, 
-    gachaType, 
+    heroArr, //영웅분류
+    gachaNum, //가챠횟수
+    heroIdxArr, //영웅인덱스
+    gachaType, //가챠종류
+    isStart, //최초여부
     gameData, 
-    saveData
-  }) => { //가챠횟수
-    const beginType = typeof gachaNum !== 'number'; //최초 시작상태 체크
+    saveData,
+  }) => {
     const getCardIdx = (gradeNum) => {
-      const chOfGrade = gameData.chArr.grade;//등급별
+      const chOfGrade = heroArr.grade;//등급별
       const length = chOfGrade[gradeNum].length,
             ran = Math.floor(Math.random() * length);
       return chOfGrade[gradeNum][ran];
     }
     const getGrade = (n, type) => {
       let ch_arr = [];
-      if (beginType) {
-        if (gachaType === "fix") {
-          ch_arr = Array.from({length: gachaNum.length}, () => 4);
+      if (isStart) {
+        if (isStart && gachaType === "fix") {
+          ch_arr = Array.from({length: heroIdxArr.length}, () => 4);
         } else {
-          ch_arr = gachaNum;
+          ch_arr = heroIdxArr;
         }
       } else {
         const arr = type === 'p' ? [1,5,10,30] : [0.1,1,5,10,20,30]; // 다이아 & 골드 등급 나올확률값
@@ -3962,10 +4035,9 @@ export const util = { //this.loadImage();
     }
     let chArr = [];
     let chDataArr = [];
-    const recruitmentNum = beginType ? gachaNum.length : gachaNum;// 뽑는 횟수
-    const cardGrade = getGrade(recruitmentNum, gachaType);
-    for (let i = 0; i < recruitmentNum; ++i) {
-      const newIdx = gachaType === "fix" ? gachaNum[i] : getCardIdx(cardGrade.arr[i]);		
+    const cardGrade = getGrade(gachaNum, gachaType);
+    for (let i = 0; i < gachaNum; ++i) {
+      const newIdx = gachaType === "fix" ? heroIdxArr[i] : getCardIdx(cardGrade.arr[i]);		
       const addGrade = Math.random();
       let luckyGradePoint = 0;
       if (cardGrade.arr[i] === 1) {
@@ -4021,10 +4093,18 @@ export const util = { //this.loadImage();
         gradeMax: maxG,
         chSlotIdx: saveData.ch.length + i,
       });
+      //시나리오 heroNum 증가
+      const sData = util.updateScenarioHeroNum({
+        gameData: gameData,
+        saveData: saveData,
+      });
+      saveData = sData;
+      const chScenario = gameData.ch[newIdx].scenarioRegion;
       chDataArr.push(util.saveLvState('', {
         itemEff: util.getItemEff(),
         grade: cardG,
         newState: {
+          nickName: "",
           actionPoint: 25,
           actionMax: Math.floor(gameData.ch[newIdx].st1 / 3 + gameData.ch[newIdx].st6 / 3),
           pointTime: 25*5*60,//5분, 초단위로 변환
@@ -4044,10 +4124,31 @@ export const util = { //this.loadImage();
           mark: Math.round(Math.random()*2),//동물뱃지 추가보유여부(상점에서 exp로 구입가능)
           idx: newIdx,
           items: [{}, {}, {}, {}, {}, {}, {}, {}],
-          lv: 20,
+          lv: 1,
           sk: [{idx: 1, lv: 1, exp: 0,},{idx: 2, lv: 1, exp: 0,},],
           animalSkill: util.makeSkillTree(gameData, newIdx, job),
           hasSkill: [{idx: 1, lv: 1, exp: 0,},{idx: 2, lv: 1, exp: 0,},],
+          scenario: chScenario ? chScenario.map((v) => {
+            const scenarioList = v.split("-");
+            return {
+              currentStage: 0,
+              stage: Array.from({length: gameData.scenario[scenarioList[0]][scenarioList[1]].scenarioList[scenarioList[2]].stage.length}, (v) => ({
+                first:true,
+                clear:[false,false,false,false],
+                select:0,
+                lineup:{
+                  select:0,
+                  slot:{
+                    no: 0,
+                    leader: "",
+                    entry: Array.from({length: 25}, () => ""),
+                    eff: Array.from({length: 25}, () => Array.from({length: 10}, () => [0, 0])),
+                    num: 0
+                  }
+                },
+              })),
+            }
+          }) : "",
         },
       }, saveData, gameData));
     };

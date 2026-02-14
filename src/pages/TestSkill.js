@@ -1864,7 +1864,7 @@ const TestSkill = ({
 				luk = (saveCh.bSt9 || 0) + (saveCh.iSt9 || 0) + (effData?.rtSt9 || 0);
 			battleAlly.current.push({
 				...saveCh,
-				na: gameData.ch?.[saveCh.idx]?.na1 || "",
+				na: gameData.ch?.[saveCh.idx]?.na1[lang] || "",
 				hasExp:saveCh.hasExp || 0,
 				state: '',
 				buffDebuff:[],

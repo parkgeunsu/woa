@@ -154,7 +154,7 @@ const CharacterRelation = ({
   return (
     <>
       <Wrap className="relation">
-        <InfoGroup pointTitle={chData?.na1} title={`${gameData?.msg?.grammar?.conjunction[lang]} ${gameData?.msg?.menu?.relation[lang]}`} guideClick={() => {
+        <InfoGroup pointTitle={chData?.na1[lang]} title={`${gameData?.msg?.grammar?.conjunction[lang]} ${gameData?.msg?.menu?.relation[lang]}`} guideClick={() => {
           setPopupType('guide');
           setPopupOn(true);
           setPopupInfo({
@@ -182,7 +182,7 @@ const CharacterRelation = ({
                             <div key={`relationMember_${mStatus.idx}`} style={{ margin: "0 10px 0 0" }}>
                               <ChBox active={mStatus.hasMember}>
                                 <CardCh>
-                                  <ChPic isThumb={true} pic={`ch${mStatus.chData.display}`} />
+                                  <ChPic isThumb={true} pic={`chs${mStatus.chData.display}`} />
                                 </CardCh>
                               </ChBox>
                               {rtStatus.isAllComplete && <RtComplete color="red" code="t4" weight="600">ALL</RtComplete>}
@@ -238,7 +238,7 @@ const CharacterRelation = ({
                 <Text code="t1" color="main" weight="600">{gameData?.msg?.sentence?.nodata_scenario?.[lang]}</Text>}
               </Relations>
               <ChDescription code="t1" color="main" isDynamic={true}>
-                {chData?.txt}
+                {chData?.txt[lang]}
               </ChDescription>
             </ChRelation>
           </RelationWrap>

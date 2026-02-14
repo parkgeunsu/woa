@@ -1334,6 +1334,12 @@ const BattleResultCh = styled(FlexBox)`
 	height: auto;
 	box-sizing: border-box;
 `;
+const ResultText = styled(Text)`
+		margin: 10px 0 5px 0;
+`;
+const ChCard = styled(FlexBox)`
+	flex: 1;
+`;
 const BattleEndCh = styled(FlexBox)`
 	margin: 0 0 20px 0;
 	width: 100%;
@@ -1350,12 +1356,12 @@ const BattleEndCh = styled(FlexBox)`
 const BattleEndContribution = styled(FlexBox)`
 	width: auto;
 `;
-const BattleResultItem = styled(FlexBox)`
+const BattleResult = styled(FlexBox)`
 	height: auto;
 `;
-const BattleResultItemContent = styled(FlexBox)``;
+const BattleResultContent = styled(FlexBox)``;
 const BattleResultMoney = styled(Text)`
-	margin: 10px 0 0 0;
+	margin: 10px 0 5px 0;
 `;
 const BattleEndHpexp = styled(FlexBox)`
 	position: relative;
@@ -1698,7 +1704,7 @@ const calculatePassives = ({ teamList, passiveSkillList, finalPassiveList, gameD
 	});
 };
 
-const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, bgm, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, atkOption}) => {
+const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLine, resetOrder, setAllyEffect, setEnemyEffect, gameData, battleAlly, battleEnemy, gameSpd, bgm, setAllyAction, setEnemyAction, setLandCriticalEffect, allyPos, enemyPos, setMode, setWeather, allyEnemyPassive, allyPassive, enemyPassive, setAllyEnemyPassive, allyEnemyBuff, allyBuff, enemyBuff, setAllyEnemyBuff, atkOption, lang}) => {
 	const timeDelay = gameData.timeDelay.battle;
 	const endGameCheck = () => {//게임 종료 체크
 		const chLength = [battleAlly.length, battleEnemy.length],
@@ -1761,6 +1767,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 				enemyBuff: enemyBuff,
 				setAllyEnemyBuff: setAllyEnemyBuff,
 				atkOption: atkOption,
+				lang: lang,
 			});
 			return;
 		}
@@ -2137,7 +2144,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						heal_ = Math.floor((1 + (criticalAtk ? healNum * 1.33 : healNum) / 100) * attacker.mak);
 						heal.push(heal_);
 						totalBattleGrade += heal_;
-						console.log(`${attacker.na1} -> ${defEnemy.na1},`, `힐: ${Math.floor(heal_)}`);
+						console.log(`${attacker.na1[lang]} -> ${defEnemy.na1[lang]},`, `힐: ${Math.floor(heal_)}`);
 					} else if (attackerSkillType === 41 || attackerSkillType === 43) { //hp회복
 						if (defEnemy.state !== 'die') { //적이 살았을 경우
 							if (Math.random() < criticalChance) {
@@ -2157,7 +2164,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							heal_ = Math.floor((1 + (criticalAtk ? healNum * 1.33 : healNum) / 100) * attacker.mak);
 							heal.push(heal_);
 							totalBattleGrade += heal_;
-							console.log(`${attacker.na1} -> ${defEnemy.na1},`, `힐: ${Math.floor(heal_)}`);
+							console.log(`${attacker.na1[lang]} -> ${defEnemy.na1[lang]},`, `힐: ${Math.floor(heal_)}`);
 						}
 					}
 					if (attackerSkillType === 42 || attackerSkillType === 43) { //sp회복
@@ -2351,7 +2358,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 										teamAction[defData.idx] = teamAction[defData.idx] ? `${teamAction[defData.idx]} avoid${avoidNum}` : `avoid${avoidNum}`;
 									}
 									const counterChance = Math.random() < (defData.ch.counterAttack ? parseInt(defData.ch.counterAttack.num) * 0.01: 0); //반격 확률
-									//console.log(defData.ch.na1, .1 + (defData.ch.counterAttack ? parseInt(defData.ch.counterAttack.num) * 0.01 : 0)+'확률 반격');
+									//console.log(defData.ch.na1[lang], .1 + (defData.ch.counterAttack ? parseInt(defData.ch.counterAttack.num) * 0.01 : 0)+'확률 반격');
 									if (counterChance && atkS === 0 && timeLine[turnIdx].order.skIdx !== 17 && timeLine[turnIdx].order.targetIdx.length === 1) {//반격 확률 계산, 연속공격중 마지막일때만, 반격이 아닐경우, 광역기가 아닐경우
 										const effectTarget = timeLine[turnIdx].order.team === 'ally' ? allyPos[timeLine[turnIdx].order.idx].pos : enemyPos[timeLine[turnIdx].order.idx];
 										timeLine.splice(turnIdx + 1, 0, {
@@ -2533,8 +2540,8 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 						if (avoid) {
 							dmg.push('');
 						} else {
-							//dmg.push(dmg_);
-							dmg.push(2000);
+							dmg.push(dmg_);
+							//dmg.push(2000);
 							if (skillCate === 14) {
 								if (gameData.skill[skillIdx].attackEff.length > 0) {
 									gameData.skill[skillIdx].attackEff.forEach((attackEffect) => {
@@ -2548,7 +2555,7 @@ const actionAnimation = ({setTurnIdx, setSkillMsg, skillEffect, turnIdx, timeLin
 							}
 							totalBattleGrade += dmg_;
 						}
-						console.log(`${attacker.na1} -> ${defEnemy.na1},`, `데미지: ${Math.floor(dmg_)},`, `공격: ${Math.floor(atkNum[attackType] * (kgAtk + multiplesAttackNum + elementAttackPercent + 1))},`, `방어: ${Math.floor(criticalAtk ? defCount * stateImpactDef * .5 : defCount * stateImpactDef)}`);
+						console.log(`${attacker.na1[lang]} -> ${defEnemy.na1[lang]},`, `데미지: ${Math.floor(dmg_)},`, `공격: ${Math.floor(atkNum[attackType] * (kgAtk + multiplesAttackNum + elementAttackPercent + 1))},`, `방어: ${Math.floor(criticalAtk ? defCount * stateImpactDef * .5 : defCount * stateImpactDef)}`);
 						console.log(attacker, defencer);
 					} else { //적이 죽었을 경우
 						dmg.push('');
@@ -3797,15 +3804,16 @@ const Battle = ({
 	const isMoveEvent = React.useMemo(() => util.loadData("historyParam")?.moveEvent && Object.keys(util.loadData("historyParam")?.moveEvent)?.length > 0
 	, []);
 	const sData = React.useMemo(() => saveData && Object.keys(saveData).length !== 0 ? saveData : util.loadData('saveData'), [saveData]);
-	const useLineup = React.useMemo(() => {
-		return isMoveEvent ? sData.eventLineup : sData.lineup;
-	}, [sData, isMoveEvent]);
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
 	const battleType = React.useMemo(() => {
 		return paramData?.battle.type;
 	}, [paramData]);
+	const useLineup = React.useMemo(() => {
+		const scenarioBattleData = paramData.battle.scenario;
+		return isMoveEvent ? sData.eventLineup : battleType === "scenarioRegion" ? sData.ch[scenarioBattleData.slotIdx].scenario[scenarioBattleData.chScenarioIdx]?.stage[scenarioBattleData.stageIdx].lineup : sData.lineup;
+	}, [sData, isMoveEvent]);
 	const battleData = React.useMemo(() => {
 		if (battleType === "scenarioRegion") {
 			const scenarioBattleData = paramData.battle.scenario;
@@ -3895,15 +3903,15 @@ const Battle = ({
 	const viewScenario = React.useMemo(() => {
 		const scenarioBattleData = paramData.battle.scenario;
 		if (scenarioBattleData) {
-			return battleType === "scenarioRegion" ? sData.scenario[scenarioBattleData.stay.replace(/[0-9]/g, "")][scenarioBattleData.dynastyIdx]?.scenarioList[scenarioBattleData.dynastyScenarioIdx].stage[scenarioBattleData.stageIdx].first : "";
+			return battleType === "scenarioRegion" ? sData.ch[scenarioBattleData.slotIdx].scenario[scenarioBattleData.chScenarioIdx]?.stage[scenarioBattleData.stageIdx].first : "";
 		} else {
 			navigate('../gameMain');
 			return "";
 		}
-		
 	}, [sData, battleType, paramData]);
 	const mapLand = React.useMemo(() => battleData?.map || [], [battleData]);
-	const allyDeck = useRef(useLineup.save_slot[useLineup.select].entry);//캐릭터 저장된 카드index
+	const allyDeck = useRef(
+		battleType === "scenarioRegion" ? useLineup.slot?.entry : useLineup.save_slot?.[useLineup.select].entry);//캐릭터 저장된 카드index
 	const enemyDeck = React.useMemo(() => {
 		if (!battleData) return [];
 		if (battleType === "scenarioRegion") {
@@ -3946,7 +3954,7 @@ const Battle = ({
 	const enemyRelationArr = useRef();//적군인연
 	const relationHeight = useRef(0);//인연 박스 크기
 	const relationCh = useRef();//인연 적용캐릭
-	const [acquiredItems, setAcquiredItems] = useState([]);//획득한 아이템
+	const [lootList, setLootList] = useState({});//전리품 목록
 	const allySlot = useRef([]);//아군 저장 슬롯배열
 	const resultExp = useRef([]);//결과 획득 경험치
 	const resultBeige = useRef([]);//결과 전투벳지
@@ -4068,7 +4076,7 @@ const Battle = ({
 			conversationCount.current = 0;
 			conversationTimeout.current = setInterval(conversationInterval, 50);
 			
-			sData.scenario[scenarioBattleData.stay.replace(/[0-9]/g, "")][scenarioBattleData.dynastyIdx].scenarioList[scenarioBattleData.dynastyScenarioIdx].stage[scenarioBattleData.stageIdx].first = false;
+			sData.ch[scenarioBattleData.slotIdx].scenario[scenarioBattleData.chScenarioIdx].stage[scenarioBattleData.stageIdx].first = false;
 			changeSaveData(sData);
 		} else {//시나리오 패스
 			setTimeout(() => {
@@ -4124,11 +4132,9 @@ const Battle = ({
 				fireR = saveCh.el9 + saveCh.iSt32 + (effData?.rtSt32 || 0),
 				windR = saveCh.el10 + saveCh.iSt33 + (effData?.rtSt33 || 0),
 				earthR = saveCh.el11 + saveCh.iSt34 + (effData?.rtSt34 || 0);
-			saveCh.hasSkill[2] = {idx:47,lv:1,exp:1};//삭제 해야됨
-			saveCh.hasSkill[3] = {idx:271,lv:1,exp:1};//삭제 해야됨
 			battleAlly.current.push({
 				...saveCh,
-				na1: gameData.ch[saveCh.idx].na1,
+				na1: gameData.ch[saveCh.idx].na1[lang],
 				animal_type: gameData.ch[saveCh.idx].animal_type,
 				hasExp:saveCh.hasExp,
 				state: '',//죽음 idx !== 0 ? 'die' : ''
@@ -4851,11 +4857,29 @@ const Battle = ({
 			}, 500);//pB.timeDelay
 		} else if (mode === 'battleWin') {
 			console.log('pgs', '격!퇴!성!공!');
-			let dropItem = {
+			const dropItem = {
 				items: [],
 				money: 0,
-			};
+			},
+				getHero = [];
+			const saveD = {...sData};
 			battleEnemy.current.forEach((enemyData) => {
+				//캐릭터 획득
+				const heroData = gameData.ch[enemyData.idx];
+				if (gameData.percent.getBattleHero[heroData.grade] > Math.random()) {
+					const card = util.makeCard({
+						heroArr: classification,
+						gachaNum: 1,
+						gachaType: "fix",
+						heroIdxArr: [enemyData.idx],
+						gameData: gameData,
+						saveData: saveD,
+					});
+					saveD.ch = [...saveD.ch, card.chDataArr[0]];
+					console.log(enemyData.idx);
+					getHero.push(enemyData.idx);
+				}
+				//아이템 획득
 				const dropList = util.mergeConcatAll([
 					gameData.drop.country[enemyData.country],
 					gameData.drop.lv[Math.min(4, Math.floor(enemyData.lv / 10))],
@@ -4886,7 +4910,7 @@ const Battle = ({
 							itemCode = String(itemIdx);
 						}
 						util.getItem({
-							saveData: sData,
+							saveData: saveD,
 							gameData: gameData,
 							changeSaveData: changeSaveData,
 							option: {
@@ -4904,30 +4928,37 @@ const Battle = ({
 				}
 				dropItem.money += dropList.money;
 			});
-			console.log('pgs', dropItem);
-			setAcquiredItems(dropItem);
+			setLootList({
+				...dropItem,
+				hero: getHero,
+			});
 			if (battleType === "exploring") { //탐색 모드시 룰렛 데이터 제거
 				util.saveData('historyParam', {
 					...util.loadData('historyParam'),
 					roulette: {base: {},add: {}, lv: {}, map: {}},
 				});
 			}
-			let saveD = {
-				...sData,
-				info: {
-					...sData.info,
-					money: sData.info.money + dropItem.money,
-				},
-				ch: sData.ch.map(ch => ({ ...ch, items: ch.items.map(item => ({ ...item })), battleBadge: [...ch.battleBadge] })),
-				scenario: JSON.parse(JSON.stringify(sData.scenario)), // Deep clone scenario due to complex nesting
+			saveD.info = {
+				...saveD.info,
+				money: saveD.info.money + dropItem.money,
 			};
+			saveD.ch = saveD.ch.map(ch => ({ ...ch, items: ch.items.map(item => ({ ...item })), battleBadge: [...ch.battleBadge] }));
+			saveD.scenario = JSON.parse(JSON.stringify(saveD.scenario));
+
+			console.log('pgs', saveD, getHero);
 			if (battleType === "scenarioRegion") {
 				//난이도 클리어 처리
 				const scenarioBattleData = paramData.battle.scenario,
 					stayKey = scenarioBattleData.stay.replace(/[0-9]/g, "");
-				saveD.scenario[stayKey][scenarioBattleData.dynastyIdx].scenarioList[scenarioBattleData.dynastyScenarioIdx].stage[scenarioBattleData.stageIdx].clear[scenarioBattleData.stageDifficult] = true;
 
-				saveD.scenario[stayKey][scenarioBattleData.dynastyIdx].scenarioList[scenarioBattleData.dynastyScenarioIdx].currentStage = Math.max(saveD.scenario[stayKey][scenarioBattleData.dynastyIdx].scenarioList[scenarioBattleData.dynastyScenarioIdx].currentStage, scenarioBattleData.stageIdx);
+				sData.ch[scenarioBattleData.slotIdx].scenario[scenarioBattleData.chScenarioIdx].stage[scenarioBattleData.stageIdx].clear[scenarioBattleData.stageDifficult] = true;
+
+				const currentStage = scenarioBattleData.stageIdx + 1;
+				sData.ch[scenarioBattleData.slotIdx].scenario[scenarioBattleData.chScenarioIdx].currentStage = currentStage;
+
+				//savedata.scenario progressedStage 변경
+				saveD.scenario[stayKey][scenarioBattleData.dynastyIdx].scenarioList[scenarioBattleData.dynastyScenarioIdx].progressedStage = currentStage;
+
 			}
 			setWeather({
 				type: '',
@@ -5117,7 +5148,7 @@ const Battle = ({
 								</CardChRing>
 								<CardCh isThumb={true} pic={`ch${util.chIdxToGroup(chData?.display)}`} idx={chData?.display} /> */}
 								<CharacterCard usedType="conversation" saveData={saveData} gameData={gameData} saveCharacter={data} gameSpd={speed} />
-								<div className="ch_name">{chData?.na1}</div>
+								<div className="ch_name">{chData?.na1[lang]}</div>
 							</ScenarioCh>
 							{idx === conversationStepRef.current - 1 && (
 								<ScenarioTalk ref={conversationBoxRef} pos={data.pos} dangerouslySetInnerHTML={{__html: conversationMsg}} />
@@ -5167,10 +5198,31 @@ const Battle = ({
 							);
 						})}
 					</BattleResultCh>
-					<BattleResultItem justifyContent="center" direction="column">
-						<Text code="t3" color="main">{gameData.msg.title.getItem[lang]}</Text>
-						<BattleResultItemContent>
-						{acquiredItems && acquiredItems?.items?.map((item, idx) => {
+					<BattleResult justifyContent="center" direction="column">
+						<ResultText code="t3" color="main">{gameData.msg.title.getHero[lang]}</ResultText>
+						{!lootList?.hero || lootList?.hero?.length === 0 && <Text code="t1" color="grey">{gameData.msg.sentence.nodata_getHero[lang]}</Text>}
+						<BattleResultContent>
+						{lootList?.hero && lootList?.hero?.map((heroIdx, idx) => {
+							const heroData = gameData.ch[heroIdx];
+							return (
+								<ItemContainer key={idx} onClick={(e) => {
+									e.stopPropagation();
+									setTooltipPos(e.target.getBoundingClientRect());
+									console.log("pgs", heroData)
+									setTooltip(heroData.na1?.[lang]);
+									setTooltipOn(true);
+								}}>
+									<ChCard key={`lootCard${idx}`} direction="column">
+										<CharacterCard usedType="small" size="60" equalSize={true} saveData={saveData} saveCharacter={heroData}/>
+									</ChCard>
+								</ItemContainer>
+							);
+						})}
+						</BattleResultContent>
+						<ResultText code="t3" color="main">{gameData.msg.title.getItem[lang]}</ResultText>
+						{!lootList?.items || lootList?.items?.length === 0 && <Text code="t1" color="grey">{gameData.msg.sentence.nodata_getItem[lang]}</Text>}
+						<BattleResultContent>
+						{lootList?.items && lootList?.items?.map((item, idx) => {
 							let itemData;
 							let isEquip = false;
 							if (["head", "armor", "weapon", "amulet", "ring"].includes(item.type)) {
@@ -5203,9 +5255,9 @@ const Battle = ({
 								</ItemContainer>
 							)
 						})}
-						</BattleResultItemContent>
-						<BattleResultMoney code="t3" color="main">{gameData.msg.title.money[lang]}: {acquiredItems?.money}</BattleResultMoney>
-					</BattleResultItem>
+						</BattleResultContent>
+						<BattleResultMoney code="t3" color="main">{gameData.msg.title.money[lang]}: {lootList?.money}</BattleResultMoney>
+					</BattleResult>
 				</BattleEnd>
 			)}
 			{mode === "battleLose" && (
