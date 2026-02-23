@@ -292,13 +292,14 @@ const BattleEffectLand = styled.div`
 	` : ''}
 `;
 const TimeLineCh = styled.div`
+	display: inline-block;
 	position: relative;
 	padding-top: ${({size}) => size}px;
 	width: ${({size}) => size}px;
 	height: 0;
 	border-radius: 50%;
 	overflow: hidden;
-	${({team}) => team === 'ally' ? 'margin:15px 0 0 0;' : 'margin:-15px 0 0 0;'}
+	${({team}) => team === 'ally' ? 'top: 15px;' : 'top: 5px;'}
 	z-index: 1;
 	outline: 1px solid #fff;
 	.state {
@@ -1050,14 +1051,31 @@ const WeatherArrow = styled.div`
 const BattleOrder = styled.div`
 	position: relative;
 	height: 50px;
-	background-color: var(--color-b);
+	background-color: ${({mode}) => mode !== "action" ? `var(--color-b)` : `#3e2c00`};
+	.battle_menu {
+		${({mode}) => (mode === "order" || mode === "area") ? `
+			pointer-events: unset;
+			opacity: 1;
+		` : `
+			pointer-events: none;
+			opacity: 0;
+		`};
+	}
+	&:before{
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 10px;
+		left: 0;
+		top: -4px;
+		background: url(${({frameImg}) => frameImg});background-size:contain;
+	}
 `;
 const BattleMenu = styled.div`
 	display: flex;
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	background-color: var(--color-b);
 	overflow: hidden;
 	z-index: 50;
 	transition: opacity ${({gameSpd}) => 0.75 / gameSpd}s;
@@ -1075,51 +1093,22 @@ const BattleMenu = styled.div`
 	ul li button span{flex:1;white-space:nowrap;}
 	.skSp{font-size:0.938rem;}
 	.skName{font-size:0.813rem;white-space:nowrap;}
-	${({mode}) => (mode === "order" || mode === "area") ? `
-		pointer-events: unset;
-		opacity: 1;
-	` : `
-		pointer-events: none;
-		opacity: 0;
-	`};
 `;
 const BattleTurn = styled.div`
-	display: flex;
 	position: absolute;
+	left: 30px;
 	width: 100%;
 	height: 100%;
-  flex-direction: row;
-	background: #3e2c00;
-	align-items: center;
-	justify-content: center;
+	white-space: nowrap;
+	transition: left 0.5s ease-in-out;
 	${({mode}) => mode === "action" ? `
 		pointer-events: unset;
 		opacity: 1;
-		overflow: unset;
 	` : `
 		pointer-events: none;
 		opacity: 0;
-		overflow: hidden;
 	`
 	};
-	&:before{
-		content: '';
-		position: absolute;
-		width: 100%;
-		height: 10px;
-		left: 0;
-		top: -4px;
-		background: url(${({frameImg}) => frameImg});background-size:contain;
-	}
-	&:after{
-		content: '';
-		position: absolute;
-		width: 100%;
-		height: 10px;
-		left: 0;
-		bottom: -4px;
-		background: url(${({frameImg}) => frameImg});background-size:contain;
-	}
 `;
 const RelationArea = styled.div`
 	display: flex;
@@ -3992,6 +3981,7 @@ const Battle = ({
 	const [orderIdx, setOrderIdx] = useState(); //명령 지시 순서
 	const [mode, setMode] = useState();
 	const [turnIdx, setTurnIdx] = useState(); //공격캐릭터 활성화 순번
+	const timeLineRef = useRef(null);//타임라인 참조
 	const conversationTimeout = useRef();
 	const [conversationMsg, setConversationMsg] = useState();//대화 내용
 	const [msgOn, setMsgOn] = useState(false);
@@ -5015,8 +5005,25 @@ const Battle = ({
 			});
 		}
 	}, [mode]);
+
+	const battleTurnLeft = (index, viewportWidth, itemCount, itemWidth = 30) => {
+		const contentWidth = itemCount * itemWidth;
+		const vpCenter = viewportWidth / 2;
+		const itemCenterX = index * itemWidth + itemWidth / 2;
+
+		// 오른쪽에 있을 때만 이동 (왼쪽이면 0)
+		const shift = -Math.max(0, itemCenterX - vpCenter);
+		// 컨텐츠의 끝을 넘지 않도록 클램프
+		const maxScroll = Math.max(0, contentWidth - viewportWidth);
+		const left = Math.min(shift, maxScroll);
+		return left === 0 ? 30 : left;
+	}
+
 	useLayoutEffect(() => {
 		teamPower.current = powerChk(battleAlly.current, battleEnemy.current);
+		if (timeLineRef.current) {
+			timeLineRef.current.style.left = `${battleTurnLeft(turnIdx, window.innerWidth, timeLine.current.length)}px`;
+		}
 	}, [turnIdx]);
 	useLayoutEffect(() => {
 		if (allyPos.current[orderIdx]) {
@@ -5208,7 +5215,6 @@ const Battle = ({
 								<ItemContainer key={idx} onClick={(e) => {
 									e.stopPropagation();
 									setTooltipPos(e.target.getBoundingClientRect());
-									console.log("pgs", heroData)
 									setTooltip(heroData.na1?.[lang]);
 									setTooltipOn(true);
 								}}>
@@ -5581,8 +5587,8 @@ const Battle = ({
 						</WeatherIconBox>
 					</BattleWeater>
 				</BattleArea>
-				<BattleOrder>
-					{battleAlly.current && <BattleMenu className="battle_menu" mode={mode} gameSpd={speed}>
+				<BattleOrder frameImg={imgSet.etc.frameRope} mode={mode}>
+					{battleAlly.current && <BattleMenu className="battle_menu" gameSpd={speed}>
 						{typeof orderIdx === 'number' && (
 							<>
 								<div className="chInfo">
@@ -5634,7 +5640,7 @@ const Battle = ({
 							</>
 						)}
 					</BattleMenu>}
-					<BattleTurn mode={mode} frameImg={imgSet.etc.frameRope}>
+					<BattleTurn mode={mode} ref={timeLineRef}>
 						{timeLine.current && timeLine.current.map((data, idx) => {
 							const chData = data.order.team === 'ally' ? battleAlly.current[data.order.idx] : battleEnemy.current[data.order.idx];
 							const activeSkill = activeSk(data);// die 및 active스킬 판단 대기,방어,철벽방어

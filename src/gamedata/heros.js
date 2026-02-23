@@ -1794,7 +1794,7 @@ Biography: Heo Jun was a Joseon Dynasty physician and medical scholar. He compil
       en:"(Tokui Michiyuki)",
       jp:""
     },
-    "display":66,"style":"","animal_type":0,"face_d":"left","element":[9],"grade":3,"job":[3,17],"cost":7,
+    "display":57,"style":"","animal_type":0,"face_d":"left","element":[9],"grade":3,"job":[3,17],"cost":7,
     "st0":68,"st1":133,"st2":140,"st3":55,"st4":131,"st5":36,"st6":59,
     "sk":[{"idx":1}],
     "relation":[],

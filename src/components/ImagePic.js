@@ -17,10 +17,8 @@ const StyledItemPic = styled.span`
         }
       `;
     }
-  }};
-  background-image: ${({url}) => `url(${url})`};
-  background-repeat: no-repeat;
-`
+  }}
+`;
 
 const ItemPic = ({
   type,
@@ -39,12 +37,12 @@ const ItemPic = ({
   const picSize = useCallback((node) => {
     if (node !== null) {
       const size = node.getBoundingClientRect().width;
-      node.style.backgroundPosition = `-${(idx % 10) * size}px -${Math.floor(idx / 10) * size + size * startIdx}px`;
+      node.style.background = `url(${imgSet.images[pic]}) no-repeat -${(idx % 10) * size}px -${Math.floor(idx / 10) * size + size * startIdx}px`;
       node.style.backgroundSize = `${size * 10}px`;
     }
   }, [pic, idx, imgSet, startIdx]);
   return (
-    <StyledItemPic ref={picSize} url={imgSet.images[pic]} startIdx={startIdx} className="pic" {...rest}>
+    <StyledItemPic ref={picSize} startIdx={startIdx} className="pic" itemPic={pic} idx={idx} {...rest}>
       {children}
     </StyledItemPic>
   )

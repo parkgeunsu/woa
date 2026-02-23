@@ -571,6 +571,7 @@ import ch_53 from 'images/ch/ch_53.png';
 import ch_54 from 'images/ch/ch_54.png';
 import ch_55 from 'images/ch/ch_55.png';
 import ch_56 from 'images/ch/ch_56.png';
+import ch_57 from 'images/ch/ch_57.png';
 import ch_6 from 'images/ch/ch_6.png';
 import ch_60 from 'images/ch/ch_60.png';
 import ch_61 from 'images/ch/ch_61.png';
@@ -578,7 +579,6 @@ import ch_62 from 'images/ch/ch_62.png';
 import ch_63 from 'images/ch/ch_63.png';
 import ch_64 from 'images/ch/ch_64.png';
 import ch_65 from 'images/ch/ch_65.png';
-import ch_66 from 'images/ch/ch_66.png';
 import ch_7 from 'images/ch/ch_7.png';
 import ch_8 from 'images/ch/ch_8.png';
 import ch_9 from 'images/ch/ch_9.png';
@@ -641,6 +641,7 @@ import chs_53 from 'images/chs/ch_53.png';
 import chs_54 from 'images/chs/ch_54.png';
 import chs_55 from 'images/chs/ch_55.png';
 import chs_56 from 'images/chs/ch_56.png';
+import chs_57 from 'images/chs/ch_57.png';
 import chs_6 from 'images/chs/ch_6.png';
 import chs_60 from 'images/chs/ch_60.png';
 import chs_61 from 'images/chs/ch_61.png';
@@ -648,7 +649,6 @@ import chs_62 from 'images/chs/ch_62.png';
 import chs_63 from 'images/chs/ch_63.png';
 import chs_64 from 'images/chs/ch_64.png';
 import chs_65 from 'images/chs/ch_65.png';
-import chs_66 from 'images/chs/ch_66.png';
 import chs_7 from 'images/chs/ch_7.png';
 import chs_8 from 'images/chs/ch_8.png';
 import chs_9 from 'images/chs/ch_9.png';
@@ -761,13 +761,13 @@ const chGroup = {
   ch54:ch_54,
   ch55:ch_55,
   ch56:ch_56,
+  ch57:ch_57,
   ch60:ch_60,
   ch61:ch_61,
   ch62:ch_62,
   ch63:ch_63,
   ch64:ch_64,
   ch65:ch_65,
-  ch66:ch_66,
   ch200:ch_200,
   ch201:ch_201,
   ch202:ch_202,
@@ -832,13 +832,13 @@ const chsGroup = {
   chs54:chs_54,
   chs55:chs_55,
   chs56:chs_56,
+  chs57:chs_57,
   chs60:chs_60,
   chs61:chs_61,
   chs62:chs_62,
   chs63:chs_63,
   chs64:chs_64,
   chs65:chs_65,
-  chs66:chs_66,
   chs200:chs_200,
   chs201:chs_201,
   chs202:chs_202,
