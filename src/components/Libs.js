@@ -3989,9 +3989,10 @@ export const util = { //this.loadImage();
   }) => {
     const getCardIdx = (gradeNum) => {
       const chOfGrade = heroArr.grade;//등급별
-      const length = chOfGrade[gradeNum].length,
+      const gradeNum_ = chOfGrade[gradeNum] ? gradeNum : gradeNum + 1;//없는 등급그룹이 있을 경우 등급그룹 + 1
+      const length = chOfGrade[gradeNum_]?.length,
             ran = Math.floor(Math.random() * length);
-      return chOfGrade[gradeNum][ran];
+      return chOfGrade[gradeNum_][ran];
     }
     const getGrade = (n, type) => {
       let ch_arr = [];

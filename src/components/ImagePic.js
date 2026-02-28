@@ -8,6 +8,8 @@ const StyledItemPic = styled.span`
   display: inline-block;
   width: 100%;
   height: 100%;
+  background-image: url(${({url}) => url});
+  background-repeat: no-repeat;
   ${({startIdx}) => {
     if (startIdx === '') { //equip일 경우
       return `
@@ -37,12 +39,12 @@ const ItemPic = ({
   const picSize = useCallback((node) => {
     if (node !== null) {
       const size = node.getBoundingClientRect().width;
-      node.style.background = `url(${imgSet.images[pic]}) no-repeat -${(idx % 10) * size}px -${Math.floor(idx / 10) * size + size * startIdx}px`;
+      node.style.backgroundPosition = `-${(idx % 10) * size}px -${Math.floor(idx / 10) * size + size * startIdx}px`;
       node.style.backgroundSize = `${size * 10}px`;
     }
   }, [pic, idx, imgSet, startIdx]);
   return (
-    <StyledItemPic ref={picSize} startIdx={startIdx} className="pic" itemPic={pic} idx={idx} {...rest}>
+    <StyledItemPic ref={picSize} url={imgSet.images[pic]} startIdx={startIdx} className="pic" itemPic={pic} idx={idx} {...rest}>
       {children}
     </StyledItemPic>
   )

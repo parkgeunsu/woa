@@ -22,6 +22,7 @@ import styled from 'styled-components';
 // 	z-index:10;
 // 	background: #f00;
 // `;
+
 const TeamIcon = styled.div`
 	position: absolute;
 	left: 50%;
@@ -745,15 +746,17 @@ const EffArea = styled.div`
 		transform: rotate(${rotate}deg) scale(${size});
 	`}
 `;
-const Eff = styled.img`
-	display: block;
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 500%;
-	height:${({frame}) => {
-		return Math.ceil(frame / 5) * 100;
-	}}%;
+const EffBg = styled.div`
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 500%;
+  height: ${({frame}) => Math.ceil(frame / 5) * 100}%;
+
+  background-image: url(${({ src }) => src});
+	background-size: 100% 100%;
+  background-repeat: no-repeat;
 	animation:${({frame, repeat, gameSpd}) => `frame${frame} ${(frame / 10) * gameSpd / repeat}s steps(1)`};
 	animation-iteration-count: ${({repeat}) => repeat || "infinite"};
 `;
@@ -5363,7 +5366,7 @@ const Battle = ({
 								<EffLand key={idx} className="effect_land" left={idx % 5 * mapSize} top={Math.floor(idx / 5) * mapSize} gameSpd={speed}>
 									{showEff && (
 										<EffArea className="eff_area" size={enemyEffect.effSize} rotate={enemyEffect.effRotate} filter={enemyEffect.effFilter}>
-											<Eff src={imgSet.effect[enemyEffect.effAnimation].img} frame={imgSet.effect[enemyEffect.effAnimation].frame} repeat={gameData.skill[enemyEffect.skillIdx].effAnimationRepeat} gameSpd={gameData.timeDelay.battle.skill * 0.001 / speed}/>
+											<EffBg src={imgSet.effect[enemyEffect.effAnimation].img} frame={imgSet.effect[enemyEffect.effAnimation].frame} repeat={gameData.skill[enemyEffect.skillIdx].effAnimationRepeat} gameSpd={gameData.timeDelay.battle.skill * 0.001 / speed}/>
 										</EffArea>
 									)}
 									{effNum && <EffNum effType={effectType} gameSpd={gameData.timeDelay.battle.skill * 0.001 / speed}>{effNum}</EffNum>}
@@ -5387,7 +5390,7 @@ const Battle = ({
 								<EffLand key={idx} className={`effect_land`} left={idx % 5 * mapSize} top={Math.floor(idx / 5) * mapSize} gameSpd={speed}>
 									{showEff && (
 										<EffArea className="eff_area" size={allyEffect.effSize} rotate={allyEffect.effRotate} filter={allyEffect.effFilter}>
-											<Eff src={imgSet.effect[allyEffect.effAnimation].img} frame={imgSet.effect[allyEffect.effAnimation].frame} repeat={gameData.skill[allyEffect.skillIdx].effAnimationRepeat} gameSpd={gameData.timeDelay.battle.skill * 0.001 / speed}/>
+											<EffBg src={imgSet.effect[allyEffect.effAnimation].img} frame={imgSet.effect[allyEffect.effAnimation].frame} repeat={gameData.skill[allyEffect.skillIdx].effAnimationRepeat} gameSpd={gameData.timeDelay.battle.skill * 0.001 / speed}/>
 										</EffArea>
 									)}
 									{effNum && <EffNum effType={effectType} gameSpd={gameData.timeDelay.battle.skill * 0.001 / speed}>{effNum}</EffNum>}
