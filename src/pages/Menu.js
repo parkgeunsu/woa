@@ -1,5 +1,5 @@
-import { AppContext } from 'App';
 import { Button } from 'components/Button';
+import { AppContext } from 'contexts/app-context';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 

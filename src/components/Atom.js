@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const StyledText = styled.div`
   line-height: 1.5;
   font-size: ${({theme, code}) => theme.font[code] || theme.font.t1};
-  color: ${({theme, isRgbColor, color}) => isRgbColor ? color : theme.color[color] || theme.color.sub};
+  color: ${({theme, rgbColor, color}) => rgbColor ? color : theme.color[color] || theme.color.sub};
   font-weight: ${({weight}) => weight};
   text-align: ${({align}) => align};
   ${({isDynamic}) => isDynamic && `
@@ -27,11 +27,11 @@ const Text = ({
   isDynamic,
   ...rest
 }) => {
-  const isRgbColor = (typeof color === 'string') &&
+  const rgbColor = (typeof color === 'string') &&
   (color.includes('#') || color.includes('rgb') || color.includes('hsl'));
 
   return (
-    <StyledText code={code} isRgbColor={isRgbColor} color={color} borderColor={borderColor} align={align} weight={weight} isDynamic={isDynamic} {...rest}>{children}</StyledText>
+    <StyledText code={code} rgbColor={rgbColor} color={color} borderColor={borderColor} align={align} weight={weight} isDynamic={isDynamic} {...rest}>{children}</StyledText>
   )
 }
 

@@ -1,4 +1,3 @@
-import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import { IconPic } from 'components/ImagePic';
@@ -6,6 +5,7 @@ import InfoGroup from 'components/InfoGroup';
 import { util } from 'components/Libs';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
+import { AppContext } from 'contexts/app-context';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
@@ -274,7 +274,7 @@ const CharacterState = ({
                     <StateIcon type="state" pic="icon100" idx={idx} />
                     <StateInner>
                       <StateText code="t2" color="main">{gameData.msg.state[data][lang]}</StateText>
-                      <TextTotal code="t4" weight="600" color={stateColor} borderColor="sub">
+                      <TextTotal code="t4" weight="600" color={stateColor}>
                         {saveCh['st' + idx] || 0}
                       </TextTotal>
                     </StateInner>

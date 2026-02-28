@@ -1,4 +1,3 @@
-import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import GuideQuestion from 'components/GuideQuestion';
@@ -6,6 +5,7 @@ import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
+import { AppContext } from 'contexts/app-context';
 import ChLineup from 'pages/ChLineup';
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';

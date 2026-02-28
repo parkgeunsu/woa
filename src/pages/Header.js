@@ -1,6 +1,6 @@
-import { AppContext } from 'App';
 import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
+import { AppContext } from 'contexts/app-context';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';

@@ -1,4 +1,3 @@
-import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { Button } from 'components/Button';
 import { FlexBox } from 'components/Container';
@@ -6,6 +5,7 @@ import { IconPic, MergedPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
+import { AppContext } from 'contexts/app-context';
 import GameMainFooter from 'pages/GameMainFooter';
 import QuickMenu from 'pages/QuickMenu';
 import React, { useCallback, useContext, useRef, useState } from 'react';

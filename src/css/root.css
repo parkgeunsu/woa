@@ -1,5 +1,56 @@
 @charset "utf-8";
 
+
+@font-face {
+  font-family: 'myFont';
+  src:
+    local('MySans'),
+    url('fontMedium.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+AC00-D7A3;
+}
+@font-face {
+  font-family: 'myFont_e';
+  src:
+    local('MySans'),
+    url('fontEnglish.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020-007F;
+}
+@font-face {
+  font-family: 'myFont_eName';
+  src:
+    local('MySans'),
+    url('fontEnglishName.otf') format('opentype');
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020-007F;
+}
+@font-face {
+  font-family: 'myFont_j';
+  src:
+    local('MySans'),
+    url('fontJapan.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  unicode-range: 
+    U+3040-309F, /* 히라가나 */
+    U+30A0-30FF, /* 가타카나 */
+    U+31F0-31FF, /* 확장 가타카나 */
+    U+4E00-9FFF; /* 일본 한자 */
+}
+@font-face {
+  font-family: 'myFont_number';
+  src:
+    local('MySans'),
+    url('fontNumber.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0030-0039;
+}
+
 :root {
   --color-w: #fff;
   --color-b: #000;
@@ -34,6 +85,7 @@ dl,
 dt,
 dd,
 p {
+  font-family: 'myFont_number', 'myFont', 'myFont_e', 'myFont_j', sans-serif;
   margin: 0;
   padding: 0;
   line-height: 1;
@@ -47,6 +99,7 @@ li,
 span,
 label,
 button {
+  font-family: 'myFont_number', 'myFont', 'myFont_e', 'myFont_j', sans-serif;
   line-height: 1;
   font-size: 0.75rem;
   vertical-align: middle;

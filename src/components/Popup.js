@@ -1,10 +1,10 @@
-import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { Button } from 'components/Button';
 import { FlexBox } from 'components/Container';
 import { ChPic, IconPic, ItemPic, MarkPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import PopupContainer from 'components/PopupContainer';
+import { AppContext } from 'contexts/app-context';
 import CharacterCard from 'pages/CharacterCard';
 import ChList from 'pages/ChList';
 import React, { useContext, useEffect, useRef, useState } from 'react';

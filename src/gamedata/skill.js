@@ -26,42 +26,42 @@ export const skill = [
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:23,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:[0,0,0,0,0]},
+		buff:[{type:29,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:[0,0,0,0,0]},
 	{idx:4,
 		na:{ko:'어둠의 하수인',en:'Minions of Darkness',jp:'暗の手先'},element_type:8,cate:11,
 		txt:'<possible><area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:24,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:[0,0,0,0,0]},
+		buff:[{type:30,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:[0,0,0,0,0]},
 	{idx:5,
 		na:{ko:'물의 하수인',en:'Minions of Water',jp:'水の手先'},element_type:9,cate:11,
 		txt:'<possible><area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:25,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:[0,0,0,0,0]},
+		buff:[{type:31,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:[0,0,0,0,0]},
 	{idx:6,
 		na:{ko:'불의 하수인',en:'Minions of Fire',jp:'火の手先'},element_type:10,cate:11,
 		txt:'<possible><area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:26,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:[0,0,0,0,0]},
+		buff:[{type:32,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:[0,0,0,0,0]},
 	{idx:7,
 		na:{ko:'바람의 하수인',en:'Minions of Wind',jp:'風の手先'},element_type:11,cate:11,
 		txt:'<possible><area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:27,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:[0,0,0,0,0]},
+		buff:[{type:33,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:[0,0,0,0,0]},
 	{idx:8,
 		na:{ko:'땅의 하수인',en:'Minions of Earth',jp:'地の手先'},element_type:12,cate:11,
 		txt:'<possible><area>, <el> <buff>',
 		skillClass:0,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'slash0',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
-		buff:[{type:28,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:[0,0,0,0,0]},
+		buff:[{type:34,num:['20%','20%','20%','20%','20%']}],atkCount:[0],sp:[0,0,0,0,0]},
 	{idx:9,
 		na:{ko:'빛의 정령',en:'Spirit of Light',jp:'光の精霊'},element_type:7,cate:2,
 		txt:'<area>, <el> <buff>',
@@ -111,13 +111,13 @@ export const skill = [
 		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',jobTxtIdx:1,
 		eff:[{type:'grade',num:['10','20','30','40','50']}],sp:[5,5,5,5,5]},
 	{idx:16,
-		na:{ko:'선박 전문',en:'Ship Specialty',jp:'船舶専門'},element_type:0,cate:11,
+		na:{ko:'항해술',en:'Navigation',jp:'航海術'},element_type:0,cate:11,
 		txt:'<job>',
 		skillClass:2,
 		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',jobTxtIdx:2,
 		eff:[{type:'grade',num:['10','20','30','40','50']}],sp:[5,5,5,5,5]},
 	{idx:17,
-		na:{ko:'장비 전문',en:'Equipment Specialty',jp:'設備専門'},element_type:0,cate:11,
+		na:{ko:'대장기술',en:'Blacksmithing',jp:'鍛冶技術'},element_type:0,cate:11,
 		txt:'<job>',
 		skillClass:2,
 		ta_:0,ta:[],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',jobTxtIdx:3,
@@ -1129,18 +1129,18 @@ export const skill = [
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:47,num:[2,2,2,2,2]}],buffCount:[2,3,4,4,5],atkCount:[1],sp:[13,13,13,13,13]},
 	{idx:321,
+		na:{ko:'꿀빨기',en:'Sucking on honey',jp:'はちみつを吸う'},element_type:12,cate:13,
+		txt:'<area>, <dmg>, <el>',
+		ta_:0,ta:[23,23,23,23,23],effAnimation:'buff23',effAnimationRepeat:1,effSize:[1.5,1.5,2,2,2.5],effRotate:0,effFilter:'hue-rotate(180deg)',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:41,num:['170%','180%','190%','200%','210%']}],atkCount:[1],sp:[15,16,17,18,18]},
+	{idx:322,
 		na:{ko:'비행',en:'Flight',jp:'飛翔'},element_type:0,cate:5,
 		txt:'<area>, <turn> <buff>',
 		skillClass:1,
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'buff19',effAnimationRepeat:1,effSize:[2,2.25,2.5,2.75,3],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:47,num:[1,1,1,1,1]}],buffCount:[2,3,3,4,4],atkCount:[1],sp:[13,13,13,13,13]},
-	{idx:322,
-		na:{ko:'꿀빨기',en:'Sucking on honey',jp:'はちみつを吸う'},element_type:12,cate:13,
-		txt:'<area>, <dmg>, <el>',
-		ta_:0,ta:[23,23,23,23,23],effAnimation:'buff23',effAnimationRepeat:1,effSize:[1.5,1.5,2,2,2.5],effRotate:0,effFilter:'hue-rotate(180deg)',
-		attackEff:[],multiplesAttack:[],
-		eff:[{type:41,num:['170%','180%','190%','200%','210%']}],atkCount:[1],sp:[15,16,17,18,18]},
 	{idx:323,
 		na:{ko:'주변정리(땅)',en:'Clean up(Earth)',jp:'周辺整理(地)'},element_type:12,cate:3,
 		txt:'<area>, <multiples>, <dmg>, <el>',
@@ -1214,7 +1214,7 @@ export const skill = [
 		attackEff:[],multiplesAttack:[],
 		eff:[{type:3,num:['140%','150%','150%','160%','180%']}],buff:[{type:53,num:[]}],buffCount:[2,2,2,2,2],buffChance:['5%','10%','15%','20%','25%'],atkCount:[1],sp:[13,14,15,16,16]},
 	{idx:335,
-		na:{ko:'고공낙하',en:'High-falling',jp:'高所落下'},element_type:12,cate:7,
+		na:{ko:'고공낙하',en:'High-falling',jp:'高所落下'},element_type:1,cate:7,
 		txt:'<area>, <dmg>, <el>, <chance> <turn> <buff>',
 		ta_:1,ta:[3,6,6,18,19],effAnimation:'earth5',effAnimationRepeat:1,effSize:[1.5,1.75,2,2.25,5],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
@@ -1364,29 +1364,29 @@ export const skill = [
 		attackEff:[],multiplesAttack:[],
 		eff:[{type:5,num:['90%','120%','90%','120%','130%']}],atkCount:[1],sp:[10,13,11,14,14]},
 	{idx:360,
-		na:{ko:'양의 왕',en:'King of Sheep',jp:'豚の王'},element_type:0,cate:2,
-		txt:'<area>, <buff>',
-		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
-		attackEff:[],multiplesAttack:[],
-		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
-	{idx:361,
-		na:{ko:'하마의 왕',en:'King of Hippos',jp:'カバの王'},element_type:0,cate:2,
-		txt:'<area>, <buff>',
-		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
-		attackEff:[],multiplesAttack:[],
-		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
-	{idx:362,
-		na:{ko:'악어의 왕',en:'King of Crocodiles',jp:'ワニの王'},element_type:0,cate:2,
-		txt:'<area>, <buff>',
-		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
-		attackEff:[],multiplesAttack:[],
-		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
-	{idx:363,
 		na:{ko:'하이에나의 왕',en:'King of Hyenas',jp:'ハイエナの王'},element_type:0,cate:2,
 		txt:'<area>, <buff>',
 		ta_:0,ta:[23,23,23,23,23],effAnimation:'',effAnimationRepeat:1,effSize:[1,1,1,1,1],effRotate:0,effFilter:'',
 		attackEff:[],multiplesAttack:[],
 		buff:[{type:5,num:['10%','20%','30%','40%','50%']}],atkCount:[1],sp:[0,0,0,0,0]},
+	{idx:361,
+		na:{ko:'무리사냥(빛)',en:'Herd Hunt(Light)',jp:'群れ狩り(光)'},element_type:7,cate:3,
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[22,22,21,21,20],effAnimation:'earth4',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'hue-rotate(290deg) brightness(2.5)',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:5,num:['90%','120%','90%','120%','130%']}],atkCount:[1],sp:[10,13,11,14,14]},
+	{idx:362,
+		na:{ko:'무리사냥(물)',en:'Herd Hunt(Water)',jp:'群れ狩り(水)'},element_type:9,cate:3,
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[22,22,21,21,20],effAnimation:'earth4',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'hue-rotate(190deg)',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:5,num:['90%','120%','90%','120%','130%']}],atkCount:[1],sp:[10,13,11,14,14]},
+	{idx:363,
+		na:{ko:'무리사냥(불)',en:'Herd Hunt(Fire)',jp:'群れ狩り(火)'},element_type:10,cate:3,
+		txt:'<area>, <dmg>, <el>',
+		ta_:1,ta:[22,22,21,21,20],effAnimation:'earth4',effAnimationRepeat:1,effSize:[5,5,5,5,5],effRotate:0,effFilter:'hue-rotate(90deg)',
+		attackEff:[],multiplesAttack:[],
+		eff:[{type:5,num:['90%','120%','90%','120%','130%']}],atkCount:[1],sp:[10,13,11,14,14]},
 	];
 
 // [cate] (스킬종류)
@@ -1775,3 +1775,198 @@ export const mutateSkill = {
 		{idx: 258, lv: 1},
 	],
 }
+
+/*
+계백
+{
+	"이름": { ko: "결사 돌격", en: "Death-Squad Charge", jp: "決死突撃" },
+	"설명": {
+		ko: "체력이 낮을수록 무력과 민첩이 상승하며, 첫 돌입 시 추가 피해를 준다.",
+		en: "The lower the HP, the higher the Might and Agility; deals bonus damage on the first engage.",
+		jp: "体力が低いほど武力と敏捷が上昇し、初突入時に追加ダメージ。"
+	}
+},
+{
+	"이름": { ko: "황산벌 결의", en: "Hwangsanbeol Resolve", jp: "黄山伐の決意" },
+	"설명": {
+		ko: "아군 전체의 통솔을 끌어올리고, 공포/동요 계열 디버프에 저항한다.",
+		en: "Boosts team Command and grants resistance to fear/panic debuffs.",
+		jp: "味方の統率を強化し、恐怖・動揺系デバフ耐性を付与。"
+	}
+}
+
+흑치상지
+{
+	"이름": { ko: "암영 돌파", en: "Umbral Breakthrough", jp: "暗影突破" },
+	"설명": {
+		ko: "은신/연막 상태로 돌입하며, 방어력이 높은 적에게 추가 관통 피해를 준다.",
+		en: "Engages with stealth/smoke and deals bonus piercing damage to high-defense targets.",
+		jp: "隠密/煙幕で突入し、防御の高い敵に貫通追加ダメージ。"
+	}
+},
+{
+	"이름": { ko: "전장 생존술", en: "Battlefield Survival", jp: "戦場の生存術" },
+	"설명": {
+		ko: "피격 시 일정 확률로 피해를 경감하고, 반격 확률이 상승한다.",
+		en: "Chance to reduce incoming damage when hit; increases counterattack rate.",
+		jp: "被弾時に確率で被害軽減、反撃率上昇。"
+	}
+}
+
+사타상여
+{
+	"이름": { ko: "토벽 진형", en: "Earthen Rampart Formation", jp: "土壁陣形" },
+	"설명": {
+		ko: "아군 방어선을 강화하고, 범위 피해를 분산(피해 감소)시킨다.",
+		en: "Reinforces the frontline and mitigates distributed AoE damage.",
+		jp: "前線を強化し、範囲ダメージを分散（軽減）する。"
+	}
+},
+{
+	"이름": { ko: "반격의 망치", en: "Hammer of Counterstrike", jp: "反撃の槌" },
+	"설명": {
+		ko: "방어 성공 후 반격 피해가 크게 증가한다.",
+		en: "After a successful guard, counterattack damage greatly increases.",
+		jp: "防御成功後、反撃ダメージが大幅増加。"
+	}
+}
+복신
+{
+	"이름": { ko: "기동 지휘", en: "Mobile Command", jp: "機動指揮" },
+	"설명": {
+		ko: "아군 민첩을 높이고, 이동 후 공격 시 피해가 증가한다.",
+		en: "Increases allies’ Agility; boosts damage when attacking after movement.",
+		jp: "味方の敏捷を上げ、移動後攻撃のダメージ増加。"
+	}
+},
+{
+	"이름": { ko: "부흥의 깃발", en: "Banner of Restoration", jp: "復興の旗" },
+	"설명": {
+		ko: "전투 중 한 번, 아군에게 보호막과 사기 상승(통솔 보정)을 부여한다.",
+		en: "Once per battle, grants shield and morale (Command buff) to allies.",
+		jp: "戦闘中一度、味方にシールドと士気（統率補正）を付与。"
+	}
+}
+도침
+{
+	"이름": { "ko": "지혜의 축복", "en": "Blessing of Wisdom", "ja": "知恵の祝福" },
+	"설명": {
+		"ko": "아군 지력을 상승시킨다.",
+		"en": "Raises intelligence of allies.",
+		"ja": "味方の知力を上昇させる。"
+	}
+}
+문무왕
+{
+	"이름": { "ko": "왕명 선포", "en": "Royal Decree", "ja": "王命宣布" },
+	"설명": {
+		"ko": "전투 시작 시 아군 전체 통솔·정치가 상승하고, 첫 2턴 디버프 저항이 증가한다.",
+		"en": "At battle start, increases allies’ Command and Politics; boosts debuff resistance for the first 2 turns.",
+		"ja": "戦闘開始時、味方の統率・政治上昇。最初の2ターンはデバフ耐性増加。"
+	}
+},
+{
+	"이름": { "ko": "통일의 깃발", "en": "Banner of Unification", "ja": "統一の旗" },
+	"설명": {
+		"ko": "아군 피해량을 올리고, 적의 사기(통솔) 보정을 감소시킨다.",
+		"en": "Increases allied damage and reduces enemies’ morale (Command scaling).",
+		"ja": "味方ダメージ増加、敵の士気（統率補正）低下。"
+	}
+}
+의자왕
+ {
+	"이름": { 
+		"ko": "초기 정복 원정", 
+		"en": "Early Conquest Campaign", 
+		"ja": "初期遠征" 
+	},
+	"설명": {
+		"ko": "전투 시작 시 아군 무력과 통솔을 상승시킨다. 전투 초반(2턴) 피해 증가 효과가 있다.",
+		"en": "At battle start, increases allied Might and Command; grants bonus damage for the first 2 turns.",
+		"ja": "戦闘開始時、味方の武力と統率上昇。最初の2ターンはダメージ増加。"
+	}
+},
+{
+	"이름": { 
+		"ko": "왕권의 동요", 
+		"en": "Shaken Authority", 
+		"ja": "揺らぐ王権" 
+	},
+	"설명": {
+		"ko": "체력이 50% 이하일 때 아군 매력이 상승하지만, 방어가 소폭 감소한다.",
+		"en": "When HP falls below 50%, increases allied Charm but slightly reduces defense.",
+		"ja": "体力50%以下で味方の魅力上昇。ただし防御がやや減少。"
+	}
+},
+{
+	"이름": { 
+		"ko": "몰락의 결단", 
+		"en": "Desperate Resolve", 
+		"ja": "滅亡の決断" 
+	},
+	"설명": {
+		"ko": "전투 중 1회, 아군 전체 피해량을 크게 상승시키지만 이후 1턴 동안 방어가 감소한다.",
+		"en": "Once per battle, greatly increases allied damage, but reduces defense for 1 turn afterward.",
+		"ja": "戦闘中1回、味方全体のダメージ大幅増加。ただし次の1ターン防御低下。"
+	}
+}
+부여융
+{
+	"이름": { "ko": "교섭의 기술", "en": "Art of Negotiation", "ja": "交渉術" },
+	"설명": {
+		"ko": "아군의 디버프 지속시간을 줄이고, 적의 매력 기반 효과(유혹/동요)를 약화시킨다.",
+		"en": "Shortens allied debuff durations and weakens enemy Charm-based effects (tempt/panic).",
+		"ja": "味方デバフ持続短縮、敵の魅力依存効果（誘惑/動揺）弱体化。"
+	}
+},
+{
+	"이름": { "ko": "자원 조달", "en": "Resource Procurement", "ja": "資源調達" },
+	"설명": {
+		"ko": "아군 체력 소량 회복 + 보호막 부여(전투 중 1회).",
+		"en": "Minor team heal + barrier (once per battle).",
+		"ja": "全体小回復＋バリア（戦闘中1回）。"
+	}
+}
+김유신
+{
+	"이름": { "ko": "천군 지휘", "en": "Command of the Host", "ja": "大軍指揮" },
+	"설명": {
+		"ko": "아군 전체 통솔·지력이 상승하고, 지휘관(장군) 직업에게 추가 보정이 붙는다.",
+		"en": "Increases allies’ Command and Intelligence; grants extra scaling to General-class allies.",
+		"ja": "味方の統率・知力を上昇し、将軍クラスに追加補正。"
+	}
+},
+{
+	"이름": { "ko": "결단의 진군", "en": "March of Resolve", "ja": "決断の進軍" },
+	"설명": {
+		"ko": "3턴 동안 아군 민첩이 상승하며, 이동 후 공격 피해가 증가한다.",
+		"en": "For 3 turns, boosts allies’ Agility and increases damage when attacking after movement.",
+		"ja": "3ターン、味方の敏捷上昇。移動後攻撃のダメージ増加。"
+	}
+},
+{
+	"이름": { "ko": "황산벌 공세", "en": "Hwangsanbeol Offensive", "ja": "黄山伐攻勢" },
+	"설명": {
+		"ko": "전열 돌파 공격. 방어형 적에게 추가 피해 및 방어 관통이 적용된다.",
+		"en": "Frontline breach attack with bonus damage and armor pierce versus defensive targets.",
+		"ja": "前線突破攻撃。防御型の敵に追加ダメージ＆貫通。"
+	}
+}
+관창
+{
+	"이름": { "ko": "결사 돌격", "en": "Daredevil Charge", "ja": "決死突撃" },
+	"설명": {
+		"ko": "자신의 체력을 소모해 강력한 단일 돌파 피해를 주며, 적 전열을 약화시킨다.",
+		"en": "Consumes own HP to deal massive single-target breach damage and weaken the enemy frontline.",
+		"ja": "自身の体力を消費し、強力な単体突破ダメージ＋敵前線弱体化。"
+	}
+},
+{
+	"이름": { "ko": "화랑의 혼", "en": "Spirit of the Hwarang", "ja": "花郎の魂" },
+	"설명": {
+		"ko": "전투 중 1회, 치명타 확률과 민첩이 크게 상승한다. 전사 시 아군 전체 사기 상승.",
+		"en": "Once per battle, greatly boosts crit rate and Agility; upon defeat, raises team morale.",
+		"ja": "戦闘中1回、会心率と敏捷が大幅上昇。戦死時、味方全体の士気上昇。"
+	}
+}ㅁ
+*/

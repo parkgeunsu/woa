@@ -29,7 +29,7 @@ const hero = [//face_d 얼굴방향, expType 성장타입, awaken 각성속성,
     },
     "display":20,"style":20,"animal_type":24,"face_d":"center","element":[12],"grade":6,"job":[0,12],"cost":14,
     "st0":88,"st1":160,"st2":148,"st3":73,"st4":146,"st5":88,"st6":100,
-    "sk":[{"idx":1}],
+    "sk":[],
     "relation":[1,2,3],
     "txt": {
       ko:`유비(劉備)
@@ -60,7 +60,7 @@ Biography: Liu Bei was the founding emperor of the Shu Han state during China's 
     },
     "display":0,"style":0,"animal_type":0,"face_d":"center","element":[9],"grade":6,"job":[0,13],"cost":15,
     "st0":97,"st1":177,"st2":135,"st3":67,"st4":184,"st5":96,"st6":95,
-    "sk":[{"idx":1}],
+    "sk":[],
     "relation":[0,1],
     "txt": {
       ko:`조조(曹魏)
@@ -85,13 +85,13 @@ Biography: Cao Cao was a Chinese politician, military general, and poet of the l
       en:"Zihuan",
       jp:"子桓"
     },"na3":{
-      ko:"문제아",
-      en:"Problem Child",
-      jp:"問題児"
+      ko:"위의 개국황제",
+      en:"Founding Emperor of Wei",
+      jp:"魏の開国皇帝"
     },
-    "display":1,"style":1,"animal_type":0,"face_d":"left","element":[9],"grade":4,"job":[0,12],"cost":11,
-    "st0":71,"st1":135,"st2":64,"st3":70,"st4":174,"st5":85,"st6":45,
-    "sk":[{"idx":1}],
+    "display":1,"style":1,"animal_type":0,"face_d":"left","element":[9],"grade":6,"job":[0,4],"cost":18,
+    "st0":98,"st1":143,"st2":96,"st3":57,"st4":176,"st5":89,"st6":84,
+    "sk":[],
     "relation":[0],
     "txt": {
       ko:`조비(曹丕)
@@ -116,13 +116,13 @@ Biography: Cao Pi was the first emperor of Cao Wei. His courtesy name was Zihuan
       en:"Zijian",
       jp:"子建"
     },"na3":{
-      ko:"칠보지재",
-      en:"Seven-Pace Talent",
-      jp:"七歩の才"
+      ko:"칠보시의 천재",
+      en:"Genius of Seven-Pace Poetry",
+      jp:"七歩詩の天才"
     },
-    "display":2,"style":2,"animal_type":0,"face_d":"right","element":[7],"grade":2,"job":[4,6],"cost":9,
-    "st0":20,"st1":48,"st2":48,"st3":41,"st4":172,"st5":67,"st6":88,
-    "sk":[{"idx":1}],
+    "display":2,"style":2,"animal_type":0,"face_d":"right","element":[7],"grade":5,"job":[4,12],"cost":14,
+    "st0":52,"st1":121,"st2":73,"st3":66,"st4":193,"st5":49,"st6":96,
+    "sk":[],
     "relation":[0],
     "txt": {
       ko:`조식(曹植)
@@ -151,9 +151,9 @@ Biography: Cao Zhi was a poet and prince of the late Eastern Han to Cao Wei peri
       en:"Yellow-Haired Child",
       jp:"黄鬚児"
     },
-    "display":3,"style":3,"animal_type":0,"face_d":"left","element":[11],"grade":4,"job":[2,10],"cost":12,
-    "st0":62,"st1":190,"st2":192,"st3":88,"st4":72,"st5":5,"st6":86,
-    "sk":[{"idx":1}],
+    "display":3,"style":3,"animal_type":0,"face_d":"left","element":[10],"grade":5,"job":[2,10],"cost":12,
+    "st0":91,"st1":183,"st2":181,"st3":74,"st4":123,"st5":38,"st6":77,
+    "sk":[],
     "relation":[0],
     "txt": {
       ko:`조창(曹彰)
@@ -178,13 +178,13 @@ Biography: Cao Zhang was the fourth son of King Wu of Wei, the second son of Emp
       en:"Cangshu",
       jp:"倉舒"
     },"na3":{
-      ko:"영재",
-      en:"Prodigy",
-      jp:"英才"
+      ko:"신동의 저울",
+      en:"Prodigy's Scale",
+      jp:"神童の天秤"
     },
-    "display":4,"style":4,"animal_type":0,"face_d":"center","element":[11],"grade":2,"job":[4],"cost":5,
-    "st0":30,"st1":55,"st2":42,"st3":25,"st4":170,"st5":79,"st6":83,
-    "sk":[{"idx":1}],
+    "display":4,"style":4,"animal_type":0,"face_d":"center","element":[9],"grade":4,"job":[4,16],"cost":12,
+    "st0":47,"st1":99,"st2":54,"st3":71,"st4":194,"st5":58,"st6":84,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`조충(曹沖)
@@ -209,13 +209,13 @@ Biography: Cao Chong was the eighth son of Cao Cao, who died young at the age of
       en:"Zidan",
       jp:"子丹"
     },"na3":{
-      ko:"",
-      en:"",
-      jp:""
+      ko:"서방전선의 총사령관",
+      en:"Commander of the Western Front",
+      jp:"西方戦線の総司令官"
     },
-    "display":5,"style":5,"animal_type":0,"face_d":"right","element":[7],"grade":5,"job":[2,3],"cost":12,
-    "st0":77,"st1":173,"st2":160,"st3":81,"st4":124,"st5":66,"st6":81,
-    "sk":[{"idx":1}],
+    "display":5,"style":5,"animal_type":0,"face_d":"right","element":[12],"grade":5,"job":[3,4],"cost":14,
+    "st0":97,"st1":166,"st2":148,"st3":61,"st4":161,"st5":72,"st6":73,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`조진(曹眞)
@@ -244,9 +244,9 @@ Biography: Cao Zhen was a member of the imperial clan and a general of the Cao W
       en:"Thousand-Mile Colt",
       jp:"千里駒"
     },
-    "display":6,"style":6,"animal_type":0,"face_d":"left","element":[7],"grade":3,"job":[3,8],"cost":7,
-    "st0":72,"st1":133,"st2":147,"st3":64,"st4":115,"st5":42,"st6":67,
-    "sk":[{"idx":1}],
+    "display":6,"style":6,"animal_type":0,"face_d":"left","element":[11],"grade":5,"job":[2,13],"cost":14,
+    "st0":92,"st1":159,"st2":156,"st3":74,"st4":149,"st5":54,"st6":70,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`조휴(曹休)
@@ -271,13 +271,13 @@ Biography: Cao Xiu was a member of the imperial clan and a general of the Cao We
       en:"Zilian",
       jp:"子廉"
     },"na3":{
-      ko:"",
-      en:"",
-      jp:""
+      ko:"위의 결사호위",
+      en:"Wei's Suicide Guard",
+      jp:"魏の決死護衛"
     },
-    "display":7,"style":7,"animal_type":0,"face_d":"left","element":[11],"grade":3,"job":[3,11],"cost":7,
-    "st0":83,"st1":141,"st2":155,"st3":63,"st4":80,"st5":24,"st6":55,
-    "sk":[{"idx":1}],
+    "display":7,"style":7,"animal_type":0,"face_d":"left","element":[11],"grade":5,"job":[2,13],"cost":15,
+    "st0":89,"st1":171,"st2":163,"st3":65,"st4":139,"st5":46,"st6":66,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`조홍(曹洪)
@@ -302,13 +302,13 @@ Biography: Cao Hong was a general of the Cao Wei state during the Three Kingdoms
       en:"Zixiao",
       jp:"子孝"
     },"na3":{
-      ko:"대사마",
-      en:"Grand Marshal",
-      jp:"大司馬"
+      ko:"위의 철벽수비",
+      en:"Wei's Iron Wall Defense",
+      jp:"魏の鉄壁守備"
     },
-    "display":8,"style":8,"animal_type":0,"face_d":"center","element":[11],"grade":5,"job":[2,3,13],"cost":13,
-    "st0":90,"st1":183,"st2":182,"st3":77,"st4":142,"st5":49,"st6":78,
-    "sk":[{"idx":1}],
+    "display":8,"style":"","animal_type":0,"face_d":"center","element":[12],"grade":6,"job":[2,3,13],"cost":18,
+    "st0":104,"st1":191,"st2":173,"st3":64,"st4":156,"st5":53,"st6":71,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`조인(曹仁)
@@ -337,9 +337,9 @@ Biography: Cao Ren was a general of the Cao Wei state during the Three Kingdoms 
       en:"Beauty Exceeding the Moon",
       jp:"絶世の美女"
     },
-    "display":9,"style":9,"animal_type":19,"face_d":"left","element":[10],"grade":3,"job":[7,12],"cost":4,
-    "st0":14,"st1":22,"st2":6,"st3":33,"st4":133,"st5":66,"st6":98,
-    "sk":[{"idx":1}],
+    "display":9,"style":"","animal_type":19,"face_d":"left","element":[9],"grade":4,"job":[4,7],"cost":10,
+    "st0":38,"st1":92,"st2":41,"st3":64,"st4":148,"st5":71,"st6":97,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`견씨(甄氏)
@@ -364,13 +364,13 @@ Biography: Lady Zhen was the principal wife of Cao Pi, the first emperor of Cao 
       en:"Yuanyang",
       jp:"元譲"
     },"na3":{
-      ko:"맹하후",
-      en:"Fierce Xiahou",
-      jp:"猛夏侯"
+      ko:"외눈의 맹장",
+      en:"One‑eyed valiant warrior",
+      jp:"片目の勇将"
     },
-    "display":10,"style":10,"animal_type":0,"face_d":"center","element":[8],"grade":5,"job":[2,13],"cost":13,
-    "st0":81,"st1":160,"st2":155,"st3":70,"st4":125,"st5":76,"st6":93,
-    "sk":[{"idx":1}],
+    "display":10,"style":"","animal_type":0,"face_d":"center","element":[10],"grade":6,"job":[2,13],"cost":18,
+    "st0":103,"st1":187,"st2":176,"st3":67,"st4":151,"st5":54,"st6":86,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`하후돈(夏侯惇)
@@ -395,13 +395,13 @@ Biography: Xiahou Dun was a general and statesman under Cao Cao during the late 
       en:"Miaocai",
       jp:"妙才"
     },"na3":{
-      ko:"귀속장군",
-      en:"General of the Vanguard",
-      jp:"奇襲将軍"
+      ko:"질풍의 장군",
+      en:"General of the Gale",
+      jp:"疾風の将軍"
     },
-    "display":11,"style":11,"animal_type":0,"face_d":"right","element":[10],"grade":5,"job":[9,13],"cost":13,
-    "st0":86,"st1":176,"st2":182,"st3":82,"st4":101,"st5":55,"st6":89,
-    "sk":[{"idx":1}],
+    "display":11,"style":11,"animal_type":0,"face_d":"right","element":[11],"grade":6,"job":[9,13],"cost":17,
+    "st0":101,"st1":176,"st2":169,"st3":83,"st4":147,"st5":49,"st6":74,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`하후연(夏侯淵)
@@ -426,13 +426,13 @@ Biography: Xiahou Yuan was a general under Cao Cao during the late Eastern Han d
       en:"Wenyuan",
       jp:"文遠"
     },"na3":{
-      ko:"료래래",
-      en:"Ryo Ryo",
-      jp:"遼々"
+      ko:"합비의 영웅",
+      en:"Hero of Hefei",
+      jp:"合肥の英雄"
     },
-    "display":12,"style":12,"animal_type":20,"face_d":"right","element":[8],"grade":6,"job":[3,13],"cost":15,
-    "st0":89,"st1":188,"st2":192,"st3":90,"st4":144,"st5":51,"st6":75,
-    "sk":[{"idx":1}],
+    "display":12,"style":12,"animal_type":20,"face_d":"right","element":[7],"grade":6,"job":[3,13],"cost":17,
+    "st0":106,"st1":178,"st2":174,"st3":79,"st4":168,"st5":57,"st6":91,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`장료(張遼)
@@ -453,17 +453,17 @@ Biography: Zhang Liao was a general of the Cao Wei state during the late Eastern
       en:"Dian Wei",
       jp:"典韋"
     },"na2":{
-      ko:"",
-      en:"",
-      jp:""
-    },"na3":{
       ko:"악래",
       en:"Yue Lai",
       jp:"悪来"
+    },"na3":{
+      ko:"괴력의 호위",
+      en:"Bodyguard of Great Strength",
+      jp:"怪力の護衛"
     },
-    "display":13,"style":13,"animal_type":22,"face_d":"right","element":[12],"grade":5,"job":[2,10],"cost":12,
-    "st0":65,"st1":190,"st2":194,"st3":74,"st4":60,"st5":19,"st6":95,
-    "sk":[{"idx":1}],
+    "display":13,"style":13,"animal_type":22,"face_d":"right","element":[10],"grade":5,"job":[2,10],"cost":15,
+    "st0":74,"st1":193,"st2":188,"st3":61,"st4":108,"st5":31,"st6":72,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`전위(典韋)
@@ -488,13 +488,13 @@ Biography: Dian Wei was a soldier under Cao Cao during the late Eastern Han dyna
       en:"Zhongkang",
       jp:"仲康"
     },"na3":{
-      ko:"호치",
-      en:"Tiger Fool",
-      jp:"虎痴"
+      ko:"호위의 거인",
+      en:"Giant Bodyguard",
+      jp:"護衛の巨人"
     },
-    "display":14,"style":14,"animal_type":25,"face_d":"center","element":[9],"grade":5,"job":[10,14],"cost":12,
-    "st0":66,"st1":190,"st2":192,"st3":73,"st4":88,"st5":23,"st6":85,
-    "sk":[{"idx":1}],
+    "display":14,"style":14,"animal_type":25,"face_d":"center","element":[12],"grade":5,"job":[2,3],"cost":14,
+    "st0":71,"st1":191,"st2":184,"st3":58,"st4":104,"st5":28,"st6":69,
+    "sk":[],
     "relation":[0,4],
     "txt": {
       ko:`허저(許褚)
@@ -519,13 +519,13 @@ Biography: Xu Chu was a general of the late Eastern Han and Wei periods. His cou
       en:"Zhongye",
       jp:"仲業"
     },"na3":{
-      ko:"",
-      en:"",
-      jp:""
+      ko:"형주의 수비장",
+      en:"Defender of Jing Province",
+      jp:"荊州の守備将"
     },
-    "display":15,"style":15,"animal_type":4,"face_d":"left","element":[11],"grade":5,"job":[2,10],"cost":9,
-    "st0":82,"st1":155,"st2":153,"st3":75,"st4":157,"st5":75,"st6":72,
-    "sk":[{"idx":1}],
+    "display":15,"style":15,"animal_type":4,"face_d":"left","element":[12],"grade":5,"job":[2,13],"cost":13,
+    "st0":94,"st1":169,"st2":151,"st3":59,"st4":153,"st5":55,"st6":66,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`문빙(文聘)
@@ -550,13 +550,13 @@ Biography: Wen Ping was a general of the Cao Wei state during the Three Kingdoms
       en:"Zhongruo",
       jp:"仲若"
     },"na3":{
-      ko:"",
-      en:"",
-      jp:""
+      ko:"반위의 장수",
+      en:"General of Banwei",
+      jp:"半威の将軍"
     },
-    "display":16,"style":16,"animal_type":4,"face_d":"left","element":[10],"grade":3,"job":[2,3],"cost":7,
-    "st0":73,"st1":160,"st2":166,"st3":72,"st4":80,"st5":34,"st6":22,
-    "sk":[{"idx":1}],
+    "display":16,"style":16,"animal_type":4,"face_d":"left","element":[8],"grade":4,"job":[8,13],"cost":10,
+    "st0":83,"st1":162,"st2":158,"st3":72,"st4":139,"st5":44,"st6":61,
+    "sk":[],
     "relation":[4],
     "txt": {
       ko:`문흠(文欽)
@@ -581,13 +581,13 @@ Biography: Wen Qin was a general of the Cao Wei and Shu Han states during the Th
       en:"Ziqian",
       jp:"次騫"
     },"na3":{
-      ko:"소드마스터",
-      en:"Sword Master",
-      jp:"剣の達人"
+      ko:"백기돌파의 청년장수",
+      en:"Young General who Broke the White Flag",
+      jp:"白旗突破の青年将軍"
     },
-    "display":17,"style":17,"animal_type":4,"face_d":"right","element":[10],"grade":6,"job":[13,5],"cost":15,
-    "st0":76,"st1":193,"st2":196,"st3":92,"st4":132,"st5":25,"st6":70,
-    "sk":[{"idx":1}],
+    "display":17,"style":17,"animal_type":4,"face_d":"right","element":[11],"grade":5,"job":[13,5],"cost":13,
+    "st0":86,"st1":177,"st2":181,"st3":82,"st4":128,"st5":41,"st6":73,
+    "sk":[],
     "relation":[4],
     "txt": {
       ko:`문앙(文鴦)
@@ -612,13 +612,13 @@ Biography: Wen Yang was a general of the Cao Wei and Western Jin dynasties durin
       en:"Zhongda",
       jp:"仲達"
     },"na3":{
-      ko:"",
-      en:"",
-      jp:""
+      ko:"위의 잠룡",
+      en:"Sleeping Dragon of Wei",
+      jp:"魏の潜龍"
     },
-    "display":18,"style":18,"animal_type":20,"face_d":"left","element":[11],"grade":6,"job":[1,4],"cost":14,
-    "st0":94,"st1":144,"st2":125,"st3":65,"st4":196,"st5":91,"st6":73,
-    "sk":[{"idx":1}],
+    "display":18,"style":18,"animal_type":20,"face_d":"left","element":[8],"grade":7,"job":[1,4],"cost":23,
+    "st0":112,"st1":158,"st2":131,"st3":61,"st4":194,"st5":97,"st6":90,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`사마의(司馬懿)
@@ -643,13 +643,13 @@ Biography: Sima Yi was a statesman of the Cao Wei state and the posthumously hon
       en:"Fengxiao",
       jp:"奉孝"
     },"na3":{
-      ko:"",
-      en:"",
-      jp:""
+      ko:"기책의 참모",
+      en:"Strategist of Witty Plans",
+      jp:"奇策の参謀"
     },
-    "display":19,"style":19,"animal_type":7,"face_d":"left","element":[7],"grade":5,"job":[1,12],"cost":13,
-    "st0":40,"st1":20,"st2":20,"st3":25,"st4":190,"st5":84,"st6":78,
-    "sk":[{"idx":1}],
+    "display":19,"style":19,"animal_type":7,"face_d":"left","element":[11],"grade":6,"job":[1,4],"cost":18,
+    "st0":71,"st1":118,"st2":63,"st3":69,"st4":192,"st5":84,"st6":87,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`곽가(郭嘉)
@@ -709,9 +709,9 @@ Biography: Yi Sun-sin was a military official of the Joseon Dynasty during the I
       en:"Dragon of Echigo",
       jp:"越後の龍"
     },
-    "display":22,"style":100,"animal_type":20,"face_d":"left","element":[7],"grade":6,"job":[0,3],"cost":15,
-    "st0":110,"st1":160,"st2":185,"st3":95,"st4":155,"st5":60,"st6":90,
-    "sk":[{"idx":1}],
+    "display":22,"style":"","animal_type":20,"face_d":"left","element":[7],"grade":7,"job":[0,3],"cost":23,
+    "st0":118,"st1":176,"st2":178,"st3":83,"st4":184,"st5":86,"st6":93,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`우에스기 겐신(上杉 謙信)
@@ -742,7 +742,7 @@ Biography: Uesugi Kenshin was a warlord and daimyo of the Sengoku period. His bi
     },
     "display":23,"style":101,"animal_type":1,"face_d":"right","element":[10],"grade":7,"job":[0,2],"cost":15,
     "st0":92,"st1":200,"st2":200,"st3":99,"st4":157,"st5":56,"st6":14,
-    "sk":[{"idx":1}],
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`리처드 1세(Richard I)
@@ -767,13 +767,13 @@ Biography: Richard I was the second King of England from the Plantagenet dynasty
       en:"",
       jp:""
     },"na3":{
-      ko:"신께서 뽑아든 검",
-      en:"Sword of God",
-      jp:"神に選ばれし剣"
+      ko:"알라의 검",
+      en:"Allah's Sword",
+      jp:"アッラーの剣"
     },
-    "display":24,"style":102,"animal_type":0,"face_d":"center","element":[8],"grade":7,"job":[2,3,13],"cost":15,
-    "st0":120,"st1":197,"st2":196,"st3":90,"st4":193,"st5":85,"st6":97,
-    "sk":[{"idx":1}],
+    "display":24,"style":102,"animal_type":0,"face_d":"center","element":[10],"grade":7,"job":[2,3,13],"cost":25,
+    "st0":119,"st1":181,"st2":186,"st3":88,"st4":168,"st5":63,"st6":91,
+    "sk":[],
     "relation":[4],
     "txt": {
       ko:`할리드 이븐 알 왈리드(خالد إبن الوليد)
@@ -804,7 +804,7 @@ Biography: Khalid ibn al-Walid was a military commander of the early Islamic Ras
     },
     "display":25,"style":103,"animal_type":19,"face_d":"center","element":[9],"grade":7,"job":[0,9],"cost":15,
     "st0":122,"st1":155,"st2":137,"st3":73,"st4":197,"st5":55,"st6":94,
-    "sk":[{"idx":1}],
+    "sk":[],
     "relation":[4],
     "txt": {
       ko:`나폴레옹 보나파르트(Napoléon Bonaparte)
@@ -835,7 +835,7 @@ Biography: Napoleon Bonaparte was a French military leader and emperor of the Fi
     },
     "display":26,"style":104,"animal_type":0,"face_d":"left","element":[12],"grade":7,"job":[2,13],"cost":15,
     "st0":97,"st1":172,"st2":196,"st3":94,"st4":170,"st5":52,"st6":81,
-    "sk":[{"idx":1}],
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`잔 다르크(Jeanne d'Arc)
@@ -866,7 +866,7 @@ Biography: Joan of Arc was a French national heroine and a saint of the Roman Ca
     },
     "display":27,"style":105,"animal_type":6,"face_d":"center","element":[11],"grade":6,"job":[0,13],"cost":14,
     "st0":94,"st1":166,"st2":142,"st3":71,"st4":182,"st5":95,"st6":95,
-    "sk":[{"idx":1}],
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`오다 노부나가(織田 信長)
@@ -891,13 +891,13 @@ Biography: Oda Nobunaga was a figure who unified Japan during the Sengoku period
       en:"",
       jp:""
     },"na3":{
-      ko:"(藤堂高虎)",
-      en:"Todo Takatora",
-      jp:""
+      ko:"축성의 명수",
+      en:"Master of Fortification",
+      jp:"築城の名手"
     },
-    "display":28,"style":"","animal_type":19,"face_d":"left","element":[8],"grade":4,"job":[13,3],"cost":11,
-    "st0":79,"st1":176,"st2":139,"st3":51,"st4":170,"st5":90,"st6":1,
-    "sk":[{"idx":1}],
+    "display":28,"style":"","animal_type":19,"face_d":"left","element":[12],"grade":6,"job":[13,16],"cost":18,
+    "st0":101,"st1":166,"st2":151,"st3":69,"st4":173,"st5":82,"st6":76,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`도도 다카토라(藤堂 高虎)
@@ -922,13 +922,13 @@ Biography: Todo Takatora was a daimyo who was active from the Sengoku period to 
       en:"",
       jp:""
     },"na3":{
-      ko:"(来島通総)",
-      en:"Kurushima Michifusa",
-      jp:""
+      ko:"세토내해의 해적장",
+      en:"Pirate of the Seto Inland Sea",
+      jp:"瀬戸内の海賊長"
     },//수군
-    "display":29,"style":"","animal_type":24,"face_d":"left","element":[9],"grade":3,"job":[3,8],"cost":7,
-    "st0":73,"st1":155,"st2":142,"st3":70,"st4":100,"st5":55,"st6":61,
-    "sk":[{"idx":1}],
+    "display":29,"style":"","animal_type":24,"face_d":"left","element":[9],"grade":4,"job":[3,8],"cost":11,
+    "st0":74,"st1":148,"st2":139,"st3":81,"st4":131,"st5":44,"st6":67,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`구루시마 미치후사(来島 通総)
@@ -953,13 +953,13 @@ Biography: Kurushima Michifusa was a Sengoku period warrior from Iyo Province.`,
       en:"",
       jp:""
     },"na3":{
-      ko:"(来島通総)",
-      en:"Kurushima Michifusa",
-      jp:""
+      ko:"해상실무가",
+      en:"Maritime Expert",
+      jp:"海事実務家"
     },
-    "display":30,"style":"","animal_type":9,"face_d":"center","element":[11],"grade":3,"job":[0,10],"cost":7,
-    "st0":40,"st1":132,"st2":157,"st3":51,"st4":141,"st5":80,"st6":55,
-    "sk":[{"idx":1}],
+    "display":30,"style":"","animal_type":9,"face_d":"center","element":[9],"grade":3,"job":[3,11],"cost":8,
+    "st0":63,"st1":142,"st2":131,"st3":71,"st4":133,"st5":46,"st6":64,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`가메이 고레노리(亀井玆矩)
@@ -984,13 +984,13 @@ Biography: Kamei Korenori was a warrior and daimyo active from the Azuchi-Momoya
       en:"",
       jp:""
     },"na3":{
-      ko:"(脇坂安治)",
-      en:"Wakizaka Yasuharu",
-      jp:""
+      ko:"시즈가타케의 칠본창",
+      en:"Seven Spears of Shizugatake",
+      jp:"賤ヶ岳の七本槍"
     },
-    "display":31,"style":"","animal_type":22,"face_d":"right","element":[9],"grade":2,"job":[0,3],"cost":7,
-    "st0":66,"st1":144,"st2":140,"st3":45,"st4":79,"st5":55,"st6":16,
-    "sk":[{"idx":1}],
+    "display":31,"style":"","animal_type":22,"face_d":"right","element":[9],"grade":3,"job":[2,3],"cost":7,
+    "st0":63,"st1":142,"st2":131,"st3":71,"st4":133,"st5":46,"st6":64,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`와키자카 야스하루(脇坂 安治)
@@ -1015,13 +1015,13 @@ Biography: Wakisaka Yasuharu was a warrior and daimyo active from the Azuchi-Mom
       en:"",
       jp:""
     },"na3":{
-      ko:"(九鬼嘉隆)",
-      en:"Kuki Yoshitaka",
-      jp:""
+      ko:"철갑선의 제독",
+      en:"Admiral of Ironclad Ships",
+      jp:"鉄甲船の提督"
     },
-    "display":32,"style":"","animal_type":22,"face_d":"center","element":[9],"grade":3,"job":[3,8],"cost":7,
-    "st0":73,"st1":152,"st2":135,"st3":51,"st4":117,"st5":45,"st6":66,
-    "sk":[{"idx":1}],
+    "display":32,"style":"","animal_type":22,"face_d":"center","element":[9],"grade":5,"job":[3,17],"cost":15,
+    "st0":95,"st1":164,"st2":149,"st3":76,"st4":142,"st5":63,"st6":78,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`구키 요시타카(九鬼 嘉隆)
@@ -1046,13 +1046,13 @@ Biography: Kuki Yoshitaka was a warrior and daimyo active from the Sengoku perio
       en:"",
       jp:""
     },"na3":{
-      ko:"(加藤嘉明)",
-      en:"Kato Yoshiaki",
-      jp:""
+      ko:"시즈가타케의 창",
+      en:"Spear of Shizugatake",
+      jp:"賤ヶ岳の槍"
     },
-    "display":33,"style":"","animal_type":19,"face_d":"left","element":[9],"grade":3,"job":[3,14],"cost":7,
-    "st0":75,"st1":144,"st2":144,"st3":43,"st4":110,"st5":50,"st6":65,
-    "sk":[{"idx":1}],
+    "display":33,"style":"","animal_type":19,"face_d":"left","element":[9],"grade":4,"job":[2,17],"cost":11,
+    "st0":76,"st1":152,"st2":144,"st3":72,"st4":128,"st5":55,"st6":70,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`가토 요시아키(加藤 嘉明)
@@ -1077,13 +1077,13 @@ Biography: Kato Yoshiaki was a warrior and daimyo of the Azuchi-Momoyama and Edo
       en:"Pyeongjung",
       jp:"平仲"
     },"na3":{
-      ko:"하지메 사토루",
-      en:"Hajime Satoru",
-      jp:"はじめ 悟"
+      ko:"칠천량 패장",
+      en:"Admiral of Chilcheollyang",
+      jp:"七千両の提督"
     },
-    "display":34,"style":105,"animal_type":0,"face_d":"center","element":[10],"grade":2,"job":[10,14],"cost":7,
-    "st0":50,"st1":150,"st2":135,"st3":25,"st4":70,"st5":18,"st6":0,
-    "sk":[{"idx":1}],
+    "display":34,"style":105,"animal_type":29,"face_d":"center","element":[8],"grade":3,"job":[2,13],"cost":7,
+    "st0":51,"st1":139,"st2":122,"st3":63,"st4":118,"st5":46,"st6":42,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`원균(元均)
@@ -1108,13 +1108,13 @@ Biography: Won Gyun was a military officer of the Joseon Dynasty during the Imji
       en:"Eon-gyeong",
       jp:"彦卿"
     },"na3":{
-      ko:"순천부사",
-      en:"Suncheonbusa",
-      jp:"順天府使"
+      ko:"전라좌수군 부장",
+      en:"Deputy Admiral of Jeolla",
+      jp:"全羅左水軍副将"
     },
-    "display":35,"style":105,"animal_type":3,"face_d":"center","element":[12],"grade":4,"job":[1,8],"cost":7,
-    "st0":73,"st1":110,"st2":99,"st3":70,"st4":175,"st5":77,"st6":81,
-    "sk":[{"idx":1}],
+    "display":35,"style":105,"animal_type":3,"face_d":"center","element":[9],"grade":4,"job":[2,8],"cost":12,
+    "st0":69,"st1":151,"st2":141,"st3":74,"st4":139,"st5":51,"st6":67,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`권준(權俊)
@@ -1139,13 +1139,13 @@ Biography: Gwon Jun was a military officer of the Joseon Dynasty during the Imji
       en:"Chang-jin",
       jp:"昌辰"
     },"na3":{
-      ko:"녹도만호",
-      en:"Nokdomanho",
-      jp:"녹島万戸"
+      ko:"옥포의 돌격장",
+      en:"Charge of Okpo",
+      jp:"玉浦の突撃将"
     },
-    "display":36,"style":105,"animal_type":7,"face_d":"right","element":[12],"grade":5,"job":[3,9],"cost":7,
-    "st0":85,"st1":150,"st2":159,"st3":72,"st4":140,"st5":60,"st6":91,
-    "sk":[{"idx":1}],
+    "display":36,"style":105,"animal_type":7,"face_d":"right","element":[10],"grade":4,"job":[3,9],"cost":10,
+    "st0":63,"st1":164,"st2":153,"st3":78,"st4":121,"st5":39,"st6":66,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`정운(鄭運)
@@ -1174,9 +1174,9 @@ Biography: Jeong Un was a military officer of the Joseon Dynasty during the Imji
       en:"Mu-ui-gong",
       jp:"武毅公"
     },
-    "display":37,"style":105,"animal_type":4,"face_d":"center","element":[11],"grade":5,"job":[3,13],"cost":7,
-    "st0":87,"st1":172,"st2":172,"st3":67,"st4":147,"st5":76,"st6":82,
-    "sk":[{"idx":1}],
+    "display":37,"style":105,"animal_type":4,"face_d":"center","element":[9],"grade":3,"job":[3,13],"cost":7,
+    "st0":57,"st1":142,"st2":133,"st3":69,"st4":124,"st5":44,"st6":61,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`이순신(李純信)
@@ -1184,7 +1184,7 @@ Biography: Jeong Un was a military officer of the Joseon Dynasty during the Imji
 열전: 조선 중기의 왕족, 무장, 유학자이다. 임진왜란 때에 활동하던 장수로 그의 상관이기도 했던 충무공 이순신(李舜臣), 등림수 이순신(李舜臣) 등과의 구별을 위해 무의공 이순신, 입부 이순신으로 불린다. 본관은 전주. 양녕대군의 다섯째 서자 장평도정(長平都正)의 4대손이자, 대한민국 초대 대통령 이승만의 9대 방조가 된다. 시호는 무의(武毅), 자는 입부(立夫)이다.`,
       en:`Yi Sun-sin (李純信)
 Dates: December 27, 1553 – September 2, 1611
-Biography: Yi Sun-sin was a Joseon Dynasty royal, military officer, and Confucian scholar. He was an active commander during the Imjin War and is distinguished from his superior, Admiral Yi Sun-sin (충무공 이순신), and Yi Sun-sin of Deungnimsu (등림수 이순신) by the titles Yi Sun-sin of Mui-gong and Yi Sun-sin of Ipbu. His clan origin was Jeonju. He was the 4th generation descendant of Jangpyeong-dojeong, the fifth son of Grand Prince Yangnyeong, and the 9th generation ancestor of the first President of South Korea, Syngman Rhee. His posthumous title was Mui, and his courtesy name was Ipbu.`,
+Biography: Yi Sun-sin was a Joseon Dynasty royal, military officer, and Confucian scholar. He was an active commander during the Imjin War and is distinguished from his superior, Admiral Yi Sun-sin (Yi Sun-sin), and Yi Sun-sin of Deungnimsu (Yi Sun-sin) by the titles Yi Sun-sin of Mui-gong and Yi Sun-sin of Ipbu. His clan origin was Jeonju. He was the 4th generation descendant of Jangpyeong-dojeong, the fifth son of Grand Prince Yangnyeong, and the 9th generation ancestor of the first President of South Korea, Syngman Rhee. His posthumous title was Mui, and his courtesy name was Ipbu.`,
       jp:`李純信(イ・スンシン)
 生没年: 1553年12月27日 - 1611年9月2日
 列伝: 朝鮮中期の王族、武将、儒学者。壬辰倭乱の際に活躍した将軍で、彼の直属の上官でもあった忠武公李舜臣、登臨亭守李舜臣などとの区別のため、武毅公李純信、立夫李舜臣と呼ばれる。本貫は全州。譲寧大君の五男である長平都正の4代孫であり、大韓民国初代大統領李承晩の9代傍祖となる。諡号は武毅、字は立夫。`,
@@ -1201,13 +1201,13 @@ Biography: Yi Sun-sin was a Joseon Dynasty royal, military officer, and Confucia
       en:"Gyeong-hyeon",
       jp:"景見"
     },"na3":{
-      ko:"옥포만호",
-      en:"Okpo-manho",
-      jp:"玉浦万戸"
+      ko:"수군 보좌장",
+      en:"Naval Staff Officer",
+      jp:"水軍補佐将"
     },
-    "display":38,"style":105,"animal_type":3,"face_d":"center","element":[7],"grade":5,"job":[3,14],"cost":7,
-    "st0":75,"st1":166,"st2":130,"st3":62,"st4":175,"st5":75,"st6":85,
-    "sk":[{"idx":1}],
+    "display":38,"style":105,"animal_type":3,"face_d":"center","element":[9],"grade":3,"job":[3,14],"cost":7,
+    "st0":59,"st1":147,"st2":137,"st3":72,"st4":133,"st5":47,"st6":64,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`이운룡(李雲龍)
@@ -1232,13 +1232,13 @@ Biography: Yi Un-ryong was a military officer of the Joseon Dynasty during the I
       en:"I-gyeon",
       jp:"以見"
     },"na3":{
-      ko:"영의정",
-      en:"Yeonguijeong",
-      jp:"領議政"
+      ko:"장비록의 재상",
+      en:"Prime Minister of the War Records",
+      jp:"戦備録の宰相"
     },
-    "display":39,"style":105,"animal_type":3,"face_d":"left","element":[9],"grade":6,"job":[1,6],"cost":7,
-    "st0":82,"st1":150,"st2":90,"st3":53,"st4":190,"st5":92,"st6":79,
-    "sk":[{"idx":1}],
+    "display":39,"style":105,"animal_type":3,"face_d":"left","element":[7],"grade":6,"job":[1,4],"cost":15,
+    "st0":71,"st1":123,"st2":61,"st3":58,"st4":188,"st5":92,"st6":87,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`류성룡(柳成龍)
@@ -1263,13 +1263,13 @@ Biography: Ryu Seong-ryong was a Joseon Dynasty civil official, scholar, physici
       en:"Eon-sin",
       jp:"彦愼"
     },"na3":{
-      ko:"행주대첩",
-      en:"Haengju-daechup",
-      jp:"行州大捷"
+      ko:"행주대첩의 명장",
+      en:"Famous General of Haengju",
+      jp:"行州大捷の明将"
     },
-    "display":40,"style":105,"animal_type":4,"face_d":"center","element":[8],"grade":6,"job":[2,13],"cost":7,
-    "st0":96,"st1":170,"st2":125,"st3":67,"st4":178,"st5":77,"st6":92,
-    "sk":[{"idx":1}],
+    "display":40,"style":105,"animal_type":4,"face_d":"center","element":[10],"grade":6,"job":[1,13],"cost":17,
+    "st0":103,"st1":169,"st2":158,"st3":67,"st4":171,"st5":79,"st6":84,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`권율(權慄)
@@ -1290,17 +1290,17 @@ Biography: Gwon Yul was a Joseon Dynasty civil official, military officer, and p
       en:"Yi Hon",
       jp:"李煴"
     },"na2":{
-      ko:"",
-      en:"",
-      jp:""
-    },"na3":{
       ko:"광해군",
       en:"Gwanghaegun",
       jp:"光海君"
+    },"na3":{
+      ko:"중립외교의 군주",
+      en:"Monarch of Neutral Diplomacy",
+      jp:"中立外交の君主"
     },
-    "display":41,"style":105,"animal_type":2,"face_d":"center","element":[8],"grade":5,"job":[0,3],"cost":7,
-    "st0":71,"st1":181,"st2":111,"st3":75,"st4":185,"st5":88,"st6":33,
-    "sk":[{"idx":1}],
+    "display":41,"style":105,"animal_type":2,"face_d":"center","element":[8],"grade":5,"job":[0,1],"cost":14,
+    "st0":82,"st1":134,"st2":71,"st3":56,"st4":174,"st5":88,"st6":73,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`광해군(光海君)
@@ -1325,13 +1325,13 @@ Biography: Gwanghaegun was the 15th king of Joseon (reigned 1608–1623). He was
       en:"Myeon-o",
       jp:"勉吾"
     },"na3":{
-      ko:"진주대첩",
-      en:"Jinju-daechup",
-      jp:"晋州大捷"
+      ko:"진주대첩의 영웅",
+      en:"Hero of Jinju-daechup",
+      jp:"晋州大捷の英雄"
     },
-    "display":42,"style":105,"animal_type":3,"face_d":"center","element":[7],"grade":6,"job":[13,3],"cost":7,
-    "st0":94,"st1":181,"st2":180,"st3":70,"st4":155,"st5":70,"st6":94,
-    "sk":[{"idx":1}],
+    "display":42,"style":105,"animal_type":3,"face_d":"center","element":[10],"grade":6,"job":[13,3],"cost":17,
+    "st0":104,"st1":167,"st2":161,"st3":69,"st4":171,"st5":73,"st6":86,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`김시민(金時敏)
@@ -1357,12 +1357,12 @@ Biography: Kim Si-min was a military officer of the Joseon Dynasty during the Im
       jp:""
     },"na3":{
       ko:"홍의장군",
-      en:"Hong-ui-janggun",
+      en:"Red-Clad General",
       jp:"紅衣将軍"
     },
-    "display":43,"style":105,"animal_type":4,"face_d":"center","element":[10],"grade":6,"job":[13,8],"cost":7,
-    "st0":88,"st1":160,"st2":173,"st3":90,"st4":177,"st5":65,"st6":86,
-    "sk":[{"idx":1}],
+    "display":43,"style":105,"animal_type":4,"face_d":"center","element":[11],"grade":5,"job":[8,13],"cost":12,
+    "st0":92,"st1":158,"st2":149,"st3":77,"st4":163,"st5":61,"st6":88,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`곽재우(郭再祐)
@@ -1387,13 +1387,13 @@ Biography: Gwak Jae-u was a military officer, politician, and soldier of the Jos
       en:"Gyeong-un",
       jp:"景雲"
     },"na3":{
-      ko:"임진왜란의 조자룡",
-      en:"Imjin-waeran-ui Jo-ja-ryong",
-      jp:"壬辰倭乱の趙子龍"
+      ko:"용마장군",
+      en:"Dragon Horse General",
+      jp:"龍馬将軍"
     },
-    "display":44,"style":105,"animal_type":2,"face_d":"center","element":[11],"grade":6,"job":[13,5],"cost":7,
-    "st0":96,"st1":190,"st2":186,"st3":89,"st4":138,"st5":44,"st6":86,
-    "sk":[{"idx":1}],
+    "display":44,"style":105,"animal_type":2,"face_d":"center","element":[10],"grade":5,"job":[5,13],"cost":11,
+    "st0":95,"st1":171,"st2":166,"st3":82,"st4":148,"st5":57,"st6":76,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`정기룡(鄭起龍)
@@ -1418,13 +1418,13 @@ Biography: Jeong Gi-ryong was a military officer of the Joseon Dynasty. His clan
       en:"Ja-sang",
       jp:"子常"
     },"na3":{
-      ko:"오성",
-      en:"Oseong",
-      jp:"梧城"
+      ko:"백사",
+      en:"Baeksa",
+      jp:"白沙"
     },
-    "display":45,"style":105,"animal_type":8,"face_d":"left","element":[12],"grade":4,"job":[4],"cost":7,
-    "st0":70,"st1":133,"st2":112,"st3":41,"st4":181,"st5":84,"st6":83,
-    "sk":[{"idx":1}],
+    "display":45,"style":105,"animal_type":8,"face_d":"left","element":[7],"grade":5,"job":[1,4],"cost":10,
+    "st0":54,"st1":118,"st2":61,"st3":59,"st4":184,"st5":87,"st6":82,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`이항복(李恒福)
@@ -1453,9 +1453,9 @@ Biography: Yi Hang-bok was a Joseon Dynasty civil official, politician, poet, an
       en:"Han-eum",
       jp:"漢陰"
     },
-    "display":46,"style":105,"animal_type":8,"face_d":"left","element":[10],"grade":4,"job":[4],"cost":7,
-    "st0":65,"st1":127,"st2":100,"st3":48,"st4":178,"st5":92,"st6":84,
-    "sk":[{"idx":1}],
+    "display":46,"style":105,"animal_type":8,"face_d":"left","element":[7],"grade":6,"job":[1,4],"cost":17,
+    "st0":71,"st1":121,"st2":63,"st3":58,"st4":189,"st5":91,"st6":88,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`이덕형(李德馨)
@@ -1476,17 +1476,17 @@ Biography: Yi Deok-hyeong was a Joseon Dynasty civil official. His clan origin w
       en:"Yi Yeon",
       jp:"李昖"
     },"na2":{
-      ko:"",
-      en:"",
-      jp:""
-    },"na3":{
       ko:"선조",
       en:"Seonjo",
       jp:"宣祖"
+    },"na3":{
+      ko:"임진왜란기의 군주",
+      en:"Monarch during the Imjin War",
+      jp:"壬辰倭乱期の君主"
     },
-    "display":47,"style":105,"animal_type":7,"face_d":"left","element":[12],"grade":3,"job":[0,1],"cost":7,
-    "st0":60,"st1":143,"st2":93,"st3":73,"st4":159,"st5":88,"st6":11,
-    "sk":[{"idx":1}],
+    "display":47,"style":105,"animal_type":7,"face_d":"left","element":[8],"grade":4,"job":[0,1],"cost":11,
+    "st0":66,"st1":126,"st2":58,"st3":52,"st4":162,"st5":74,"st6":61,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`선조(宣祖)
@@ -1511,13 +1511,13 @@ Biography: King Seonjo was the 14th king of the Joseon Dynasty, reigning from Ju
       en:"",
       jp:""
     },"na3":{
-      ko:"흑의장군",
-      en:"Heug-ui Jang-gun",
-      jp:"黒衣将軍"
+      ko:"부산진 수호장",
+      en:"Busanjin Guardian",
+      jp:"釜山鎮守将"
     },
-    "display":48,"style":105,"animal_type":6,"face_d":"center","element":[9],"grade":3,"job":[3],"cost":7,
-    "st0":83,"st1":159,"st2":171,"st3":67,"st4":109,"st5":44,"st6":77,
-    "sk":[{"idx":1}],
+    "display":48,"style":105,"animal_type":6,"face_d":"center","element":[10],"grade":4,"job":[3,13],"cost":11,
+    "st0":78,"st1":162,"st2":157,"st3":71,"st4":129,"st5":46,"st6":83,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`정발(鄭撥)
@@ -1542,13 +1542,13 @@ Biography: Jeong Bal was a military officer of the Joseon Dynasty during the mid
       en:"Cheon-gok",
       jp:"天谷"
     },"na3":{
-      ko:"",
-      en:"",
-      jp:""
+      ko:"동래부 결사항전",
+      en:"Last Stand at Dongnae",
+      jp:"東莱府決死抗戦"
     },
-    "display":49,"style":105,"animal_type":4,"face_d":"center","element":[10],"grade":4,"job":[3,5],"cost":7,
-    "st0":84,"st1":160,"st2":152,"st3":75,"st4":145,"st5":64,"st6":84,
-    "sk":[{"idx":1}],
+    "display":49,"style":105,"animal_type":4,"face_d":"center","element":[10],"grade":4,"job":[3,5],"cost":12,
+    "st0":76,"st1":158,"st2":149,"st3":69,"st4":132,"st5":58,"st6":88,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`송상현(宋象賢)
@@ -1573,13 +1573,13 @@ Biography: Song Sang-hyeon was a Joseon Dynasty civil official, writer, and gene
       en:"Myeong-bo",
       jp:"明甫"
     },"na3":{
-      ko:"",
-      en:"",
-      jp:""
+      ko:"경상도 방어장",
+      en:"Gyeongsang-do Defense General",
+      jp:"慶尚道防衛将"
     },
-    "display":50,"style":105,"animal_type":4,"face_d":"center","element":[9],"grade":4,"job":[3],"cost":7,
-    "st0":90,"st1":162,"st2":170,"st3":72,"st4":153,"st5":70,"st6":75,
-    "sk":[{"idx":1}],
+    "display":50,"style":105,"animal_type":4,"face_d":"center","element":[12],"grade":4,"job":[3,9],"cost":11,
+    "st0":82,"st1":163,"st2":151,"st3":66,"st4":139,"st5":61,"st6":71,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`박진(朴晉)
@@ -1604,13 +1604,13 @@ Biography: Park Jin was a military officer and soldier who served in various bat
       en:"Ja-heo",
       jp:"子虚"
     },"na3":{
-      ko:"",
-      en:"",
-      jp:""
+      ko:"북관대첩의 의병장",
+      en:"Righteous Army Leader of the Northern Campaign Victory Stele",
+      jp:"北関大捷の義兵長"
     },
-    "display":51,"style":105,"animal_type":3,"face_d":"center","element":[10],"grade":4,"job":[3,10],"cost":7,
-    "st0":86,"st1":170,"st2":166,"st3":65,"st4":158,"st5":66,"st6":72,
-    "sk":[{"idx":1}],
+    "display":51,"style":105,"animal_type":3,"face_d":"center","element":[11],"grade":5,"job":[1,5],"cost":15,
+    "st0":91,"st1":152,"st2":147,"st3":73,"st4":168,"st5":64,"st6":86,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`정문부(鄭文孚)
@@ -1635,13 +1635,13 @@ Biography: Jeong Mun-bu was a Joseon Dynasty civil official, a first-class merit
       en:"Sa-sun",
       jp:"士純"
     },"na3":{
-      ko:"",
-      en:"",
-      jp:""
+      ko:"통신사 부사",
+      en:"Joseon Envoy to Japan",
+      jp:"通信使副使"
     },
-    "display":52,"style":105,"animal_type":3,"face_d":"right","element":[9],"grade":4,"job":[1,6],"cost":7,
-    "st0":50,"st1":95,"st2":68,"st3":24,"st4":179,"st5":87,"st6":64,
-    "sk":[{"idx":1}],
+    "display":52,"style":105,"animal_type":3,"face_d":"right","element":[7],"grade":4,"job":[1,6],"cost":11,
+    "st0":52,"st1":121,"st2":59,"st3":54,"st4":173,"st5":81,"st6":77,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`김성일(金誠一)
@@ -1666,13 +1666,13 @@ Biography: Kim Seong-il was a Joseon Dynasty civil official, diplomat, and schol
       en:"Ip-ji",
       jp:"立之"
     },"na3":{
-      ko:"",
-      en:"",
-      jp:""
+      ko:"탄금대의 패장",
+      en:"Defeated General of the Battle of Tangeumdae",
+      jp:"弾琴台の敗将"
     },
-    "display":53,"style":105,"animal_type":3,"face_d":"center","element":[8],"grade":3,"job":[3,15],"cost":7,
-    "st0":80,"st1":147,"st2":172,"st3":55,"st4":101,"st5":46,"st6":71,
-    "sk":[{"idx":1}],
+    "display":53,"style":105,"animal_type":3,"face_d":"center","element":[8],"grade":4,"job":[3,13],"cost":13,
+    "st0":68,"st1":166,"st2":158,"st3":74,"st4":124,"st5":49,"st6":64,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`신립(申砬)
@@ -1697,13 +1697,13 @@ Biography: Shin Rip was a military officer of the Joseon Dynasty. A descendant o
       en:"",
       jp:""
     },"na3":{
-      ko:"(堀内氏善)",
-      en:"(Horiuchi Ujiyoshi)",
-      jp:""
+      ko:"왜군 중견장",
+      en:"Japanese general",
+      jp:"日本軍中堅将"
     },
-    "display":54,"style":105,"animal_type":6,"face_d":"right","element":[12],"grade":2,"job":[3,14],"cost":7,
-    "st0":61,"st1":130,"st2":111,"st3":59,"st4":103,"st5":50,"st6":48,
-    "sk":[{"idx":1}],
+    "display":54,"style":105,"animal_type":22,"face_d":"right","element":[10],"grade":3,"job":[3,14],"cost":7,
+    "st0":63,"st1":153,"st2":147,"st3":71,"st4":131,"st5":44,"st6":61,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`호리우치 우지요시(堀内氏善)
@@ -1732,9 +1732,9 @@ Biography: Horiuchi Ujiyoshi was a Japanese military commander who was active fr
       en:"Shipbuilder",
       jp:"造船技術者"
     },
-    "display":55,"style":"","animal_type":23,"face_d":"left","element":[9],"grade":4,"job":[3,16],"cost":7,
-    "st0":70,"st1":170,"st2":159,"st3":68,"st4":162,"st5":68,"st6":77,
-    "sk":[{"idx":1}],
+    "display":55,"style":"","animal_type":23,"face_d":"left","element":[9],"grade":5,"job":[13,16],"cost":14,
+    "st0":67,"st1":137,"st2":121,"st3":63,"st4":179,"st5":76,"st6":71,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`나대용(羅大用)
@@ -1759,13 +1759,13 @@ Biography: Na Dae-yong was a military officer of the Joseon Dynasty who contribu
       en:"",
       jp:""
     },"na3":{
-      ko:"신의",
-      en:"Divine Doctor",
-      jp:"神医"
+      ko:"동의보감의 의성",
+      en:"Divine Doctor of Donguibogam",
+      jp:"東医宝鑑の医聖"
     },
-    "display":56,"style":"","animal_type":6,"face_d":"left","element":[7],"grade":5,"job":[15,12],"cost":7,
-    "st0":54,"st1":112,"st2":71,"st3":39,"st4":181,"st5":80,"st6":90,
-    "sk":[{"idx":1}],
+    "display":56,"style":"","animal_type":6,"face_d":"left","element":[7],"grade":5,"job":[15,12],"cost":13,
+    "st0":41,"st1":118,"st2":52,"st3":57,"st4":191,"st5":83,"st6":89,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`허준(許浚)
@@ -1790,13 +1790,13 @@ Biography: Heo Jun was a Joseon Dynasty physician and medical scholar. He compil
       en:"",
       jp:""
     },"na3":{
-      ko:"(得居通幸)",
-      en:"(Tokui Michiyuki)",
-      jp:""
+      ko:"이요 수군의 해적장",
+      en:"Pirate leader of Iyo Navy",
+      jp:"伊予水軍の海賊長"
     },
-    "display":57,"style":"","animal_type":0,"face_d":"left","element":[9],"grade":3,"job":[3,17],"cost":7,
-    "st0":68,"st1":133,"st2":140,"st3":55,"st4":131,"st5":36,"st6":59,
-    "sk":[{"idx":1}],
+    "display":57,"style":"","animal_type":0,"face_d":"left","element":[9],"grade":3,"job":[8,17],"cost":7,
+    "st0":62,"st1":102,"st2":97,"st3":55,"st4":89,"st5":16,"st6":52,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`도쿠이 미치유키(得居通幸)
@@ -1825,9 +1825,9 @@ Biography: Tokui Michiyuki was a Japanese military commander active from the Sen
       en:"Dictator for Life",
       jp:"終身独裁官"
     },
-    "display":58,"style":"","animal_type":1,"face_d":"left","element":[7],"grade":7,"job":[0,1],"cost":20,
-    "st0":117,"st1":172,"st2":172,"st3":77,"st4":190,"st5":96,"st6":96,
-    "sk":[{"idx":1}],
+    "display":58,"style":"","animal_type":1,"face_d":"left","element":[7],"grade":7,"job":[0,13],"cost":24,
+    "st0":121,"st1":171,"st2":172,"st3":79,"st4":197,"st5":97,"st6":98,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`가이우스 율리우스 카이사르(Gaius Julius Caesar)
@@ -1856,9 +1856,9 @@ Biography: Gaius Julius Caesar was a Roman politician and general during the lat
       en:"Magnus",
       jp:"大ポンペイウス"
     },
-    "display":59,"style":"","animal_type":4,"face_d":"left","element":[9],"grade":5,"job":[2,13],"cost":17,
-    "st0":101,"st1":165,"st2":175,"st3":75,"st4":170,"st5":85,"st6":85,
-    "sk":[{"idx":1}],
+    "display":59,"style":"","animal_type":4,"face_d":"left","element":[11],"grade":6,"job":[0,13],"cost":20,
+    "st0":109,"st1":169,"st2":176,"st3":76,"st4":173,"st5":86,"st6":92,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`그나이우스 폼페이우스 마그누스(Gnaeus Pompeius Magnus)
@@ -1887,9 +1887,9 @@ Biography: Gnaeus Pompeius Magnus was a great Roman general and politician. He f
       en:"Richest Man",
       jp:"富豪"
     },
-    "display":60,"style":"","animal_type":28,"face_d":"left","element":[10],"grade":4,"job":[11],"cost":12,
-    "st0":70,"st1":110,"st2":115,"st3":55,"st4":150,"st5":93,"st6":80,
-    "sk":[{"idx":1}],
+    "display":60,"style":"","animal_type":28,"face_d":"left","element":[10],"grade":6,"job":[11,13],"cost":19,
+    "st0":96,"st1":153,"st2":141,"st3":61,"st4":171,"st5":95,"st6":79,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`마르쿠스 리키니우스 크라수스(Marcus Licinius Crassus)
@@ -1918,9 +1918,9 @@ Biography: Marcus Licinius Crassus was a Roman politician and general. Known as 
       en:"Noble Roman",
       jp:"高潔なローマ人"
     },
-    "display":61,"style":"","animal_type":20,"face_d":"left","element":[11],"grade":3,"job":[3,5],"cost":13,
-    "st0":75,"st1":116,"st2":118,"st3":69,"st4":165,"st5":77,"st6":89,
-    "sk":[{"idx":1}],
+    "display":61,"style":"","animal_type":20,"face_d":"left","element":[11],"grade":5,"job":[4,13],"cost":17,
+    "st0":89,"st1":141,"st2":131,"st3":68,"st4":182,"st5":85,"st6":74,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`마르쿠스 유니우스 브루투스(Marcus Junius Brutus)
@@ -1949,9 +1949,9 @@ Biography: Marcus Junius Brutus was a Roman politician. He was one of the leader
       en:"Loyal Soldier",
       jp:"忠実な軍人"
     },
-    "display":62,"style":"","animal_type":3,"face_d":"right","element":[10],"grade":4,"job":[2,10],"cost":15,
-    "st0":86,"st1":170,"st2":172,"st3":73,"st4":134,"st5":66,"st6":88,
-    "sk":[{"idx":1}],
+    "display":62,"style":"","animal_type":3,"face_d":"right","element":[10],"grade":6,"job":[0,13],"cost":21,
+    "st0":106,"st1":177,"st2":179,"st3":74,"st4":164,"st5":71,"st6":96,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`마르쿠스 안토니우스(Marcus Antonius)
@@ -1980,9 +1980,9 @@ Biography: Marcus Antonius was a Roman politician and general. He served as an a
       en:"The Venerable",
       jp:"尊厳ある者"
     },
-    "display":63,"style":"","animal_type":4,"face_d":"center","element":[7],"grade":6,"job":[0,12],"cost":20,
-    "st0":100,"st1":120,"st2":136,"st3":40,"st4":190,"st5":99,"st6":87,
-    "sk":[{"idx":1}],
+    "display":63,"style":"","animal_type":4,"face_d":"center","element":[7],"grade":7,"job":[0,13],"cost":25,
+    "st0":120,"st1":158,"st2":142,"st3":67,"st4":193,"st5":99,"st6":95,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`가이우스 율리우스 카이사르 옥타비아누스 아우구스투스(Augustus)
@@ -2011,9 +2011,9 @@ Biography: The first emperor of the Roman Empire. He ushered in the Pax Romana e
       en:"Cavalry Commander",
       jp:"騎兵隊長"
     },
-    "display":64,"style":"","animal_type":20,"face_d":"right","element":[12],"grade":5,"job":[13,3],"cost":17,
-    "st0":103,"st1":189,"st2":192,"st3":80,"st4":170,"st5":71,"st6":72,
-    "sk":[{"idx":1}],
+    "display":64,"style":"","animal_type":20,"face_d":"right","element":[10],"grade":4,"job":[2,13],"cost":14,
+    "st0":94,"st1":161,"st2":157,"st3":82,"st4":173,"st5":58,"st6":70,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`티투스 라비에누스(Titus Labienus)
@@ -2042,9 +2042,9 @@ Biography: Titus Labienus was a Roman general. During the Gallic Wars, he was Ca
       en:"King of Gaul",
       jp:"ガリアの王"
     },
-    "display":65,"style":"","animal_type":15,"face_d":"center","element":[10],"grade":5,"job":[8,13],"cost":15,
-    "st0":83,"st1":180,"st2":168,"st3":71,"st4":163,"st5":76,"st6":90,
-    "sk":[{"idx":1}],
+    "display":65,"style":"","animal_type":15,"face_d":"center","element":[12],"grade":6,"job":[8,13],"cost":19,
+    "st0":108,"st1":191,"st2":184,"st3":77,"st4":156,"st5":63,"st6":92,
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`베르킨게토릭스(Vercingetorix)
@@ -2058,6 +2058,773 @@ Biography: Vercingetorix was a chieftain of the Gauls. He united various Gallic 
 列伝: ガリアの部族長。多くのガリア部族を統合してローマのカエサルに立ち向かったが、アレシアの戦いで敗北した。`,
     },
     "region":"italy0","period":1,"scenarioRegion":""
+  },
+  {
+    "idx":66,"na1":{
+      ko: "계백",
+      en: "Gyebaek",
+      jp: "階伯"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko: "황산벌의 결사대장",
+      en: "Captain of the Hwangsanbeol Death Squad",
+      jp: "黄山伐の決死隊長"
+    },
+    "display":66,"style":"","animal_type":2,"face_d":"center","element":[10],"grade":5,"job":[3,13],"cost":20,
+    "st0":112,"st1":186,"st2":182,"st3":79,"st4":151,"st5":43,"st6":81,
+    "sk":[],
+    "relation":[6,7,9],
+    "txt": {
+      ko: `계백(階伯)
+생몰년: ? ~ 660년 8월 21일(음력 7월 10일)
+열전: 백제 말기의 인물이다. 660년 나·당 연합군이 백제를 침략할 때 황산벌 전투의 지휘관으로 알려져 있다. 군사 5천을 이끌고 황산벌에서 5만의 신라군과 다섯 차례의 전투를 벌인 끝에 백제군이 패배했고 계백도 전사했다. 성충, 흥수와 함께 백제의 충신이라 불린다`,
+      en: `Gyebaek
+Dates: ? ~ August 21, 660 (July 10, 660 in the lunar calendar)
+Biography: Gyebaek was a figure from the late Baekje period. He is known as the commander of the Battle of Hwangsanbeol when the allied forces of Goguryeo and Tang invaded Baekje in 660. He led 5,000 soldiers and fought five battles against the 50,000 Silla army at Hwangsanbeol, but the Baekje army was defeated and Gyebaek was killed in action. He is revered as a loyal subject of Baekje along with Seongchung and Heungsu.`,
+      jp: `階伯
+生没年: ? ~ 660年8月21日(旧暦7月10日)
+列伝: 百済末期の人物。660年、唐・新羅連合軍が百済を侵攻した際、黄山伐の戦いの指揮官として知られている。兵士5千を率いて黄山伐で5万の兵を擁する新羅軍と5度にわたる戦闘を繰り広げた末、百済軍は敗北し、階伯も戦死した。成忠、興寿と共に百済の忠臣として称えられている。`
+    },
+    "region":"korea2","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":67,
+    "na1":{
+      ko: "흑치상지",
+      en: "Heukchi Sangji",
+      jp: "コクチ・サンジ"
+    },"na2":{
+      ko:"항원",
+      en:"Hangwon",
+      jp:"ハンウォン"
+    },"na3":{
+      ko: "흑치의 맹습",
+      en: "Black-Tooth Onslaught",
+      jp: "黒歯の猛襲"
+    },
+    "display":67,"style":"","animal_type":2,"face_d":"right","element":[8],"grade":5,"job":[5,13],"cost":19,
+    "st0":104,"st1":171,"st2":173,"st3":81,"st4":162,"st5":58,"st6":76,
+    "sk":[],
+    "relation":[7],
+    "txt": {
+      ko: `흑치상지(黑齒常之)
+생몰년: 630년 ~ 689년 음력 10월
+열전: 백제의 장군으로, 백제 멸망 후 백제 부흥운동을 이끌었다. 백제유민 세력의 핵심인물이다. 의자왕의 아들 왕자 부여융과 함께 당나라인들을 몰아내었으나 적이였던 흑치상지를 당나라는 회유하여 당나라에 귀화하였다.`,
+      en: `Heukchi Sangji
+Dates: 630 ~ 689
+Biography: Heukchi Sangji was a general of Baekje. He led the Baekje restoration movement after the fall of Baekje. He was a key figure in the Baekje refugee forces. He drove out the Tang Chinese forces along with Prince Buyeo Pung, the son of King Uija, but the Tang forces persuaded Heukchi Sangji, who was an enemy, to defect to Tang.`,
+      jp: `コクチ・サンジ(Heukchi Sangji)
+生没年: 630年 - 689年
+列伝: 百済の将軍。百済滅亡後、百済復興運動を率いた。百済遺民勢力の核心人物である。義慈王の息子である王子扶余隆と共に唐の軍勢を追い払ったが、敵であったコクチ・サンジを唐は懐柔し、唐に帰化した。`
+    },
+    "region":"korea2","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":68,
+    "na1":{
+      ko: "사타상여",
+      en: "Sata Sangyeo",
+      jp: "サタ・サンギョ"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko: "성벽의 거목",
+      en: "The Giant of the City Wall",
+      jp: "城壁の巨木"
+    },
+    "display":68,"style":"","animal_type":6,"face_d":"center","element":[12],"grade":4,"job":[2,3],"cost":19,
+    "st0":92,"st1":167,"st2":176,"st3":88,"st4":141,"st5":49,"st6":72,
+    "sk":[],
+    "relation":[7],
+    "txt": {
+      ko: `사타상여(沙咤相如)
+생몰년: ? ~ ?
+열전: 백제 부흥운동에 참여한 유민이자, 대성팔족(大姓八族)중의 하나인 사(沙)씨 출신이다. 흑치상지와 함께 백제 부흥운동을 이끌었다.`,
+      en: `Sata Sangyeo
+Dates: ? ~ ?
+Biography: Sata Sangyeo was a refugee who participated in the Baekje restoration movement and was from the Sa clan, one of the eight great clans of Baekje. He led the Baekje restoration movement along with Heukchi Sangji.`,
+      jp: `サタ・サンギョ(Sata Sangyeo)
+生没年: ? ~ ?
+列伝: 百済復興運動に参加した百済の遺民であり、大姓八族の一つである沙(サ)氏の出身である。`
+    },
+    "region":"korea2","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":69,
+    "na1":{
+      ko: "복신",
+      en: "Boksin",
+      jp: "フクシン"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko: "부흥군의 맹장",
+      en: "The Mighty General of the Restoration Army",
+      jp: "復興軍の猛将"
+    },
+    "display":69,"style":"","animal_type":26,"face_d":"center","element":[11],"grade":5,"job":[8,13],"cost":15,
+    "st0":109,"st1":163,"st2":158,"st3":76,"st4":159,"st5":68,"st6":74,
+    "sk":[],
+    "relation":[8],
+    "txt": {
+      ko: `복신(福信)
+생몰년: ? ~ ?
+열전: 백제 부흥운동에 참여한 유민이자, 대성팔족(大姓八族)중의 하나인 사(沙)씨 출신이다. 흑치상지와 함께 백제 부흥운동을 이끌었다.`,
+      en: `Sata Sangyeo
+Dates: ? ~ ?
+Biography: Sata Sangyeo was a refugee who participated in the Baekje restoration movement and was from the Sa clan, one of the eight great clans of Baekje. He led the Baekje restoration movement along with Heukchi Sangji.`,
+      jp: `サタ・サンギョ(Sata Sangyeo)
+生没年: ? ~ ?
+列伝: 百済復興運動に参加した百済の遺民であり、大姓八族の一つである沙(サ)氏の出身である。`
+    },
+    "region":"korea2","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":70,
+    "na1":{
+      ko: "부여풍",
+      en: "Buyeo Pung",
+      jp: "扶餘豊"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko: "부흥의 왕자",
+      en: "The Prince of Restoration",
+      jp: "復興の王子"
+    },
+    "display":70,"style":"","animal_type":19,"face_d":"left","element":[11],"grade":4,"job":[0,4],"cost":16,
+    "st0":89,"st1":146,"st2":117,"st3":66,"st4":162,"st5":84,"st6":79,
+    "sk":[],
+    "relation":[8],
+    "txt": {
+      ko: `풍왕(豊王)
+생몰년: ? ~ ?
+열전: 백제의 왕자이자 백제 부흥군의 지도자로, 별칭은 풍장(豊璋)이다. 의자왕의 아들로 왜국에 있던 도중 660년 백제가 멸망하자 텐지 천황이 지원해준 왜군을 동원하여 귀국, 복신에 의해 소백제왕으로 추대되었으나, 백제 부흥군 내 내분으로 663년 백강 전투에서 나·당 연합군에게 참패하였다.`,
+      en: `Buyeo Pung
+Dates: ? ~ ?
+Biography: Buyeo Pung was the prince of Baekje and the leader of the Baekje restoration army. He was the son of King Uija and was in Japan when Baekje was destroyed in 660. He returned to Baekje with the help of the Japanese army and was elected as the king of Baekje by Boksin. However, due to internal conflicts within the Baekje restoration army, he was defeated by the allied forces of Goguryeo and Tang in the Battle of Baekgang in 663.`,
+      jp: `フヨ・プン(Buyeo Pung)
+生没年: ? ~ ?
+列伝: 百済の王子であり、百済復興軍の指導者で、別称は豊璋（ほうしょう）である。義慈王の息子として倭国に滞在していたが、660年に百済が滅亡すると、天智天皇が支援した倭軍を率いて帰国し、福信によって小百済王として推戴された。しかし、百済復興軍内部の内紛によって、663年の白村江の戦いで羅唐連合軍に大敗した。`
+    },
+    "region":"korea2","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":71,
+    "na1":{
+      ko: "도침",
+      en: "Dochim",
+      jp: "道琛"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko: "백제 부흥의 현자",
+      en: "The Sage of Baekje Restoration",
+      jp: "百済復興の賢者"
+    },
+    "display":71,"style":"","animal_type":18,"face_d":"left","element":[11],"grade":4,"job":[4,6],"cost":19,
+    "st0":77,"st1":129,"st2":92,"st3":63,"st4":179,"st5":73,"st6":71,
+    "sk":[],
+    "relation":[8],
+    "txt": {
+      ko: `도침(道琛)
+생몰년: ? ~ 661년
+열전: 백제의 승려이다.
+660년에 백제가 나(羅)·당(唐) 연합군에 의해 패망하자, 왜국에 볼모로 갔던 부여풍을 임시 왕으로 추대했고, 주류성에서 영군장군이라 자칭하였다. 유민을 규합하여 투쟁을 벌였으나, 내분이 일어나 복신에게 살해되었다.`,
+      en: `Dochim
+Dates: ? ~ 661
+Biography: Dochim was a Buddhist monk of Baekje. When Baekje was destroyed in 660, he led the Baekje restoration movement along with Boksin. He was later killed by Boksin due to internal conflicts.`,
+      jp: `道琛(どうしん)
+生没年: ? ~ 661年
+列伝: 百済の僧侶である。660年に百済が羅唐連合軍に滅ぼされると、倭国にいた豊璋を王に推戴し、周留城で霊軍将軍と称した。民衆を結集して闘争を続けたが、内紛が起こり、福信によって殺害された。`
+    },
+    "region":"korea2","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":72,
+    "na1":{
+      ko: "부여융",
+      en: "Buyeo Yung",
+      jp: "扶餘隆"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko: "당에 귀속된 백제 왕자",
+      en: "Baekje Prince Under Tang",
+      jp: "唐に属した百済王子"
+    },
+    "display":72,"style":"","animal_type":19,"face_d":"left","element":[9],"grade":4,"job":[0,4],"cost":12,
+    "st0":83,"st1":141,"st2":111,"st3":58,"st4":168,"st5":86,"st6":74,
+    "sk":[],
+    "relation":[],
+    "txt": {
+      ko: `부여융(扶餘隆)
+생몰년: 615년 ~ 682년
+열전: 백제의 왕족이자 당나라 장군이다. 자는 융(隆)이다. 숭(崇)이라고도 한다. 백제 멸망 후 당나라에 귀순하여 백제 부흥운동 토벌에 협조하고 당나라의 백제군공 웅진도독으로 부임하여 백제 유민들을 약탈하였다. 당나라에서 광록대부 태상원외경 겸 웅진도독 대방군왕까지 임명됐으나, 당의 웅진도독부는 신라에 의해 한반도에서 축출되어 요동으로 이주했다. 부여융이 마지막 태자인지에 관해서는 학설 대립이 있다.`,
+      en: `Buyeo Yung
+Dates: 615 ~ 682
+Biography: Buyeo Yung was a prince of Baekje and a general of the Tang Dynasty. He was the son of King Uija and was in Japan when Baekje was destroyed in 660. He returned to Baekje with the help of the Japanese army and was elected as the king of Baekje by Boksin. However, due to internal conflicts within the Baekje restoration army, he was defeated by the allied forces of Goguryeo and Tang in the Battle of Baekgang in 663.`,
+      jp: `扶餘隆(ふよ・りゅう)
+生没年: 615年 ~ 682年
+列伝: 百済の王族であり、唐の将軍である。字は隆（りゅう）。崇（すう）とも呼ばれる。百済滅亡後、唐に帰順して百済復興運動の討伐に協力し、唐の百済軍公 웅진都督として赴任し、百済の民衆を略奪した。唐では光禄大夫 太上元外卿 兼 웅진都督 大方君王まで任命されたが、唐の웅진都督府は新羅によって韓半島から追放され、遼東に移住した。 부여융が最後の太子であったかについては学説が対立している。`
+    },
+    "region":"korea2","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":73,
+    "na1":{
+      ko: "의자왕",
+      en: "King Uija",
+      jp: "義慈王"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko: "백제 최후의 군주",
+      en: "The Last Monarch of Baekje",
+      jp: "百済最後の君主"
+    },
+    "display":73,"style":"","animal_type":19,"face_d":"left","element":[10],"grade":5,"job":[0,12],"cost":18,
+    "st0":101,"st1":154,"st2":127,"st3":61,"st4":173,"st5":91,"st6":83,
+    "sk":[],
+    "relation":[],
+    "txt": {
+      ko: `의자왕(義慈王)
+생몰년: 589년 ~ 660년
+열전: 백제의 제31대 왕으로, 성왕의 손자이자 무왕의 아들이다. 641년에 왕위에 올라 웅진으로 천도하여 왕권을 강화하고, 신라를 공격하여 대야성을 함락하는 등 영토를 확장하였다. 그러나 660년에 나(羅)·당(唐) 연합군이 침공하자 수도 사비성이 함락되고 항복하여 백제는 멸망하였다.`,
+      en: `King Uija
+Dates: 589 ~ 660
+Biography: King Uija was the 31st king of Baekje, the grandson of King Seong and the son of King Mu. He ascended the throne in 641 and moved the capital to Ungjin to strengthen royal authority. He expanded Baekje's territory by attacking Silla and capturing Daeya fortress. However, in 660, when the allied forces of Silla and Tang invaded, the capital city of Sabi was captured and Baekje was destroyed.`,
+      jp: `義慈王(ぎじおう)
+生没年: 589年 ~ 660年
+列伝: 百済の第31代王で、聖王の孫であり、武王の息子である。641年に王位に就き、熊津に遷都して王権を強化し、新羅を攻撃して大耶城を陥落させるなど領土を拡大した。しかし、660年に羅唐連合軍が侵攻すると、首都の泗沘城が陥落し、降伏して百済は滅亡した。`
+    },
+    "region":"korea2","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":74,
+    "na1":{
+      ko: "김법민",
+      en: "Kim Beop-min",
+      jp: "キム・ボプミン"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko: "문무왕",
+      en: "King Munmu",
+      jp: "文武王"
+    },
+    "display":74,"style":"","animal_type":8,"face_d":"left","element":[7],"grade":6,"job":[0,13],"cost":19,
+    "st0":118,"st1":166,"st2":139,"st3":71,"st4":184,"st5":87,"st6":94,
+    "sk":[],
+    "relation":[],
+    "txt": {
+      ko: `김법민(金法敏)
+생몰년: 628년 ~ 681년 7월 1일
+열전: 신라의 무신이자 정치가이다.
+태종 무열왕의 셋째 아들로 태어나, 삼국통일의 주역으로 활약하였다. 특히 백제 부흥운동을 진압하고, 당나라의 세력을 한반도에서 몰아내는 데 결정적인 역할을 하였다. 사후에는 문무왕으로 추존되어 신라의 위대한 왕으로 기억되고 있다.`,
+      en: `Kim Beop-min
+Dates: 628 ~ July 1, 681
+Biography: Kim Beop-min was a general and statesman of Silla.
+Born as the third son of King Taejong Muyeol, he played a leading role in the unification of the Three Kingdoms. He played a decisive role in suppressing the Baekje restoration movement and driving out the Tang forces from the Korean peninsula. After his death, he was posthumously honored as King Munmu and is remembered as a great king of Silla.`,
+      jp: `金法敏(きんほうびん)
+生没年: 628年 ~ 681年7月1日
+列伝: 新羅の武臣であり政治家である。
+太宗武烈王の三男として生まれ、三国統一の主役として活躍した。特に百済復興運動を鎮圧し、唐の勢力を韓半島から追い出すのに決定的な役割を果たした。死後、文武王として追尊され、新羅の偉大な王として記憶されている。`
+    },
+    "region":"korea1","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":75,"na1":{
+      ko:"김유신",
+      en:"Kim Yu-sin",
+      jp:"キム・ユシン"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko:"신라의 검",
+      en:"Blade of Silla",
+      jp:"新羅の剣"
+    },
+    "display":75,"style":"","animal_type":14,"face_d":"left","element":[10],"grade":6,"job":[2,13],"cost":20,
+    "st0":121,"st1":178,"st2":164,"st3":74,"st4":186,"st5":79,"st6":93,
+    "sk":[],
+    "relation":[9,11],
+    "txt": {
+      ko: `김유신(金庾信)
+생몰년: 595년 ~ 673년
+열전: 신라의 장군.
+삼국통일의 주역으로, 가야 출신임에도 불구하고 신라에 귀순하여 태종무열왕을 도와 백제와 고구려를 멸망시켰다. 화랑 출신으로 뛰어난 리더십과 용맹함을 겸비했다.`,
+      en: `Kim Yu-sin
+Dates: 595 ~ 673
+Biography: Kim Yu-sin was a general of Silla.
+He was a key figure in the unification of the Three Kingdoms. Although he was from Gaya, he defected to Silla and helped King Taejong Muyeol conquer Baekje and Goguryeo. He was a Hwarang with outstanding leadership and bravery.`,
+      jp: `キム・ユシン(Kim Yu-sin)
+生没年: 595年 - 673年
+列伝: 新羅の将軍。
+三国統一の主役であり、伽耶出身でありながら新羅に帰順し、太宗武烈王を助けて百済と高句麗を滅亡させた。花郎出身で優れたリーダーシップと勇猛さを兼ね備えていた。`
+    },
+    "region":"korea1","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":76,"na1":{
+      ko:"김품일",
+      en:"Kim Pum-il",
+      jp:"キム・プムイル"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko:"전열의 방패",
+      en:"Shield of the Frontline",
+      jp:"前線の盾"
+    },
+    "display":76,"style":"","animal_type":14,"face_d":"left","element":[12],"grade":4,"job":[2,13],"cost":16,
+    "st0":93,"st1":171,"st2":156,"st3":78,"st4":147,"st5":52,"st6":69,
+    "sk":[],
+    "relation":[10],
+    "txt": {
+      ko: `김품일(金品日)
+생몰년: ? ~ ?
+열전: 신라의 장군이다.
+660년 나·당 연합군이 백제를 칠 때 아들인 화랑 관창과 함께 출전하였다. 664년 문무왕 때 김인문 등과 함께 고구려의 돌사성을 공격하였다. 668년 나·당 연합군이 고구려를 쳐들어갈 때, 귀당총관으로서 공을 세웠으며, 백제의 유민들이 소동을 일으킨 63개의 성을 빼앗았다.`,
+      en: `Kim Pum-il
+Dates: ? ~ ?
+Biography: He was a general of Silla.
+In 660, when the Silla–Tang allied forces attacked Baekje, he went to war together with his son, the Hwarang Gwan Chang. In 664, during the reign of King Munmu, he attacked Goguryeo’s Dolsaseong Fortress along with Kim Inmun. In 668, when the Silla–Tang allied forces invaded Goguryeo, he distinguished himself as the commander of the Gui-dang forces and recaptured 63 fortresses where Baekje refugees had started an uprising.`,
+      jp: `キム・プムイル(Kim Pum-il)
+生没年: ?年 - ?年
+列伝: 彼は新羅の将軍である。
+660年、羅唐連合軍が百済を攻撃した際、息子の花郎・官昌と共に出征した。664年、文武王の時に金仁問らとともに高句麗の突沙城を攻撃した。668年、羅唐連合軍が高句麗へ侵攻した時には、帰唐総管として功績を立ち、百済の遺民が反乱を起こした63か所の城を奪還した。`
+    },
+    "region":"korea1","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":77,"na1":{
+      ko:"관창",
+      en:"Gwan Chang",
+      jp:"官昌"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko:"화랑의 불꽃",
+      en:"Flame of the Hwarang",
+      jp:"花郎の炎"
+    },
+    "display":77,"style":"","animal_type":14,"face_d":"left","element":[10],"grade":4,"job":[2,3],"cost":15,
+    "st0":85,"st1":165,"st2":171,"st3":86,"st4":119,"st5":33,"st6":89,
+    "sk":[],
+    "relation":[10,11],
+    "txt": {
+      ko: `관창(官昌)
+생몰년: 645년~660년
+열전: 신라의 화랑이다.
+660년 백제와의 전쟁에서 큰 공을 세우고 계백의 진영에 세 번 찾아가 결투를 벌이던 중 전사했다. 그의 죽음은 신라군이 결사적으로 백제와 싸우는데 기여하였다. 그 후에 그는 신라의 대표적인 화랑으로 알려져 노래〈한국을 빛낸 100명의 위인들〉에 그가 나오기도 한다.`,
+      en: `Gwan Chang
+Dates: 645 ~ 660
+Biography: He was a Hwarang of Silla.
+In 660, he fought bravely in the war against Baekje and was killed in action while challenging Gyebaek to a duel three times. His death inspired the Silla army to fight fiercely against Baekje. He later became known as one of Silla’s most representative Hwarangs and was even featured in the song “100 Great Figures Who Shone in Korea.”`,
+      jp: `官昌(クァンチャン)
+生没年: 645年 - 660年
+列伝: 彼は新羅の花郎である。
+660年、百済との戦争で大きな功績を立て、階伯の陣営に三度訪れて決闘を挑んだ末に戦死した。彼の死は新羅軍が決死的に百済と戦うことに貢献した。その後、彼は新羅の代表的な花郎として知られ、歌「韓国を輝かせた100人の偉人たち」にも登場する。`
+    },
+    "region":"korea1","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":78,"na1":{
+      ko:"김흠순",
+      en:"Kim Heum-sun",
+      jp:"金欽純"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko:"기동의 칼끝",
+      en:"Blade of the Mobile Force",
+      jp:"機動の刃"
+    },
+    "display":78,"style":"","animal_type":14,"face_d":"left","element":[11],"grade":4,"job":[2,3],"cost":13,
+    "st0":97,"st1":176,"st2":162,"st3":71,"st4":143,"st5":58,"st6":73,
+    "sk":[],
+    "relation":[11],
+    "txt": {
+      ko: `김흠순(金欽純)
+생몰년: 599년 ~ 680년
+열전: 가야의 왕족 출신으로 신라의 군인 겸 정치인이자 외척이었다. 신라 화랑도의 19대 풍월주이며 관직은 시중에 이르렀다. 그는 가야국 금관가야의 왕 구형왕의 증손자였으며 김서현의 아들로 김유신의 동생이다.`,
+      en: `Kim Heum-sun
+Dates: 599 ~ 680
+Biography: He was a military and political figure of Silla and a relative of the royal family, born into the royal lineage of Gaya. He served as the 19th Pungwolju (head of the Hwarang Corps) of Silla and rose to the rank of Jijeung (Minister of State). He was the great-grandson of King Guhyeong of Geumgwan Gaya and the younger brother of Kim Yu-sin, being the son of Kim Seo-hyeon.`,
+      jp: `金欽純(キム・フムスン)
+生没年: 599年 - 680年
+列伝: 彼は伽耶の王族出身で、新羅の軍人兼政治家であり外戚であった。新羅花郎道の19代風月主であり、官職は侍中まで昇進した。彼は伽耶国金官伽耶の王求亥王の曾孫であり、金舒玄の息子で金庾信の弟である。`
+    },
+    "region":"korea1","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":79,"na1":{
+      ko:"알천",
+      en:"Alcheon",
+      jp:"閼川"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko:"화랑의 맹장",
+      en:"Hwarang Vanguard",
+      jp:"花郎の猛将"
+    },
+    "display":79,"style":"","animal_type":14,"face_d":"center","element":[9],"grade":5,"job":[13,9],"cost":18,
+    "st0":109,"st1":168,"st2":149,"st3":66,"st4":171,"st5":82,"st6":86,
+    "sk":[],
+    "relation":[11],
+    "txt": {
+      ko: `알천(閼川)
+생몰년: 577년 음력 5월 6일~686년 음력 10월 12일
+열전: 신라(新羅)의 상대등(上大等)이다.
+신라 선덕여왕·진덕여왕, 태종무열왕 때의 진골 귀족으로 화백회의 의장인 상대등(上大等)을 역임하였다. 진덕여왕 사후에는 대리청정(섭정)으로 추대되었으나 동생인 태종 무열왕 김춘추(金春秋)에게 양보하였다. 진주 소씨는 알천을 자신들의 조상으로 보고 있다.`,
+      en: `Alcheon
+Dates: 577 ~ 686
+Biography: He was the Sangdaedeung (Chief Minister) of Silla. As a true-bone aristocrat during the reigns of Queen Seondeok, Queen Jindeok, and King Taejong Muyeol, he served as the chairman of the Council of Nobles (Hwabaek) in his capacity as Sangdaedeung. After Queen Jindeok’s death, he was nominated to act as regent, but he yielded the position to his younger brother, Kim Chun-chu (later King Taejong Muyeol). The Jinju So clan regards Alcheon as their ancestral progenitor.`,
+      jp: `閼川(あるちょん)
+生没年: 577年 - 686年
+列伝: 新羅(新羅)の相頭(上大等)である。
+新羅の善徳女王・真徳女王、太宗武烈王時代の真骨貴族で、 화백会議の議長である相頭(上大等)を務めた。真徳女王の死後、代理執政(摂政)に推戴されたが、弟の太宗武烈王金春秋(金春秋)に譲った。晋州ソ氏はアルチョンを自分たちの祖先と見なしている。`
+    },
+    "region":"korea1","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":80,"na1":{
+      ko:"사다함",
+      en:"Sadaham",
+      jp:"斯多含"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko:"화랑의 명장",
+      en:"Hwarang Commander",
+      jp:"花郎の名将"
+    },
+    "display":80,"style":"","animal_type":14,"face_d":"center","element":[10],"grade":4,"job":[13,9],"cost":13,
+    "st0":83,"st1":161,"st2":154,"st3":76,"st4":132,"st5":51,"st6":84,
+    "sk":[],
+    "relation":[11],
+    "txt": {
+      ko: `사다함(斯多含)
+생몰년: ? ~ 562년
+열전: 신라의 화랑(花郞)이자 장군이다. 6세기 중반 신라의 영토 확장에 크게 공헌하였다. 562년, 대가야 정벌 당시 24세의 젊은 나이로 전사하였다. 그의 용맹함과 희생정신은 후대 화랑들에게 귀감이 되었다.`,
+      en: `Sadaham
+Dates: ? ~ 562
+Biography: He was a Hwarang (elite youth corps) member and general of Silla. He made significant contributions to the territorial expansion of Silla in the mid-6th century. In 562, he was killed in action at the age of 24 during the conquest of Daegaya. His bravery and spirit of sacrifice became an inspiration to later Hwarang.`,
+      jp: `斯多含(サダハム)
+生没年: ? - 562年
+列伝: 新羅の花郎(ファラン)であり、将軍である。6世紀半ば、新羅の領土拡大に大きく貢献した。562年、大加耶征伐の際、24歳の若さで戦死した。彼の勇猛さと犠牲精神は、後世の花郎たちの模範となった。`
+    },
+    "region":"korea1","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":81,"na1":{
+      ko:"설오유",
+      en:"Seoloyu",
+      jp:"薛烏儒"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko:"신라의 중견장",
+      en:"Middle-ranking general of Silla",
+      jp:"新羅の中将"
+    },
+    "display":81,"style":"","animal_type":20,"face_d":"left","element":[10],"grade":3,"job":[3,13],"cost":8,
+    "st0":61,"st1":152,"st2":146,"st3":72,"st4":124,"st5":44,"st6":63,
+    "sk":[],
+    "relation":[],
+    "txt": {
+      ko: `설오유(薛烏儒)
+생몰년: ? ~ 6세기 중반
+열전: 신라의 중견장이다. 6세기 중반 신라의 영토 확장에 크게 공헌하였다.`,
+      en: `Seoloyu
+Dates: ? ~ 6th century
+Biography: He was a middle-ranking general of Silla. He made significant contributions to the territorial expansion of Silla in the mid-6th century.`,
+      jp: `薛烏儒(セロイユ)
+生没年: ? - 6世紀半ば
+列伝: 新羅の中将である。6世紀半ば、新羅の領土拡大に大きく貢献した。`
+    },
+    "region":"korea1","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":82,"na1":{
+      ko:"보장왕",
+      en:"King Bogwang",
+      jp:"保王"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko:"고구려 최후의 왕",
+      en:"Last king of Goguryeo",
+      jp:"高句麗の最後の王"
+    },
+    "display":82,"style":"","animal_type":2,"face_d":"left","element":[8],"grade":4,"job":[0,4],"cost":12,
+    "st0":68,"st1":132,"st2":71,"st3":54,"st4":158,"st5":72,"st6":66,
+    "sk":[],
+    "relation":[],
+    "txt": {
+      ko: `보장왕(保王)
+생몰년: ? ~ 6세기 중반
+열전: 고구려의 최후의 왕이다.`,
+      en: `King Bogwang
+Dates: ? ~ 6th century
+Biography: He was the last king of Goguryeo.`,
+      jp: `保王(ボウワン)
+生没年: ? - 6世紀半ば
+列伝: 高句麗の最後の王である。`
+    },
+    "region":"korea0","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":83,"na1":{
+      ko:"단업",
+      en:"Dan-eop",
+      jp:"段業"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko:"반란 가담자",
+      en:"Leader of the rebellion",
+      jp:"乱の将軍"
+    },
+    "display":83,"style":"","animal_type":8,"face_d":"left","element":[8],"grade":3,"job":[1,4],"cost":9,
+    "st0":49,"st1":118,"st2":61,"st3":55,"st4":143,"st5":69,"st6":58,
+    "sk":[],
+    "relation":[],
+    "txt": {
+      ko: `단업(段業)
+생몰년: ? ~ 6세기 중반
+열전: 반란의 가담자이다.`,
+      en: `Dan-eop
+Dates: ? ~ 6th century
+Biography: He was the leader of the rebellion.`,
+      jp: `段業(ダンエオ)
+生没年: ? - 6世紀半ば
+列伝: 乱の将軍である。`
+    },
+    "region":"korea1","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":84,"na1":{
+      ko:"김흠돌",
+      en:"Kim-hyeom-dol",
+      jp:"金欽突"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko:"반란 귀족",
+      en:"Leader of the rebellion",
+      jp:"乱の将軍"
+    },
+    "display":84,"style":"","animal_type":14,"face_d":"left","element":[8],"grade":4,"job":[8,13],"cost":11,
+    "st0":79,"st1":149,"st2":138,"st3":66,"st4":151,"st5":77,"st6":69,
+    "sk":[],
+    "relation":[],
+    "txt": {
+      ko: `김흠돌(金欽突)
+생몰년: ? ~ 681년
+열전: 반란의 귀족이다.`,
+      en: `Kim-hyeom-dol
+Dates: ? ~ 681
+Biography: He was a nobleman of the rebellion.`,
+      jp: `金欽突(キンヒムト)
+生没年: ? - 681年
+列伝: 乱の将軍である。`
+    },
+    "region":"korea1","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":85,"na1":{
+      ko:"김춘추",
+      en:"Kim-Chunchu",
+      jp:"金春秋"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko:"태종무열왕",
+      en:"King Taejongmuwang",
+      jp:"太宗武烈王"
+    },
+    "display":85,"style":"","animal_type":8,"face_d":"left","element":[7],"grade":6,"job":[0,1],"cost":16,
+    "st0":101,"st1":151,"st2":121,"st3":61,"st4":183,"st5":92,"st6":91,
+    "sk":[],
+    "relation":[],
+    "txt": {
+      ko: `김춘추(金春秋)
+생몰년: 603년 ~ 661년 음력 6월
+열전: 신라의 제29대 임금이다. 무열왕으로 불리기도 한다.`,
+      en: `Kim-Chunchu
+Dates: 603 ~ 661
+Biography: He was the 29th emperor of Silla. He was also known as the Martial King.`,
+      jp: `金春秋(キンチュウ)
+生没年: 603年 - 661年
+列伝: 新羅の第29代皇帝である。武烈王(武烈王)とも呼ばれる。`
+    },
+    "region":"korea1","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":86,"na1":{
+      ko:"김인문",
+      en:"Kim-Inmun",
+      jp:"金仁問"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko:"당 외교관",
+      en:"Envoys of the Tang Dynasty",
+      jp:"唐外交官"
+    },
+    "display":86,"style":"","animal_type":8,"face_d":"left","element":[7],"grade":5,"job":[1,4],"cost":12,
+    "st0":71,"st1":132,"st2":89,"st3":59,"st4":171,"st5":88,"st6":82,
+    "sk":[],
+    "relation":[],
+    "txt": {
+      ko: `김인문(金仁問)
+생몰년: 629년 ~ 694년 4월 29일
+열전: 신라의 왕족이자 문무왕 때의 장군 및 정치인이고, 태종무열왕의 둘째 아들이며 문무왕의 친동생이다. 자(字)는 인수(仁壽)이다. 신라의 삼국통일에 참여하여 활동하였으며 당나라에 사신으로 다녀오기도 했다. 보령 성주사지 낭혜화상탑비에 의하면 그의 작위는 임해공(臨海公)이라 한다.`,
+      en: `Kim-Inmun
+Dates: 629 ~ 694
+Biography: He was a member of the Silla royal family, a general and politician during the reign of King Munmu, and the second son of King Taejong Muyeol as well as the younger brother of King Munmu. His courtesy name was Insu. He took part in the unification wars of the Three Kingdoms and also served as an envoy to the Tang dynasty. According to the epitaph of the Stupa of Buddhist Monk Nanghye at Seongju Temple Site in Boryeong, his title was Prince Imhae.`,
+      jp: `金仁問(キンインムン)
+生没年: 629年 - 694年
+列伝: 彼は新羅の王族であり、文武王の時代の将軍・政治家で、太宗武烈王の次子であり文武王の実弟である。字は仁壽である。新羅の三国統一に参加して活動し、唐に使節として赴いたこともある。保寧の城主寺址・朗慧和上塔碑によれば、彼の爵位は臨海公である。`
+    },
+    "region":"korea1","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":87,"na1":{
+      ko:"김수로왕",
+      en:"King Suro",
+      jp:"金首露王"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko:"가야 건국 시조",
+      en:"Founder of Gaya",
+      jp:"伽倻建国始祖"
+    },
+    "display":87,"style":"","animal_type":23,"face_d":"left","element":[7],"grade":5,"job":[0,13],"cost":13,
+    "st0":93,"st1":168,"st2":154,"st3":68,"st4":151,"st5":81,"st6":92,
+    "sk":[],
+    "relation":[],
+    "txt": {
+      ko: `수로왕(首露王)
+생몰년: 42년 음력 3월 4일 ~ 199년 음력 3월 23일
+재위: 가락국(駕洛國)의 초대 국왕이며, 김해 김씨의 시조이다. 시호는 수릉왕(首陵王)이다.`,
+      en: `Kim-Suro
+Dates: 42 ~ 199
+Biography: He was the founding king of the Garak Kingdom (Gaya) and the progenitor of the Gimhae Kim clan. His posthumous title was King Surŭng.`,
+      jp: `金首露王(キンスウロウ)
+生没年: 42年 - 199年
+列伝: 彼は駕洛国（加羅国／伽倻）の初代国王であり、金海金氏の始祖である。諡号は首陵王である。`
+    },
+    "region":"korea1","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":88,"na1":{
+      ko:"구형왕",
+      en:"King Gugyeong",
+      jp:"仇衡王"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko:"가야 최후의 왕",
+      en:"Last King of Gaya",
+      jp:"伽倻最後の王"
+    },
+    "display":88,"style":"","animal_type":12,"face_d":"center","element":[8],"grade":4,"job":[0,1],"cost":10,
+    "st0":66,"st1":139,"st2":119,"st3":55,"st4":147,"st5":68,"st6":64,
+    "sk":[],
+    "relation":[],
+    "txt": {
+      ko: `구형왕(仇衡王)
+생몰년: ? ~ ?
+재위: 금관가야의 마지막 왕이다.`,
+      en: `Kim-Gugyeong
+Dates: ? ~ ?
+Biography: He was the last king of Gaya.`,
+      jp: `金首露王(キンスウロウ)
+生没年: ?年 - ?年
+列伝: 金冠伽倻の最後の王`
+    },
+    "region":"korea1","period":2,"scenarioRegion":""
+  },
+  {
+    "idx":89,"na1":{
+      ko:"내물왕",
+      en:"King Naemul",
+      jp:"内物王"
+    },"na2":{
+      ko:"",
+      en:"",
+      jp:""
+    },"na3":{
+      ko:"김씨 왕통 확립자",
+      en:"Founder of the Kim Dynasty",
+      jp:"金氏王統確立者"
+    },
+    "display":89,"style":"","animal_type":2,"face_d":"center","element":[9],"grade":5,"job":[0,4],"cost":10,
+    "st0":88,"st1":149,"st2":131,"st3":59,"st4":166,"st5":84,"st6":81,
+    "sk":[],
+    "relation":[],
+    "txt": {
+      ko: `내물왕(内物王)
+생몰년: ? ~ ?
+재위: 금관가야의 마지막 왕이다.`,
+      en: `Kim-Naemul
+Dates: ? ~ ?
+Biography: He was the founder of the Kim Dynasty.`,
+      jp: `内物王(ナイモウ王)
+生没年: ?年 - ?年
+列伝: 金冠伽倻の最後の王`
+    },
+    "region":"korea1","period":2,"scenarioRegion":""
   },
 ]
 //김덕령, 김종서, 이숙번, 조영무, 윤흥신, 이억기, 어영담, 우치적, 황진, 휴정, 계월향, 논개
@@ -2074,7 +2841,7 @@ Biography: Vercingetorix was a chieftain of the Gauls. He united various Gallic 
   // {"idx":29,"na1":"호리우치 우지요시","na2":"","na3":"(堀内氏善)",//수군
   //   "display":105,"style":105,"animal_type":6,"face_d":"center","element":[11],"grade":6,"job":[0],"cost":15,
   //   "st0":94,"st1":166,"st2":142,"st3":71,"st4":182,"st5":95,"st6":95,
-  //   "sk":[{"idx":1}],
+  //   "sk":[],
   //   "relation":[4],
   //   "txt": "호리우치 우지요시(일본어: 堀内氏善, 덴분 18년(1549년) ~ 게이초 20년 음력 4월 10일(1615년 5월 7일))는 센고쿠 시대부터 에도 시대 초기까지 활약한 무장이다. 구마노 수군(熊野水軍)의 장수.",
   //   "region":""},
@@ -2097,7 +2864,7 @@ const common = [
     },
     "display":200,"style":"","animal_type":6,"face_d":"right","element":[randomNum(6,12)],"grade":1,"job":[9],"cost":5,
     "st0":randomNum(30,50),"st1":randomNum(50,100),"st2":randomNum(50,100),"st3":randomNum(30,70),"st4":randomNum(50,100),"st5":randomNum(20,50),"st6":randomNum(50,100),
-    "sk":[{"idx":1}],
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`너구리`,
@@ -2122,7 +2889,7 @@ const common = [
     },
     "display":201,"style":"","animal_type":20,"face_d":"right","element":[randomNum(6,12)],"grade":1,"job":[9],"cost":5,
     "st0":randomNum(30,50),"st1":randomNum(50,100),"st2":randomNum(50,100),"st3":randomNum(30,70),"st4":randomNum(50,100),"st5":randomNum(20,50),"st6":randomNum(50,100),
-    "sk":[{"idx":1}],
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`독수리`,
@@ -2147,7 +2914,7 @@ const common = [
     },
     "display":202,"style":"","animal_type":12,"face_d":"right","element":[randomNum(6,12)],"grade":1,"job":[9],"cost":5,
     "st0":randomNum(30,50),"st1":randomNum(50,100),"st2":randomNum(50,100),"st3":randomNum(30,70),"st4":randomNum(50,100),"st5":randomNum(20,50),"st6":randomNum(50,100),
-    "sk":[{"idx":1}],
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`소`,
@@ -2172,7 +2939,7 @@ const common = [
     },
     "display":203,"style":"","animal_type":13,"face_d":"left","element":[randomNum(6,12)],"grade":1,"job":[9],"cost":5,
     "st0":randomNum(30,50),"st1":randomNum(50,100),"st2":randomNum(50,100),"st3":randomNum(30,70),"st4":randomNum(50,100),"st5":randomNum(20,50),"st6":randomNum(50,100),
-    "sk":[{"idx":1}],
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`곰`,
@@ -2197,7 +2964,7 @@ const common = [
     },
     "display":204,"style":"","animal_type":28,"face_d":"right","element":[randomNum(6,12)],"grade":1,"job":[9],"cost":5,
     "st0":randomNum(30,50),"st1":randomNum(50,100),"st2":randomNum(50,100),"st3":randomNum(30,70),"st4":randomNum(50,100),"st5":randomNum(20,50),"st6":randomNum(50,100),
-    "sk":[{"idx":1}],
+    "sk":[],
     "relation":[],
     "txt": {
       ko:`하이에나`,

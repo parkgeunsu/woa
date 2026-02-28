@@ -1,9 +1,9 @@
-import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
+import { AppContext } from 'contexts/app-context';
 import ChLineup from 'pages/ChLineup';
 import CharacterCard from 'pages/CharacterCard';
 import React, { useContext, useEffect, useState } from 'react';

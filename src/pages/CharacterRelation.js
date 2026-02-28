@@ -1,4 +1,3 @@
-import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import { ChPic } from 'components/ImagePic';
@@ -6,6 +5,7 @@ import InfoGroup from 'components/InfoGroup';
 import { util } from 'components/Libs';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
+import { AppContext } from 'contexts/app-context';
 import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
 

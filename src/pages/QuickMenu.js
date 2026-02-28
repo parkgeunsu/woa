@@ -1,7 +1,7 @@
-import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
+import { AppContext } from 'contexts/app-context';
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';

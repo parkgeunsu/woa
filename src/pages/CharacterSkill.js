@@ -1,4 +1,3 @@
-import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import { IconPic } from 'components/ImagePic';
@@ -6,6 +5,7 @@ import InfoGroup from 'components/InfoGroup';
 import { util } from 'components/Libs';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
+import { AppContext } from 'contexts/app-context';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
@@ -47,54 +47,14 @@ const Skill = styled(FlexBox)`
     top: 0;
     border: 10px solid transparent;
   }
-  ${({skillCate}) => {
-    switch(skillCate) {
-      case 1:
-        return `
-          &:after {
-            border-left-color: var(--color-blue);
-            border-top-color: var(--color-blue);
-          }
-        `;
-      case 2: //passive
-        return `
-          &:after {
-            border-left-color: var(--color-lightblue);
-            border-top-color: var(--color-lightblue);
-          }
-        `;
-      case 3: //active
-        return `
-          &:after {
-            border-left-color: var(--color-red);
-            border-top-color: var(--color-red);
-          }
-        `;
-      case 4: //defence
-        return `
-          &:after {
-            border-left-color: var(--color-point6);
-            border-top-color: var(--color-point6);
-          }
-        `;
-      case 5: //buff
-        return `
-          &:after {
-            border-left-color: var(--color-yellow);
-            border-top-color: var(--color-yellow);
-          }
-        `;
-      case 6: //debuff
-        return `
-          &:after {
-            border-left-color: var(--color-purple);
-            border-top-color: var(--color-purple);
-          }
-        `;
-      default:
-        break;
-    }
-  }}
+`;
+const SkillTypePic = styled(IconPic)`
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  right: 0;
+  top: 0;
+  z-index: 2;
 `;
 const SkillInfo = styled(FlexBox)``;
 const SkillTxt = styled(FlexBox)`
@@ -210,7 +170,6 @@ const CharacterSkill = ({
               lv: skillData.lv - 1,
               lang: lang,
             });
-
             let actionPossibleSkill = 'possible';
             if (skillType > 0 && skillType < 7) {
               const isMatch = saveCh.newActionType?.some((type) => (type + 1) === skillType);
@@ -220,7 +179,8 @@ const CharacterSkill = ({
             const skillKey = `skill-${skillData.idx}-${idx}`;
 
             return (
-              <Skill key={skillKey} possible={actionPossibleSkill} skillCate={skillCate} direction="column">
+              <Skill key={skillKey} possible={actionPossibleSkill}direction="column">
+                {skillData.idx !== 0 && <SkillTypePic pic="icon100" type="skillType" idx={skillCate} />}
                 <SkillInfo>
                   <SkillIcon>
                     <IconPic pic="skill" idx={skData.idx} />

@@ -1,7 +1,7 @@
-import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import { util } from 'components/Libs';
+import { AppContext } from 'contexts/app-context';
 import GameMainFooter from 'pages/GameMainFooter';
 import MoveRegion from 'pages/MoveRegion';
 import QuickMenu from 'pages/QuickMenu';

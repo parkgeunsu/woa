@@ -1,4 +1,3 @@
-import { AppContext } from 'App';
 import { ActionChDisplay } from 'components/Components';
 import { ItemPic, MarkPic } from 'components/ImagePic';
 import ItemGradeColor from 'components/ItemGradeColor';
@@ -8,6 +7,7 @@ import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import TabMenu from 'components/TabMenu';
+import { AppContext } from 'contexts/app-context';
 import 'css/shop.css';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';

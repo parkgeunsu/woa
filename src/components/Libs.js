@@ -2675,7 +2675,7 @@ export const util = { //this.loadImage();
       const addEff = [];
   
       //슬롯
-      const slotNum = () => {
+      const slotNum = (() => {
         if (grade === 1) {
           if (Math.random() < 0.3) {
             return Math.round(Math.random() * (itemData.socket - 1)) + 1;
@@ -2685,8 +2685,8 @@ export const util = { //this.loadImage();
         } else {
           return Math.round(Math.random() * itemData.socket);
         }
-      };
-      itemLv -= slotNum() * 10;
+      })();
+      itemLv -= slotNum * 10;
       if (itemLv > 0) {
         const itemPart = String(option.items)[0];
         if (grade === 2) {
@@ -3026,7 +3026,7 @@ export const util = { //this.loadImage();
       dataObj.changeSaveData(sData);//데이터 저장
       dataObj.showPopup(false);
     } else if (dataObj.type === 'itemEvaluate') { //아이템 확인
-      sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
+      // sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
       const itemInfo = dataObj.data.saveItemData.part === 3 ? `${dataObj.data.saveItemData.part}-${dataObj.data.saveItemData.weaponType}-${dataObj.data.saveItemData.idx}` : `${dataObj.data.saveItemData.part}-${dataObj.data.saveItemData.idx}`;
       const option = {
         type: dataObj.data.type,
@@ -3080,16 +3080,28 @@ export const util = { //this.loadImage();
     return num.replace(/,/g, "");
   },
   fnPercent: (arr) => { //확률 연산
-    let blockPercent = [{idx:0, num:arr[0]}],
-      idx = 1;
-    const percent = Math.random() * 100;
-    arr.reduce((a, b) => {
-      const per = (a + b);
-      blockPercent.push({idx: idx, num:per});
-      ++idx;
-      return per;
-    });
-    return blockPercent.filter((block) => percent < block.num)[0].idx;
+    if (!Array.isArray(arr) || arr.length === 0) throw new Error('arr is empty');
+
+    // 누적합 만들기 + 유효성 검사
+    const cumulative = [];
+    let total = 0;
+
+    for (let i = 0; i < arr.length; i++) {
+      const w = Number(arr[i]);
+      if (!Number.isFinite(w) || w < 0) {
+        throw new Error(`arr[${i}] invalid weight: ${arr[i]}`);
+      }
+      total += w;
+      cumulative.push({ idx: i, num: total });
+    }
+
+    if (total <= 0) return -1; // 전부 0이면 선택 불가
+
+    const r = Math.random() * total; // [0, total)
+    // filter[0] 대신 find로 즉시 찾기 (안전)
+    const picked = cumulative.find(block => r < block.num);
+    return picked ? picked.idx : cumulative[cumulative.length - 1].idx; // 부동소수 방어
+
   },
   getSkillMultiplesLang: ({buff, type, lang}) => {
     const textFor = {ko:'에 대한 데미지',en:'Damage to',jp:'へのダメージ'}
@@ -3596,6 +3608,7 @@ export const util = { //this.loadImage();
       case 'elevation':
       case 'pattern':
         return 7;
+      case 'skillType':
       case 'battleState':
         return 8;
       case 'skillBack':
@@ -4100,6 +4113,27 @@ export const util = { //this.loadImage();
       });
       saveData = sData;
       const chScenario = gameData.ch[newIdx].scenarioRegion;
+      const jobElementType = job === 1 ? Math.floor(Math.random() * 4) : job === 6 ? Math.floor(Math.random() * 2) : "";//특정 직업의 속성 설정(마법사, 도사)
+      const skill = [{idx: 0, lv: 1, exp: 0}, {idx: 1, lv: 1, exp: 0}, {idx: 2, lv: 1, exp: 0}];//기본 스킬
+      gameData.job[job].skill.basic.forEach((v)=>{//직업 추가되는 스킬
+        if (v < 3) {
+          skill[v].lv += 1;
+        } else {
+          skill.push({idx: v, lv: 1, exp: 0});
+        }
+      });
+
+      //랜덤스킬 획득
+      const skillLvGroup = gameData.job[job].skill[`lv${util.fnPercent(gameData.percent.getBaseSkill)}`],
+        getRandomSkillIdx = skillLvGroup[Math.floor(Math.random() * skillLvGroup.length)];
+      const skillTarget = skill.find(s => s.idx === getRandomSkillIdx);
+      if (skillTarget) {
+        skillTarget.lv += 1;
+      } else {
+        skill.push({ idx: getRandomSkillIdx, lv: 1, exp: 0 });
+      }
+      //동물뱃지 획득
+      const animalBadge = Math.floor(Math.random()*2);
       chDataArr.push(util.saveLvState('', {
         itemEff: util.getItemEff(),
         grade: cardG,
@@ -4113,21 +4147,33 @@ export const util = { //this.loadImage();
           actionType: actionType,
           newActionType : [actionType],
           job: job,
+          ...(typeof jobElementType === "number" ? {jobElement: jobElementType} : {}),
           kg: kg,
           exp: 0,
           hasExp: 0,
-          battleBadge:[0,0,0,0],
-          animalBadge:0,//총 보유 동물뱃지
+          battleBadge: [0,0,0,0],
+          animalBadge: animalBadge,//총 보유 동물뱃지
           grade: cardG,
           gradeMax: maxG,
           gradeUp: 0,
-          mark: Math.round(Math.random()*2),//동물뱃지 추가보유여부(상점에서 exp로 구입가능)
+          mark: animalBadge,//동물뱃지 추가보유여부(상점에서 exp로 구입가능)
           idx: newIdx,
           items: [{}, {}, {}, {}, {}, {}, {}, {}],
           lv: 1,
-          sk: [{idx: 1, lv: 1, exp: 0,},{idx: 2, lv: 1, exp: 0,},],
-          animalSkill: util.makeSkillTree(gameData, newIdx, job),
-          hasSkill: [{idx: 1, lv: 1, exp: 0,},{idx: 2, lv: 1, exp: 0,},],
+          sk: skill,
+          animalSkill: util.makeSkillTree({
+            gameData: gameData,
+            idx: newIdx,
+            jobIdx: job,
+            jobElementType: typeof jobElementType === "number" ? jobElementType : "",
+          }),
+          hasSkill: skill.map((v) => {
+            return {
+              idx: v.idx,
+              lv: v.lv,
+              exp: v.exp,
+            }
+          }),
           scenario: chScenario ? chScenario.map((v) => {
             const scenarioList = v.split("-");
             return {
@@ -4158,27 +4204,12 @@ export const util = { //this.loadImage();
       maxCard: cardGrade.maxGrade,
     };
   },
-  makeSkillTree: (gameData, chIdx, jobIdx) => {
-    const element = gameData.ch[chIdx].element[0],
-      cloneJob = {...gameData.job[jobIdx]},
-      cloneAnimalType = {...gameData.animal_type[gameData.ch[chIdx].animal_type]};
-    // if (job.skill.type === "random") {
-    //   const skillLv = [45, 30, 15, 10],
-    //     randomNum = util.fnPercent(skillLv),
-    //     skillLvGroup = job.skill[`lv${randomNum}`];
-    //   const skillNum = Math.floor(Math.random() * skillLvGroup.length);
-    // }
+  makeSkillTree: ({gameData, idx, jobIdx, jobElementType}) => {
+    const cloneAnimal = {...gameData.animal_type[gameData.ch[idx].animal_type]};
     const limitLvArr = Array.from({length: 4}, (v, idx) => idx * (Math.floor(Math.random() * 10 - 5) + 15));
     const emptySkillArr = Array.from({length: 4}, () => ([])).map((v, skLineIdx) => {
       return Array.from({length: 4}, (sk, skIdx) => {
-        let skill = {}
-        if (skIdx < 2) {
-          skill = cloneAnimalType.skill[`lv${skLineIdx}`];
-          //동물 스킬
-        } else {
-          skill = cloneJob.skill[`lv${skLineIdx}`];
-          //직업 스킬
-        }
+        const skill = cloneAnimal.skill[`lv${skLineIdx}`];
         if (skill.length === 0) {
           return {idx: ""};
         }
@@ -4187,7 +4218,7 @@ export const util = { //this.loadImage();
         skill.splice(randomSkillCount, 1);
         const hasSkill = Math.random() < (0.6 - 0.1 * skLineIdx);
         return hasSkill ? {
-          idx: skillIdx,
+          idx: Array.isArray(skillIdx) ? skillIdx[jobElementType] : skillIdx,
           lv: 0,
           lvLimit: limitLvArr[skLineIdx],
         } : {idx: ""}

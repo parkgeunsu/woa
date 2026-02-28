@@ -2,6 +2,7 @@ import { FlexBox } from 'components/Container';
 import { MergedPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import { ColorSet, FontSet } from 'components/Theme';
+import { AppContext } from 'contexts/app-context';
 import 'css/keyFrameAnimation.css';
 import 'css/root.css';
 import { gameData, version } from 'gamedata/data';
@@ -24,15 +25,13 @@ import Setup from 'pages/Setup';
 import Shipyard from 'pages/Shipyard';
 import StartGame from 'pages/StartGame';
 import TradingPost from 'pages/TradingPost';
-import React, { createContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 
 import TestSkill from 'pages/TestSkill';
 
-export const AppContext = createContext();
-
-const RootContainer = styled(AppContext.Provider)`
+const RootContainer = styled.div`
   height: 100%;
   overflow-y: overlay;
   overflow-x: hidden;
@@ -534,87 +533,89 @@ const App = ({
   }, []);
   return (
     <ThemeProvider theme={theme}>
-      <RootContainer value={contextData}>
-        <svg style={{position:"absolute",width:0,height:0,visibility:"hidden"}}xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100">
-          <radialGradient id="radial_rainbow" cx="43.5693" cy="42.9141" r="43.8667" gradientUnits="userSpaceOnUse">
-            <stop offset="0" style={{"stopColor":"#FF0000"}}/>
-            <stop offset="0.25" style={{"stopColor":"#FF8800"}}/>
-            <stop offset="0.5" style={{"stopColor":"#FFFF00"}}/>
-            <stop offset="0.7" style={{"stopColor":"#008800"}}/>
-            <stop offset="0.8" style={{"stopColor":"#0000FF"}}/>
-            <stop offset="0.95" style={{"stopColor":"#000088"}}/>
-            <stop offset="1" style={{"stopColor":"#880088"}}/>
-          </radialGradient>
-          <linearGradient id="linear_rainbow" gradientUnits="userSpaceOnUse" x1="6.1328" y1="50.0005" x2="93.8662" y2="50.0005">
-            <stop offset="0" style={{"stopColor":"#FF0000"}}/>
-            <stop offset="0.17" style={{"stopColor":"#FF8800"}}/>
-            <stop offset="0.33" style={{"stopColor":"#FFFF00"}}/>
-            <stop offset="0.50" style={{"stopColor":"#008800"}}/>
-            <stop offset="0.66" style={{"stopColor":"#0000FF"}}/>
-            <stop offset="0.83" style={{"stopColor":"#000088"}}/>
-            <stop offset="1" style={{"stopColor":"#880088"}}/>
-          </linearGradient>
-          <linearGradient id="Mottled" gradientUnits="userSpaceOnUse" x1="6.1328" y1="50.0005" x2="93.8662" y2="50.0005">
-            <stop offset="0" style={{"stopColor":"#000000"}}/>
-            <stop offset="0.17" style={{"stopColor":"#ffffff"}}/>
-            <stop offset="0.33" style={{"stopColor":"#000000"}}/>
-            <stop offset="0.50" style={{"stopColor":"#ffffff"}}/>
-            <stop offset="0.66" style={{"stopColor":"#000000"}}/>
-            <stop offset="0.83" style={{"stopColor":"#ffffff"}}/>
-            <stop offset="1" style={{"stopColor":"#000000"}}/>
-          </linearGradient>
-        </svg>
-        <Wrapper location={location} className={`root ${location}`}>
-          {location !== "battle" && location !== "" && location !== "main" && location !== "start" && (location !== "recruitment" && !paramData?.start?.begin) && location.indexOf('test') < 0 && (
-            <Header saveData={saveData} />
-          )}
-          <CountryBackground {...setBack(location)} />
-          {showDim && (location === "gameMain" || location === "setup" || location === "chat") && <BackgroundShadow />}
-          <ContentContainer location={location} direction="column" className="content">
-            <Routes>
-              <Route path="/" element={<Menu type="new" />} />
+      <AppContext.Provider value={contextData}>
+        <RootContainer>
+          <svg style={{position:"absolute",width:0,height:0,visibility:"hidden"}}xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100">
+            <radialGradient id="radial_rainbow" cx="43.5693" cy="42.9141" r="43.8667" gradientUnits="userSpaceOnUse">
+              <stop offset="0" style={{"stopColor":"#FF0000"}}/>
+              <stop offset="0.25" style={{"stopColor":"#FF8800"}}/>
+              <stop offset="0.5" style={{"stopColor":"#FFFF00"}}/>
+              <stop offset="0.7" style={{"stopColor":"#008800"}}/>
+              <stop offset="0.8" style={{"stopColor":"#0000FF"}}/>
+              <stop offset="0.95" style={{"stopColor":"#000088"}}/>
+              <stop offset="1" style={{"stopColor":"#880088"}}/>
+            </radialGradient>
+            <linearGradient id="linear_rainbow" gradientUnits="userSpaceOnUse" x1="6.1328" y1="50.0005" x2="93.8662" y2="50.0005">
+              <stop offset="0" style={{"stopColor":"#FF0000"}}/>
+              <stop offset="0.17" style={{"stopColor":"#FF8800"}}/>
+              <stop offset="0.33" style={{"stopColor":"#FFFF00"}}/>
+              <stop offset="0.50" style={{"stopColor":"#008800"}}/>
+              <stop offset="0.66" style={{"stopColor":"#0000FF"}}/>
+              <stop offset="0.83" style={{"stopColor":"#000088"}}/>
+              <stop offset="1" style={{"stopColor":"#880088"}}/>
+            </linearGradient>
+            <linearGradient id="Mottled" gradientUnits="userSpaceOnUse" x1="6.1328" y1="50.0005" x2="93.8662" y2="50.0005">
+              <stop offset="0" style={{"stopColor":"#000000"}}/>
+              <stop offset="0.17" style={{"stopColor":"#ffffff"}}/>
+              <stop offset="0.33" style={{"stopColor":"#000000"}}/>
+              <stop offset="0.50" style={{"stopColor":"#ffffff"}}/>
+              <stop offset="0.66" style={{"stopColor":"#000000"}}/>
+              <stop offset="0.83" style={{"stopColor":"#ffffff"}}/>
+              <stop offset="1" style={{"stopColor":"#000000"}}/>
+            </linearGradient>
+          </svg>
+          <Wrapper location={location} className={`root ${location}`}>
+            {location !== "battle" && location !== "" && location !== "main" && location !== "start" && (location !== "recruitment" && !paramData?.start?.begin) && location.indexOf('test') < 0 && (
+              <Header saveData={saveData} />
+            )}
+            <CountryBackground {...setBack(location)} />
+            {showDim && (location === "gameMain" || location === "setup" || location === "chat") && <BackgroundShadow />}
+            <ContentContainer location={location} direction="column" className="content">
+              <Routes>
+                <Route path="/" element={<Menu type="new" />} />
 
-              <Route path="/start" element={<StartGame saveData={saveData} changeSaveData={changeSaveData} setLang={setLang} />} />
+                <Route path="/start" element={<StartGame saveData={saveData} changeSaveData={changeSaveData} setLang={setLang} />} />
 
-              <Route path="/setup" element={<Setup setLang={setLang} setSpeed={setSpeed} setBgm={setBgm} setEfm={setEfm} setRes={setResolution} setBge={setBge} />} />
+                <Route path="/setup" element={<Setup setLang={setLang} setSpeed={setSpeed} setBgm={setBgm} setEfm={setEfm} setRes={setResolution} setBge={setBge} />} />
 
-              <Route path="/gameMain" element={<GameMain saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} gameMode={gameMode} setGameMode={setGameMode} showDim={showDim} setShowDim={setShowDim} />} />
+                <Route path="/gameMain" element={<GameMain saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} gameMode={gameMode} setGameMode={setGameMode} showDim={showDim} setShowDim={setShowDim} />} />
 
-              <Route path="/cardsList" element={<CharacterList saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/cardsList" element={<CharacterList saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/cards" element={<Cards saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/cards" element={<Cards saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/inven" element={<InvenShop shopType="inven" saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/inven" element={<InvenShop shopType="inven" saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/cardPlacement" element={<CardPlacement saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/cardPlacement" element={<CardPlacement saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/moveEvent" element={<MoveEvent saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} gameMode={gameMode} setGameMode={setGameMode}  showDim={showDim} setShowDim={setShowDim} />} />
+                <Route path="/moveEvent" element={<MoveEvent saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} gameMode={gameMode} setGameMode={setGameMode}  showDim={showDim} setShowDim={setShowDim} />} />
 
-              <Route path="/enhancingCards" element={<EnhancingCards saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/enhancingCards" element={<EnhancingCards saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/enhancingStickers" element={<EnhancingStickers saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/enhancingStickers" element={<EnhancingStickers saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/composite" element={<Composite saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/composite" element={<Composite saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/shop" element={<InvenShop shopType="shop" saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/shop" element={<InvenShop shopType="shop" saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/tool" element={<InvenShop shopType="tool" saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/tool" element={<InvenShop shopType="tool" saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/shipyard" element={<Shipyard saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/shipyard" element={<Shipyard saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/map" element={<Sail saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/map" element={<Sail saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
 
-              <Route path="/testSkill" element={<TestSkill />} saveData={saveData} />
-            </Routes>
-          </ContentContainer>
-        </Wrapper>
-      </RootContainer>
+                <Route path="/testSkill" element={<TestSkill />} saveData={saveData} />
+              </Routes>
+            </ContentContainer>
+          </Wrapper>
+        </RootContainer>
+      </AppContext.Provider>
     </ThemeProvider>
   );
 }

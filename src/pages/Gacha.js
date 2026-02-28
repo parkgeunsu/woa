@@ -1,4 +1,3 @@
-import { AppContext } from 'App';
 import { Button } from 'components/Button';
 import { Prices } from 'components/Components';
 import { FlexBox } from 'components/Container';
@@ -6,6 +5,7 @@ import { MergedPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Modal from 'components/Modal';
 import ModalContainer from 'components/ModalContainer';
+import { AppContext } from 'contexts/app-context';
 import 'css/gacha.css';
 import CharacterCard from 'pages/CharacterCard';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';

@@ -1,8 +1,8 @@
-import { AppContext } from 'App';
 import { ItemPic, MarkPic } from 'components/ImagePic';
 import ItemGradeColor from 'components/ItemGradeColor';
 import { util } from 'components/Libs';
 import TabMenu from 'components/TabMenu';
+import { AppContext } from 'contexts/app-context';
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';

@@ -1,4 +1,3 @@
-import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import { IconPic, SkillMark } from 'components/ImagePic';
@@ -8,6 +7,7 @@ import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
+import { AppContext } from 'contexts/app-context';
 import useLongPress from 'hooks/useLongPress';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
@@ -52,7 +52,8 @@ const RequiredLine = styled.div`
       box-shadow: -3px 0 0 0 var(--color-red), 3px 0 0 0 var(--color-red);
     ` : 
     `
-      background: var(--color-grey);
+      background: var(--color-darkgrey);
+      box-shadow: 0 0 7px 2px var(--color-b);
     `
   };
 `;
@@ -96,7 +97,7 @@ const SkillButton = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  opacity: ${({used}) => used ? 1 : 0.4};
+  ${({used}) => used ? `` : `filter: grayscale(100%) brightness(0.3);`};
   z-index: 2;
   .limitLv {
     position: absolute;

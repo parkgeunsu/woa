@@ -1,6 +1,6 @@
-import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { ChPic, IconPic, MergedPic } from 'components/ImagePic';
+import { AppContext } from 'contexts/app-context';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
@@ -86,14 +86,19 @@ const Name = styled(Text)`
   position:absolute;
   display:inline-block;
   right:2%;
-  bottom:25%;
+  top: 52%;
   width:67%;
   line-height:1;
   z-index:1;
   box-sizing:border-box;
   letter-spacing: -2px;
-  white-space:nowrap;
+  word-break: keep-all;
   color: inherit;
+  strong {
+    margin: 0 5px 0 0;
+    font-family: 'myFont', 'myFont_eName', 'myFont_j', sans-serif;
+    letter-spacing: 0px;
+  }
 `;
 const SubName = styled(Text)`
   position:absolute;
@@ -533,7 +538,7 @@ const CharacterCard = ({
             {!isShowCard && <ListNameLv elementType={chData?.element[0] - 6} className="name_lv">
               <Lv code="t8" color="main">{saveCh?.lv}</Lv>
               <SubName code="t2" color="main">{chData?.na3[lang]}</SubName>
-              <Name code="t5" color="main">{`${chData?.na1[lang]} ${chData?.na2?.[lang] ? `(${chData?.na2[lang]})` : ''}`}</Name>
+              <Name code="t5" color="main"><strong>{chData?.na1[lang]}</strong>{chData?.na2?.[lang] ? `(${chData?.na2[lang]})` : ''}</Name>
             </ListNameLv>}
             <ListCh type="profile" isRound={0} pic={`ch${chData?.display}`} />
             {!isShowCard && <ListJobAction>

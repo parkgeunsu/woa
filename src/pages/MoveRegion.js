@@ -1,10 +1,10 @@
-import { AppContext } from "App";
 import { Text } from "components/Atom";
 import { IconButton } from "components/Button";
 import { FlexBox } from "components/Container";
 import { IconPic } from 'components/ImagePic';
 import { Select } from "components/Input";
 import { util } from "components/Libs";
+import { AppContext } from 'contexts/app-context';
 import CharacterCard from "pages/CharacterCard";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";

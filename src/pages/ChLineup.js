@@ -1,6 +1,6 @@
-import { AppContext } from 'App';
 import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
+import { AppContext } from 'contexts/app-context';
 import CharacterCard from 'pages/CharacterCard';
 import React, { useContext } from 'react';
 import styled from 'styled-components';

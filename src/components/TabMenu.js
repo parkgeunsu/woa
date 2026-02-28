@@ -1,6 +1,6 @@
-import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { IconPic } from 'components/ImagePic';
+import { AppContext } from 'contexts/app-context';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 

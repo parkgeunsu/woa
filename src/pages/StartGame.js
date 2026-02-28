@@ -1,4 +1,3 @@
-import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { Button } from 'components/Button';
 import { FlexBox, TitleBox } from 'components/Container';
@@ -8,6 +7,7 @@ import { util } from 'components/Libs';
 import { ListItem, ListWrap } from 'components/List';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
+import { AppContext } from 'contexts/app-context';
 import CharacterCard from 'pages/CharacterCard';
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';

@@ -1,4 +1,4 @@
-import { AppContext } from 'App';
+import { AppContext } from 'contexts/app-context';
 import { useContext } from 'react';
 import styled from 'styled-components';
 

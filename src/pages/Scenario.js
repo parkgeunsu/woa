@@ -1,4 +1,3 @@
-import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import GuideQuestion from 'components/GuideQuestion';
@@ -10,6 +9,7 @@ import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import Tooltip from 'components/Tooltip';
 import TooltipContainer from 'components/TooltipContainer';
+import { AppContext } from 'contexts/app-context';
 import CharacterCard from 'pages/CharacterCard';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';

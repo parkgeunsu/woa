@@ -1,7 +1,7 @@
-import { AppContext } from 'App';
 import { Text } from 'components/Atom';
 import { Button } from 'components/Button';
 import { ActionChDisplay } from 'components/Components';
+import { FlexBox } from 'components/Container';
 import { ItemPic, MarkPic } from 'components/ImagePic';
 import ItemGradeColor from 'components/ItemGradeColor';
 import { util } from 'components/Libs';
@@ -10,6 +10,7 @@ import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import TabMenu from 'components/TabMenu';
+import { AppContext } from 'contexts/app-context';
 import 'css/shop.css';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -48,7 +49,7 @@ const ShopPopup = styled.div`
 	position: absolute;
 	left: 20px;
 	right: 20px;
-	bottom: 50px;
+	height: calc(100% - 50px);
 	z-index: 3;
 `;
 const ActionCh = styled.div`
@@ -147,10 +148,10 @@ const ActionCh = styled.div`
 `;
 const ItemContainer = styled.ul`
 	display: flex;
-	border: 3px double ${({color}) => color};
+	border: 5px solid transparent;
 	flex-direction: column;
 	width: 100%;
-	height: 50%;
+	height: 100%;
 	background: rgba(0,0,0,.7);
   border-image: url(${({frameBack}) => frameBack}) 5 round;
 	& > div {
@@ -200,11 +201,8 @@ const ItemHeader = styled.li`
 	padding: 5px;
 	text-align: center;
 	border: 5px solid transparent;
+	background: ${({theme}) => theme.color.sub};
 	border-image: url(${({frameBack}) => frameBack}) 5 round;
-	.item_name {
-		color: ${({ color }) => color};
-		text-shadow: -1px -1px 1px rgba(255,255,255,.5), 1px 1px 1px #000;
-	}
 `;
 const ItemFix = styled.li`
 	display: flex;
@@ -261,6 +259,7 @@ const ItemList = styled.li`
 				return `
 					margin: 0 0 5px 0;
 					justify-content: space-between;
+					flex-direction: row;
 				`;
 			case 'set': 
 				return `
@@ -270,12 +269,16 @@ const ItemList = styled.li`
 			default: 
 				return `
 					margin: 10px 0 0 0;
+					flex-direction: column;
 				`;
 			}
 	}}
-	flex-direction: column;
 	.item_title{margin:0 0 5px 0;font-size:0.75rem;color:#ddd;}
-	.item_effs{display:flex;align-items:center;margin:0 0 5px 5px;color:#2f73ff;font-weight:600;}
+	.item_effs{
+		display:flex;
+		align-items:center;
+		margin:0 5px 5px 5px;
+		color:#2f73ff;font-weight:600;}
 	.item_effs.add{color:#ffac2f;}
 	.item_effs.hole{color:#e14040;}
 	.item_effs span{display:block;font-weight:600;}
@@ -284,7 +287,10 @@ const ItemList = styled.li`
 	.item_effs .add{margin:0 5px 0 0;color:#ffac2f;}
 	.item_effs .hole{color:#e14040;}
 	.item_effs .total{flex:1;text-align:right;font-size:0.938rem;color:#fff;}
-	.item_slot{display:flex;margin:5px 0 0 0;align-items:center;}
+	.item_slot{
+		display:flex;
+		align-items:center;
+	}
 	.item_slot .item_holes{margin:0 0 5px 0;}
 	.item_slot .item_holes .item_holeback {
 		display:inline-block;background-image:radial-gradient(at 50%, #000 30%, #888 100%);
@@ -448,8 +454,8 @@ const ShopFooter = ({
 	return <>
 		{typeof selectedItem?.gameItem?.part === 'number' && (
 			<>
-				<ItemHeader frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color?.[selectedItem.saveItemData?.grade]} flex-center="true">
-					<span className="item_name" dangerouslySetInnerHTML={{__html: `${selectedItem.saveItemData?.colorantSet ? util.getColorant(selectedItem.saveItemData.colorantSet, gameData).na?.[lang] || "" : ''} ${selectedItem.saveItemData?.modifier?.[lang] || ""} ${selectedItem.gameItem?.na?.[lang] || ""}`}}></span>
+				<ItemHeader frameBack={imgSet.etc.frameChBack} flex-center="true">
+					<Text code="t2" color={gameData.itemGrade.color?.[selectedItem.saveItemData?.grade]} dangerouslySetInnerHTML={{__html: `${selectedItem.saveItemData?.colorantSet ? util.getColorant(selectedItem.saveItemData.colorantSet, gameData).na?.[lang] || "" : ''} ${selectedItem.saveItemData?.modifier?.[lang] || ""} ${selectedItem.gameItem?.na?.[lang] || ""}`}}></Text>
 				</ItemHeader>
 				<ItemFix color="select2">
 					<ItemGradeColor part={selectedItem.gameItem?.part} grade={gameData.itemGrade.txt_e?.[selectedItem.saveItemData?.grade]?.toLowerCase()} sealed={selectedItem.saveItemData?.sealed} size="80" onClick={() => {
@@ -527,34 +533,36 @@ const ShopFooter = ({
 						})}
 					</ItemList>
 					<div style={{width:"100%"}} className="scroll-y">
-						{selectedItem.saveItemData.baseEff.length > 0 && (
-							<ItemList className="item_list">
-								<div className="item_title">{gameData.msg.itemInfo.basicEffect[lang]}</div>
-								{selectedItem.saveItemData.baseEff.map((data, idx) => {
-									const grade = selectedItem.saveItemData.grade > 3 ? 3 : selectedItem.saveItemData.grade - 1;
-									return (
-										<div key={idx} className="item_effs">{`${util.getEffectType(data.type, lang)} ${selectedItem.saveItemData.sealed ? data.num : data.num[grade]}`}</div>
-									) 
-								})}
-							</ItemList>
-						)}
-						{selectedItem.saveItemData.addEff.length > 0 && (
-							<ItemList className="item_list">
-								<div className="item_title">{gameData.msg.itemInfo.addEffect[lang]}</div>
-								{selectedItem.saveItemData.addEff.map((data, idx) => {
-									const grade = selectedItem.saveItemData.grade > 3 ? 3 : selectedItem.saveItemData.grade - 1;
-									if (data.type === 100) {
+						<FlexBox direction="row" justify="space-between" alignItems="flex-start">
+							{selectedItem.saveItemData.baseEff.length > 0 && (
+								<ItemList style={{flex: 1}}>
+									<div className="item_title">{gameData.msg.itemInfo.basicEffect[lang]}</div>
+									{selectedItem.saveItemData.baseEff.map((data, idx) => {
+										const grade = selectedItem.saveItemData.grade > 3 ? 3 : selectedItem.saveItemData.grade - 1;
 										return (
-											<div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${gameData.skill[data.skIdx].na[lang]} LV.${data.skLv}`}</div>
-										)
-									} else {
-										return (
-											<div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
-										)
-									}
-								})}
-							</ItemList>
-						)}
+											<div key={idx} className="item_effs">{`${util.getEffectType(data.type, lang)} ${selectedItem.saveItemData.sealed ? data.num : data.num[grade]}`}</div>
+										) 
+									})}
+								</ItemList>
+							)}
+							{selectedItem.saveItemData.addEff.length > 0 && (
+								<ItemList style={{flex: 1}}>
+									<div className="item_title">{gameData.msg.itemInfo.addEffect[lang]}</div>
+									{selectedItem.saveItemData.addEff.map((data, idx) => {
+										const grade = selectedItem.saveItemData.grade > 3 ? 3 : selectedItem.saveItemData.grade - 1;
+										if (data.type === 100) {
+											return (
+												<div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${gameData.skill[data.skIdx].na[lang]} LV.${data.skLv}`}</div>
+											)
+										} else {
+											return (
+												<div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
+											)
+										}
+									})}
+								</ItemList>
+							)}
+						</FlexBox>
 						{selectedItem.gameItem.set !== 0 && (<ItemList type="set" className="item_list">
 							<div className="item_setNa">{gameData.items.set_type[selectedItem.gameItem.set].na}</div>
 						</ItemList>
@@ -565,8 +573,8 @@ const ShopFooter = ({
 		)}
 		{selectedItem.gameItem?.imgCate === 'itemHole' && (
 			<>
-				<ItemHeader frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[selectedItem.saveItemData.grade]} flex-center="true">
-					<span className="item_name" dangerouslySetInnerHTML={{__html: `${selectedItem.gameItem.na[lang]}`}}></span>
+				<ItemHeader frameBack={imgSet.etc.frameChBack} flex-center="true">
+					<Text code="t2" color={gameData.itemGrade.color[selectedItem.saveItemData.grade]} dangerouslySetInnerHTML={{__html: `${selectedItem.gameItem.na[lang]}`}}></Text>
 				</ItemHeader>
 				<ItemFix color="select1">
 					<ItemGradeColor grade={gameData.itemGrade.txt_e[selectedItem.saveItemData.grade || selectedItem.gameItem.grade].toLowerCase()} sealed={selectedItem.saveItemData?.sealed} size="80" onClick={() => {
@@ -604,8 +612,8 @@ const ShopFooter = ({
 		)}
 		{(selectedItem.gameItem?.imgCate === 'itemUpgrade' || selectedItem.gameItem?.imgCate === 'itemMaterial' || selectedItem.gameItem?.imgCate === 'itemEtc') && (
 			<>
-				<ItemHeader frameBack={imgSet.etc.frameChBack} color={gameData.itemGrade.color[selectedItem.saveItemData.grade]} flex-center="true">
-					<span className="item_name" dangerouslySetInnerHTML={{__html: `${selectedItem.gameItem.na[lang]}`}}></span>
+				<ItemHeader frameBack={imgSet.etc.frameChBack} flex-center="true">
+					<Text code="t2" rgbColor={gameData.itemGrade.color[selectedItem.saveItemData.grade]} dangerouslySetInnerHTML={{__html: `${selectedItem.gameItem.na[lang]}`}}></Text>
 				</ItemHeader>
 				<ItemFix color="select1">
 					<ItemGradeColor grade={gameData.itemGrade.txt_e[selectedItem.saveItemData.grade || selectedItem.gameItem.grade].toLowerCase()} size="80" onClick={() => {
@@ -1699,7 +1707,7 @@ const InvenShop = ({
 				{itemPopup && selectItem[selectItemNum]?.saveItemData && Object.keys(selectItem[selectItemNum]?.saveItemData).length !== 0 && <ShopPopup onClick={() => {
 					setItemPopup(false);
 				}}>
-					<ItemContainer color={selectItemArr[selectItemNum]} className={`item_select item_select items`} itemSelect="select">
+					<ItemContainer frameBack={imgSet.etc.frameChBack} className={`item_select item_select items`} itemSelect="select">
 						<ShopFooter 
 							selectItem={selectItem}
 							selectItemArr={selectItemArr}

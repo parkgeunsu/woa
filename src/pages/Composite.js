@@ -1,4 +1,3 @@
-import { AppContext } from 'App';
 import { ActionChDisplay } from 'components/Components';
 import { ItemPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
@@ -9,6 +8,7 @@ import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import TabMenu from 'components/TabMenu';
+import { AppContext } from 'contexts/app-context';
 import 'css/combineItem.css';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';

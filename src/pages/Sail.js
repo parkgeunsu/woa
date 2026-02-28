@@ -1,5 +1,5 @@
-import { AppContext } from 'App';
 import { util } from 'components/Libs';
+import { AppContext } from 'contexts/app-context';
 import 'css/map.css';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';

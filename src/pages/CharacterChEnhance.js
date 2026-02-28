@@ -1,4 +1,4 @@
-// import { AppContext } from 'App';
+// import { AppContext } from 'contexts/app-context'
 // import React, { useContext } from 'react';
 import frameChBack from 'images/frame/frame_chback.png';
 import styled from 'styled-components';

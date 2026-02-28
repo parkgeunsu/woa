@@ -1,7 +1,7 @@
-import { AppContext } from 'App';
 import { Prices } from 'components/Components';
 import { FlexBox } from 'components/Container';
 import ModalContainer from 'components/ModalContainer';
+import { AppContext } from 'contexts/app-context';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 

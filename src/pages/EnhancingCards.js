@@ -1,4 +1,3 @@
-import { AppContext } from 'App';
 import { IconPic, ItemPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Modal from 'components/Modal';
@@ -6,6 +5,7 @@ import ModalContainer from 'components/ModalContainer';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import TabMenu from 'components/TabMenu';
+import { AppContext } from 'contexts/app-context';
 import 'css/itemEnhancement.css';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';

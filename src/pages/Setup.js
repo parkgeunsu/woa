@@ -1,7 +1,7 @@
-import { AppContext } from 'App';
 import { FlexBox } from 'components/Container';
 import { RadioBox } from 'components/Input';
 import { ListItem, ListWrap } from 'components/List';
+import { AppContext } from 'contexts/app-context';
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 

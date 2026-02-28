@@ -1,4 +1,3 @@
-import { AppContext } from 'App';
 import { Button } from 'components/Button';
 import { FlexBox } from 'components/Container';
 import { IconPic } from 'components/ImagePic';
@@ -7,6 +6,7 @@ import Modal from 'components/Modal';
 import ModalContainer from 'components/ModalContainer';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
+import { AppContext } from 'contexts/app-context';
 import React, { useContext, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
