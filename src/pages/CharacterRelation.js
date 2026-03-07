@@ -15,8 +15,12 @@ const Wrap = styled(FlexBox)`
   padding: 25px 20px 20px;
   box-sizing: border-box;
 `;
-const RelationWrap = styled.div``;
+const BiographyWrap = styled.div``;
 const RelationName = styled(Text)`
+  width: 100%;
+  text-align: left;
+`;
+const ScenarioName = styled(Text)`
   width: 100%;
   text-align: left;
 `;
@@ -73,9 +77,20 @@ const ChRelation = styled.div`
 `;
 const ChDescription = styled(Text)`
   padding: 10px;
-  text-align: left;
+  width: calc(100% - 20px);
 `;
-const Relations = styled(FlexBox)`
+const RelationWrap = styled(FlexBox)`
+  position: relative;
+  margin: 0 auto;
+  padding: 10px;
+  width: calc(100% - 20px);
+  border: 3px double rgba(255,255,255,.5);
+  border-radius: 5px;
+  background: rgba(0,0,0,.5);
+  overflow: hidden;
+  box-sizing: border-box;
+`;
+const ScenarioWrap = styled(FlexBox)`
   position: relative;
   margin: 0 auto;
   padding: 10px;
@@ -87,6 +102,13 @@ const Relations = styled(FlexBox)`
   box-sizing: border-box;
 `;
 const Relation = styled(FlexBox)`
+  position: relative;
+  margin: 0 0 15px 0;
+  &:last-of-type {
+    margin: 0;
+  }
+`;
+const Scenario = styled(FlexBox)`
   position: relative;
   margin: 0 0 15px 0;
   &:last-of-type {
@@ -154,7 +176,7 @@ const CharacterRelation = ({
   return (
     <>
       <Wrap className="relation">
-        <InfoGroup pointTitle={chData?.na1[lang]} title={`${gameData?.msg?.grammar?.conjunction[lang]} ${gameData?.msg?.menu?.relation[lang]}`} guideClick={() => {
+        <InfoGroup pointTitle={`Lv.${saveCh.lv} ${chData?.na1[lang]}`} title={`${gameData?.msg?.grammar?.conjunction[lang]} ${gameData?.msg?.menu?.biography[lang]}`} guideClick={() => {
           setPopupType('guide');
           setPopupOn(true);
           setPopupInfo({
@@ -162,19 +184,19 @@ const CharacterRelation = ({
             lang: lang,
           });
         }}>
-          <RelationWrap className="scroll-y">
+          <BiographyWrap className="scroll-y">
             <ChRelation direction="column" justifyContent="flex-start">
-              <Relations direction="column">
-                {relationStatus.length > 0 ? relationStatus.map((rtStatus) => {
+              <RelationWrap direction="column">
+                {relationStatus.length > 0 ? relationStatus.map((rtStatus, idx) => {
                   const { skillText } = util.getSkillText({
                     skill: rtStatus.data,
                     lv: 0,
                     lang: lang,
                   });
                   return (
-                    <Relation direction="column" key={`chRelation_${rtStatus.id}`}>
-                      <RelationName code="t2" color="main" weight="600">{rtStatus.data?.na?.[lang]}</RelationName>
-                      <RelationTxt code="t1" color="main" align="left" dangerouslySetInnerHTML={{ __html: skillText }}>
+                    <Relation direction="column" key={`chRelation_${idx}`}>
+                      <RelationName code="t1"  color="main" weight="600">{rtStatus.data?.na?.[lang]}</RelationName>
+                      <RelationTxt code="t0"  color="main" align="left" dangerouslySetInnerHTML={{ __html: skillText }}>
                       </RelationTxt>
                       <RelationMember>
                         {rtStatus.memberStatus.map((mStatus, idx_) => (
@@ -195,8 +217,8 @@ const CharacterRelation = ({
                 }) : (
                   <Text code="t1" color="main" weight="600">{gameData?.msg?.sentence?.nodata_relation?.[lang]}</Text>
                 )}
-              </Relations>
-              <Relations style={{ margin: "10px auto 0"}} direction="column">
+              </RelationWrap>
+              <ScenarioWrap style={{ margin: "10px auto 0"}} direction="column">
                 {chScenario ? chScenario.map((scPath, scIdx) => {
                   const scenarioData = scPath.split("-");
                   const scenarioInfo = gameData?.scenario?.[scenarioData[0]]?.[scenarioData[1]]?.scenarioList?.[scenarioData[2]];
@@ -204,8 +226,8 @@ const CharacterRelation = ({
                   if (!scenarioInfo) return null;
 
                   return (
-                    <Relation direction="column" key={`relations_${scPath}`}>
-                      <RelationName code="t2" color="main" weight="600">{scenarioInfo.name?.[lang]}</RelationName>
+                    <Scenario direction="column" key={`relations_${scPath}`}>
+                      <ScenarioName font="point" code="t2" color="main" weight="600">{scenarioInfo.name?.[lang]}</ScenarioName>
                       {scenarioInfo.stage?.map((stageData, sIdx) => {
                         const isOpen = !!openStages[`${scIdx}_${sIdx}`];
                         return (
@@ -232,16 +254,16 @@ const CharacterRelation = ({
                           </FlexBox>
                         )
                       })}
-                    </Relation>
+                    </Scenario>
                   )
                 }) :
                 <Text code="t1" color="main" weight="600">{gameData?.msg?.sentence?.nodata_scenario?.[lang]}</Text>}
-              </Relations>
-              <ChDescription code="t1" color="main" isDynamic={true}>
+              </ScenarioWrap>
+              <ChDescription font="point" code="t1" color="main" align="left" isDynamic={true}>
                 {chData?.txt[lang]}
               </ChDescription>
             </ChRelation>
-          </RelationWrap>
+          </BiographyWrap>
         </InfoGroup>
       </Wrap>
       <PopupContainer>

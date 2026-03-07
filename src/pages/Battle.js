@@ -5252,9 +5252,7 @@ const Battle = ({
 								}}>
 									{isEquip ? (
 										<ItemGradeColor part={itemData.part} grade={gameData.itemGrade?.txt_e?.[itemData.grade]?.toLowerCase()}>
-											<ItemPic type="equip">
-												<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg?.[itemData.display], itemData.color || [], itemData.id)}}></svg>
-											</ItemPic>
+											<ItemPic type="equip" pic="equip" idx={itemData.display} />
 										</ItemGradeColor>
 									) : (
 										<ItemPic pic="itemEtc" type={item.type} idx={itemData.display}>

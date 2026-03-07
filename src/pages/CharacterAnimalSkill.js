@@ -197,7 +197,7 @@ const CharacterAnimalSkill = ({
   return (
     <>
       <Wrap className="skillAnimal scroll-y">
-        <InfoGroup pointTitle={chName} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.animalSkill[lang]}`} guideClick={() => {
+        <InfoGroup pointTitle={`Lv.${saveCh.lv} ${chName}`} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.animalSkill[lang]}`} guideClick={() => {
           setPopupType('guide');
           setPopupOn(true);
           setPopupInfo({

@@ -3,7 +3,6 @@ import { FlexBox } from "components/Container";
 import { IconPic, ItemPic } from "components/ImagePic";
 import InfoGroup from "components/InfoGroup";
 import ItemGradeColor from "components/ItemGradeColor";
-import { util } from "components/Libs";
 import Msg from "components/Msg";
 import MsgContainer from "components/MsgContainer";
 import Popup from "components/Popup";
@@ -83,7 +82,7 @@ const ItemList = styled.li`
     left: 2px;
     right: 2px;
     bottom: 2px;
-    font-size: 0.688rem;
+   font-size: 0.688rem;
     text-align: center;
     z-index: 1;
   }
@@ -98,46 +97,23 @@ const ItemList = styled.li`
   .pic.impossible svg {
     filter: invert(1);
   }
-  .hole {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 3;
-    pointer-events: none;
-  }
-  .hole .hole_slot {
-    position: absolute;
-    width: 25%;
-    padding-top: 25%;
+`;
+const Hole = styled(FlexBox)`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  pointer-events: none;
+  .hole_slot {
+    width: 15%;
+    padding-top: 15%;
     border-radius: 50%;
-    border: 1px solid #000;
     background: rgba(0, 0, 0, 0.7);
   }
-  .hole .hole_slot.fixed {
+  .hole_slot.fixed {
     background: rgba(255, 172, 47, 0.7);
-  }
-  .hole .hole_slot.hole0 {
-    left: 0;
-    top: 0;
-  }
-  .hole .hole_slot.hole1 {
-    right: 0;
-    top: 0;
-  }
-  .hole .hole_slot.hole2 {
-    right: 0;
-    bottom: 0;
-  }
-  .hole .hole_slot.hole3 {
-    left: 0;
-    bottom: 0;
-  }
-  .hole .hole_slot.hole4 {
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
   }
 `;
 const EmptyIconPic = styled(IconPic)`
@@ -208,14 +184,61 @@ const StateList = styled.li`
 const StateText = styled(Text)`
   margin: 0 10px 0 0;
 `;
+const ItemBox = styled(FlexBox)`
+  display: ${({ isShow }) => (isShow ? "flex" : "none")};
+  position: absolute;
+  top: 0;
+  right: calc(23% - 2px);
+  bottom: 15%;
+  left: calc(23% - 2px);
+  width: auto;
+  height: auto;
+  border: 5px solid transparent;
+  background: rgba(0,0,0,.8);
+  border-image: url(${({frameBack}) => frameBack}) 5 round;
+  overflow-y: auto;
+  z-index:2;
+`;
+const ItemBoxNoList = styled(FlexBox)`
+  padding: 20px;
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
+`;
+const ItemBoxList = styled.div`
+  position: relative;
+  padding-top: calc(25% - 5px);
+  width: calc(25% - 5px);
+  height: 0;
+  border: 1px solid ${({ gradeColor }) => gradeColor || "#fff"};
+  .txt {
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+   font-size: 0.688rem;
+    text-align: center;
+    z-index: 1;
+  }
+  .pic {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    width: 100%;
+  }
+  .pic.impossible svg {
+    filter: invert(1);
+  }
+`;
 const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
   const context = useContext(AppContext);
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
-  // const imgSet = React.useMemo(() => {
-  //   return context.images;
-  // }, [context]);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
@@ -244,8 +267,8 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
             : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx].kg;
       }
     });
-    
-    const maxKg = Math.floor(chData.st1 / 0.3 + (saveCh.kg / gameData.animal_size.kg[chData.animal_type][1] - 1) * 100) / 10;
+    const chGrade = saveCh.grade - gameData.ch[saveCh.idx].grade;
+    const maxKg = Math.floor((chData.st1 / 0.3 + (saveCh.kg / gameData.animal_size.kg[chData.animal_type][1] - 1) * 100) / 10 * gameData.addGradeArr[chGrade + 1]);
     
     return {
       current: currentKg,
@@ -266,10 +289,12 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
 
+  const [itemBoxShow, setItemBoxShow] = useState(false);
+  const [possibleEquipItem, setPossibleEquipItem] = useState([]);
   const handlePopup = useCallback(
-    (itemType, itemIdx, itemSaveSlot, itemPart, itemGrade, itemWeaponType) => {
+    ({itemType, itemIdx, itemSaveSlot, itemPart, itemGrade, itemWeaponType}) => {
       if (itemType) {
-        const saveItemData = saveItems[itemSaveSlot];
+        const saveItemData = itemType === "hequip" ? saveData.items.equip[itemSaveSlot] : saveItems[itemSaveSlot];
         setPopupType(itemType);
         const itemsGrade = itemGrade < 5 ? 0 : itemGrade - 5;
         let gameItemData = "";
@@ -307,7 +332,7 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
     <>
       <Wrap className="items">
         <InfoGroup
-          pointTitle={chData.na1[lang]}
+          pointTitle={`Lv.${saveCh.lv} ${chData.na1[lang]}`}
           title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.equipment[lang]}`}
           guideClick={() => {
             setPopupType("guide");
@@ -365,15 +390,16 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
                       <ItemList
                         key={`equip${idx}`}
                         gradeColor={gameData.itemGrade.color[data.grade]}
-                        onClick={() => {
-                          handlePopup(
-                            "equip",
-                            data.idx,
-                            idx,
-                            data.part,
-                            data.grade,
-                            data.weaponType
-                          );
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handlePopup({
+                            itemType: "equip",
+                            itemIdx: data.idx,
+                            itemSaveSlot: idx,
+                            itemPart: data.part,
+                            itemGrade: data.grade,
+                            itemWeaponType: data.weaponType
+                          });
                         }}
                       >
                         <ItemGradeColor
@@ -382,22 +408,8 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
                             data.grade
                           ].toLowerCase()}
                         >
-                          <ItemPic type="equip" className="pic">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="100px"
-                              height="100px"
-                              viewBox="0 0 100 100"
-                              dangerouslySetInnerHTML={{
-                                __html: util.setItemColor(
-                                  gameData.itemsSvg[items.display],
-                                  data.color,
-                                  data.svgColor || data.id
-                                ),
-                              }}
-                            ></svg>
-                          </ItemPic>
-                          <span className="hole" flex-center="true">
+                          <ItemPic type="equip" pic="equip" idx={items.display} />
+                          <Hole alignItems="flex-end" justifyContent="space-between">
                             {itemsHole.map((holeData, holeidx) => {
                               const holePic =
                                 holeData !== 0
@@ -405,7 +417,7 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
                                   : 0;
                               return (
                                 <span
-                                  className={`hole_slot hole${holeidx} ${
+                                  className={`hole_slot ${
                                     holePic !== 0 ? "fixed" : ""
                                   }`}
                                   key={`hole${holeidx}`}
@@ -419,7 +431,7 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
                                 </span>
                               );
                             })}
-                          </span>
+                          </Hole>
                         </ItemGradeColor>
                       </ItemList>
                     );
@@ -429,7 +441,13 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
                     
                     if (iconIdx !== undefined) {
                       return (
-                        <ItemList empty={true} key={idx}>
+                        <ItemList empty={true} key={idx} onClick={() => {
+                          const equipType = gameData.animal_type[animalIdx].equip[idx];
+                          setItemBoxShow(true);
+                          setPossibleEquipItem(saveData?.items?.equip.map((value, index) => ({value, index})).filter((itemData) => {
+                            return itemData.value.part === equipType;
+                          }));
+                        }}>
                           <EmptyIconPic type="item" pic="icon100" idx={iconIdx} />
                         </ItemList>
                       );
@@ -443,8 +461,8 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
                 {gameData.battleStateName.map((bData, idx) => {
                   return (
                     <StateList key={idx} className={bData}>
-                      <StateText code="t1" color="land3">
-                        {gameData.msg.state[bData].en}
+                      <StateText code="t2" color="main">
+                        {gameData.msg.state[bData][lang]}
                       </StateText>
                       <Text code="t4" color="set">
                         {(saveCh["bSt" + idx] || 0) + (saveCh["iSt" + idx] || 0)}
@@ -454,6 +472,52 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
                 })}
               </ul>
             </State>
+            <ItemBox isShow={itemBoxShow} frameBack={imgSet.etc.frameChBack} justifyContent="flex-start" alignItems="flex-start" alignContent="flex-start"flexWrap="wrap" onClick={() => {
+              setItemBoxShow(false);
+            }}>
+              {possibleEquipItem.length > 0 ? possibleEquipItem.map((itemData, idx) => {
+                const itemDataValue = itemData.value;
+                const itemsGrade = itemDataValue.grade < 5 ? 0 : itemDataValue.grade - 5;
+                const items = itemDataValue.part === 3 ? gameItem.equip[itemDataValue.part][itemDataValue.weaponType][itemsGrade][itemDataValue.idx] : gameItem.equip[itemDataValue.part][0][itemsGrade][itemDataValue.idx];
+                const itemsHole = itemDataValue.hole;
+                const equipPossible = (() => {
+                  let chk;
+                  if (itemData.sealed) {
+                    chk = true;
+                  } else {
+                    chk = !items.limit[saveCh.job];
+                  }
+                  return chk;
+                })();
+                return items && (
+                  <ItemBoxList key={`hequip${idx}`} onClick={(e) => {
+                    e.stopPropagation();
+                    handlePopup({
+                      itemType: 'hequip',
+                      itemIdx: itemDataValue.idx,
+                      itemSaveSlot: itemData.index,
+                      itemPart: itemDataValue.part,
+                      itemGrade: itemDataValue.grade,
+                      itemWeaponType: itemDataValue.weaponType
+                    });
+                  }} data-itemnum={`equip_${itemDataValue.idx}`}>
+                    <ItemGradeColor part={itemDataValue.part} grade={gameData.itemGrade.txt_e[itemDataValue.grade].toLowerCase()} sealed={itemDataValue.sealed} impossible={equipPossible}>
+                      <ItemPic type="equip" pic="equip" idx={items.display} />
+                      <Hole alignItems="flex-end" justifyContent="space-between">
+                        {itemsHole.map((holeData, holeidx) => {
+                          const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
+                          return (
+                            <span className={`hole_slot ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
+                              <ItemPic type="hole" className="pic" pic="itemEtc" idx={holePic} />
+                            </span>
+                          );
+                        })}
+                      </Hole>
+                    </ItemGradeColor>
+                  </ItemBoxList>
+                )
+              }) : <ItemBoxNoList justifyContent="center" alignItems="center"><Text code="t2" color="main">{gameData.msg.sentence.noWearableItems[lang]}</Text></ItemBoxNoList>}
+            </ItemBox>
           </EquipItems>
         </InfoGroup>
       </Wrap>

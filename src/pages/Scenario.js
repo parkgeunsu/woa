@@ -517,7 +517,7 @@ const ScenarioList = ({
                       setTooltip([gameData.msg.title?.['gold']?.[lang] || "Gold", util.comma(dropFirst.num), gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic="itemEtc" type="etc" idx={0}>
+                      <ItemPic isAbsolute pic="itemEtc" type="etc" idx={0}>
                         {<span className="display_text">{dropFirst.num}</span>}
                       </ItemPic>
                     </span>
@@ -535,7 +535,7 @@ const ScenarioList = ({
                         <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], items.color, items.svgColor || items.id)}}>
                         </svg>
                       </span>
-                      <ItemPic className="pic" pic="itemEtc" type={dropType} idx={items.display} />
+                      <ItemPic isAbsolute pic="itemEtc" type={dropType} idx={items.display} />
                     </span>
                   } else if (dropFirst.type === 'Etc') {
                     const dropType = dropFirst.type.toLowerCase(),
@@ -546,7 +546,7 @@ const ScenarioList = ({
                       setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic="itemEtc" type={dropType} idx={items.display}>
+                      <ItemPic isAbsolute pic="itemEtc" type={dropType} idx={items.display}>
                         {items.displayText && <span className="display_text">{items.displayText}</span>}
                       </ItemPic>
                     </span>
@@ -559,7 +559,7 @@ const ScenarioList = ({
                       setTooltip([items.na?.[lang] || "", dropFirst.num, gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic="itemEtc" type={dropType} idx={items.display}>
+                      <ItemPic isAbsolute pic="itemEtc" type={dropType} idx={items.display}>
                         {<span className="display_text">{dropFirst.num}</span>}
                       </ItemPic>
                     </span>
@@ -572,7 +572,7 @@ const ScenarioList = ({
                       setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic="itemEtc" type={dropType} idx={items.display} />
+                      <ItemPic isAbsolute pic="itemEtc" type={dropType} idx={items.display} />
                     </span>
                   } else if (dropFirst.type === 'Hole'){
                     const dropType = dropFirst.type.toLowerCase(),
@@ -583,7 +583,7 @@ const ScenarioList = ({
                       setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic="itemEtc" type={dropType} idx={items.display} />
+                      <ItemPic isAbsolute pic="itemEtc" type={dropType} idx={items.display} />
                     </span>
                   } else {
                     return '';
@@ -599,7 +599,7 @@ const ScenarioList = ({
                       setTooltip([gameData.msg.title?.['gold']?.[lang] || "Gold", util.comma(dropAlways.num), '100%']);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic="itemEtc" type="etc"
+                      <ItemPic isAbsolute pic="itemEtc" type="etc"
                        idx={0}>
                         {<span className="display_text">{dropAlways.num}</span>}
                       </ItemPic>
@@ -613,10 +613,7 @@ const ScenarioList = ({
                       setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
                       setTooltipOn(true);
                     }}>
-                      <span className="pic">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], items.color, items.svgColor || items.id)}}>
-                        </svg>
-                      </span>
+                      <ItemPic isAbsolute type="equip" pic="equip" idx={items.display} />
                     </span>
                   } else if (dropAlways.type === 'Etc') {
                     const dropType = dropAlways.type.toLowerCase(),
@@ -627,7 +624,7 @@ const ScenarioList = ({
                       setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic="itemEtc" type={dropType} idx={items.display}>
+                      <ItemPic isAbsolute pic="itemEtc" type={dropType} idx={items.display}>
                         {items.displayText && <span className="display_text">{items.displayText}</span>}
                       </ItemPic>
                     </span>
@@ -640,7 +637,7 @@ const ScenarioList = ({
                       setTooltip([items.na?.[lang] || "", dropAlways.num, dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic="itemEtc" type={dropType} idx={items.display}>
+                      <ItemPic isAbsolute pic="itemEtc" type={dropType} idx={items.display}>
                         {<span className="display_text">{dropAlways.num}</span>}
                       </ItemPic>
                     </span>
@@ -653,7 +650,7 @@ const ScenarioList = ({
                       setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
                       setTooltipOn(true);
                     }}>
-                      <ItemPic className="pic" pic="itemEtc" type={dropType} idx={items.display} />
+                      <ItemPic isAbsolute pic="itemEtc" type={dropType} idx={items.display} />
                     </span>
                   } else if (dropAlways.type === 'Hole'){
                     const dropType = dropAlways.type.toLowerCase(),

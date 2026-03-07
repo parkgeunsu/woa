@@ -1,3 +1,4 @@
+import { Text } from 'components/Atom';
 import GuideQuestion from 'components/GuideQuestion';
 import styled from 'styled-components';
 
@@ -12,7 +13,6 @@ const InfoGroupContainer = styled.dl`
 const InfoTitle = styled.dt`
   padding: 0 0 10px;
   font-size: 1rem;
-  letter-spacing: -1px;
   color: #fff;
   text-align: center;
   strong {
@@ -38,7 +38,7 @@ const InfoGroup = ({
   return (
     <InfoGroupContainer {...rest}>
       <InfoTitle>
-        {pointTitle && <strong>{pointTitle}</strong>} {title}
+        {pointTitle && <Text inline font="point" code="t3" color="main" weight="600">{pointTitle}</Text>} <Text inline code="t1" color="main" weight="600">{title}</Text>
           {hasGuide && 
             <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
               guideClick && guideClick();

@@ -137,25 +137,25 @@ const GachaEffect = styled.div`
 	background: radial-gradient(hsl(9, 100%, 27%) 4%, hsl(9, 100%, 18%) 9%, hsla(9, 100%, 20%, 0) 9%) 0 0, radial-gradient(hsl(9, 100%, 27%) 4%, hsl(9, 100%, 18%) 8%, hsla(9, 100%, 20%, 0) 10%) 50px 50px, radial-gradient(hsla(9, 100%, 30%, 0.8) 20%, hsla(9, 100%, 20%, 0)) 50px 0, radial-gradient(hsla(9, 100%, 30%, 0.8) 20%, hsla(9, 100%, 20%, 0)) 0 50px, radial-gradient(hsla(9, 100%, 20%, 1) 35%, hsla(9, 100%, 20%, 0) 60%) 50px 0, radial-gradient(hsla(9, 100%, 20%, 1) 35%, hsla(9, 100%, 20%, 0) 60%) 100px 50px, radial-gradient(hsla(9, 100%, 15%, 0.7), hsla(9, 100%, 20%, 0)) 0 0, radial-gradient(hsla(9, 100%, 15%, 0.7), hsla(9, 100%, 20%, 0)) 50px 50px, linear-gradient(45deg, hsla(9, 100%, 20%, 0) 49%, hsla(9, 100%, 0%, 1) 50%, hsla(9, 100%, 20%, 0) 70%) 0 0, linear-gradient(-45deg, hsla(9, 100%, 20%, 0) 49%, hsla(9, 100%, 0%, 1) 50%, hsla(9, 100%, 20%, 0) 70%) 0 0;
 	background-color: #300;
 	background-size: 100px 100px;
-	&.grade6:before {
+	&.grade5:before {
 		opacity: 1;
 		background: radial-gradient(hsl(30, 100%, 27%) 4%, hsl(30, 100%, 18%) 9%, hsla(30, 100%, 20%, 0) 9%) 0 0, radial-gradient(hsl(30, 100%, 27%) 4%, hsl(30, 100%, 18%) 8%, hsla(30, 100%, 20%, 0) 10%) 50px 50px, radial-gradient(hsla(30, 100%, 30%, 0.8) 20%, hsla(30, 100%, 20%, 0)) 50px 0, radial-gradient(hsla(30, 100%, 30%, 0.8) 20%, hsla(30, 100%, 20%, 0)) 0 50px, radial-gradient(hsla(30, 100%, 20%, 1) 35%, hsla(30, 100%, 20%, 0) 60%) 50px 0, radial-gradient(hsla(30, 100%, 20%, 1) 35%, hsla(30, 100%, 20%, 0) 60%) 100px 50px, radial-gradient(hsla(30, 100%, 15%, 0.7), hsla(30, 100%, 20%, 0)) 0 0, radial-gradient(hsla(30, 100%, 15%, 0.7), hsla(30, 100%, 20%, 0)) 50px 50px, linear-gradient(45deg, hsla(30, 100%, 20%, 0) 49%, hsla(30, 100%, 0%, 1) 50%, hsla(30, 100%, 20%, 0) 70%) 0 0, linear-gradient(-45deg, hsla(30, 100%, 20%, 0) 49%, hsla(30, 100%, 0%, 1) 50%, hsla(30, 100%, 20%, 0) 70%) 0 0;
 		background-color: #300;
 		background-size: 100px 100px;
 	}
-	&.grade5:before {
+	&.grade4:before {
 		opacity: 1;
 		background: radial-gradient(hsl(279, 100%, 27%) 4%, hsl(279, 100%, 18%) 9%, hsla(279, 100%, 20%, 0) 9%) 0 0, radial-gradient(hsl(279, 100%, 27%) 4%, hsl(279, 100%, 18%) 8%, hsla(279, 100%, 20%, 0) 10%) 50px 50px, radial-gradient(hsla(279, 100%, 30%, 0.8) 20%, hsla(279, 100%, 20%, 0)) 50px 0, radial-gradient(hsla(279, 100%, 30%, 0.8) 20%, hsla(279, 100%, 20%, 0)) 0 50px, radial-gradient(hsla(279, 100%, 20%, 1) 35%, hsla(279, 100%, 20%, 0) 60%) 50px 0, radial-gradient(hsla(279, 100%, 20%, 1) 35%, hsla(279, 100%, 20%, 0) 60%) 100px 50px, radial-gradient(hsla(279, 100%, 15%, 0.7), hsla(279, 100%, 20%, 0)) 0 0, radial-gradient(hsla(279, 100%, 15%, 0.7), hsla(279, 100%, 20%, 0)) 50px 50px, linear-gradient(45deg, hsla(279, 100%, 20%, 0) 49%, hsla(279, 100%, 0%, 1) 50%, hsla(279, 100%, 20%, 0) 70%) 0 0, linear-gradient(-45deg, hsla(279, 100%, 20%, 0) 49%, hsla(279, 100%, 0%, 1) 50%, hsla(279, 100%, 20%, 0) 70%) 0 0;
 		background-color: #300;
 		background-size: 100px 100px;
 	}
-	&.grade4:before {
+	&.grade3:before {
 		opacity: 1;
 		background: radial-gradient(hsl(57, 100%, 27%) 4%, hsl(57, 100%, 18%) 9%, hsla(57, 100%, 20%, 0) 9%) 0 0, radial-gradient(hsl(57, 100%, 27%) 4%, hsl(57, 100%, 18%) 8%, hsla(57, 100%, 20%, 0) 10%) 50px 50px, radial-gradient(hsla(57, 100%, 30%, 0.8) 20%, hsla(57, 100%, 20%, 0)) 50px 0, radial-gradient(hsla(57, 100%, 30%, 0.8) 20%, hsla(57, 100%, 20%, 0)) 0 50px, radial-gradient(hsla(57, 100%, 20%, 1) 35%, hsla(57, 100%, 20%, 0) 60%) 50px 0, radial-gradient(hsla(57, 100%, 20%, 1) 35%, hsla(57, 100%, 20%, 0) 60%) 100px 50px, radial-gradient(hsla(57, 100%, 15%, 0.7), hsla(57, 100%, 20%, 0)) 0 0, radial-gradient(hsla(57, 100%, 15%, 0.7), hsla(57, 100%, 20%, 0)) 50px 50px, linear-gradient(45deg, hsla(57, 100%, 20%, 0) 49%, hsla(57, 100%, 0%, 1) 50%, hsla(57, 100%, 20%, 0) 70%) 0 0, linear-gradient(-45deg, hsla(57, 100%, 20%, 0) 49%, hsla(57, 100%, 0%, 1) 50%, hsla(57, 100%, 20%, 0) 70%) 0 0;
 		background-color: #300;
 		background-size: 100px 100px;
 	}
-	&.grade3:before {
+	&.grade2:before {
 		opacity: 1;
 		background: radial-gradient(hsl(206, 100%, 27%) 4%, hsl(206, 100%, 18%) 9%, hsla(206, 100%, 20%, 0) 9%) 0 0, radial-gradient(hsl(206, 100%, 27%) 4%, hsl(206, 100%, 18%) 8%, hsla(206, 100%, 20%, 0) 10%) 50px 50px, radial-gradient(hsla(206, 100%, 30%, 0.8) 20%, hsla(206, 100%, 20%, 0)) 50px 0, radial-gradient(hsla(206, 100%, 30%, 0.8) 20%, hsla(206, 100%, 20%, 0)) 0 50px, radial-gradient(hsla(206, 100%, 20%, 1) 35%, hsla(206, 100%, 20%, 0) 60%) 50px 0, radial-gradient(hsla(206, 100%, 20%, 1) 35%, hsla(206, 100%, 20%, 0) 60%) 100px 50px, radial-gradient(hsla(206, 100%, 15%, 0.7), hsla(206, 100%, 20%, 0)) 0 0, radial-gradient(hsla(206, 100%, 15%, 0.7), hsla(206, 100%, 20%, 0)) 50px 50px, linear-gradient(45deg, hsla(206, 100%, 20%, 0) 49%, hsla(206, 100%, 0%, 1) 50%, hsla(206, 100%, 20%, 0) 70%) 0 0, linear-gradient(-45deg, hsla(206, 100%, 20%, 0) 49%, hsla(206, 100%, 0%, 1) 50%, hsla(206, 100%, 20%, 0) 70%) 0 0;
 		background-color: #300;
@@ -617,7 +617,7 @@ const Gacha = ({
 										infoRef.current.classList.add('on');
 										popCard(gameData.ch[data.idx]);
 									} else {//카드 열기
-										if (cardGrade > 5) {
+										if (cardGrade > 4) {
 											e.target.classList.add('special');
 										} else {
 											e.target.classList.add('open');
@@ -650,7 +650,7 @@ const Gacha = ({
 						cardRef.current.forEach((el, idx) => {
 							const data = gachaCard[idx];
 							const cardGrade = gameData.ch[data.idx].grade;
-							if (cardGrade > 5) {
+							if (cardGrade > 4) {
 								el.classList.add('special');
 							} else {
 								el.classList.add('open');

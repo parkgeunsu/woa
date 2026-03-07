@@ -82,23 +82,6 @@ const PopupRelationListCh = styled.span`
   background-image:url(${({chDisplay}) => chDisplay});
   background-size:100%;background-position:center -10%;
 `;
-const PopupApplyState = styled.ul`
-  margin: auto auto;
-  width: 80%;
-`;
-const StateList = styled.li`
-  display: flex;
-  margin: 0 0 10px 0;
-  justify-content: space-between;
-  .name{padding:0 0 0 5px;width:22%;font-size:0.688rem;color:#999;text-align:left;}
-  .name b{display:block;font-size:0.875rem;color:#fff;font-weight:600;}
-  .current{width:48%;font-size:1rem;font-weight:600;color:#0b7;text-align:center;letter-spacing:-1px;}
-  .current b{font-size:0.875rem;color:#0b7;text-align:center;}
-  .total{padding:0 5px 0 0;width:30%;font-size:1.5rem;font-weight:600;color:#0b7;text-align:right;}
-  &:last-of-type{
-    margin: 0;
-  }
-`;
 const Img = styled.img.attrs(
   ({imgurl}) => ({
     src: imgurl 
@@ -170,8 +153,8 @@ const PopupItemContainer = styled.ul`
   flex-direction: column;
   align-items: center;
   margin: auto auto;
-  width: 80%;
-  max-height: 80%;
+  width: 90%;
+  max-height: 90%;
   background: rgba(0,0,0,.7);
   border: 5px solid transparent;
   border-image: url(${({frameBack}) => frameBack}) 5 round;
@@ -224,9 +207,6 @@ const PopupItemList = styled.li`
         break;
     }
   }};
-  &.item_eff {
-    padding: 0 10px;
-  }
   &.item_hole {
     padding: 0 10px;
   }
@@ -255,78 +235,78 @@ const PopupItemList = styled.li`
   .item_set_piece:last-of-type {
     margin: 0 0 0 15px;
   }
-  .item_holeback {
-    display: inline-block;
-    background-image: radial-gradient(at 50%, #000 30%, #888 100%);
-    border-radius: 20px;
-    width: 40px;
-    height: 40px;
-    text-align: center;
-  }
   .item_set_piece.on {
     color: #fff;
     font-weight: 600;
   }
 `;
 const PopupItemCoin = styled(FlexBox)``;
-const PopupItemSlot = styled(FlexBox)`
-  .item_holes {
-    margin: 0;
-  }
+const PopupItemSlot = styled(FlexBox)``;
+const PopupItemHoleBack = styled(FlexBox)`
+  display: inline-block;
+  border-radius: 20px;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  background-image: ${({fixed}) => fixed ? `
+    radial-gradient(at 50%, #000 30%, rgba(255, 172, 47, 0.7) 100%);
+  ` : `
+    radial-gradient(at 50%, #000 30%, #888 100%)
+  `}
 `;
-const PopupItemName = styled.span`
+const PopupItemName = styled(Text)`
   color: ${({ grade }) => grade};
   text-shadow: -1px -1px 1px rgba(255,255,255,.5), 1px 1px 1px #000;
-  line-height:1.2;font-size:0.938rem;font-weight:600;
+  line-height:1.2;
 `;
-const PopupItemInfo = styled.div`
-  display: flex;
-  flex-direction: column;
+const PopupItemInfo = styled(FlexBox)`
   margin: 0 0 0 10px;
-  flex: 1;
-  span{display:inline-block;vertical-align:middle;}
-  .item_top{display:flex;justify-content:space-between;margin:0 0 15px 0;color:#bbb;font-size:0.75rem;}
-  .item_bottom{margin:0 0 10px 0;}
-  .item_description{
-    flex:1;
-    font-family:serif;
-    line-height:1.2;
-    font-size:0.688rem;
-    color:#d3a859;
-    font-weight:600;
-  }
-  .item_kg{text-align:right;font-weight:600;color:#bbb;}
-  .item_grade {
-    color: ${({ color }) => color};
-  }
+  width: calc(100% - 10px);
+`;
+const PopupItemTop = styled(FlexBox)`
+  height: auto;
+`;
+const PopupItemGrade = styled(Text)`
+  color: ${({ color }) => color};
+`;
+const PopupItemType = styled(Text)``;
+const PopupItemDescription = styled(Text)`
+  color: ${({ color }) => color};
+  line-height: 1.2;
+  text-align: left;
+`;
+const PopupItemKg = styled(Text)`
+  width: 100%;
+  color: ${({ color }) => color};
 `;
 const PopupItemTitle = styled(Text)`
   margin: 0 0 5px 0;
+  line-height: 1;
 `;
-const PopupItem = styled.div`
-  position: relative;
-  width: 80px;
-  height: 80px;
-  border: 5px double #c80;
-  &:after{
+/*
+&:after{
     display:block;
     content:'';
     width:100%;
     height:100%;
   }
+*/
+const PopupItem = styled.div`
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border: 5px double #c80;
   ${({sealed}) => sealed ? `
-    svg {
-      filter: brightness(0.3) drop-shadow(0px 0px 1px #fff);
-    }
+    filter: brightness(0.3) drop-shadow(0px 0px 1px #fff);
     &:before{
-        content: '?';
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%,-50%);
-        z-index: 1;
-        font-size: 2.5rem;
-      }
+      content: '?';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      z-index: 1;
+      font-size: 2.5rem;
+    }
   `: ''}
   ${({part, grade}) => {
     if (grade) {
@@ -409,48 +389,17 @@ const PopupItem = styled.div`
     }
   }}
 `;
-const PopupItemEffs = styled.div`
-  display: flex;
-  align-items: center;
+const PopupItemEffs = styled(FlexBox)`
   margin: 0 0 5px 15px;
-  color: #2f73ff;
-  font-weight: 600;
-  &.add {
-    color: #ffac2f;
-  }
-  &.hole {
-    color: #e14040;
-  }
-  span {
-    display: block;
-    font-weight: 600;
-  }
-  .cate {
-    margin: 0 10px 0 0;
-    color: #00a90c;
-  }
-  .base {
-    margin: 0 5px 0 0;
-    color: #2f73ff;
-  }
-  .add {
-    margin: 0 5px 0 0;
-    color: #ffac2f;
-  }
-  .hole {
-    color: #e14040;
-  }
-  .total {
-    flex: 1;
-    text-align: right;
-    font-size: 0.938rem;
-    color: #fff;
-  }
+  width: auto;
+  ${({color}) => color ? `color: ${color}` : ''}
 `;
-const PopupItemPrice = styled.div`
-  span{display:inline-block;margin:0 5px 0 0;font-size:0.875rem;color:#c80;}
-  em{font-size:0.875rem;color:#fff;vertical-align:middle;}
+const PopupItemEffText = styled(Text)`
+  margin: ${({margin}) => margin ? `0 ${margin}px 0 0` : 0};
+  line-height: 1;
 `;
+const PopupItemPrice = styled(FlexBox)``;
+const PopupItemButton = styled(FlexBox)``;
 const SkillImg = styled.div`
   position: relative;
   margin: 0 10px 0 0;
@@ -529,22 +478,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         })}
 			</PopupRelation>
 		);
-	} else if (type === 'applyState') {
-    return (
-      <PopupApplyState>
-        {gameData.battleStateName?.map((bData, idx) => {
-          const chStats = saveData.ch?.[dataObj.chSlotIdx] || {};
-          return (
-            <StateList key={idx} className={bData}>
-              <span className="name">{gameData.msg?.state?.[bData]?.[lang]}<b>{gameData.msg?.state?.[bData]?.en}</b></span>
-              <span className="current">{`${chStats['bSt'+idx] || 0} + `}<b>{`${chStats['iSt'+idx] || 0}`}</b></span>
-              <span className="total">{(chStats['bSt'+idx] || 0) + (chStats['iSt'+idx] || 0)}</span>
-            </StateList>
-          )
-        })}
-      </PopupApplyState>
-    )
-  } else if (type === 'equip') {
+	} else if (type === 'equip') {
     const itemsGrade = dataObj.saveItemData.grade < 5 ? 0 : dataObj.saveItemData.grade - 5;
     const items = dataObj.saveItemData.part === 3 ? 
       gameData.items?.equip?.[dataObj.saveItemData.part]?.[dataObj.saveItemData.weaponType]?.[itemsGrade]?.[dataObj.saveItemData.idx] : 
@@ -558,24 +492,21 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     const totalEff = util.getTotalEff(saveItems, gameData);
 		return (
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack}>
-        <PopupItemList frameBack={imgSet.etc.frameChBack} type="header" grade={gameData.itemGrade.color[grade]}>
-          <PopupItemName dangerouslySetInnerHTML={{__html: `${saveItems.colorantSet ? util.getColorant(saveItems.colorantSet, gameData).na[lang] : ''} ${saveItems.modifier[lang]}<br/>${items.na[lang]}`}}>
+        <PopupItemList frameBack={imgSet.etc.frameChBack} type="header">
+          <PopupItemName code="t3" grade={gameData.itemGrade.color[grade]} color="main" weight="600" dangerouslySetInnerHTML={{__html: `${saveItems.colorantSet ? util.getColorant(saveItems.colorantSet, gameData).na[lang] : ''} ${saveItems.modifier[lang]}<br/>${items.na[lang]}`}}>
           </PopupItemName>
         </PopupItemList>
-        <PopupItemList flex="true">
+        <PopupItemList>
           <PopupItem part={items.part} grade={gameData.itemGrade.txt_e[saveItems.grade].toLowerCase()}>
-            <ItemPic type="equip">
-              <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color, saveItems.svgColor || saveItems.id)}}>
-              </svg>
-            </ItemPic>  
+            <ItemPic type="equip" pic="equip" idx={items.display} />
           </PopupItem>
           <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemInfo className="item_cont" color={gameData.itemGrade.color[grade]}>
-              <div className="item_top">
-                <span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[grade] : gameData.itemGrade.txt_e[grade]}</span> <span className="item_type">{gameData.itemType[items.part][lang]}</span>
-              </div>
-              <div className="item_description" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></div>
-              <div className="item_kg">{items.kg}kg</div>
+            <PopupItemInfo direction="column" justifyContent="space-between">
+              <PopupItemTop justifyContent="space-between" className="item_top">
+                <PopupItemGrade code="t1"  color={gameData.itemGrade.color[grade]}>{lang === 'ko' ? gameData.itemGrade.txt_k[grade] : gameData.itemGrade.txt_e[grade]}</PopupItemGrade><PopupItemType code="t1"  color="#bbb">{gameData.itemType[items.part][lang]}</PopupItemType>
+              </PopupItemTop>
+              <PopupItemDescription code="t1"  color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></PopupItemDescription>
+              <PopupItemKg code="t2"  weight="600" color="#bbb" align="right">{items.kg || 0}kg</PopupItemKg>
             </PopupItemInfo>
             {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
           </div>
@@ -588,37 +519,37 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             {saveItems.hole.map((holeData, idx) => {
               const holePic = holeData !== 0 ? gameData.items.hole[holeData.idx].display : 0;
               return (
-                <div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}>
-                  <span className="item_holeback">
+                <div key={`hole${idx}`}>
+                  <PopupItemHoleBack fixed={holePic !== 0}>
                     <ItemPic pic="itemEtc" type="hole" idx={holePic} />
-                  </span>
+                  </PopupItemHoleBack>
                 </div>
               )
             })}
           </PopupItemSlot>
         </PopupItemList>
-        <PopupItemList className="item_eff" type="eff">
-          <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.itemEffect[lang]}</PopupItemTitle>
+        <PopupItemList type="eff">
+          <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.itemEffect[lang]}</PopupItemTitle>
           {totalEff.map((eff, idx) => {
             if (eff.type === 100) {
               return (
-                <PopupItemEffs key={idx}>
-                  <span className="cate">{util.getEffectType(eff.type, lang)}</span>
+                <PopupItemEffs justifyContent="space-between" alignItems="center" key={idx}>
+                  <PopupItemEffText code="t1" margin={10} weight="600" color="#00a90c">{util.getEffectType(eff.type, lang)}</PopupItemEffText>
                   {eff.skList.map((sk, skIndex) => {
                     return (
-                      <span key={`skIndex${skIndex}`} className="total">{`${gameData.skill?.[sk.idx]?.na?.[lang]} LV.${sk.lv}`}</span>
+                      <PopupItemEffText style={{flex:1}} code="t2" align="right"  color="main" key={`skIndex${skIndex}`}>{`${gameData.skill?.[sk.idx]?.na?.[lang]} LV.${sk.lv}`}</PopupItemEffText>
                     )
                   })}
                 </PopupItemEffs>
               )
             } else {
               return (
-                <PopupItemEffs key={idx}>
-                  <span className="cate">{util.getEffectType(eff.type, lang)}</span>
-                  {eff.base > 0 && <span className="base">{eff.base}</span>}
-                  {eff.add > 0 && <span className="add">{eff.add}</span>}
-                  {eff.hole > 0 && <span className="hole">{eff.hole}</span>}
-                  <span className="total">{eff.base + eff.add + eff.hole}</span>
+                <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx}>
+                  <PopupItemEffText code="t1" margin={10} weight="600" color="#00a90c" className="cate">{util.getEffectType(eff.type, lang)}</PopupItemEffText>
+                  {eff.base > 0 && <PopupItemEffText code="t1"  margin={5}  weight="600" color="#2f73ff" className="base">{eff.base}</PopupItemEffText>}
+                  {eff.add > 0 && <PopupItemEffText code="t1" margin={5}  weight="600" color="#ffac2f" className="add">{eff.add}</PopupItemEffText>}
+                  {eff.hole > 0 && <PopupItemEffText code="t1" margin={5}  weight="600" color="#e14040" className="hole">{eff.hole}</PopupItemEffText>}
+                  <PopupItemEffText style={{flex: 1}} code="t2"  align="right" weight="600" color="main" className="total">{eff.base + eff.add + eff.hole}</PopupItemEffText>
                 </PopupItemEffs>
               )
             }
@@ -626,46 +557,60 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         </PopupItemList>
         <div style={{width:"100%"}} className="scroll-y">
           {saveItems.baseEff.length > 0 && (
-            <PopupItemList className="item_eff" type="eff">
-              <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.basicEffect[lang]}</PopupItemTitle>
+            <PopupItemList type="eff">
+              <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.basicEffect[lang]}</PopupItemTitle>
               {saveItems.baseEff.map((data, idx) => {
                 const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
                 return (
-                  <PopupItemEffs key={idx}>{`${util.getEffectType(data.type, lang)} ${data.num[grade]}`}</PopupItemEffs>
+                  <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx}>
+                    <PopupItemEffText code="t1" margin={10} weight="600" color="#00a90c">
+                      {util.getEffectType(data.type, lang)}
+                    </PopupItemEffText>
+                    <PopupItemEffText style={{flex:1}} code="t2" align="right"  color="main" key={`skIndex${idx}`}>
+                      {data.num[grade]}
+                    </PopupItemEffText>
+                  </PopupItemEffs>
                 ) 
               })}
             </PopupItemList>
           )}
           {saveItems.addEff.length > 0 && (
-            <PopupItemList className="item_eff" type="eff">
-              <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.addEffect[lang]}</PopupItemTitle>
+            <PopupItemList type="eff">
+              <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.addEffect[lang]}</PopupItemTitle>
               {saveItems.addEff.map((data, idx) => {
                 const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
                 if (data.type === 100) {
                   return (
-                    <PopupItemEffs key={idx} className="add">{`${util.getEffectType(data.type, lang)} ${gameData.skill[data.skIdx].na[lang]} LV.${data.skLv}`}</PopupItemEffs>
+                    <PopupItemEffs alignItems="center" justifyContent="space-between" color="#ffac2f" key={idx}>{`${util.getEffectType(data.type, lang)} ${gameData.skill[data.skIdx].na[lang]} LV.${data.skLv}`}</PopupItemEffs>
                   )
                 } else {
                   return (
-                    <PopupItemEffs key={idx} className="add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</PopupItemEffs>
+                    <PopupItemEffs alignItems="center" justifyContent="space-between" color="#ffac2f" key={idx}>{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</PopupItemEffs>
                   )
                 } 
               })}
             </PopupItemList>
           )}
           {saveItems.hole.length > 0 && (
-            <PopupItemList className="item_hole" type="hole">
-              <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.socketEffect[lang]}</PopupItemTitle>
+            <PopupItemList type="hole">
+              <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.socketEffect[lang]}</PopupItemTitle>
               {totalEff.map((data, idx) => {
                 if (data.hole > 0) {
                   return (
-                    <PopupItemEffs key={idx} className="hole">{`${util.getEffectType(data.type, lang)} ${data.hole}`}</PopupItemEffs>
+                    <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx} className="hole">
+                      <PopupItemEffText code="t1" margin={10} weight="600" color="#e14040">
+                      {util.getEffectType(data.type, lang)}
+                      </PopupItemEffText>
+                      <PopupItemEffText style={{flex:1}} code="t2" align="right"  color="main" key={`skIndex${idx}`}>
+                        {data.hole}
+                      </PopupItemEffText>
+                    </PopupItemEffs>
                   )
                 }
               })}
             </PopupItemList>
           )}
-          <PopupItemList className="item_set" type="set">
+          <PopupItemList type="set">
             <div className="item_setNa">{setsInfo.na}</div>
             {setsInfo.part && setsInfo.part.map((data, idx) => {
               return (
@@ -675,11 +620,11 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           </PopupItemList>
         </div>
         <PopupItemList frameBack={imgSet.etc.frameChBack} type="footer">
-          <PopupItemPrice>
-            <span>{gameData.msg.itemInfo.sellPrice[lang]}</span>
-            <em>{`₩${items.price * saveItems.grade}`}</em>
+          <PopupItemPrice justifyContent="flex-start">
+            <PopupItemEffText code="t2" margin={10}  color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemEffText>
+            <PopupItemEffText code="t2"  color="main">{`₩${items.price * saveItems.grade}`}</PopupItemEffText>
           </PopupItemPrice>
-          <div className="item_button" flex="true">
+          <PopupItemButton justifyContent="flex-end">
             <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:27}} onClick={(e) => {//해제
               util.buttonEvent({
                 event: e,
@@ -701,7 +646,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                 }
               }});
             }} data-buttontype="itemRelease" />
-          </div>
+          </PopupItemButton>
         </PopupItemList>
       </PopupItemContainer>
 		);
@@ -723,22 +668,19 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     return (
       <PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack}>
         <PopupItemList type="header" frameBack={imgSet.etc.frameChBack}>
-          <PopupItemName grade={gameData.itemGrade.color[grade]} dangerouslySetInnerHTML={{__html: `${saveItems.colorantSet ? util.getColorant(saveItems.colorantSet, gameData).na[lang] : ''} ${saveItems.modifier[lang]}<br/>${items.na[lang]}`}}></PopupItemName>
+          <PopupItemName code="t3"  color="main" weight="600" grade={gameData.itemGrade.color[grade]} dangerouslySetInnerHTML={{__html: `${saveItems.colorantSet ? util.getColorant(saveItems.colorantSet, gameData).na[lang] : ''} ${saveItems.modifier[lang]}<br/>${items.na[lang]}`}}></PopupItemName>
         </PopupItemList>
-        <PopupItemList flex="true">
+        <PopupItemList>
           <PopupItem part={items.part} grade={gameData.itemGrade.txt_e[saveItems.grade].toLowerCase()} sealed={sealed}>
-            <ItemPic type="equip">
-              <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], saveItems.color, saveItems.svgColor || saveItems.id)}}>
-              </svg>
-            </ItemPic>
+            <ItemPic type="equip" pic="equip" idx={items.display} />
           </PopupItem>
           <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemInfo className="item_cont" color={gameData.itemGrade.color[grade]}>
-              <div className="item_top">
-                <span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[grade] : gameData.itemGrade.txt_e[grade]}</span> <span className="item_type">{gameData.itemType[items.part][lang]}</span>
-              </div>
-              <div className="item_description" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></div>
-              <div className="item_kg">{items.kg}kg</div>
+            <PopupItemInfo direction="column" justifyContent="space-between">
+              <PopupItemTop justifyContent="space-between" className="item_top">
+                <PopupItemGrade code="t1"  color={gameData.itemGrade.color[grade]}>{lang === 'ko' ? gameData.itemGrade.txt_k[grade] : gameData.itemGrade.txt_e[grade]}</PopupItemGrade><PopupItemType code="t1"  color="#bbb">{gameData.itemType[items.part][lang]}</PopupItemType>
+              </PopupItemTop>
+              <PopupItemDescription code="t1"  color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></PopupItemDescription>
+              <PopupItemKg code="t2"  weight="600" color="#bbb" align="right">{items.kg}kg</PopupItemKg>
             </PopupItemInfo>
             {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
           </div>
@@ -751,37 +693,37 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
             {saveItems.hole.map((holeData, idx) => {
               const holePic = holeData !== 0 ? gameData.items.hole[holeData.idx].display : 0;
               return (
-                <div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}>
-                  <span className="item_holeback">
+                <div key={`hole${idx}`}>
+                  <PopupItemHoleBack fixed={holePic !== 0}>
                     <ItemPic pic="itemEtc" type="hole" idx={holePic} />
-                  </span>
+                  </PopupItemHoleBack>
                 </div>
               )
             })}
           </PopupItemSlot>
         </PopupItemList>
-        <PopupItemList className="item_eff" type="eff">
-          <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.itemEffect[lang]}</PopupItemTitle>
+        <PopupItemList type="eff">
+          <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.itemEffect[lang]}</PopupItemTitle>
           {totalEff.map((eff, idx) => {
             if (eff.type === 100) {
               return (
-                <PopupItemEffs key={idx}>
-                  <span className="cate">{util.getEffectType(eff.type, lang)}</span>
+                <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx}>
+                  <PopupItemEffText code="t1"  weight="600" color="#00a90c" className="cate">{util.getEffectType(eff.type, lang)}</PopupItemEffText>
                   {eff.skList.map((sk, skIndex) => {
                     return (
-                      <span key={`skIndex${skIndex}`} className="total">{`${gameData.skill[sk.idx].na[lang]} LV.${sk.lv}`}</span>
+                      <PopupItemEffText code="t2"  weight="600" color="main" key={`skIndex${skIndex}`} className="total">{`${gameData.skill[sk.idx].na[lang]} LV.${sk.lv}`}</PopupItemEffText>
                     )
                   })}
                 </PopupItemEffs>
               )
             } else {
               return (
-                <PopupItemEffs key={idx}>
-                  <span className="cate">{util.getEffectType(eff.type, lang)}</span>
-                  {eff.base > 0 && <span className="base">{eff.base}</span>}
-                  {eff.add > 0 && <span className="add">{eff.add}</span>}
-                  {eff.hole > 0 && <span className="hole">{eff.hole}</span>}
-                  <span className="total">{sealed ? eff.base : eff.base + eff.add + eff.hole}</span>
+                <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx}>
+                  <PopupItemEffText code="t1"  weight="600" color="#00a90c" className="cate">{util.getEffectType(eff.type, lang)}</PopupItemEffText>
+                  {eff.base > 0 && <PopupItemEffText code="t1"  weight="600" color="#2f73ff" className="base">{eff.base}</PopupItemEffText>}
+                  {eff.add > 0 && <PopupItemEffText code="t1"  weight="600" color="#ffac2f" className="add">{eff.add}</PopupItemEffText>}
+                  {eff.hole > 0 && <PopupItemEffText code="t1"  weight="600" color="#e14040" className="hole">{eff.hole}</PopupItemEffText>}
+                  <PopupItemEffText code="t2"  weight="600" color="main" className="total">{sealed ? eff.base : eff.base + eff.add + eff.hole}</PopupItemEffText>
                 </PopupItemEffs>
               )
             }
@@ -789,28 +731,35 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
         </PopupItemList>
         <div style={{width:"100%"}} className="scroll-y">
           {!sealed && (
-            <PopupItemList className="item_eff" type="eff">
-              <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.basicEffect[lang]}</PopupItemTitle>
+            <PopupItemList type="eff">
+              <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.basicEffect[lang]}</PopupItemTitle>
               {saveItems.baseEff && saveItems.baseEff.map((data, idx) => {
                 const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
                 return (
-                  <PopupItemEffs key={idx}>{`${util.getEffectType(data.type, lang)} ${data.num[grade]}`}</PopupItemEffs>
+                  <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx}>
+                    <PopupItemEffText code="t1" margin={10} weight="600" color="#00a90c">
+                      {util.getEffectType(data.type, lang)}
+                    </PopupItemEffText>
+                    <PopupItemEffText style={{flex:1}} code="t2" align="right"  color="main" key={`skIndex${idx}`}>
+                      {data.num[grade]}
+                    </PopupItemEffText>
+                  </PopupItemEffs>
                 ) 
               })}
             </PopupItemList>
           )}
           {saveItems.addEff.length > 0 && (
-            <PopupItemList className="item_eff" type="eff">
-              <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.addEffect[lang]}</PopupItemTitle>
+            <PopupItemList type="eff">
+              <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.addEffect[lang]}</PopupItemTitle>
               {saveItems.addEff.map((data, idx) => {
                 const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
                 if (data.type === 100) {
 										return (
-											<PopupItemEffs key={idx} className="add">{`${util.getEffectType(data.type, lang)} ${gameData.skill[data.skIdx].na[lang]} LV.${data.skLv}`}</PopupItemEffs>
+											<PopupItemEffs alignItems="center" justifyContent="space-between" color="#ffac2f" key={idx} className="add">{`${util.getEffectType(data.type, lang)} ${gameData.skill[data.skIdx].na[lang]} LV.${data.skLv}`}</PopupItemEffs>
 										)
                 } else {
                   return (
-                    <PopupItemEffs key={idx} className="add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</PopupItemEffs>
+                    <PopupItemEffs alignItems="center" justifyContent="space-between" color="#ffac2f" key={idx} className="add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</PopupItemEffs>
                   )
                 }
               })}
@@ -818,11 +767,18 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           )}
           {saveItems.hole.length > 0 && (
             <PopupItemList className="item_hole" type="hole">
-              <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.socketEffect[lang]}</PopupItemTitle>
+              <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.socketEffect[lang]}</PopupItemTitle>
               {totalEff.map((data, idx) => {
                 if (data.hole > 0) {
                   return (
-                    <PopupItemEffs key={idx} className="hole">{`${util.getEffectType(data.type, lang)} ${data.hole}`}</PopupItemEffs>
+                    <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx} className="hole">
+                      <PopupItemEffText code="t1" margin={10} weight="600" color="#e14040">
+                      {util.getEffectType(data.type, lang)}
+                      </PopupItemEffText>
+                      <PopupItemEffText style={{flex:1}} code="t2" align="right"  color="main" key={`skIndex${idx}`}>
+                        {data.hole}
+                      </PopupItemEffText>
+                    </PopupItemEffs>
                   )
                 }
               })}
@@ -838,9 +794,9 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
           </PopupItemList>
         </div>
         <PopupItemList frameBack={imgSet.etc.frameChBack} type="footer">
-          <PopupItemPrice>
-            <span>{gameData.msg.itemInfo.sellPrice[lang]}</span>
-            <em>{`₩${items.price * saveItems.grade}`}</em>
+          <PopupItemPrice justifyContent="flex-start">
+            <PopupItemEffText code="t2" margin={10}  color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemEffText>
+            <PopupItemEffText code="t2"  color="main">{`₩${items.price * saveItems.grade}`}</PopupItemEffText>
           </PopupItemPrice>
           {sealed ? (//밀봉
             <div className="item_button" flex="true">
@@ -1017,44 +973,51 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     return (
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack}>
         <PopupItemList type="header" frameBack={imgSet.etc.frameChBack}>
-          <PopupItemName grade={gameData.itemGrade.color[items.grade]}>{items.na[lang]}</PopupItemName>
+          <PopupItemName code="t3"  color="main" weight="600" grade={gameData.itemGrade.color[items.grade]}>{items.na[lang]}</PopupItemName>
         </PopupItemList>
-        <PopupItemList flex="true">
+        <PopupItemList>
           <PopupItem part="11" className="item">
             <ItemPic pic="itemEtc" type="hole" idx={items.display} />
           </PopupItem>
           <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemInfo className="item_cont" color={gameData.itemGrade.color[items.grade]}>
-              <div className="item_top">
-                <span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[items.grade] : gameData.itemGrade.txt_e[items.grade]}</span> <span className="item_type">{gameData.msg.title.socketJewelry[lang]}</span>
-              </div>
-              <div className="item_description" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></div>
+            <PopupItemInfo direction="column" justifyContent="space-between">
+              <PopupItemTop justifyContent="space-between" className="item_top">
+                <PopupItemGrade code="t1"  color={gameData.itemGrade.color[items.grade]}>{lang === 'ko' ? gameData.itemGrade.txt_k[items.grade] : gameData.itemGrade.txt_e[items.grade]}</PopupItemGrade><PopupItemType code="t1"  color="#bbb">{gameData.msg.title.socketJewelry[lang]}</PopupItemType>
+              </PopupItemTop>
+              <PopupItemDescription code="t1"  color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></PopupItemDescription>
             </PopupItemInfo>
             {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
           </div>
         </PopupItemList>
-        <PopupItemList className="item_eff" type="eff">
-          <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.basicEffect[lang]}</PopupItemTitle>
+        <PopupItemList type="eff">
+          <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.basicEffect[lang]}</PopupItemTitle>
           {saveItems.baseEff && saveItems.baseEff.map((data, idx) => {
             return (
-              <PopupItemEffs key={idx}>{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</PopupItemEffs>
+              <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx}>
+                <PopupItemEffText code="t1" margin={10} weight="600" color="#00a90c">
+                  {util.getEffectType(data.type, lang)}
+                </PopupItemEffText>
+                <PopupItemEffText style={{flex:1}} code="t2" align="right"  color="main" key={`skIndex${idx}`}>
+                  {data.num[0]}
+                </PopupItemEffText>
+              </PopupItemEffs>
             ) 
           })}
         </PopupItemList>
         {saveItems.addEff?.length > 0 && (
-          <PopupItemList className="item_eff" type="eff">
-            <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.addEffect[lang]}</PopupItemTitle>
+          <PopupItemList type="eff">
+            <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.addEffect[lang]}</PopupItemTitle>
             {saveItems.addEff.map((data, idx) => {
               return (
-                <PopupItemEffs key={idx} className="add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</PopupItemEffs>
+                <PopupItemEffs alignItems="center" justifyContent="space-between" color="#ffac2f" key={idx} className="add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</PopupItemEffs>
               ) 
             })}
           </PopupItemList>
         )}
         <PopupItemList frameBack={imgSet.etc.frameChBack} type="footer">
-          <PopupItemPrice>
-            <span>{gameData.msg.itemInfo.sellPrice[lang]}</span>
-            <em>{`₩${items.price}`}</em>
+          <PopupItemPrice justifyContent="flex-start">
+            <PopupItemEffText code="t2" margin={10}  color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemEffText>
+            <PopupItemEffText code="t2"  color="main">{`₩${items.price}`}</PopupItemEffText>
           </PopupItemPrice>
           <div className="item_button" flex="true">
             {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:22}} onClick={() => {//소켓
@@ -1130,26 +1093,26 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     return (
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack}>
         <PopupItemList type="header" frameBack={imgSet.etc.frameChBack}>
-          <PopupItemName grade={gameData.itemGrade.color[items.grade]}>{items.na[lang]}</PopupItemName>
+          <PopupItemName code="t3"  color="main" weight="600" grade={gameData.itemGrade.color[items.grade]}>{items.na[lang]}</PopupItemName>
         </PopupItemList>
-        <PopupItemList flex="true">
+        <PopupItemList>
           <PopupItem part="12">
             <ItemPic pic="itemEtc" type="upgrade" idx={items.display} />
           </PopupItem>
           <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemInfo className="item_cont" color={gameData.itemGrade.color[items.grade]}>
-              <div className="item_top">
-                <span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[items.grade] : gameData.itemGrade.txt_e[items.grade]}</span> <span className="item_type">{gameData.msg.title.reinforcedMaterial[lang]}</span>
-              </div>
-              <div className="item_description" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></div>
+            <PopupItemInfo direction="column" justifyContent="space-between">
+              <PopupItemTop justifyContent="space-between" className="item_top">
+                <PopupItemGrade code="t1"  color={gameData.itemGrade.color[items.grade]}>{lang === 'ko' ? gameData.itemGrade.txt_k[items.grade] : gameData.itemGrade.txt_e[items.grade]}</PopupItemGrade><PopupItemType code="t1"  color="#bbb">{gameData.msg.title.reinforcedMaterial[lang]}</PopupItemType>
+              </PopupItemTop>
+              <PopupItemDescription code="t1"  color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></PopupItemDescription>
             </PopupItemInfo>
             {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
           </div>
         </PopupItemList>
         <PopupItemList frameBack={imgSet.etc.frameChBack} type="footer">
-          <PopupItemPrice>
-            <span>{gameData.msg.itemInfo.sellPrice[lang]}</span>
-            <em>{`₩${items.price}`}</em>
+          <PopupItemPrice justifyContent="flex-start">
+            <PopupItemEffText code="t2" margin={10}  color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemEffText>
+            <PopupItemEffText code="t2"  color="main">{`₩${items.price}`}</PopupItemEffText>
           </PopupItemPrice>
           <div className="item_button" flex="true">
             {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:21}} onClick={() => {//강화
@@ -1225,26 +1188,26 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     return (
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack}>
         <PopupItemList type="header" frameBack={imgSet.etc.frameChBack}>
-          <PopupItemName grade={gameData.itemGrade.color[items.grade]}>{items.na[lang]}</PopupItemName>
+          <PopupItemName code="t3"  color="main" weight="600" grade={gameData.itemGrade.color[items.grade]}>{items.na[lang]}</PopupItemName>
         </PopupItemList>
-        <PopupItemList flex="true">
+        <PopupItemList>
           <PopupItem part="14">
             <ItemPic pic="itemEtc" type="material" idx={items.display} />
           </PopupItem>
           <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemInfo className="item_cont" color={gameData.itemGrade.color[items.grade]}>
-              <div className="item_top">
-                <span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[items.grade] : gameData.itemGrade.txt_e[items.grade]}</span> <span className="item_type">{gameData.msg.title.material[lang]}</span>
-              </div>
-              <div className="item_description" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></div>
+            <PopupItemInfo direction="column" justifyContent="space-between">
+              <PopupItemTop justifyContent="space-between" className="item_top">
+                <PopupItemGrade code="t1"  color={gameData.itemGrade.color[items.grade]}>{lang === 'ko' ? gameData.itemGrade.txt_k[items.grade] : gameData.itemGrade.txt_e[items.grade]}</PopupItemGrade><PopupItemType code="t1"  color="#bbb">{gameData.msg.title.material[lang]}</PopupItemType>
+              </PopupItemTop>
+              <PopupItemDescription code="t1"  color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></PopupItemDescription>
             </PopupItemInfo>
             {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
           </div>
         </PopupItemList>
         <PopupItemList frameBack={imgSet.etc.frameChBack} type="footer">
-          <PopupItemPrice>
-            <span>{gameData.msg.itemInfo.sellPrice[lang]}</span>
-            <em>{`₩${items.price}`}</em>
+          <PopupItemPrice justifyContent="flex-start">
+            <PopupItemEffText code="t2" margin={10}  color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemEffText>
+            <PopupItemEffText code="t2"  color="main">{`₩${items.price}`}</PopupItemEffText>
           </PopupItemPrice>
           <div className="item_button" flex="true">
             {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {//판매
@@ -1284,26 +1247,26 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
     return (
 			<PopupItemContainer className="items" frameBack={imgSet.etc.frameChBack}>
         <PopupItemList type="header" frameBack={imgSet.etc.frameChBack}>
-          <PopupItemName grade={gameData.itemGrade.color[items.grade]}>{items.na[lang]}</PopupItemName>
+          <PopupItemName code="t3"  color="main" weight="600" grade={gameData.itemGrade.color[items.grade]}>{items.na[lang]}</PopupItemName>
         </PopupItemList>
-        <PopupItemList flex="true">
+        <PopupItemList>
           <PopupItem part="13" className="item">
             <ItemPic pic="itemEtc" type="etc" idx={items.display} />
           </PopupItem>
           <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemInfo className="item_cont" color={gameData.itemGrade.color[items.grade]}>
-              <div className="item_top">
-                <span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[items.grade] : gameData.itemGrade.txt_e[items.grade]}</span> <span className="item_type">{gameData.msg.title.etc[lang]}</span>
-              </div>
-              <div className="item_description" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></div>
+            <PopupItemInfo direction="column" justifyContent="space-between">
+              <PopupItemTop justifyContent="space-between" className="item_top">
+                <PopupItemGrade code="t1"  color={gameData.itemGrade.color[items.grade]}>{lang === 'ko' ? gameData.itemGrade.txt_k[items.grade] : gameData.itemGrade.txt_e[items.grade]}</PopupItemGrade><PopupItemType code="t1"  color="#bbb">{gameData.msg.title.etc[lang]}</PopupItemType>
+              </PopupItemTop>
+              <PopupItemDescription code="t1"  color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></PopupItemDescription>
             </PopupItemInfo>
             {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
           </div>
         </PopupItemList>
         <PopupItemList frameBack={imgSet.etc.frameChBack} type="footer">
-          <PopupItemPrice>
-            <span>{gameData.msg.itemInfo.sellPrice[lang]}</span>
-            <em>{`₩${items.price}`}</em>
+          <PopupItemPrice justifyContent="flex-start">
+            <PopupItemEffText code="t2" margin={10}  color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemEffText>
+            <PopupItemEffText code="t2"  color="main">{`₩${items.price}`}</PopupItemEffText>
           </PopupItemPrice>
           <div className="item_button" flex="true">
             <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:26}} onClick={(e) => {//사용
@@ -1445,7 +1408,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               </SkillTitle>
             </dt>
             <dd>
-              <SkillDescription dangerouslySetInnerHTML={{__html: skillText}} code="t2" color="main" />
+              <SkillDescription dangerouslySetInnerHTML={{__html: skillText}} code="t2"  color="main" />
             </dd>
           </dl>
           <ul className="skill_eff">
@@ -1457,9 +1420,11 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                       "code": "t3",
                       "color": "red",
                       "weight": "600",
+                      "font": "info",
                     } : {
                       "code": "t2",
                       "color": "grey",
+                      "font": "info",
                     }}>{`Lv.${idx + 1}: ${util.getEffectType(skillEff.type, lang)} ${eff}`}</SkillEff>
                   </li>
                 )
@@ -1475,9 +1440,11 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                       "code": "t3",
                       "color": "red",
                       "weight": "600",
+                      "font": "info",
                     } : {
                       "code": "t2",
                       "color": "grey",
+                      "font": "info",
                     }}>{skill}
                     </SkillEff>
                   </li>
@@ -1494,9 +1461,11 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                       "code": "t3",
                       "color": "red",
                       "weight": "600",
+                      "font": "info",
                     } : {
                       "code": "t2",
                       "color": "grey",
+                      "font": "info",
                     }}>{skill}
                     </SkillEff>
                   </li>
@@ -1511,9 +1480,11 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
                       "code": "t3",
                       "color": "red",
                       "weight": "600",
+                      "font": "info",
                     } : {
                       "code": "t2",
                       "color": "grey",
+                      "font": "info",
                     }}>
                       {`Lv.${idx + 1}: ${gameData.msg.info.percent[lang]} ${eff}`}
                     </SkillEff>
@@ -1525,7 +1496,7 @@ const typeAsContent = (type, dataObj, saveData, changeSaveData, gameData, imgSet
               return skillEff.num.map((eff, idx) => {
                 return (
                   <li className={`skill_eff_list ${skillLv === idx + 1 ? 'on' : ''}`} key={idx}>
-                  <SkillEff code="t2" color="grey">
+                  <SkillEff code="t2"  color="grey">
                     {`Lv.${idx + 1}: ${gameData.msg.state[util.getStateName(skillEff.type)][lang]} ${eff}%`}
                   </SkillEff>
                 </li>

@@ -579,8 +579,32 @@ import ch_62 from 'images/ch/ch_62.png';
 import ch_63 from 'images/ch/ch_63.png';
 import ch_64 from 'images/ch/ch_64.png';
 import ch_65 from 'images/ch/ch_65.png';
+import ch_66 from 'images/ch/ch_66.png';
+import ch_67 from 'images/ch/ch_67.png';
+import ch_68 from 'images/ch/ch_68.png';
+import ch_69 from 'images/ch/ch_69.png';
 import ch_7 from 'images/ch/ch_7.png';
+import ch_70 from 'images/ch/ch_70.png';
+import ch_71 from 'images/ch/ch_71.png';
+import ch_72 from 'images/ch/ch_72.png';
+import ch_73 from 'images/ch/ch_73.png';
+import ch_74 from 'images/ch/ch_74.png';
+import ch_75 from 'images/ch/ch_75.png';
+import ch_76 from 'images/ch/ch_76.png';
+import ch_77 from 'images/ch/ch_77.png';
+import ch_78 from 'images/ch/ch_78.png';
+import ch_79 from 'images/ch/ch_79.png';
 import ch_8 from 'images/ch/ch_8.png';
+import ch_80 from 'images/ch/ch_80.png';
+import ch_81 from 'images/ch/ch_81.png';
+import ch_82 from 'images/ch/ch_82.png';
+import ch_83 from 'images/ch/ch_83.png';
+import ch_84 from 'images/ch/ch_84.png';
+import ch_85 from 'images/ch/ch_85.png';
+import ch_86 from 'images/ch/ch_86.png';
+import ch_87 from 'images/ch/ch_87.png';
+import ch_88 from 'images/ch/ch_88.png';
+import ch_89 from 'images/ch/ch_89.png';
 import ch_9 from 'images/ch/ch_9.png';
 import ch_200 from 'images/ch/common_0.png';
 import ch_201 from 'images/ch/common_1.png';
@@ -649,8 +673,32 @@ import chs_62 from 'images/chs/ch_62.png';
 import chs_63 from 'images/chs/ch_63.png';
 import chs_64 from 'images/chs/ch_64.png';
 import chs_65 from 'images/chs/ch_65.png';
+import chs_66 from 'images/chs/ch_66.png';
+import chs_67 from 'images/chs/ch_67.png';
+import chs_68 from 'images/chs/ch_68.png';
+import chs_69 from 'images/chs/ch_69.png';
 import chs_7 from 'images/chs/ch_7.png';
+import chs_70 from 'images/chs/ch_70.png';
+import chs_71 from 'images/chs/ch_71.png';
+import chs_72 from 'images/chs/ch_72.png';
+import chs_73 from 'images/chs/ch_73.png';
+import chs_74 from 'images/chs/ch_74.png';
+import chs_75 from 'images/chs/ch_75.png';
+import chs_76 from 'images/chs/ch_76.png';
+import chs_77 from 'images/chs/ch_77.png';
+import chs_78 from 'images/chs/ch_78.png';
+import chs_79 from 'images/chs/ch_79.png';
 import chs_8 from 'images/chs/ch_8.png';
+import chs_80 from 'images/chs/ch_80.png';
+import chs_81 from 'images/chs/ch_81.png';
+import chs_82 from 'images/chs/ch_82.png';
+import chs_83 from 'images/chs/ch_83.png';
+import chs_84 from 'images/chs/ch_84.png';
+import chs_85 from 'images/chs/ch_85.png';
+import chs_86 from 'images/chs/ch_86.png';
+import chs_87 from 'images/chs/ch_87.png';
+import chs_88 from 'images/chs/ch_88.png';
+import chs_89 from 'images/chs/ch_89.png';
 import chs_9 from 'images/chs/ch_9.png';
 import chs_200 from 'images/chs/common_0.png';
 import chs_201 from 'images/chs/common_1.png';
@@ -659,12 +707,13 @@ import chs_203 from 'images/chs/common_3.png';
 import chs_204 from 'images/chs/common_4.png';
 
 import country from 'images/country.png'; //8192 x 8960, 10, 5(1024 x 1792)
+import equip from 'images/equip.png'; //2000 x 6400, 10, 25
 import icon100 from 'images/icon100.png'; //1000, 10, 25
 import icon150 from 'images/icon150.png'; //1500, 10, 10
 import icon200 from 'images/icon200.png'; //2000, 10, 25
 import img400 from 'images/img400.png'; //6000, 10, 2
 import img800 from 'images/img800.png'; //8000 x 6400, 10, 8(800 x 800)
-import itemEtc from 'images/itemEtc.png'; //1000, 10, 50
+import itemEtc from 'images/itemEtc.png'; //2000 x 6400, 10, 50
 import map800 from 'images/map800.png'; //4000 x 4000, 5, 8
 import skill from 'images/skill.png'; //1000 x 4000, 10, 40
 
@@ -768,6 +817,30 @@ const chGroup = {
   ch63:ch_63,
   ch64:ch_64,
   ch65:ch_65,
+  ch66:ch_66,
+  ch67:ch_67,
+  ch68:ch_68,
+  ch69:ch_69,
+  ch70:ch_70,
+  ch71:ch_71,
+  ch72:ch_72,
+  ch73:ch_73,
+  ch74:ch_74,
+  ch75:ch_75,
+  ch76:ch_76,
+  ch77:ch_77,
+  ch78:ch_78,
+  ch79:ch_79,
+  ch80:ch_80,
+  ch81:ch_81,
+  ch82:ch_82,
+  ch83:ch_83,
+  ch84:ch_84,
+  ch85:ch_85,
+  ch86:ch_86,
+  ch87:ch_87,
+  ch88:ch_88,
+  ch89:ch_89,
   ch200:ch_200,
   ch201:ch_201,
   ch202:ch_202,
@@ -839,6 +912,30 @@ const chsGroup = {
   chs63:chs_63,
   chs64:chs_64,
   chs65:chs_65,
+  chs66:chs_66,
+  chs67:chs_67,
+  chs68:chs_68,
+  chs69:chs_69,
+  chs70:chs_70,
+  chs71:chs_71,
+  chs72:chs_72,
+  chs73:chs_73,
+  chs74:chs_74,
+  chs75:chs_75,
+  chs76:chs_76,
+  chs77:chs_77,
+  chs78:chs_78,
+  chs79:chs_79,
+  chs80:chs_80,
+  chs81:chs_81,
+  chs82:chs_82,
+  chs83:chs_83,
+  chs84:chs_84,
+  chs85:chs_85,
+  chs86:chs_86,
+  chs87:chs_87,
+  chs88:chs_88,
+  chs89:chs_89,
   chs200:chs_200,
   chs201:chs_201,
   chs202:chs_202,
@@ -886,7 +983,7 @@ export const effect = {
 export const images = {
   ...chGroup,
   ...chsGroup,
-  card:card,card_s:card_s,country:country,areaBack:areaBack,skill:skill,icon100:icon100,icon150:icon150,icon200:icon200,img400:img400,img800:img800,map800:map800,itemEtc:itemEtc,
+  card:card,card_s:card_s,country:country,areaBack:areaBack,skill:skill,icon100:icon100,icon150:icon150,icon200:icon200,equip:equip,img400:img400,img800:img800,map800:map800,itemEtc:itemEtc,
   frame0:frame0,
   transparent:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAAtJREFUGFdjYAACAAAFAAGq1chRAAAAAElFTkSuQmCC',
   red:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDYuMC1jMDA2IDc5LmRhYmFjYmIsIDIwMjEvMDQvMTQtMDA6Mzk6NDQgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCAyMi40IChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjVFM0Q0RkMwMDE5OTExRUZCMkY4QzZDM0YyRDUzRjBBIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjVFM0Q0RkMxMDE5OTExRUZCMkY4QzZDM0YyRDUzRjBBIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MkIzRTE2NjEwMTc3MTFFRkIyRjhDNkMzRjJENTNGMEEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MkIzRTE2NjIwMTc3MTFFRkIyRjhDNkMzRjJENTNGMEEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz72wd/gAAAADklEQVR42mL4b8oAEGAAA2sBNUl4lb4AAAAASUVORK5CYII=',

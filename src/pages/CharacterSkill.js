@@ -14,32 +14,23 @@ const Wrap = styled(FlexBox)`
   top: 0;
   padding: 25px 20px 20px;
   box-sizing: border-box;
-  .sk[cate1]:after{
-    content:'';position:absolute;left:0;top:0;border-left:10px solid var(--color-blue);border-top:10px solid var(--color-blue);border-right:10px solid transparent;border-bottom:10px solid transparent;
-  }/*passive*/
-  .sk[cate3]:after{content:'';position:absolute;left:0;top:0;border-left:10px solid var(--color-red);border-top:10px solid var(--color-red);border-right:10px solid transparent;border-bottom:10px solid transparent;}/*active*/
-  .sk[cate4]:after{content:'';position:absolute;left:0;top:0;border-left:10px solid var(--color-point6);border-top:10px solid var(--color-point6);border-right:10px solid transparent;border-bottom:10px solid transparent;}/*active, passive*/
-  .sk[cate5]:after{content:'';position:absolute;left:0;top:0;border-left:10px solid var(--color-point1);border-top:10px solid var(--color-point1);border-right:10px solid transparent;border-bottom:10px solid transparent;}/*buff*/
-  .sk[cate6]:after{content:'';position:absolute;left:0;top:0;border-left:10px solid var(--color-green);border-top:10px solid var(--color-green);border-right:10px solid transparent;border-bottom:10px solid transparent;}/*passive, buff*/
-  .sk[cate8]:after{content:'';position:absolute;left:0;top:0;border-left:10px solid var(--color-point2);border-top:10px solid var(--color-point2);border-right:10px solid transparent;border-bottom:10px solid transparent;}/*active, buff*/
-  .sk[cate9]:after{content:'';position:absolute;left:0;top:0;border-left:10px solid var(--color-w);border-top:10px solid var(--color-w);border-right:10px solid transparent;border-bottom:10px solid transparent;}/*active, passive, buff*/
+`;
+const SkillGroup = styled.div`
+  display: grid;
+  padding: 0 5px;
+  width: calc(100% - 10px);
+  height: 100%;
+  grid-template-columns: repeat(2, calc(50% - 2.5px));
+  grid-template-rows: repeat(4, calc(25% - 5px));
+  gap: 5px;
 `;
 const Skill = styled(FlexBox)`
   position: relative;
-  margin: 0 10px 5px;
-  padding: 5px 10px;
-  width: calc(100% - 20px);
-  font-size: 0.75rem;
-  border: 3px double rgba(255,255,255,.5);
-  border-radius: 5px;
-  opacity: .3;
   box-sizing: border-box;
-  flex-basis: 0;
-  ${({possible}) => possible ? `
-    border-color: var(--color-magic);
-    opacity: 1;
-  ` : ''}
-  .lv{margin:0 10px 0 0;}
+  filter: ${({possible}) => possible ? `` : `grayscale(100%) brightness(0.3);`};
+  .lv{
+    margin:0 5px 0 0;
+  }
   &:after {
     content: '';
     position: absolute;
@@ -50,20 +41,21 @@ const Skill = styled(FlexBox)`
 `;
 const SkillTypePic = styled(IconPic)`
   position: absolute;
-  width: 30px;
-  height: 30px;
-  right: 0;
+  width: 20px;
+  height: 20px;
+  left: 0;
   top: 0;
   z-index: 2;
 `;
 const SkillInfo = styled(FlexBox)``;
-const SkillTxt = styled(FlexBox)`
-  padding: 0 10px;
-  width: calc(200px - 20px);
-  flex-grow: 1;
+const SkillIconWrap = styled(FlexBox)`
+  position: relative;
+  width: auto;
+  flex-shrink: 0;
 `;
-const SkillTitle = styled(FlexBox)`
-  height: auto;
+const SkillTxt = styled(FlexBox)`
+  margin: 0 0 0 5px;
+  overflow-y: auto;
 `;
 const SkillName = styled(Text)`
 `;
@@ -80,15 +72,7 @@ const SkillIcon = styled.div`
   height: 60px;
   border-radius: 50%;
 `;
-const StyledIconPic = styled(IconPic)`
-  position: absolute;
-  left: 15%;
-  top: 15%;
-  width: 70%;
-  height: 70%;
-  z-index: 1;
-`;
-const SkillEff = styled.div`
+const SkillEff = styled(Text)`
   margin: 3px 0 0 0;
   width: 100%;
   text-align: left;
@@ -112,13 +96,13 @@ const SkillEff = styled.div`
   }
 `;
 const LvBar = styled(FlexBox)`
+  margin: 5px 0 0 0;
   height: auto;
   .exp{
     position: relative;
-    margin: auto 5px;
     width: 100%;
-    height: 10px;
-    border-radius: 20px;
+    height: 5px;
+    border-radius: 5px;
     background: var(--color-grey);
     overflow: hidden;
   }
@@ -154,13 +138,14 @@ const CharacterSkill = ({
   return (
     <>
       <Wrap className="skill scroll-y">
-        <InfoGroup pointTitle={chName} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.skill[lang]}`} guideClick={() => {
+        <InfoGroup pointTitle={`Lv.${saveCh.lv} ${chName}`} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.jobSkill[lang]}`} guideClick={() => {
           setPopupType('guide');
           setPopupOn(true);
           setPopupInfo({
             data: gameData.guide["characterSkill"],
           });
         }}>
+          <SkillGroup>
           {saveSkill && saveSkill.map((skillData, idx) => {
             const skData = gameData.skill[skillData.idx];
             if (!skData) return null;
@@ -182,33 +167,34 @@ const CharacterSkill = ({
               <Skill key={skillKey} possible={actionPossibleSkill}direction="column">
                 {skillData.idx !== 0 && <SkillTypePic pic="icon100" type="skillType" idx={skillCate} />}
                 <SkillInfo>
-                  <SkillIcon>
-                    <IconPic pic="skill" idx={skData.idx} />
-                  </SkillIcon>
-                  <SkillTxt direction="column">
-                    <SkillTitle justifyContent="flex-start">
-                      <SkillName code="t2" color="main" weight="600">
-                        <span className="lv">LV.{skillData.lv}</span>{skData.na[lang]}
-                      </SkillName>
-                      {skData.element_type !== 0 && (
-                        <ActionType>
-                          <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={skData.element_type} />
-                        </ActionType>
-                      )}
-                    </SkillTitle>
-                    <SkillEff className="txt" dangerouslySetInnerHTML={{ __html: skillText }} />
+                  <SkillIconWrap direction="column" justifyContent="flex-start">
+                    <SkillIcon>
+                      <IconPic pic="skill" idx={skData.idx} />
+                    </SkillIcon>
+                    {typeof skillData.exp === "number" && (
+                      <LvBar>
+                        <span className="exp">
+                          <span className="gradient_dark" style={{ width: `${skillData.exp || 0}%` }}></span>
+                        </span>
+                      </LvBar>
+                    )}
+                  </SkillIconWrap>
+                  <SkillTxt direction="column" justifyContent="flex-start">
+                    <SkillName code="t0"  color="main" weight="600" lineHeight="1">
+                      <span className="lv">LV.{skillData.lv}</span>{skData.na[lang]}
+                    </SkillName>
+                    {skData.element_type !== 0 && (
+                      <ActionType>
+                        <IconPic type="element" isAbsolute={true} isThumb={true} pic="icon100" idx={skData.element_type} />
+                      </ActionType>
+                    )}
+                    <SkillEff code="t0"  color="main" className="txt" dangerouslySetInnerHTML={{ __html: skillText }} />
                   </SkillTxt>
                 </SkillInfo>
-                {typeof skillData.exp === "number" && (
-                  <LvBar>
-                    <span className="exp">
-                      <span className="gradient_dark" style={{ width: `${skillData.exp || 0}%` }}></span>
-                    </span>
-                  </LvBar>
-                )}
               </Skill>
             );
           })}
+          </SkillGroup>
         </InfoGroup>
       </Wrap>
       <PopupContainer>

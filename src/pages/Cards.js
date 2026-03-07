@@ -173,12 +173,48 @@ const CloseBtn = styled(Button)`
     color: ${({ theme }) => theme.color.main};
   }
 `;
+const ChState = styled.div`
+  position: absolute;
+  inset: 0;
+  border: 5px solid transparent;
+  background: rgba(0,0,0,.8);
+  border-image: url(${({frameBack}) => frameBack}) 5 round;z-index: 3;
+`;
+const States = styled.div`
+  position: absolute;
+  inset: 10%;
+  width: 80%;
+`;
+const StateList = styled(FlexBox)`
+  margin: 0 0 5px 0;
+  width: auto;
+  height: auto;
+  &:last-of-type{
+    margin: 0;
+  }
+`;
+const StateName = styled(Text)`
+  padding: 0 0 0 5px;
+  width: 22%;
+  color: #999;
+  b {
+    display:block;
+    font-size:0.875rem;
+    color:#fff;
+    font-weight:600;
+  }
+`;
+const StateCurrent = styled(Text)`
+  width:48%;
+  letter-spacing:-1px;
+`;
+const StateTotal = styled(Text)`
+  padding: 0 5px 0 0;
+  width:30%;
+`;
 const ChStory = styled.div`
   position: absolute;
-  left: 10px;
-  right: 10px;
-  top: 20px;
-  bottom: 20px;
+  inset: 0;
   border: 5px solid transparent;
   background: rgba(0,0,0,.8);
   border-image: url(${({frameBack}) => frameBack}) 5 round;z-index: 3;
@@ -190,13 +226,11 @@ const Storys = styled.div`
 `;
 const ChInven = styled.div`
   position: absolute;
-  left: 10px;
-  right: 10px;
-  top: 0;
-  height: 80%;
+  inset: 0;
   border: 5px solid transparent;
   background: rgba(0,0,0,.8);
-  border-image: url(${({frameBack}) => frameBack}) 5 round;z-index: 3;
+  border-image: url(${({frameBack}) => frameBack}) 5 round;
+  z-index: 3;
 `;
 const InvenItems = styled.div`
   padding: 5px;
@@ -226,14 +260,23 @@ const ItemList = styled.li`
   }
   .txt{position:absolute;left:2px;right:2px;bottom:2px;font-size:0.688rem;text-align:center;z-index:1;}
   .pic{position:absolute;left:0;right:0;bottom:0;top:0;width:100%;}
-  .hole{position:absolute;left:0;right:0;top:0;bottom:0;z-index:3;pointer-events:none;}
-  .hole .hole_slot{position:absolute;width:25%;padding-top:25%;border-radius:50%;border:1px solid #000;background:rgba(0,0,0,.7);}
-  .hole .hole_slot.fixed{background:rgba(255,172,47,.7)}
-  .hole .hole_slot.hole0{left:0;top:0;}
-  .hole .hole_slot.hole1{right:0;top:0;}
-  .hole .hole_slot.hole2{right:0;bottom:0;}
-  .hole .hole_slot.hole3{left:0;bottom:0;}
-  .hole .hole_slot.hole4{left:50%;top:50%;transform:translate(-50%,-50%);}
+`;
+const Hole = styled(FlexBox)`
+  position:absolute;
+  inset: 5%;
+  z-index:3;
+  width: 90%;
+  height: 90%;
+  pointer-events:none;
+  .hole_slot{
+    width: 15%;
+    padding-top: 15%;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+  }
+  .hole_slot.fixed {
+    background: rgba(255, 172, 47, 0.7);
+  }
 `;
 const setSlotIdxFn = (state, paramData) => {
   if (!state) {
@@ -278,7 +321,8 @@ const Cards = ({
   const gameItem = React.useMemo(() => gameData.items, [gameData]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : {...saveData}, [saveData]);
   const [showInven, setShowInven] = useState(state?.dataObj.invenOpened);
-  const [showStory, setShowStory] = useState(false);
+  const [showSetting, setShowSetting] = useState(false);
+  const [showState, setShowState] = useState(false);
   const invenItems = React.useMemo(() => {
     return sData.items;
   }, [sData]);
@@ -334,7 +378,7 @@ const Cards = ({
     <>
       <Wrap className="ch_wrap">
         <ChArea>
-          <div style={{position:"absolute",left:"30%",top:0,zIndex:100, backgroundColor: '#fff'}}>
+          <div style={{position:"absolute",right:"20%",bottom:0,zIndex:100, backgroundColor: '#fff'}}>
             <button onClick={() => {
               util.getItem({
                 saveData: sData,
@@ -397,7 +441,7 @@ const Cards = ({
               setShowCard(!isShowCard);
             }}/>
             {chPage === 0 ? <CharacterCard saveData={sData} slotIdx={slotIdx} isShowCard={isShowCard}/> : <ChBack type="cardBack" pic="card" idx={0} />}
-            {chPage === 1 && <CharacterState saveData={sData} slotIdx={slotIdx} />}
+            {chPage === 1 && <CharacterState saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
             {chPage === 2 && <CharacterAnimalSkill saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
             {chPage === 3 && <CharacterSkill saveData={sData} slotIdx={slotIdx} />}
             {chPage === 4 && <CharacterRelation saveData={sData} slotIdx={slotIdx} />}
@@ -407,36 +451,51 @@ const Cards = ({
           <TopBtnGroup>
             <FlexBox>
               <TopBtn>
-                <IconPic type="item" pic="icon100" idx={7} onClick={() => {
-                  setShowStory(prev => !prev);
-                }} />
-              </TopBtn>
-              <TopBtn>
                 <IconPic type="quickMenu" pic="icon100" idx={1} onClick={() => {
                   setShowInven(prev => !prev);
                 }} />
               </TopBtn>
               <TopBtn>
                 <IconPic type="state" pic="icon100" idx={9} onClick={() => {
-                  setPopupType('applyState');
-                  setPopupOn(true);
-                  setPopupInfo({
-                    chSlotIdx: slotIdx,
-                  });
+                  setShowState(prev => !prev);
+                }} />
+              </TopBtn>
+              <TopBtn>
+                <IconPic type="item" pic="icon100" idx={7} onClick={() => {
+                  setShowSetting(prev => !prev);
                 }} />
               </TopBtn>
             </FlexBox>
           </TopBtnGroup>
-          {showStory && <ChStory frameBack={imgSet.etc.frameChBack}>
+          {showState && <ChState frameBack={imgSet.etc.frameChBack}>
             <CloseBtn onClick={() => {
-              setShowStory(false);
+              setShowState(false);
+            }}>
+              <Text code="t1">{gameData.msg.button.close[lang]}</Text>
+            </CloseBtn>
+            <States>
+              {gameData.battleStateName?.map((bData, idx) => {
+                const chStats = saveData.ch?.[slotIdx] || {};
+                return (
+                  <StateList justifyContent="space-between" key={idx} className={bData}>
+                    <StateName code="t2" align="left" color="grey">{gameData.msg?.state?.[bData]?.[lang]}<b>{gameData.msg?.state?.[bData]?.en}</b></StateName>
+                    <StateCurrent code="t4" color="#0b7" weight="600" align="center">{`${chStats['bSt'+idx] || 0} + `}<b>{`${chStats['iSt'+idx] || 0}`}</b></StateCurrent>
+                    <StateTotal code="t6" color="#0b7" align="right" weight="600" className="total">{(chStats['bSt'+idx] || 0) + (chStats['iSt'+idx] || 0)}</StateTotal>
+                  </StateList>
+                )
+              })}
+            </States>
+          </ChState>}
+          {showSetting && <ChStory frameBack={imgSet.etc.frameChBack}>
+            <CloseBtn onClick={() => {
+              setShowSetting(false);
             }}>
               <Text code="t1">{gameData.msg.button.close[lang]}</Text>
             </CloseBtn>
             <Storys className="scroll-y">
               <ul>
                 <li>
-                  {slotIdx}
+                  별칭 변경{slotIdx}
                 </li>
               </ul>
             </Storys>
@@ -472,11 +531,8 @@ const Cards = ({
                       });
                     }} data-itemnum={`equip_${data.idx}`}>
                       <ItemGradeColor part={data.part} grade={gameData.itemGrade.txt_e[data.grade].toLowerCase()} sealed={data.sealed} impossible={equipPossible}>
-                        <ItemPic type="equip" className={`pic`}>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], data.color, data.svgColor || data.id)}}>
-                          </svg>
-                        </ItemPic>
-                        <span className="hole" flex-center="true">
+                        <ItemPic type="equip" pic="equip" idx={items.display} />
+                        <Hole alignItems="flex-end" justifyContent="space-between">
                           {itemsHole.map((holeData, holeidx) => {
                             const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
                             return (
@@ -485,7 +541,7 @@ const Cards = ({
                               </span>
                             );
                           })}
-                        </span>
+                        </Hole>
                       </ItemGradeColor>
                     </ItemList>
                   )
@@ -495,6 +551,7 @@ const Cards = ({
               <ul className="h_items">
                 { invenItems.hole && invenItems.hole.map((data, idx) => {
                   const items = gameItem.hole[data.idx];
+                  console.log(items, data.idx);
                   return (
                     <ItemList key={`hole${idx}`} data-itemnum={`hole_${data.idx}`} onClick={() => {
                       handlePopup({

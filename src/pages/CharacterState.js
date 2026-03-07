@@ -1,8 +1,11 @@
 import { Text } from 'components/Atom';
+import { Button } from 'components/Button';
 import { FlexBox } from 'components/Container';
 import { IconPic } from 'components/ImagePic';
 import InfoGroup from 'components/InfoGroup';
 import { util } from 'components/Libs';
+import Msg from 'components/Msg';
+import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import { AppContext } from 'contexts/app-context';
@@ -48,6 +51,14 @@ const KgPic = styled(IconPic)`
 `;
 const KgText = styled(Text)`
   margin: 0 0 0 5px;
+`;
+const LvButton = styled(Button)`
+  margin: 0 10px 0 0;
+  padding: 0 5px;
+`;
+const LvIcon = styled(IconPic)`
+  width: 40px;
+  height: 40px;
 `;
 const StyledText = styled(Text)`
   margin: 0 5px 0 0;
@@ -166,6 +177,7 @@ const ElementList = ({
 const CharacterState = ({
   saveData,
   slotIdx,
+  changeSaveData,
 }) => {
   const context = useContext(AppContext);
   const lang = React.useMemo(() => {
@@ -186,7 +198,7 @@ const CharacterState = ({
   const saveExp = React.useMemo(() => {
     const gradeKey = 'grade' + saveCh.grade;
     const maxExpArr = gameData.exp?.[gradeKey];
-    const maxExp = (maxExpArr && typeof saveCh.lv === "number") ? maxExpArr[saveCh.lv - 1] : 0;
+    const maxExp = (maxExpArr && typeof saveCh.lv === "number") ? maxExpArr[saveCh.lv] : 0;
     
     return {
       current: saveCh.exp || 0,
@@ -204,6 +216,8 @@ const CharacterState = ({
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
+  const [msgOn, setMsgOn] = useState(false);
+  const [msg, setMsg] = useState("");
 
   const animalKg = React.useMemo(() => {
     const animalType = chData.animal_type;
@@ -227,7 +241,7 @@ const CharacterState = ({
   return (
     <>
       <Wrap className="state">
-        <InfoGroup pointTitle={chName} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.state[lang]}`} guideClick={() => {
+        <InfoGroup pointTitle={`Lv.${saveCh.lv} ${chName}`} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.state[lang]}`} guideClick={() => {
           setPopupType('guide');
           setPopupOn(true);
           setPopupInfo({
@@ -235,36 +249,58 @@ const CharacterState = ({
           });
         }}>
           <StateArea>
-            <ChInfoContainer direction="column">
-              <ChInfoLi>
-                <ActionBox justifyContent="space-between">
-                  <Text code="t2" color="grey">{gameData.msg.state.sp[lang]}</Text>
-                  <StyledText code="t2" color="main">
-                    <span className="current">{saveCh.actionPoint || 0}</span><ChInfoBar>/</ChInfoBar><span className="max">50</span>
-                  </StyledText>
-                </ActionBox>
-                <BodyKg justifyContent="flex-end">
-                  <SizeTxt code="t3" color="main">({animalKg})</SizeTxt>
-                  <KgPic type="state" pic="icon100" idx={8} />
-                  <KgText code="t2" color={util.getPercentColor(gameData.animal_size.kg[chData.animal_type]?.[2] || 1, saveCh.kg || 0).stateColor}>{`${saveCh.kg || 0} kg`}</KgText>
-                </BodyKg>
-              </ChInfoLi>
-              <ChInfoLi>
-                <FlexBox justifyContent="space-between">
-                  <Text code="t2" color="grey">{gameData.msg.info.exp[lang]}</Text>
-                  <StyledText code="t2" color="main">
-                    <span className="current">{saveExp.current}</span> <ChInfoBar>/</ChInfoBar> <span className="max">{saveExp.max}</span>
-                  </StyledText>
-                </FlexBox>
-              </ChInfoLi>
-              <ChInfoLi>
-                <FlexBox justifyContent="space-between">
-                  <Text code="t2" color="grey">{gameData.msg.info.cumulativeExp[lang]}</Text>
-                  <StyledText code="t2" color="main">
-                    <span className="current">{saveHasExp.current}</span> <ChInfoBar>/</ChInfoBar> <span className="max">{saveHasExp.max}</span>
-                  </StyledText>
-                </FlexBox>
-              </ChInfoLi>
+            <ChInfoContainer direction="row">
+              <LvButton onClick={() => {//레벨업
+                const maxExp = saveExp.max;//레벨당 필요한 경험치
+                const currentExp = saveExp.current;//현재 경험치
+                const hasExp = saveHasExp.current;//보유 경험치
+                const needExp = maxExp - currentExp;//레벨업에 필요한 경험치
+                if (needExp <= hasExp) {
+                  const sData = {...saveData};
+                  const isLvUp = currentExp + needExp >= maxExp;
+                  sData.ch[slotIdx].exp = currentExp + needExp;
+                  sData.ch[slotIdx].hasExp = hasExp - needExp;
+                  if (isLvUp) {
+                    sData.ch[slotIdx].lv = saveCh.lv + 1;
+                    sData.ch[slotIdx].exp = currentExp + needExp - maxExp;
+                  }
+                  changeSaveData(sData);
+                } else {
+                  setMsgOn(true);
+                  setMsg(gameData.msg.sentence.lackExp[lang]);
+                }
+              }}><LvIcon type="commonIcon" pic="icon200" idx={0} /></LvButton>
+              <FlexBox direction="column">
+                <ChInfoLi>
+                  <ActionBox justifyContent="space-between">
+                    <Text code="t2" color="grey">{gameData.msg.state.sp[lang]}</Text>
+                    <StyledText code="t2" color="main">
+                      <span className="current">{saveCh.actionPoint || 0}</span><ChInfoBar>/</ChInfoBar><span className="max">50</span>
+                    </StyledText>
+                  </ActionBox>
+                  <BodyKg justifyContent="flex-end">
+                    <SizeTxt code="t3" color="main">({animalKg})</SizeTxt>
+                    <KgPic type="state" pic="icon100" idx={8} />
+                    <KgText code="t2" color={util.getPercentColor(gameData.animal_size.kg[chData.animal_type]?.[2] || 1, saveCh.kg || 0).stateColor}>{`${saveCh.kg || 0} kg`}</KgText>
+                  </BodyKg>
+                </ChInfoLi>
+                <ChInfoLi>
+                  <FlexBox justifyContent="space-between">
+                    <Text code="t2" color="grey">{gameData.msg.info.exp[lang]}</Text>
+                    <StyledText code="t2" color="main">
+                      <span className="current">{saveExp.current}</span> <ChInfoBar>/</ChInfoBar> <span className="max">{saveExp.max}</span>
+                    </StyledText>
+                  </FlexBox>
+                </ChInfoLi>
+                <ChInfoLi>
+                  <FlexBox justifyContent="space-between">
+                    <Text code="t2" color="grey">{gameData.msg.info.cumulativeExp[lang]}</Text>
+                    <StyledText code="t2" color="main">
+                      <span className="current">{saveHasExp.current}</span> <ChInfoBar>/</ChInfoBar> <span className="max">{saveHasExp.max}</span>
+                    </StyledText>
+                  </FlexBox>
+                </ChInfoLi>
+              </FlexBox>
             </ChInfoContainer>
             <StateContainer direction="row" justifyContent="flex-start">
               {gameData.stateName.map((data, idx) => {
@@ -306,6 +342,9 @@ const CharacterState = ({
       <PopupContainer>
         {popupOn && <Popup type={popupType} saveData={saveData} dataObj={popupInfo} showPopup={setPopupOn} />}
       </PopupContainer>
+      <MsgContainer>
+        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+      </MsgContainer>
     </>
   );
 }

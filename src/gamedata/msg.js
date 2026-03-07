@@ -55,6 +55,11 @@ export const msg = {
 			en:'Animal Skills',
 			jp:'動物スキル',
 		},
+		jobSkill:{
+			ko:'직업 스킬',
+			en:'Job Skill',
+			jp:'職業スキル',
+		},
 		skill:{
 			ko:'스킬',
 			en:'Skill',
@@ -65,15 +70,20 @@ export const msg = {
 			en:'Relation',
 			jp:'縁',
 		},
+		biography:{
+			ko:'전기',
+			en:'Biography',
+			jp:'伝記',
+		},
 		element:{
 			ko:'속성',
 			en:'Element',
 			jp:'属性',
 		},
 		equipment:{
-			ko:'장비착용',
-			en:'Wearing Equipment',
-			jp:'装備着用',
+			ko:'장비',
+			en:'Equipment',
+			jp:'装備',
 		},
 		totalState:{
 			ko:'전체 능력치',
@@ -1765,6 +1775,11 @@ export const msg = {
 			en:'There is no character scenario data.',
 			jp:'人物のシナリオデータはありません。',
 		},
+		lackExp:{
+			ko:'경험치 보유량이 부족합니다.',
+			en:'You don\'t have enough experience.',
+			jp:'経験値の保有量が不足しています。'
+		},
 		lackLeadership:{
 			ko:'리더의 통솔력이 부족합니다.',
 			en:'The leader lacks leadership skills.',
@@ -2039,6 +2054,11 @@ export const msg = {
 			ko:'습득 가능합니다.',
 			en:'It can be acquired.',
 			jp:'習得可能です。',
+		},
+		noWearableItems:{
+			ko:'착용 가능한 장비가 없습니다.',
+			en:'There are no wearable items.',
+			jp:'着用可能な装備がありません。',
 		},
 	},
 	grammar:{

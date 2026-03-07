@@ -197,111 +197,141 @@ const ItemContainer = styled.ul`
 		color: #00ff00;
 	}
 `;
-const ItemHeader = styled.li`
-	padding: 5px;
-	text-align: center;
-	border: 5px solid transparent;
-	background: ${({theme}) => theme.color.sub};
-	border-image: url(${({frameBack}) => frameBack}) 5 round;
-`;
 const ItemFix = styled.li`
 	display: flex;
 	position: relative;
 	padding: 5px;
 	border-bottom: ${({color}) => color};
 `;
-const ItemCont = styled.div`
-	display: flex;
-	flex-direction: column;
-  margin: 0 0 0 10px;
-	flex: 1;
-  .item_grade{
-		color: ${({ color }) => color};
-	}
-	span{
-		display: inline-block;
-		vertical-align: middle;
-		}
-	.item_top{
-		display: flex;
-		justify-content: space-between;
-		color: #bbb;
-		font-size: 0.75rem;
-	}
-	.item_bottom{
-		margin: 0 0 10px 0;
-	}
-	.item_description{
-		flex: 1;
-		font-family: serif;
-		line-height: 1.3;
-		font-size: 0.625rem;
-		color: #d3a859;
-		font-weight: 600;
-		text-overflow: ellipsis;
-		word-wrap: break-word;
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-	}
-	.item_kg{
-		text-align:right;
-		font-weight:600;
-		color:#bbb;
-	}
-`;
 const ItemList = styled.li`
 	display: flex;
-	${({type}) => {
+  margin: 5px 0 0 0;
+	padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+	${({type, frameBack}) => {
 		switch(type) {
-			case 'typeSlot':
-				return `
-					margin: 0 0 5px 0;
-					justify-content: space-between;
-					flex-direction: row;
-				`;
+      case 'header':
+        return `
+          padding: 5px 10px;
+          text-align: center;
+          background: rgba(0,0,0,.7);
+          background-image: radial-gradient(at 50%, #930 0%, #691500 40%, #000 80%);
+          border-bottom: 5px solid transparent;
+          border-image: url(${frameBack}) 5 round;
+          justify-content: center;
+        `;
+      case 'footer':
+        return `
+          justify-content: space-between;
+          align-items: center;
+          background: rgba(0,0,0,.7);
+          border-top: 5px solid transparent;
+          border-image: url(${frameBack}) 5 round;
+          button {
+            margin: 0;
+          }
+        `;
+      case 'animalCoin_slot':
+        return `
+          margin: 0 0 5px 0;
+          padding: 0 10px;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+        `;
+      case 'eff':
+        return `
+          flex-direction: column;
+        `;
+      case 'hole':
+        return `
+        `;
 			case 'set': 
 				return `
 					margin: 0 0 10px 0;
 					padding: 0 10px;
 				`;
 			default: 
-				return `
-					margin: 10px 0 0 0;
-					flex-direction: column;
-				`;
+				break;
 			}
 	}}
-	.item_title{margin:0 0 5px 0;font-size:0.75rem;color:#ddd;}
-	.item_effs{
-		display:flex;
-		align-items:center;
-		margin:0 5px 5px 5px;
-		color:#2f73ff;font-weight:600;}
-	.item_effs.add{color:#ffac2f;}
-	.item_effs.hole{color:#e14040;}
-	.item_effs span{display:block;font-weight:600;}
-	.item_effs .cate{margin:0 10px 0 0;color:#00a90c;}
-	.item_effs .base{margin:0 5px 0 0;color:#2f73ff;}
-	.item_effs .add{margin:0 5px 0 0;color:#ffac2f;}
-	.item_effs .hole{color:#e14040;}
-	.item_effs .total{flex:1;text-align:right;font-size:0.938rem;color:#fff;}
-	.item_slot{
-		display:flex;
-		align-items:center;
-	}
-	.item_slot .item_holes{margin:0 0 5px 0;}
-	.item_slot .item_holes .item_holeback {
-		display:inline-block;background-image:radial-gradient(at 50%, #000 30%, #888 100%);
-		border-radius: 20px;
-		width: 40px;
-		height: 40px;
-		text-align:center;
-	}
-	.item_slot .item_holes.fixed .item_holeback{background:rgba(255,172,47,.7);}
-	.item_slot .item_holes img{margin:2px 0 0 0;width:20px;height:20px;vertical-align:middle;}
 	.item_setNa{margin:0 0 10px 0;color:#0f0;font-size:0.875rem;}
+`;
+const ItemName = styled(Text)`
+  color: ${({ grade }) => grade};
+  text-shadow: -1px -1px 1px rgba(255,255,255,.5), 1px 1px 1px #000;
+  line-height:1.2;
+`;
+const ItemEffs = styled(FlexBox)`
+  margin: 0 0 5px 15px;
+  width: auto;
+  ${({color}) => color ? `color: ${color}` : ''}
+`;
+const ItemEffText = styled(Text)`
+  margin: ${({margin}) => margin ? `0 ${margin}px 0 0` : 0};
+  line-height: 1;
+`;
+const ItemPrice = styled(FlexBox)``;
+const ItemButton = styled(FlexBox)``;
+const ItemCoin = styled(FlexBox)``;
+const ItemSlot = styled(FlexBox)``;
+const ItemHoleBack = styled(FlexBox)`
+  display: inline-block;
+  border-radius: 20px;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  background-image: ${({fixed}) => fixed ? `
+    radial-gradient(at 50%, #000 30%, rgba(255, 172, 47, 0.7) 100%);
+  ` : `
+    radial-gradient(at 50%, #000 30%, #888 100%)
+  `}
+`;
+const ItemInfo = styled(FlexBox)`
+  margin: 0 0 0 10px;
+	width: calc(100% - 10px);
+`;
+const ItemTop = styled(FlexBox)`
+	height: auto;
+`;
+const ItemGrade = styled(Text)`
+  color: ${({ color }) => color};
+`;
+const ItemType = styled(Text)``;
+const ItemDescription = styled(Text)`
+  color: ${({ color }) => color};
+  line-height: 1.2;
+  text-align: left;
+`;
+// text-overflow: ellipsis;
+// word-wrap: break-word;
+// display: -webkit-box;
+// -webkit-line-clamp: 2;
+// -webkit-box-orient: vertical;
+// overflow: hidden;
+const ItemKg = styled(Text)`
+  width: 100%;
+  color: ${({ color }) => color};
+`;
+const ItemTitle = styled(Text)`
+  margin: 0 0 5px 0;
+  line-height: 1;
+`;
+const Hole = styled(FlexBox)`
+  position: absolute;
+  inset: 5%;
+  z-index: 3;
+  width: 90%;
+  height: 90%;
+  pointer-events: none;
+  .hole_slot {
+    width: 15%;
+    padding-top: 15%;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+  }
+	.item_holes img{margin:2px 0 0 0;width:20px;height:20px;vertical-align:middle;}
 `;
 const ItemFooter = styled.li`
 	padding: 5px;
@@ -347,9 +377,7 @@ const  SelectItemList = styled.li`
 	${({sealed}) => {
       if (sealed) {
         return `
-          svg, span {
-            filter:brightness(0.3) drop-shadow(0px 0px 1px #fff)};
-          }
+          filter:brightness(0.3) drop-shadow(0px 0px 1px #fff)};
           &:before {
             content: '?';
             position: absolute;
@@ -431,6 +459,7 @@ const ShopFooter = ({
     return gameData.items;
   }, [gameData]);
 	const selectedItem = React.useMemo(() => selectItem[selectItemNum], [selectItem, selectItemNum]);
+	const totalEff = React.useMemo(() => selectedItem?.gameItem?.part === 'number' ? util.getTotalEff(selectedItem.saveItemData, gameData) : [], [selectedItem, gameData]);
 	const timeoutRef = useRef(null); //timeout
   const handlePopup = useCallback((saveObj) => {
 		const {saveItemData, itemType, itemIdx} = saveObj;
@@ -454,10 +483,10 @@ const ShopFooter = ({
 	return <>
 		{typeof selectedItem?.gameItem?.part === 'number' && (
 			<>
-				<ItemHeader frameBack={imgSet.etc.frameChBack} flex-center="true">
-					<Text code="t2" color={gameData.itemGrade.color?.[selectedItem.saveItemData?.grade]} dangerouslySetInnerHTML={{__html: `${selectedItem.saveItemData?.colorantSet ? util.getColorant(selectedItem.saveItemData.colorantSet, gameData).na?.[lang] || "" : ''} ${selectedItem.saveItemData?.modifier?.[lang] || ""} ${selectedItem.gameItem?.na?.[lang] || ""}`}}></Text>
-				</ItemHeader>
-				<ItemFix color="select2">
+				<ItemList type="header" frameBack={imgSet.etc.frameChBack}>
+					<ItemName grade={gameData.itemGrade.color?.[selectedItem.saveItemData?.grade]}  code="t3" color="main" weight={600} dangerouslySetInnerHTML={{__html: `${selectedItem.saveItemData?.colorantSet ? util.getColorant(selectedItem.saveItemData.colorantSet, gameData).na?.[lang] || "" : ''} ${selectedItem.saveItemData?.modifier?.[lang] || ""}<br/>${selectedItem.gameItem?.na?.[lang] || ""}`}}></ItemName>
+				</ItemList>
+				<ItemList>
 					<ItemGradeColor part={selectedItem.gameItem?.part} grade={gameData.itemGrade.txt_e?.[selectedItem.saveItemData?.grade]?.toLowerCase()} sealed={selectedItem.saveItemData?.sealed} size="80" onClick={() => {
 						if (shopType === 'shop') {
 							handlePopup({
@@ -473,110 +502,130 @@ const ShopFooter = ({
 							});
 						}
 					}}>
-						<ItemPic type="equip" className={`item favorite${selectedItem.saveItemData?.favorite}`}>
-							<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectedItem.gameItem?.display], selectedItem.saveItemData?.color, selectedItem.saveItemData?.svgColor ||selectedItem.saveItemData?.id)}}></svg>
-						</ItemPic>
+						<ItemPic isAbsolute className={`favorite${selectedItem.saveItemData?.favorite}`} type="equip" pic="equip" idx={selectedItem.gameItem?.display} />
 					</ItemGradeColor>
 					<div flex-h="true" style={{flex: 1,}}>
-						<ItemCont color={gameData.itemGrade.color?.[selectedItem.saveItemData?.grade]}>
-							<div className="item_top">
-								<span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k?.[selectedItem.saveItemData?.grade] : gameData.itemGrade.txt_e?.[selectedItem.saveItemData?.grade]}</span> <span className="item_type">{gameData.itemType?.[selectedItem.gameItem?.part]?.[lang]}</span>
-							</div>
-							<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectedItem.gameItem?.txt?.[lang] || ""}"`}}></div>
-							<div className="item_kg">{selectedItem.gameItem?.kg || 0}kg</div>
-						</ItemCont>
+						<ItemInfo direction="column" justifyContent="space-between">
+							<ItemTop justifyContent="space-between" className="item_top">
+								<ItemGrade code="t2" color={gameData.itemGrade.color?.[selectedItem.saveItemData?.grade]}>{lang === 'ko' ? gameData.itemGrade.txt_k?.[selectedItem.saveItemData?.grade] : gameData.itemGrade.txt_e?.[selectedItem.saveItemData?.grade]}</ItemGrade> <ItemType code="t1" color="#bbb">{gameData.itemType?.[selectedItem.gameItem?.part]?.[lang]}</ItemType>
+							</ItemTop>
+							<ItemDescription code="t1" color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${selectedItem.gameItem?.txt?.[lang] || ""}"`}}></ItemDescription>
+							<ItemKg code="t2"  weight="600" color="#bbb" align="right">{selectedItem.gameItem?.kg || 0}kg</ItemKg>
+						</ItemInfo>
 					</div>
-				</ItemFix>
-				<div className="scroll-y">
-					{(selectedItem.saveItemData.markNum > 0 || selectedItem.saveItemData.hole.length > 0) && <ItemList type="typeSlot" className="item_list">
-						<div className="item_type">
-							<MarkPic length={selectedItem.saveItemData.markNum} pic="icon100" idx={selectedItem.saveItemData.mark} />
-						</div>
-						<div className="item_slot">
-							{selectedItem.saveItemData.hole.map((holeData, idx) => {
-								const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
-								return (
-									<div key={`hole${idx}`} className={`item_holes ${holePic !== 0 ? 'fixed': ''}`}>
-										<span className="item_holeback">
-											<ItemPic className="pic" pic="itemEtc" type="hole" idx={holePic} />
-										</span>
-									</div>
-								)
-							})}
-						</div>
-					</ItemList>}
-					<ItemList className="item_list">
-						<div className="item_title">{gameData.msg.itemInfo.itemEffect[lang]}</div>
-						{util.getTotalEff(selectedItem.saveItemData, gameData).map((eff, idx) => {
-							if (eff.type === 100) {
-								return (
-									<div key={idx} className="item_effs">
-										<span className="cate">{util.getEffectType(eff.type, lang)}</span>
-										{eff.skList.map((sk, skIndex) => {
-											return (
-												<span key={`skIndex${skIndex}`} className="total">{`${gameData.skill[sk.idx].na[lang]} LV.${sk.lv}`}</span>
-											)
-										})}
-									</div>
-								)
-							} else {
-								return (
-									<div key={idx} className="item_effs">
-										<span className="cate">{util.getEffectType(eff.type, lang)}</span>
-										{eff.base > 0 && <span className="base">{eff.base}</span>}
-										{eff.add > 0 && <span className="add">{eff.add}</span>}
-										{eff.hole > 0 && <span className="hole">{eff.hole}</span>}
-										<span className="total">{selectedItem.saveItemData.sealed ? eff.base : eff.base + eff.add + eff.hole}</span>
-									</div>
-								)
-							}
+				</ItemList>
+				<ItemList type="animalCoin_slot">
+					<ItemCoin justifyContent="flex-start" className="item_type">
+						<MarkPic length={selectedItem.saveItemData.markNum} pic="icon100" idx={selectedItem.saveItemData.mark} />
+					</ItemCoin>
+					<ItemSlot justifyContent="flex-end">
+						{selectedItem.saveItemData.hole.map((holeData, idx) => {
+							const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
+							return (
+								<span key={`hole${idx}`}>
+									<ItemHoleBack fixed={holePic !== 0}>
+										<ItemPic pic="itemEtc" type="hole" idx={holePic} />
+									</ItemHoleBack>
+								</span>
+							)
 						})}
-					</ItemList>
-					<div style={{width:"100%"}} className="scroll-y">
-						<FlexBox direction="row" justify="space-between" alignItems="flex-start">
-							{selectedItem.saveItemData.baseEff.length > 0 && (
-								<ItemList style={{flex: 1}}>
-									<div className="item_title">{gameData.msg.itemInfo.basicEffect[lang]}</div>
-									{selectedItem.saveItemData.baseEff.map((data, idx) => {
-										const grade = selectedItem.saveItemData.grade > 3 ? 3 : selectedItem.saveItemData.grade - 1;
+					</ItemSlot>
+				</ItemList>
+				<ItemList type="eff">
+					<ItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.itemEffect[lang]}</ItemTitle>
+					{totalEff.map((eff, idx) => {
+						if (eff.type === 100) {
+							return (
+								<ItemEffs alignItems="center" justifyContent="space-between" key={idx}>
+									<ItemEffText code="t1" margin={10} weight="600" color="#00a90c">{util.getEffectType(eff.type, lang)}</ItemEffText>
+									{eff.skList.map((sk, skIndex) => {
 										return (
-											<div key={idx} className="item_effs">{`${util.getEffectType(data.type, lang)} ${selectedItem.saveItemData.sealed ? data.num : data.num[grade]}`}</div>
-										) 
+											<ItemEffText style={{flex:1}} code="t2" align="right" color="main" key={`skIndex${skIndex}`}>{`${gameData.skill[sk.idx].na[lang]} LV.${sk.lv}`}</ItemEffText>
+										)
 									})}
-								</ItemList>
-							)}
-							{selectedItem.saveItemData.addEff.length > 0 && (
-								<ItemList style={{flex: 1}}>
-									<div className="item_title">{gameData.msg.itemInfo.addEffect[lang]}</div>
-									{selectedItem.saveItemData.addEff.map((data, idx) => {
-										const grade = selectedItem.saveItemData.grade > 3 ? 3 : selectedItem.saveItemData.grade - 1;
-										if (data.type === 100) {
-											return (
-												<div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${gameData.skill[data.skIdx].na[lang]} LV.${data.skLv}`}</div>
-											)
-										} else {
-											return (
-												<div key={idx} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
-											)
-										}
-									})}
-								</ItemList>
-							)}
-						</FlexBox>
-						{selectedItem.gameItem.set !== 0 && (<ItemList type="set" className="item_list">
-							<div className="item_setNa">{gameData.items.set_type[selectedItem.gameItem.set].na}</div>
+								</ItemEffs>
+							)
+						} else {
+							return (
+								<ItemEffs alignItems="center" justifyContent="space-between" key={idx}>
+									<ItemEffText code="t1" margin={10} weight="600" color="#00a90c">{util.getEffectType(eff.type, lang)}</ItemEffText>
+									{eff.base > 0 && <ItemEffText code="t2" align="right" color="#2f73ff">{eff.base}</ItemEffText>}
+									{eff.add > 0 && <ItemEffText code="t2" align="right" color="#ffac2f">{eff.add}</ItemEffText>}
+									{eff.hole > 0 && <ItemEffText code="t2" align="right" color="#e14040">{eff.hole}</ItemEffText>}
+									<ItemEffText code="t2" align="right" color="main">{selectedItem.saveItemData.sealed ? eff.base : eff.base + eff.add + eff.hole}</ItemEffText>
+								</ItemEffs>
+							)
+						}
+					})}
+				</ItemList>
+				<div style={{width:"100%"}} className="scroll-y">
+					{selectedItem.saveItemData.baseEff.length > 0 && (
+						<ItemList type="eff">
+							<ItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.basicEffect[lang]}</ItemTitle>
+							{selectedItem.saveItemData.baseEff.map((data, idx) => {
+								const grade = selectedItem.saveItemData.grade > 3 ? 3 : selectedItem.saveItemData.grade - 1;
+								return (
+									<ItemEffs alignItems="center" justifyContent="space-between" key={idx}>
+										<ItemEffText code="t1" margin={10} weight="600" color="#00a90c">
+											{util.getEffectType(data.type, lang)}
+										</ItemEffText>
+										<ItemEffText style={{flex:1}} code="t2" align="right"  color="main" key={`skIndex${idx}`}>{`${selectedItem.saveItemData.sealed ? data.num : data.num[grade]}`}</ItemEffText>
+									</ItemEffs>
+								) 
+							})}
 						</ItemList>
-						)}
-					</div>
+					)}
+					{selectedItem.saveItemData.addEff.length > 0 && (
+						<ItemList type="eff">
+							<ItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.addEffect[lang]}</ItemTitle>
+							{selectedItem.saveItemData.addEff.map((eff, idx) => {
+								const grade = selectedItem.saveItemData.grade > 3 ? 3 : selectedItem.saveItemData.grade - 1;
+								if (eff.type === 100) {
+									return (
+										<ItemEffs alignItems="center" justifyContent="space-between" color="#ffac2f" key={idx}>
+											{`${util.getEffectType(eff.type, lang)} ${gameData.skill[eff.skIdx].na[lang]} LV.${eff.skLv}`}
+										</ItemEffs>
+									)
+								} else {
+									return (
+										<ItemEffs alignItems="center" justifyContent="space-between" color="#ffac2f" key={idx}>
+											{`${util.getEffectType(eff.type, lang)} ${eff.num[0]}`}
+										</ItemEffs>
+									)
+								}
+							})}
+						</ItemList>
+					)}
+					{selectedItem.saveItemData.hole.length > 0 && (
+						<ItemList type="hole">
+							<ItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.socketEffect[lang]}</ItemTitle>
+							{totalEff.map((data, idx) => {
+								if (data.hole > 0) {
+									return (
+										<ItemEffs alignItems="center" justifyContent="space-between" key={idx}>
+											<ItemEffText code="t1" margin={10} weight="600" color="#e14040">
+												{util.getEffectType(data.type, lang)}
+											</ItemEffText>
+											<ItemEffText style={{flex:1}} code="t2" align="right"  color="main" key={`skIndex${idx}`}>{`${data.hole}`}</ItemEffText>
+										</ItemEffs>
+									)
+								}
+							})}
+						</ItemList>
+					)}
+					{selectedItem.gameItem.set !== 0 && (<ItemList type="set">
+						<div className="item_setNa">{gameData.items.set_type[selectedItem.gameItem.set].na}</div>
+					</ItemList>
+					)}
 				</div>
 			</>
 		)}
 		{selectedItem.gameItem?.imgCate === 'itemHole' && (
 			<>
-				<ItemHeader frameBack={imgSet.etc.frameChBack} flex-center="true">
-					<Text code="t2" color={gameData.itemGrade.color[selectedItem.saveItemData.grade]} dangerouslySetInnerHTML={{__html: `${selectedItem.gameItem.na[lang]}`}}></Text>
-				</ItemHeader>
-				<ItemFix color="select1">
+				<ItemList type="header" frameBack={imgSet.etc.frameChBack}>
+					<ItemName grade={gameData.itemGrade.color[selectedItem.saveItemData.grade]} code="t3" color="main" weight={600} dangerouslySetInnerHTML={{__html: `${selectedItem.gameItem.na[lang]}`}}></ItemName>
+				</ItemList>
+				<ItemList>
 					<ItemGradeColor grade={gameData.itemGrade.txt_e[selectedItem.saveItemData.grade || selectedItem.gameItem.grade].toLowerCase()} sealed={selectedItem.saveItemData?.sealed} size="80" onClick={() => {
 						handlePopup({
 							saveItemData: selectedItem.saveItemData,
@@ -587,22 +636,25 @@ const ShopFooter = ({
 						<ItemPic pic="itemEtc" type={selectedItem.itemCate} idx={selectedItem.gameItem.display} />
 					</ItemGradeColor>
 					<div flex-h="true" style={{flex: 1,}}>
-						<ItemCont color={gameData.itemGrade.color[selectedItem.saveItemData.grade]}>
-							<div className="item_top">
-								<span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[selectedItem.saveItemData.grade] : gameData.itemGrade.txt_e[selectedItem.saveItemData.grade]}</span>
-							</div>
-							<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectedItem.gameItem.txt[lang]}"`}}></div>
-							<div className="item_kg">{selectedItem.gameItem.kg}kg</div>
-						</ItemCont>
+						<ItemInfo direction="column" justifyContent="space-between">
+							<ItemTop justifyContent="space-between" className="item_top">
+								<ItemGrade code="t2" color={gameData.itemGrade.color[selectedItem.saveItemData.grade]}>{lang === 'ko' ? gameData.itemGrade.txt_k[selectedItem.saveItemData.grade] : gameData.itemGrade.txt_e[selectedItem.saveItemData.grade]}</ItemGrade>
+							</ItemTop>
+							<ItemDescription code="t1"  color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${selectedItem.gameItem.txt[lang]}"`}}></ItemDescription>
+							<ItemKg code="t2"  weight="600" color="#bbb" align="right">{selectedItem.gameItem.kg}kg</ItemKg>
+						</ItemInfo>
 					</div>
-				</ItemFix>
+				</ItemList>
 				{selectedItem.gameItem.idx < 100 && (
 					<div className="scroll-y">
 						<ItemList className="item_list">
-							<div className="item_title">{gameData.msg.itemInfo.itemEffect[lang]}</div>
+							<ItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.itemEffect[lang]}</ItemTitle>
 							{util.getTotalEff(selectedItem.saveItemData, gameData).map((eff, idx) => {
 								return (
-									<div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{selectedItem.saveItemData.sealed ? eff.base : eff.base + eff.add + eff.hole}</span></div>
+									<ItemEffs alignItems="center" justifyContent="space-between" key={idx}>
+										<ItemEffText code="t1" margin={10} weight="600" color="#00a90c">{util.getEffectType(eff.type, lang)}</ItemEffText>
+										{eff.base > 0 && <ItemEffText code="t1" margin={5} weight="600" color="#2f73ff">{eff.base}</ItemEffText>}{eff.add > 0 && <ItemEffText code="t1" margin={5} weight="600" color="#ffac2f">{eff.add}</ItemEffText>}{eff.hole > 0 && <ItemEffText code="t1" margin={5} weight="600" color="#e14040">{eff.hole}</ItemEffText>}<ItemEffText code="t1" margin={5} weight="600" color="main">{selectedItem.saveItemData.sealed ? eff.base : eff.base + eff.add + eff.hole}</ItemEffText>
+									</ItemEffs>
 								)
 							})}
 						</ItemList>
@@ -612,10 +664,10 @@ const ShopFooter = ({
 		)}
 		{(selectedItem.gameItem?.imgCate === 'itemUpgrade' || selectedItem.gameItem?.imgCate === 'itemMaterial' || selectedItem.gameItem?.imgCate === 'itemEtc') && (
 			<>
-				<ItemHeader frameBack={imgSet.etc.frameChBack} flex-center="true">
-					<Text code="t2" rgbColor={gameData.itemGrade.color[selectedItem.saveItemData.grade]} dangerouslySetInnerHTML={{__html: `${selectedItem.gameItem.na[lang]}`}}></Text>
-				</ItemHeader>
-				<ItemFix color="select1">
+				<ItemList type="header" frameBack={imgSet.etc.frameChBack}>
+					<ItemName grade={gameData.itemGrade.color[selectedItem.saveItemData.grade]} code="t2" color="main" weight={600} dangerouslySetInnerHTML={{__html: `${selectedItem.gameItem.na[lang]}`}}></ItemName>
+				</ItemList>
+				<ItemList>
 					<ItemGradeColor grade={gameData.itemGrade.txt_e[selectedItem.saveItemData.grade || selectedItem.gameItem.grade].toLowerCase()} size="80" onClick={() => {
 						handlePopup({
 							saveItemData: selectedItem.saveItemData,
@@ -626,43 +678,41 @@ const ShopFooter = ({
 						<ItemPic pic="itemEtc" type={selectedItem.itemCate} idx={selectedItem.gameItem.display} />
 					</ItemGradeColor>
 					<div flex-h="true" style={{flex: 1,}}>
-						<ItemCont color={gameData.itemGrade.color[selectedItem.saveItemData.grade]}>
-							<div className="item_top">
-								<span className="item_grade">{lang === 'ko' ? gameData.itemGrade.txt_k[selectedItem.saveItemData.grade] : gameData.itemGrade.txt_e[selectedItem.saveItemData.grade]}</span>
-							</div>
-							<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectedItem.gameItem.txt[lang]}"`}}></div>
-							<div className="item_kg">{selectedItem.gameItem.kg}kg</div>
-						</ItemCont>
+						<ItemInfo direction="column" justifyContent="space-between">
+							<ItemTop justifyContent="space-between" className="item_top">
+								<ItemGrade code="t2" color={gameData.itemGrade.color[selectedItem.saveItemData.grade]}>{lang === 'ko' ? gameData.itemGrade.txt_k[selectedItem.saveItemData.grade] : gameData.itemGrade.txt_e[selectedItem.saveItemData.grade]}</ItemGrade>
+							</ItemTop>
+							<ItemDescription code="t1"  color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${selectedItem.gameItem.txt[lang]}"`}}></ItemDescription>
+							<ItemKg code="t2"  weight="600" color="#bbb" align="right">{selectedItem.gameItem.kg}kg</ItemKg>
+						</ItemInfo>
 					</div>
-				</ItemFix>
+				</ItemList>
 				<div className="scroll-y">
 					<li className="item_list item_eff">
-						<div className="item_title">
-							{selectedItem.gameItem.txt[lang]}
-						</div>
+						<ItemTitle align="left" code="t1" color="grey">{selectedItem.gameItem.txt[lang]}</ItemTitle>
 					</li>
 				</div>
 			</>
 		)}
-		<ItemFooter color={selectItemArr[selectItemNum]}>
-			<div className="item_price">
+		<ItemList type="footer" frameBack={imgSet.etc.frameChBack} color={selectItemArr[selectItemNum]}>
+			<ItemPrice justifyContent="flex-start">
 				{selectedItem.buttonType[0] === 'buy' ? <>
-					<span>{gameData.msg.itemInfo.buyPrice[lang]}</span>
-					<em>
+					<ItemEffText code="t2" margin={10} color="#c80">{gameData.msg.itemInfo.buyPrice[lang]}</ItemEffText>
+					<ItemEffText code="t2"  color="main">
 						{selectedItem.gameItem?.part <= 3 ?
 							`₩${util.comma((selectedItem.gameItem.price < 1000 ? 
 								1000 : 
 								selectedItem.gameItem.price) * 2 * (selectedItem.saveItemData.grade))}` : 
 							`₩${util.comma(selectedItem.gameItem.price * (selectedItem.saveItemData.grade || selectedItem.gameItem.grade))}`
 						}
-					</em>
+					</ItemEffText>
 				</> : <>
-					<span>{gameData.msg.itemInfo.sellPrice[lang]}</span>
-					<em>{`₩${util.comma(selectedItem.gameItem?.price * (selectedItem.gameItem?.grade || selectedItem.saveItemData?.grade))}`}</em>
+					<ItemEffText code="t2" margin={10} color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</ItemEffText>
+					<ItemEffText code="t2"  color="main">{`₩${util.comma(selectedItem.gameItem?.price * (selectedItem.gameItem?.grade || selectedItem.saveItemData?.grade))}`}</ItemEffText>
 				</>
 				}
-			</div> 
-			<div className="item_button" flex="true">
+			</ItemPrice> 
+			<ItemButton justifyContent="flex-end">
 			{selectedItem.buttonType.map((button, idx) => {
 				switch(button) {
 					case 'buy':
@@ -1298,8 +1348,8 @@ const ShopFooter = ({
 						break;
 				}
 			})}
-			</div>
-		</ItemFooter>
+			</ItemButton>
+		</ItemList>
 	</>
 }
 
@@ -1470,11 +1520,8 @@ const ShopList = ({
 						}
 						setSelectItem(cloneSelectItem);
 					}}>
-						<span className={`pic ${itemData.sealed ? "sealed" : ""}`}>
-							<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], itemData.color, itemData.svgColor || itemData.id)}}>
-							</svg>
-						</span>
-						<span className="hole" flex-center="true">
+						<ItemPic isAbsolute className={itemData.sealed ? "sealed" : ""} type="equip" pic="equip" idx={items.display} />
+						<Hole alignItems="flex-end" justifyContent="space-between">
 							{itemsHole.map((holeData, holeidx) => {
 								const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 								return (
@@ -1483,7 +1530,7 @@ const ShopList = ({
 									</span>
 								);
 							})}
-						</span>
+						</Hole>
 					</div>
 				)
 			} else {
@@ -1746,9 +1793,9 @@ const InvenShop = ({
 									setSelectItemNum(idx);
 								}
 							}}>
-								{selectItem[idx].itemSaveSlot !== "" && (selectItem[idx].itemCate === "equip" ? <ItemPic type="equip" className="item">
-									<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[selectItem[idx].gameItem.display], selectItem[idx].saveItemData.color, selectItem[idx].saveItemData.svgColor ||selectItem[idx].saveItemData.id)}}></svg>
-								</ItemPic>
+								{selectItem[idx].itemSaveSlot !== "" && (selectItem[idx].itemCate === "equip" ? 
+									<ItemPic isAbsolute type="equip" pic="equip" idx={selectItem[idx].gameItem.display} />
+									
 								: <ItemPic className="pic" pic="itemEtc" type={selectItem[idx].itemCate} idx={selectItem[idx].gameItem.display} />)}
 							</SelectItemList>
 						})}

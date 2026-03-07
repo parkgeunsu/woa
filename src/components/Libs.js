@@ -99,14 +99,10 @@ export const util = { //this.loadImage();
     battleState_[8] = Math.round(Math.random() * 200); //행운
     const battleState = util.getTotalState(battleState_);
     //등급에 따른 추가 능력치
-    let addGradePercent = 1;
-    for (let i = gameData.ch[enemyData.idx].grade; i < enemyData.grade; ++i) {
-      addGradePercent *= gameData.addGradeArr[i];
-    }
     for (const [idx, bState] of battleState.entries()) {
       enemy = {
         ...enemy,
-        ['bSt' + idx]: (idx !== 1 && idx !== 2 && idx !== 8 && idx !== 9) ? Math.round(bState * addGradePercent) : bState,
+        ['bSt' + idx]: gameData.addGradeState[idx] ? Math.round(bState * gameData.addGradeArr[gameData.ch[enemyData.idx].grade]) : bState,
       }
     }
     for (let i = 0; i <= 100; ++i) {//아이템 능력치
@@ -144,13 +140,9 @@ export const util = { //this.loadImage();
     battleState_[7] = gameData.ch[saveChSlot.idx].st3 + gameData.ch[saveChSlot.idx].st5 + gameData.ch[saveChSlot.idx].st6; //속도
     battleState_[8] = saveChSlot.stateLuk; //행운
     //등급에 따른 추가 능력치
-    let addGradePercent = 1;
-    for (let i = gameData.ch[saveChSlot.idx].grade; i < obj.grade; ++i) {
-      addGradePercent *= gameData.addGradeArr[i];
-    }
     const battleState = util.getTotalState(battleState_);
     for (const [idx, bState] of battleState.entries()) {
-      saveChSlot['bSt' + idx] = (idx !== 1 && idx !== 2 && idx !== 8 && idx !== 9) ? Math.round(bState * addGradePercent) : bState;
+      saveChSlot['bSt' + idx] = gameData.addGradeState[idx] ? Math.round(bState * gameData.addGradeArr[gameData.ch[saveChSlot.idx].grade]) : bState;
     }
     for (let i = 0; i <= 100; ++i) {//아이템 능력치
       if (i < 10) {
@@ -2840,7 +2832,8 @@ export const util = { //this.loadImage();
       //아이템 무게 측정
       let currentKg = 0;
       let itemSubmit = false;
-      const totalKg = Math.floor(gameData.ch[saveCh.idx].st1 / 0.3) / 10;
+      const chGrade = saveCh.grade - gameData.ch[saveCh.idx].grade;
+      const totalKg = Math.floor(gameData.ch[saveCh.idx].st1 / 0.3) / 10 * gameData.addGradeArr[chGrade + 1];
       for (const item of saveCh.items) {
         if (Object.keys(item).length !== 0) {
           const itemsGrade = item.grade < 5 ? 0 : item.grade - 5;
@@ -3572,9 +3565,9 @@ export const util = { //this.loadImage();
       case 'hole':
         return 10;
       case 'upgrade':
-        return 30;
+        return 22;
       case 'material':
-        return 40;
+        return 26;
       default:
         break;
     }
@@ -3601,6 +3594,7 @@ export const util = { //this.loadImage();
         return 3;
       case 'cardBack':
       case 'areaBackMoveRegion':
+      case 'commonIcon':
         return 4;
       case 'scenario':
         return 5;

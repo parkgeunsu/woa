@@ -6,21 +6,25 @@ const FlexContainer = styled.div`
   height: 100%;
   flex-direction: ${({direction}) => direction};
   align-items: ${({alignItems}) => alignItems};
+  align-content: ${({alignContent}) => alignContent};
   justify-content: ${({justifyContent}) => justifyContent};
   line-height: inherit;
   font-size: inherit;
   color: inherit;
+  flex-wrap: ${({flexWrap}) => flexWrap};
 `;
 
 const FlexBox = ({
   alignItems="center",
   justifyContent="center",
   direction="row",
+  flexWrap="nowrap",
+  alignContent="stretch",
   children,
   ...rest
 }) => {
   return (
-    <FlexContainer direction={direction} alignItems={alignItems} justifyContent={justifyContent} {...rest}>
+    <FlexContainer direction={direction} alignItems={alignItems} alignContent={alignContent} justifyContent={justifyContent} flexWrap={flexWrap} {...rest}>
       {children}
     </FlexContainer>
   )

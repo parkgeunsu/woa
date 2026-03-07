@@ -29,10 +29,10 @@ export const gameData = {
     battleStateName: ['hp','sp','rsp','atk','def','mak','mdf','rcv','spd','luk'],
     chMenu: ['display', 'state', 'animalSkill', 'skill', 'relation', 'item'],
     startCardArr: [
-      {fix: [21], arr: [4,4], gold: 5000}, 
-      {fix: [], arr: [6], gold: 10000}, 
-      {fix: [], arr: [5,3,2], gold: 20000}, 
-      {fix: [], arr: [4,4,3,2], gold: 30000}
+      {fix: [21], arr: [2,2], gold: 5000}, 
+      {fix: [], arr: [5], gold: 10000}, 
+      {fix: [], arr: [4,2,1], gold: 20000}, 
+      {fix: [], arr: [3,3,2,1], gold: 30000}
     ], //시작 카드, 돈
     startMorality: 100, //도덕성
     country: country,
@@ -40,7 +40,8 @@ export const gameData = {
     events: events,
     eventsHead: [0,1,6,6,2,2,3,3,4,5,7,7], //이벤트 지형 타입
     percent: percent,
-    addGradeArr: [1,1.1,1.25,1.35,1.5,1.7,2],//등급에 따른 추가 능력치
+    addGradeArr: [0, 1, 1.3, 1.6, 1.9, 2.2, 2.5, 2.8],//등급에 따른 추가 능력치
+    addGradeState: [true,true,true,false,false,false,false,true,false,false],//등급가중치가 적용되는 전투스텟(체력, 행동, 행동회복, 공격, 방어, 술법공격, 술법방어, 체력회복, 속도, 행운), kg증가
     possibleStageNum: [1,3,5,10],//시나리오 난이도 진행 가능한 카드영웅 갯수
     animal_type: animals,
     animal_size: {//[최소, 최대, 극최대]

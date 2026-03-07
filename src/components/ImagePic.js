@@ -1,31 +1,46 @@
 import { util } from 'components/Libs';
 import { AppContext } from 'contexts/app-context';
+import useBrightColor from 'hooks/useBrightColor';
 import React, { forwardRef, useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
 
 ////etc 0, hole 100, colorance 200, upgrade 300, material 400
+const ItemContainer = styled.div`
+  ${({isAbsolute}) => isAbsolute ? `
+    position: absolute;
+    left: 0;
+    top: 0;
+  ` : `
+    position: relative;
+  `}
+  padding: 2%;
+  width: ${({size}) => `calc(${size} - 4%)`};
+  height: ${({size}) => `calc(${size} - 4%)`};
+  isolation: isolate;
+`;
 const StyledItemPic = styled.span`
   display: inline-block;
   width: 100%;
   height: 100%;
   background-image: url(${({url}) => url});
   background-repeat: no-repeat;
-  ${({startIdx}) => {
-    if (startIdx === '') { //equip일 경우
-      return `
-        svg{
-          width: 100%;
-          height: 100%;
-        }
-      `;
-    }
-  }}
+`;
+const MaskArea = styled.div`
+  position: absolute;
+  inset: 2%;
+  background: ${({mergeColor}) => mergeColor};
+  mix-blend-mode: ${({isBright}) => isBright ? 'screen' : 'multiply'};
+  mask-image: url(${({url}) => url});
+  mask-repeat: no-repeat;
 `;
 
 const ItemPic = ({
   type,
   idx,
   pic,
+  size="100%",
+  mergeColor="rgba(255,255,255,0)",
+  isAbsolute=false,
   children,
   ...rest
 }) => {
@@ -34,8 +49,9 @@ const ItemPic = ({
     return context.images;
   }, [context]);
   const startIdx = React.useMemo(() => {
-    return type ==='equip' || !type ? '' : util.typeToStartIdx(type);
+    return type ==='equip' || !type ? 0 : util.typeToStartIdx(type);
   }, [type]);
+  const isBright = useBrightColor(mergeColor);
   const picSize = useCallback((node) => {
     if (node !== null) {
       const size = node.getBoundingClientRect().width;
@@ -43,10 +59,20 @@ const ItemPic = ({
       node.style.backgroundSize = `${size * 10}px`;
     }
   }, [pic, idx, imgSet, startIdx]);
+  const maskSize = useCallback((node) => {
+    if (node !== null) {
+      const size = node.getBoundingClientRect().width;
+      node.style["mask-position"] = `-${(idx % 10) * size}px -${Math.floor(idx / 10) * size + size * startIdx}px`;
+      node.style["mask-size"] = `${size * 10}px`;
+    }
+  }, [pic, idx, imgSet, startIdx]);
   return (
-    <StyledItemPic ref={picSize} url={imgSet.images[pic]} startIdx={startIdx} className="pic" itemPic={pic} idx={idx} {...rest}>
-      {children}
-    </StyledItemPic>
+    <ItemContainer size={size} isAbsolute={isAbsolute}>
+      <StyledItemPic ref={picSize} url={imgSet.images[pic]} startIdx={startIdx} className="pic" itemPic={pic} idx={idx} {...rest}>
+        {children}
+      </StyledItemPic>
+      {mergeColor && <MaskArea ref={maskSize} isBright={isBright} mergeColor={mergeColor} url={imgSet.images[pic]}></MaskArea>}
+    </ItemContainer>
   )
 }
 

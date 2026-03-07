@@ -96,7 +96,6 @@ const Name = styled(Text)`
   color: inherit;
   strong {
     margin: 0 5px 0 0;
-    font-family: 'myFont', 'myFont_eName', 'myFont_j', sans-serif;
     letter-spacing: 0px;
   }
 `;
@@ -537,8 +536,8 @@ const CharacterCard = ({
           <ChCard size={size} className="ch_detail" {...rest}>
             {!isShowCard && <ListNameLv elementType={chData?.element[0] - 6} className="name_lv">
               <Lv code="t8" color="main">{saveCh?.lv}</Lv>
-              <SubName code="t2" color="main">{chData?.na3[lang]}</SubName>
-              <Name code="t5" color="main"><strong>{chData?.na1[lang]}</strong>{chData?.na2?.[lang] ? `(${chData?.na2[lang]})` : ''}</Name>
+              <SubName font="point" code="t2" color="main">{chData?.na3[lang]}</SubName>
+              <Name font="point" code="t5" color="main"><strong>{chData?.na1[lang]}</strong>{chData?.na2?.[lang] ? `(${chData?.na2[lang]})` : ''}</Name>
             </ListNameLv>}
             <ListCh type="profile" isRound={0} pic={`ch${chData?.display}`} />
             {!isShowCard && <ListJobAction>
