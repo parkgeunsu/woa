@@ -11878,3 +11878,68 @@
     filter: contrast(300%);
   }
 }
+
+/* 레벨업 숫자 카운팅 애니메이션 */
+@keyframes lvup-bounce {
+  0%   { transform: translateY(8px) scale(0.98); opacity: 0; }
+  25%  { transform: translateY(-8px) scale(1.06); opacity: 1; }
+  55%  { transform: translateY(2px) scale(0.995); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+@keyframes lvup-trail {
+  0%   { text-shadow: 0 6px 0 rgba(255,255,255,0), 0 0 0 rgba(255,210,0,0); filter: drop-shadow(0 0 0 rgba(255,210,0,0)); }
+  30%  { text-shadow: 0 14px 0 rgba(255,255,255,.15), 0 0 18px rgba(255,210,0,.9); filter: drop-shadow(0 0 16px rgba(255,210,0,.8)); }
+  100% { text-shadow: 0 0 0 rgba(255,255,255,0), 0 0 4px rgba(255,210,0,.3); filter: drop-shadow(0 0 2px rgba(255,210,0,.2)); }
+}
+
+/* 레벨업 파티클 애니메이션 */
+@keyframes lvup-ring {
+  0%   { transform: scale(0.6); border-color: rgba(255,239,120,0.0); filter: blur(0); }
+  20%  { border-color: rgba(255,239,120,0.95); filter: blur(0.5px); }
+  100% { transform: scale(1.35); border-color: rgba(255,239,120,0); filter: blur(2px); }
+}
+
+@keyframes lvup-sparks {
+  0%   { opacity: 0; transform: scale(0.6) rotate(0deg); }
+  20%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.2) rotate(25deg); }
+}
+
+/* 스킬 획득 이펙트 애니메이션 */
+@keyframes skillPop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.6);
+    text-shadow: 0 0 5px #ffaa00;
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.15);
+    text-shadow: 0 0 20px #ffd700, 0 0 40px #ffea00;
+  }
+  60% {
+    opacity: 1;
+    transform: translate(-50%, calc(50% - 20px)) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, calc(50% - 80px)) scale(0.9);
+    text-shadow: 0 0 5px #ffaa00;
+  }
+}
+
+/* 아이템 업그레이드 애니메이션 */
+@keyframes item_upgrade{
+  0%{top:20%;transform:translate(-50%,-50%) rotate(0deg) scale(1);opacity:1;}
+  15%{top:50%;transform:translate(-50%,-50%) rotate(90deg) scale(1.2);opacity:.6;}
+  30%{top:30%;transform:translate(-50%,-50%) rotate(30deg) scale(1.4);opacity:1;}
+  45%{top:50%;transform:translate(-50%,-50%) rotate(90deg) scale(1.6);opacity:.7;}
+  60%{top:25%;transform:translate(-50%,-50%) rotate(60deg) scale(1.8);opacity:1;}
+  75%{top:40%;transform:translate(-50%,-50%) rotate(90deg) scale(2);opacity:.8;}
+  100%{top:40%;transform:translate(-50%,-50%) rotate(90deg) scale(2);opacity:0;}
+}
+@keyframes item_shadow{
+  0%{transform:scale(1);}
+  100%{transform:scale(1.5);}
+}

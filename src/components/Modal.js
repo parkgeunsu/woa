@@ -7,10 +7,7 @@ import styled from 'styled-components';
 
 const ModalWrap = styled.div`
 	position: fixed;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
+	inset: 0;
 	z-index: 20;
 	&:after {
 		content: "";
@@ -24,10 +21,8 @@ const ModalWrap = styled.div`
 `;
 const ModalCont = styled(FlexBox)`
   position: absolute;
-  left: 20px;
-  right: 20px;
-  top: 0;
-  bottom: 0;
+  inset: 0 20px;
+	width: calc(100% - 40px);
   z-index: 2;
 	.modal_box {
 		display: flex;
@@ -144,6 +139,7 @@ const Modal = ({
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
+	console.log(payment, gameData.prices.enhancingStickers[payment]);
 	return (
 		<ModalContainer>
 			<ModalWrap className="transition">

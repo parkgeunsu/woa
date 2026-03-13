@@ -16,35 +16,36 @@ const StyledIconPic = styled(IconPic)`
 `;
 
 const StyledPrices = styled.div`
-  display:inline-block;
-  position:relative;
-  margin:0 15px 0 0;
-  padding-left:25px;
-  line-height:20px;
-  font-size:1rem;
-  color:#ff2a00;
-  &:after{content:',';margin:0 0 0 2px;font-size:1.25rem;color:#fff;}
-  &:last-of-type:after{content:'';margin:0;}
-  &:last-of-type{margin:0;}
-  em{color:#ffc719;text-shadow:-1px -1px 0 #fff,1px 1px 0 #000;}
+  display: inline-block;
+  position: relative;
+  margin: 0 15px 0 0;
+  padding-left: 25px;
+  line-height: 20px;
+  font-size: 1rem;
+  color: #ff2a00;
+  &:after { 
+    content: ',';
+    margin: 0 0 0 2px;
+    font-size: 1.25rem;
+    color: #fff;
+  }
+  &:last-of-type:after {
+    content: '';
+    margin: 0;
+  }
+  &:last-of-type {
+    margin: 0;
+  }
+  em {
+    color: #ffc719;
+    text-shadow: -1px -1px 0 #fff,1px 1px 0 #000;
+  }
 `;
 
-const icon = (data, gameData) => {
-  console.log(data.type, gameData);
-  switch(data.type) {
-    case 'p':
-      return 2;
-    case 'g':
-      return 3;
-    default:
-      //[data.imgGroup][gameData.items[data.type][data.idx].display]
-      return 0;
-  }
-};
 const remainingItem = (data, saveData) => {
-  if (data.type === 'g') {
+  if (data.cate === 'g') {
     return saveData.info.money;
-  } else if (data.type === 'p') {
+  } else if (data.cate === 'p') {
     return saveData.info.diamond;
   } else {
     let num = 0;
@@ -63,10 +64,12 @@ export const Prices = ({
   gameData,
   ...props
 }) => {
+  console.log(payment);
   return (
     payment.map((data, idx) => {
-      return <StyledPrices {...props} key={`payment${idx}`} dangerouslySetInnerHTML={{__html:`-${util.comma(data.price)} <em>(${util.comma(remainingItem(data, saveData))})</em>`}}>
-        <StyledIconPic type="commonBtn" pic="icon100" idx={icon(data, gameData)} />
+      return <StyledPrices {...props} key={`payment${idx}`}>
+        <StyledIconPic type={data.type} pic={data.img} idx={data.idx} />
+        -{util.comma(data.price)} <em>({util.comma(remainingItem(data, saveData))})</em>
       </StyledPrices>
     })
   );

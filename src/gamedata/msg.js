@@ -1004,6 +1004,16 @@ export const msg = {
 		}
 	},
 	itemInfo:{
+		animalBadge:{
+			ko:'동물 뱃지',
+			en:'Animal Badge',
+			jp:'動物バッジ',
+		},
+		get:{
+			ko:'획득',
+			en:'Get',
+			jp:'獲得',
+		},
 		itemEffect:{
 			ko:'아이템 효과',
 			en:'Item Effect',

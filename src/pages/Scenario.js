@@ -1,7 +1,8 @@
 import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import GuideQuestion from 'components/GuideQuestion';
-import { IconPic, ItemPic } from 'components/ImagePic';
+import { IconPic } from 'components/ImagePic';
+import ItemLayout from 'components/ItemLayout';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
@@ -512,79 +513,121 @@ const ScenarioList = ({
               <DropItems justifyContent="flex-start">
                 {stageData.drop?.first[selectDifficult]?.map((dropFirst, dropFirstIdx) => {
                   if (dropFirst.type === 'Gold') {
-                    return <span className="item_layout normal" key={`dropFirst${dropFirstIdx}`} onClick={(e) => {
-                      setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([gameData.msg.title?.['gold']?.[lang] || "Gold", util.comma(dropFirst.num), gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
-                      setTooltipOn(true);
-                    }}>
-                      <ItemPic isAbsolute pic="itemEtc" type="etc" idx={0}>
-                        {<span className="display_text">{dropFirst.num}</span>}
-                      </ItemPic>
-                    </span>
+                    return <ItemLayout 
+                      gameItem={gameData.items}
+                      icon={{
+                        type: "etc",
+                        pic: "itemEtc",
+                        idx: 0,
+                      }}
+                      size="15%"
+                      key={`dropFirst${dropFirstIdx}`} 
+                      text={dropFirst.num}
+                      grade={0}
+                      onClick={(e) => {
+                        setTooltipPos(e.target.getBoundingClientRect());
+                        setTooltip([gameData.msg.title?.['gold']?.[lang] || "Gold", util.comma(dropFirst.num), gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
+                        setTooltipOn(true);
+                      }}/>
                   } else if (dropFirst.type === 'Equip' && typeof dropFirst.idx === 'string'){
                     const itemSeparate = dropFirst.idx.split('-');
                     const dropType = dropFirst.type.toLowerCase(),
                       items = gameData.items?.[dropType]?.[itemSeparate[0]]?.[itemSeparate[1]]?.[itemSeparate[2]]?.[itemSeparate[3]];
                     if (!items) return null;
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[dropFirst.grade]?.toLowerCase() || "normal"}`} key={`dropFirst${dropFirstIdx}`} onClick={(e) => {
-                      setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
-                      setTooltipOn(true);
-                    }}>
-                      <span className="pic">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100" dangerouslySetInnerHTML={{__html: util.setItemColor(gameData.itemsSvg[items.display], items.color, items.svgColor || items.id)}}>
-                        </svg>
-                      </span>
-                      <ItemPic isAbsolute pic="itemEtc" type={dropType} idx={items.display} />
-                    </span>
+                    return <ItemLayout 
+                      gameItem={gameData.items}
+                      icon={{
+                        type: {dropType},
+                        pic: "itemEtc",
+                        idx: items.display,
+                      }}
+                      size="15%"
+                      key={`dropFirst${dropFirstIdx}`}
+                      grade={dropFirst.grade}
+                      onClick={(e) => {
+                        setTooltipPos(e.target.getBoundingClientRect());
+                        setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
+                        setTooltipOn(true);
+                    }}/>
                   } else if (dropFirst.type === 'Etc') {
                     const dropType = dropFirst.type.toLowerCase(),
                       items = gameData.items?.[dropType]?.[dropFirst.idx];
                     if (!items) return null;
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[items.grade]?.toLowerCase() || "normal"}`} key={`dropFirst${dropFirstIdx}`} onClick={(e) => {
-                      setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
-                      setTooltipOn(true);
-                    }}>
-                      <ItemPic isAbsolute pic="itemEtc" type={dropType} idx={items.display}>
-                        {items.displayText && <span className="display_text">{items.displayText}</span>}
-                      </ItemPic>
-                    </span>
+                    return <ItemLayout 
+                      gameItem={gameData.items}
+                      icon={{
+                        type: dropType,
+                        pic: "itemEtc",
+                        idx: items.display,
+                      }}
+                      size="15%"
+                      key={`dropFirst${dropFirstIdx}`} 
+                      text={items.displayText}
+                      grade={items.grade}
+                      onClick={(e) => {
+                        setTooltipPos(e.target.getBoundingClientRect());
+                        setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
+                        setTooltipOn(true);
+                    }}/>
                   } else if (dropFirst.type === 'Material'){
                     const dropType = dropFirst.type.toLowerCase(),
                       items = gameData.items?.[dropType]?.[dropFirst.idx];
                     if (!items) return null;
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[items.grade]?.toLowerCase() || "normal"}`} key={`dropFirst${dropFirstIdx}`} onClick={(e) => {
-                      setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na?.[lang] || "", dropFirst.num, gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
-                      setTooltipOn(true);
-                    }}>
-                      <ItemPic isAbsolute pic="itemEtc" type={dropType} idx={items.display}>
-                        {<span className="display_text">{dropFirst.num}</span>}
-                      </ItemPic>
-                    </span>
+                    return <ItemLayout 
+                      gameItem={gameData.items}
+                      icon={{
+                        type: {dropType},
+                        pic: "itemEtc",
+                        idx: items.display,
+                      }}
+                      size="15%"
+                      key={`dropFirst${dropFirstIdx}`} 
+                      text={dropFirst.num}
+                      grade={items.grade}
+                      onClick={(e) => {
+                        setTooltipPos(e.target.getBoundingClientRect());
+                        setTooltip([items.na?.[lang] || "", dropFirst.num, gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
+                        setTooltipOn(true);
+                    }}/>
                   } else if (dropFirst.type === 'Upgrade'){
                     const dropType = dropFirst.type.toLowerCase(),
                       items = gameData.items?.[dropType]?.[dropFirst.idx];
                     if (!items) return null;
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[items.grade]?.toLowerCase() || "normal"}`} key={`dropFirst${dropFirstIdx}`} onClick={(e) => {
-                      setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
-                      setTooltipOn(true);
-                    }}>
-                      <ItemPic isAbsolute pic="itemEtc" type={dropType} idx={items.display} />
-                    </span>
+                    return <ItemLayout 
+                      gameItem={gameData.items}
+                      icon={{
+                        type: {dropType},
+                        pic: "itemEtc",
+                        idx: items.display,
+                      }}
+                      size="15%"
+                      key={`dropFirst${dropFirstIdx}`} 
+                      text={dropFirst.num}
+                      grade={items.grade}
+                      onClick={(e) => {
+                        setTooltipPos(e.target.getBoundingClientRect());
+                        setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
+                        setTooltipOn(true);
+                    }}/>
                   } else if (dropFirst.type === 'Hole'){
                     const dropType = dropFirst.type.toLowerCase(),
                       items = gameData.items?.[dropType]?.[dropFirst.idx];
                     if (!items) return null;
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[items.grade]?.toLowerCase() || "normal"}`} key={`dropFirst${dropFirstIdx}`} onClick={(e) => {
-                      setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
-                      setTooltipOn(true);
-                    }}>
-                      <ItemPic isAbsolute pic="itemEtc" type={dropType} idx={items.display} />
-                    </span>
+                    return <ItemLayout 
+                      gameItem={gameData.items}
+                      icon={{
+                        type: {dropType},
+                        pic: "itemEtc",
+                        idx: items.display,
+                      }}
+                      size="15%"
+                      key={`dropFirst${dropFirstIdx}`}
+                      grade={items.grade}
+                      onClick={(e) => {
+                        setTooltipPos(e.target.getBoundingClientRect());
+                        setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
+                        setTooltipOn(true);
+                    }}/>
                   } else {
                     return '';
                   }
@@ -594,75 +637,119 @@ const ScenarioList = ({
               <DropItems justifyContent="flex-start">
                 {stageData.drop?.always[selectDifficult]?.map((dropAlways, dropAlwaysIdx) => {
                   if (dropAlways.type === 'Gold') {
-                    return <span className="item_layout normal" key={`dropAlways${dropAlwaysIdx}`} onClick={(e) => {
-                      setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([gameData.msg.title?.['gold']?.[lang] || "Gold", util.comma(dropAlways.num), '100%']);
-                      setTooltipOn(true);
-                    }}>
-                      <ItemPic isAbsolute pic="itemEtc" type="etc"
-                       idx={0}>
-                        {<span className="display_text">{dropAlways.num}</span>}
-                      </ItemPic>
-                    </span>
+                    return <ItemLayout 
+                      gameItem={gameData.items}
+                      icon={{
+                        type: "etc",
+                        pic: "itemEtc",
+                        idx: 0,
+                      }}
+                      size="15%"
+                      key={`dropAlways${dropAlwaysIdx}`}
+                      text={dropAlways.num}
+                      grade={0}
+                      onClick={(e) => {
+                        setTooltipPos(e.target.getBoundingClientRect());
+                        setTooltip([gameData.msg.title?.['gold']?.[lang] || "Gold", util.comma(dropAlways.num), '100%']);
+                        setTooltipOn(true);
+                    }}/>
                   } else if (dropAlways.type === 'Equip' && typeof dropAlways.idx === 'string'){
                     const itemSeparate = dropAlways.idx.split('-');
                     const items = gameData.items?.[dropAlways.type.toLowerCase()]?.[itemSeparate[0]]?.[itemSeparate[1]]?.[itemSeparate[2]]?.[itemSeparate[3]];
                     if (!items) return null;
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[dropAlways.grade]?.toLowerCase() || "normal"}`} key={`dropAlways${dropAlwaysIdx}`} onClick={(e) => {
-                      setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
-                      setTooltipOn(true);
-                    }}>
-                      <ItemPic isAbsolute type="equip" pic="equip" idx={items.display} />
-                    </span>
+                    return <ItemLayout 
+                      gameItem={gameData.items}
+                      icon={{
+                        type: "equip",
+                        pic: "equip",
+                        idx: items.display,
+                      }}
+                      size="15%"
+                      key={`dropAlways${dropAlwaysIdx}`}
+                      grade={dropAlways.grade}
+                      onClick={(e) => {
+                        setTooltipPos(e.target.getBoundingClientRect());
+                        setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
+                        setTooltipOn(true);
+                    }}/>
                   } else if (dropAlways.type === 'Etc') {
                     const dropType = dropAlways.type.toLowerCase(),
                       items = gameData.items?.[dropType]?.[dropAlways.idx];
                     if (!items) return null;
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[items.grade]?.toLowerCase() || "normal"}`} key={`dropAlways${dropAlwaysIdx}`} onClick={(e) => {
-                      setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
-                      setTooltipOn(true);
-                    }}>
-                      <ItemPic isAbsolute pic="itemEtc" type={dropType} idx={items.display}>
-                        {items.displayText && <span className="display_text">{items.displayText}</span>}
-                      </ItemPic>
-                    </span>
+                    return <ItemLayout 
+                      gameItem={gameData.items}
+                      icon={{
+                        type: dropType,
+                        pic: "itemEtc",
+                        idx: items.display,
+                      }}
+                      size="15%"
+                      key={`dropAlways${dropAlwaysIdx}`}
+                      text={items.displayText}
+                      grade={items.grade}
+                      onClick={(e) => {
+                        setTooltipPos(e.target.getBoundingClientRect());
+                        setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
+                        setTooltipOn(true);
+                    }}/>
                   } else if (dropAlways.type === 'Material'){
                     const dropType = dropAlways.type.toLowerCase(),
                       items = gameData.items?.[dropType]?.[dropAlways.idx];
                     if (!items) return null;
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[items.grade]?.toLowerCase() || "normal"}`} key={`dropAlways${dropAlwaysIdx}`} onClick={(e) => {
-                      setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na?.[lang] || "", dropAlways.num, dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
-                      setTooltipOn(true);
-                    }}>
-                      <ItemPic isAbsolute pic="itemEtc" type={dropType} idx={items.display}>
-                        {<span className="display_text">{dropAlways.num}</span>}
-                      </ItemPic>
-                    </span>
+                    return <ItemLayout 
+                      gameItem={gameData.items}
+                      icon={{
+                        type: dropType,
+                        pic: "itemEtc",
+                        idx: items.display,
+                      }}
+                      size="15%"
+                      key={`dropAlways${dropAlwaysIdx}`}
+                      text={dropAlways.num}
+                      grade={items.grade}
+                      onClick={(e) => {
+                        setTooltipPos(e.target.getBoundingClientRect());
+                        setTooltip([items.na?.[lang] || "", dropAlways.num, dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
+                        setTooltipOn(true);
+                    }}/>
                   } else if (dropAlways.type === 'Upgrade'){
                     const dropType = dropAlways.type.toLowerCase(),
                       items = gameData.items?.[dropType]?.[dropAlways.idx];
                     if (!items) return null;
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[items.grade]?.toLowerCase() || "normal"}`} key={`dropAlways${dropAlwaysIdx}`} onClick={(e) => {
-                      setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
-                      setTooltipOn(true);
-                    }}>
-                      <ItemPic isAbsolute pic="itemEtc" type={dropType} idx={items.display} />
-                    </span>
+                    return <ItemLayout 
+                      gameItem={gameData.items}
+                      icon={{
+                        type: dropType,
+                        pic: "itemEtc",
+                        idx: items.display,
+                      }}
+                      size="15%"
+                      key={`dropAlways${dropAlwaysIdx}`}
+                      grade={items.grade}
+                      onClick={(e) => {
+                        setTooltipPos(e.target.getBoundingClientRect());
+                        setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
+                        setTooltipOn(true);
+                    }}/>
                   } else if (dropAlways.type === 'Hole'){
                     const dropType = dropAlways.type.toLowerCase(),
                       items = gameData.items?.[dropType]?.[dropAlways.idx];
                     if (!items) return null;
-                    return <span className={`item_layout ${gameData.itemGrade.txt_e?.[items.grade]?.toLowerCase() || "normal"}`} key={`dropAlways${dropAlwaysIdx}`} onClick={(e) => {
-                      setTooltipPos(e.target.getBoundingClientRect());
-                      setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
-                      setTooltipOn(true);
-                    }}>
-                      <ItemPic className="pic" pic="itemEtc" type={dropType} idx={items.display} />
-                    </span>
+                    return <ItemLayout 
+                      gameItem={gameData.items}
+                      icon={{
+                        type: dropType,
+                        pic: "itemEtc",
+                        idx: items.display,
+                      }}
+                      size="15%"
+                      key={`dropAlways${dropAlwaysIdx}`}
+                      grade={items.grade}
+                      onClick={(e) => {
+                        setTooltipPos(e.target.getBoundingClientRect());
+                        setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
+                        setTooltipOn(true);
+                    }}/>
                   } else {
                     return '';
                   }

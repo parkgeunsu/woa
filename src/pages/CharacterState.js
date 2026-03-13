@@ -9,7 +9,7 @@ import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import { AppContext } from 'contexts/app-context';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
@@ -53,8 +53,52 @@ const KgText = styled(Text)`
   margin: 0 0 0 5px;
 `;
 const LvButton = styled(Button)`
+  position: relative;
   margin: 0 10px 0 0;
   padding: 0 5px;
+  &:before {
+    content: "";
+    position: absolute; 
+    left: -5%;
+    top: -5%;
+    margin: auto;
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 239, 120, 0.0);
+    transform: scale(0.6);
+    pointer-events: none;
+    filter: blur(0);
+  }
+
+  &.animate:before {
+    animation: lvup-ring 800ms ease-out forwards;
+  }
+
+  &:after {
+    content: "";
+    position: absolute; inset: 0;
+    margin: auto;
+    width: 60%; height: 60%;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff6b0 0%, #ffd23d 60%, rgba(255,210,61,0) 70%);
+    opacity: 0;
+    pointer-events: none;
+    mask: radial-gradient(circle at center, white 0 40%, transparent 41%);
+    box-shadow:
+      0 -34px 0 0 #ffd23d,
+      29px -17px 0 0 #fff6b0,
+      34px  0px 0 0 #ffd23d,
+    -29px -17px 0 0 #ffe37a,
+      0   34px 0 0 #ffd23d,
+    -34px  0px 0 0 #fff29c,
+      29px  17px 0 0 #ffd23d,
+    -29px  17px 0 0 #ffe37a;
+    transform: scale(0.6);
+  }
+
+  &.animate:after {
+    animation: lvup-sparks 800ms ease-out forwards;
+  }
 `;
 const LvIcon = styled(IconPic)`
   width: 40px;
@@ -101,6 +145,7 @@ const TextTotal = styled(Text)`
   margin: 0 0 0 5px;
   width: 30px;
   line-height: 1 !important;
+  white-space: nowrap;
 `;
 const ElementContainer = styled(FlexBox)`
   flex-wrap: wrap;
@@ -177,6 +222,7 @@ const ElementList = ({
 const CharacterState = ({
   saveData,
   slotIdx,
+  setRewardText,
   changeSaveData,
 }) => {
   const context = useContext(AppContext);
@@ -218,7 +264,7 @@ const CharacterState = ({
   const [popupInfo, setPopupInfo] = useState({});
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
-
+  const lvUpTimeoutRef = useRef([null, null]);
   const animalKg = React.useMemo(() => {
     const animalType = chData.animal_type;
     const kgLimit = gameData.animal_size?.kg?.[animalType]?.[2];
@@ -237,7 +283,11 @@ const CharacterState = ({
       return gameData.msg.state.kg4[lang];
     }
   }, [gameData, saveCh.kg, chData.animal_type, lang]);
-
+  useEffect(() => {
+    return () => {
+      clearTimeout(lvUpTimeoutRef.current);
+    };
+  }, []);
   return (
     <>
       <Wrap className="state">
@@ -250,7 +300,7 @@ const CharacterState = ({
         }}>
           <StateArea>
             <ChInfoContainer direction="row">
-              <LvButton onClick={() => {//레벨업
+              <LvButton className="lvupEffect" onClick={() => {//레벨업
                 const maxExp = saveExp.max;//레벨당 필요한 경험치
                 const currentExp = saveExp.current;//현재 경험치
                 const hasExp = saveHasExp.current;//보유 경험치
@@ -260,11 +310,48 @@ const CharacterState = ({
                   const isLvUp = currentExp + needExp >= maxExp;
                   sData.ch[slotIdx].exp = currentExp + needExp;
                   sData.ch[slotIdx].hasExp = hasExp - needExp;
-                  if (isLvUp) {
-                    sData.ch[slotIdx].lv = saveCh.lv + 1;
+                  if (isLvUp) {//레벨 업
+                    sData.ch[slotIdx].lv = sData.ch[slotIdx].lv + 1;
                     sData.ch[slotIdx].exp = currentExp + needExp - maxExp;
                   }
-                  changeSaveData(sData);
+                  const luck = sData.ch[slotIdx].st7; //행운
+                  const isGetAnimalCoin = util.getAnimalCoin({
+                    slotIdx: slotIdx,
+                    saveData: sData,
+                    luck: luck,
+                    lv: sData.ch[slotIdx].lv,
+                  });
+                  const skillIdx = util.getSkill({
+                    gameData: gameData,
+                    slotIdx: slotIdx,
+                    saveData: sData,
+                    luck: luck,
+                    lv: sData.ch[slotIdx].lv,
+                  });
+                  let rewardText = "";
+                  console.log(skillIdx, isGetAnimalCoin);
+                  if (skillIdx && isGetAnimalCoin) {
+                    rewardText = `${gameData.skill[skillIdx].na[lang]} ${gameData.msg.itemInfo.get[lang]} \n${gameData.animalType[chData.animal_type].na[lang]}${gameData.msg.itemInfo.animalBadge[lang]} ${gameData.msg.itemInfo.get[lang]}`;
+                  } else {
+                    if (skillIdx) {
+                      rewardText = `${gameData.skill[skillIdx].na[lang]} ${gameData.msg.itemInfo.get[lang]}`;
+                    }
+                    if (isGetAnimalCoin) {
+                      rewardText = `${gameData.animalType[chData.animal_type].na[lang]}${gameData.msg.itemInfo.animalBadge[lang]} ${gameData.msg.itemInfo.get[lang]}`;
+                    }
+                  }
+                  util.effect.lvUp({
+                    timeoutRef: lvUpTimeoutRef,
+                    rewardText: rewardText,
+                    setRewardText: setRewardText,
+                    rewardType: skillIdx && isGetAnimalCoin ? "both" : skillIdx ? "skill" : isGetAnimalCoin ? "animalCoin" : "none",
+                  });
+                  util.saveCharacter({
+                    gameData: gameData,
+                    saveData: sData,
+                    changeSaveData: changeSaveData,
+                    chSlotIdx: slotIdx,
+                  });
                 } else {
                   setMsgOn(true);
                   setMsg(gameData.msg.sentence.lackExp[lang]);

@@ -133,7 +133,7 @@ const CharacterSkill = ({
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
-  const saveSkill = React.useMemo(() => saveCh.hasSkill, [saveCh]);
+  const saveSkill = React.useMemo(() => saveCh.sk, [saveCh]);
 
   return (
     <>

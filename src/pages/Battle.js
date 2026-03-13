@@ -1,7 +1,7 @@
 import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
-import { IconPic, ItemPic } from 'components/ImagePic';
-import ItemGradeColor from 'components/ItemGradeColor';
+import { IconPic } from 'components/ImagePic';
+import ItemLayout from 'components/ItemLayout';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
@@ -1090,12 +1090,28 @@ const BattleMenu = styled.div`
 	.chInfo .spR:after{content:')'}
 	.fix_button{height:100%;}
 	.fix_button button{display:flex;margin:5px;height:40px;border-radius:10px;background: #fff;box-sizing:border-box;align-items:center;}
-	ul{display:flex;flex:1;height:100%;align-items:center;justify-content:flex-start;}
-	ul li{height:100%;}
-	ul li button{display:flex;margin:5px;height:40px;border-radius:10px;background:#fff;box-sizing:border-box;align-items:center;}
-	ul li button span{flex:1;white-space:nowrap;}
-	.skSp{font-size:0.938rem;}
-	.skName{font-size:0.813rem;white-space:nowrap;}
+`;
+const BattleMenuContainer = styled(FlexBox)`
+	.skSp {
+		font-size:0.938rem;
+	}
+	.skName {
+		font-size:0.813rem;
+		white-space:nowrap;
+	}
+`;
+const SkillIcon = styled.div`
+	position: relative;
+	margin: 5px 2px 5px 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+	${({theme, back}) => back ? `background: ${theme.color.grey2};` : ''}
+`;
+const SkillText = styled(Text)`
+	position: absolute;
+	left: 1%;
+	top: 1%;
 `;
 const BattleTurn = styled.div`
 	position: absolute;
@@ -3835,8 +3851,9 @@ const Battle = ({
 			const posArr = Array.from({ length: 25 }, (_, idx) => idx);
 			const entryEntries = Array.from({ length: 25 }, (_, idx) => {return {idx:'', lv:1 }});
 			for(let i = 0; i < enemyCount; i++) {
+				const isHero = Math.random() < 0.2;//영웅 인지 일반병인지
 				const posIdx = Math.floor(Math.random() * posArr.length),
-					chIdx = Math.floor(Math.random() * chArr.length),
+					chIdx = isHero ? Math.floor(Math.random() * chArr.length) : Math.floor(Math.random() * 4 + 200),
 					pos = posArr[posIdx],
 					ch = chArr[chIdx];
 				posArr.splice(posIdx, 1);
@@ -4193,7 +4210,7 @@ const Battle = ({
 			enemyRelation.forEach((rtData, idx) => {
 				gameData.relation[rtData.idx].member.forEach((memberIdx) => {
 					if (memberIdx === data.idx) {
-						effData = relationEff(enemyData, gameData.relation[rtData.idx].eff);
+						effData = relationEff(enemyData, gameData.relation[rtData.idx].buff);
 						//console.log("적군증가량", effData);
 					}
 				});
@@ -5251,13 +5268,30 @@ const Battle = ({
 									setTooltipOn(true);
 								}}>
 									{isEquip ? (
-										<ItemGradeColor part={itemData.part} grade={gameData.itemGrade?.txt_e?.[itemData.grade]?.toLowerCase()}>
-											<ItemPic type="equip" pic="equip" idx={itemData.display} />
-										</ItemGradeColor>
+										<ItemLayout 
+											gameItem={gameData.items}
+											isEquip
+											icon={{
+												type: "equip",
+												pic: "equip",
+												idx: itemData.display
+											}}
+											grade={itemData.grade}
+											itemsHole={itemData.hole}
+											sealed={itemData.sealed}
+										/>
 									) : (
-										<ItemPic pic="itemEtc" type={item.type} idx={itemData.display}>
-											{itemData.displayText && <span className="display_text">{itemData.displayText}</span>}
-										</ItemPic>
+										<ItemLayout 
+											gameItem={gameData.items}
+											isEquip
+											icon={{
+												type: item.type,
+												pic: "itemEtc",
+												idx: itemData.display
+											}}
+											grade={itemData.grade}
+											sealed={itemData.sealed}
+										/>
 									)}
 								</ItemContainer>
 							)
@@ -5596,48 +5630,62 @@ const Battle = ({
 									<span className="sp">{battleAlly.current[orderIdx]?.sp}</span>
 									{/* <span className="spR">{battleAlly.current[orderIdx]?.bSt2}</span> */}
 								</div>
-								<div className="fix_button">
-									<button onClick={() => {
-										battleCommand('cancel');
-									}}><span className="skName">{lang === 'ko' ? '취소' : 'Cancel'}</span></button>
-								</div>
-								<ul className="scroll-x">
-									<li><button onClick={() => {
-										battleCommand('wait');
-									}}><span className="skSp">{battleAlly.current[orderIdx]?.bSt2}</span><span className="skName">{lang === 'ko' ? '대기' : 'Wait'}</span></button></li>
+								<BattleMenuContainer alignItems="center" justifyContent="flex-start">
+									<SkillIcon back>
+										<IconPic isAbsolute type="etc" pic="icon100" idx={20} />
+										<IconPic type="star" pic="icon100" idx={10} />
+									</SkillIcon>
 									{battleAlly.current[orderIdx]?.mutate ? 
-										gameData.mutateSkill[battleAlly.current[orderIdx]?.mutate].map((data, idx) => {
-											const sk = gameData.skill;
-											return (
-												<li key={idx}><button onClick={() => {
+									gameData.mutateSkill[battleAlly.current[orderIdx]?.mutate].map((data, idx) => {
+										const sk = gameData.skill;
+										return (
+											<SkillIcon onClick={() => {
+												if (data.idx === 0) {
+													battleCommand('wait');
+												} else {
 													battleCommand(sk[data.idx], data.lv);
-												}}><span className="skSp">{sk[data.idx].sp[data.lv - 1]}</span><span className="skName">{sk[data.idx].na[lang]}</span></button></li>
-											);
-										})
-									:
-										battleAlly.current[orderIdx]?.hasSkill && battleAlly.current[orderIdx]?.hasSkill.map((data, idx) => {
-											const sk = gameData.skill;
-											const characterActionType = battleAlly.current[orderIdx].newActionType;//동물 actionType과 skill element간 속성싱크가 1차이가 남
-											const skillType = sk[data.idx].element_type;
-											let actionType = true;
-											if (skillType > 0 && skillType < 7) {
-												characterActionType.forEach((data) => {
-													actionType = (data + 1) === skillType;
-													if (actionType) {
-														return;
-													}
-												});
-												//스킬 공격타입과 캐릭공격타입이 같은지 확인
-											}
-											if (sk[data.idx].cate !== 2 && actionType) {
-												return (
-													<li key={idx}><button onClick={() => {
+												}
+											}}>
+												<>
+													<IconPic pic="skill" idx={sk[data.idx].idx} />
+													<SkillText code="t2" color="main" weight="600" borderColor="sub" lineHeight="1">{sk[data.idx].sp[data.lv - 1]}</SkillText>
+												</>
+											</SkillIcon>
+										);
+									})
+								:
+									battleAlly.current[orderIdx]?.hasSkill && battleAlly.current[orderIdx]?.hasSkill.map((data, idx) => {
+										const sk = gameData.skill;
+										const characterActionType = battleAlly.current[orderIdx].newActionType;//동물 actionType과 skill element간 속성싱크가 1차이가 남
+										const skillType = sk[data.idx].element_type;
+										let actionType = true;
+										if (skillType > 0 && skillType < 7) {
+											characterActionType.forEach((data) => {
+												actionType = (data + 1) === skillType;
+												if (actionType) {
+													return;
+												}
+											});
+											//스킬 공격타입과 캐릭공격타입이 같은지 확인
+										}
+										if (sk[data.idx].cate !== 2 && sk[data.idx].cate !== 11 && actionType) {
+											return (
+												<SkillIcon onClick={() => {
+													if (data.idx === 0) {
+														battleCommand('wait');
+													} else {
 														battleCommand(sk[data.idx], data.lv);
-													}}><span className="skSp">{sk[data.idx].sp[data.lv - 1]}</span><span className="skName">{sk[data.idx].na[lang]}</span></button></li>
-												);
-											}
-										})}
-								</ul>
+													}
+												}}>
+													<>
+														<IconPic pic="skill" idx={sk[data.idx].idx} />
+														<SkillText code="t2" color="main" weight="600" borderColor="sub" lineHeight="1">{sk[data.idx].sp[data.lv - 1]}</SkillText>
+													</>
+												</SkillIcon>
+											);
+										}
+									})}
+								</BattleMenuContainer>
 							</>
 						)}
 					</BattleMenu>}

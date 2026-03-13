@@ -100,7 +100,9 @@ const Msg = ({
 			<MsgWrap ref={msgRef} className="transition" onClick={() => {
 				showMsg(prev => !prev);
 			}}>
-				<MsgCont direction="column"  dangerouslySetInnerHTML={{__html: text}}></MsgCont>
+				<MsgCont direction="column">
+					<div dangerouslySetInnerHTML={{__html: text}} />
+				</MsgCont>
 			</MsgWrap>
 		</MsgContinaer>
 	)

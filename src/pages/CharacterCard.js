@@ -237,8 +237,8 @@ const ListChElement1 = styled(MergedPic)`
   left: -10%;
   top: -10%;
   padding-top: 120%;
-  width: 120%;
-  height: 0;
+  width: 120% !important;
+  height: 0 !important;
   z-index: 5;
   animation: rotate_ring linear ${({gameSpd}) => 22.5 / gameSpd}s infinite;
 `;
@@ -319,6 +319,7 @@ const ListChCost = styled(Text)`
 const CharacterCard = ({
   size,
   equalSize=false,
+  isZoomCard,
   isShowCard,
   saveData,
   slotIdx,
@@ -511,36 +512,40 @@ const CharacterCard = ({
           <CardContainer size={size} sizeH={sizeH}>
             <ChCard size={size} className="ch_detail">
               <ListCh type="profile" isRound={10} pic={`chs${chData?.display}`} />
-              <ListJobAction>
-                <ListChJob className="job">
-                  <IconPic type={saveCh?.gradeUp ? `job${saveCh?.gradeUp}` : 'job'} isAbsolute={true} pic="icon100" idx={saveCh?.job} />
-                </ListChJob>
-                {saveCh?.newActionType?.map((data, idx) => {
-                  return (
-                    <ListChActionType key={'action'+idx} className="action_type">
-                      <IconPic type={saveCh?.gradeUp ? `element${saveCh?.gradeUp}`: 'element'} isAbsolute={true} isThumb={true} pic="icon100" idx={data + 1} />
-                    </ListChActionType>
-                  )
-                })}
-                {saveCh?.gradeUp && saveCh?.gradeUp > 0 && <GradeUp idx={gameData.ch[saveCh?.idx].animal_type} type={`animalType${saveCh?.gradeUp}`} pic="icon100" />}
-              </ListJobAction>
-              <ListElementSmall type="elementBack" pic="card_s" idx={chData?.element[0] - 6} />
-              <ListChStar>
-                {starArr.map((star, idx) => {
-                  return <Star idx={saveCh?.grade >= idx + 1 ? idx + 1 : 0} type={saveCh?.gradeUp ? `star${saveCh?.gradeUp}` : 'star'} pic="icon100" key={`start${idx}`} />;
-                })}
-              </ListChStar>
+              {!isZoomCard && 
+                <>
+                <ListJobAction>
+                  <ListChJob className="job">
+                    <IconPic type={saveCh?.gradeUp ? `job${saveCh?.gradeUp}` : 'job'} isAbsolute={true} pic="icon100" idx={saveCh?.job} />
+                  </ListChJob>
+                  {saveCh?.newActionType?.map((data, idx) => {
+                    return (
+                      <ListChActionType key={'action'+idx} className="action_type">
+                        <IconPic type={saveCh?.gradeUp ? `element${saveCh?.gradeUp}`: 'element'} isAbsolute={true} isThumb={true} pic="icon100" idx={data + 1} />
+                      </ListChActionType>
+                    )
+                  })}
+                  {saveCh?.gradeUp && saveCh?.gradeUp > 0 && <GradeUp idx={gameData.ch[saveCh?.idx].animal_type} type={`animalType${saveCh?.gradeUp}`} pic="icon100" />}
+                </ListJobAction>
+                <ListElementSmall type="elementBack" pic="card_s" idx={chData?.element[0] - 6} />
+                <ListChStar>
+                  {starArr.map((star, idx) => {
+                    return <Star idx={saveCh?.grade >= idx + 1 ? idx + 1 : 0} type={saveCh?.gradeUp ? `star${saveCh?.gradeUp}` : 'star'} pic="icon100" key={`start${idx}`} />;
+                  })}
+                </ListChStar>
+                </>
+              }
             </ChCard>
           </CardContainer>
         ) : (
           <ChCard size={size} className="ch_detail" {...rest}>
-            {!isShowCard && <ListNameLv elementType={chData?.element[0] - 6} className="name_lv">
+            {!isZoomCard && <ListNameLv elementType={chData?.element[0] - 6} className="name_lv">
               <Lv code="t8" color="main">{saveCh?.lv}</Lv>
               <SubName font="point" code="t2" color="main">{chData?.na3[lang]}</SubName>
               <Name font="point" code="t5" color="main"><strong>{chData?.na1[lang]}</strong>{chData?.na2?.[lang] ? `(${chData?.na2[lang]})` : ''}</Name>
             </ListNameLv>}
             <ListCh type="profile" isRound={0} pic={`ch${chData?.display}`} />
-            {!isShowCard && <ListJobAction>
+            {!isZoomCard && <ListJobAction>
               <ListChJob className="job">
                 <IconPic type={saveCh?.gradeUp ? `job${saveCh?.gradeUp}` : 'job'} isAbsolute={true} pic="icon100" idx={saveCh?.job} />
               </ListChJob>
@@ -553,12 +558,15 @@ const CharacterCard = ({
               })}
               {saveCh?.gradeUp > 0 && <GradeUp idx={gameData.ch[saveCh?.idx].animal_type} type={`animalType${saveCh?.gradeUp}`} pic="icon100" />}
             </ListJobAction>}
-            <ListChElement type="elementBack" pic="card" idx={chData?.element[0] - 6 + (saveCh?.lv > 49 ? 20 : 0)} />
-            {!isShowCard && <ListChStar>
-              {starArr.map((star, idx) => {
-                return <Star idx={saveCh?.grade >= idx + 1 ? idx + 1 : 0} type={saveCh?.gradeUp ? `star${saveCh?.gradeUp}` : 'star'} pic="icon100" key={`start${idx}`} />;
-              })}
-            </ListChStar>}
+            {!isZoomCard && 
+            <>
+              <ListChElement type="elementBack" pic="card" idx={chData?.element[0] - 6 + (saveCh?.lv > 49 ? 20 : 0)} />
+              <ListChStar>
+                {starArr.map((star, idx) => {
+                  return <Star idx={saveCh?.grade >= idx + 1 ? idx + 1 : 0} type={saveCh?.gradeUp ? `star${saveCh?.gradeUp}` : 'star'} pic="icon100" key={`start${idx}`} />;
+                })}
+              </ListChStar>
+            </>}
           </ChCard>
         )
       );

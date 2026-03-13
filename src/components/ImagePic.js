@@ -28,6 +28,7 @@ const StyledItemPic = styled.span`
 const MaskArea = styled.div`
   position: absolute;
   inset: 2%;
+  opacity: 0.5;
   background: ${({mergeColor}) => mergeColor};
   mix-blend-mode: ${({isBright}) => isBright ? 'screen' : 'multiply'};
   mask-image: url(${({url}) => url});
@@ -82,13 +83,17 @@ const StyledIconPic = styled.div`
   ${({itemPic, startIdx, idx, whNum, urlImg}) => {
     if (urlImg) {
       return `
-        background: url(${itemPic}) no-repeat 0% 0%;
+        background-image: url(${itemPic});
+        background-repeat: no-repeat;
+        background-position: 0% 0%;
         background-size: ${whNum[0] * 100}%;
       `;
     } else {
       return `
       \
-        background: url(${itemPic}) no-repeat ${(idx % whNum[0]) * (100 / (whNum[0] - 1))}% ${Math.floor(idx / whNum[0]) * (100 / (whNum[1] - 1)) + (100 / (whNum[1] - 1)) * startIdx}%;
+        background: url(${itemPic});
+        background-repeat: no-repeat;
+        background-position: ${(idx % whNum[0]) * (100 / (whNum[0] - 1))}% ${Math.floor(idx / whNum[0]) * (100 / (whNum[1] - 1)) + (100 / (whNum[1] - 1)) * startIdx}%;
         background-size: ${whNum[0] * 100}%;
       `;
     }

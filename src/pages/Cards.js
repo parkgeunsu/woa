@@ -1,18 +1,14 @@
 import { Text } from 'components/Atom';
 import { Button } from 'components/Button';
 import { FlexBox } from 'components/Container';
-import { IconPic, ItemPic, MergedPic } from 'components/ImagePic';
+import { IconPic, MergedPic } from 'components/ImagePic';
+import ItemLayout from 'components/ItemLayout';
+import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import { AppContext } from 'contexts/app-context';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import styled from 'styled-components';
-
-import ItemGradeColor from 'components/ItemGradeColor';
-import { util } from 'components/Libs';
 import CharacterAnimalSkill from 'pages/CharacterAnimalSkill';
 import CharacterCard from 'pages/CharacterCard';
 import CharacterItems from 'pages/CharacterItems';
@@ -20,6 +16,9 @@ import CharacterPaging from 'pages/CharacterPaging';
 import CharacterRelation from 'pages/CharacterRelation';
 import CharacterSkill from 'pages/CharacterSkill';
 import CharacterState from 'pages/CharacterState';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 //const CH_MENU_HEIGHT = 50;
 const Img = styled.img.attrs(
@@ -46,10 +45,18 @@ const ChCard = styled.div`
   left: 50%;
   top: calc(50% - 25px);
   transform: translate(-50%,-50%);
-  width: 85%;
+  transition: all 0.5s;
+  ${({isZoomCard, frameBack}) => isZoomCard ? `
+    width: 100%;
+    z-index: 100;
+    border: 5px solid transparent;
+    border-image: url(${frameBack}) 5 round;
+  ` : `
+    width: 85%;
+    z-index: 1;
+  `};
   overflow: hidden;
   font-size: 0;
-  z-index: 1;
   ${({chPage, gradeUp}) => {
     const grade = (() => {
       switch(gradeUp) {
@@ -81,15 +88,6 @@ const ChCard = styled.div`
     width: 100%;
     pointer-events: none;
   }
-  .lvEffect span{position:absolute;left:0;right:0;bottom:0%;height:1%;z-index:10;opacity:0;background:rgba(255,255,255,.7);}
-  .lvEffect span:first-of-type{transition: all 0.5s 0s ease-in;box-shadow:0 0 20px 10px #fff;}
-  .lvEffect span:nth-of-type(2){transition: all 0.5s 0.15s ease-in;box-shadow:0 0 20px 10px #fd0;}
-  .lvEffect span:nth-of-type(3){transition: all 0.5s 0.3s ease-in;box-shadow:0 0 20px 10px #fa0;}
-  .lvEffect span:nth-of-type(4){transition: all 0.5s 0.45s ease-in;box-shadow:0 0 20px 10px #f80;}
-  .lvEffect span:nth-of-type(5){transition: all 0.5s 0.6s ease-in;box-shadow:0 0 20px 10px #f60;}
-  .lvEffect span:nth-of-type(6){transition: all 0.5s 0.75s ease-in;box-shadow:0 0 20px 10px #f40;}
-  .lvEffect span:last-of-type{transition: all 0.5s 0.9s ease-in;box-shadow:0 0 20px 10px #f20;}
-  .lvEffect.on span{opacity:.5;bottom:100%;}
 `;
 const ChBack = styled(MergedPic)`
   position: absolute;
@@ -105,7 +103,7 @@ const ChInfo = styled.div`
   ${'' /* 42% */}
   background: rgba(0,0,0,.8);
   box-sizing: border-box;
-  border: 0px solid transparent;
+  border: 5px solid transparent;
   ${'' /* 5px */}
   border-image: url(${({frameBack}) => frameBack}) 5 round;
   z-index:3;
@@ -278,7 +276,11 @@ const Hole = styled(FlexBox)`
     background: rgba(255, 172, 47, 0.7);
   }
 `;
-const setSlotIdxFn = (state, paramData) => {
+const setSlotIdxFn = (state, paramData, navigate) => {
+  if (!state && Object.keys(paramData).length === 0) {
+    navigate('../');
+    return 0;
+  }
   if (!state) {
 		return paramData.cards.selectIdx || 0;
 	}
@@ -290,12 +292,36 @@ const setPageIdxFn = (state) => {
 	}
   return state.dataObj.chTabIdx;
 }
+const GetLvReward = styled.div`
+  position: fixed;
+  inset: 0;
+  font-size: 32px;
+  pointer-events: none;
+  background: rgba(0,0,0,0.7);
+  opacity: 0;
+  z-index: 100;
+  &.animate {
+    opacity: 1;
+  }
+  .rewardText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: pre-wrap;
+    text-shadow: 0 0 10px #ffd700, 0 0 20px #ffea00;
+  }
+  &.animate .rewardText{
+    animation: skillPop 1.5s ease-out infinite forwards;
+  }
+`;
 const Cards = ({
   saveData,
   changeSaveData,
   currentTime,
 }) => {
   const context = useContext(AppContext);
+  const navigate = useNavigate();
 	const {state} = useLocation();
   const isMoveEvent = React.useMemo(() => {
     return util.loadData("historyParam")?.moveEvent && Object.keys(util.loadData("historyParam").moveEvent)?.length > 0;
@@ -312,28 +338,29 @@ const Cards = ({
   const classification = React.useMemo(() => {
     return context.classification;
   }, [context]);
+  const [isZoomCard, setZoomCard] = useState(false);
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
-  const [isShowCard, setShowCard] = useState(false);
   const gameItem = React.useMemo(() => gameData.items, [gameData]);
-  const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : {...saveData}, [saveData]);
+  const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') ?? {} : {...saveData}, [saveData]);
   const [showInven, setShowInven] = useState(state?.dataObj.invenOpened);
   const [showSetting, setShowSetting] = useState(false);
   const [showState, setShowState] = useState(false);
+  const [rewardText, setRewardText] = useState("");
   const invenItems = React.useMemo(() => {
     return sData.items;
   }, [sData]);
-  const chLength = React.useMemo(() => sData.ch.length ,[sData]);
+  const chLength = React.useMemo(() => sData?.ch?.length ,[sData]);
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
-  const [slotIdx, setSlotIdx] = useState(setSlotIdxFn(state, paramData));
+  const [slotIdx, setSlotIdx] = useState(setSlotIdxFn(state, paramData, navigate));
   const [chPage, setChPage] = useState(setPageIdxFn(state));
   useEffect(() => {
-		setSlotIdx(setSlotIdxFn(state, paramData));
+		setSlotIdx(setSlotIdxFn(state, paramData, navigate));
 		setChPage(setPageIdxFn(state));
 	}, [state, paramData]);
   const changeChPage = (idx) => {
@@ -436,17 +463,22 @@ const Cards = ({
             }}>동물스킬 리셋</button>
             {currentTime}
           </div>
-          <ChCard className="ch_card" gradeUp={sData.ch[slotIdx]?.gradeUp} chPage={chPage}>
-            <Img imgurl={imgSet.images.transparent800} onClick={() => {
-              setShowCard(!isShowCard);
-            }}/>
-            {chPage === 0 ? <CharacterCard saveData={sData} slotIdx={slotIdx} isShowCard={isShowCard}/> : <ChBack type="cardBack" pic="card" idx={0} />}
-            {chPage === 1 && <CharacterState saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
+          {Object.keys(sData).length > 0 && sData.ch.length > 0 && <ChCard className="ch_card" isZoomCard={isZoomCard} gradeUp={sData.ch[slotIdx]?.gradeUp} chPage={chPage} frameBack={imgSet.etc.frameChBack} onClick={() => {
+            if (chPage === 0) {
+              setZoomCard(prev => !prev);
+            }
+          }}>
+            <Img imgurl={imgSet.images.transparent800} />
+            {chPage === 0 ? <CharacterCard saveData={sData} slotIdx={slotIdx} isZoomCard={isZoomCard} /> : <ChBack type="cardBack" pic="card" idx={0} />}
+            {chPage === 1 && <CharacterState saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} setRewardText={setRewardText} />}
             {chPage === 2 && <CharacterAnimalSkill saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
             {chPage === 3 && <CharacterSkill saveData={sData} slotIdx={slotIdx} />}
             {chPage === 4 && <CharacterRelation saveData={sData} slotIdx={slotIdx} />}
             {chPage === 5 && <CharacterItems saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
-          </ChCard>
+          </ChCard>}
+          <GetLvReward id="getLvReward">
+            <Text code="t6" color="#fff" weight="600" className="rewardText">{rewardText}</Text>
+          </GetLvReward>
           <CharacterPaging chLength={chLength} saveData={sData} changeChSlot={changeChSlot} slotIdx={slotIdx} />
           <TopBtnGroup>
             <FlexBox>
@@ -530,19 +562,21 @@ const Cards = ({
                         itemSaveSlot: idx,
                       });
                     }} data-itemnum={`equip_${data.idx}`}>
-                      <ItemGradeColor part={data.part} grade={gameData.itemGrade.txt_e[data.grade].toLowerCase()} sealed={data.sealed} impossible={equipPossible}>
-                        <ItemPic type="equip" pic="equip" idx={items.display} />
-                        <Hole alignItems="flex-end" justifyContent="space-between">
-                          {itemsHole.map((holeData, holeidx) => {
-                            const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
-                            return (
-                              <span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
-                                <ItemPic type="hole" className="pic" pic="itemEtc" idx={holePic} />
-                              </span>
-                            );
-                          })}
-                        </Hole>
-                      </ItemGradeColor>
+                      <ItemLayout 
+                        gameItem={gameItem}
+                        isEquip
+                        icon={{
+                          type: "equip",
+                          pic: "equip",
+                          idx: items.display,
+                          mergeColor: data.color,
+                        }}
+                        part={data.part}
+                        grade={data.grade}
+                        itemsHole={itemsHole}
+                        impossible={equipPossible}
+                        sealed={data.sealed}
+                      />
                     </ItemList>
                   )
                 })}
@@ -551,7 +585,6 @@ const Cards = ({
               <ul className="h_items">
                 { invenItems.hole && invenItems.hole.map((data, idx) => {
                   const items = gameItem.hole[data.idx];
-                  console.log(items, data.idx);
                   return (
                     <ItemList key={`hole${idx}`} data-itemnum={`hole_${data.idx}`} onClick={() => {
                       handlePopup({
@@ -560,9 +593,18 @@ const Cards = ({
                         itemSaveSlot: idx,
                       });
                     }}>
-                      <ItemGradeColor part="11">
-                        <ItemPic type="hole" className="pic" pic="itemEtc" idx={items.display} />
-                      </ItemGradeColor>
+                      <ItemLayout 
+                        gameItem={gameItem}
+                        isEquip
+                        icon={{
+                          type: "hole",
+                          pic: "itemEtc",
+                          idx: items.display
+                        }}
+                        part="11"
+                        grade={items.grade}
+                        sealed={items.sealed}
+                      />
                     </ItemList>
                   )
                 })}
@@ -578,10 +620,19 @@ const Cards = ({
                         itemData: data,
                         itemSaveSlot: idx,
                       });
-                    }} >
-                      <ItemGradeColor part="12">
-                        <ItemPic type="upgrade" className="pic" pic="itemEtc" idx={items.display} />
-                      </ItemGradeColor>
+                    }}>
+                      <ItemLayout 
+                        gameItem={gameItem}
+                        isEquip
+                        icon={{
+                          type: "upgrade",
+                          pic: "itemEtc",
+                          idx: items.display
+                        }}
+                        part="12"
+                        grade={items.grade}
+                        sealed={items.sealed}
+                      />
                     </ItemList>
                   )
                 })}
@@ -598,9 +649,18 @@ const Cards = ({
                         itemSaveSlot: idx,
                       });
                     }}>
-                      <ItemGradeColor part="13">
-                        <ItemPic type="material" className="pic" pic="itemEtc" idx={items.display} />
-                      </ItemGradeColor>
+                      <ItemLayout 
+                        gameItem={gameItem}
+                        isEquip
+                        icon={{
+                          type: "material",
+                          pic: "itemEtc",
+                          idx: items.display
+                        }}
+                        part="13"
+                        grade={items.grade}
+                        sealed={items.sealed}
+                      />
                     </ItemList>
                   )
                 })}
@@ -617,9 +677,18 @@ const Cards = ({
                         itemSaveSlot: idx,
                       });
                     }}>
-                      <ItemGradeColor part="13">
-                        <ItemPic type="etc" className="pic" pic="itemEtc" idx={items.display} />
-                      </ItemGradeColor>
+                      <ItemLayout 
+                        gameItem={gameItem}
+                        isEquip
+                        icon={{
+                          type: "etc",
+                          pic: "itemEtc",
+                          idx: items.display
+                        }}
+                        part="13"
+                        grade={items.grade}
+                        sealed={items.sealed}
+                      />
                     </ItemList>
                   )
                 })}

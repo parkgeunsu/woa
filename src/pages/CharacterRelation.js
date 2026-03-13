@@ -5,6 +5,8 @@ import InfoGroup from 'components/InfoGroup';
 import { util } from 'components/Libs';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
+import Tooltip from 'components/Tooltip';
+import TooltipContainer from 'components/TooltipContainer';
 import { AppContext } from 'contexts/app-context';
 import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
@@ -35,10 +37,14 @@ const RelationMember = styled(FlexBox)`
   margin: 10px 0 0 0;
   height: auto;
 `;
-const ChBox = styled.div`
+const Member = styled.div`
   position: relative;
-  width: 40px;
-  padding-top: 40px;
+  width: 20%;
+  padding-top: 20%;
+`;
+const ChBox = styled.div`
+  position: absolute;
+  inset: 5%;
   border-radius: 10%;
   overflow: hidden;
   box-sizing: border-box;
@@ -67,10 +73,10 @@ const RtComplete = styled(Text)`
 `;
 const CardCh = styled.span`
   position:absolute;
-	left: -15%;
-	top: -15%;
-	width: 130%;
-	height: 130%;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
 `;
 const ChRelation = styled.div`
   position: relative;
@@ -134,6 +140,9 @@ const CharacterRelation = ({
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
+  const [tooltipOn, setTooltipOn] = useState(false);
+  const [tooltip, setTooltip] = useState('');
+  const [tooltipPos, setTooltipPos] = useState([0,0]);
   const chRelation = React.useMemo(() => chData.relation, [chData]);
   
   const relationStatus = React.useMemo(() => {
@@ -198,17 +207,21 @@ const CharacterRelation = ({
                       <RelationName code="t1"  color="main" weight="600">{rtStatus.data?.na?.[lang]}</RelationName>
                       <RelationTxt code="t0"  color="main" align="left" dangerouslySetInnerHTML={{ __html: skillText }}>
                       </RelationTxt>
-                      <RelationMember>
+                      <RelationMember flexWrap="wrap">
                         {rtStatus.memberStatus.map((mStatus, idx_) => (
                           mStatus.chData && (
-                            <div key={`relationMember_${mStatus.idx}`} style={{ margin: "0 10px 0 0" }}>
+                            <Member key={`relationMember_${mStatus.idx}`} onClick={(e) => {
+                              setTooltipPos(e.target.getBoundingClientRect());
+                              setTooltip(mStatus.chData.na1[lang]);
+                              setTooltipOn(true);
+                            }}>
                               <ChBox active={mStatus.hasMember}>
                                 <CardCh>
                                   <ChPic isThumb={true} pic={`chs${mStatus.chData.display}`} />
                                 </CardCh>
                               </ChBox>
                               {rtStatus.isAllComplete && <RtComplete color="red" code="t4" weight="600">ALL</RtComplete>}
-                            </div>
+                            </Member>
                           )
                         ))}
                       </RelationMember>
@@ -269,6 +282,9 @@ const CharacterRelation = ({
       <PopupContainer>
         {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} />}
       </PopupContainer>
+			<TooltipContainer>
+				{tooltipOn && <Tooltip pos={tooltipPos} text={tooltip} showTooltip={setTooltipOn} />}
+			</TooltipContainer>
     </>
   );
 }

@@ -8,7 +8,6 @@ import { exp } from 'gamedata/exp';
 import { guide } from 'gamedata/guide';
 import { ch } from 'gamedata/heros';
 import { items } from 'gamedata/items';
-import { itemsSvg } from 'gamedata/itemsSvg';
 import { job } from 'gamedata/job';
 import { lineup } from 'gamedata/lineup';
 import { msg } from 'gamedata/msg';
@@ -40,10 +39,14 @@ export const gameData = {
     events: events,
     eventsHead: [0,1,6,6,2,2,3,3,4,5,7,7], //이벤트 지형 타입
     percent: percent,
+    //레벨업시 체력 증가
     addGradeArr: [0, 1, 1.3, 1.6, 1.9, 2.2, 2.5, 2.8],//등급에 따른 추가 능력치
     addGradeState: [true,true,true,false,false,false,false,true,false,false],//등급가중치가 적용되는 전투스텟(체력, 행동, 행동회복, 공격, 방어, 술법공격, 술법방어, 체력회복, 속도, 행운), kg증가
+    addLvArr: 0.01, //레벨당 능력치 증가
+    addLvState: [true,false,false,false,false,false,false,true,false,false],//레벨업시 적용되는 전투스텟(체력, 행동, 행동회복, 공격, 방어, 술법공격, 술법방어, 체력회복, 속도, 행운), kg증가
+    addGradeBaseState: [0,2,5,7,10,12,15],//등급차이에 따른 능력치 +
     possibleStageNum: [1,3,5,10],//시나리오 난이도 진행 가능한 카드영웅 갯수
-    animal_type: animals,
+    animalType: animals,
     animal_size: {//[최소, 최대, 극최대]
       kg:[
         [2,9,20],//고양이
@@ -85,9 +88,9 @@ export const gameData = {
     ships: ships,
     //grade (0하급poor, 1일반normal, 2매직magic, 3레어rare, 4에픽epic, 5유니크unique, 6레전드legend)
     itemGrade: {//'#999'
-      txt_e: ['Poor','Normal','Magic','Rare','Epic','Unique','Legend'],
-      txt_k: ['일반','매직','레어','에픽','세트','유니크','레전드'],
-      color: ['#fff','#0090ff','#a800ff','#ffcc15','#00a90c','#ff2a00','#ff8800']
+      txt_e: ['','Poor','Normal','Magic','Rare','Epic','Unique','Legend'],
+      txt_k: ['','일반','매직','레어','에픽','세트','유니크','레전드'],
+      color: ['','#fff','#0090ff','#ffcc15','#a800ff','#00a90c','#ff2a00','#ff8800']
     },
     chGradeColor:['#fff','#00a90c','#0090ff','#a800ff','#ffcc15','#ff2a00','#ff8000'],
     stateMax:[150,200,200,100,200,100,100,200],//능력치 최대치(통,체,완,순,지,정,매,운) 150,200,200,100,200,100,100,200
@@ -118,7 +121,6 @@ export const gameData = {
     mutateSkill: mutateSkill,
     relation: relation,
     scenario: scenario,
-    itemsSvg: itemsSvg,
     colorSvg: colorSvg,
     shipSvg: shipSvg,
     sailSvg: sailSvg,

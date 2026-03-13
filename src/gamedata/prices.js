@@ -14,10 +14,42 @@ export const prices = {
 
 	},
 	enhancingStickers:{
-		socketRemove:[{type:'g',price:500},{type:'etc',imgGroup:'itemEtc',idx:22,price:1}],
-		upgrade1:[{type:'g',price:1000},{type:'etc',imgGroup:'itemEtc',idx:8,price:1}],
-		upgrade2:[{type:'g',price:5000},{type:'etc',imgGroup:'itemEtc',idx:9,price:1}],
-		upgrade3:[{type:'g',price:10000},{type:'etc',imgGroup:'itemEtc',idx:10,price:1}],
+		socketRemove:[
+			{cate:'g',type:'commonBtn',img:'icon100',idx:3,price:500},
+			{cate:'item',type:'etc',img:'itemEtc',idx:28,price:1}],
+		upgrade0:[
+			{cate:'g',type:'commonBtn',img:'icon100',idx:3,price:1000},
+			{cate:'item',type:'upgrade',img:'itemEtc',idx:0,price:1}],
+		upgrade1:[
+			{cate:'g',type:'commonBtn',img:'icon100',idx:3,price:5000},
+			{cate:'item',type:'upgrade',img:'itemEtc',idx:1,price:1}],
+		upgrade2:[
+			{cate:'g',type:'commonBtn',img:'icon100',idx:3,price:10000},
+			{cate:'item',type:'upgrade',img:'itemEtc',idx:2,price:1}],
+		upgrade4:[
+			{cate:'g',type:'commonBtn',img:'icon100',idx:3,price:15000},
+			{cate:'item',type:'upgrade',img:'itemEtc',idx:3,price:1}],
+		upgrade5:[
+			{cate:'g',type:'commonBtn',img:'icon100',idx:3,price:20000},
+			{cate:'item',type:'upgrade',img:'itemEtc',idx:4,price:1}],
+		upgrade6:[
+			{cate:'g',type:'commonBtn',img:'icon100',idx:3,price:25000},
+			{cate:'item',type:'upgrade',img:'itemEtc',idx:5,price:1}],
+		upgrade7:[
+			{cate:'g',type:'commonBtn',img:'icon100',idx:3,price:5000},
+			{cate:'item',type:'upgrade',img:'itemEtc',idx:6,price:1}],
+		upgrade8:[
+			{cate:'g',type:'commonBtn',img:'icon100',idx:3,price:10000},
+			{cate:'item',type:'upgrade',img:'itemEtc',idx:7,price:1}],
+		upgrade9:[
+			{cate:'g',type:'commonBtn',img:'icon100',idx:3,price:15000},
+			{cate:'item',type:'upgrade',img:'itemEtc',idx:8,price:1}],
+		upgrade10:[
+			{cate:'g',type:'commonBtn',img:'icon100',idx:3,price:20000},
+			{cate:'item',type:'upgrade',img:'itemEtc',idx:9,price:1}],
+		upgrade11:[
+			{cate:'g',type:'commonBtn',img:'icon100',idx:3,price:25000},
+			{cate:'item',type:'upgrade',img:'itemEtc',idx:10,price:1}],
 	}
 }
 

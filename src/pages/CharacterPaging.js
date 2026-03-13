@@ -39,7 +39,6 @@ const CharacterPaging = ({
       node.scrollTo(cardWidth * (slotIdx - cardHalfNum), 0);
     }
   }, [slotIdx, cardWidth]);
-
   return (
     <ChList ref={scrollMove} type="paging">
       <ChUl chSize={cardWidth} chLength={chLength}>

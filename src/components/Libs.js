@@ -91,18 +91,20 @@ export const util = { //this.loadImage();
     let battleState_ = [];
     let enemy = {};
     const itemEff = util.getItemEff('', enemyData, gameData.items, true);
+    const gradeGap = gameData.addGradeBaseState[enemyData.grade - gameData.ch[enemyData.idx].grade] || 0;//등급 차이
     for (const idx of gameData.stateName.keys()) {
       const st = gameData.ch[enemyData.idx]['st' + idx] || 0;
-      battleState_[idx] = st;
+      battleState_[idx] = st + gradeGap;
     }
     battleState_[7] = gameData.ch[enemyData.idx].st3 + gameData.ch[enemyData.idx].st5 + gameData.ch[enemyData.idx].st6; //속도
     battleState_[8] = Math.round(Math.random() * 200); //행운
     const battleState = util.getTotalState(battleState_);
     //등급에 따른 추가 능력치
     for (const [idx, bState] of battleState.entries()) {
+      const _bState = idx === 0 ? bState + (bState * (enemyData.lv / 10)) : bState; //레벨에 따른 체력 가중치
       enemy = {
         ...enemy,
-        ['bSt' + idx]: gameData.addGradeState[idx] ? Math.round(bState * gameData.addGradeArr[gameData.ch[enemyData.idx].grade]) : bState,
+        ['bSt' + idx]: gameData.addLvState[idx] ? Math.round(_bState * (1 + (gameData.addLvArr * enemyData.lv))) : _bState,
       }
     }
     for (let i = 0; i <= 100; ++i) {//아이템 능력치
@@ -119,7 +121,7 @@ export const util = { //this.loadImage();
     for (const idx of gameData.element.keys()) {
       enemy = {
         ...enemy,
-        ['el' + idx]: gameData.animal_type[gameData.ch[enemyData.idx].animal_type].element[idx],
+        ['el' + idx]: gameData.animalType[gameData.ch[enemyData.idx].animal_type].element[idx],
       }
     }
     enemy = {
@@ -131,10 +133,11 @@ export const util = { //this.loadImage();
   saveLvState: (saveSlot, obj, saveData, gameData) => {//카드 획득시 레벨당 능력치 저장(캐릭터 저장된 슬롯번호, {카드등급, 아이템 이펙트등...})
     let battleState_ = [];
     let saveChSlot = { ...(saveData.ch[saveSlot] || obj.newState) };
+    const gradeGap = gameData.addGradeBaseState[obj.grade - gameData.ch[saveChSlot.idx].grade] || 0;//등급 차이
     for (const idx of gameData.stateName.keys()) {
       const st = gameData.ch[saveChSlot.idx]['st' + idx] || 0;
-      saveChSlot['st' + idx] = st//현재능력치
-      battleState_[idx] = st;
+      saveChSlot['st' + idx] = st + gradeGap//현재능력치
+      battleState_[idx] = st + gradeGap;
     }
     saveChSlot['st7'] = saveChSlot.stateLuk; //행운
     battleState_[7] = gameData.ch[saveChSlot.idx].st3 + gameData.ch[saveChSlot.idx].st5 + gameData.ch[saveChSlot.idx].st6; //속도
@@ -142,7 +145,8 @@ export const util = { //this.loadImage();
     //등급에 따른 추가 능력치
     const battleState = util.getTotalState(battleState_);
     for (const [idx, bState] of battleState.entries()) {
-      saveChSlot['bSt' + idx] = gameData.addGradeState[idx] ? Math.round(bState * gameData.addGradeArr[gameData.ch[saveChSlot.idx].grade]) : bState;
+      const _bState = idx === 0 ? bState + (bState * ((saveChSlot.lv - 1) / 10)) : bState; //레벨에 따른 체력 가중치
+      saveChSlot['bSt' + idx] = gameData.addLvState[idx] ? Math.round(_bState * (1 + (gameData.addLvArr * saveChSlot.lv))) : _bState;
     }
     for (let i = 0; i <= 100; ++i) {//아이템 능력치
       if (i < 10) {
@@ -158,7 +162,7 @@ export const util = { //this.loadImage();
     for (const idx of gameData.element.keys()) {
       saveChSlot = {
         ...saveChSlot,
-        ['el' + idx]: gameData.animal_type[gameData.ch[saveChSlot.idx].animal_type].element[idx],
+        ['el' + idx]: gameData.animalType[gameData.ch[saveChSlot.idx].animal_type].element[idx],
       }
     }
     saveChSlot = {
@@ -168,24 +172,21 @@ export const util = { //this.loadImage();
     }
     return saveChSlot;
   },
-  saveCharacter: (dataObj) => { //아이템 변경시 스텟저장
-    const gameData = dataObj.gameData;
-    const saveData = dataObj.saveData;
-    const gameItem = dataObj.gameData.items;
+  saveCharacter: ({gameData, saveData, chSlotIdx, changeSaveData}) => { //아이템 변경시 스텟저장
     let saveCh = [
-      ...dataObj.saveData.ch,
+      ...saveData.ch,
     ].map(ch => ({ ...ch, items: ch.items.map(item => ({ ...item })), animalSkill: ch.animalSkill.map(group => group.map(sk => ({ ...sk }))) }));
 
-    if (typeof dataObj.chSlotIdx === "number") { //슬롯설정이 되면 개별 캐릭만 실행
-      const itemEff = util.getItemEff(dataObj.chSlotIdx, saveCh, gameItem);
-      saveCh[dataObj.chSlotIdx] = util.saveLvState(dataObj.chSlotIdx, {
+    if (typeof chSlotIdx === "number") { //슬롯설정이 되면 개별 캐릭만 실행
+      const itemEff = util.getItemEff(chSlotIdx, saveCh, gameData.items);
+      saveCh[chSlotIdx] = util.saveLvState(chSlotIdx, {
         itemEff: itemEff,
-        grade: gameData.ch[saveCh[dataObj.chSlotIdx].idx].grade,
+        grade: gameData.ch[saveCh[chSlotIdx].idx].grade,
         newState: {},
       }, { ...saveData, ch: saveCh }, gameData)
-    } else if (dataObj.chSlotIdx === "all") { //슬롯설정이 없으면 전체 캐릭 실행
+    } else if (chSlotIdx === "all") { //슬롯설정이 없으면 전체 캐릭 실행
       for (const idx of saveCh.keys()) {
-        const itemEff = util.getItemEff(idx, saveCh, gameItem);
+        const itemEff = util.getItemEff(idx, saveCh, gameData.items);
         saveCh[idx] = util.saveLvState(idx, {
           itemEff: itemEff,
           grade: saveCh[idx].grade || gameData.ch[saveCh[idx].idx].grade,
@@ -193,10 +194,10 @@ export const util = { //this.loadImage();
         }, { ...saveData, ch: saveCh }, gameData);
       }
     }
-    return {
+    changeSaveData({
       ...saveData,
       ch: saveCh,
-    }
+    })
   },
   getNonOverlappingNumber: (arr, num, n) => {
     let newArr = [],
@@ -268,7 +269,36 @@ export const util = { //this.loadImage();
       }
       if(item.hole){
         for (const eff of item.hole) {
-          if(eff) {
+          console.log(eff);
+          if (eff.baseEff) {//save baseEff
+            const baseEff = eff.baseEff;
+            for (const baseData of baseEff) {
+              console.log(baseData);
+              if (effData[baseData.type] === undefined) {
+                effData[baseData.type] = {percent:0, number:0};
+              }
+              if (baseData.num.indexOf('%') > 0){
+                effData[baseData.type].percent = effData[baseData.type].percent + parseInt(baseData.num);
+              } else {
+                effData[baseData.type].number = effData[baseData.type].number + parseInt(baseData.num);
+              }
+            }
+          }
+          if (eff.addEff) {//save addEff
+            const addEff = eff.addEff;
+            for (const addData of addEff) {
+              console.log(addData);
+              if (effData[addData.type] === undefined) {
+                effData[addData.type] = {percent:0, number:0};
+              }
+              if (addData.num.indexOf('%') > 0){
+                effData[addData.type].percent = effData[addData.type].percent + parseInt(addData.num);
+              } else {
+                effData[addData.type].number = effData[addData.type].number + parseInt(addData.num);
+              }
+            }
+          }
+          if(eff) {//gameData eff
             const holeItem = gameItem.hole[eff.idx].eff;
             for (const holeData of holeItem) {
               if (effData[holeData.type] === undefined) {
@@ -569,10 +599,18 @@ export const util = { //this.loadImage();
         return Math.round(current/total*100);
     }
   },
-  getTotalEff: (saveItems, gameData, socketEff) => {
+  getTotalEff: ({saveItems, gameData, cate}) => {
     let totalEff = [];
     const grade = saveItems.hole ? saveItems.grade : 1;
-    saveItems.baseEff.forEach((data, idx) => {
+    if (cate === "hole") {
+      gameData.items[cate][saveItems.idx].eff.forEach((data, idx) => {
+        if (totalEff[data.type] === undefined) {
+          totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
+        }
+        totalEff[data.type].hole += parseInt(data.num);
+      });
+    }
+    saveItems.baseEff?.forEach((data, idx) => {
       if (totalEff[data.type] === undefined) {
         totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
       }
@@ -582,7 +620,7 @@ export const util = { //this.loadImage();
         totalEff[data.type].base += parseInt(data.num[grade - 1]);
       }
     });
-    saveItems.addEff.forEach((data, idx) => {
+    saveItems.addEff?.forEach((data, idx) => {
       if (totalEff[data.type] === undefined) {
         totalEff[data.type] = data.type === 100 ? {type: data.type, skList: []} : {type: data.type, base: 0, add:0, hole:0};
       }
@@ -595,21 +633,25 @@ export const util = { //this.loadImage();
         totalEff[data.type].add += parseInt(data.num[0]);
       }
     });
-    if (socketEff) {
-      socketEff.save.forEach((data, idx) => {
-        if (data) {
-          const holeItem = gameData.items.hole[data.idx].eff;
-          holeItem.forEach((holeData, idx) => {
-            if (totalEff[holeData.type] === undefined) {
-              totalEff[holeData.type] = {type: holeData.type, base: 0, add:0, hole:0};
+    if (saveItems.hole) {
+      saveItems.hole.forEach((data, idx) => {
+        if (data.baseEff) {//save baseEff
+          data.baseEff.forEach((baseData, idx) => {
+            if (totalEff[baseData.type] === undefined) {
+              totalEff[baseData.type] = {type: baseData.type, base: 0, add:0, hole:0};
             }
-            totalEff[holeData.type].hole += parseInt(holeData.num);
+            totalEff[baseData.type].hole += parseInt(baseData.num);
           });
         }
-      });
-    } else if (saveItems.hole) {
-      saveItems.hole.forEach((data, idx) => {
-        if (data) {
+        if (data.addEff) {//save addEff
+          data.addEff.forEach((addData, idx) => {
+            if (totalEff[addData.type] === undefined) {
+              totalEff[addData.type] = {type: addData.type, base: 0, add:0, hole:0};
+            }
+            totalEff[addData.type].hole += parseInt(addData.num);
+          });
+        }
+        if (data) {//gameData eff
           const holeItem = gameData.items.hole[data.idx].eff;
           holeItem.forEach((holeData, idx) => {
             if (totalEff[holeData.type] === undefined) {
@@ -771,7 +813,7 @@ export const util = { //this.loadImage();
   },
   getEnemySkill: (data, gameData) => {
     const chData = gameData.ch[data.idx],
-      animalSkill = gameData.animal_type[chData.animal_type].skill,
+      animalSkill = gameData.animalType[chData.animal_type].skill,
       jobSkill = gameData.job[chData.job[0]].skill,
       skillArr = [1, 2, ...animalSkill.lv0, ...jobSkill.lv0];//lv0 수정해야함
     const skillNums = [3,6,9,12,15],
@@ -798,15 +840,33 @@ export const util = { //this.loadImage();
     }
     return skill;
   },
-  getSkill: (gameData, ch, slotIdx, saveData, changeSaveData) => {
-    const chData = gameData.ch[ch.idx],
-      animalSkill = gameData.animal_type[chData.animal_type].skill,
-      jobSkill = gameData.job[chData.job].skill,
-      skillArr = [...animalSkill, ...jobSkill];
-    const skillNum = Math.floor(Math.random() * skillArr.length),
-      skillIdx = skillArr[skillNum];
+  getAnimalCoin: ({
+    slotIdx, saveData, luck, lv
+  }) => {
+    const coin = (lv % 10 === 0) ? 1 : (Math.random() < luck / 400) ? 1 : 0; //10레벨마다 획득, 행운치에 따라서 획득
+    saveData.ch[slotIdx].mark = saveData.ch[slotIdx].mark + coin;
+    saveData.ch[slotIdx].animalBadge = saveData.ch[slotIdx].animalBadge + coin;
+    return coin === 0 ? false : true;
+  },
+  getSkill: ({
+    gameData,
+    slotIdx,
+    saveData,
+    luck,
+    lv,
+  }) => {
+    const saveCh = saveData.ch[slotIdx];
+    const intelligence = saveCh.st4; //지능
+    const isGet = lv % 5 === 0 || Math.random() < (luck + intelligence) / 600; //5레벨마다 획득, 행운 + 지능에 따라서 획득
+    if (!isGet) {
+      return "";
+    }
+    const lvGroup = gameData.job[saveCh.job].skill[saveCh.lv === 50 ? "maxLv" : `lv${util.fnPercent([50,30,15,5])}`];
+    const skillNum = Math.floor(Math.random() * lvGroup.length),
+      skillIdx = lvGroup[skillNum];
     const lvExp = [100,50,25,25];
     let hasSkill = '';
+    console.log(skillIdx, skillNum);
     saveData.ch[slotIdx].sk.forEach((data, idx) => {
       if (data.idx === skillIdx) {
         data.exp += lvExp[data.lv - 1];
@@ -818,71 +878,70 @@ export const util = { //this.loadImage();
         return;
       }
     });
-    util.effect.skill(gameData.skill[skillIdx], hasSkill);
-    if (!hasSkill) {
-      saveData.ch[slotIdx].sk.push({
-        idx: skillIdx,
-        lv: 1,
-        exp: 0,
-      });
+    if (skillIdx !== undefined) {
+      if (!hasSkill) {
+        saveData.ch[slotIdx].sk.push({
+          idx: skillIdx,
+          lv: 1,
+          exp: 0,
+        });
+      }
     }
-    changeSaveData(saveData);
+    return skillIdx;
   },
   effect: {
-    lvUp: () => {
-      const lvUpContainer = document.getElementsByClassName('ch_card')[0];
-      const lvElement = document.createElement('div');
-      lvElement.setAttribute('class', 'lvEffect');
-      if (lvUpContainer) {
-        lvUpContainer.appendChild(lvElement);
-        lvElement.innerHTML = '<span></span><span></span><span></span><span></span><span></span><span></span><span></span>';
-      };
-      setTimeout(() => {
-        lvElement.classList.add("on");
+    lvUp: ({
+      timeoutRef,
+      rewardType,
+      rewardText,
+      setRewardText,
+    }) => {
+      const lvUpElement = document.getElementsByClassName('lvupEffect');
+      Array.prototype.forEach.call(lvUpElement, (el) => {
+        el.classList.remove("animate");
+      });
+      clearTimeout(timeoutRef.current[0]);
+      timeoutRef.current[0] = setTimeout(() => {
+        Array.prototype.forEach.call(lvUpElement, (el) => {
+          el.classList.add("animate");
+        });
         setTimeout(() => {
-          const element = document.getElementsByClassName('lvEffect')[0];
-          if(element) {
-            element.remove();
-          }
-        }, 1600);
-      }, 200);
-    },
-    skill: (skill, hasSkill) => {
-      const skillContainer = document.getElementsByClassName('content')[0];
-      const skillElement = document.createElement('div');
-      skillElement.setAttribute('class', `skillEffect effect${skill.element_type}`);
-      if (skillContainer) {
-        skillContainer.appendChild(skillElement);
-        if(!hasSkill){
-          skillElement.innerHTML = `<div class="skillName newName1">${skill.na || '나몰라'} 획득</div><div class="skillName newName2">${skill.na || '나몰라'} 획득</div>`;
-          setTimeout(() => {
-            skillElement.classList.add("on");
-            setTimeout(() => {
-              skillElement.classList.add("fadeOut");
-              setTimeout(() => {
-                const element = document.getElementsByClassName('skillEffect')[0];
-                if(element) {
-                  element.remove();
-                }
-              }, 1000);
-            }, 1200);
-          }, 200);
-        } else {
-          skillElement.innerHTML = `<div class="skillName oldName">LV.${hasSkill.lv} ${skill.na || '나몰라'}<div class="skillExp"><em class="gradient_dark" style="width:${hasSkill.exp}%"></em></div></div>`;
-          setTimeout(() => {
-            skillElement.classList.add("fadeIn");
-            setTimeout(() => {
-              skillElement.classList.add("fadeOut");
-              setTimeout(() => {
-                const element = document.getElementsByClassName('skillEffect')[0];
-                if(element) {
-                  element.remove();
-                }
-              }, 1000);
-            }, 1200);
-          }, 200);
-        }
+          Array.prototype.forEach.call(lvUpElement, (el) => {
+            el.classList.remove("animate");
+          });
+        }, 800);
+      }, 50);
+      if (rewardType === "both") {
+        setRewardText(rewardText);
+        util.effect.lvUpReward({
+          timeoutRef: timeoutRef,
+          setRewardText: setRewardText,
+        });
+      } else if (rewardType === "skill") {
+        setRewardText(rewardText);
+        util.effect.lvUpReward({
+          timeoutRef: timeoutRef,
+          setRewardText: setRewardText,
+        });
+      } else if (rewardType === "animalCoin") {
+        setRewardText(rewardText);
+        util.effect.lvUpReward({
+          timeoutRef: timeoutRef,
+          setRewardText: setRewardText,
+        });
       }
+    },
+    lvUpReward: ({
+      timeoutRef,
+      setRewardText,
+    }) => {
+      const container = document.getElementById('getLvReward');
+      clearTimeout(timeoutRef.current[1]);
+      container.classList.add("animate");
+      timeoutRef.current[1] = setTimeout(() => {
+        container.classList.remove("animate");
+        setRewardText("");
+      }, 1500);
     }
   },
   // setNumber: (n) => {
@@ -1788,16 +1847,6 @@ export const util = { //this.loadImage();
       }
     }
   },
-  setItemColor: (svgData, colorSet, id) => {
-    let svg = svgData;
-    const idPattern = new RegExp("==id==","g");
-    svg = svg.replace(idPattern, id);
-    for (const [idx, data] of colorSet.entries()) {
-      const pattern = new RegExp("=="+idx+"==","g");
-      svg = svg.replace(pattern, data);
-    }
-    return svg;
-  },
   setShipColor: (svgData, wood, colorSet, id, sail, sailColor, cannon) => {
     let svg = svgData;
     const idPattern = new RegExp("==id==","g"),
@@ -1843,17 +1892,17 @@ export const util = { //this.loadImage();
     const b = Math.round(Math.random() * 255);
     return `rgb(${r},${g},${b})`;
   },
-  getHslColor: (colorLight, opacity) => {
+  getHslColor: (colorType, opacity) => {
     const h = Math.round(Math.random() * 360);
     let s = 0;
     let l = 0;
-    if (colorLight === "point") {
+    if (colorType === 0) {//point
       s = Math.round(Math.random() * 20 + 80);
       l = Math.round(Math.random() * 35 + 35);
-    } else if (colorLight === "light") {
+    } else if (colorType === 1) {//light
       s = Math.round(Math.random() * 20 + 80);
       l = Math.round(Math.random() * 30 + 50);
-    } else {
+    } else {//dark
       s = Math.round(Math.random() * 20 + 80);
       l = Math.round(Math.random() * 30 + 20);
     }
@@ -2626,7 +2675,7 @@ export const util = { //this.loadImage();
           itemLv: itemLv,
           slot: 0,//아이템 홀착용 갯수
           hole: [],
-          color: itemData.color,
+          color: "",
           baseEff: [{
             type: itemData.eff[0].type,
             num: itemData.eff[0].num[0] + ' ~ ' + itemData.eff[0].num[1],
@@ -2643,16 +2692,8 @@ export const util = { //this.loadImage();
         changeSaveData(save);
         return;
       }
-      const darkColor = util.getHslColor('dark',1),
-        lightColor = util.getHslColor('light',1);
-      let colorArr = Math.random() < .5 ? [lightColor, darkColor] : [darkColor, lightColor];
-      const color = itemData.color.map((data, idx) => {
-        if (idx < 2) {
-          return colorArr[idx];
-        } else {
-          return util.getHslColor('point',1);
-        }
-      });
+      const color = util.getRgbColor();
+      // const color = util.getHslColor(Math.floor(Math.random() * 3),1);
       const baseEff = itemData.eff.map((data) => {
         let num = [];
         num[0] = String(Math.round(Math.random() * (Number(data.num[1]) - Number(data.num[0]))) + (Number(data.num[1]) - Number(data.num[0])));
@@ -2728,9 +2769,9 @@ export const util = { //this.loadImage();
         }
       })();
       const animalModifier = [
-        `${mark !== '' ? gameData.animal_type[mark].na.ko : ''}${gameData.items.markModifier.ko[markNum]}`,
-        `${gameData.items.markModifier.en[markNum]} ${mark !== '' ? gameData.animal_type[mark].na.en : ''}${markNum > 1 ? 's' : ''}`,
-        `${mark !== '' ? gameData.animal_type[mark].na.jp : ''}${gameData.items.markModifier.jp[markNum]}`,
+        `${mark !== '' ? gameData.animalType[mark].na.ko : ''}${gameData.items.markModifier.ko[markNum]}`,
+        `${gameData.items.markModifier.en[markNum]} ${mark !== '' ? gameData.animalType[mark].na.en : ''}${markNum > 1 ? 's' : ''}`,
+        `${mark !== '' ? gameData.animalType[mark].na.jp : ''}${gameData.items.markModifier.jp[markNum]}`,
       ];
       const modifier = {
         ko:gameData.items.slotModifier.ko[slotNum] + ' ' + animalModifier[0],
@@ -2852,7 +2893,7 @@ export const util = { //this.loadImage();
         return;
       }
       for (const [itemSlot, item] of saveCh.items.entries()) {
-        if (invenPart === gameData.animal_type[chType].equip[itemSlot] && overlapCheck) {//해당파트와 같은파트인지? && 빈칸인지? && 같은파트가 비었을경우 한번만 발생하게 
+        if (invenPart === gameData.animalType[chType].equip[itemSlot] && overlapCheck) {//해당파트와 같은파트인지? && 빈칸인지? && 같은파트가 비었을경우 한번만 발생하게 
           if (item.idx === undefined) { //해당 슬롯이 비었을 비었을 경우
             currentKg += dataObj.data.gameItem.kg
             if (currentKg > totalKg) { //가능 무게를 넘어 갈 경우
@@ -2868,11 +2909,12 @@ export const util = { //this.loadImage();
               }
               sData.items['equip'].splice(dataObj.data.itemSaveSlot, 1);//인벤에서 아이템 제거
               overlapCheck = false;
-              dataObj.changeSaveData(util.saveCharacter({//데이터 저장
+              util.saveCharacter({//데이터 저장
                 saveData: sData,
                 chSlotIdx: dataObj.data.chSlotIdx,
                 gameData: gameData,
-              }));
+                changeSaveData: dataObj.changeSaveData,
+              });
               dataObj.showPopup(false);
               itemSubmit = true;
               break;
@@ -2906,16 +2948,17 @@ export const util = { //this.loadImage();
       saveCh.newActionType = [saveCh.actionType];
       for (const [itemSlot, item] of saveCh.items.entries()) {
         const chType = gameData.ch[saveCh.idx].animal_type;
-        if (gameData.animal_type[chType].equip[itemSlot] === 3 && item.idx !== undefined) {
+        if (gameData.animalType[chType].equip[itemSlot] === 3 && item.idx !== undefined) {
           const anotherWeaponActionType = gameData.items.equip[item.part][item.weaponType][0][item.idx].actionType;
           saveCh.newActionType = anotherWeaponActionType === '' ? [saveCh.actionType] : anotherWeaponActionType;
         }
       }
-      dataObj.changeSaveData(util.saveCharacter({//데이터 저장
+      util.saveCharacter({//데이터 저장
         saveData: sData,
         chSlotIdx: dataObj.data.chSlotIdx,
         gameData: gameData,
-      }));
+        changeSaveData: dataObj.changeSaveData,
+      });
       dataObj.showPopup(false);
     } else if (dataObj.type === 'itemUse') { //아이템 사용
       const saveCh = sData.ch[dataObj.data.chSlotIdx];
@@ -2924,40 +2967,17 @@ export const util = { //this.loadImage();
           sData.info.money += dataObj.data.gameItem.price;//돈 계산
           break;
         case 98: //경험치 획득
-          if (saveCh.lv >= 50) {
-            const hasMaxExp = gameData.hasMaxExp[saveCh.grade];
-            saveCh.hasExp += dataObj.data.gameItem.eff;
-            saveCh.hasExp += saveCh.exp;
-            saveCh.lv = 50;
-            saveCh.exp = 0;
-            if (saveCh.hasExp > hasMaxExp) {
-              saveCh.hasExp = hasMaxExp;
-            }
-          } else {
-            saveCh.exp += dataObj.data.gameItem.eff;
+          const hasMaxExp = gameData.hasMaxExp[saveCh.grade];
+          saveCh.hasExp += dataObj.data.gameItem.eff;
+          if (saveCh.hasExp > hasMaxExp) {
+            saveCh.hasExp = hasMaxExp;
           }
-          const lvUp = (ch, dataObj, currentSData) => {
-            const maxExp = gameData.exp['grade' + ch.grade][ch.lv - 1];
-            dataObj.changeSaveData(util.saveCharacter({//데이터 저장
-              saveData: currentSData,
-              chSlotIdx: dataObj.data.chSlotIdx,
-              gameData: gameData,
-            }));
-            if (ch.exp >= maxExp) { //레벨업
-              util.effect.lvUp();
-              if (ch.lv <= 50) {
-                ch.lv += 1;
-                ch.exp -= maxExp;
-                setTimeout(() => {
-                  lvUp(ch, dataObj, currentSData);
-                }, 300);
-                if (ch.lv % 10 === 0) {
-                  util.getSkill(gameData, ch, dataObj.data.chSlotIdx, currentSData, dataObj.changeSaveData);
-                }
-              }
-            }
-          }
-          lvUp(saveCh, dataObj, sData);
+          util.saveCharacter({//데이터 저장
+            saveData: saveCh,
+            chSlotIdx: dataObj.data.chSlotIdx,
+            gameData: gameData,
+            changeSaveData: dataObj.changeSaveData,
+          });
           break;
         default:
           dataObj.showMsg(true);
@@ -3396,7 +3416,7 @@ export const util = { //this.loadImage();
     const jobText = [
       {},
       {ko:'상점에서 가격흥정 가능',en:'Negotiate prices in your store',jp:'ショップで価格交渉可能'},
-      {ko:'선박 제작/분해 가능',en:'Can build/disassemble ships',jp:'船舶製作/分解可能'},
+      {ko:'항해이동 설정 가능',en:'Navigation movement can be configured',jp:'航海移動の設定が可能です。'},
       {ko:'장비 제작/분해 가능',en:'Can build/disassemble equipment',jp:'機器製作/分解可能'},
       {ko:'조각상 제작 가능',en:'Statues can be crafted',jp:'彫像製作可能'},
       {ko:'식물 재배 가능',en:'Can grow plants',jp:'植物栽培可能'},
@@ -3581,6 +3601,7 @@ export const util = { //this.loadImage();
       case 'moveEventFinish':
       case 'eventBack':
       case 'worldMap':
+      case 'etc':
         return 0;
       case 'lv':
       case 'quickMenu':
@@ -3608,6 +3629,7 @@ export const util = { //this.loadImage();
       case 'skillBack':
         return 9;
       case 'star':
+      case 'hole':
         return 10;
       case 'star1':
         return 11;
@@ -3621,9 +3643,13 @@ export const util = { //this.loadImage();
         return 18;
       case 'job2':
         return 21;
+      case 'upgrade':
+        return 22;
       case 'job3':
       case 'flag':
         return 24;
+      case 'material':
+        return 26;
       case 'animalType':
       case 'moveEventBlock':
         return 27;
@@ -3675,27 +3701,6 @@ export const util = { //this.loadImage();
         return [8,5];
       case 'img800':
         return [10,8];
-      case 'ch0':
-      case 'chs0':
-      case 'ch1':
-      case 'chs1':
-      case 'ch2':
-      case 'chs2':
-      case 'ch3':
-      case 'chs3':
-      case 'ch4':
-      case 'chs4':
-      case 'ch5':
-      case 'chs5':
-      case 'ch6':
-      case 'chs6':
-      case 'ch7':
-      case 'chs7':
-      case 'ch8':
-      case 'chs8':
-      case 'ch9':
-      case 'chs9':
-        return [10, 6];
       case 'icon100':
         return [10, 60];
       case 'icon150':
@@ -3705,7 +3710,7 @@ export const util = { //this.loadImage();
       case 'map800':
         return [5, 8];
       case 'itemEtc':
-        return [10, 50];
+        return [10, 32];
       case 'skill':
         return [20, 40];
       default:
@@ -3983,7 +3988,7 @@ export const util = { //this.loadImage();
   }) => {
     const getCardIdx = (gradeNum) => {
       const chOfGrade = heroArr.grade;//등급별
-      const gradeNum_ = chOfGrade[gradeNum] ? gradeNum : gradeNum + 1;//없는 등급그룹이 있을 경우 등급그룹 + 1
+      const gradeNum_ = chOfGrade[gradeNum] ? gradeNum : chOfGrade[gradeNum + 1] ? gradeNum + 1 : gradeNum - 1;//없는 등급그룹이 있을 경우 등급그룹 + 1
       const length = chOfGrade[gradeNum_]?.length,
             ran = Math.floor(Math.random() * length);
       return chOfGrade[gradeNum_][ran];
@@ -4088,7 +4093,7 @@ export const util = { //this.loadImage();
       const cardG = cardGrade.arr[i] + luckyGradePoint,
         maxGradePoint = Math.round(Math.random() * ((gameData.ch[newIdx].grade > 4 ? 7 : 6) - cardG)),
         maxG = Math.max(cardG + Math.min(maxGradePoint, 0), 7);
-      const animalAction = gameData.animal_type[gameData.ch[newIdx].animal_type].actionType,
+      const animalAction = gameData.animalType[gameData.ch[newIdx].animal_type].actionType,
         actionType = animalAction[Math.floor(Math.random() * animalAction.length)];//공격타입
       const jobs = gameData.ch[newIdx].job,
         job = jobs[Math.floor(Math.random() * jobs.length)];//직업
@@ -4145,7 +4150,7 @@ export const util = { //this.loadImage();
           ...(typeof jobElementType === "number" ? {jobElement: jobElementType} : {}),
           kg: kg,
           exp: 0,
-          hasExp: 0,
+          hasExp: 500,
           battleBadge: [0,0,0,0],
           animalBadge: animalBadge,//총 보유 동물뱃지
           grade: cardG,
@@ -4200,7 +4205,7 @@ export const util = { //this.loadImage();
     };
   },
   makeSkillTree: ({gameData, idx, jobIdx, jobElementType}) => {
-    const cloneAnimal = {...gameData.animal_type[gameData.ch[idx].animal_type]};
+    const cloneAnimal = {...gameData.animalType[gameData.ch[idx].animal_type]};
     const limitLvArr = Array.from({length: 4}, (v, idx) => idx * (Math.floor(Math.random() * 10 - 5) + 15));
     const emptySkillArr = Array.from({length: 4}, () => ([])).map((v, skLineIdx) => {
       return Array.from({length: 4}, (sk, skIdx) => {

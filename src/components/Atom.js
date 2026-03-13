@@ -11,7 +11,7 @@ const StyledText = styled.div`
   ${({isDynamic}) => isDynamic && `
     white-space: pre-wrap;
   `}
-  word-break: break-word;
+  word-break: keep-all;
   ${({theme, borderColor}) => borderColor ? `
     text-shadow: -1px 0 ${theme.color[borderColor]},
     0 1px ${theme.color[borderColor]},

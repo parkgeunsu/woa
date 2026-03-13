@@ -10,28 +10,25 @@ export const guide = {
     },
     txt:{
       ko:[
-        '동물 스킬트리는 캐릭터를 얻는 시점에서 랜덤으로 획득한다.',
-        '장착한 아이템이 보유한 동물뱃지의 갯수를 스킬갯수로 사용한다.',
-        '캐릭터의 동물타입과 아이템의 동물타입이 같을 경우에 스킬갯수로 인정한다.',
-        '액티브 스킬 최대 12개, 패시브 스킬 최대 4개를 획득할 수 있다.',
-        '액티브 스킬은 좌측 3열, 패시브 스킬은 우측 1열에 배치된다.',
-        '액티브 스킬은 선행스킬이 존재한다.',
+        '캐릭터의 능력치와 속성을 확인할 수 있다.',
+        '레벨업을 하면 체력, 행동력, 행동회복력이 상승한다.',
+        '레벨업을 하면 확률적으로 동물코인, 스킬을 획득 할 수 있다.',
+        '등급초월을 하면 속성치가 상승한다.',
+        '등급초월시에는 동물코인을 확정적으로 획득 할 수 있다.'
       ],
       en:[
-        'The animal skiltree is acquired randomly at the point of obtaining the character.',
-        'Use the number of animal badges held by the installed items as the number of skills.',
-        'If the animal type of the character and the animal type of the item are the same, the number of skills is recognized.',
-        'Up to 12 active skills and up to 4 passive skills can be acquired.',
-        'The active skill is placed in the left row 3 and the passive skill is placed in the right row 1.',
-        'Active skills have prior skills.',
+        'You can check the character\'s stats and attributes.',
+        'When you level up, your health, action power, and action recovery power increase.',
+        'When you level up, you can get animal coins and skills with a certain probability.',
+        'When you transcend the grade, your stats increase.',
+        'When you transcend the grade, you can get animal coins with a certain probability.'
       ],
       jp:[
-        '動物のスキルツリーはキャラクターを取得した時点でランダムで獲得する',
-        '装備したアイテムが保有している動物バッジの数をスキル数として使用する',
-        'キャラクターの動物タイプとアイテムの動物タイプが同じ場合にスキル数として認める',
-        'アクティブスキル最大12個、パッシブスキル最大4個を獲得することができる',
-        'アクティブスキルは左3列、パッシブスキルは右1列に配置される',
-        'アクティブスキルには先行スキルが存在する」',
+        'キャラクターの能力値と属性を確認することができる',
+        'レベルアップをすると体力、行動力、行動回復力が上昇する',
+        'レベルアップをすると確率的に動物コイン、スキルを獲得することができる',
+        '等級超越をすると属性値が上昇する',
+        '等級超越をすると動物コインを確定的に獲得することができる'
       ]
     }
   },

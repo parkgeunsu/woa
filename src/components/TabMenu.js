@@ -32,13 +32,13 @@ const TabButton = styled.button`
   padding: 3px 0 0 0;
   width: 100%;
   text-align: center;
-  border-radius: 50% 50% 0;
+  border-radius: 50% 50% 0 0;
   ${({selected}) => selected ? `
-    background-color: rgba(0,0,0,.5);
+    background-color: rgba(0,0,0,.8);
     color: #fff;
     font-weight: 600;
   ` : `
-    background: rgba(255,255,255,.5);
+    background: rgba(255,255,255,.3);
     color: #000;
   `}
   .menu{padding:0 20px;}

@@ -3,13 +3,15 @@ import { Button } from 'components/Button';
 import { ActionChDisplay } from 'components/Components';
 import { FlexBox } from 'components/Container';
 import { ItemPic, MarkPic } from 'components/ImagePic';
-import ItemGradeColor from 'components/ItemGradeColor';
+import ItemLayout from 'components/ItemLayout';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import TabMenu from 'components/TabMenu';
+import Tooltip from 'components/Tooltip';
+import TooltipContainer from 'components/TooltipContainer';
 import { AppContext } from 'contexts/app-context';
 import 'css/shop.css';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
@@ -155,7 +157,6 @@ const ItemContainer = styled.ul`
 	background: rgba(0,0,0,.7);
   border-image: url(${({frameBack}) => frameBack}) 5 round;
 	& > div {
-		padding: 5px;
 		width: 100%;
 		box-sizing: border-box;
 	}
@@ -205,7 +206,7 @@ const ItemFix = styled.li`
 `;
 const ItemList = styled.li`
 	display: flex;
-  margin: 5px 0 0 0;
+  margin: ${({margin}) => margin !== undefined ? `${margin}px` : '5px 0 0 0'};
 	padding: 10px;
   width: 100%;
   box-sizing: border-box;
@@ -244,9 +245,6 @@ const ItemList = styled.li`
         return `
           flex-direction: column;
         `;
-      case 'hole':
-        return `
-        `;
 			case 'set': 
 				return `
 					margin: 0 0 10px 0;
@@ -269,6 +267,45 @@ const ItemEffs = styled(FlexBox)`
   ${({color}) => color ? `color: ${color}` : ''}
 `;
 const ItemEffText = styled(Text)`
+	${({type}) => type === "skill" ? `
+    &:first-of-type {
+      flex: 1;
+      text-align: left;
+    }
+    &:nth-of-type(2) {
+      flex: 2;
+      text-align: right;
+    }
+    &:nth-of-type(3) {
+      flex: 2;
+      text-align: right;
+    }
+    &:last-of-type {
+      flex: 2;
+      text-align: right;
+    }
+  ` : `
+		&:first-of-type {
+			flex: 2;
+			text-align: left;
+		}
+		&:nth-of-type(2) {
+			flex: 1;
+			text-align: center;
+		}
+		&:nth-of-type(3) {
+			flex: 1;
+			text-align: center;
+		}
+		&:nth-of-type(4) {
+			flex: 1;
+			text-align: center;
+		}
+		&:last-of-type {
+			flex: 2;
+			text-align: right;
+		}
+	`}
   margin: ${({margin}) => margin ? `0 ${margin}px 0 0` : 0};
   line-height: 1;
 `;
@@ -317,21 +354,6 @@ const ItemKg = styled(Text)`
 const ItemTitle = styled(Text)`
   margin: 0 0 5px 0;
   line-height: 1;
-`;
-const Hole = styled(FlexBox)`
-  position: absolute;
-  inset: 5%;
-  z-index: 3;
-  width: 90%;
-  height: 90%;
-  pointer-events: none;
-  .hole_slot {
-    width: 15%;
-    padding-top: 15%;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.7);
-  }
-	.item_holes img{margin:2px 0 0 0;width:20px;height:20px;vertical-align:middle;}
 `;
 const ItemFooter = styled.li`
 	padding: 5px;
@@ -424,6 +446,36 @@ const buttonType = (button, itemData) => {
 	}
 	return button;
 }
+const holeEffectText = (gameData, holeData, lang) => {
+  let eff = [],
+    effText = `${gameData.items.hole[holeData.idx].na[lang]}<br/>`;
+  gameData.items.hole[holeData.idx]?.eff?.forEach((data) => {
+    if (eff[data.type]) {
+      eff[data.type] += Number(data.num);
+    } else {
+      eff[data.type] = Number(data.num);
+    }
+  });
+  holeData?.baseEff?.forEach((data) => {
+    if (eff[data.type]) {
+      eff[data.type] += Number(data.num);
+    } else {
+      eff[data.type] = Number(data.num);
+    }
+  });
+  holeData?.addEff?.forEach((data) => {
+    if (eff[data.type]) {
+      eff[data.type] += Number(data.num);
+    } else {
+      eff[data.type] = Number(data.num);
+    }
+  });
+  eff.forEach((data, idx) => {
+    effText += `${util.getEffectType(idx, lang)}: ${data}<br/>`;
+  });
+  effText = effText.slice(0, -5);
+  return effText;
+}
 const ShopFooter = ({
 	selectItem,
 	selectItemArr,
@@ -442,6 +494,9 @@ const ShopFooter = ({
 	setPopupOn,
 	setMsgOn,
 	setMsg,
+	setTooltip,
+	setTooltipPos,
+	setTooltipOn,
 	setItemPopup,
 }) => {
   const context = useContext(AppContext);
@@ -459,7 +514,11 @@ const ShopFooter = ({
     return gameData.items;
   }, [gameData]);
 	const selectedItem = React.useMemo(() => selectItem[selectItemNum], [selectItem, selectItemNum]);
-	const totalEff = React.useMemo(() => selectedItem?.gameItem?.part === 'number' ? util.getTotalEff(selectedItem.saveItemData, gameData) : [], [selectedItem, gameData]);
+	const totalEff = React.useMemo(() => typeof selectedItem?.gameItem?.part === 'number' ? util.getTotalEff({
+		saveItems: selectedItem.saveItemData,
+		gameData: gameData,
+		cate: selectedItem,
+	}) : [], [selectedItem, gameData]);
 	const timeoutRef = useRef(null); //timeout
   const handlePopup = useCallback((saveObj) => {
 		const {saveItemData, itemType, itemIdx} = saveObj;
@@ -487,7 +546,19 @@ const ShopFooter = ({
 					<ItemName grade={gameData.itemGrade.color?.[selectedItem.saveItemData?.grade]}  code="t3" color="main" weight={600} dangerouslySetInnerHTML={{__html: `${selectedItem.saveItemData?.colorantSet ? util.getColorant(selectedItem.saveItemData.colorantSet, gameData).na?.[lang] || "" : ''} ${selectedItem.saveItemData?.modifier?.[lang] || ""}<br/>${selectedItem.gameItem?.na?.[lang] || ""}`}}></ItemName>
 				</ItemList>
 				<ItemList>
-					<ItemGradeColor part={selectedItem.gameItem?.part} grade={gameData.itemGrade.txt_e?.[selectedItem.saveItemData?.grade]?.toLowerCase()} sealed={selectedItem.saveItemData?.sealed} size="80" onClick={() => {
+					<ItemLayout 
+					gameItem={gameItem}
+					icon={{
+						type: "equip",
+						pic: "equip",
+						idx: selectedItem.gameItem?.display,
+						mergeColor: selectedItem.saveItemData.color,
+					}}
+					size={80}
+					grade={selectedItem.saveItemData?.grade}
+					favorite={selectedItem.saveItemData?.favorite}
+					sealed={selectedItem.saveItemData?.sealed}
+					onClick={() => {
 						if (shopType === 'shop') {
 							handlePopup({
 								saveItemData: selectedItem.saveItemData,
@@ -501,9 +572,7 @@ const ShopFooter = ({
 								itemIdx: selectedItem.idx,
 							});
 						}
-					}}>
-						<ItemPic isAbsolute className={`favorite${selectedItem.saveItemData?.favorite}`} type="equip" pic="equip" idx={selectedItem.gameItem?.display} />
-					</ItemGradeColor>
+					}} />
 					<div flex-h="true" style={{flex: 1,}}>
 						<ItemInfo direction="column" justifyContent="space-between">
 							<ItemTop justifyContent="space-between" className="item_top">
@@ -523,7 +592,13 @@ const ShopFooter = ({
 							const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
 							return (
 								<span key={`hole${idx}`}>
-									<ItemHoleBack fixed={holePic !== 0}>
+									<ItemHoleBack fixed={holePic !== 0} onClick={(e) => {
+										e.stopPropagation();
+										setTooltipPos(e.target.getBoundingClientRect());
+                    const itemName = gameData.items.hole[holeData.idx].na[lang];
+                    setTooltip(holeEffectText(gameData, holeData, lang));
+                    setTooltipOn(true);
+									}}>
 										<ItemPic pic="itemEtc" type="hole" idx={holePic} />
 									</ItemHoleBack>
 								</span>
@@ -537,10 +612,10 @@ const ShopFooter = ({
 						if (eff.type === 100) {
 							return (
 								<ItemEffs alignItems="center" justifyContent="space-between" key={idx}>
-									<ItemEffText code="t1" margin={10} weight="600" color="#00a90c">{util.getEffectType(eff.type, lang)}</ItemEffText>
+									<ItemEffText type="skill" code="t1" weight="600" color="#00a90c">{util.getEffectType(eff.type, lang)}</ItemEffText>
 									{eff.skList.map((sk, skIndex) => {
 										return (
-											<ItemEffText style={{flex:1}} code="t2" align="right" color="main" key={`skIndex${skIndex}`}>{`${gameData.skill[sk.idx].na[lang]} LV.${sk.lv}`}</ItemEffText>
+											<ItemEffText type="skill" code="t2" align="right" color="main" key={`skIndex${skIndex}`}>{`${gameData.skill[sk.idx].na[lang]} LV.${sk.lv}`}</ItemEffText>
 										)
 									})}
 								</ItemEffs>
@@ -548,10 +623,10 @@ const ShopFooter = ({
 						} else {
 							return (
 								<ItemEffs alignItems="center" justifyContent="space-between" key={idx}>
-									<ItemEffText code="t1" margin={10} weight="600" color="#00a90c">{util.getEffectType(eff.type, lang)}</ItemEffText>
-									{eff.base > 0 && <ItemEffText code="t2" align="right" color="#2f73ff">{eff.base}</ItemEffText>}
-									{eff.add > 0 && <ItemEffText code="t2" align="right" color="#ffac2f">{eff.add}</ItemEffText>}
-									{eff.hole > 0 && <ItemEffText code="t2" align="right" color="#e14040">{eff.hole}</ItemEffText>}
+									<ItemEffText code="t1" weight="600" color="#00a90c">{util.getEffectType(eff.type, lang)}</ItemEffText>
+									<ItemEffText code="t2" align="right" color="#2f73ff">{eff.base || "-"}</ItemEffText>
+									<ItemEffText code="t2" align="right" color="#ffac2f">{eff.add || "-"}</ItemEffText>
+									<ItemEffText code="t2" align="right" color="#e14040">{eff.hole || "-"}</ItemEffText>
 									<ItemEffText code="t2" align="right" color="main">{selectedItem.saveItemData.sealed ? eff.base : eff.base + eff.add + eff.hole}</ItemEffText>
 								</ItemEffs>
 							)
@@ -566,10 +641,10 @@ const ShopFooter = ({
 								const grade = selectedItem.saveItemData.grade > 3 ? 3 : selectedItem.saveItemData.grade - 1;
 								return (
 									<ItemEffs alignItems="center" justifyContent="space-between" key={idx}>
-										<ItemEffText code="t1" margin={10} weight="600" color="#00a90c">
+										<ItemEffText code="t1" weight="600" color="#2f73ff">
 											{util.getEffectType(data.type, lang)}
 										</ItemEffText>
-										<ItemEffText style={{flex:1}} code="t2" align="right"  color="main" key={`skIndex${idx}`}>{`${selectedItem.saveItemData.sealed ? data.num : data.num[grade]}`}</ItemEffText>
+										<ItemEffText code="t2" align="right"  color="#2f73ff">{`${selectedItem.saveItemData.sealed ? data.num : data.num[grade]}`}</ItemEffText>
 									</ItemEffs>
 								) 
 							})}
@@ -583,13 +658,23 @@ const ShopFooter = ({
 								if (eff.type === 100) {
 									return (
 										<ItemEffs alignItems="center" justifyContent="space-between" color="#ffac2f" key={idx}>
-											{`${util.getEffectType(eff.type, lang)} ${gameData.skill[eff.skIdx].na[lang]} LV.${eff.skLv}`}
+											<ItemEffText code="t1" weight="600" color="#ffac2f">
+												{util.getEffectType(eff.type, lang)}
+											</ItemEffText>
+											<ItemEffText code="t2" align="right"  color="#ffac2f">
+												{`${gameData.skill[eff.skIdx].na[lang]} LV.${eff.skLv}`}
+											</ItemEffText>
 										</ItemEffs>
 									)
 								} else {
 									return (
 										<ItemEffs alignItems="center" justifyContent="space-between" color="#ffac2f" key={idx}>
-											{`${util.getEffectType(eff.type, lang)} ${eff.num[0]}`}
+											<ItemEffText code="t1" weight="600" color="#ffac2f">
+												{util.getEffectType(eff.type, lang)}
+											</ItemEffText>
+											<ItemEffText code="t2" align="right"  color="#ffac2f">
+												{eff.num[0]}
+											</ItemEffText>
 										</ItemEffs>
 									)
 								}
@@ -597,16 +682,16 @@ const ShopFooter = ({
 						</ItemList>
 					)}
 					{selectedItem.saveItemData.hole.length > 0 && (
-						<ItemList type="hole">
+						<ItemList type="eff">
 							<ItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.socketEffect[lang]}</ItemTitle>
 							{totalEff.map((data, idx) => {
 								if (data.hole > 0) {
 									return (
 										<ItemEffs alignItems="center" justifyContent="space-between" key={idx}>
-											<ItemEffText code="t1" margin={10} weight="600" color="#e14040">
+											<ItemEffText code="t1" weight="600" color="#e14040">
 												{util.getEffectType(data.type, lang)}
 											</ItemEffText>
-											<ItemEffText style={{flex:1}} code="t2" align="right"  color="main" key={`skIndex${idx}`}>{`${data.hole}`}</ItemEffText>
+											<ItemEffText code="t2" align="right"  color="#e14040" key={`skIndex${idx}`}>{`${data.hole}`}</ItemEffText>
 										</ItemEffs>
 									)
 								}
@@ -626,15 +711,24 @@ const ShopFooter = ({
 					<ItemName grade={gameData.itemGrade.color[selectedItem.saveItemData.grade]} code="t3" color="main" weight={600} dangerouslySetInnerHTML={{__html: `${selectedItem.gameItem.na[lang]}`}}></ItemName>
 				</ItemList>
 				<ItemList>
-					<ItemGradeColor grade={gameData.itemGrade.txt_e[selectedItem.saveItemData.grade || selectedItem.gameItem.grade].toLowerCase()} sealed={selectedItem.saveItemData?.sealed} size="80" onClick={() => {
+					<ItemLayout 
+					gameItem={gameItem}
+					icon={{
+						type: "hole",
+						pic: "itemEtc",
+						idx: selectedItem.gameItem.display,
+						mergeColor: selectedItem.saveItemData.color,
+					}}
+					size={80}
+					grade={selectedItem.saveItemData.grade || selectedItem.gameItem.grade}
+					sealed={selectedItem.saveItemData?.sealed}
+					onClick={() => {
 						handlePopup({
 							saveItemData: selectedItem.saveItemData,
 							itemType: 'hole',
 							itemIdx: selectedItem.idx,
 						});
-					}}>
-						<ItemPic pic="itemEtc" type={selectedItem.itemCate} idx={selectedItem.gameItem.display} />
-					</ItemGradeColor>
+					}} />
 					<div flex-h="true" style={{flex: 1,}}>
 						<ItemInfo direction="column" justifyContent="space-between">
 							<ItemTop justifyContent="space-between" className="item_top">
@@ -647,13 +741,20 @@ const ShopFooter = ({
 				</ItemList>
 				{selectedItem.gameItem.idx < 100 && (
 					<div className="scroll-y">
-						<ItemList className="item_list">
+						<ItemList margin={0} type="eff">
 							<ItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.itemEffect[lang]}</ItemTitle>
-							{util.getTotalEff(selectedItem.saveItemData, gameData).map((eff, idx) => {
+							{util.getTotalEff({
+								saveItems: selectedItem.saveItemData,
+								gameData: gameData,
+								cate: selectedItem.itemCate,
+							}).map((eff, idx) => {
 								return (
 									<ItemEffs alignItems="center" justifyContent="space-between" key={idx}>
-										<ItemEffText code="t1" margin={10} weight="600" color="#00a90c">{util.getEffectType(eff.type, lang)}</ItemEffText>
-										{eff.base > 0 && <ItemEffText code="t1" margin={5} weight="600" color="#2f73ff">{eff.base}</ItemEffText>}{eff.add > 0 && <ItemEffText code="t1" margin={5} weight="600" color="#ffac2f">{eff.add}</ItemEffText>}{eff.hole > 0 && <ItemEffText code="t1" margin={5} weight="600" color="#e14040">{eff.hole}</ItemEffText>}<ItemEffText code="t1" margin={5} weight="600" color="main">{selectedItem.saveItemData.sealed ? eff.base : eff.base + eff.add + eff.hole}</ItemEffText>
+										<ItemEffText code="t1" weight="600" color="#00a90c">{util.getEffectType(eff.type, lang)}</ItemEffText>
+										<ItemEffText code="t1" margin={5} weight="600" color="#2f73ff">{eff.base || "-"}</ItemEffText>
+										<ItemEffText code="t1" margin={5} weight="600" color="#ffac2f">{eff.add || "-"}</ItemEffText>
+										<ItemEffText code="t1" margin={5} weight="600" color="#e14040">{eff.hole || "-"}</ItemEffText>
+										<ItemEffText code="t1" margin={5} weight="600" color="main">{selectedItem.saveItemData.sealed ? eff.base : eff.base + eff.add + eff.hole}</ItemEffText>
 									</ItemEffs>
 								)
 							})}
@@ -668,15 +769,23 @@ const ShopFooter = ({
 					<ItemName grade={gameData.itemGrade.color[selectedItem.saveItemData.grade]} code="t2" color="main" weight={600} dangerouslySetInnerHTML={{__html: `${selectedItem.gameItem.na[lang]}`}}></ItemName>
 				</ItemList>
 				<ItemList>
-					<ItemGradeColor grade={gameData.itemGrade.txt_e[selectedItem.saveItemData.grade || selectedItem.gameItem.grade].toLowerCase()} size="80" onClick={() => {
+					<ItemLayout 
+					gameItem={gameItem}
+					icon={{
+						type: selectedItem.itemCate,
+						pic: "itemEtc",
+						idx: selectedItem.gameItem.display
+					}}
+					size={80}
+					grade={selectedItem.saveItemData.grade || selectedItem.gameItem.grade}
+					sealed={selectedItem.saveItemData?.sealed}
+					onClick={() => {
 						handlePopup({
 							saveItemData: selectedItem.saveItemData,
 							itemType: selectedItem.itemCate,
 							itemIdx: selectedItem.idx,
 						});
-					}}>
-						<ItemPic pic="itemEtc" type={selectedItem.itemCate} idx={selectedItem.gameItem.display} />
-					</ItemGradeColor>
+					}} />
 					<div flex-h="true" style={{flex: 1,}}>
 						<ItemInfo direction="column" justifyContent="space-between">
 							<ItemTop justifyContent="space-between" className="item_top">
@@ -688,16 +797,16 @@ const ShopFooter = ({
 					</div>
 				</ItemList>
 				<div className="scroll-y">
-					<li className="item_list item_eff">
+					<ItemList margin={0} className="item_list">
 						<ItemTitle align="left" code="t1" color="grey">{selectedItem.gameItem.txt[lang]}</ItemTitle>
-					</li>
+					</ItemList>
 				</div>
 			</>
 		)}
 		<ItemList type="footer" frameBack={imgSet.etc.frameChBack} color={selectItemArr[selectItemNum]}>
 			<ItemPrice justifyContent="flex-start">
 				{selectedItem.buttonType[0] === 'buy' ? <>
-					<ItemEffText code="t2" margin={10} color="#c80">{gameData.msg.itemInfo.buyPrice[lang]}</ItemEffText>
+					<ItemEffText code="t2" color="#c80">{gameData.msg.itemInfo.buyPrice[lang]}</ItemEffText>
 					<ItemEffText code="t2"  color="main">
 						{selectedItem.gameItem?.part <= 3 ?
 							`₩${util.comma((selectedItem.gameItem.price < 1000 ? 
@@ -707,8 +816,8 @@ const ShopFooter = ({
 						}
 					</ItemEffText>
 				</> : <>
-					<ItemEffText code="t2" margin={10} color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</ItemEffText>
-					<ItemEffText code="t2"  color="main">{`₩${util.comma(selectedItem.gameItem?.price * (selectedItem.gameItem?.grade || selectedItem.saveItemData?.grade))}`}</ItemEffText>
+					<ItemEffText code="t2" color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</ItemEffText>
+					<ItemEffText code="t2" margin={10} color="main">{`₩${util.comma(selectedItem.gameItem?.price * (selectedItem.gameItem?.grade || selectedItem.saveItemData?.grade))}`}</ItemEffText>
 				</>
 				}
 			</ItemPrice> 
@@ -1448,6 +1557,7 @@ const selectItemFn = (sData, state, shopType, selectSlot) => {
 		}
 	}
 }
+const SHOP_HORIZONTAL_NUM = 5; //가로 갯수
 const ShopList = ({
 	gameData,
 	shopType,
@@ -1457,12 +1567,12 @@ const ShopList = ({
 	scrollIdx,
 	invenIdx,
 	selectTab,
-	gameItem,
 	selectItem,
 	selectItemNum,
 	setSelectItem,
 	setItemPopup,
 }) => {
+	const gameItem = gameData.items;
 	const selectColor = (idx) => {
 		let colorNum = '';
 		selectItem.forEach((selectedItem, selectedIdx) => {
@@ -1480,10 +1590,21 @@ const ShopList = ({
 			if (typeof itemData.part === 'number') { // 장비인지
 				const itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5;
 				const items = itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx] : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx];
-				const itemsHole = itemData.hole;
-				return items && (
-					<div className={`item_layout ${gameData.itemGrade.txt_e[itemData.grade].toLowerCase()} ${typeof selectColor_ === 'number' ? 'select' + selectColor_ : ''} favorite${itemData.favorite}`} 
-					key={`items${idx}`} 
+				return items && <ItemLayout 
+					gameItem={gameItem}
+					icon={{
+						type: "equip",
+						pic: "equip",
+						idx: items.display,
+						mergeColor: itemData.color,
+					}}
+					num={SHOP_HORIZONTAL_NUM}
+					key={`items${idx}`}
+					grade={itemData.grade}
+					itemsHole={itemData.hole}
+					sealed={itemData.sealed}
+					favorite={itemData.favorite}
+					selectColor={selectColor_}
 					onClick={() => {
 						setItemPopup(true);
 						itemData.quality = itemsGrade;
@@ -1519,26 +1640,23 @@ const ShopList = ({
 							buttonType: button,
 						}
 						setSelectItem(cloneSelectItem);
-					}}>
-						<ItemPic isAbsolute className={itemData.sealed ? "sealed" : ""} type="equip" pic="equip" idx={items.display} />
-						<Hole alignItems="flex-end" justifyContent="space-between">
-							{itemsHole.map((holeData, holeidx) => {
-								const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
-								return (
-									<span className={`hole_slot hole${holeidx} ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
-										<ItemPic className="pic" pic="itemEtc" type="hole" idx={holePic} />
-									</span>
-								);
-							})}
-						</Hole>
-					</div>
-				)
+					}}/>
 			} else {
 				const itemTypeNa = typeof invenIdx === 'number' ? invenNa[invenIdx] : typeList[scrollIdx].na;
 				const items = gameItem[itemTypeNa][itemData.idx];
 				const grade = itemData.grade || items?.grade || 0;
-				return items && (
-					<div className={`item_layout ${gameData.itemGrade.txt_e[grade].toLowerCase()} ${typeof selectColor_ === 'number' ? 'select' + selectColor_ : ''}`} key={`items${idx}`} onClick={() => {
+				return items && <ItemLayout 
+					gameItem={gameItem}
+					icon={{
+						type: itemTypeNa,
+						pic: "itemEtc",
+						idx: items.display
+					}}
+					num={SHOP_HORIZONTAL_NUM}
+					key={`items${idx}`}
+					grade={grade}
+					selectColor={selectColor_}
+					onClick={() => {
 						setItemPopup(true);
 						let button = [];
 						if (shopType === 'shop') {
@@ -1572,16 +1690,12 @@ const ShopList = ({
 							buttonType: button,
 						}
 						setSelectItem(cloneSelectItem);
-					}}>
-						<div className={`pic ${itemData.sealed ? "sealed" : "" }`}>
-							<ItemPic pic="itemEtc" type={itemTypeNa} idx={items.display} />
-						</div>
-					</div>
-				)
+					}} />
 			}
 		})}
 	</>
 }
+
 const InvenShop = ({
 	shopType,
 	cityIdx,
@@ -1599,15 +1713,15 @@ const InvenShop = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const gameItem = React.useMemo(() => {
-    return gameData.items;
-  }, [gameData]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupInfo, setPopupInfo] = useState({});
   const [popupType, setPopupType] = useState('');
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
+	const [tooltipOn, setTooltipOn] = useState(false);
+	const [tooltip, setTooltip] = useState('');
+	const [tooltipPos, setTooltipPos] = useState([0,0]);
 	const [itemPopup, setItemPopup] = useState(false);
 	const shopItem = React.useMemo(() => {
 		const cityData = sData.city[cityIdx];
@@ -1696,6 +1810,7 @@ const InvenShop = ({
 			});
 		}
 	}, [sData, shopType]);
+
   return (
 		<>
 			<ShopWrap>
@@ -1726,7 +1841,6 @@ const InvenShop = ({
 												scrollIdx={scrollIdx} 
 												invenIdx={invenIdx} 
 												selectTab={selectTab} 
-												gameItem={gameItem} 
 												selectItem={selectItem} 
 												selectItemNum={selectItemNum} 
 												setSelectItem={setSelectItem}
@@ -1742,19 +1856,18 @@ const InvenShop = ({
 									list={scrollData} 
 									scrollIdx={scrollIdx} 
 									selectTab={selectTab} 
-									gameItem={gameItem} 
 									selectItem={selectItem} 
 									selectItemNum={selectItemNum} 
 									setSelectItem={setSelectItem}
 									setItemPopup={setItemPopup} />
 							}
-							</ShopItem>
+						</ShopItem>
 					})}
 				</ShopScrollContent>
 				{itemPopup && selectItem[selectItemNum]?.saveItemData && Object.keys(selectItem[selectItemNum]?.saveItemData).length !== 0 && <ShopPopup onClick={() => {
 					setItemPopup(false);
 				}}>
-					<ItemContainer frameBack={imgSet.etc.frameChBack} className={`item_select item_select items`} itemSelect="select">
+					<ItemContainer frameBack={imgSet.etc.frameChBack} itemSelect="select">
 						<ShopFooter 
 							selectItem={selectItem}
 							selectItemArr={selectItemArr}
@@ -1773,6 +1886,9 @@ const InvenShop = ({
 							setPopupOn={setPopupOn} 
 							setMsgOn={setMsgOn} 
 							setMsg={setMsg}
+							setTooltip={setTooltip}
+							setTooltipPos={setTooltipPos}
+							setTooltipOn={setTooltipOn}
 							setItemPopup={setItemPopup} />
 					</ItemContainer>
 				</ShopPopup>}
@@ -1808,6 +1924,9 @@ const InvenShop = ({
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
       </MsgContainer>
+			<TooltipContainer>
+				{tooltipOn && <Tooltip isDark={true} pos={tooltipPos} text={tooltip} showTooltip={setTooltipOn} />}
+			</TooltipContainer>
 		</>
   );
 }

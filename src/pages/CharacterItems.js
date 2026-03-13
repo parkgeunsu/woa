@@ -1,14 +1,16 @@
 import { Text } from "components/Atom";
 import { FlexBox } from "components/Container";
-import { IconPic, ItemPic } from "components/ImagePic";
+import { IconPic } from "components/ImagePic";
 import InfoGroup from "components/InfoGroup";
-import ItemGradeColor from "components/ItemGradeColor";
+import ItemLayout from 'components/ItemLayout';
 import Msg from "components/Msg";
 import MsgContainer from "components/MsgContainer";
 import Popup from "components/Popup";
 import PopupContainer from "components/PopupContainer";
+import Tooltip from 'components/Tooltip';
+import TooltipContainer from 'components/TooltipContainer';
 import { AppContext } from 'contexts/app-context';
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Wrap = styled(FlexBox)`
@@ -248,7 +250,7 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
     [gameData, saveCh]
   );
   const animalIdx = React.useMemo(() => chData.animal_type, [chData]);
-
+  const [equipType, setEquipType] = useState(0);
   const saveItems = React.useMemo(() => {
     return saveCh.items;
   }, [saveCh]);
@@ -288,6 +290,9 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
   const [popupInfo, setPopupInfo] = useState({});
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
+  const [tooltipOn, setTooltipOn] = useState(false);
+  const [tooltip, setTooltip] = useState('');
+  const [tooltipPos, setTooltipPos] = useState([0,0]);
 
   const [itemBoxShow, setItemBoxShow] = useState(false);
   const [possibleEquipItem, setPossibleEquipItem] = useState([]);
@@ -327,7 +332,11 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
     5: 9,
     10: 3
   };
-
+  useEffect(() => {
+    setPossibleEquipItem(saveData?.items?.equip.map((value, index) => ({value, index})).filter((itemData) => {
+      return itemData.value.part === equipType;
+    }));
+  }, [popupOn, equipType]);
   return (
     <>
       <Wrap className="items">
@@ -402,51 +411,29 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
                           });
                         }}
                       >
-                        <ItemGradeColor
-                          part={gameData.animal_type[animalIdx].equip[idx]}
-                          grade={gameData.itemGrade.txt_e[
-                            data.grade
-                          ].toLowerCase()}
-                        >
-                          <ItemPic type="equip" pic="equip" idx={items.display} />
-                          <Hole alignItems="flex-end" justifyContent="space-between">
-                            {itemsHole.map((holeData, holeidx) => {
-                              const holePic =
-                                holeData !== 0
-                                  ? gameItem.hole[holeData.idx].display
-                                  : 0;
-                              return (
-                                <span
-                                  className={`hole_slot ${
-                                    holePic !== 0 ? "fixed" : ""
-                                  }`}
-                                  key={`hole${holeidx}`}
-                                >
-                                  <ItemPic
-                                    type="hole"
-                                    className="pic"
-                                    pic="itemEtc"
-                                    idx={holePic}
-                                  />
-                                </span>
-                              );
-                            })}
-                          </Hole>
-                        </ItemGradeColor>
+                        <ItemLayout 
+                          gameItem={gameItem}
+                          isEquip
+                          icon={{
+                            type: "equip",
+                            pic: "equip",
+                            idx: items.display,
+                            mergeColor: data.color,
+                          }}
+                          grade={data.grade}
+                          part={gameData.animalType[animalIdx].equip[idx]}
+                          itemsHole={itemsHole}/>
                       </ItemList>
                     );
                   } else {
-                    const emptyItemType = gameData.animal_type[animalIdx].equip[idx];
+                    const emptyItemType = gameData.animalType[animalIdx].equip[idx];
                     const iconIdx = emptyIconMap[emptyItemType];
                     
                     if (iconIdx !== undefined) {
                       return (
                         <ItemList empty={true} key={idx} onClick={() => {
-                          const equipType = gameData.animal_type[animalIdx].equip[idx];
                           setItemBoxShow(true);
-                          setPossibleEquipItem(saveData?.items?.equip.map((value, index) => ({value, index})).filter((itemData) => {
-                            return itemData.value.part === equipType;
-                          }));
+                          setEquipType(gameData.animalType[animalIdx].equip[idx]);
                         }}>
                           <EmptyIconPic type="item" pic="icon100" idx={iconIdx} />
                         </ItemList>
@@ -485,7 +472,7 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
                   if (itemData.sealed) {
                     chk = true;
                   } else {
-                    chk = !items.limit[saveCh.job];
+                    chk = !items?.limit && !items?.limit[saveCh.job];
                   }
                   return chk;
                 })();
@@ -501,19 +488,20 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
                       itemWeaponType: itemDataValue.weaponType
                     });
                   }} data-itemnum={`equip_${itemDataValue.idx}`}>
-                    <ItemGradeColor part={itemDataValue.part} grade={gameData.itemGrade.txt_e[itemDataValue.grade].toLowerCase()} sealed={itemDataValue.sealed} impossible={equipPossible}>
-                      <ItemPic type="equip" pic="equip" idx={items.display} />
-                      <Hole alignItems="flex-end" justifyContent="space-between">
-                        {itemsHole.map((holeData, holeidx) => {
-                          const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;
-                          return (
-                            <span className={`hole_slot ${holePic !== 0 ? 'fixed': ''}`} key={`hole${holeidx}`}>
-                              <ItemPic type="hole" className="pic" pic="itemEtc" idx={holePic} />
-                            </span>
-                          );
-                        })}
-                      </Hole>
-                    </ItemGradeColor>
+                    <ItemLayout 
+                      gameItem={gameItem}
+                      isEquip
+                      icon={{
+                        type: "equip",
+                        pic: "equip",
+                        idx: items.display,
+                        mergeColor: itemDataValue.color,
+                      }}
+                      grade={itemDataValue.grade}
+                      part={itemDataValue.part}
+                      sealed={itemDataValue.sealed}
+                      impossible={equipPossible}
+                      itemsHole={itemsHole}/>
                   </ItemBoxList>
                 )
               }) : <ItemBoxNoList justifyContent="center" alignItems="center"><Text code="t2" color="main">{gameData.msg.sentence.noWearableItems[lang]}</Text></ItemBoxNoList>}
@@ -531,12 +519,18 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
             showPopup={setPopupOn}
             msgText={setMsg}
             showMsg={setMsgOn}
+            setTooltip={setTooltip}
+            setTooltipPos={setTooltipPos}
+            setTooltipOn={setTooltipOn}
           />
         )}
       </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
       </MsgContainer>
+			<TooltipContainer>
+				{tooltipOn && <Tooltip isDark={true} pos={tooltipPos} text={tooltip} showTooltip={setTooltipOn} />}
+			</TooltipContainer>
     </>
   );
 };
