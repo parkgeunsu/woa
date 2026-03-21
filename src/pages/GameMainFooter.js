@@ -12,9 +12,12 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  position: relative;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   width: 100%;
-  min-height: 36px;
+  height: 36px;
   z-index: 10;
 `;
 const ButtonWrap = styled(FlexBox)`

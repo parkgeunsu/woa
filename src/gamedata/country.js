@@ -1,3 +1,4 @@
+//shop 보유건물 0:여관, 1:무기상, 2:도구상, 3:악세사리상, 4:연금술소, 5:훈련소, 6:교역소, 7:대장간, 8:교회, 9:절, 10:비밀상점, 11:조선소, 12:항구, 13:마을회관, 14:길드
 export const country = {
   regions: [
     {//0
@@ -12,6 +13,7 @@ export const country = {
         jp:'日本東部',
       },
       difficultLv: 10,
+      shop: [0,1,2,5,6,9],
     },
     {//1
       id:'japan1',
@@ -25,6 +27,7 @@ export const country = {
         jp:'日本中部',
       },
       difficultLv: 10,
+      shop: [0,1,2,3,5,6,9],
     },
     {//2
       id:'japan2',
@@ -38,6 +41,7 @@ export const country = {
         jp:'日本西部',
       },
       difficultLv: 10,
+      shop: [0,2,5,6,9,10],
     },
     {//3
       id:'korea0',
@@ -51,6 +55,7 @@ export const country = {
         jp:'韓国北部',
       },
       difficultLv: 10,
+      shop: [0,2,4,5,6,9],
     },
     {//4
       id:'korea1',
@@ -64,6 +69,7 @@ export const country = {
         jp:'韓国東部',
       },
       difficultLv: 10,
+      shop: [0,2,3,5,6,9],
     },
     {//5
       id:'korea2',
@@ -77,6 +83,7 @@ export const country = {
         jp:'韓国西部',
       },
       difficultLv: 10,
+      shop: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]//[0,1,2,5,6,9],
     },
     {//6
       id:'mongolia0',
@@ -90,6 +97,7 @@ export const country = {
         jp:'モンゴル北東部',
       },
       difficultLv: 10,
+      shop: [0,1,2,5,6,9],
     },
     {//7
       id:'mongolia1',
@@ -103,6 +111,7 @@ export const country = {
         jp:'モンゴル南東部',
       },
       difficultLv: 10,
+      shop: [0,2,5,6,9],
     },
     {//8
       id:'mongolia2',
@@ -116,6 +125,7 @@ export const country = {
         jp:'モンゴル中部',
       },
       difficultLv: 10,
+      shop: [0,2,3,5,6,9],
     },
     {//9
       id:'mongolia3',
@@ -129,6 +139,7 @@ export const country = {
         jp:'モンゴル西北部',
       },
       difficultLv: 10,
+      shop: [0,2,5,6,9,10],
     },
     {//10
       id:'mongolia4',
@@ -142,6 +153,7 @@ export const country = {
         jp:'モンゴル西南部',
       },
       difficultLv: 10,
+      shop: [0,2,4,5,6,9],
     },
     {//11
       id:'china0',
@@ -155,6 +167,7 @@ export const country = {
         jp:'中国東北部',
       },
       difficultLv: 10,
+      shop: [0,2,5,6,9],
     },
     {//12
       id:'china1',
@@ -168,6 +181,7 @@ export const country = {
         jp:'中国北部',
       },
       difficultLv: 10,
+      shop: [0,1,2,5,6,9],
     },
     {//13
       id:'china2',
@@ -181,6 +195,7 @@ export const country = {
         jp:'中国西北部',
       },
       difficultLv: 10,
+      shop: [0,2,5,6,9],
     },
     {//14
       id:'china3',
@@ -194,6 +209,7 @@ export const country = {
         jp:'中国東部',
       },
       difficultLv: 10,
+      shop: [0,2,4,5,6,9],
     },
     {//15
       id:'china4',
@@ -207,6 +223,7 @@ export const country = {
         jp:'中国中部',
       },
       difficultLv: 10,
+      shop: [0,2,5,6,7,9],
     },
     {//16
       id:'china5',
@@ -220,6 +237,7 @@ export const country = {
         jp:'中国西部',
       },
       difficultLv: 10,
+      shop: [0,2,5,6,9],
     },
     {//17
       id:'china6',
@@ -233,6 +251,7 @@ export const country = {
         jp:'中国南東部',
       },
       difficultLv: 10,
+      shop: [0,2,4,5,6,9],
     },
     {//18
       id:'china7',
@@ -246,6 +265,7 @@ export const country = {
         jp:'中国南部',
       },
       difficultLv: 10,
+      shop: [0,2,5,6,9],
     },
     {//19
       id:'saudiArabia0',
@@ -259,6 +279,7 @@ export const country = {
         jp:'サウジアラビア',
       },
       difficultLv: 10,
+      shop: [0,2,4,5,6,9,10],
     },
     {//20
       id:'egypt0',
@@ -272,6 +293,7 @@ export const country = {
         jp:'エジプト',
       },
       difficultLv: 10,
+      shop: [0,2,5,6,7,9],
     },
     {//21
       id:'greece0',
@@ -285,6 +307,7 @@ export const country = {
         jp:'ギリシャ',
       },
       difficultLv: 10,
+      shop: [0,1,2,5,6,8],
     },
     {//22
       id:'italy0',
@@ -298,6 +321,7 @@ export const country = {
         jp:'イタリア',
       },
       difficultLv: 10,
+      shop: [0,2,3,5,6,8,10],
     },
     {//23
       id:'france0',
@@ -311,6 +335,7 @@ export const country = {
         jp:'フランス',
       },
       difficultLv: 10,
+      shop: [0,2,4,5,6,8],
     },
     {//24
       id:'spain0',
@@ -324,6 +349,7 @@ export const country = {
         jp:'スペイン',
       },
       difficultLv: 10,
+      shop: [0,1,2,5,6,8],
     },
     {//25
       id:'portugal0',
@@ -337,6 +363,7 @@ export const country = {
         jp:'ポルトガル',
       },
       difficultLv: 10,
+      shop: [0,2,5,6,7,8],
     },
     {//26
       id:'unitedKingdom0',
@@ -350,6 +377,7 @@ export const country = {
         jp:'イギリス東部',
       },
       difficultLv: 10,
+      shop: [0,1,2,5,6,8],
     },
     {//27
       id:'unitedKingdom1',
@@ -363,6 +391,7 @@ export const country = {
         jp:'イギリス西部',
       },
       difficultLv: 10,
+      shop: [0,2,5,7,6,8,10],
     }
   ],
 }

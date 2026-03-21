@@ -2287,9 +2287,9 @@ export const util = { //this.loadImage();
         return 1;
       case 'cardPlacement':
         return 2;
-      case 'enhancingCards':
+      case 'EnhancingItem':
         return 3;
-      case 'enhancingStickers':
+      case 'enhancingCard':
         return 4;
       case 'composite':
         return 5;
@@ -2830,11 +2830,11 @@ export const util = { //this.loadImage();
     if (localStorage.getItem('closeTime')) {
       const timeGap = Math.floor((time.getTime() - new Date(localStorage.getItem('closeTime')).getTime())/1000);//마지막 접속시간과 현재시간과 차이
       for (const data of saveData.ch) {
-        data.actionPoint += Math.floor(timeGap / 50);
+        const maxActionPoint = data.actionMax || 50;
+        data.actionPoint = Math.min((data.actionPoint || 0) + Math.floor(timeGap / 5), maxActionPoint);
         data.pointTime -= timeGap;
       }
       changeSaveData(saveData);
-      console.log(saveData, timeGap);
       localStorage.setItem('closeTime', time);
     } else {
       localStorage.setItem('closeTime', time);
@@ -2864,7 +2864,7 @@ export const util = { //this.loadImage();
       }))
     };
 
-    if (dataObj.type === 'enhancingStickers') {
+    if (dataObj.type === 'enhancingCard') {
 
     } else if (dataObj.type === 'itemEquip') { //아이템 착용
       const invenPart = dataObj.data.saveItemData.part;
@@ -2988,52 +2988,38 @@ export const util = { //this.loadImage();
       dataObj.changeSaveData(sData);//데이터 저장
       dataObj.showPopup(false);
     } else if (dataObj.type === 'itemBuy') { //아이템 구입
-      if (dataObj.data.type.indexOf('ship') >= 0) {//배 물품 구입
-        let overlapIdx = '';
-        sData.ship[dataObj.data.type.split('ship')[1]].loadedItem.filter((data, idx) => {
-          if (data.idx === dataObj.data.saveItemData.idx) {
-            overlapIdx = idx;
-          }
-          return idx;
-        });
-        if (typeof overlapIdx === 'number') { //같은 상품이 있으면
-          sData.ship[dataObj.data.type.split('ship')[1]].loadedItem[overlapIdx].num += dataObj.data.num;
-        } else { //같은 상품이 없으면
-          sData.ship[dataObj.data.type.split('ship')[1]].loadedItem.push({
-            idx: dataObj.data.saveItemData.idx,
-            num: dataObj.data.num,
-          });
-        }
-        //배 저장소 측정
-        sData.info.money -= dataObj.data.gameItem.price * dataObj.data.num;//돈 계산
+      if (dataObj.data.type === 'equip') {
+        sData.info.money -= (dataObj.data.gameItem.price < 1000 ? 1000 : dataObj.data.gameItem.price) * 2 * dataObj.data.gameItem.grade;
+      } else if (dataObj.data.type === 'hole') {
+        sData.info.money -= dataObj.data.gameItem.price * (dataObj.data.num || 1);
       } else {
-        if (dataObj.data.type === 'equip') {
-          sData.info.money -= (dataObj.data.gameItem.price < 1000 ? 1000 : dataObj.data.gameItem.price) * 2 * dataObj.data.gameItem.grade;
-        } else if (dataObj.data.type === 'hole') {
-          sData.info.money -= dataObj.data.gameItem.price * 2;
-        } else {
-          sData.info.money -= dataObj.data.gameItem.price;//돈 계산
-        }
-        sData.items[dataObj.data.type].push(dataObj.data.saveItemData);//아이템 추가
+        console.log(dataObj.data.num, dataObj.data.gameItem.price);
+        sData.info.money -= dataObj.data.gameItem.price * (dataObj.data.num || 1);//돈 계산
+      }
+      //아이템 추가
+      const slotIdx = sData.items[dataObj.data.type].findIndex((data) => data.idx === dataObj.data.saveItemData.idx);
+      if (slotIdx >= 0) {
+        sData.items[dataObj.data.type][slotIdx].num = Number(sData.items[dataObj.data.type][slotIdx].num) + Number(dataObj.data.num);
+      } else {
+        sData.items[dataObj.data.type].push({...dataObj.data.saveItemData, num: dataObj.data.num});
       }
       dataObj.changeSaveData(sData);//데이터 저장
       dataObj.showPopup(false);
     } else if (dataObj.type === 'itemSell') { //아이템 판매
-      if (dataObj.data.type.indexOf('ship') >= 0) {//배 물품 판매
-        const num = sData.ship[dataObj.data.type.split('ship')[1]].loadedItem[dataObj.data.itemSaveSlot].num;
-        if (dataObj.data.num < num) { //일부만 팔경우
-          sData.ship[dataObj.data.type.split('ship')[1]].loadedItem[dataObj.data.itemSaveSlot].num -= dataObj.data.num;
-        } else { //전체 팔경우
-          sData.ship[dataObj.data.type.split('ship')[1]].loadedItem.splice(dataObj.data.itemSaveSlot, 1);
-        }
-        sData.info.money += dataObj.data.gameItem.price * dataObj.data.num;//돈 계산
+      if (dataObj.data.type === 'equip' || dataObj.data.type === 'hole') {
+        //console.log(dataObj.data.gameItem.price, dataObj.data.gameItem.grade);
+        sData.info.money += dataObj.data.gameItem.price * (dataObj.data.num || 1);//dataObj.data.gameItem.grade;//돈 계산
       } else {
-        if (dataObj.data.type === 'equip' || dataObj.data.type === 'hole') {
-          //console.log(dataObj.data.gameItem.price, dataObj.data.gameItem.grade);
-          sData.info.money += dataObj.data.gameItem.price * dataObj.data.gameItem.grade;//돈 계산
+        sData.info.money += dataObj.data.gameItem.price * (dataObj.data.num || 1);//돈 계산
+      }
+      const slotIdx = sData.items[dataObj.data.type].findIndex((data) => data.idx === dataObj.data.gameItem.idx);
+      if (slotIdx >= 0) {
+        if (sData.items[dataObj.data.type][slotIdx].num > dataObj.data.num) {
+          sData.items[dataObj.data.type][slotIdx].num = Number(sData.items[dataObj.data.type][slotIdx].num) - Number(dataObj.data.num);
         } else {
-          sData.info.money += dataObj.data.gameItem.price;//돈 계산
+          sData.items[dataObj.data.type].splice(slotIdx, 1);//인벤에서 아이템 제거
         }
+      } else {
         sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot, 1);//인벤에서 아이템 제거
       }
       dataObj.changeSaveData(sData);//데이터 저장
@@ -3581,13 +3567,12 @@ export const util = { //this.loadImage();
       case 'equip':
         return '';
       case 'etc':
+      case 'material':
         return 0;
       case 'hole':
         return 10;
       case 'upgrade':
         return 22;
-      case 'material':
-        return 26;
       default:
         break;
     }
@@ -3619,8 +3604,11 @@ export const util = { //this.loadImage();
         return 4;
       case 'scenario':
         return 5;
+      case 'hunting':
+        return 6;
       case 'mutate':
       case 'elevation':
+      case 'shop':
       case 'pattern':
         return 7;
       case 'skillType':
@@ -3711,8 +3699,12 @@ export const util = { //this.loadImage();
         return [5, 8];
       case 'itemEtc':
         return [10, 32];
+      case 'material':
+        return [10, 16];
       case 'skill':
         return [20, 40];
+      case 'shop':
+        return [10, 2];
       default:
         break;
     }
@@ -4114,7 +4106,7 @@ export const util = { //this.loadImage();
       saveData = sData;
       const chScenario = gameData.ch[newIdx].scenarioRegion;
       const jobElementType = job === 1 ? Math.floor(Math.random() * 4) : job === 6 ? Math.floor(Math.random() * 2) : "";//특정 직업의 속성 설정(마법사, 도사)
-      const skill = [{idx: 0, lv: 1, exp: 0}, {idx: 1, lv: 1, exp: 0}, {idx: 2, lv: 1, exp: 0}];//기본 스킬
+      const skill = [{idx: 0, lv: 1, exp: 0}, {idx: 1, lv: 1, exp: 0}, {idx: 2, lv: 1, exp: 0}, ...gameData.ch[newIdx].sk.map((v) => ({idx: v.idx, lv: v.lv, exp: 0}))];//기본 스킬 + 캐릭터 스킬
       gameData.job[job].skill.basic.forEach((v)=>{//직업 추가되는 스킬
         if (v < 3) {
           skill[v].lv += 1;

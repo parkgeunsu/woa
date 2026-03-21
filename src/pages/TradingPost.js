@@ -1,79 +1,134 @@
+import { Text } from 'components/Atom';
 import { ActionChDisplay, Calculator, RangeSlider } from 'components/Components';
-import { ItemPic } from 'components/ImagePic';
+import { FlexBox } from 'components/Container';
+import { ItemPic, MergedPic } from 'components/ImagePic';
+import ItemLayout from 'components/ItemLayout';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
+import Npc from 'components/Npc';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
-import TabMenu from 'components/TabMenu';
 import { AppContext } from 'contexts/app-context';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-const Img = styled.img.attrs(
-  ({imgurl}) => ({
-    src: imgurl 
-  })
-)``;
-const Wrap = styled.div`
-	display: flex;
+const Wrap = styled(FlexBox)`
 	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	flex-direction: column;
+	inset: 0;
 	padding: 0 0 20px 0;
-	width: 100%;
-	height: 100%;
 	box-sizing: border-box;
 	overflow: hidden;
 `;
-const MenuButton = styled.button``;
-const ShopIcon = styled.span`
-	background:url(${({ icoType }) => icoType}) no-repeat left center;background-size:100%;
+const TradingContainer = styled(FlexBox)`
+	position: relative;
+	margin: 10px auto 0;
+	height: 25%;
+	width: 90%;
+  background: rgba(0,0,0,.7);
+  border: 5px solid transparent;
+  border-image: url(${({frameBack}) => frameBack}) 5 round;
+	box-sizing: border-box;
 `;
-const ItemContainer = styled.ul`
-  border:5px solid transparent;
-  border-image:url(${({frameBack}) => frameBack}) 5 round;
-	&.on{
-		outline:5px solid #000;
-	}
-  .item_header{border:5px solid transparent;
-  border-image:url(${({frameBack}) => frameBack}) 5 round;
-  }
-  .item_name{color:${({ color }) => color};text-shadow:-1px -1px 1px rgba(255,255,255,.5), 1px 1px 1px #000;font-size:0.875rem;font-weight:600;}
+const ShopItem = styled.div`
+	position: absolute;
+	inset: 0;
+	overflow-y: auto;
+	${({selected}) => selected ? `
+		pointer-events: unset;
+		opacity: 1;
+	` : `
+		pointer-events: none;
+		opacity: 0;
+	`};
 `;
-const ItemName = styled.div`
-  .item_grade{color:${({ color }) => color};}
+const TradingItemContainer = styled(FlexBox)`
+	position: relative;
+	width: calc(90% - 10px);
+	flex: 1;
+  border: 5px solid transparent;
+	border-top: none;
+  border-image: url(${({frameBack}) => frameBack}) 5 round;
+  background: rgba(0,0,0,.7);
+	.item_select{width:100%;}
+	.item_fix{padding:5px;border-bottom:5px double #ffac2f;}
+	.item_button{margin:5px 0 0 0;}
 `;
-const ShipContainer = styled.div``;
-const tradingList = [
-	{na:'buy',icon:10},
-	{na:'sell',icon:11},
-];
-const storageCheck = (items) => {
-	let total = 0;
-	for (const item of items) {
-		total += item.num;
-	}
-	return total;
-}
-const shipSize = (shipIdx) => {
-	if (shipIdx < 3) { //소형
-		return 0;
-	} else if (shipIdx < 8) { //중형
-		return 1;
-	} else { //대형
-		return 2;
-	}
-}
+const SliderContainer = styled(FlexBox)`
+	position: relative;
+	flex: 1;
+	margin: 0 10px 0 0;
+	padding: 10px;
+	height: 100%;
+	box-sizing: border-box;
+	background: rgba(0,0,0,.5);
+`;
+const UserContainer = styled(FlexBox)`
+	position: relative;
+	padding: 10px 20px 0 20px;
+	height: calc(25% - 10px);
+	width: calc(100% - 40px);
+`;
+const ItemInfo = styled(FlexBox)`
+	padding: 10px;
+	width: 100%;
+	box-sizing: border-box;
+`;
+const ItemPicContainer = styled(FlexBox)`
+	position: relative;
+	width: 30%;
+	padding-top: 30%;
+	height: 0;
+	border-radius: 10%;
+	background: radial-gradient( at 30% 30%, rgba(0,0,0,0.3) 0%, var(--color-normal) 100%);
+`;
+const ItemContent = styled(FlexBox)`
+	position: relative;
+	margin: 0 0 0 10px;
+	width: 70%;
+	height: 100%;
+`;
+const ItemHeader = styled(Text)``;
+const ItemDescription = styled(Text)``;
+const ItemPrice = styled(FlexBox)`
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	height: auto;
+`;
+const ItemButton = styled(FlexBox)`
+	margin: 5px 0 0 0;
+`;
+const ActionPic = styled(FlexBox)`
+	position: relative;
+	width: auto;
+	height: 100%;
+	border-radius: 5%;
+	overflow: hidden;
+  box-sizing: border-box;
+  background: rgb(0, 0, 0, 0.5);
+  z-index: 3;
+`;
+const NoneChText = styled(Text)`
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+`;
+const Img = styled.img.attrs(
+	({imgurl}) => ({
+		src: imgurl 
+	})
+)`
+	height: 100%;
+`;
 const TradingPost = ({
-	cityIdx,
 	saveData,
 	changeSaveData,
 }) => {
   const context = useContext(AppContext);
+	const navigate = useNavigate();
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -86,287 +141,237 @@ const TradingPost = ({
   const gameItem = React.useMemo(() => {
     return gameData.items;
   }, [gameData]);
+	const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
+	const stayIdx = React.useMemo(() => util.getRegionToIdx(sData?.info?.stay), [saveData]);
   // const [modalOn, setModalOn] = useState(false);
 	// const [modalInfo, setModalInfo] = useState({});
   // const [modalType, setModalType] = useState();
   const [popupOn, setPopupOn] = useState(false);
   const [popupInfo, setPopupInfo] = useState({});
+	const [popupType, setPopupType] = useState('');
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
 	const [selectTab, setSelectTab] = useState(0);
-	const [selectShip, setSelectShip] = useState(0);
 	const [rangeValue, setRangeValue] = useState(0);
 	const [showCal, setShowCal] = useState(false);
 	const [item, setItem] = useState([]);
-	const [selectItem, setSelectItem] = useState({save:{},game:{},select:'',selectTab:'',selectShip:'',buttonType:[]});
-	const [actionCh, setActionCh] = useState({});//행동할 캐릭터 데이터
-	const actionRef = useRef();//행동할 캐릭터 선택자
+	const [selectItem, setSelectItem] = useState({save:{},game:{},select:'',selectTab:'',buttonType:[]});
+	const actionCh = React.useMemo(() => sData.actionCh['tradingPost'], [sData]);//행동할 캐릭터 데이터
 	useEffect(() => {
-		if (saveData && Object.keys(saveData).length !== 0) {
-			let items = [[],[]];
-			const cityData = saveData.city?.[cityIdx];
-			if (cityData?.tradingPost) {
-				for (const [idx, item] of cityData.tradingPost.entries()) {
-					items[0][idx] = item;
-				}
-			}
-			if (saveData.ship) {
-				for (const [idx, item] of saveData.ship.entries()) {
-					items[1][idx] = item;
-				}
-			}
-			setItem(items);
-			if (saveData.actionCh?.tradingPost) {
-				setActionCh(saveData.actionCh.tradingPost);
-				setPopupInfo({
-					ch:saveData.ch,
-					actionCh:saveData.actionCh.tradingPost.idx,
-					type:'tradingPost'
-				})
+		console.log(rangeValue)
+	}, [rangeValue])
+	const shopItem = React.useMemo(() => {
+		const cityData = sData.city?.[stayIdx];
+		let materialItems = [];
+		if (cityData?.tradingPost) {
+			for (const [idx, item] of cityData.tradingPost.entries()) {
+				materialItems[idx] = item;
 			}
 		}
-	}, [saveData]);
+		setItem(materialItems);
+		return [
+			[...materialItems],
+			[...sData.items.material],
+		];	
+	}, [sData, stayIdx]);
   return (
 		<>
-			<Wrap>
-				<div className="shop_top trading">
-					<div className="shop_top_left">
-						<TabMenu direction="vertical" list={tradingList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" />
-						{Object.keys(actionCh).length !== 0 && (<div ref={actionRef} className={`ch_select_area ${actionCh.idx ? 'g' + saveData.ch[actionCh.idx].grade : ''}`} onClick={() => {
-								setPopupOn(true);
-							}}>
-								<ActionChDisplay type="tradingPost" saveData={saveData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
-							</div>
-						)}
-					</div>
-					<div className="shop_item num4 scroll-y">
-						{item[selectTab] && item[selectTab].map((data, idx) => {
-							if (selectTab === 0) {
-								const items = gameItem.material[data.idx];
-								const grade = data.grade || items?.grade;
-								return (
-									<div className={`item_layout ${gameData.itemGrade?.txt_e[grade]?.toLowerCase()} ${selectItem.selectTab === selectTab && selectItem.select === idx ? 'select1' : ''}`} key={`items${idx}`} onClick={() => {
-										let button = ['buy','bargaining'];
-										setSelectItem({
-											save:data,
-											game:items,
-											select:idx,
-											selectTab:selectTab,
-											selectShip:selectShip,
-											buttonType:button,
-										});
-										setRangeValue(0);
-									}}>
-										<ItemPic className="pic" pic="itemEtc" type="material" idx={items.display}>
-											{typeof data.num === 'number' ? (
-												<span className="has_num">{util.comma(data.num)}</span>
-											) : (
-												<span className="has_num infinite">∞</span>
-											)}
-										</ItemPic>
-									</div>
-								)
-							} else {
-								if (data.stay === saveData.info.stay && idx === selectShip) {
-									return data.loadedItem.map((itemData, itemIdx) => {
-										const items = gameItem.material?.[itemData.idx];
-										const grade = items?.grade;
-										return (
-											<div className={`item_layout ${gameData.itemGrade?.txt_e?.[grade]?.toLowerCase()} ${selectItem.selectTab === selectTab && selectItem.selectShip === selectShip && selectItem.select === itemIdx ? 'select2' : ''}`} key={`shipitems${itemIdx}`} onClick={() => {
-												let button = ['sell','bargaining'];
-												setSelectItem({
-													save:itemData,
-													game:items,
-													select:itemIdx,
-													selectTab:selectTab,
-													selectShip:selectShip,
-													buttonType:button,
-												});
-												setRangeValue(0);
-											}}>
-												<ItemPic className="pic" pic="itemEtc" type="material" idx={items.display}>
-													{typeof itemData.num === 'number' ? (
-														<span className="has_num">{itemData.num}</span>
-													) : (
-														<span className="has_num infinite">∞</span>
-													)}
-												</ItemPic>
-											</div>
-										)
-									});
-								}
-							}
-						})}
-					</div>
-				</div>
-				<div className="shop_middle scroll-x">
-					{item[1] && item[1].map((shipD, shipIdx) => {
-						if (shipD.stay === saveData.info.stay) {
-							let shipSail = [],
-								shipSailColor = [],
-								shipCannon = [];
-							shipD.sail.forEach((data, idx) => {
-								if (data) {
-									shipSail[idx] = `${shipD.shipIdx}_${data.type}_${idx + 1}`;
-									shipSailColor[idx] = data.color;
-								} else {
-									shipSail[idx] = '';
-									shipSailColor[idx] = '';
-								}
-							});
-							shipD.cannon.forEach((data, idx) => {
-								if (data) {
-									shipCannon[idx] = `${shipD.shipIdx}_${data}_${idx + 1}`
-								} else {
-									shipCannon[idx] = '';
-								}
+			<Wrap direction="column">
+				<Npc imgSet={imgSet} shopType={'tradingPost'} gameData={gameData} lang={lang} setSelectTab={setSelectTab} navigate={navigate} onClick={() => { 
+					setSelectItem({save:{},game:{},select:'',selectTab:'',buttonType:[]});
+				}}/>
+				<TradingContainer frameBack={imgSet.etc.frameChBack}>
+					{shopItem.map((scrollData, scrollIdx) => {
+						return <ShopItem selected={selectTab === scrollIdx} key={`scrollContent${scrollIdx}`}>
+							{scrollData.map((invenData, invenIdx) => {
+								const items = gameItem.material[invenData.idx];
+								return invenData && <ItemLayout
+									gameItem={gameData.items}
+									icon={{
+										type: 'material',
+										pic: 'material',
+										idx: items.display,
+									}}
+									num={6}
+									key={`items${invenIdx}`}
+									grade={invenData.grade || items?.grade}
+									text={invenData?.num ? util.comma(invenData.num) : invenData.num}
+									selectColor={selectItem === invenIdx ? 1 : ""}
+									onClick={() => {
+										if (scrollIdx === 0) {
+											setSelectItem({
+												save: invenData,
+												game: items,
+												select: invenIdx,
+												buttonType: ['buy','bargaining'],
+											});
+										} else {
+											setSelectItem({
+												save: sData.items.material,
+												game: items,
+												select: invenIdx,
+												buttonType: ['sell','bargaining'],
+											});
+										}
+										// let button = ['buy','bargaining'];
+										// setSelectItem({
+										// 	save:invenData,
+										// 	game:items,
+										// 	select:invenIdx,
+										// 	selectTab:selectTab,
+										// 	buttonType:button,
+										// });
+										// setRangeValue(0);
+									}}
+								/>
 							})
-							return (
-								<ShipContainer className={`ship ${selectShip === shipIdx ? 'select' : ''}`} key={`ship${shipIdx}`} onClick={() => {
-									setSelectShip(shipIdx);
-									setSelectItem({save:{},game:{},select:'',selectTab:'',selectShip:'',buttonType:[]});
-								}}>
-									<div className={`ship_display size${shipSize(shipD.shipIdx)} ship${shipD.shipIdx}`}>
-										<svg className="ship_body" xmlns="http://www.w3.org/2000/svg" width="320px" height="600px" viewBox="0 0 320 600" dangerouslySetInnerHTML={{__html: util.setShipColor(gameData.shipSvg?.[shipD.shipIdx], imgSet.wood?.[shipD.wood] || imgSet.images?.transparent, gameData.ships?.woodColor?.[gameData.ships?.wood?.[shipD.wood]?.woodColor ?? 4], Math.random().toString(36).substring(2, 11), [gameData.sailSvg?.[shipSail[0]], gameData.sailSvg?.[shipSail[1]], gameData.sailSvg?.[shipSail[2]]], [shipSailColor[0], shipSailColor[1], shipSailColor[2]], [gameData.cannonSvg?.[shipCannon[0]], gameData.cannonSvg?.[shipCannon[1]], gameData.cannonSvg?.[shipCannon[2]]])}}></svg>
-										{shipD.figure !== '' && <svg className="ship_face" style={{filter:`drop-shadow(0 0 7px ${gameData.ships?.figureColor?.[gameData.ships?.figurehead?.[shipD.figure]?.color]?.[2]})`}} xmlns="http://www.w3.org/2000/svg" width="200px" height="200px" viewBox="0 0 200 200" dangerouslySetInnerHTML={{__html: util.setFigureColor(gameData.figureSvg?.[gameData.ships?.figurehead?.[shipD.figure]?.display], gameData.ships?.figureColor, gameData.ships?.figurehead?.[shipD.figure]?.color)}}></svg>}
-									</div>
-									<div className="ship_storage">{storageCheck(shipD.loadedItem)} / <br/>{shipD.resource.loadage}</div>
-								</ShipContainer>
-							)
 						}
+					</ShopItem>
 					})}
-				</div>
-				<div className="shop_bottom trading">
-					{Object.keys(selectItem.save).length !== 0 ? (
-						<ItemContainer className={`item_select items ${selectTab === 0 ? 'tab1' : 'tab2'}`} color={gameData.itemGrade?.color?.[selectItem.save.grade]}>
-							<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem.game.na?.[lang] || ''}`}}></span></li>
-							<li className="item_fix" flex="true">
-								<div className={`item ${gameData.itemGrade?.txt_e?.[selectItem.save.grade || selectItem.game.grade]?.toLowerCase()}`}>
-									<ItemPic className="pic" pic="itemEtc" type="material" idx={selectItem.game.display} />
-								</div>
-								<div flex-h="true" style={{flex: 1}}>
-									<ItemName className="item_cont" color={gameData.itemGrade?.color?.[selectItem.save.grade]}>
-										<div className="item_top">
-											<span className="item_grade">{lang === 'ko' ? gameData.itemGrade?.txt_k?.[selectItem.save.grade] : gameData.itemGrade?.txt_e?.[selectItem.save.grade]}</span>
-										</div>
-										<div className="item_description" dangerouslySetInnerHTML={{__html: `"${selectItem.game.txt?.[lang]}"`}}></div>
-										<div flex="true" style={{justifyContent:'space-between'}}>
-											<div className="item_price"><span>{gameData.msg?.itemInfo?.buyPrice?.[lang]}</span><em>{`₩${util.comma(selectItem.game.price < 1000 ? 1000 : selectItem.game.price)}`}</em></div>
-											<div className="item_kg">{selectItem.game.kg}kg</div>
-										</div>
-									</ItemName>
-								</div>
-							</li>
-							<li className="item_footer" flex-v="true">
-								<RangeSlider min={0} max={selectItem.selectTab === 0 ? item[selectItem.selectTab][selectItem.select].num : item[selectItem.selectTab][selectShip].loadedItem[selectItem.select].num} step={1} value={[rangeValue]} pirce={gameItem.material[selectTab === 0 ? item[selectTab][selectItem.select].idx : item[selectTab][selectShip].loadedItem[selectItem.select].idx].price} setValue={setRangeValue} showCal={setShowCal}/>
+				</TradingContainer>
+				<TradingItemContainer frameBack={imgSet.etc.frameChBack}>
+					<ItemInfo justifyContent="flex-start" alignItems="flex-start">
+						{selectItem.select !== "" ? 
+						<>
+							<ItemPicContainer>
+								<ItemPic isAbsolute pic="material" type="material" idx={selectItem.game.display} />
+							</ItemPicContainer>
+							<ItemContent direction="column" justifyContent="flex-start" alignItems="flex-start">
+								<ItemHeader code="t3" color={gameData.itemGrade?.color?.[selectItem.save.grade] || "main"} weight="600" align="left">{selectItem.game.na[lang]}</ItemHeader>
+								<ItemDescription code="t1" lineHeight="1.2" color="main" align="left">{selectItem.game.txt?.[lang]}</ItemDescription>
+								<ItemPrice justifyContent="space-between">
+									<Text code="t2" color="main" weight="600">{`${gameData.msg?.itemInfo?.buyPrice?.[lang]}: ${util.comma(selectItem.game.price)}`}</Text>
+									<Text code="t2" color="main" weight="600">{`${selectItem.game.kg}kg`}</Text>
+								</ItemPrice>
+							</ItemContent>
+						</> : <></>}
+					</ItemInfo>
+				</TradingItemContainer>
+				<UserContainer justifyContent="space-between">
+					<SliderContainer direction="column">
+						{selectItem.select !== "" && (
+							<>
+								{selectTab === 0 ? <RangeSlider min={0} max={item[selectItem.select].num} step={1} value={[rangeValue]} pirce={gameItem.material[item[selectItem.select].idx].price} setValue={setRangeValue} showCal={setShowCal}/> : <RangeSlider min={0} max={selectItem.save[selectItem.select].num} step={1} value={[rangeValue]} pirce={gameItem.material[item[selectItem.select].idx].price} setValue={setRangeValue} showCal={setShowCal}/>}
+								<ItemButton justifyContent="flex-end">
 								{selectItem.buttonType.map((button, idx) => {
 									switch(button) {
 										case 'buy':
 											return (
-												<div className="item_button" key={`button${idx}`} flex="true">
-													<button text="true" className="button_small" onClick={(e) => {
-														if (actionCh.idx === '' || actionCh.idx === undefined) {
-															setMsgOn(true);
-															setMsg(gameData.msg?.sentenceFn?.selectSkillCh?.(lang,gameData.skill?.[201]?.na) || "Select Character");
-															return;
-														}
-														let saveD = JSON.parse(JSON.stringify(saveData));
-														const charData = saveD.ch?.[actionCh.idx];
-														if (charData && charData.actionPoint >= (gameData.actionPoint?.itemBuy || 0)) {//행동력 지불
-															if (saveD.info.money >= rangeValue[0] * selectItem.game.price) {//소유금이 더 많을경우
-																if (saveD.city[cityIdx]?.tradingPost?.[selectItem.select] && typeof saveD.city[cityIdx].tradingPost[selectItem.select].num === 'number') { //수량이 정해져 있을경우
-																	saveD.city[cityIdx].tradingPost[selectItem.select].num -= rangeValue[0];
-																	changeSaveData(saveD);
-																}
-																charData.actionPoint -= (gameData.actionPoint?.itemBuy || 0);
-																util.buttonEvent({
-																	event: e,
-																	type: 'itemBuy',
-																	data: {
-																		slotIdx: 0,
-																		gameItem: selectItem.game,
-																		saveItemData: selectItem.save,
-																		type:'ship'+selectShip,
-																		num:rangeValue[0],
-																	},
-																	saveData: saveData,
-																	changeSaveData: changeSaveData,
-																	gameData: gameData,
-																	msgText: setMsg,
-																	showMsg: setMsgOn,
-																	showPopup: setPopupOn,
-																	lang: lang,
-																});
-																setRangeValue(0);
-															} else {
-																setMsgOn(true);
-																setMsg(gameData.msg?.sentence?.lackMoney?.[lang] || "Not enough money");
+												<button text="true" className="button_small" onClick={(e) => {
+													if (actionCh.idx === '' || actionCh.idx === undefined) {
+														setMsgOn(true);
+														setMsg(gameData.msg?.sentenceFn?.selectSkillCh?.(lang,gameData.skill?.[15]?.na) || "Select Character");
+														return;
+													}
+													let saveD = JSON.parse(JSON.stringify(saveData));
+													const charData = saveD.ch?.[actionCh.idx];
+													if (charData && charData.actionPoint >= (gameData.actionPoint?.itemBuy || 0)) {//행동력 지불
+														if (saveD.info.money >= rangeValue * selectItem.game.price) {//소유금이 더 많을경우
+															if (saveD.city[stayIdx]?.tradingPost?.[selectItem.select] && typeof saveD.city[stayIdx].tradingPost[selectItem.select].num === 'number') { //수량이 정해져 있을경우
+																saveD.city[stayIdx].tradingPost[selectItem.select].num -= rangeValue;
+																changeSaveData(saveD);
 															}
+															charData.actionPoint -= (gameData.actionPoint?.itemBuy || 0);
+															util.buttonEvent({
+																event: e,
+																type: 'itemBuy',
+																data: {
+																	slotIdx: 0,
+																	gameItem: selectItem.game,
+																	saveItemData: selectItem.save,
+																	type:'material',
+																	num:rangeValue,
+																},
+																saveData: saveData,
+																changeSaveData: changeSaveData,
+																gameData: gameData,
+																msgText: setMsg,
+																showMsg: setMsgOn,
+																showPopup: setPopupOn,
+																lang: lang,
+															});
+															setRangeValue(0);
 														} else {
 															setMsgOn(true);
-															setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1[lang]) || "Not enough Action Point");
+															setMsg(gameData.msg?.sentence?.lackMoney?.[lang] || "Not enough money");
 														}
-													}} data-buttontype="itemBuy">{gameData.msg?.button?.buy?.[lang] || "Buy"}</button>
-												</div>
+													} else {
+														setMsgOn(true);
+														setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1[lang]) || "Not enough Action Point");
+													}
+												}} data-buttontype="itemBuy">{gameData.msg?.button?.buy?.[lang] || "Buy"}</button>
 											)
 										case 'sell':
 											return (
-												<div className="item_button" key={`button${idx}`} flex="true">
-													<button text="true" className="button_small" onClick={(e) => {
-														if (actionCh.idx === '' || actionCh.idx === undefined) {
-															setMsgOn(true);
-															setMsg(gameData.msg?.sentenceFn?.selectSkillCh?.(lang,gameData.skill?.[201]?.na) || "Select Character");
-															return;
-														}
-														let saveD = JSON.parse(JSON.stringify(saveData));
-														const charData = saveD.ch?.[actionCh.idx];
-														if (charData && charData.actionPoint >= (gameData.actionPoint?.itemSell || 0)) {//행동력 지불
-															if (rangeValue) {
-																charData.actionPoint -= (gameData.actionPoint?.itemSell || 0);
-																util.buttonEvent({
-																	event: e,
-																	type: 'itemSell',
-																	data: {
-																		slotIdx: 0,
-																		gameItem: selectItem.game,
-																		itemSaveSlot:selectItem.select,
-																		type:'ship'+selectShip,
-																		num:rangeValue[0],
-																	},
-																	saveData: saveData,
-																	changeSaveData: changeSaveData,
-																	gameData: gameData,
-																	msgText: setMsg,
-																	showMsg: setMsgOn,
-																	showPopup: setPopupOn,
-																	lang: lang,
-																});
-																setSelectItem({save:{},game:{},select:'',selectTab:'',selectShip:'',buttonType:[]});
-															} else {
-																setMsgOn(true);
-																setMsg(gameData.msg?.sentence?.selectQuantity?.[lang] || "Select Quantity");
-															}
+												<button text="true" className="button_small" onClick={(e) => {
+													if (actionCh.idx === '' || actionCh.idx === undefined) {
+														setMsgOn(true);
+														setMsg(gameData.msg?.sentenceFn?.selectSkillCh?.(lang,gameData.skill?.[201]?.na) || "Select Character");
+														return;
+													}
+													let saveD = JSON.parse(JSON.stringify(saveData));
+													const charData = saveD.ch?.[actionCh.idx];
+													if (charData && charData.actionPoint >= (gameData.actionPoint?.itemSell || 0)) {//행동력 지불
+														if (rangeValue) {
+															charData.actionPoint -= (gameData.actionPoint?.itemSell || 0);
+															util.buttonEvent({
+																event: e,
+																type: 'itemSell',
+																data: {
+																	slotIdx: 0,
+																	gameItem: selectItem.game,
+																	itemSaveSlot:selectItem.select,
+																	type:'material',
+																	num:rangeValue,
+																},
+																saveData: saveData,
+																changeSaveData: changeSaveData,
+																gameData: gameData,
+																msgText: setMsg,
+																showMsg: setMsgOn,
+																showPopup: setPopupOn,
+																lang: lang,
+															});
+															setSelectItem({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 														} else {
 															setMsgOn(true);
-															setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1[lang]) || "Not enough Action Point");
+															setMsg(gameData.msg?.sentence?.selectQuantity?.[lang] || "Select Quantity");
 														}
-													}} data-buttontype="itemSell">{gameData.msg?.button?.sell?.[lang] || "Sell"}</button>
-												</div>
+													} else {
+														setMsgOn(true);
+														setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1[lang]) || "Not enough Action Point");
+													}
+												}} data-buttontype="itemSell">{gameData.msg?.button?.sell?.[lang] || "Sell"}</button>
 											)
 										default:
 											break;
 									}
 								})}
-							</li>
-						</ItemContainer>
-					) : (
-						<ItemContainer className={`item_select item_select1 items ${selectTab === 0 ? 'tab1' : 'tab2'}`}></ItemContainer>
-					)}
-				</div>
-				{showCal && <Calculator value={rangeValue} max={item[0][selectItem.select].num} setValue={setRangeValue} showCal={setShowCal}/>}
+								</ItemButton>
+							</>
+						)}
+					</SliderContainer>
+					<ActionPic onClick={() => {
+							setPopupInfo({
+								ch: sData.ch,
+								actionCh: sData.actionCh['tradingPost'].idx,
+								type: 'tradingPost',
+								setMsg: setMsg,
+								setMsgOn: setMsgOn,
+							});
+							setPopupType('selectCh');
+							setPopupOn(true);
+						}}>
+						<MergedPic isAbsolute pic="card" idx={40 + (sData.ch?.[actionCh.idx]?.grade || 0)} />
+						{actionCh.idx === "" && <NoneChText code="t1" color="red" workBreak="keep-all">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
+						<Img imgurl={imgSet.images.transparent800} />
+						<ActionChDisplay type={'tradingPost'} saveData={sData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
+					</ActionPic>
+				</UserContainer>
+				{showCal && <Calculator value={rangeValue} max={item[selectItem.select].num} setValue={setRangeValue} showCal={setShowCal}/>}
 			</Wrap>
 			<PopupContainer>
-        {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
+        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
       </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}

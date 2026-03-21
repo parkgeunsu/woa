@@ -10,10 +10,10 @@ export const prices = {
 	shop:{
 
 	},
-	enhancingCards:{
+	enhancingItem:{
 
 	},
-	enhancingStickers:{
+	enhancingCard:{
 		socketRemove:[
 			{cate:'g',type:'commonBtn',img:'icon100',idx:3,price:500},
 			{cate:'item',type:'etc',img:'itemEtc',idx:28,price:1}],
@@ -54,7 +54,10 @@ export const prices = {
 }
 
 export const actionPoint = {
-	itemBuy:3,
-	itemSell:3,
-	enhancingStickers:5,
+  recoveryTime: 50000,
+	usePoine: {
+		itemBuy: 3,
+		itemSell: 3,
+		enhancingCard: 5,
+	}
 }

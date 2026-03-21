@@ -139,7 +139,7 @@ const Modal = ({
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
-	console.log(payment, gameData.prices.enhancingStickers[payment]);
+	console.log(payment, gameData.prices.enhancingCard[payment]);
 	return (
 		<ModalContainer>
 			<ModalWrap className="transition">
@@ -149,7 +149,7 @@ const Modal = ({
 						{payment && (
 							<>
 								<div className="price_group">
-									<Prices payment={gameData.prices.enhancingStickers[payment]} imgSet={imgSet} saveData={saveData} gameData={gameData}/>
+									<Prices payment={gameData.prices.enhancingCard[payment]} imgSet={imgSet} saveData={saveData} gameData={gameData}/>
 								</div>
 							</>
 						)}

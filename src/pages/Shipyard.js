@@ -177,7 +177,6 @@ const shipSize = (shipIdx) => {
 	}
 }
 const Shipyard = ({
-	cityIdx,
 	saveData,
 	changeSaveData,
 }) => {
@@ -209,6 +208,7 @@ const Shipyard = ({
 	const canColorRef = useRef(null);
 	const colorChip = useRef(null);
 	const [item, setItem] = useState([[],[],[],[]]);
+	const stayIdx = React.useMemo(() => util.getRegionToIdx(saveData?.info?.stay), [saveData]);
 	const [shipInfo, setShipInfo] = useState({name:'',price:0,durability:0,loadage:0,knot:0,space:0});
 	const [shipInfoOn, setShipInfoOn] = useState(false);
 	const [selectShip, setSelectShip] = useState({shipIdx:'',wood:'',figure:'',anchor:'',sail0:'',sail1:'',sail2:'',sail0Color:'#fff',sail1Color:'#fff',sail2Color:'#fff',cannon0:'',cannon1:'',cannon2:''});
@@ -225,7 +225,7 @@ const Shipyard = ({
 	useEffect(() => {
 		if (Object.keys(saveData || {}).length !== 0) {
 			possessedShip.current = new Array(Math.max(0, (saveData.ship?.length || 1) - 1)).fill('');
-			const cityData = saveData.city?.[cityIdx];
+			const cityData = saveData.city?.[stayIdx];
 			if (cityData?.shipyard) {
 				const items = [
 					[...(cityData.shipyard.blueprint || [])],
@@ -263,7 +263,7 @@ const Shipyard = ({
 		}
 	}, [saveData]);
 	useEffect(() => {
-	}, [cityIdx])
+	}, [])
   return (
 		<>
 			<Wrap>

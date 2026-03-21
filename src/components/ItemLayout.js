@@ -1,3 +1,4 @@
+import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import { ItemPic } from 'components/ImagePic';
 import styled from 'styled-components';
@@ -305,14 +306,12 @@ const HoleSlot = styled.span`
     rgba(0, 0, 0, 0.7);
   `}
 `;
-const DisplayText = styled.span`
+const DisplayText = styled(Text)`
   display: block;
   position: absolute;
   top: 2%;
   width: 100%;
-  font-size: 0.875rem;
-  color: #fff;
-  font-weight: 600;
+  background: rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   text-align: center;
   pointer-events: none;
@@ -351,7 +350,7 @@ const ItemLayout = ({
     {...onClick && {onClick: onClick}}
     selected={selectColor}>
     <ItemPic type={icon.type} pic={icon.pic} idx={icon.idx} mergeColor={icon.mergeColor} isAbsolute>
-      {text && <DisplayText>{text}</DisplayText>}
+      {text && <DisplayText code="t1" color="main">{text}</DisplayText>}
     </ItemPic>
     {itemsHole && <Hole alignItems="flex-end" justifyContent="space-between">
       {itemsHole.map((holeData, holeidx) => {

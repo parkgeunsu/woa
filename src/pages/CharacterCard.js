@@ -505,6 +505,41 @@ const CharacterCard = ({
         </CardContainer>
       )
     }
+    if (usedType === 'actionCh') {
+      const starArr = Array.from({length: saveCh?.gradeMax}, () => '');
+      return (chData && 
+        <ChCard size={size} className="ch_detail" {...rest}>
+          {!isZoomCard && <ListNameLv elementType={chData?.element[0] - 6} className="name_lv">
+            <Lv code="t3" color="main">{saveCh?.lv}</Lv>
+            <SubName style={{top: "20%"}} font="point" code="t1" color="main">{chData?.na3[lang]}</SubName>
+            <Name font="point" code="t2" color="main"><strong>{chData?.na1[lang]}</strong>{chData?.na2?.[lang] ? `(${chData?.na2[lang]})` : ''}</Name>
+          </ListNameLv>}
+          <ListCh type="profile" isRound={0} pic={`ch${chData?.display}`} />
+          {!isZoomCard && <ListJobAction>
+            <ListChJob>
+              <IconPic type={saveCh?.gradeUp ? `job${saveCh?.gradeUp}` : 'job'} isAbsolute={true} pic="icon100" idx={saveCh?.job} />
+            </ListChJob>
+            {saveCh?.newActionType.map((data, idx) => {
+              return (
+                <ListChActionType key={'action'+idx} className="action_type">
+                  <IconPic type={saveCh?.gradeUp ? `element${saveCh?.gradeUp}`: 'element'} isAbsolute={true} isThumb={true} pic="icon100" idx={data + 1} />
+                </ListChActionType>
+              )
+            })}
+            {saveCh?.gradeUp > 0 && <GradeUp idx={gameData.ch[saveCh?.idx].animal_type} type={`animalType${saveCh?.gradeUp}`} pic="icon100" />}
+          </ListJobAction>}
+          {!isZoomCard && 
+          <>
+            <ListChElement type="elementBack" pic="card" idx={chData?.element[0] - 6 + (saveCh?.lv > 49 ? 20 : 0)} />
+            <ListChStar>
+              {starArr.map((star, idx) => {
+                return <Star idx={saveCh?.grade >= idx + 1 ? idx + 1 : 0} type={saveCh?.gradeUp ? `star${saveCh?.gradeUp}` : 'star'} pic="icon100" key={`start${idx}`} />;
+              })}
+            </ListChStar>
+          </>}
+        </ChCard>
+      )
+    }
     if (slotIdx !== '') {
       const starArr = Array.from({length: saveCh?.gradeMax}, () => '');
       return (

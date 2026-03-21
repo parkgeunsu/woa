@@ -11,7 +11,7 @@ const StyledText = styled.div`
   ${({isDynamic}) => isDynamic && `
     white-space: pre-wrap;
   `}
-  word-break: keep-all;
+  word-break: ${({wordBreak}) => wordBreak ? wordBreak : "break-word"};
   ${({theme, borderColor}) => borderColor ? `
     text-shadow: -1px 0 ${theme.color[borderColor]},
     0 1px ${theme.color[borderColor]},
@@ -30,6 +30,7 @@ const Text = ({
   children,
   borderColor,
   isDynamic,
+  wordBreak,
   inline=false,
   ...rest
 }) => {
@@ -37,7 +38,7 @@ const Text = ({
   (color.includes('#') || color.includes('rgb') || color.includes('hsl'));
 
   return (
-    <StyledText font={font} lineHeight={lineHeight} code={code} rgbColor={rgbColor} inline={inline} color={color} borderColor={borderColor} align={align} weight={weight} isDynamic={isDynamic} {...rest}>{children}</StyledText>
+    <StyledText font={font} lineHeight={lineHeight} code={code} rgbColor={rgbColor} wordBreak={wordBreak} inline={inline} color={color} borderColor={borderColor} align={align} weight={weight} isDynamic={isDynamic} {...rest}>{children}</StyledText>
   )
 }
 

@@ -1,7 +1,7 @@
 import { Text } from 'components/Atom';
 import { Button } from 'components/Button';
 import { FlexBox } from 'components/Container';
-import { ChPic, IconPic, ItemPic, MarkPic } from 'components/ImagePic';
+import { ChPic, IconPic, ItemPic, MarkPic, MergedPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import PopupContainer from 'components/PopupContainer';
 import { AppContext } from 'contexts/app-context';
@@ -15,24 +15,147 @@ const StyledIconPic = styled(IconPic)`
   position: absolute;
   z-index: 1;
 `;
-const ChUl = styled.ul`
-  .none_skill {
-    line-height: 1.5;
-    font-size: 1rem;
+const ActionChWrap = styled(FlexBox)`
+  position: relative;
+  margin: auto auto;
+  width: 80%;
+  height: 80%;
+`;
+const ActionCh = styled(FlexBox)`
+  position: relative;
+  margin: 0 0 20px 0;
+  width: 100%;
+  height: calc(50% - 20px);
+`;
+const ChDisplay = styled.div`
+  display: inline-block;
+  position: relative;
+  width: 50%;
+  img {
+    width: 100%;
   }
 `;
+const ChCard = styled(CharacterCard)`
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+`;
+const ChBack = styled(MergedPic)`
+  position: absolute;
+  top: 0;
+`;
+const ChSkillActionPoint = styled(FlexBox)`
+  position: relative;
+  margin: 0 0 10px 0;
+  width: 100%;
+  height: 10%;
+`;
+const ChSkill = styled(FlexBox)`
+`;
+const ChActionPoint = styled(FlexBox)`
+`;
+const ActionSkillIcon = styled.div`
+  margin: 0 5px 0 0;
+  width: 40px;
+  height: 40px;
+`;
+const StateContainer = styled(FlexBox)`
+  margin: 0 0 0 10px;
+  padding: 5px;
+  width: 40%;
+  height: 100%;
+  border-radius: 10px;
+  border: 2px solid var(--color-b);
+  background: rgba(255,255,255,.3);
+  box-sizing: border-box;
+  flex-wrap: wrap;
+`;
+const StateGroup = styled(FlexBox)`
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  height: auto;
+`;
+const StateIcon = styled(IconPic)`
+  width: 25px;
+  height: 25px;
+`;
+const StateInner = styled(FlexBox)`
+  padding: 1px 5px 1px 10px;
+  width: auto;
+  border-radius: 15px;
+  box-sizing: border-box;
+`;
+const StateText = styled(Text)`
+  line-height: 1 !important;
+  letter-spacing: 2px;
+`;
+const TextTotal = styled(Text)`
+  margin: 0 0 0 5px;
+  width: 30px;
+  line-height: 1 !important;
+  white-space: nowrap;
+`;
+const ButtonArea = styled(FlexBox)`
+  position: relative;
+  height: 10%;
+  width: 100%;
+`;
+const ChUl = styled.ul``;
 const ChLi = styled.li`
   display: inline-block;
   position: relative;
   margin: 0 4px 4px 0;
   width: calc(25% - 5px);
-  padding-top: calc(32.5% - 5px);
+  padding-top: calc(25% - 5px);
   border-radius: 10px;
   overflow: hidden;
-  &.select {
-    outline: 2px solid #fff;
-    box-shadow: 0 0 10px #fff, 0 0 20px #fff;
-  }
+  ${({select, theme}) => select && `
+    outline: 2px solid ${theme.color.point2};
+    box-shadow: 0 0 10px ${theme.color.point2}, 0 0 20px ${theme.color.point2};
+  `}
+  ${({hasSkill}) => !hasSkill && `
+    filter: grayscale(1);
+  `}
+  ${({grade}) => {
+    switch(grade) {
+      case 1:
+        return `
+          box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+        `;
+      case 2:
+        return `
+          box-shadow: 0 0 10px #00a90c, 0 0 20px #00a90c;
+        `;
+      case 3:
+        return `
+          box-shadow: 0 0 10px #0090ff, 0 0 20px #0090ff;
+        `;
+      case 4:
+        return `
+          box-shadow: 0 0 10px #a800ff, 0 0 20px #a800ff;
+        `;
+      case 5:
+        return `
+          box-shadow: 0 0 10px #ffcc15, 0 0 20px #ffcc15;
+        `;
+      case 6:
+        return `
+          box-shadow: 0 0 10px #ff2a00, 0 0 20px #ff2a00;
+        `;
+      case 7:
+        return `
+          box-shadow: 0 0 10px #ff8000, 0 0 20px #ff8000;
+        `;
+      default:
+        return ``;
+    }
+  }}
+`;
+const NoneSkill = styled(Text)`
+  margin: 10px 0 0 0;
 `;
 const PopupRelation = styled.ul`
   margin: auto auto;
@@ -158,6 +281,7 @@ const PopupItemContainer = styled.ul`
   background: rgba(0,0,0,.7);
   border: 5px solid transparent;
   border-image: url(${({frameBack}) => frameBack}) 5 round;
+  box-sizing: border-box;
 `;
 const PopupItemList = styled.li`
   display: flex;
@@ -911,7 +1035,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
             <PopupItemEffText code="t2" margin={10} color="main">{`₩${items.price * saveItems.grade}`}</PopupItemEffText>
           </PopupItemPrice>
           {sealed ? (//밀봉
-            <div className="item_button" flex="true">
+            <ButtonArea justifyContent="flex-end">
               <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:25}} onClick={() => {//감정
                 showMsg(true);
                 msgText(gameData.msg.sentence.goInven[lang]);
@@ -970,9 +1094,9 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
                   }, 1800);
                 }
               }} data-buttontype="itemSell" />}
-            </div>
+            </ButtonArea>
           ) : (//개봉
-            <div className="item_button" flex="true">
+            <ButtonArea justifyContent="flex-end">
               <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:20}} onClick={(e) => {//장착
                 util.buttonEvent({
                   event: e,
@@ -999,7 +1123,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
                 msgText(gameData.msg.sentence.goForge[lang]);
                 timeoutRef.current = setTimeout(() => {
                   util.saveHistory({
-                    location: 'enhancingStickers',
+                    location: 'enhancingCard',
                     navigate: navigate,
                     callback: () => {},
                     state: {
@@ -1013,13 +1137,13 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
                     isNavigate: true,
                   });
                 }, 1800);
-              }} data-buttontype="enhancingStickers" />}
+              }} data-buttontype="enhancingCard" />}
               {!isMoveEvent && hasSocket > 0 && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:22}} onClick={(e) => {//소켓
                 showMsg(true);
                 msgText(gameData.msg.sentence.goForge[lang]);
                 timeoutRef.current = setTimeout(() => {
                   util.saveHistory({
-                    location: 'enhancingStickers',
+                    location: 'enhancingCard',
                     navigate: navigate,
                     callback: () => {},
                     state: {
@@ -1073,7 +1197,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
                   }, 1800);
                 }
               }} data-buttontype="itemSell" />}
-            </div>
+            </ButtonArea>
           )}
         </PopupItemList>
       </PopupItemContainer>
@@ -1138,13 +1262,13 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
             <PopupItemEffText code="t2" color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemEffText>
             <PopupItemEffText code="t2" margin={10} color="main">{`₩${items.price}`}</PopupItemEffText>
           </PopupItemPrice>
-          <div className="item_button" flex="true">
+          <ButtonArea justifyContent="flex-end">
             {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:22}} onClick={() => {//소켓
               showMsg(true);
               msgText(gameData.msg.sentence.goForge[lang]);
               timeoutRef.current = setTimeout(() => {
                 util.saveHistory({
-                  location: 'enhancingStickers',
+                  location: 'enhancingCard',
                   navigate: navigate,
                   callback: () => {},
                   state: {
@@ -1202,7 +1326,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
               //   lang: lang,
               // })
             }} data-buttontype="itemSell" />}
-          </div>
+          </ButtonArea>
         </PopupItemList>
       </PopupItemContainer>
     )
@@ -1233,13 +1357,13 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
             <PopupItemEffText code="t2" color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemEffText>
             <PopupItemEffText code="t2" margin={10} color="main">{`₩${items.price}`}</PopupItemEffText>
           </PopupItemPrice>
-          <div className="item_button" flex="true">
+          <ButtonArea justifyContent="flex-end">
             {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:21}} onClick={() => {//강화
               showMsg(true);
               msgText(gameData.msg.sentence.goForge[lang]);
               timeoutRef.current = setTimeout(() => {
                 util.saveHistory({
-                  location: 'enhancingStickers',
+                  location: 'enhancingCard',
                   navigate: navigate,
                   callback: () => {},
                   state: {
@@ -1265,7 +1389,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
               //   showPopup: showPopup,
               //   lang: lang,
               // })
-            }} data-buttontype="enhancingStickers" />}
+            }} data-buttontype="enhancingCard" />}
             {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {//판매
               showMsg(true);
               msgText(gameData.msg.sentence.goTool[lang]);
@@ -1297,7 +1421,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
               //   lang: lang,
               // })
             }} data-buttontype="itemSell" />}
-          </div>
+          </ButtonArea>
         </PopupItemList>
       </PopupItemContainer>
     )
@@ -1311,7 +1435,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
         </PopupItemList>
         <PopupItemList>
           <PopupItem part="14">
-            <ItemPic pic="itemEtc" type="material" idx={items.display} />
+            <ItemPic pic="material" type="material" idx={items.display} />
           </PopupItem>
           <div flex-h="true" style={{flex: 1,}}>
             <PopupItemInfo direction="column" justifyContent="space-between">
@@ -1328,7 +1452,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
             <PopupItemEffText code="t2" color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemEffText>
             <PopupItemEffText code="t2" margin={10} color="main">{`₩${items.price}`}</PopupItemEffText>
           </PopupItemPrice>
-          <div className="item_button" flex="true">
+          <ButtonArea justifyContent="flex-end">
             {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {//판매
               showMsg(true);
               msgText(gameData.msg.sentence.goTrade[lang]);
@@ -1356,7 +1480,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
               //   lang: lang,
               // })
             }} data-buttontype="itemSell" />}
-          </div>
+          </ButtonArea>
         </PopupItemList>
       </PopupItemContainer>
     )
@@ -1387,7 +1511,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
             <PopupItemEffText code="t2" color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemEffText>
             <PopupItemEffText code="t2" margin={10} color="main">{`₩${items.price}`}</PopupItemEffText>
           </PopupItemPrice>
-          <div className="item_button" flex="true">
+          <ButtonArea justifyContent="flex-end">
             <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:26}} onClick={(e) => {//사용
               util.buttonEvent({
                 event: e,
@@ -1433,7 +1557,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
               //   lang: lang,
               // })
             }} data-buttontype="itemSell" />}
-          </div>
+          </ButtonArea>
         </PopupItemList>
       </PopupItemContainer>
     )
@@ -1632,65 +1756,70 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
       possibleCh = 0;
     switch(dataObj.type) {
       case 'tradingPost':
-      case 'shop':
+      case 'equipment':
+      case 'accessory':
       case 'tool':
-        skillIdx = 201;
-        break;
-      case 'shipyard':
-        skillIdx = 202;
+        skillIdx = 15;
         break;
       case 'composite':
-        skillIdx = 206;
+        skillIdx = 20;
         break;
-      case 'enhancingStickers1':
+      case 'enhancingCard':
+        skillIdx = 17;
+        break;
+      case 'EnhancingItem':
         skillIdx = 203;
         break;
-      case 'enhancingStickers2':
-        skillIdx = 207;
-        break;
       case 'recruitment':
-        skillIdx = 208;
+        skillIdx = 22;
+        break;
+      case 'shipyard':
+        skillIdx = 17;
         break;
       default:
         break;
     }
+    const skillLv = dataObj.selectIdx !== "" ? saveData.ch[dataObj.selectIdx].sk.find((skill) => skill.idx === skillIdx)?.lv || 0 : 0;
 		return (
-      <div className="select_character">
-        <div className="select_chInfo">
-          <div className="select_chDisplay">
+      <ActionChWrap direction="column">
+        <ActionCh>
+          <ChDisplay>
             <Img imgurl={imgSet.images.transparent800} />
-            <CharacterCard saveData={saveData} slotIdx={dataObj.selectIdx} />
-          </div>
-          <div className="select_rBox" flex-v="true">
-            {/* <Img imgurl={imgSet.passive[gameData.skill[skillIdx].effAnimation]} /> */}
-            {dataObj.selectIdx !== '' && saveData.ch?.[dataObj.selectIdx] ? <ul className="select_chState">
-              <li>통솔: {saveData.ch[dataObj.selectIdx].rSt0}</li>
-              <li>체력: {saveData.ch[dataObj.selectIdx].rSt1}</li>
-              <li>완력: {saveData.ch[dataObj.selectIdx].rSt2}</li>
-              <li>민첩: {saveData.ch[dataObj.selectIdx].rSt3}</li>
-              <li>지력: {saveData.ch[dataObj.selectIdx].rSt4}</li>
-              <li>정신: {saveData.ch[dataObj.selectIdx].rSt5}</li>
-              <li>매력: {saveData.ch[dataObj.selectIdx].rSt6}</li>
-              <li>행운: {saveData.ch[dataObj.selectIdx].bSt9}</li>
-            </ul> : 
-            <ul className="select_chState">
-              <li>통솔: 0</li>
-              <li>체력: 0</li>
-              <li>완력: 0</li>
-              <li>민첩: 0</li>
-              <li>지력: 0</li>
-              <li>정신: 0</li>
-              <li>매력: 0</li>
-              <li>행운: 0</li>
-            </ul>}
-          </div>
-        </div>
+            <ChCard usedType="actionCh" saveData={saveData} slotIdx={dataObj.selectIdx} />
+            <ChBack type="cardBack" pic="card" idx={0} />
+          </ChDisplay>
+          <StateContainer direction="column" justifyContent="space-around" alignItems="center">
+            {gameData.stateName.map((data, idx) => {
+              const { stateColor } = util.getPercentColor(gameData.stateMax[idx], dataObj.selectIdx !== "" ? chData[dataObj.selectIdx]['st' + idx] : 0);
+              return (
+                <StateGroup key={`chst${idx}`} justifyContent="flex-start">
+                  <StateIcon type="state" pic="icon100" idx={idx} />
+                  <StateInner>
+                    <StateText code="t2" color="main">{gameData.msg.state[data][lang]}</StateText>
+                    <TextTotal code="t4" weight="600" color={stateColor}>
+                      {dataObj.selectIdx !== "" ? chData[dataObj.selectIdx]['st' + idx] : 0}
+                    </TextTotal>
+                  </StateInner>
+                </StateGroup>
+              )
+            })}
+          </StateContainer>
+        </ActionCh>
+        {dataObj.selectIdx !== "" && <ChSkillActionPoint dirction="row" justifyContent="space-between">
+          <ChSkill justifyContent="flex-start">
+            <ActionSkillIcon><IconPic type="skill" pic="skill" idx={skillIdx} /></ActionSkillIcon>
+            <Text code="t4" color="main" weight="600">{skillLv > 0 && `${gameData.skill[skillIdx].na[lang]} Lv.${skillLv} `}</Text>
+          </ChSkill>
+          <ChActionPoint justifyContent="flex-end">
+            <Text code="t4" color="main" weight="600">{`${saveData.ch[dataObj.selectIdx].actionPoint} / ${saveData.ch[dataObj.selectIdx].actionMax}`}</Text>
+          </ChActionPoint>
+        </ChSkillActionPoint>}
         <ChList type="action_list">
           <ChUl>
           {chData.map((data, idx) => {
             const saveCh = saveData.ch[idx];
             let hasSkill = false;
-            for (const [idx, skillData] of saveCh.hasSkill.entries()) {
+            for (const [idx, skillData] of saveCh.sk.entries()) {
               if (skillData.idx === skillIdx) {
                 hasSkill = true;
                 break;
@@ -1699,20 +1828,25 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
             //const chData = gameData.ch[saveCh.idx];
             if (hasSkill) {
               possibleCh ++;
-              return (
-                <ChLi className={`g${saveCh.grade} ${dataObj.selectIdx === idx ? 'select' : ''}`} key={idx} onClick={(e) => {
-                  e.stopPropagation();
-                  dataObj.setSelectIdx(idx);
-                }}>
-                  <CharacterCard usedType="popup" saveData={saveData} saveCharacter={saveCh} />
-                </ChLi>
-              )
             }
+            return (
+              <ChLi select={dataObj.selectIdx === idx} hasSkill={hasSkill} grade={saveCh.grade} key={`chLi_${idx}`} onClick={(e) => {
+                e.stopPropagation();
+                if (hasSkill) {
+                  dataObj.setSelectIdx(idx);
+                } else {
+                  dataObj.setMsg(gameData.msg.sentenceFn.selectSkillCh(lang, gameData.skill[skillIdx].na));
+                  dataObj.setMsgOn(true);
+                }
+              }}>
+                <CharacterCard usedType="thumb" saveData={saveData} saveCharacter={saveCh} />
+              </ChLi>
+            )
           })}
           </ChUl>
-          {possibleCh === 0 && <div className="none_skill">{gameData.msg.sentenceFn.noneHaveSkill(lang, gameData.skill[skillIdx].na)}</div>}
+          {possibleCh === 0 && <NoneSkill code="t2" color="red" weight="600">{gameData.msg.sentenceFn.noneHaveSkill(lang, gameData.skill[skillIdx].na)}</NoneSkill>}
         </ChList>
-        <div className="item_button" flex="true">
+        <ButtonArea justifyContent="flex-end">
           <button className="button_big" text="true" onClick={(e) => {
             e.stopPropagation();
             e.stopPropagation();
@@ -1723,8 +1857,8 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
             }
             showPopup(false);
           }} data-buttontype="itemUse">{gameData.msg.button.confirm[lang]}</button>
-        </div>
-      </div>
+        </ButtonArea>
+      </ActionChWrap>
 		);
   }
 }
@@ -1752,7 +1886,7 @@ const Popup = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const [selectIdx, setSelectIdx] = useState(0);
+  const [selectIdx, setSelectIdx] = useState(dataObj.actionCh);
   const [content, setContent] = useState();
   const timeoutRef = useRef(null);
   useEffect(() => {
@@ -1779,18 +1913,13 @@ const Popup = ({
     }));
   }, [saveData, dataObj, selectIdx]);
   useEffect(() => {
-    if (saveData && Object.keys(saveData).length !== 0) {
-      if (type === 'selectCh') {
-        setSelectIdx(dataObj.actionCh);
-      }
-    }
     // if (dataObj?.saveItemData?.sealed) {
     //   setContent(typeAsContent(type, {
     //     ...dataObj,
     //     saveItemData: saveData.items[dataObj.type][dataObj.itemSaveSlot],
     //   }, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, showPopup, lang));
     // }
-  }, [saveData]);
+  }, []);
 	return (
     <>
       <PopupContainer>

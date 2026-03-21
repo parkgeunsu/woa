@@ -294,7 +294,7 @@ export const guide = {
       ],
     }
   },
-  enhancingCards:{
+  enhancingItem:{
     title:{
 			ko:'시나리오',
 			en:'Scenarios',
@@ -324,7 +324,7 @@ export const guide = {
       ],
     }
   },
-  enhancingStickers:{//Combination
+  enhancingCard:{//Combination
     title:{
 			ko:'시나리오',
 			en:'Scenarios',

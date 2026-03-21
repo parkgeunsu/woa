@@ -1,7 +1,9 @@
-import { ChPic, IconPic, MergedPic } from 'components/ImagePic';
+import { Text } from 'components/Atom';
+import { FlexBox } from 'components/Container';
+import { IconPic, MergedPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
+import CharacterCard from 'pages/CharacterCard';
 import { useState } from 'react';
-import { Range, getTrackBackground } from 'react-range';
 import styled from 'styled-components';
 
 
@@ -74,47 +76,65 @@ export const Prices = ({
     })
   );
 }
-const StyledRangeTrack = styled.div`
+const StyledRangeTrack = styled.input`
 	position:relative;
-	height:20px;
-	width:100%;
-	border-radius:10px;
-  border:2px solid #000;
-  box-sizing:border-box;
-	background:${props => getTrackBackground({
-		values: props.value,
-		colors: ['#ffcc15', 'rgba(0,0,0,.5)', 'rgba(0,0,0,.1)'],
-		min: props.min,
-		max: props.max,
-	})};
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+  border: 2px solid #ffcc15;
+  margin: 0;
+  padding: 0;
+	height: 10px;
+	width: 100%;
+	border-radius: 10px;
+  box-sizing: border-box;
+	background: linear-gradient(to left, #ffcc15, rgba(0,0,0,.5), rgba(0,0,0,.1));
+  touch-action: none;
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ffcc15;
+    cursor: pointer;
+    box-shadow: 0 0 2px #000, 0 0 5px #000;
+  }
+  &::-moz-range-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ffcc15;
+    cursor: pointer;
+    box-shadow: 0 0 2px #000, 0 0 5px #000;
+    border: none;
+  }
 `;
-const StyledRangeThumb = styled.div`
-	position:absolute;
-	top:0;
-	width:20px;
-	height:20px;
-	border-radius:20px;
-	box-shadow:0 0 2px #000,0 0 5px #000;
-	background:#ffcc15;
-	outline:none;
+const TextMinMax = styled(FlexBox)`
+  margin: 0 0 5px 0;
+  width: 100%;
 `;
-const TextMinMax = styled.div`
-  display:flex;
-  margin:0 0 5px 0;
-  font-size:0.75rem;
-  color:#ddd;
-  justify-content:space-between;
+const TextValueContainer = styled(FlexBox)`
+  margin: 15px 0 0 0;
+  width: 100%;
 `;
 const TextValue = styled.div`
-  display:inline-block;
-  padding:5px;
-  background:rgba(0,0,0,.3);
-  border-radius:5px;
-  font-size:1rem;
-  font-weight:600;
-  text-align:right;
-  &:first-of-type{width:40%;}
-  &:last-of-type{margin:0 0 0 5px;width:60%;}
+  display: inline-block;
+  padding: 5px;
+  background: rgba(0,0,0,.3);
+  border: 2px solid #ffcc15;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: right;
+  &:first-of-type {
+    width: 40%;
+  }
+  &:last-of-type {
+    margin: 0 0 0 5px;
+    width: 60%;
+  }
 `;
 export const RangeSlider = ({
   min,
@@ -125,34 +145,21 @@ export const RangeSlider = ({
 	setValue,
   showCal,
 }) => {
-  const max_ = typeof max === 'number' ? max : 999999;
   return (
     <>
-      <TextMinMax><span>{min}</span><span>{util.comma(max_)}</span></TextMinMax>
-      <Range
-        draggableTrack
-        step={step}
-        min={min}
-        max={max_}
-        values={value}
-        onChange={(value) => {
-          setValue(value);
-        }}
-        renderTrack={({props, children}) => (
-          <StyledRangeTrack {...props} min={min} max={max_} value={value}>
-            {children}
-          </StyledRangeTrack>
-        )}
-        renderThumb={({props}) => (
-          <StyledRangeThumb {...props} />
-        )}
-      />
-      <div flex="true" style={{margin:'10px 0 0 0'}}>
+      <TextMinMax justifyContent="space-between">
+        <Text code="t2" color="main">{min}</Text>
+        <Text code="t2" color="main">{util.comma(max)}</Text>
+      </TextMinMax>
+      <StyledRangeTrack type="range" min={min} max={max} step={step} value={value} onChange={(e) => {
+        setValue(e.target.value);
+      }} />
+      <TextValueContainer justifyContent="space-between">
         <TextValue onClick={() => {
           showCal(true);
         }}>{util.comma(String(value))}</TextValue>
         <TextValue>{util.comma(String(pirce * value))}</TextValue>
-      </div>
+      </TextValueContainer>
     </>
 	)
 }
@@ -239,68 +246,46 @@ export const Calculator = ({
   );
 }
 
-// .ch_select_area .list_job_actiontype{position:absolute;left:3px;top:3px;width:20%;font-size:0;z-index:2;}
-// .ch_select_area .list_job{display:inline-block;width:100%;padding-top:100%;background-repeat:no-repeat;background-position:center center;z-index:5;}
-// .ch_select_area .list_action_type{display:inline-block;width:100%;padding-top:100%;background-repeat:no-repeat;background-position:center center;z-index:5;}
-// .ch_select_area .list_actionPoint{position:absolute;left:50%;bottom:5px;transform:translate(-50%, 0);white-space:nowrap;text-shadow:1px 1px 1px #000;font-size:1rem;}
-
-const ListCh = styled(ChPic)`
-  position:absolute;
-  top:0;
-  z-index:1;
-`;
-const ListJob = styled.span`
-  background-image:url(${({jobIcon}) => jobIcon});background-size:100%;
-`;
-const ListActionType = styled.span`
-  background-image:url(${({actionType}) => actionType});background-size:100%;
-`;
-const ListRing = styled(MergedPic)`
-  position:absolute;
-  top:0;
-  background-position:center 55%;
-  z-index:1;
-  ${'' /* background-size:85%; */}
-`;
-const ListElement = styled(MergedPic)`
+const ChCard = styled(CharacterCard)`
   position: absolute;
-  bottom: 20%;
-`;
-const ListFrame = styled(MergedPic)`
-  position: absolute;
-  top: 0;
-`;
+  inset: 5%;
+  width: 90%;
+  height: 90%;
+`
 export const ActionChDisplay = ({
   type,
   saveData,
   gameData,
   actionCh,
-  imgSet,
 }) => {
   let skillIdx = '',
     hasSkill = false;
   switch(type) {
     case 'tradingPost':
-    case 'shop':
+    case 'equipment':
+    case 'accessory':
     case 'tool':
-      skillIdx = 201;
-      break;
-    case 'shipyard':
-      skillIdx = 202;
+      skillIdx = 15;
       break;
     case 'composite':
-      skillIdx = 205;
+      skillIdx = 20;
       break;
-    case 'enhancingStickers':
+    case 'enhancingCard':
+      skillIdx = 17;
+      break;
+    case 'EnhancingItem':
       skillIdx = 203;
       break;
     case 'recruitment':
-      skillIdx = 208;
+      skillIdx = 22;
+      break;
+    case 'shipyard':
+      skillIdx = 17;
       break;
     default:
       break;
   }
-  if (actionCh.idx !== '') {
+  if (actionCh.idx !== '' && actionCh.idx !== undefined) {
     for (const [idx, skillData] of saveData.ch[actionCh.idx].hasSkill.entries()) {
       if (skillData.idx === skillIdx) {
         hasSkill = true;
@@ -313,20 +298,9 @@ export const ActionChDisplay = ({
   if (hasSkill) {
     const displayIdx = gameData.ch[saveData.ch[actionCh.idx].idx].display;
     return (
-      <div className={`action_ch g${saveData.ch[actionCh.idx].grade}`}>
-        <ListRing type="cardBack" pic="card" idx={0} />
-        <ListElement type="elementBack" pic="card" idx={gameData.ch[saveData.ch[actionCh.idx].idx].element} />
-        <ListCh className="transition" pic={`ch${util.chIdxToGroup(displayIdx)}`} idx={displayIdx} />
-        <div className="list_job_actiontype">
-          <ListJob jobIcon={imgSet.job[saveData.ch[actionCh.idx].job]} className="list_job"/>
-          {saveData.ch[actionCh.idx].newActionType.map((data, idx) => {
-            return (
-              <ListActionType key={'action'+idx} actionType={imgSet.element[data + 1]} className="list_action_type"/>
-            )
-          })}
-        </div>
-        <ListFrame type="cardBack" pic="card" idx={1} />
-        <div className="list_actionPoint">{`${saveData.ch[actionCh.idx].actionPoint} / ${saveData.ch[actionCh.idx].actionMax}`}</div>
+      <div>
+				<MergedPic isAbsolute pic="card" idx={40} />
+        <ChCard usedType="actionCh" saveData={saveData} slotIdx={actionCh.idx} />
       </div>
     )
   } else {

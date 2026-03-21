@@ -1,6 +1,5 @@
 import { animals } from 'gamedata/animals';
 import { city } from 'gamedata/city';
-import { colorSvg } from 'gamedata/colorSvg';
 import { country } from 'gamedata/country';
 import { drop } from 'gamedata/drop';
 import { events } from 'gamedata/events';
@@ -16,8 +15,8 @@ import { actionPoint, prices } from 'gamedata/prices';
 import { recipe } from 'gamedata/recipe';
 import { relation } from 'gamedata/relation';
 import { scenario } from 'gamedata/scenario';
-import { cannonSvg, figureSvg, sailSvg, shipSvg } from 'gamedata/shipSvg';
 import { ships } from 'gamedata/ships';
+import { shop } from 'gamedata/shop';
 import { mutateSkill, skill } from 'gamedata/skill';
 import { timeDelay } from 'gamedata/timeDelay';
 //etc 0, hole 100, colorance 200, upgrade 300, material 400
@@ -86,6 +85,8 @@ export const gameData = {
     job: job,//직업
     items: items,
     ships: ships,
+    shop: shop,
+    shopName: ['home','equipment','tool','accessory','composite','training','tradingPost','blacksmith','church','temple','mystery','tavern','shipyard','port','townHall','guild'],
     //grade (0하급poor, 1일반normal, 2매직magic, 3레어rare, 4에픽epic, 5유니크unique, 6레전드legend)
     itemGrade: {//'#999'
       txt_e: ['','Poor','Normal','Magic','Rare','Epic','Unique','Legend'],
@@ -121,11 +122,6 @@ export const gameData = {
     mutateSkill: mutateSkill,
     relation: relation,
     scenario: scenario,
-    colorSvg: colorSvg,
-    shipSvg: shipSvg,
-    sailSvg: sailSvg,
-    cannonSvg: cannonSvg,
-    figureSvg: figureSvg,
     prices: prices,
     actionPoint: actionPoint,
     guide: guide,

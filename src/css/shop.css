@@ -1,17 +1,4 @@
 @charset "utf-8";
-.shop_top.trading{height:calc(30% - 10px);}
-.shop_middle{padding:0 20px;flex:unset;height:calc(30% - 10px);border:5px double #00a90c;border-left:none;border-right:none;box-sizing:border-box;white-space:nowrap;background:rgb(174, 216, 255);}
-.shop_middle .ship{display:inline-block;position:relative;width:auto;height:100%;box-sizing:border-box;}
-.shop_middle .ship.select{background:#f60;}
-.shop_middle .ship:last-of-type{margin:0;}
-.shop_middle .ship .ship_storage{position:absolute;left:5px;bottom:5px;z-index:3;font-weight:600;text-shadow:1px 1px 0 #000;}
-.shop_bottom.trading{height:calc(40% - 10px);margin:10px 0 0 0;}
-.shop_bottom.trading .item_select{width:100%;}
-.shop_bottom.trading .tab1{border:5px double #ffac2f;}
-.shop_bottom.trading .tab2{border:5px double #e14040;}
-.shop_bottom.trading .item_fix{padding:5px;border-bottom:5px double #ffac2f;}
-.shop_bottom.trading .item_footer{padding:10px 20px 0;}
-.shop_bottom.trading .item_footer .item_button{margin:5px 0 0 0;}
 
 /*character*/
 .stone_w:after{background:radial-gradient(farthest-side at 35% 35%, #fff, #000);}

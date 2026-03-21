@@ -680,7 +680,7 @@ Biography: Guo Jia was a strategist of the late Eastern Han period. His courtesy
     },
     "display":21,"style":99,"animal_type":6,"face_d":"left","element":[9],"grade":4,"maxGrade":7,"job":[13],"cost":15,
     "st0":120,"st1":170,"st2":138,"st3":69,"st4":190,"st5":75,"st6":95,
-    "sk":[{"idx":1},{"idx":1},{"idx":2}],
+    "sk":[{"idx":15,"lv":1}],
     "relation":[],
     "txt": {
       ko:`이순신(李舜臣)

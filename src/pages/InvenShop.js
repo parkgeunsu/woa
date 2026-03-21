@@ -2,11 +2,12 @@ import { Text } from 'components/Atom';
 import { Button } from 'components/Button';
 import { ActionChDisplay } from 'components/Components';
 import { FlexBox } from 'components/Container';
-import { ItemPic, MarkPic } from 'components/ImagePic';
+import { ItemPic, MarkPic, MergedPic } from 'components/ImagePic';
 import ItemLayout from 'components/ItemLayout';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
+import Npc from 'components/Npc';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import TabMenu from 'components/TabMenu';
@@ -40,12 +41,13 @@ const ShopTop = styled.div`
 `;
 const ShopScrollContent = styled.div`
 	position: relative;
-	padding: 0 20px;
-	flex-wrap: wrap;
-	width: 100%;
-	height: calc(100% - 90px);
-	border-radius: 0 10px 10px 10px;
+	margin: 0 auto;
+	width: calc(100% - 40px);
+	height: 100%;
 	box-sizing: border-box;
+  background: rgba(0,0,0,.7);
+  border: 5px solid transparent;
+  border-image: url(${({frameBack}) => frameBack}) 5 round;
 `;
 const ShopPopup = styled.div`
 	position: absolute;
@@ -53,100 +55,6 @@ const ShopPopup = styled.div`
 	right: 20px;
 	height: calc(100% - 50px);
 	z-index: 3;
-`;
-const ActionCh = styled.div`
-	position: absolute;
-  bottom: 0;
-	right: 0;
-  width: 100px;
-  padding-top: 148px;
-  border: 5px double #00a90c;
-  box-sizing: border-box;
-  white-space: nowrap;
-  background: rgb(0, 0, 0, 0.5);
-  border-radius: 15px;
-  z-index: 3;
-	&.g1 {
-		box-shadow: 0 0 10px #fff, 0 0 20px #fff;
-	}
-	&.g2 {
-		box-shadow: 0 0 10px #00a90c, 0 0 20px #00a90c;
-	}
-	&.g3 {
-		box-shadow: 0 0 10px #0090ff, 0 0 20px #0090ff;
-	}
-	&.g4 {
-		box-shadow: 0 0 10px #a800ff, 0 0 20px #a800ff;
-	}
-	&.g5 {
-		box-shadow: 0 0 10px #ffcc15, 0 0 20px #ffcc15;
-	}
-	&.g6 {
-		box-shadow: 0 0 10px #ff2a00, 0 0 20px #ff2a00;
-	}
-	&.g7 {
-		box-shadow: 0 0 10px #ff8000, 0 0 20px #ff8000;
-	}
-	.action_ch {
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: 0;
-		bottom: 0;
-		border-radius: 10px;
-		overflow: hidden;
-		span {
-			display: block;
-		}
-		&.g1 {
-			background-color: #fff;
-			&.on {
-				box-shadow: 0 0 10px #fff, 0 0 6px #fff, 0 0 3px #fff;
-			}
-		}
-		&.g2 {
-			background-color: #00a90c;
-			&.on {
-				box-shadow: 0 0 10px #00a90c, 0 0 6px #00a90c, 0 0 3px #00a90c;
-			}
-		}
-		&.g3 {
-			background-color: #0090ff;
-			&.on {
-				box-shadow: 0 0 10px #0090ff, 0 0 6px #0090ff, 0 0 3px #0090ff;
-			}
-		}
-		&.g4 {
-			background-color: #a800ff;
-			&.on {
-				box-shadow: 0 0 10px #a800ff, 0 0 6px #a800ff, 0 0 3px #a800ff;
-			}
-		}
-		&.g5 {
-			background-color: #ffcc15;
-			&.on {
-				box-shadow: 0 0 10px #ffcc15, 0 0 6px #ffcc15, 0 0 3px #ffcc15;
-			}
-		}
-		&.g6 {
-			background-color: #ff2a00;
-			&.on {
-				box-shadow: 0 0 10px #ff2a00, 0 0 6px #ff2a00, 0 0 3px #ff2a00;
-			}
-		}
-		&.g7 {
-			background-color: #ff8000;
-			&.on {
-				box-shadow: 0 0 10px #ff8000, 0 0 6px #ff8000, 0 0 3px #ff8000;
-			}
-		}
-		&.on {
-			transform: scale(1.2) translate(0, 6%);
-			z-index: 1;
-		}
-		/* &.none:before{display:block;position:absolute;left:50%;top:50%;content:'';width:5px;height:50%;background:#ff2a00;transform:translate(-50%,-50%) rotate(-30deg);}
-		&.none:after{display:block;position:absolute;left:50%;top:50%;content:'';width:5px;height:50%;background:#ff2a00;transform:translate(-50%,-50%) rotate(30deg);} */
-	}
 `;
 const ItemContainer = styled.ul`
 	display: flex;
@@ -156,6 +64,7 @@ const ItemContainer = styled.ul`
 	height: 100%;
 	background: rgba(0,0,0,.7);
   border-image: url(${({frameBack}) => frameBack}) 5 round;
+	box-sizing: border-box;
 	& > div {
 		width: 100%;
 		box-sizing: border-box;
@@ -375,26 +284,27 @@ const ItemFooter = styled.li`
 `;
 const  SelectItemGroup = styled.div`
 	position: absolute;
-	left: 20px;
-	right: 20px;
-	bottom: 15px;
+	left: 22px;
+	top: 0;
 	ul {
 		display: flex;
 	}
 `;
 const  SelectItemList = styled.li`
 	position: relative;
-	margin: 0 10px 0 0;
-	width: 30px;
-	height: 30px;
-	border-radius: 50%;
+	margin: -3px 0 0 0;
+	width: 26px;
+	height: 26px;
+	border-radius: 0 0 13px 13px;
 	box-sizing: border-box;
-	${({select, color}) => {
+	background: ${({color}) => color};
+	${({select}) => {
 		return select ? `
-			outline: 3px solid ${color};
-		` : `
-			background: ${color};
-		`;
+			height: 36px;
+			& > div {
+				top: 10px;	
+			}
+		` : ``;
 	}}
 	${({sealed}) => {
       if (sealed) {
@@ -416,10 +326,8 @@ const  SelectItemList = styled.li`
 `;
 const ShopItem = styled.div`
 	position: absolute;
-	left: 20px;
-	right: 20px;
-	top: 0;
-	bottom: 0;
+	inset: 0;
+	overflow-y: auto;
 	${({selected}) => selected ? `
 		pointer-events: unset;
 		opacity: 1;
@@ -483,10 +391,8 @@ const ShopFooter = ({
 	setSelectItem,
 	selectSlot,
 	shopType,
-	actionCh,
 	saveData,
 	changeSaveData,
-	cityIdx,
 	typeList,
 	selectTab,
 	setPopupType,
@@ -559,7 +465,7 @@ const ShopFooter = ({
 					favorite={selectedItem.saveItemData?.favorite}
 					sealed={selectedItem.saveItemData?.sealed}
 					onClick={() => {
-						if (shopType === 'shop') {
+						if (shopType === 'equipment') {
 							handlePopup({
 								saveItemData: selectedItem.saveItemData,
 								itemType: (selectedItem.selectTab < 3 ? 'equip' : 'hequip'),
@@ -595,7 +501,6 @@ const ShopFooter = ({
 									<ItemHoleBack fixed={holePic !== 0} onClick={(e) => {
 										e.stopPropagation();
 										setTooltipPos(e.target.getBoundingClientRect());
-                    const itemName = gameData.items.hole[holeData.idx].na[lang];
                     setTooltip(holeEffectText(gameData, holeData, lang));
                     setTooltipOn(true);
 									}}>
@@ -773,9 +678,10 @@ const ShopFooter = ({
 					gameItem={gameItem}
 					icon={{
 						type: selectedItem.itemCate,
-						pic: "itemEtc",
+						pic: selectedItem.gameItem?.imgCate === "itemMaterial" ? "material" : "itemEtc",
 						idx: selectedItem.gameItem.display
 					}}
+					text={selectedItem.saveItemData.num}
 					size={80}
 					grade={selectedItem.saveItemData.grade || selectedItem.gameItem.grade}
 					sealed={selectedItem.saveItemData?.sealed}
@@ -827,7 +733,7 @@ const ShopFooter = ({
 					case 'buy':
 						return (
 							<StyledButton key={`button${idx}`} type="icon" icon={{type:'commonBtn', pic:'icon100', idx:24}} onClick={(e) => {
-								if (shopType === 'shop') {
+								if (shopType === 'equipment') {
 									if (selectedItem.gameItem?.part <= 3) { //무기이면
 										// if (actionCh.idx === '') {
 										// 	setMsgOn(true);
@@ -837,7 +743,7 @@ const ShopFooter = ({
 										let saveD = JSON.parse(JSON.stringify(saveData));
 										// if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemBuy) {//행동력 지불
 										// 	saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemBuy;
-										//	saveD.city[cityIdx].shop[typeList[selectedItem.selectTab].na].splice(selectedItem.itemSaveSlot, 1);
+										//	saveD.city[stayIdx].shop[typeList[selectedItem.selectTab].na].splice(selectedItem.itemSaveSlot, 1);
 										util.buttonEvent({
 											event: e,
 											type: 'itemBuy',
@@ -898,8 +804,8 @@ const ShopFooter = ({
 										setMsgOn(true);
 										setMsg(gameData.msg.sentence.goShop[lang]);
 										timeoutRef.current = setTimeout(() => {
-											util.saveHistory({
-												location: 'shop',
+											util.save({
+												location: 'equipment',
 												navigate: navigate,
 												callback: () => {},
 												state: {
@@ -924,7 +830,7 @@ const ShopFooter = ({
 										let saveD = JSON.parse(JSON.stringify(saveData));
 										// if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemBuy) {//행동력 지불
 										// 	saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemBuy;
-										//	saveD.city[cityIdx].shop[typeList[selectedItem.selectTab].na].splice(selectedItem.itemSaveSlot, 1);
+										//	saveD.city[stayIdx].shop[typeList[selectedItem.selectTab].na].splice(selectedItem.itemSaveSlot, 1);
 											util.buttonEvent({
 												event: e,
 												type: 'itemBuy',
@@ -967,7 +873,7 @@ const ShopFooter = ({
 					case 'sell':
 						return (
 							<StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} key={`button${idx}`} onClick={(e) => {
-								if (shopType === 'shop') {
+								if (shopType === 'equipment') {
 									if (typeof selectedItem.gameItem?.part === 'number') { //장비면
 										if (selectedItem.gameItem?.part <= 3) { //투구,갑옷,무기이면
 											// if (actionCh.idx === '') {
@@ -1002,7 +908,7 @@ const ShopFooter = ({
 														itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5,
 														nextItem = itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx] : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx];
 													util.saveHistory({
-														location: 'shop',
+														location: 'equipment',
 														navigate: navigate,
 														callback: () => {},
 														state: {
@@ -1085,7 +991,7 @@ const ShopFooter = ({
 											setMsg(gameData.msg.sentence.goShop[lang]);
 											timeoutRef.current = setTimeout(() => {
 												util.saveHistory({
-													location: 'shop',
+													location: 'tool',
 													navigate: navigate,
 													callback: () => {},
 													state: {
@@ -1220,7 +1126,7 @@ const ShopFooter = ({
 											setMsg(gameData.msg.sentence.goShop[lang]);
 											timeoutRef.current = setTimeout(() => {
 												util.saveHistory({
-													location: 'shop',
+													location: 'inven',
 													navigate: navigate,
 													callback: () => {},
 													state: {
@@ -1312,7 +1218,7 @@ const ShopFooter = ({
 								setMsg(gameData.msg.sentence.goForge[lang]);
 								timeoutRef.current = setTimeout(() => {
 									util.saveHistory({
-										location: 'enhancingStickers',
+										location: 'enhancingCard',
 										navigate: navigate,
 										callback: () => {},
 										state: {
@@ -1335,7 +1241,7 @@ const ShopFooter = ({
 								setMsg(gameData.msg.sentence.goForge[lang]);
 								timeoutRef.current = setTimeout(() => {
 									util.saveHistory({
-										location: 'enhancingStickers',
+										location: 'enhancingCard',
 										navigate: navigate,
 										callback: () => {},
 										state: {
@@ -1408,7 +1314,7 @@ const ShopFooter = ({
 													gameItem: selectedItem.gameItem,
 													itemSaveSlot: selectedItem.itemSaveSlot,
 													selectTab: typeof selectedItem.gameItem.part === 'number' ? 0 : 1,
-													type: shopType === 'shop' ? 'equip' : typeList[selectTab].itemCate,
+													type: shopType === 'equipment' ? 'equip' : typeList[selectTab].itemCate,
 													selectSlot: selectSlot,
 												}
 											},
@@ -1431,7 +1337,7 @@ const ShopFooter = ({
 										setSelectItem: setSelectItem,
 										gameItem: selectedItem.gameItem,
 										itemSaveSlot: selectedItem.itemSaveSlot,
-										type: shopType === "shop" ? "equip" : typeList[selectTab].itemCate,
+										type: shopType === "equipment" ? "equip" : typeList[selectTab].itemCate,
 									},
 									saveData: saveD,
 									changeSaveData: changeSaveData,
@@ -1471,7 +1377,8 @@ const selectTabFn = (state, shopType, typeList) => {
 	}
 	let _selectTab = 0;
 	switch (shopType) {
-		case 'shop':
+		case 'accessory':
+		case 'equipment':
 		case 'tool':
 			_selectTab = 3;
 			for (const [idx, data] of typeList.entries()) {
@@ -1498,8 +1405,18 @@ const selectItemFn = (sData, state, shopType, selectSlot) => {
 		if (state.dataObj.selectSlot === selectSlot) {
 			const saveItems = sData.items[state.dataObj.type][state.dataObj.itemSaveSlot].sealed ? state.dataObj.saveItemData : sData.items[state.dataObj.type][state.dataObj.itemSaveSlot];
 			const button = buttonType(['sell'], saveItems);
+			console.log(shopType);
 			switch (shopType) {
-				case 'shop':
+				case 'equipment':
+					return {
+						saveItemData: saveItems,
+						gameItem: state.dataObj.gameItem,
+						itemSaveSlot: state.dataObj.itemSaveSlot,
+						selectTab: state.dataObj.selectTab,
+						itemCate: state.dataObj.type,
+						buttonType: button,
+					};
+				case 'accessory':
 					return {
 						saveItemData: saveItems,
 						gameItem: state.dataObj.gameItem,
@@ -1557,7 +1474,7 @@ const selectItemFn = (sData, state, shopType, selectSlot) => {
 		}
 	}
 }
-const SHOP_HORIZONTAL_NUM = 5; //가로 갯수
+const SHOP_HORIZONTAL_NUM = 6; //가로 갯수
 const ShopList = ({
 	gameData,
 	shopType,
@@ -1609,23 +1526,35 @@ const ShopList = ({
 						setItemPopup(true);
 						itemData.quality = itemsGrade;
 						let button = [];
-						if (shopType === 'shop') {
-							if (selectTab < 3) {
-								button.push('buy');
-							} else {
+						switch(shopType) {
+							case 'equipment':
+								if (selectTab < 3) {
+									button.push('buy');
+								} else {
+									button.push('sell');
+									button = buttonType(button, itemData);
+								}
+								break;
+							case 'tool':
+								if (selectTab < 2) {
+									button.push('buy');
+								} else {
+									button.push('sell');
+									button = buttonType(button, itemData);
+								}
+								break;
+							case 'accessory':
+								if (selectTab < 2) {
+									button.push('buy');
+								} else {
+									button.push('sell');
+									button = buttonType(button, itemData);
+								}
+								break;
+							case 'inven':
 								button.push('sell');
 								button = buttonType(button, itemData);
-							}
-						} else if (shopType === 'tool') {
-							if (selectTab < 3) {
-								button.push('buy');
-							} else {
-								button.push('sell');
-								button = buttonType(button, itemData);
-							}
-						} else if (shopType === 'inven') {
-							button.push('sell');
-							button = buttonType(button, itemData);
+								break;
 						}
 						if (selectItem[selectItemNum].itemSaveSlot !== '' && selectItem[selectItemNum].selectTab === selectTab && selectItem[selectItemNum].itemSaveSlot === idx) {
 							setSelectItem({saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]});
@@ -1643,23 +1572,24 @@ const ShopList = ({
 					}}/>
 			} else {
 				const itemTypeNa = typeof invenIdx === 'number' ? invenNa[invenIdx] : typeList[scrollIdx].na;
-				const items = gameItem[itemTypeNa][itemData.idx];
+				const items = gameItem[itemTypeNa === "accessory" ? "equip" : itemTypeNa][itemData.idx];
 				const grade = itemData.grade || items?.grade || 0;
 				return items && <ItemLayout 
 					gameItem={gameItem}
 					icon={{
 						type: itemTypeNa,
-						pic: "itemEtc",
+						pic: itemTypeNa === "material" ? "material" : "itemEtc",
 						idx: items.display
 					}}
 					num={SHOP_HORIZONTAL_NUM}
 					key={`items${idx}`}
 					grade={grade}
+					text={itemData.num}
 					selectColor={selectColor_}
 					onClick={() => {
 						setItemPopup(true);
 						let button = [];
-						if (shopType === 'shop') {
+						if (shopType === 'equipment') {
 							if (selectTab < 3) {
 								button.push('buy');
 							} else {
@@ -1695,13 +1625,70 @@ const ShopList = ({
 		})}
 	</>
 }
-
+const Img = styled.img.attrs(
+	({imgurl}) => ({
+		src: imgurl 
+	})
+)`
+	height: 100%;
+`;
+const ShopContainer = styled(FlexBox)`
+	position: relative;
+	margin: 10px auto 0;
+	height: 45%;
+	width: 90%;
+  background: rgba(0,0,0,.7);
+  border: 5px solid transparent;
+  border-image: url(${({frameBack}) => frameBack}) 5 round;
+	box-sizing: border-box;
+`;
+const GreetingText = styled(Text)`
+	padding: 10%;
+`;
+const UserContainer = styled(FlexBox)`
+	position: relative;
+	padding: 10px 20px 0 20px;
+	height: calc(25% - 10px);
+	width: calc(100% - 40px);
+`;
+const ActionDetail = styled(FlexBox)`
+	position: relative;
+	width: auto;
+	height: 100%;
+	border-radius: 5%;
+	overflow: hidden;
+  box-sizing: border-box;
+  background: rgb(0, 0, 0, 0.5);
+  z-index: 3;
+`;
+const ActionPic = styled(FlexBox)`
+	position: relative;
+	width: auto;
+	height: 100%;
+	border-radius: 5%;
+	overflow: hidden;
+  box-sizing: border-box;
+  background: rgb(0, 0, 0, 0.5);
+  z-index: 3;
+`;
+const ActionChPic = styled(MergedPic)`
+	width: 90%;
+	height: 90%;
+	left: 5%;
+	top: 5%;
+`;
+const NoneChText = styled(Text)`
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+`;
 const InvenShop = ({
 	shopType,
-	cityIdx,
 	saveData,
 	changeSaveData,
 }) => {
+  const navigate = useNavigate();
   const context = useContext(AppContext);
 	const {state} = useLocation();
   const lang = React.useMemo(() => {
@@ -1714,6 +1701,7 @@ const InvenShop = ({
     return context.gameData;
   }, [context]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
+	const stayIdx = React.useMemo(() => util.getRegionToIdx(sData?.info?.stay), [sData]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupInfo, setPopupInfo] = useState({});
   const [popupType, setPopupType] = useState('');
@@ -1724,20 +1712,25 @@ const InvenShop = ({
 	const [tooltipPos, setTooltipPos] = useState([0,0]);
 	const [itemPopup, setItemPopup] = useState(false);
 	const shopItem = React.useMemo(() => {
-		const cityData = sData.city[cityIdx];
+		const cityData = sData.city[stayIdx];
 		switch (shopType) {
-			case 'shop':
+			case 'equipment':
 				return [
-					[...cityData.shop.helm],
-					[...cityData.shop.armor],
-					[...cityData.shop.weapon],
+					[...cityData.equipment?.helm],
+					[...cityData.equipment?.armor],
+					[...cityData.equipment?.weapon],
 					[[...sData.items.equip],[...sData.items.hole],[...sData.items.upgrade],[...sData.items.material],[...sData.items.etc]],
 				];
 			case 'tool':
 				return [
-					[...cityData.tool.accessory],
-					[...cityData.tool.upgrade],
-					[...cityData.tool.etc],
+					[...cityData.tool?.upgrade],
+					[...cityData.tool?.etc],
+					[[...sData.items.equip],[...sData.items.hole],[...sData.items.upgrade],[...sData.items.material],[...sData.items.etc]],
+				];
+			case 'accessory':
+				return [
+					[...cityData.accessory?.ring],
+					[...cityData.accessory?.amulet],
 					[[...sData.items.equip],[...sData.items.hole],[...sData.items.upgrade],[...sData.items.material],[...sData.items.etc]],
 				];
 			case 'inven':
@@ -1751,10 +1744,10 @@ const InvenShop = ({
 			default: 
 				break;
 		}
-	}, [cityIdx, sData, shopType]);
+	}, [stayIdx, sData, shopType]);
 	const typeList = React.useMemo(() => {
 		switch (shopType) {
-			case 'shop':
+			case 'equipment':
 				return [
 					{na:'helm',itemCate:'equip',icon:10},
 					{na:'armor',itemCate:'equip',icon:11},
@@ -1763,9 +1756,14 @@ const InvenShop = ({
 				];
 			case 'tool':
 				return [
-					{na:'accessory',itemCate:'equip',icon:18},
 					{na:'upgrade',itemCate:'upgrade',icon:15},
 					{na:'etc',itemCate:'etc',icon:17},
+					{na:'inven',itemCate:'equip',icon:13},
+				];
+			case 'accessory':
+				return [
+					{na:'ring',itemCate:'equip',icon:18},
+					{na:'amulet',itemCate:'equip',icon:19},
 					{na:'inven',itemCate:'equip',icon:13},
 				];
 			case 'inven':
@@ -1781,17 +1779,17 @@ const InvenShop = ({
 		}
 	}, [shopType]);
 	const invenNa = useRef(['equip', 'hole', 'upgrade', 'material', 'etc']);
-	const selectItemArr = ['#fff','#ffac2f','#e14040','#a800ff','#0090ff','#00a90c'];
+	const selectItemArr = ['#ffeB91','#0cf','#de570e','#36A886','#006043','#917600'];
 	const [selectItemNum, setSelectItemNum] = useState(0);
-	const [selectTab, setSelectTab] = useState(selectTabFn(state, shopType, typeList));
+	const [selectTab, setSelectTab] = useState("");
 	const [selectItem, setSelectItem] = useState(() => {
 		return selectItemArr.map(() => {
 			return selectItemFn(sData, state, shopType, selectItemNum);
 		});
 	});
-	useEffect(() => {
-		setSelectTab(selectTabFn(state, shopType, typeList));
-	}, [sData, state, shopType, typeList]);
+	// useEffect(() => {
+	// 	setSelectTab(selectTabFn(state, shopType, typeList));
+	// }, [sData, state, shopType, typeList]);
 	useEffect(() => {
 		// setSelectItem(() => {
 		// 	return selectItemArr.map(() => {
@@ -1799,71 +1797,133 @@ const InvenShop = ({
 		// 	});
 		// });
 	}, [sData, state, shopType, typeList, selectItemArr, selectItemNum]);
-	const actionCh = React.useMemo(() => sData.actionCh.shop, [sData]);//행동할 캐릭터 데이터
-	const actionRef = useRef();//행동할 캐릭터 선택자
+	const actionCh = React.useMemo(() => sData.actionCh[shopType], [sData]);//행동할 캐릭터 데이터
 	useEffect(() => {
 		if (Object.keys(sData).length !== 0 && shopType !== 'inven') {
 			setPopupInfo({
 				ch: sData.ch,
 				actionCh: sData.actionCh[shopType].idx,
-				type: shopType
+				type: shopType,
+				setMsg: setMsg,
+				setMsgOn: setMsgOn,
 			});
 		}
 	}, [sData, shopType]);
-
   return (
 		<>
 			<ShopWrap>
-				<ShopTop>
-					<TabMenu list={typeList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" />
-				</ShopTop>
-				{Object.keys(actionCh).length !== 0 && shopType !== 'inven' && (<ActionCh ref={actionRef} className={`ch_select_area ${actionCh.idx !== "" ? 'g' + (sData.ch?.[actionCh.idx]?.grade || 1) : ''}`} onClick={() => {
-						setPopupType('selectCh');
-						setPopupOn(true);
-					}}>
-						<ActionChDisplay type="shop" saveData={sData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
-					</ActionCh>
-				)}
-				<ShopScrollContent className="num6">
-					{shopItem.map((scrollData, scrollIdx) => {
-						return <ShopItem className="scroll-y" selected={selectTab === scrollIdx} key={`scrollContent${scrollIdx}`}>
-							{typeList[scrollIdx].na === 'inven' ? 
-								scrollData.map((invenData, invenIdx) => {
-									return (
-										<div key={`inven${invenIdx}`}>
-											<Text code="t3" color="main">{gameData.msg.menu[invenNa.current[invenIdx]][lang]}</Text>
-											<ShopList 
-												gameData={gameData} 
-												shopType={shopType} 
-												typeList={typeList} 
-												invenNa={invenNa.current} 
-												list={invenData} 
-												scrollIdx={scrollIdx} 
-												invenIdx={invenIdx} 
-												selectTab={selectTab} 
-												selectItem={selectItem} 
-												selectItemNum={selectItemNum} 
-												setSelectItem={setSelectItem}
-												setItemPopup={setItemPopup} />
-										</div>
-									)
-								})
-							: 
-								<ShopList 
-									gameData={gameData} 
-									shopType={shopType} 
-									typeList={typeList} 
-									list={scrollData} 
-									scrollIdx={scrollIdx} 
-									selectTab={selectTab} 
-									selectItem={selectItem} 
-									selectItemNum={selectItemNum} 
-									setSelectItem={setSelectItem}
-									setItemPopup={setItemPopup} />
-							}
-						</ShopItem>
-					})}
-				</ShopScrollContent>
+				{shopType !== "inven" ?
+				<>
+					<Npc imgSet={imgSet} shopType={shopType} gameData={gameData} lang={lang} setSelectTab={setSelectTab} navigate={navigate}/>
+					<ShopContainer frameBack={imgSet.etc.frameChBack}>
+						{selectTab === "" && <GreetingText code="t4" color="main" wordBreak="keep-all">{gameData.shop[shopType].greeting[lang]}</GreetingText>}
+						{shopItem.map((scrollData, scrollIdx) => {
+							return <ShopItem selected={selectTab === scrollIdx} key={`scrollContent${scrollIdx}`}>
+								{typeList[scrollIdx].na === 'inven' ? 
+									scrollData.map((invenData, invenIdx) => {
+										return (
+											<div key={`inven${invenIdx}`}>
+												<Text code="t3" color="main">{gameData.msg.menu[invenNa.current[invenIdx]][lang]}</Text>
+												<ShopList 
+													gameData={gameData} 
+													shopType={shopType} 
+													typeList={typeList} 
+													invenNa={invenNa.current} 
+													list={invenData} 
+													scrollIdx={scrollIdx} 
+													invenIdx={invenIdx} 
+													selectTab={selectTab} 
+													selectItem={selectItem} 
+													selectItemNum={selectItemNum} 
+													setSelectItem={setSelectItem}
+													setItemPopup={setItemPopup} />
+											</div>
+										)
+									})
+								: 
+									<ShopList 
+										gameData={gameData} 
+										shopType={shopType} 
+										typeList={typeList} 
+										list={scrollData} 
+										scrollIdx={scrollIdx} 
+										selectTab={selectTab} 
+										selectItem={selectItem} 
+										selectItemNum={selectItemNum} 
+										setSelectItem={setSelectItem}
+										setItemPopup={setItemPopup} />
+								}
+							</ShopItem>
+						})}
+					</ShopContainer>
+					<UserContainer justifyContent="space-between">
+						<SelectItemGroup>
+							<ul>
+								{selectItemArr.map((itemColor, idx) => {
+									return <SelectItemList sealed={selectItem[idx].saveItemData.sealed} select={selectItemNum === idx} color={itemColor} key={`itemColor_${idx}`} onClick={() => {
+										if (selectItemNum === idx) {
+											if (itemPopup === false) {
+												const cloneSelectItem = [...selectItem];
+												cloneSelectItem[idx] = {saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]}
+												setSelectItem(cloneSelectItem);
+											} else {
+												setItemPopup(false);
+											}
+										} else {
+											setItemPopup(true);
+											setSelectItemNum(idx);
+										}
+									}}>
+										{selectItem[idx].itemSaveSlot !== "" && (selectItem[idx].itemCate === "equip" ? 
+											<ItemPic isAbsolute type="equip" pic="equip" idx={selectItem[idx].gameItem.display} />
+											
+										: <ItemPic className="pic" pic="itemEtc" type={selectItem[idx].itemCate} idx={selectItem[idx].gameItem.display} />)}
+									</SelectItemList>
+								})}
+							</ul>
+						</SelectItemGroup>
+						<ActionDetail>
+
+						</ActionDetail>
+						<ActionPic onClick={() => {
+								setPopupType('selectCh');
+								setPopupOn(true);
+							}}>
+							<MergedPic isAbsolute pic="card" idx={40 + (sData.ch?.[actionCh.idx]?.grade || 0)} />
+							{actionCh.idx === "" && <NoneChText code="t1" color="red" workBreak="keep-all">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
+							<Img imgurl={imgSet.images.transparent800} />
+							<ActionChDisplay type={shopType} saveData={sData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
+						</ActionPic>
+					</UserContainer>
+				</>
+				:
+				<>
+					<ShopTop>
+						<TabMenu list={typeList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" />
+					</ShopTop>
+					<ShopScrollContent frameBack={imgSet.etc.frameChBack}>
+						{shopItem.map((scrollData, scrollIdx) => {
+							return <ShopItem selected={selectTab === scrollIdx} key={`scrollContent${scrollIdx}`}>
+								<div key={`inven${scrollIdx}`}>
+									<ShopList 
+										gameData={gameData} 
+										shopType={shopType} 
+										typeList={typeList} 
+										invenNa={invenNa.current} 
+										list={scrollData} 
+										scrollIdx={scrollIdx} 
+										invenIdx={scrollIdx} 
+										selectTab={selectTab} 
+										selectItem={selectItem} 
+										selectItemNum={selectItemNum} 
+										setSelectItem={setSelectItem}
+										setItemPopup={setItemPopup} />
+								</div>
+							</ShopItem>
+						})}
+					</ShopScrollContent>
+				</>
+				}
 				{itemPopup && selectItem[selectItemNum]?.saveItemData && Object.keys(selectItem[selectItemNum]?.saveItemData).length !== 0 && <ShopPopup onClick={() => {
 					setItemPopup(false);
 				}}>
@@ -1874,11 +1934,9 @@ const InvenShop = ({
 							selectItemNum={selectItemNum}
 							setSelectItem={setSelectItem} 
 							selectSlot={1} 
-							shopType={shopType} 
-							actionCh={actionCh} 
+							shopType={shopType}
 							saveData={sData} 
-							changeSaveData={changeSaveData} 
-							cityIdx={cityIdx} 
+							changeSaveData={changeSaveData}
 							typeList={typeList} 
 							selectTab={selectTab} 
 							setPopupType={setPopupType} 
@@ -1892,31 +1950,6 @@ const InvenShop = ({
 							setItemPopup={setItemPopup} />
 					</ItemContainer>
 				</ShopPopup>}
-				<SelectItemGroup>
-					<ul>
-						{selectItemArr.map((itemColor, idx) => {
-							return <SelectItemList sealed={selectItem[idx].saveItemData.sealed} select={selectItemNum === idx} color={itemColor} key={`itemColor_${idx}`} onClick={() => {
-								if (selectItemNum === idx) {
-									if (itemPopup === false) {
-										const cloneSelectItem = [...selectItem];
-										cloneSelectItem[idx] = {saveItemData:{},gameItem:{},itemSaveSlot:'',selectTab:'',itemCate:'',buttonType:[]}
-										setSelectItem(cloneSelectItem);
-									} else {
-										setItemPopup(false);
-									}
-								} else {
-									setItemPopup(true);
-									setSelectItemNum(idx);
-								}
-							}}>
-								{selectItem[idx].itemSaveSlot !== "" && (selectItem[idx].itemCate === "equip" ? 
-									<ItemPic isAbsolute type="equip" pic="equip" idx={selectItem[idx].gameItem.display} />
-									
-								: <ItemPic className="pic" pic="itemEtc" type={selectItem[idx].itemCate} idx={selectItem[idx].gameItem.display} />)}
-							</SelectItemList>
-						})}
-					</ul>
-				</SelectItemGroup>
 			</ShopWrap>
 			<PopupContainer>
         {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={sData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}

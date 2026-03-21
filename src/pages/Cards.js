@@ -629,6 +629,7 @@ const Cards = ({
                           pic: "itemEtc",
                           idx: items.display
                         }}
+                        text={data.num || ""}
                         part="12"
                         grade={items.grade}
                         sealed={items.sealed}
@@ -654,9 +655,10 @@ const Cards = ({
                         isEquip
                         icon={{
                           type: "material",
-                          pic: "itemEtc",
+                          pic: "material",
                           idx: items.display
                         }}
+                        text={data.num || 1}
                         part="13"
                         grade={items.grade}
                         sealed={items.sealed}

@@ -54,12 +54,13 @@ const Menu = ({
               <>
                 <li><Button type="menu" to="/cards" onClick={() => {console.log("card");}}>{gameData.msg?.menu?.['card']?.[lang] || "Card"}</Button></li>
                 <li><Button type="menu" to="/inven" onClick={() => {console.log("inven");}}>{gameData.msg?.menu?.['inven']?.[lang] || "Inven"}</Button></li>
-                <li><Button type="menu" to="/shop" onClick={() => {console.log("shop");}}>{gameData.msg?.menu?.['shop']?.[lang] || "Shop"}</Button></li>
+                <li><Button type="menu" to="/equipment" onClick={() => {console.log("equipment");}}>{gameData.msg?.menu?.['equipment']?.[lang] || "Equipment"}</Button></li>
+                <li><Button type="menu" to="/accessory" onClick={() => {console.log("accessory");}}>{gameData.msg?.menu?.['accessory']?.[lang] || "Accessory"}</Button></li>
                 <li><Button type="menu" to="/tool" onClick={() => {console.log("tool");}}>{gameData.msg?.menu?.['tool']?.[lang] || "Tool"}</Button></li>
                 <li><Button type="menu" to="/shipyard" onClick={() => {console.log("shipyard");}}>{gameData.msg?.menu?.['shipyard']?.[lang] || "Shipyard"}</Button></li>
                 <li><Button type="menu" to="/tradingPost" onClick={() => {console.log("tradingPost");}}>{gameData.msg?.menu?.['tradingPost']?.[lang] || "Trading Post"}</Button></li>
-                <li><Button type="menu" to="/enhancingCards" onClick={() => {console.log("enhancingCards");}}>{gameData.msg?.menu?.['enhancingCards']?.[lang] || "Enhancing Cards"}</Button></li>
-                <li><Button type="menu" to="/enhancingStickers" onClick={() => {console.log("enhancingStickers");}}>{gameData.msg?.menu?.['enhancingStickers']?.[lang] || "Enhancing Stickers"}</Button></li>
+                <li><Button type="menu" to="/enhancingItem" onClick={() => {console.log("enhancingItem");}}>{gameData.msg?.menu?.['enhancingItem']?.[lang] || "Enhancing Item"}</Button></li>
+                <li><Button type="menu" to="/enhancingCard" onClick={() => {console.log("enhancingCard");}}>{gameData.msg?.menu?.['enhancingCard']?.[lang] || "Enhancing Card"}</Button></li>
                 <li><Button type="menu" to="/composite" onClick={() => {console.log("composite");}}>{gameData.msg?.menu?.['composite']?.[lang] || "Composite"}</Button></li>
                 <li><Button type="menu" to="/recruitment" onClick={() => {console.log("gacha");}}>{gameData.msg?.menu?.['recruitment']?.[lang] || "Recruitment"}</Button></li>
                 <li><Button type="menu" to="/cardPlacement" onClick={() => {console.log("cardPlacement");}}>{gameData.msg?.menu?.['cardPlacement']?.[lang] || "Placement"}</Button></li>

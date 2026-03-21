@@ -265,6 +265,7 @@ const CharacterState = ({
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
   const lvUpTimeoutRef = useRef([null, null]);
+
   const animalKg = React.useMemo(() => {
     const animalType = chData.animal_type;
     const kgLimit = gameData.animal_size?.kg?.[animalType]?.[2];
@@ -362,7 +363,7 @@ const CharacterState = ({
                   <ActionBox justifyContent="space-between">
                     <Text code="t2" color="grey">{gameData.msg.state.sp[lang]}</Text>
                     <StyledText code="t2" color="main">
-                      <span className="current">{saveCh.actionPoint || 0}</span><ChInfoBar>/</ChInfoBar><span className="max">50</span>
+                      <span className="current">{saveCh.actionPoint || 0}</span><ChInfoBar>/</ChInfoBar><span className="max">{saveCh.actionMax || 50}</span>
                     </StyledText>
                   </ActionBox>
                   <BodyKg justifyContent="flex-end">

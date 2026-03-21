@@ -124,7 +124,7 @@ export const recipe = {
 	9:[],
 	10:[
 		{entry:[{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26},{cate:'etc',idx:26}],get:[{cate:'etc',idx:[30,31,32,33]}]},
-		{entry:[{cate:'etc',idx:24},{cate:'etc',idx:24},{cate:'etc',idx:24},{cate:'etc',idx:24},{cate:'etc',idx:24},{cate:'etc',idx:24},{cate:'etc',idx:24},{cate:'etc',idx:24},{cate:'etc',idx:24},{cate:'etc',idx:24}],get:[{cate:'etc',idx:23}]},
+		{entry:[{cate:'etc',idx:24},{cate:'etc',idx:25},{cate:'etc',idx:26},{cate:'etc',idx:27},{cate:'etc',idx:28},{cate:'etc',idx:29}],get:[{cate:'etc',idx:23}]},
 	],
 	11:[],
 	12:[],

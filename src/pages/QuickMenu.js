@@ -115,31 +115,8 @@ const QuickMenu = ({
           callback: () => {},
           isNavigate: true,
         });//히스토리 저장
-      }}/><Text className="text">{gameData.msg?.button?.['cardPlacement']?.[lang] || "Placement"}</Text></li>
-      {type !== "move" && <li><IconPic type="quickMenu" pic="icon100" idx={3} onClick={() => {
-        util.saveHistory({
-          location: 'enhancingCards',
-          navigate: navigate,
-          callback: () => {},
-          isNavigate: true,
-        });//히스토리 저장
-      }}/><Text className="text">{gameData.msg?.button?.['enhancingCards']?.[lang] || "Enhance"}</Text></li>}
-      {type !== "move" && <li><IconPic type="quickMenu" pic="icon100" idx={4} onClick={() => {
-        util.saveHistory({
-          location: 'enhancingStickers',
-          navigate: navigate,
-          callback: () => {},
-          isNavigate: true,
-        });//히스토리 저장
-      }}/><Text className="text">{gameData.msg?.button?.['enhancingStickers']?.[lang] || "Socket"}</Text></li>}
-      {type !== "move" && <li><IconPic type="quickMenu" pic="icon100" idx={5} onClick={() => {
-        util.saveHistory({
-          location: 'composite',
-          navigate: navigate,
-          callback: () => {},
-          isNavigate: true,
-        });//히스토리 저장
-      }}/><Text className="text">{gameData.msg?.button?.['composite']?.[lang] || "Composite"}</Text></li>}
+      }}/>
+      <Text className="text">{gameData.msg?.button?.['cardPlacement']?.[lang] || "Placement"}</Text></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={6} onClick={() => {
       }}/><Text className="text">{gameData.msg?.button?.['chat']?.[lang] || "Chat"}</Text></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={7} onClick={() => {

@@ -558,61 +558,6 @@ span[small] {
 /*wheater icon*/
 .ch_info .skill .sk .txt span[night] {
 }
-
-/* 팝업 캐릭터 선택 */
-.select_character {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  margin: auto auto;
-  width: 80%;
-  height: 80%;
-}
-.select_character .select_chInfo {
-  position: relative;
-  width: 100%;
-}
-.select_character .select_chDisplay {
-  display: inline-block;
-  position: relative;
-  width: 60%;
-}
-.select_character .select_chDisplay img {
-  width: 100%;
-}
-.select_character .select_chDisplay .lv {
-  font-size: 1rem;
-}
-.select_character .select_chDisplay .name_ {
-  font-size: 0.625rem;
-}
-.select_character .select_chDisplay .name {
-  font-size: 0.75rem;
-}
-.select_character .select_chDisplay .star span {
-  width: 1.25rem;
-}
-.select_character .select_rBox {
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 0 10px;
-  box-sizing: border-box;
-  width: 40%;
-  text-align: center;
-}
-.select_character .select_chState {
-  margin: 10px 0 0 0;
-}
-.select_character .select_chState li {
-  margin: 0 0 5px 0;
-  font-size: 0.875rem;
-}
-
-.item_button {
-  justify-content: flex-end;
-}
-
 /*map*/
 .map_wrap {
 }

@@ -143,6 +143,11 @@ const IconPic = forwardRef(({
 });
 
 const StyledMergedPic = styled.div`
+  ${({isAbsolute}) => isAbsolute ? `
+    position: absolute;
+    left: 0;
+    top: 0;
+  `: ''}
   width: 100%;
   height: 100%;
   ${({chPic, type, startIdx, idx, whNum, isThumb, absoluteSize}) => {
@@ -164,6 +169,7 @@ const MergedPic = ({//merged 된 이미지에서 좌표를 찾는 방식
   wNum=10,
   hNum=6,
   isThumb=false,
+  isAbsolute=false,
   absoluteSize,
   children,
   ...rest
@@ -178,7 +184,7 @@ const MergedPic = ({//merged 된 이미지에서 좌표를 찾는 방식
   const startIdx = React.useMemo(() => {
     return !type ? 0 : util.iconToStartIdx(type);
   }, [type]);
-  return (typeof idx === "number" && <StyledMergedPic startIdx={startIdx} absoluteSize={absoluteSize} type={type} whNum={whNum} isThumb={isThumb} chPic={imgSet.images[pic]} idx={idx} {...rest}>
+  return (typeof idx === "number" && <StyledMergedPic startIdx={startIdx} isAbsolute={isAbsolute} absoluteSize={absoluteSize} type={type} whNum={whNum} isThumb={isThumb} chPic={imgSet.images[pic]} idx={idx} {...rest}>
       {children}
     </StyledMergedPic>
   )

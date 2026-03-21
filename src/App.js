@@ -11,21 +11,29 @@ import Battle from 'pages/Battle';
 import CardPlacement from 'pages/CardPlacement';
 import Cards from 'pages/Cards';
 import CharacterList from 'pages/CharacterList';
+import Church from 'pages/Church';
 import Composite from 'pages/Composite';
-import EnhancingCards from 'pages/EnhancingCards';
-import EnhancingStickers from 'pages/EnhancingStickers';
+import EnhancingCard from 'pages/EnhancingCard';
+import EnhancingItem from 'pages/EnhancingItem';
 import Recruitment from 'pages/Gacha';
 import GameMain from 'pages/GameMain';
+import Guild from 'pages/Guild';
 import Header from 'pages/Header';
+import Home from 'pages/Home';
 import InvenShop from 'pages/InvenShop';
 import Menu from 'pages/Menu';
 import MoveEvent from 'pages/MoveEvent';
+import Mystery from 'pages/Mystery';
+import Port from 'pages/Port';
 import Sail from 'pages/Sail';
 import Setup from 'pages/Setup';
 import Shipyard from 'pages/Shipyard';
 import StartGame from 'pages/StartGame';
+import Tavern from 'pages/Tavern';
+import Temple from 'pages/Temple';
+import TownHall from 'pages/TownHall';
 import TradingPost from 'pages/TradingPost';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 
@@ -149,50 +157,106 @@ const ContentContainer = styled(FlexBox)`
     }
   }
 `;
-const setCity = (data, lang) => {
-  let cityD = {...data};
-  cityD[0].tradingPost = [//교역소 상품생성
-    {idx:3,num:''},{idx:13,num:1200},{idx:15,num:100},{idx:23,num:500},{idx:34,num:''},{idx:33,num:250},{idx:45,num:300},
-  ];
-  let accessory = [];//도구상 악세사리 생성
-  for (let i = 0; i < 20; i ++) {
-    accessory[i] = {...util.getItem({
-      saveData: false,
-      gameData: gameData,
-      changeSaveData: false,
-      option: {
-        type:'equip',
-        items:Math.round(Math.random())+4,//악세사리만 해당
-        lv:Math.round(Math.random()*100),
-        sealed:false,
-      },
-      isSave: false,
-      lang:lang
-    })}
-  }
-  cityD[0].tool.accessory = accessory;
-  let items = [[],[],[],[]];//장비상 아이템 생성
-  for (let i = 0; i < 20; i ++) {
-    for (let j = 1; j < 4; j ++) {
-      items[j - 1][i] = {...util.getItem({
-        saveData: false,
-        gameData: gameData,
-        changeSaveData: false,
-        option: {
-          type:'equip',
-          items:j,//장비만 해당
-          //아이템종류, 세부종류(검,단검), 매직등급
-          lv:Math.round(Math.random()*100),
-          sealed:false,
-        },
-        isSave: false,
-        lang: lang,
-      })}
+const setCity = (countryData, lang) => {
+  const cityD = Array.from({length:countryData.length}, (v, idx) => ({
+    idx: idx,
+    cityName: countryData[idx].name[lang],
+    price: 1, //물가 (일주일에 한번씩 랜덤 변동)
+    tool: {
+      upgrade: [{idx:0},{idx:1},{idx:6},{idx:7}],
+      etc: [{idx:20}, {idx:21}, {idx:22}, {idx: util.getStringToCountryIdx(countryData[idx].id) + 30}],
+    },
+    accessory: {
+      ring: Array.from({length:20}, () => {
+        return {...util.getItem({
+          saveData: false,
+          gameData: gameData,
+          changeSaveData: false,
+          option: {
+            type:'equip',
+            items: 4,
+            lv:Math.round(Math.random()*100),
+            sealed:false,
+          },
+          isSave: false,
+          lang:lang
+        })}
+      }),
+      amulet: Array.from({length:20}, () => {
+        return {...util.getItem({
+          saveData: false,
+          gameData: gameData,
+          changeSaveData: false,
+          option: {
+            type:'equip',
+            items: 5,
+            lv:Math.round(Math.random()*100),
+            sealed:false,
+          },
+          isSave: false,
+          lang:lang
+        })}
+      }),
+    },
+    equipment: {
+      helm: Array.from({length:20}, () => {
+        return {...util.getItem({
+          saveData: false,
+          gameData: gameData,
+          changeSaveData: false,
+          option: {
+            type:'equip',
+            items: 1,
+            lv:Math.round(Math.random()*100),
+            sealed:false,
+          },
+          isSave: false,
+          lang:lang
+        })}
+      }),
+      armor:Array.from({length:20}, () => {
+        return {...util.getItem({
+          saveData: false,
+          gameData: gameData,
+          changeSaveData: false,
+          option: {
+            type:'equip',
+            items: 2,
+            lv:Math.round(Math.random()*100),
+            sealed:false,
+          },
+          isSave: false,
+          lang:lang
+        })}
+      }),
+      weapon:Array.from({length:20}, () => {
+        return {...util.getItem({
+          saveData: false,
+          gameData: gameData,
+          changeSaveData: false,
+          option: {
+            type:'equip',
+            items: 3,
+            lv:Math.round(Math.random()*100),
+            sealed:false,
+          },
+          isSave: false,
+          lang:lang
+        })}
+      }),
+    },
+    tradingPost: [//교역소 상품생성
+      {idx:3,num:9000},{idx:13,num:1200},{idx:15,num:100},{idx:23,num:500},{idx:34,num:9000},{idx:33,num:250},{idx:45,num:300},
+    ],
+    shipyard:{
+      blueprint:[30],
+      wood:[0,3,4,5,7],
+      sail:[0,1,2,5],
+      figure:[0,5,6,7,20,22,35,40,47],
+      anchor:[0,1,2,6],
+      cannon:[0,1,2,3,4,5,6]
     }
-  }
-  cityD[0].shop.helm = items[0];
-  cityD[0].shop.armor = items[1];
-  cityD[0].shop.weapon = items[2];
+  }));
   return cityD;
 }
 const setDifficultLv = (gameData) => {
@@ -279,6 +343,52 @@ const classification = (gameData) => {
   });
   return classification;
 }
+const makeSaveData = (saveData) => {
+  saveData.actionCh = {
+    equipment: {idx:''},
+    accessory: {idx:''},
+    tool: {idx:''},
+    shipyard: {idx:''},
+    tradingPost: {idx:''},
+    EnhancingItem: {idx:''},
+    enhancingCard: {idx:''},
+    enhancingCard2: {idx:''},
+    composite: {idx:''},
+    recruitment: {idx:''}
+  }
+  saveData.info = {
+    id:'',
+    lv:1,
+    diamond:0,
+    money:0,
+    morality:100,
+    stay:0,
+    shipIdx:0,
+  }
+  saveData.lineup = {
+    select: 0,
+    save_slot: Array.from({length: 8}, () => {
+      return {
+        no: 0,
+        leader: 0,
+        entry: Array.from({length: 25}, () => ""),
+        num: 0,
+      }
+    })
+  }
+  saveData.eventLineup = {
+    select: 0,
+    save_slot: Array.from({length: 8}, () => {
+      return {
+        no: 0,
+        leader: 0,
+        entry: Array.from({length: 25}, () => ""),
+        num: 0,
+      }
+    })
+  }
+  return saveData;
+}
 const App = ({
   loadData,
 }) => {
@@ -286,9 +396,13 @@ const App = ({
   const locationObj = useLocation();
   const location = locationObj.pathname.split("/")[1];
   const [saveData, setSaveData] = useState({});
+  const savedDataRef = useRef(saveData);
+
+  useEffect(() => {
+    savedDataRef.current = saveData;
+  }, [saveData]);
   const [gameMode, setGameMode] = useState('');
   const slotIdx = 'all';
-  const [cityIdx] = useState(0); //setCityIdx
   const [showDim, setShowDim] = useState(false);
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
@@ -331,12 +445,12 @@ const App = ({
           pic: "areaBack",
           idx: 2
         };
-      case "enhancingCards":
+      case "EnhancingItem":
         return {
           pic: "areaBack",
           idx: 3
         };
-      case "enhancingStickers":
+      case "enhancingCard":
         return {
           pic: "areaBack",
           idx: 4
@@ -346,7 +460,7 @@ const App = ({
           pic: "areaBack",
           idx: 5
         };
-      case "shop":
+      case "equipment":
         return {
           pic: "areaBack",
           idx: 6
@@ -371,7 +485,7 @@ const App = ({
           pic: "areaBack",
           idx: 10
         };
-      case "post":
+      case "accessory":
         return {
           pic: "areaBack",
           idx: 12
@@ -380,6 +494,11 @@ const App = ({
         return {
           pic: "areaBack",
           idx: 13
+        };
+      case "post":
+        return {
+          pic: "areaBack",
+          idx: 14
         };
       case "battleWin":
         return {
@@ -464,7 +583,7 @@ const App = ({
   }
   // useEffect(() => {
   //   setCityData(city(gameData.city.port));
-  // }, [cityIdx]);
+  // }, []); //하루가 지났을때 24시에 리셋
   useEffect(() => {
     // setContextData();
     const storageVer = util.loadData('version'),
@@ -475,10 +594,11 @@ const App = ({
       if (location !== '') {
         navigate('../');
       }
-      saveNew.city = setCity(gameData.city.port, contextData.setting.lang);
-      useSaveData = saveNew;
-      util.saveData("saveData", saveNew);
+      const sData = makeSaveData(saveNew);
+      sData.city = setCity(gameData.country.regions, contextData.setting.lang);
+      util.saveData("saveData", sData);
       util.saveData("version", version);
+      localStorage.setItem('lastCityReset', new Date().toDateString());
       util.saveData("setting", {
         lang: 'ko',
         bgm: true,
@@ -487,6 +607,7 @@ const App = ({
         speed: 2,
       });
       util.saveData("history",[]);
+      useSaveData = saveNew;
       setSaveData(saveNew);
     } else {
       if (storageVer !== version) { //데이터 버전이 다를 경우
@@ -500,6 +621,14 @@ const App = ({
       let cloneContextData = {...contextData};
       cloneContextData.setting = setting;
       setContextData(cloneContextData);
+      
+      const lastResetStr = localStorage.getItem('lastCityReset');
+      const todayStr = new Date().toDateString();
+      if (lastResetStr !== todayStr && useSaveData) {
+        useSaveData.city = setCity(gameData.country.regions, setting.lang || 'ko');
+        util.saveData("saveData", useSaveData);
+        localStorage.setItem('lastCityReset', todayStr);
+      }
       setSaveData(() => {
         if (useSaveData?.ch[0]?.bSt0) { //캐릭 전투능력치 설정이 안되어 있을 경우
           util.saveData('saveData', useSaveData);
@@ -532,7 +661,7 @@ const App = ({
       // if ((history === null || history === undefined || history.length === 0 || history[0] === '') && 
       // changePage('gameMain', {aa: 1, bb: 2});
     }
-    //util.getTimeGap(useSaveData, changeSaveData);//시간 저장
+    util.getTimeGap(useSaveData, changeSaveData);//시간 저장
     
     return () => {
       localStorage.setItem('closeTime', new Date());
@@ -545,6 +674,38 @@ const App = ({
       localStorage.setItem('lastRoute', locationObj.pathname + locationObj.search);
     }
   }, [locationObj.pathname, locationObj.search]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!savedDataRef.current || !savedDataRef.current.ch) return;
+      
+      const currentData = JSON.stringify(savedDataRef.current);
+      const cloneData = JSON.parse(currentData);
+      let isChanged = false;
+      
+      const lastResetStr = localStorage.getItem('lastCityReset');
+      const todayStr = new Date().toDateString();
+      if (lastResetStr !== todayStr) {
+        const lang = util.loadData('setting')?.lang || 'ko';
+        cloneData.city = setCity(gameData.country.regions, lang);
+        localStorage.setItem('lastCityReset', todayStr);
+        isChanged = true;
+      }
+      
+      cloneData.ch.forEach(ch => {
+        const maxActionPoint = ch.actionMax || 50;
+        if ((ch.actionPoint || 0) < maxActionPoint) {
+          ch.actionPoint = (ch.actionPoint || 0) + 1;
+          isChanged = true;
+        }
+      });
+      
+      if (isChanged) {
+        changeSaveData(cloneData);
+      }
+    }, gameData.actionPoint.recoveryTime);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -564,37 +725,55 @@ const App = ({
 
                 <Route path="/setup" element={<Setup setLang={setLang} setSpeed={setSpeed} setBgm={setBgm} setEfm={setEfm} setRes={setResolution} setBge={setBge} />} />
 
-                <Route path="/gameMain" element={<GameMain saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} gameMode={gameMode} setGameMode={setGameMode} showDim={showDim} setShowDim={setShowDim} />} />
+                <Route path="/gameMain" element={<GameMain saveData={saveData} changeSaveData={changeSaveData} gameMode={gameMode} setGameMode={setGameMode} showDim={showDim} setShowDim={setShowDim} />} />
 
-                <Route path="/cardsList" element={<CharacterList saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/home" element={<Home saveData={saveData} changeSaveData={changeSaveData} />} />
 
-                <Route path="/cards" element={<Cards saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/church" element={<Church saveData={saveData} changeSaveData={changeSaveData} />} />
 
-                <Route path="/inven" element={<InvenShop shopType="inven" saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/temple" element={<Temple saveData={saveData} changeSaveData={changeSaveData} />} />
 
-                <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/guild" element={<Guild saveData={saveData} changeSaveData={changeSaveData} />} />
 
-                <Route path="/cardPlacement" element={<CardPlacement saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/port" element={<Port saveData={saveData} changeSaveData={changeSaveData} />} />
 
-                <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/townHall" element={<TownHall saveData={saveData} changeSaveData={changeSaveData} />} />
 
-                <Route path="/moveEvent" element={<MoveEvent saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} gameMode={gameMode} setGameMode={setGameMode}  showDim={showDim} setShowDim={setShowDim} />} />
+                <Route path="/tavern" element={<Tavern saveData={saveData} changeSaveData={changeSaveData} />} />
 
-                <Route path="/enhancingCards" element={<EnhancingCards saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/mystery" element={<Mystery saveData={saveData} changeSaveData={changeSaveData} />} />
 
-                <Route path="/enhancingStickers" element={<EnhancingStickers saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/cardsList" element={<CharacterList saveData={saveData} changeSaveData={changeSaveData} />} />
 
-                <Route path="/composite" element={<Composite saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/cards" element={<Cards saveData={saveData} changeSaveData={changeSaveData} />} />
 
-                <Route path="/shop" element={<InvenShop shopType="shop" saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/inven" element={<InvenShop shopType="inven" saveData={saveData} changeSaveData={changeSaveData} />} />
 
-                <Route path="/tool" element={<InvenShop shopType="tool" saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} />} />
 
-                <Route path="/shipyard" element={<Shipyard saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/cardPlacement" element={<CardPlacement saveData={saveData} changeSaveData={changeSaveData} />} />
 
-                <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} />} />
 
-                <Route path="/map" element={<Sail saveData={saveData} changeSaveData={changeSaveData} cityIdx={cityIdx} />} />
+                <Route path="/moveEvent" element={<MoveEvent saveData={saveData} changeSaveData={changeSaveData} gameMode={gameMode} setGameMode={setGameMode}  showDim={showDim} setShowDim={setShowDim} />} />
+
+                <Route path="/EnhancingItem" element={<EnhancingItem saveData={saveData} changeSaveData={changeSaveData} />} />
+
+                <Route path="/enhancingCard" element={<EnhancingCard saveData={saveData} changeSaveData={changeSaveData} />} />
+
+                <Route path="/composite" element={<Composite saveData={saveData} changeSaveData={changeSaveData} />} />
+
+                <Route path="/equipment" element={<InvenShop shopType="equipment" saveData={saveData} changeSaveData={changeSaveData} />} />
+
+                <Route path="/accessory" element={<InvenShop shopType="accessory" saveData={saveData} changeSaveData={changeSaveData} />} />
+
+                <Route path="/tool" element={<InvenShop shopType="tool" saveData={saveData} changeSaveData={changeSaveData} />} />
+
+                <Route path="/shipyard" element={<Shipyard saveData={saveData} changeSaveData={changeSaveData} />} />
+
+                <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} />} />
+
+                <Route path="/map" element={<Sail saveData={saveData} changeSaveData={changeSaveData} />} />
 
                 <Route path="/testSkill" element={<TestSkill />} saveData={saveData} />
               </Routes>

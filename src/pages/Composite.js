@@ -321,10 +321,11 @@ const Composite = ({
 								gameItem={gameData.items}
 								icon={{
 									type: cate,
-									pic: isEquip ? "equip" : "itemEtc",
+									pic: isEquip ? "equip" : cate === "material" ? "material" : "itemEtc",
 									idx: items?.display,
 									mergeColor: data.color,
 								}}
+								text={data.num || ""}
 								num={4}
 								key={`item${idx}`}
 								{...isEquip && {
@@ -371,10 +372,11 @@ const Composite = ({
 								gameItem={gameData.items}
 								icon={{
 									type: combineList[selectTab].keyName,
-									pic: isEquip ? "equip" : "itemEtc",
+									pic: isEquip ? "equip" : cate === "material" ? "material" : "itemEtc",
 									idx: items?.display,
 									mergeColor: data.color,
 								}}
+								text={data.num || ""}
 								num={6}
 								key={`items${idx}`}
 								{...isEquip && {

@@ -5,12 +5,17 @@ export const msg = {
 			en:'Inven',
 			jp:'インベントリ',
 		},
-		equipmentShop:{
+		equipment:{
 			ko:'장비 상점',
 			en:'Equipment Shop',
 			jp:'機器店',
 		},
-		toolShop:{
+		accessory:{
+			ko:'악세사리 상점',
+			en:'Accessory Shop',
+			jp:'アクセサリー店',
+		},
+		tool:{
 			ko:'도구 상점',
 			en:'Tool Shop',
 			jp:'工具店',
@@ -80,11 +85,6 @@ export const msg = {
 			en:'Element',
 			jp:'属性',
 		},
-		equipment:{
-			ko:'장비',
-			en:'Equipment',
-			jp:'装備',
-		},
 		totalState:{
 			ko:'전체 능력치',
 			en:'Total State',
@@ -110,10 +110,15 @@ export const msg = {
 			en:'Equip',
 			jp:'設備',
 		},
-		accessory:{
-			ko:'악세사리',
-			en:'Accessory',
-			jp:'アクセサリー',
+		ring:{
+			ko:'반지',
+			en:'Ring',
+			jp:'リング',
+		},
+		amulet:{
+			ko:'목걸이',
+			en:'Amulet',
+			jp:'アミュレット',
 		},
 		hole:{
 			ko:'소켓',
@@ -174,6 +179,143 @@ export const msg = {
 			ko:'보유',
 			en:'Possessed',
 			jp:'保有',
+		}
+	},
+	building: {
+		home_text0: {
+			ko:'대표 영웅 변경',
+			en:'Change main hero',
+			jp:'代表英雄を変更',
+		},
+		home_text1: {
+			ko:'카드 정비',
+			en:'Organize cards',
+			jp:'カード整理',
+		},
+		equipment_text0: {
+			ko:'투구 구입',
+			en:'Buy a helmet',
+			jp:'兜を買う',
+		},
+		equipment_text1: {
+			ko:'갑옷 구입',
+			en:'Buy a armor',
+			jp:'鎧を買う',
+		},
+		equipment_text2: {
+			ko:'무기 구입',
+			en:'Buy a weapon',
+			jp:'武器を買う',
+		},
+		accessory_text0: {
+			ko:'반지 구입',
+			en:'Buy a ring',
+			jp:'リングを買う',
+		},
+		accessory_text1: {
+			ko:'목걸이 구입',
+			en:'Buy a amulet',
+			jp:'アミュレットを買う',
+		},
+		tool_text0: {
+			ko:'강화재료 구입',
+			en:'Buy a upgrade material',
+			jp:'強化素材を買う',
+		},
+		tool_text1: {
+			ko:'기타제품 구입',
+			en:'Buy a etc',
+			jp:'その他を買う',
+		},
+		tradingPost_text0: {
+			ko:'무역품 거래',
+			en:'Trading',
+			jp:'貿易',
+		},
+		composite_text0: {
+			ko:'아이템 합성',
+			en:'Item Synthesis',
+			jp:'アイテム合成',
+		},
+		training_text0: {
+			ko:'영웅 레벨 강화',
+			en:'Hero Level Upgrade',
+			jp:'英雄レベル強化',
+		},
+		training_text1: {
+			ko:'영웅 등급 강화',
+			en:'Hero Grade Upgrade',
+			jp:'英雄グレード強化',
+		},
+		training_text2: {
+			ko:'스킬 레벨 강화',
+			en:'Skill Level Upgrade',
+			jp:'スキルレベル強化',
+		},
+		blackMarket_text0: {
+			ko:'장비 강화',
+			en:'Equipment Upgrade',
+			jp:'装備強化',
+		},
+		blackMarket_text1: {
+			ko:'아이템 소켓 강화',
+			en:'Item Socket Upgrade',
+			jp:'アイテムソケット強化',
+		},
+		church_text0: {
+			ko:'장비 정화',
+			en:'Equipment Purification',
+			jp:'装備浄化',
+		},
+		temple_text0: {
+			ko:'영웅 정화',
+			en:'Hero Purification',
+			jp:'英雄浄化',
+		},
+		mystery_text0: {
+			ko:'비밀 무기',
+			en:'Secret Weapon',
+			jp:'秘密武器',
+		},
+		mystery_text1: {
+			ko:'비밀 장신구',
+			en:'Secret Accessory',
+			jp:'秘密アクセサリー',
+		},
+		mystery_text2: {
+			ko:'비밀 장신구',
+			en:'Secret Accessory',
+			jp:'秘密アクセサリー',
+		},
+		tavern_text0: {
+			ko:'술집',
+			en:'Tavern',
+			jp:'酒場',
+		},
+		shipyard_text0: {
+			ko:'조선소',
+			en:'Shipyard',
+			jp:'造船所',
+		},
+		port_text0: {
+			ko:'항구',
+			en:'Port',
+			jp:'港',
+		},
+		townHall_text0: {
+			ko:'마을회관',
+			en:'Townhall',
+			jp:'町役場',
+		},
+		sell_item: {
+			ko: '아이템 판매',
+			en: 'Sell Item',
+			jp: 'アイテム販売',
+		},
+		getOut: {
+			ko: '밖으로 이동',
+			en: 'Move out',
+			jp: '外へ移動',
 		}
 	},
 	state:{
@@ -830,12 +972,12 @@ export const msg = {
 			en:'Card placement',
 			jp:'カード配置',
 		},
-		enhancingCards:{
+		enhancingItem:{
 			ko:'카드 강화',
 			en:'Enhancing Cards',
 			jp:'カード強化',
 		},
-		enhancingStickers:{
+		enhancingCard:{
 			ko:'스티커 강화',
 			en:'Enhancing Stickers',
 			jp:'ステッカー強化',
@@ -1755,6 +1897,11 @@ export const msg = {
 		},
 	},
 	sentence:{
+		noneSelectCh:{
+			ko:'선택된 인물이 없습니다.',
+			en:'No character is selected.',
+			jp:'選択された人物がいません。',
+		},
 		needMoreHero:{
 			ko:'해당 난이도를 도전하려면 영웅이 더 필요합니다.',
 			en:'You need more heroes to challenge this difficulty.',

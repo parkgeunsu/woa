@@ -286,7 +286,6 @@ const action = ({
 const MoveEvent = ({
   saveData,
   changeSaveData,
-  cityIdx,
   gameMode,
   setGameMode,
   showDim,
