@@ -236,7 +236,7 @@ const CharacterAnimalSkill = ({
               setMsgOn(true);
               setMsg(gameData.msg.sentence.resetAnimalSkill[lang]);
             }}>{gameData.msg.button.skillReset[lang]}</div>
-            <SkillPoint className="skill_point">
+            <SkillPoint>
               {animalPoint <= 0 ? <BadgesTxt code="t3" color="main">{gameData.msg.sentence.noBadges[lang]}</BadgesTxt> : <SkillMark point={animalPoint} idx={animalType}/>}
             </SkillPoint>
           </SkillHeader>

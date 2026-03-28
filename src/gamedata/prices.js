@@ -10,10 +10,10 @@ export const prices = {
 	shop:{
 
 	},
-	enhancingItem:{
+	blacksmith:{
 
 	},
-	enhancingCard:{
+	training:{
 		socketRemove:[
 			{cate:'g',type:'commonBtn',img:'icon100',idx:3,price:500},
 			{cate:'item',type:'etc',img:'itemEtc',idx:28,price:1}],
@@ -58,6 +58,6 @@ export const actionPoint = {
 	usePoine: {
 		itemBuy: 3,
 		itemSell: 3,
-		enhancingCard: 5,
+		training: 5,
 	}
 }

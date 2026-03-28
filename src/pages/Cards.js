@@ -292,29 +292,6 @@ const setPageIdxFn = (state) => {
 	}
   return state.dataObj.chTabIdx;
 }
-const GetLvReward = styled.div`
-  position: fixed;
-  inset: 0;
-  font-size: 32px;
-  pointer-events: none;
-  background: rgba(0,0,0,0.7);
-  opacity: 0;
-  z-index: 100;
-  &.animate {
-    opacity: 1;
-  }
-  .rewardText {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    white-space: pre-wrap;
-    text-shadow: 0 0 10px #ffd700, 0 0 20px #ffea00;
-  }
-  &.animate .rewardText{
-    animation: skillPop 1.5s ease-out infinite forwards;
-  }
-`;
 const Cards = ({
   saveData,
   changeSaveData,
@@ -349,7 +326,6 @@ const Cards = ({
   const [showInven, setShowInven] = useState(state?.dataObj.invenOpened);
   const [showSetting, setShowSetting] = useState(false);
   const [showState, setShowState] = useState(false);
-  const [rewardText, setRewardText] = useState("");
   const invenItems = React.useMemo(() => {
     return sData.items;
   }, [sData]);
@@ -470,15 +446,12 @@ const Cards = ({
           }}>
             <Img imgurl={imgSet.images.transparent800} />
             {chPage === 0 ? <CharacterCard saveData={sData} slotIdx={slotIdx} isZoomCard={isZoomCard} /> : <ChBack type="cardBack" pic="card" idx={0} />}
-            {chPage === 1 && <CharacterState saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} setRewardText={setRewardText} />}
+            {chPage === 1 && <CharacterState saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
             {chPage === 2 && <CharacterAnimalSkill saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
             {chPage === 3 && <CharacterSkill saveData={sData} slotIdx={slotIdx} />}
             {chPage === 4 && <CharacterRelation saveData={sData} slotIdx={slotIdx} />}
             {chPage === 5 && <CharacterItems saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
           </ChCard>}
-          <GetLvReward id="getLvReward">
-            <Text code="t6" color="#fff" weight="600" className="rewardText">{rewardText}</Text>
-          </GetLvReward>
           <CharacterPaging chLength={chLength} saveData={sData} changeChSlot={changeChSlot} slotIdx={slotIdx} />
           <TopBtnGroup>
             <FlexBox>

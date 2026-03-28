@@ -49,8 +49,8 @@ const saveNew = {
       {"idx":8},
     ],
     "material":[
-      {"idx":0},
-      {"idx":1},
+      {"idx":20,"num":10},
+      {"idx":14,"num":100},
     ],
     "etc":[
       {"idx":25},

@@ -1,5 +1,4 @@
 import { Text } from 'components/Atom';
-import { Button } from 'components/Button';
 import { FlexBox } from 'components/Container';
 import { IconPic } from 'components/ImagePic';
 import InfoGroup from 'components/InfoGroup';
@@ -9,7 +8,7 @@ import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import { AppContext } from 'contexts/app-context';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
@@ -52,61 +51,8 @@ const KgPic = styled(IconPic)`
 const KgText = styled(Text)`
   margin: 0 0 0 5px;
 `;
-const LvButton = styled(Button)`
-  position: relative;
-  margin: 0 10px 0 0;
-  padding: 0 5px;
-  &:before {
-    content: "";
-    position: absolute; 
-    left: -5%;
-    top: -5%;
-    margin: auto;
-    width: 100%; height: 100%;
-    border-radius: 50%;
-    border: 3px solid rgba(255, 239, 120, 0.0);
-    transform: scale(0.6);
-    pointer-events: none;
-    filter: blur(0);
-  }
-
-  &.animate:before {
-    animation: lvup-ring 800ms ease-out forwards;
-  }
-
-  &:after {
-    content: "";
-    position: absolute; inset: 0;
-    margin: auto;
-    width: 60%; height: 60%;
-    border-radius: 50%;
-    background: radial-gradient(circle, #fff6b0 0%, #ffd23d 60%, rgba(255,210,61,0) 70%);
-    opacity: 0;
-    pointer-events: none;
-    mask: radial-gradient(circle at center, white 0 40%, transparent 41%);
-    box-shadow:
-      0 -34px 0 0 #ffd23d,
-      29px -17px 0 0 #fff6b0,
-      34px  0px 0 0 #ffd23d,
-    -29px -17px 0 0 #ffe37a,
-      0   34px 0 0 #ffd23d,
-    -34px  0px 0 0 #fff29c,
-      29px  17px 0 0 #ffd23d,
-    -29px  17px 0 0 #ffe37a;
-    transform: scale(0.6);
-  }
-
-  &.animate:after {
-    animation: lvup-sparks 800ms ease-out forwards;
-  }
-`;
-const LvIcon = styled(IconPic)`
-  width: 40px;
-  height: 40px;
-`;
 const StyledText = styled(Text)`
   margin: 0 5px 0 0;
-  text-align: right;
   & > span {
     font-size: inherit;
   }
@@ -168,7 +114,7 @@ const ElementIcon = styled.div`
   border-radius: 50%;
   right: 0;
   ${({actionPossibleElement}) => actionPossibleElement ? `
-    box-shadow: 0 0 10px var(--color-red), 0 0 5px var(--color-red);
+    outline: 3px solid var(--color-red);
   `: ""};
 `;
 const ElementText = styled(FlexBox)`
@@ -222,7 +168,6 @@ const ElementList = ({
 const CharacterState = ({
   saveData,
   slotIdx,
-  setRewardText,
   changeSaveData,
 }) => {
   const context = useContext(AppContext);
@@ -241,16 +186,13 @@ const CharacterState = ({
   );
   const chName = React.useMemo(() => chData.na1[lang] || "", [chData.na1, lang]);
 
-  const saveExp = React.useMemo(() => {
+  const maxExp = React.useMemo(() => {
     const gradeKey = 'grade' + saveCh.grade;
     const maxExpArr = gameData.exp?.[gradeKey];
     const maxExp = (maxExpArr && typeof saveCh.lv === "number") ? maxExpArr[saveCh.lv] : 0;
     
-    return {
-      current: saveCh.exp || 0,
-      max: maxExp
-    };
-  }, [gameData.exp, saveCh.grade, saveCh.lv, saveCh.exp]);
+    return maxExp;
+  }, [gameData.exp, saveCh.grade, saveCh.lv]);
 
   const saveHasExp = React.useMemo(() => {
     return {
@@ -264,7 +206,6 @@ const CharacterState = ({
   const [popupInfo, setPopupInfo] = useState({});
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
-  const lvUpTimeoutRef = useRef([null, null]);
 
   const animalKg = React.useMemo(() => {
     const animalType = chData.animal_type;
@@ -284,11 +225,6 @@ const CharacterState = ({
       return gameData.msg.state.kg4[lang];
     }
   }, [gameData, saveCh.kg, chData.animal_type, lang]);
-  useEffect(() => {
-    return () => {
-      clearTimeout(lvUpTimeoutRef.current);
-    };
-  }, []);
   return (
     <>
       <Wrap className="state">
@@ -301,68 +237,11 @@ const CharacterState = ({
         }}>
           <StateArea>
             <ChInfoContainer direction="row">
-              <LvButton className="lvupEffect" onClick={() => {//레벨업
-                const maxExp = saveExp.max;//레벨당 필요한 경험치
-                const currentExp = saveExp.current;//현재 경험치
-                const hasExp = saveHasExp.current;//보유 경험치
-                const needExp = maxExp - currentExp;//레벨업에 필요한 경험치
-                if (needExp <= hasExp) {
-                  const sData = {...saveData};
-                  const isLvUp = currentExp + needExp >= maxExp;
-                  sData.ch[slotIdx].exp = currentExp + needExp;
-                  sData.ch[slotIdx].hasExp = hasExp - needExp;
-                  if (isLvUp) {//레벨 업
-                    sData.ch[slotIdx].lv = sData.ch[slotIdx].lv + 1;
-                    sData.ch[slotIdx].exp = currentExp + needExp - maxExp;
-                  }
-                  const luck = sData.ch[slotIdx].st7; //행운
-                  const isGetAnimalCoin = util.getAnimalCoin({
-                    slotIdx: slotIdx,
-                    saveData: sData,
-                    luck: luck,
-                    lv: sData.ch[slotIdx].lv,
-                  });
-                  const skillIdx = util.getSkill({
-                    gameData: gameData,
-                    slotIdx: slotIdx,
-                    saveData: sData,
-                    luck: luck,
-                    lv: sData.ch[slotIdx].lv,
-                  });
-                  let rewardText = "";
-                  console.log(skillIdx, isGetAnimalCoin);
-                  if (skillIdx && isGetAnimalCoin) {
-                    rewardText = `${gameData.skill[skillIdx].na[lang]} ${gameData.msg.itemInfo.get[lang]} \n${gameData.animalType[chData.animal_type].na[lang]}${gameData.msg.itemInfo.animalBadge[lang]} ${gameData.msg.itemInfo.get[lang]}`;
-                  } else {
-                    if (skillIdx) {
-                      rewardText = `${gameData.skill[skillIdx].na[lang]} ${gameData.msg.itemInfo.get[lang]}`;
-                    }
-                    if (isGetAnimalCoin) {
-                      rewardText = `${gameData.animalType[chData.animal_type].na[lang]}${gameData.msg.itemInfo.animalBadge[lang]} ${gameData.msg.itemInfo.get[lang]}`;
-                    }
-                  }
-                  util.effect.lvUp({
-                    timeoutRef: lvUpTimeoutRef,
-                    rewardText: rewardText,
-                    setRewardText: setRewardText,
-                    rewardType: skillIdx && isGetAnimalCoin ? "both" : skillIdx ? "skill" : isGetAnimalCoin ? "animalCoin" : "none",
-                  });
-                  util.saveCharacter({
-                    gameData: gameData,
-                    saveData: sData,
-                    changeSaveData: changeSaveData,
-                    chSlotIdx: slotIdx,
-                  });
-                } else {
-                  setMsgOn(true);
-                  setMsg(gameData.msg.sentence.lackExp[lang]);
-                }
-              }}><LvIcon type="commonIcon" pic="icon200" idx={0} /></LvButton>
               <FlexBox direction="column">
                 <ChInfoLi>
                   <ActionBox justifyContent="space-between">
                     <Text code="t2" color="grey">{gameData.msg.state.sp[lang]}</Text>
-                    <StyledText code="t2" color="main">
+                    <StyledText code="t2" color="main" align="right">
                       <span className="current">{saveCh.actionPoint || 0}</span><ChInfoBar>/</ChInfoBar><span className="max">{saveCh.actionMax || 50}</span>
                     </StyledText>
                   </ActionBox>
@@ -374,17 +253,16 @@ const CharacterState = ({
                 </ChInfoLi>
                 <ChInfoLi>
                   <FlexBox justifyContent="space-between">
-                    <Text code="t2" color="grey">{gameData.msg.info.exp[lang]}</Text>
-                    <StyledText code="t2" color="main">
-                      <span className="current">{saveExp.current}</span> <ChInfoBar>/</ChInfoBar> <span className="max">{saveExp.max}</span>
+                    <Text code="t2" color="grey">{gameData.msg.info.lvUpExp[lang]}</Text>
+                    <StyledText code="t2" color="main" align="right"><span className="max">{maxExp}</span>
                     </StyledText>
                   </FlexBox>
                 </ChInfoLi>
                 <ChInfoLi>
                   <FlexBox justifyContent="space-between">
                     <Text code="t2" color="grey">{gameData.msg.info.cumulativeExp[lang]}</Text>
-                    <StyledText code="t2" color="main">
-                      <span className="current">{saveHasExp.current}</span> <ChInfoBar>/</ChInfoBar> <span className="max">{saveHasExp.max}</span>
+                    <StyledText code="t2" color="main" align="right">
+                      <span className="current">{saveHasExp.current}</span> (<span className="max">{saveHasExp.max}</span>)
                     </StyledText>
                   </FlexBox>
                 </ChInfoLi>

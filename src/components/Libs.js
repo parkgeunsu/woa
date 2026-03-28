@@ -2287,9 +2287,9 @@ export const util = { //this.loadImage();
         return 1;
       case 'cardPlacement':
         return 2;
-      case 'EnhancingItem':
+      case 'training':
         return 3;
-      case 'enhancingCard':
+      case 'blacksmith':
         return 4;
       case 'composite':
         return 5;
@@ -2864,7 +2864,7 @@ export const util = { //this.loadImage();
       }))
     };
 
-    if (dataObj.type === 'enhancingCard') {
+    if (dataObj.type === 'training') {
 
     } else if (dataObj.type === 'itemEquip') { //아이템 착용
       const invenPart = dataObj.data.saveItemData.part;
@@ -3401,17 +3401,19 @@ export const util = { //this.loadImage();
   getSkillJobLang: ({jobIdx, lang}) => {
     const jobText = [
       {},
-      {ko:'상점에서 가격흥정 가능',en:'Negotiate prices in your store',jp:'ショップで価格交渉可能'},
-      {ko:'항해이동 설정 가능',en:'Navigation movement can be configured',jp:'航海移動の設定が可能です。'},
-      {ko:'장비 제작/분해 가능',en:'Can build/disassemble equipment',jp:'機器製作/分解可能'},
-      {ko:'조각상 제작 가능',en:'Statues can be crafted',jp:'彫像製作可能'},
+      {ko:'상점 아이템 구입 가능',en:'Can purchase items in the store',jp:'ショップでアイテム購入可能'},
+      {ko:'지역간 빠른이동 가능',en:'Can move quickly between regions',jp:'地域間高速移動が可能'},
+      {ko:'장비 강화/분해 가능',en:'Can strengthen/disassemble equipment',jp:'機器強化/分解可能'},
+      {ko:'조각품 제작 가능',en:'Can craft statues',jp:'彫像製作可能'},
       {ko:'식물 재배 가능',en:'Can grow plants',jp:'植物栽培可能'},
       {ko:'아이템 합성 가능',en:'Items can be composited',jp:'アイテム合成可能'},
-      {ko:'목걸이, 반지 제작/분해 가능',en:'Can create/disassemble necklaces and rings',jp:'ネックレス、指輪製作/分解可能'},
+      {ko:'목걸이, 반지 강화/분해 가능',en:'Can strengthen/disassemble necklaces and rings',jp:'ネックレス、指輪強化/分解可能'},
       {ko:'동료를 찾을 확률 증가',en:'Increases the chance of finding a companion',jp:'仲間を確率アップ'},
       {ko:'예술품 제작 가능',en:'Can create art',jp:'アート作品制作可能'},
       {ko:'기습 공격 가능',en:'Surprise attack possible',jp:'奇襲攻撃可能'},
-      {ko:'상황 판단능력이 좋음',en:'Good judgment skills',jp:'状況判断能​​力が良い'},
+      {ko:'미확인 아이템 식별 가능',en:'Can identify unidentified items',jp:'未確認アイテム識別可能'},
+      {ko:'저주받은 아이템 정화 가능',en:'Can purify cursed items',jp:'呪われたアイテム浄化可能'},
+      {ko:'저주받은 카드 정화 가능',en:'Can purify cursed cards',jp:'呪われたカード浄化可能'},
     ];
     return jobText[jobIdx][lang];
   },
@@ -4141,7 +4143,6 @@ export const util = { //this.loadImage();
           job: job,
           ...(typeof jobElementType === "number" ? {jobElement: jobElementType} : {}),
           kg: kg,
-          exp: 0,
           hasExp: 500,
           battleBadge: [0,0,0,0],
           animalBadge: animalBadge,//총 보유 동물뱃지

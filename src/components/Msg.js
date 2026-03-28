@@ -1,3 +1,4 @@
+import { Text } from "components/Atom";
 import { FlexBox } from 'components/Container';
 import MsgContinaer from 'components/MsgContainer';
 import { useLayoutEffect, useRef } from 'react';
@@ -33,9 +34,6 @@ const MsgCont = styled(FlexBox)`
 	padding: 0 20px;
 	width: auto;
 	z-index: 2;
-	word-break: break-all;
-	line-height: 1.5;
-	font-size: 0.938rem;
 	text-align: center;
 	span {
 		line-height: 1.5;
@@ -101,7 +99,7 @@ const Msg = ({
 				showMsg(prev => !prev);
 			}}>
 				<MsgCont direction="column">
-					<div dangerouslySetInnerHTML={{__html: text}} />
+					<Text code="t3" color="main" dangerouslySetInnerHTML={{__html: text}} />
 				</MsgCont>
 			</MsgWrap>
 		</MsgContinaer>

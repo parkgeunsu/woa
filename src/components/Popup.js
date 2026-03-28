@@ -52,6 +52,10 @@ const ChSkillActionPoint = styled(FlexBox)`
   width: 100%;
   height: 10%;
 `;
+const UpIcon = styled(IconPic)`
+  width: 50px;
+  height: 50px;
+`;
 const ChSkill = styled(FlexBox)`
 `;
 const ChActionPoint = styled(FlexBox)`
@@ -1123,7 +1127,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
                 msgText(gameData.msg.sentence.goForge[lang]);
                 timeoutRef.current = setTimeout(() => {
                   util.saveHistory({
-                    location: 'enhancingCard',
+                    location: 'training',
                     navigate: navigate,
                     callback: () => {},
                     state: {
@@ -1137,13 +1141,13 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
                     isNavigate: true,
                   });
                 }, 1800);
-              }} data-buttontype="enhancingCard" />}
+              }} data-buttontype="training" />}
               {!isMoveEvent && hasSocket > 0 && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:22}} onClick={(e) => {//소켓
                 showMsg(true);
                 msgText(gameData.msg.sentence.goForge[lang]);
                 timeoutRef.current = setTimeout(() => {
                   util.saveHistory({
-                    location: 'enhancingCard',
+                    location: 'training',
                     navigate: navigate,
                     callback: () => {},
                     state: {
@@ -1268,7 +1272,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
               msgText(gameData.msg.sentence.goForge[lang]);
               timeoutRef.current = setTimeout(() => {
                 util.saveHistory({
-                  location: 'enhancingCard',
+                  location: 'training',
                   navigate: navigate,
                   callback: () => {},
                   state: {
@@ -1363,7 +1367,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
               msgText(gameData.msg.sentence.goForge[lang]);
               timeoutRef.current = setTimeout(() => {
                 util.saveHistory({
-                  location: 'enhancingCard',
+                  location: 'training',
                   navigate: navigate,
                   callback: () => {},
                   state: {
@@ -1389,7 +1393,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
               //   showPopup: showPopup,
               //   lang: lang,
               // })
-            }} data-buttontype="enhancingCard" />}
+            }} data-buttontype="training" />}
             {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {//판매
               showMsg(true);
               msgText(gameData.msg.sentence.goTool[lang]);
@@ -1756,19 +1760,19 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
       possibleCh = 0;
     switch(dataObj.type) {
       case 'tradingPost':
-      case 'equipment':
       case 'accessory':
+      case 'equipment':
       case 'tool':
         skillIdx = 15;
         break;
       case 'composite':
         skillIdx = 20;
         break;
-      case 'enhancingCard':
-        skillIdx = 17;
+      case 'training':
+        skillIdx = 0;
         break;
-      case 'EnhancingItem':
-        skillIdx = 203;
+      case 'blacksmith':
+        skillIdx = 17;
         break;
       case 'recruitment':
         skillIdx = 22;
@@ -1779,7 +1783,13 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
       default:
         break;
     }
-    const skillLv = dataObj.selectIdx !== "" ? saveData.ch[dataObj.selectIdx].sk.find((skill) => skill.idx === skillIdx)?.lv || 0 : 0;
+    const saveCh = saveData.ch[dataObj.selectIdx];
+    const skillLv = dataObj.selectIdx !== "" ? saveCh.sk.find((skill) => skill.idx === skillIdx)?.lv || 0 : 0,
+      possibleLvUp = dataObj.selectIdx !== "" && saveCh.hasExp > gameData.exp[`grade${saveCh.grade}`][saveCh.lv],
+      possibleGradeUp = dataObj.selectIdx !== "" && saveCh.grade <= 7 && saveData.ch.filter((ch) => {
+        return ch.idx === dataObj.selectIdx
+      }).length >= 2,
+      possibleSkillUp = dataObj.selectIdx !== "" && saveCh.animalBadge > 0;
 		return (
       <ActionChWrap direction="column">
         <ActionCh>
@@ -1806,12 +1816,18 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
           </StateContainer>
         </ActionCh>
         {dataObj.selectIdx !== "" && <ChSkillActionPoint dirction="row" justifyContent="space-between">
+          {dataObj.type !== "training" ? 
           <ChSkill justifyContent="flex-start">
             <ActionSkillIcon><IconPic type="skill" pic="skill" idx={skillIdx} /></ActionSkillIcon>
-            <Text code="t4" color="main" weight="600">{skillLv > 0 && `${gameData.skill[skillIdx].na[lang]} Lv.${skillLv} `}</Text>
-          </ChSkill>
+            <Text code="t4" color="main" weight="600">{saveCh.hasExp > 0 && `${gameData.skill[skillIdx].na[lang]} Lv.${skillLv} `}</Text>
+          </ChSkill> : 
+          <ChSkill justifyContent="flex-start">
+            {possibleLvUp && <UpIcon type="commonIcon" pic="icon200" idx={1} />}
+            {possibleGradeUp && <UpIcon type="commonIcon" pic="icon200" idx={3} />}
+            {possibleSkillUp && <UpIcon type="commonIcon" pic="icon200" idx={7} />}
+          </ChSkill>}
           <ChActionPoint justifyContent="flex-end">
-            <Text code="t4" color="main" weight="600">{`${saveData.ch[dataObj.selectIdx].actionPoint} / ${saveData.ch[dataObj.selectIdx].actionMax}`}</Text>
+            <Text code="t4" color="main" weight="600">{`${saveCh.actionPoint} / ${saveCh.actionMax}`}</Text>
           </ChActionPoint>
         </ChSkillActionPoint>}
         <ChList type="action_list">

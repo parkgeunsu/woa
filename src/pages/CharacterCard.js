@@ -304,6 +304,17 @@ const GradeUp = styled(IconPic)`
   width: 100%;
   height: 0;
 `;
+const ListChNum = styled(Text)`
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  padding: 0 5px;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: var(--color-darkgrey);
+  line-height: 1.25rem;
+  z-index:7;
+`;
 const ListChCost = styled(Text)`
   position: absolute;
   left: 5px;
@@ -329,6 +340,7 @@ const CharacterCard = ({
   gameSpd=1,
   grade, 
   showCost,
+  showNum,
   ...rest
 }) => {
   const context = useContext(AppContext);
@@ -433,7 +445,8 @@ const CharacterCard = ({
                   </ListChActionType>
                 )
               })}
-              {showCost && <ListChCost code="t2" color="main" weight="600">{chData?.cost}</ListChCost>}
+              {showNum && <ListChNum code="t2" color="main" weight="600">{showNum}</ListChNum>}
+              {!showNum &&showCost && <ListChCost code="t2" color="main" weight="600">{chData?.cost}</ListChCost>}
             </>
           )}
         </>

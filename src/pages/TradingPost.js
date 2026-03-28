@@ -55,6 +55,9 @@ const TradingItemContainer = styled(FlexBox)`
 	.item_fix{padding:5px;border-bottom:5px double #ffac2f;}
 	.item_button{margin:5px 0 0 0;}
 `;
+const GreetingText = styled(Text)`
+	padding: 10%;
+`;
 const SliderContainer = styled(FlexBox)`
 	position: relative;
 	flex: 1;
@@ -126,6 +129,7 @@ const Img = styled.img.attrs(
 const TradingPost = ({
 	saveData,
 	changeSaveData,
+	setLoading,
 }) => {
   const context = useContext(AppContext);
 	const navigate = useNavigate();
@@ -151,7 +155,7 @@ const TradingPost = ({
 	const [popupType, setPopupType] = useState('');
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
-	const [selectTab, setSelectTab] = useState(0);
+	const [selectTab, setSelectTab] = useState("");
 	const [rangeValue, setRangeValue] = useState(0);
 	const [showCal, setShowCal] = useState(false);
 	const [item, setItem] = useState([]);
@@ -163,8 +167,9 @@ const TradingPost = ({
 	const shopItem = React.useMemo(() => {
 		const cityData = sData.city?.[stayIdx];
 		let materialItems = [];
-		if (cityData?.tradingPost) {
-			for (const [idx, item] of cityData.tradingPost.entries()) {
+		console.log(cityData?.tradingPost?.goods);
+		if (cityData?.tradingPost?.goods) {
+			for (const [idx, item] of cityData.tradingPost.goods.entries()) {
 				materialItems[idx] = item;
 			}
 		}
@@ -174,59 +179,63 @@ const TradingPost = ({
 			[...sData.items.material],
 		];	
 	}, [sData, stayIdx]);
+	useEffect(() => {
+		setLoading(false);
+	}, []);
   return (
 		<>
 			<Wrap direction="column">
-				<Npc imgSet={imgSet} shopType={'tradingPost'} gameData={gameData} lang={lang} setSelectTab={setSelectTab} navigate={navigate} onClick={() => { 
+				<Npc imgSet={imgSet} shopType={'tradingPost'} gameData={gameData} lang={lang} selectTab={selectTab} setSelectTab={setSelectTab} navigate={navigate} onClick={() => { 
 					setSelectItem({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 				}}/>
 				<TradingContainer frameBack={imgSet.etc.frameChBack}>
-					{shopItem.map((scrollData, scrollIdx) => {
-						return <ShopItem selected={selectTab === scrollIdx} key={`scrollContent${scrollIdx}`}>
-							{scrollData.map((invenData, invenIdx) => {
-								const items = gameItem.material[invenData.idx];
-								return invenData && <ItemLayout
-									gameItem={gameData.items}
-									icon={{
-										type: 'material',
-										pic: 'material',
-										idx: items.display,
-									}}
-									num={6}
-									key={`items${invenIdx}`}
-									grade={invenData.grade || items?.grade}
-									text={invenData?.num ? util.comma(invenData.num) : invenData.num}
-									selectColor={selectItem === invenIdx ? 1 : ""}
-									onClick={() => {
-										if (scrollIdx === 0) {
-											setSelectItem({
-												save: invenData,
-												game: items,
-												select: invenIdx,
-												buttonType: ['buy','bargaining'],
-											});
-										} else {
-											setSelectItem({
-												save: sData.items.material,
-												game: items,
-												select: invenIdx,
-												buttonType: ['sell','bargaining'],
-											});
-										}
-										// let button = ['buy','bargaining'];
-										// setSelectItem({
-										// 	save:invenData,
-										// 	game:items,
-										// 	select:invenIdx,
-										// 	selectTab:selectTab,
-										// 	buttonType:button,
-										// });
-										// setRangeValue(0);
-									}}
-								/>
-							})
-						}
-					</ShopItem>
+					{selectTab === "" && <GreetingText code="t4" color="main" wordBreak="keep-all">{gameData.shop["tradingPost"].greeting[lang]}</GreetingText>}
+					{selectTab !== "" && shopItem.map((scrollData, scrollIdx) => {
+							return <ShopItem selected={selectTab === scrollIdx} key={`scrollContent${scrollIdx}`}>
+								{scrollData.map((invenData, invenIdx) => {
+									const items = gameItem.material[invenData.idx];
+									return invenData && <ItemLayout
+										gameItem={gameData.items}
+										icon={{
+											type: 'material',
+											pic: 'material',
+											idx: items.display,
+										}}
+										num={6}
+										key={`items${invenIdx}`}
+										grade={invenData.grade || items?.grade}
+										text={invenData?.num ? util.comma(invenData.num) : invenData.num}
+										selectColor={selectItem === invenIdx ? 1 : ""}
+										onClick={() => {
+											if (scrollIdx === 0) {
+												setSelectItem({
+													save: invenData,
+													game: items,
+													select: invenIdx,
+													buttonType: ['buy','bargaining'],
+												});
+											} else {
+												setSelectItem({
+													save: sData.items.material,
+													game: items,
+													select: invenIdx,
+													buttonType: ['sell','bargaining'],
+												});
+											}
+											// let button = ['buy','bargaining'];
+											// setSelectItem({
+											// 	save:invenData,
+											// 	game:items,
+											// 	select:invenIdx,
+											// 	selectTab:selectTab,
+											// 	buttonType:button,
+											// });
+											// setRangeValue(0);
+										}}
+									/>
+								})
+							}
+						</ShopItem>
 					})}
 				</TradingContainer>
 				<TradingItemContainer frameBack={imgSet.etc.frameChBack}>
@@ -267,8 +276,8 @@ const TradingPost = ({
 													const charData = saveD.ch?.[actionCh.idx];
 													if (charData && charData.actionPoint >= (gameData.actionPoint?.itemBuy || 0)) {//행동력 지불
 														if (saveD.info.money >= rangeValue * selectItem.game.price) {//소유금이 더 많을경우
-															if (saveD.city[stayIdx]?.tradingPost?.[selectItem.select] && typeof saveD.city[stayIdx].tradingPost[selectItem.select].num === 'number') { //수량이 정해져 있을경우
-																saveD.city[stayIdx].tradingPost[selectItem.select].num -= rangeValue;
+															if (saveD.city[stayIdx]?.tradingPost?.goods[selectItem.select] && typeof saveD.city[stayIdx].tradingPost.goods[selectItem.select].num === 'number') { //수량이 정해져 있을경우
+																saveD.city[stayIdx].tradingPost.goods[selectItem.select].num -= rangeValue;
 																changeSaveData(saveD);
 															}
 															charData.actionPoint -= (gameData.actionPoint?.itemBuy || 0);

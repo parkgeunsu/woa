@@ -28,8 +28,8 @@ const NpcTalk = styled(FlexBox)`
   display: inline-flex;
 	padding: 3px 10px;
 	border-radius: 20px;
-	background: rgba(0, 0, 0, 0.7);
 	box-sizing: border-box;
+  background: ${({selected}) => selected ? `rgba(255, 100, 0, 0.7);` : 'rgba(0, 0, 0, 0.7);'}
 `;
 
 const getShopType = (type) => {
@@ -42,10 +42,10 @@ const getShopType = (type) => {
 			return 3;
 		case 'inven':
 			return 0;
-    case 'enhancingItem':
-      return 7;
-    case 'enhancingCard':
+    case 'training':
       return 5;
+    case 'blacksmith':
+      return 7;
 		case 'tradingPost':
 			return 6;
     case 'composite':
@@ -82,6 +82,7 @@ const Npc = ({
   gameData,
   imgSet,
   lang,
+  selectTab,
   setSelectTab,
   navigate,
   onClick,
@@ -101,7 +102,7 @@ const Npc = ({
       <NpcMenu flexWrap="wrap" alignItems="flex-start" justifyContent="flex-start">
         {gameData.shop[shopType].menu.map((menuData, menuIdx) => {
           return (
-            <NpcTalk key={`npcTalk${menuIdx}`} onClick={() => {
+            <NpcTalk selected={selectTab === menuIdx} key={`npcTalk${menuIdx}`} onClick={() => {
               if (menuIdx !== gameData.shop[shopType].menu.length - 1) {
                 setSelectTab(menuIdx);
               } else {

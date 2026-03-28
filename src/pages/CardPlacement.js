@@ -224,6 +224,7 @@ const ChLi = styled.li`
 	position: relative;
 	margin: 0 3px 3px 0;
 	width: calc(20% - 2.4px);
+	height: 0;
 	padding-top: calc(20% - 2.4px);
 	overflow: hidden;
 	border-radius: 10px;

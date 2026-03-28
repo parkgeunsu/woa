@@ -61,6 +61,7 @@ const TabMenu = ({
   selectTab,
   setSelectTab,
   direction,
+  hiddenText,
   onClick,
   children,
   ...rest
@@ -87,7 +88,7 @@ const TabMenu = ({
               <TabIcon>
                 <IconPic type="commonBtn" pic="icon100" idx={data.icon} />
               </TabIcon>
-              <Text color={"main"} code="t2">{gameData.msg.menu[data.na][lang]}</Text>
+              {!hiddenText && <Text color={"main"} code="t2">{gameData.msg.menu[data.na][lang]}</Text>}
             </TabButton>
           </TabList>
         );

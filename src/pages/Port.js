@@ -3,7 +3,7 @@ import { FlexBox } from 'components/Container';
 import { util } from 'components/Libs';
 import Npc from 'components/Npc';
 import { AppContext } from 'contexts/app-context';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -18,6 +18,7 @@ const Wrap = styled(FlexBox)`
 const Port = ({
 	saveData,
 	changeSaveData,
+  setLoading,
 }) => {
   const context = useContext(AppContext);
   const navigate = useNavigate();
@@ -35,10 +36,13 @@ const Port = ({
     return gameData.items;
   }, [gameData]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
+  useEffect(() => {
+    setLoading(false);
+  }, []);
   return (
     <>
 			<Wrap direction="column">
-				<Npc imgSet={imgSet} shopType={'port'} gameData={gameData} lang={lang} setSelectTab={setSelectTab} navigate={navigate} onClick={() => {
+				<Npc imgSet={imgSet} shopType={'port'} gameData={gameData} lang={lang} selectTab={selectTab} setSelectTab={setSelectTab} navigate={navigate} onClick={() => {
 				}}/>
       </Wrap>
     </>

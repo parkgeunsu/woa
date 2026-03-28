@@ -14,13 +14,14 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,1,2,5,6,9],
+      goods: [3,22,32,45],
     },
     {//1
       id:'japan1',
       pos:[1325.5,195.5],
       movePossible:['japan0','japan2'],
       sailPossible:[],
-      distancePosition: [4, 7],
+      distancePosition: [4,7],
       name: {
         ko:'일본 중부',
         en:'Central Japan',
@@ -28,13 +29,14 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,1,2,3,5,6,9],
+      goods: [3,22,32,45],
     },
     {//2
       id:'japan2',
       pos:[1310,220],
       movePossible:['japan1'],
       sailPossible:[],
-      distancePosition: [4, 7],
+      distancePosition: [4,7],
       name: {
         ko:'일본 서부',
         en:'Western Japan',
@@ -42,13 +44,14 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,5,6,9,10],
+      goods: [3,32,45,61],
     },
     {//3
       id:'korea0',
       pos:[1267,169.5],
       movePossible:['mongolia1','korea1','korea2'],
       sailPossible:[],
-      distancePosition: [5, 7],
+      distancePosition: [5,7],
       name: {
         ko:'한국 북부',
         en:'North Korea',
@@ -56,6 +59,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,4,5,6,9],
+      goods: [20,22,46,60,71],
     },
     {//4
       id:'korea1',
@@ -70,6 +74,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,3,5,6,9],
+      goods: [20,22,38,46,52,60,61,71],
     },
     {//5
       id:'korea2',
@@ -83,7 +88,8 @@ export const country = {
         jp:'韓国西部',
       },
       difficultLv: 10,
-      shop: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]//[0,1,2,5,6,9],
+      shop: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],//[0,1,2,5,6,9],
+      goods: [2,3,20,38,45,60,61,71],
     },
     {//6
       id:'mongolia0',
@@ -98,6 +104,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,1,2,5,6,9],
+      goods: [65,73],
     },
     {//7
       id:'mongolia1',
@@ -112,6 +119,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,5,6,9],
+      goods: [66,73],
     },
     {//8
       id:'mongolia2',
@@ -126,6 +134,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,3,5,6,9],
+      goods: [58,66,73],
     },
     {//9
       id:'mongolia3',
@@ -140,6 +149,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,5,6,9,10],
+      goods: [58,73,74],
     },
     {//10
       id:'mongolia4',
@@ -154,6 +164,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,4,5,6,9],
+      goods: [73,74],
     },
     {//11
       id:'china0',
@@ -168,6 +179,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,5,6,9],
+      goods: [],
     },
     {//12
       id:'china1',
@@ -182,6 +194,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,1,2,5,6,9],
+      goods: [38,61],
     },
     {//13
       id:'china2',
@@ -196,6 +209,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,5,6,9],
+      goods: [31,38,64,68,70],
     },
     {//14
       id:'china3',
@@ -210,6 +224,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,4,5,6,9],
+      goods: [3,4,30,33,47,48,52,53,54,62],
     },
     {//15
       id:'china4',
@@ -224,6 +239,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,5,6,7,9],
+      goods: [3,4,46,48],
     },
     {//16
       id:'china5',
@@ -238,6 +254,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,5,6,9],
+      goods: [31,38],
     },
     {//17
       id:'china6',
@@ -252,6 +269,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,4,5,6,9],
+      goods: [3,30,33,36,45,47,49,52,53,54,56,63],
     },
     {//18
       id:'china7',
@@ -266,6 +284,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,5,6,9],
+      goods: [3,34,46,51,59],
     },
     {//19
       id:'saudiArabia0',
@@ -280,6 +299,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,4,5,6,9,10],
+      goods: [],
     },
     {//20
       id:'egypt0',
@@ -294,6 +314,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,5,6,7,9],
+      goods: [],
     },
     {//21
       id:'greece0',
@@ -308,6 +329,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,1,2,5,6,8],
+      goods: [7,35,37],
     },
     {//22
       id:'italy0',
@@ -322,6 +344,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,3,5,6,8,10],
+      goods: [7,9,14,24,27,37,44,46,52,54,60,65],
     },
     {//23
       id:'france0',
@@ -336,6 +359,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,4,5,6,8],
+      goods: [2,4,14,24,27,46,63],
     },
     {//24
       id:'spain0',
@@ -350,6 +374,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,1,2,5,6,8],
+      goods: [7,8,10,14,27,37,52],
     },
     {//25
       id:'portugal0',
@@ -364,6 +389,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,5,6,7,8],
+      goods: [37],
     },
     {//26
       id:'unitedKingdom0',
@@ -378,6 +404,7 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,1,2,5,6,8],
+      goods: [67,69],
     },
     {//27
       id:'unitedKingdom1',
@@ -392,6 +419,21 @@ export const country = {
       },
       difficultLv: 10,
       shop: [0,2,5,7,6,8,10],
+      goods: [25,67],
     }
   ],
 }
+
+//브라질 [8,12,15,17,19,21,28,39,51,53,54,56,65]
+//아르헨티나 [7]
+//미국 [13,16,20,21,22,23,24,25,27,30,31,33,39,47,50,53,58,64,68,70]
+//중국 [7,8,9,12,13,15,19,20,21,30,31,34,36]
+//인도 [10,17,19,21,23,31,52,54,56,57,59,62,63,64,68,70]
+//에디오피아 [23]
+//터키 [11,35,36,37,52,54,55,55,72]
+//멕시코 [16,23,26,32,39,48,50,55]
+//태국 [18,19]
+//호주 [29,31,33,41,42,47,50,66]
+//인도네시아 [29,31,34,41,51,55,57,58]
+//아프리카 [40,42]
+//러시아 [43]

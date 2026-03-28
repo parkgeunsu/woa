@@ -8,7 +8,7 @@ import MoveRegion from 'pages/MoveRegion';
 import QuickMenu from 'pages/QuickMenu';
 import Roulette from 'pages/Roulette';
 import Scenario from 'pages/Scenario';
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -76,6 +76,7 @@ const GameMain = ({
   setGameMode,
   showDim,
   setShowDim,
+  setLoading,
 }) => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
@@ -154,6 +155,9 @@ const GameMain = ({
         return {};
     }
   }
+  useEffect(() => {
+    setLoading(false);
+  }, []);
   return (
     <Wrap direction="column">
       <QuickMenu type="main" stay={stay} gameMode={gameMode} showDim={showDim} setShowDim={setShowDim}/>
@@ -168,6 +172,7 @@ const GameMain = ({
         {gameData.country.regions[util.getRegionToIdx(stay)].shop.map((shop, idx) => {
           return (
             <ShopIcon idx={shop} key={`shop_${idx}`} onClick={() => {
+              setLoading(true);
               switch(shop) {
                 case 0: //집
                   util.saveHistory({
@@ -208,7 +213,7 @@ const GameMain = ({
                   break;
                 case 5: //훈련소
                   util.saveHistory({//카드 강화
-                    location: 'enhancingCard',
+                    location: 'training',
                     navigate: navigate,
                     callback: () => {},
                     isNavigate: true,
@@ -224,7 +229,7 @@ const GameMain = ({
                   break;
                 case 7: //대장간
                   util.saveHistory({//아이템 강화
-                    location: 'enhancingItem',
+                    location: 'blacksmith',
                     navigate: navigate,
                     callback: () => {},
                     isNavigate: true,

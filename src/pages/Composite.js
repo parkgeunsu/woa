@@ -1,33 +1,105 @@
+import { Text } from 'components/Atom';
 import { ActionChDisplay } from 'components/Components';
+import { FlexBox } from 'components/Container';
+import { MergedPic } from 'components/ImagePic';
 import ItemLayout from 'components/ItemLayout';
 import { util } from 'components/Libs';
-import Modal from 'components/Modal';
-import ModalContainer from 'components/ModalContainer';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
+import Npc from 'components/Npc';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import TabMenu from 'components/TabMenu';
 import { AppContext } from 'contexts/app-context';
-import 'css/combineItem.css';
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-const Wrap = styled.div`
-	display: flex;
+const Wrap = styled(FlexBox)`
 	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	flex-direction: column;
+  inset: 0;
 	padding: 0 0 20px 0;
-	width: 100%;
-	height: 100%;
 	box-sizing: border-box;
 	overflow: hidden;
 `;
-
+const WorkArea = styled(FlexBox)`
+	position: relative;
+	margin: 10px auto 0;
+  flex: 1;
+	width: 90%;
+  box-sizing: border-box;
+  background: rgba(0,0,0,.7);
+  border: 5px solid transparent;
+  border-image: url(${({frameBack}) => frameBack}) 5 round;
+`;
+const GreetingText = styled(Text)`
+	padding: 10%;
+`;
+const CombineBox = styled(FlexBox)`
+	position: relative;
+	margin: 0 10px 0 20px;
+	padding-top: 60%;
+	width: 60%;
+	height: 0;
+`;
+const BackPic = styled(MergedPic)`
+	position: absolute;
+	inset: 0;
+`;
+const ItemBox = styled(FlexBox)`
+	position: absolute;
+	width: 80%;
+	height: 80%;
+	left: 10%;
+	top: 10%;
+`;
+const ItemButton = styled(FlexBox)`
+	flex: 1;
+`;
+const UserContainer = styled(FlexBox)`
+	position: relative;
+	padding: 10px 20px 0 20px;
+	height: calc(25% - 10px);
+	width: calc(100% - 40px);
+`;
+const ItemMaterial = styled(FlexBox)`
+	position: relative;
+	flex: 1;
+	height: 100%;
+`;
+const ScrollArea = styled(FlexBox)`
+	position: relative;
+	flex: 1;
+	padding: 5px;
+	height: 100%;
+	overflow-y: auto;
+	box-sizing: border-box;
+	background: rgba(0,0,0,.8);
+`;
+const ActionPic = styled(FlexBox)`
+	position: relative;
+	margin: 0 0 0 10px;
+	width: auto;
+	height: 100%;
+	border-radius: 5%;
+	overflow: hidden;
+  box-sizing: border-box;
+  background: rgb(0, 0, 0, 0.5);
+  z-index: 3;
+`;
+const NoneChText = styled(Text)`
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+`;
+const Img = styled.img.attrs(
+	({imgurl}) => ({
+		src: imgurl 
+	})
+)`
+	height: 100%;
+`;
 const combineList = [
 	{na:'equip',icon:11,keyName:"equip"},
 	{na:'hole',icon:14,keyName:"hole"},
@@ -35,48 +107,6 @@ const combineList = [
 	{na:'material',icon:13,keyName:"material"},
 	{na:'etc',icon:16,keyName:"etc"},
 ];
-
-const ShopIcon = styled.span`
-	background:url(${({ icoType }) => icoType}) no-repeat left center;background-size:100%;
-`;
-const ItemTotalEff = styled.div`
-	border:5px solid transparent;
-  border-image:url(${({frameBack}) => frameBack}) 5 round;
-`;
-const LockIcon = styled.div`
-	background-image:url(${({iconLock}) => iconLock});background-size:100%;background-repeat:no-repeat;background-position:center center;
-`;
-
-const getTotalEff = (saveItems, gameData, socketEff) => {
-	let totalEff = {};
-	const grade = saveItems.grade;
-  for (const data of saveItems.baseEff) {
-		if (totalEff[data.type] === undefined) {
-			totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
-		}
-		totalEff[data.type].base += parseInt(data.num[grade - 1]);
-	}
-	for (const data of saveItems.addEff) {
-		if (totalEff[data.type] === undefined) {
-			totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
-		}
-		totalEff[data.type].add += parseInt(data.num[0]);
-	}
-	if (socketEff) {
-		for (const data of socketEff.save) {
-			if (data && data.idx !== undefined) {
-				const holeItem = gameData.items.hole[data.idx].eff;
-				for (const holeData of holeItem) {
-					if (totalEff[holeData.type] === undefined) {
-						totalEff[holeData.type] = {type: holeData.type, base: 0, add:0, hole:0};
-					}
-					totalEff[holeData.type].hole += parseInt(holeData.num);
-				}
-			}
-		}
-	}
-	return totalEff;
-}
 const getItem = ({
 	cate,
 	itemData,
@@ -100,8 +130,10 @@ const getItem = ({
 const Composite = ({
 	saveData,
 	changeSaveData,
+	setLoading,
 }) => {
   const context = useContext(AppContext);
+	const navigate = useNavigate();
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -114,14 +146,13 @@ const Composite = ({
   const gameItem = React.useMemo(() => {
     return gameData.items;
   }, [gameData]);
-  const [modalOn, setModalOn] = useState(false);
-	const [modalInfo, setModalInfo] = useState({});
-  const [modalType] = useState('confirm');
+	const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupInfo, setPopupInfo] = useState({});
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
-	const [selectTab, setSelectTab] = useState(0);
+	const [selectTab, setSelectTab] = useState("");
+	const [selectItemTab, setSelectItemTab] = useState(0);
 	const [item, setItem] = useState([]);
 	const [selectIdx, setSelectIdx] = useState(0);
 	const [selectItem, setSelectItem] = useState({
@@ -168,257 +199,272 @@ const Composite = ({
 			});
 		}
 	}, [saveData, selectItem.select, gameItem.hole]);
-
+	useEffect(() => {
+		setLoading(false);
+	}, []);
 	return (
 		<>
-			<Wrap>
-				<div className="combineItem_top">
-					<div className="action_select has_button">
-						{Object.keys(actionCh).length !== 0 && (
-							<div ref={actionRef} className={`ch_select_area ${actionCh.idx && saveData.ch?.[actionCh.idx] ? 'g' + saveData.ch[actionCh.idx].grade : ''}`} onClick={() => {
-								setPopupOn(true);
-							}}>
-								<ActionChDisplay type="composite" saveData={saveData} gameData={gameData} actionCh={actionCh} imgSet={imgSet} />
-							</div>
-						)}
-						<div className="button_group">
-							<button className="button_big" text="true" onClick={(e) => {
-								e.stopPropagation();
-								if (actionCh.idx === '' || actionCh.idx === undefined) {
-									setMsgOn(true);
-									setMsg(gameData.msg.sentenceFn?.selectSkillCh?.(lang, gameData.skill?.[203]?.na?.[lang]) || "Select Character");
-									return;
-								}
-								
-								let recipeNum = 0;
-								for (const data of selectItem.select) {
-									if (data !== '') {
-										recipeNum++;
+			<Wrap direction="column">
+				<Npc imgSet={imgSet} shopType={'composite'} gameData={gameData} lang={lang} selectTab={selectTab} setSelectTab={setSelectTab} navigate={navigate} onClick={() => {
+				}}/>
+				<WorkArea frameBack={imgSet.etc.frameChBack}direction="row" alignItems="center">
+					{selectTab === "" && <GreetingText code="t4" color="main" wordBreak="keep-all">{gameData.shop["composite"].greeting[lang]}</GreetingText>}
+					{selectTab !== "" && 
+						<>
+							<CombineBox  justifyContent="center" alignItems="center">
+								<BackPic pic="img800" idx={71} />
+								<ItemBox flexWrap="wrap">
+									{selectItem.save && selectItem.save.map((data, idx) => {
+										const cate = selectItem.selectTab[idx];
+										const items = getItem({
+											cate: cate,
+											itemData: data,
+											gameData: gameData,
+										});
+										const isEquip = cate === "equip";
+										return <ItemLayout 
+											gameItem={gameData.items}
+											icon={{
+												type: cate,
+												pic: isEquip ? "equip" : cate === "material" ? "material" : "itemEtc",
+												idx: items?.display,
+												mergeColor: data.color,
+											}}
+											text={data.num || ""}
+											num={4}
+											key={`item${idx}`}
+											{...isEquip && {
+												sealed: data.sealed,
+												itemsHole: data.hole}
+											}
+											grade={data.grade || items?.grade}
+											{...cate === "etc" && {text: items?.displayText}}
+											selectColor={selectIdx === idx ? 2 : ""}
+											onClick={() => {
+												setSelectIdx(idx);
+												if (selectIdx === idx && Object.keys(selectItem.save[idx]).length !== 0) {
+													let cloneSelectItem = {...selectItem};
+													cloneSelectItem.save[idx] = {};
+													cloneSelectItem.game[idx] = {};
+													cloneSelectItem.select[idx] = '';
+													cloneSelectItem.selectTab[idx] = '';
+													setSelectItem(cloneSelectItem);
+												}
+											}}
+										/>
+									})}
+								</ItemBox>
+							</CombineBox>
+							<ItemButton direction="column" justifyContent="center" alignItems="center">
+								<button className="button_big" text="true" onClick={(e) => {
+									e.stopPropagation();
+									if (actionCh.idx === '' || actionCh.idx === undefined) {
+										setMsgOn(true);
+										setMsg(gameData.msg.sentenceFn?.selectSkillCh?.(lang, gameData.skill?.[203]?.na?.[lang]) || "Select Character");
+										return;
 									}
-								}
+									
+									let recipeNum = 0;
+									for (const data of selectItem.select) {
+										if (data !== '') {
+											recipeNum++;
+										}
+									}
 
-								if (!recipeNum) {
-									setMsgOn(true);
-									setMsg(gameData.msg.sentence?.selectItem?.[lang] || "Select Item");
-								} else {
-									let success = false;
-									if (gameData.recipe[recipeNum]) {
-										for (const recipeData of gameData.recipe[recipeNum]) {
-											if (Object.keys(recipeData).length !== 0) {
-												let matchedIndices = new Set();
-												let tempItemsToRemove = [];
-												let itemsToRemove = [];
-												let allMatched = recipeData.entry.every((requirement) => {
-													let matchIdx = selectItem.selectTab.findIndex((cate, sIdx) => {
-														if (matchedIndices.has(sIdx) || !cate) return false;
-														if (cate !== requirement.cate) return false;
-														
-														if (typeof requirement.idx === 'number') {
-															return selectItem.game[sIdx]?.idx === requirement.idx;
-														} else if (typeof requirement.idx === 'string' && requirement.idx.indexOf('g') >= 0) {
-															return Number(selectItem.save[sIdx]?.grade) === Number(requirement.idx.substr(1));
+									if (!recipeNum) {
+										setMsgOn(true);
+										setMsg(gameData.msg.sentence?.selectItem?.[lang] || "Select Item");
+									} else {
+										let success = false;
+										if (gameData.recipe[recipeNum]) {
+											for (const recipeData of gameData.recipe[recipeNum]) {
+												if (Object.keys(recipeData).length !== 0) {
+													let matchedIndices = new Set();
+													let tempItemsToRemove = [];
+													let itemsToRemove = [];
+													let allMatched = recipeData.entry.every((requirement) => {
+														let matchIdx = selectItem.selectTab.findIndex((cate, sIdx) => {
+															if (matchedIndices.has(sIdx) || !cate) return false;
+															if (cate !== requirement.cate) return false;
+															
+															if (typeof requirement.idx === 'number') {
+																return selectItem.game[sIdx]?.idx === requirement.idx;
+															} else if (typeof requirement.idx === 'string' && requirement.idx.indexOf('g') >= 0) {
+																return Number(selectItem.save[sIdx]?.grade) === Number(requirement.idx.substr(1));
+															}
+															return false;
+														});
+
+														if (matchIdx !== -1) {
+															matchedIndices.add(matchIdx);
+															tempItemsToRemove.push({ cate: selectItem.selectTab[matchIdx], idx: selectItem.select[matchIdx] });
+															return true;
 														}
 														return false;
 													});
 
-													if (matchIdx !== -1) {
-														matchedIndices.add(matchIdx);
-														tempItemsToRemove.push({ cate: selectItem.selectTab[matchIdx], idx: selectItem.select[matchIdx] });
-														return true;
-													}
-													return false;
-												});
+													if (allMatched) {
+														itemsToRemove = tempItemsToRemove;
+														// SUCCESS
+														success = true;
+														setSelectItem({
+															save: Array.from({ length: 16 }, () => ({})),
+															game: Array.from({ length: 16 }, () => ({})),
+															select: Array.from({ length: 16 }, () => ('')),
+															selectTab: Array.from({ length: 16 }, () => (''))
+														});
+														
+														let newItems = { ...saveData.items };
+														const categoriesToUpdate = new Set(itemsToRemove.map(r => r.cate));
+														
+														categoriesToUpdate.forEach(cate => {
+															const indicesToRemove = itemsToRemove
+																.filter(r => r.cate === cate)
+																.map(r => r.idx);
+															newItems[cate] = newItems[cate].filter((_, idx) => !indicesToRemove.includes(idx));
+														});
 
-												if (allMatched) {
-													itemsToRemove = tempItemsToRemove;
-													// SUCCESS
-													success = true;
-													setSelectItem({
-														save: Array.from({ length: 16 }, () => ({})),
-														game: Array.from({ length: 16 }, () => ({})),
-														select: Array.from({ length: 16 }, () => ('')),
-														selectTab: Array.from({ length: 16 }, () => (''))
-													});
-													
-													let newItems = { ...saveData.items };
-													const categoriesToUpdate = new Set(itemsToRemove.map(r => r.cate));
-													
-													categoriesToUpdate.forEach(cate => {
-														const indicesToRemove = itemsToRemove
-															.filter(r => r.cate === cate)
-															.map(r => r.idx);
-														newItems[cate] = newItems[cate].filter((_, idx) => !indicesToRemove.includes(idx));
-													});
-
-													for (const getItem of recipeData.get) {
-														let newItemObj;
-														if (typeof getItem.idx === 'number') {
-															newItemObj = gameData.items[getItem.cate][getItem.idx];
-														} else if (typeof getItem.idx === 'object') {
-															const ranCount = Math.floor(Math.random() * getItem.idx.length);
-															newItemObj = gameData.items[getItem.cate][getItem.idx[ranCount]];
-														} else if (typeof getItem.idx === 'string' && getItem.idx.indexOf('g') >= 0) {
-															const option = {
-																type: 'equip',
-																items: Math.ceil(Math.random() * 3),
-																grade: getItem.idx.substr(1),
-																lv: Math.round(Math.random() * 100),
-																sealed: true,
-															};
-															util.getItem({
-																saveData: { ...saveData, items: newItems },
-																gameData: gameData,
-																changeSaveData: (updatedSData) => {
-																	newItems = updatedSData.items;
-																},
-																option: option,
-																isSave: true,
-																lang: lang
-															});
-															continue;
+														for (const getItem of recipeData.get) {
+															let newItemObj;
+															if (typeof getItem.idx === 'number') {
+																newItemObj = gameData.items[getItem.cate][getItem.idx];
+															} else if (typeof getItem.idx === 'object') {
+																const ranCount = Math.floor(Math.random() * getItem.idx.length);
+																newItemObj = gameData.items[getItem.cate][getItem.idx[ranCount]];
+															} else if (typeof getItem.idx === 'string' && getItem.idx.indexOf('g') >= 0) {
+																const option = {
+																	type: 'equip',
+																	items: Math.ceil(Math.random() * 3),
+																	grade: getItem.idx.substr(1),
+																	lv: Math.round(Math.random() * 100),
+																	sealed: true,
+																};
+																util.getItem({
+																	saveData: { ...saveData, items: newItems },
+																	gameData: gameData,
+																	changeSaveData: (updatedSData) => {
+																		newItems = updatedSData.items;
+																	},
+																	option: option,
+																	isSave: true,
+																	lang: lang
+																});
+																continue;
+															}
+															if (newItemObj) {
+																newItems[getItem.cate] = [newItemObj, ...newItems[getItem.cate]];
+															}
 														}
-														if (newItemObj) {
-															newItems[getItem.cate] = [newItemObj, ...newItems[getItem.cate]];
-														}
-													}
 
-													const newSaveData = JSON.parse(JSON.stringify(saveData));
-													newSaveData.items = newItems;
-													changeSaveData(newSaveData);
-													break; // Exit recipe loop
+														const newSaveData = JSON.parse(JSON.stringify(saveData));
+														newSaveData.items = newItems;
+														changeSaveData(newSaveData);
+														break; // Exit recipe loop
+													}
 												}
 											}
 										}
-									}
-									if (!success) {
-										setMsgOn(true);
-										setMsg(gameData.msg.sentence?.none?.[lang] || "No Recipe found");
-									}
-								}
-							}}>{gameData.msg.button?.composite?.[lang] || "Synthesis"}</button>
-							<button className="button_big" text="true" onClick={(e) => {
-								e.stopPropagation();
-								setSelectItem({
-									save: Array.from({ length: 16 }, () => ({})),
-									game: Array.from({ length: 16 }, () => ({})),
-									select: Array.from({ length: 16 }, () => ('')),
-									selectTab: Array.from({ length: 16 }, () => (''))
-								});
-								console.log('슬롯 비우기');
-							}}>{gameData.msg.button?.reset?.[lang] || "Reset"}</button>
-						</div>
-					</div>
-					<div className="combineItem_box">
-						{selectItem.save && selectItem.save.map((data, idx) => {
-							const cate = selectItem.selectTab[idx];
-							const items = getItem({
-								cate: cate,
-								itemData: data,
-								gameData: gameData,
-							});
-							const isEquip = cate === "equip";
-							return <ItemLayout 
-								gameItem={gameData.items}
-								icon={{
-									type: cate,
-									pic: isEquip ? "equip" : cate === "material" ? "material" : "itemEtc",
-									idx: items?.display,
-									mergeColor: data.color,
-								}}
-								text={data.num || ""}
-								num={4}
-								key={`item${idx}`}
-								{...isEquip && {
-									sealed: data.sealed,
-									itemsHole: data.hole}
-								}
-								grade={data.grade || items?.grade}
-								{...cate === "etc" && {text: items?.displayText}}
-								selectColor={selectIdx === idx ? 2 : ""}
-								onClick={() => {
-									setSelectIdx(idx);
-									if (selectIdx === idx && Object.keys(selectItem.save[idx]).length !== 0) {
-										let cloneSelectItem = {...selectItem};
-										cloneSelectItem.save[idx] = {};
-										cloneSelectItem.game[idx] = {};
-										cloneSelectItem.select[idx] = '';
-										cloneSelectItem.selectTab[idx] = '';
-										setSelectItem(cloneSelectItem);
-									}
-								}}
-							/>
-						})}
-					</div>
-				</div>
-				<div className="combineItem_bottom">
-					<TabMenu list={combineList} selectTab={selectTab} setSelectTab={setSelectTab} className="transition" />
-					<div className="combineItem_area scroll-y">
-						{item[combineList[selectTab].keyName] && item[combineList[selectTab].keyName].map((data, idx) => {
-							const cate = combineList[selectTab].keyName;
-							let select = false;
-							for (const [selectIndex, selectData] of selectItem.selectTab.entries()) {
-								if (selectData === cate && selectItem.select[selectIndex] === idx) {
-									select = true;
-									return;//return 시 선택된 아이템이 인벤창에서 사라짐
-								}
-							};
-							const items = getItem({
-								cate: cate,
-								itemData: data,
-								gameData: gameData,
-							});
-							const isEquip = cate === "equip";
-							return <ItemLayout 
-								gameItem={gameData.items}
-								icon={{
-									type: combineList[selectTab].keyName,
-									pic: isEquip ? "equip" : cate === "material" ? "material" : "itemEtc",
-									idx: items?.display,
-									mergeColor: data.color,
-								}}
-								text={data.num || ""}
-								num={6}
-								key={`items${idx}`}
-								{...isEquip && {
-									sealed: data.sealed,
-									itemsHole: data.hole}
-								}
-								grade={data.grade || items?.grade}
-								{...cate === "etc" && {text: items?.displayText}}
-								selectColor={select ? 0 : ""}
-								onClick={() => {
-									let cloneSelectItem = {...selectItem};
-									for (const [selectIndex, selectData] of cloneSelectItem.selectTab.entries()) {
-										if (selectData === cate && selectItem.select[selectIndex] === idx) {
-											cloneSelectItem.save[selectIndex] = {};
-											cloneSelectItem.game[selectIndex] = {};
-											cloneSelectItem.select[selectIndex] = '';
-											cloneSelectItem.selectTab[selectIndex] = '';
-											break;
+										if (!success) {
+											setMsgOn(true);
+											setMsg(gameData.msg.sentence?.none?.[lang] || "No Recipe found");
 										}
 									}
-									cloneSelectItem.save[selectIdx] = data;
-									cloneSelectItem.game[selectIdx] = items;
-									cloneSelectItem.select[selectIdx] = idx;
-									cloneSelectItem.selectTab[selectIdx] = combineList[selectTab].keyName;
-									if (cate === "upgrade" || cate === "etc") {
-										cloneSelectItem.num += 1;
+								}}>{gameData.msg.button?.composite?.[lang] || "Synthesis"}</button>
+								<button className="button_big" text="true" onClick={(e) => {
+									e.stopPropagation();
+									setSelectItem({
+										save: Array.from({ length: 16 }, () => ({})),
+										game: Array.from({ length: 16 }, () => ({})),
+										select: Array.from({ length: 16 }, () => ('')),
+										selectTab: Array.from({ length: 16 }, () => (''))
+									});
+									console.log('슬롯 비우기');
+								}}>{gameData.msg.button?.reset?.[lang] || "Reset"}</button>
+							</ItemButton>
+						</>
+					}
+				</WorkArea>
+				<UserContainer justifyContent="space-between">
+					<ItemMaterial direction="column" justifyContent="flex-start" alignItems="flex-start">
+						<TabMenu list={combineList} selectTab={selectItemTab} setSelectTab={setSelectItemTab} hiddenText={true} />
+						<ScrollArea flexWrap="wrap" justifyContent="flex-start" alignItems="flex-start">
+							{item[combineList[selectItemTab].keyName] && item[combineList[selectItemTab].keyName].map((data, idx) => {
+								const cate = combineList[selectItemTab].keyName;
+								let select = false;
+								for (const [selectIndex, selectData] of selectItem.selectTab.entries()) {
+									if (selectData === cate && selectItem.select[selectIndex] === idx) {
+										select = true;
+										return;//return 시 선택된 아이템이 인벤창에서 사라짐
 									}
-									setSelectItem(cloneSelectItem);
-								}}
-							/>
-						})}
-					</div>
-				</div>
+								};
+								const items = getItem({
+									cate: cate,
+									itemData: data,
+									gameData: gameData,
+								});
+								const isEquip = cate === "equip";
+								return <ItemLayout 
+									gameItem={gameData.items}
+									icon={{
+										type: combineList[selectItemTab].keyName,
+										pic: isEquip ? "equip" : cate === "material" ? "material" : "itemEtc",
+										idx: items?.display,
+										mergeColor: data.color,
+									}}
+									text={data.num || ""}
+									num={6}
+									key={`items${idx}`}
+									{...isEquip && {
+										sealed: data.sealed,
+										itemsHole: data.hole}
+									}
+									grade={data.grade || items?.grade}
+									{...cate === "etc" && {text: items?.displayText}}
+									selectColor={select ? 0 : ""}
+									onClick={() => {
+										let cloneSelectItem = {...selectItem};
+										for (const [selectIndex, selectData] of cloneSelectItem.selectTab.entries()) {
+											if (selectData === cate && selectItem.select[selectIndex] === idx) {
+												cloneSelectItem.save[selectIndex] = {};
+												cloneSelectItem.game[selectIndex] = {};
+												cloneSelectItem.select[selectIndex] = '';
+												cloneSelectItem.selectTab[selectIndex] = '';
+												break;
+											}
+										}
+										cloneSelectItem.save[selectIdx] = data;
+										cloneSelectItem.game[selectIdx] = items;
+										cloneSelectItem.select[selectIdx] = idx;
+										cloneSelectItem.selectTab[selectIdx] = combineList[selectItemTab].keyName;
+										if (cate === "upgrade" || cate === "etc") {
+											cloneSelectItem.num += 1;
+										}
+										setSelectItem(cloneSelectItem);
+									}}
+								/>
+							})}
+						</ScrollArea>
+					</ItemMaterial>
+					<ActionPic onClick={() => {
+							setPopupInfo({
+								ch: sData.ch,
+								actionCh: sData.actionCh['composite'].idx,
+								type: 'composite',
+								setMsg: setMsg,
+								setMsgOn: setMsgOn,
+							});
+							setPopupOn(true);
+						}}>
+						<MergedPic isAbsolute pic="card" idx={40 + (sData.ch?.[actionCh.idx]?.grade || 0)} />
+						{actionCh.idx === "" && <NoneChText code="t1" color="red" workBreak="keep-all">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
+						<Img imgurl={imgSet.images.transparent800} />
+						<ActionChDisplay type={'composite'} saveData={sData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
+					</ActionPic>
+				</UserContainer>
 			</Wrap>
 			<PopupContainer>
         {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
       </PopupContainer>
-			<ModalContainer>
-				{modalOn && <Modal submitFn={() => {}} type={modalType} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {
-					setModalOn(false);
-				}} gameData={gameData}/>}
-			</ModalContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
       </MsgContainer>

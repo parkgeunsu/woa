@@ -294,7 +294,7 @@ export const guide = {
       ],
     }
   },
-  enhancingItem:{
+  blacksmith:{
     title:{
 			ko:'시나리오',
 			en:'Scenarios',
@@ -324,7 +324,7 @@ export const guide = {
       ],
     }
   },
-  enhancingCard:{//Combination
+  training:{
     title:{
 			ko:'시나리오',
 			en:'Scenarios',

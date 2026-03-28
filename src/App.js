@@ -8,13 +8,12 @@ import 'css/root.css';
 import { gameData, version } from 'gamedata/data';
 import { saveNew } from 'gamedata/savedata';
 import Battle from 'pages/Battle';
+import Blacksmith from 'pages/Blacksmith';
 import CardPlacement from 'pages/CardPlacement';
 import Cards from 'pages/Cards';
 import CharacterList from 'pages/CharacterList';
 import Church from 'pages/Church';
 import Composite from 'pages/Composite';
-import EnhancingCard from 'pages/EnhancingCard';
-import EnhancingItem from 'pages/EnhancingItem';
 import Recruitment from 'pages/Gacha';
 import GameMain from 'pages/GameMain';
 import Guild from 'pages/Guild';
@@ -33,10 +32,12 @@ import Tavern from 'pages/Tavern';
 import Temple from 'pages/Temple';
 import TownHall from 'pages/TownHall';
 import TradingPost from 'pages/TradingPost';
+import Training from 'pages/Training';
 import React, { useEffect, useRef, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 
+import Loading from 'components/Loading';
 import TestSkill from 'pages/TestSkill';
 
 const RootContainer = styled.div`
@@ -157,16 +158,22 @@ const ContentContainer = styled(FlexBox)`
     }
   }
 `;
-const setCity = (countryData, lang) => {
+const setCity = ({
+  countryData,
+  goodsData,
+  lang
+}) => {
   const cityD = Array.from({length:countryData.length}, (v, idx) => ({
     idx: idx,
     cityName: countryData[idx].name[lang],
-    price: 1, //물가 (일주일에 한번씩 랜덤 변동)
+    price: Number((Math.random() * 1.9 + 0.1).toFixed(2)), //물가 (일주일에 한번씩 랜덤 변동 0.1 ~ 2.0)
     tool: {
+      price: 1,
       upgrade: [{idx:0},{idx:1},{idx:6},{idx:7}],
       etc: [{idx:20}, {idx:21}, {idx:22}, {idx: util.getStringToCountryIdx(countryData[idx].id) + 30}],
     },
     accessory: {
+      price: 1,
       ring: Array.from({length:20}, () => {
         return {...util.getItem({
           saveData: false,
@@ -199,6 +206,7 @@ const setCity = (countryData, lang) => {
       }),
     },
     equipment: {
+      price: 1,
       helm: Array.from({length:20}, () => {
         return {...util.getItem({
           saveData: false,
@@ -245,9 +253,15 @@ const setCity = (countryData, lang) => {
         })}
       }),
     },
-    tradingPost: [//교역소 상품생성
-      {idx:3,num:9000},{idx:13,num:1200},{idx:15,num:100},{idx:23,num:500},{idx:34,num:9000},{idx:33,num:250},{idx:45,num:300},
-    ],
+    tradingPost: {
+      price: 1,
+      goods: countryData[idx].goods.map((goods, goodsIdx) => {
+        return {
+          idx: goods,
+          num: goodsData[goods].numSize,
+        }
+      })
+    },
     shipyard:{
       blueprint:[30],
       wood:[0,3,4,5,7],
@@ -350,9 +364,9 @@ const makeSaveData = (saveData) => {
     tool: {idx:''},
     shipyard: {idx:''},
     tradingPost: {idx:''},
-    EnhancingItem: {idx:''},
-    enhancingCard: {idx:''},
-    enhancingCard2: {idx:''},
+    blacksmith: {idx:''},
+    training: {idx:''},
+    training2: {idx:''},
     composite: {idx:''},
     recruitment: {idx:''}
   }
@@ -363,8 +377,10 @@ const makeSaveData = (saveData) => {
     money:0,
     morality:100,
     stay:0,
+    leaderIdx:0,
     shipIdx:0,
   }
+  saveData.entry = [];
   saveData.lineup = {
     select: 0,
     save_slot: Array.from({length: 8}, () => {
@@ -397,6 +413,7 @@ const App = ({
   const location = locationObj.pathname.split("/")[1];
   const [saveData, setSaveData] = useState({});
   const savedDataRef = useRef(saveData);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     savedDataRef.current = saveData;
@@ -445,12 +462,12 @@ const App = ({
           pic: "areaBack",
           idx: 2
         };
-      case "EnhancingItem":
+      case "training":
         return {
           pic: "areaBack",
           idx: 3
         };
-      case "enhancingCard":
+      case "blacksmith":
         return {
           pic: "areaBack",
           idx: 4
@@ -595,10 +612,14 @@ const App = ({
         navigate('../');
       }
       const sData = makeSaveData(saveNew);
-      sData.city = setCity(gameData.country.regions, contextData.setting.lang);
+      sData.city = setCity({
+        countryData: gameData.country.regions,
+        goodsData: gameData.items.material,
+        lang: contextData.setting.lang
+      });
       util.saveData("saveData", sData);
       util.saveData("version", version);
-      localStorage.setItem('lastCityReset', new Date().toDateString());
+      localStorage.setItem('lastCityReset', new Date().getTime().toString());
       util.saveData("setting", {
         lang: 'ko',
         bgm: true,
@@ -623,11 +644,18 @@ const App = ({
       setContextData(cloneContextData);
       
       const lastResetStr = localStorage.getItem('lastCityReset');
-      const todayStr = new Date().toDateString();
-      if (lastResetStr !== todayStr && useSaveData) {
-        useSaveData.city = setCity(gameData.country.regions, setting.lang || 'ko');
+      const currentTime = new Date().getTime();
+      const parsedTime = parseInt(lastResetStr, 10);
+      const is7DaysPast = !lastResetStr || isNaN(parsedTime) || (currentTime - parsedTime >= 7 * 24 * 60 * 60 * 1000);
+      
+      if (is7DaysPast && useSaveData) {
+        useSaveData.city = setCity({
+          countryData: gameData.country.regions,
+          goodsData: gameData.items.material,
+          lang: setting.lang,
+        });
         util.saveData("saveData", useSaveData);
-        localStorage.setItem('lastCityReset', todayStr);
+        localStorage.setItem('lastCityReset', currentTime.toString());
       }
       setSaveData(() => {
         if (useSaveData?.ch[0]?.bSt0) { //캐릭 전투능력치 설정이 안되어 있을 경우
@@ -683,11 +711,17 @@ const App = ({
       let isChanged = false;
       
       const lastResetStr = localStorage.getItem('lastCityReset');
-      const todayStr = new Date().toDateString();
-      if (lastResetStr !== todayStr) {
+      const currentTime = new Date().getTime();
+      const parsedTime = parseInt(lastResetStr, 10);
+      
+      if (!lastResetStr || isNaN(parsedTime) || (currentTime - parsedTime >= 7 * 24 * 60 * 60 * 1000)) {
         const lang = util.loadData('setting')?.lang || 'ko';
-        cloneData.city = setCity(gameData.country.regions, lang);
-        localStorage.setItem('lastCityReset', todayStr);
+        cloneData.city = setCity({
+          countryData: gameData.country.regions,
+          goodsData: gameData.items.material,
+          lang: lang,
+        });
+        localStorage.setItem('lastCityReset', currentTime.toString());
         isChanged = true;
       }
       
@@ -713,7 +747,7 @@ const App = ({
         <RootContainer>
           <Wrapper location={location} className={`root ${location}`}>
             {location !== "battle" && location !== "" && location !== "main" && location !== "start" && (location !== "recruitment" && !paramData?.start?.begin) && location.indexOf('test') < 0 && (
-              <Header saveData={saveData} />
+              <Header saveData={saveData} setLoading={setLoading}/>
             )}
             <CountryBackground {...setBack(location)} />
             {showDim && (location === "gameMain" || location === "setup" || location === "chat") && <BackgroundShadow />}
@@ -721,63 +755,64 @@ const App = ({
               <Routes>
                 <Route path="/" element={<Menu type="new" />} />
 
-                <Route path="/start" element={<StartGame saveData={saveData} changeSaveData={changeSaveData} setLang={setLang} />} />
+                <Route path="/start" element={<StartGame saveData={saveData} changeSaveData={changeSaveData} setLang={setLang} setLoading={setLoading}/>} />
 
-                <Route path="/setup" element={<Setup setLang={setLang} setSpeed={setSpeed} setBgm={setBgm} setEfm={setEfm} setRes={setResolution} setBge={setBge} />} />
+                <Route path="/setup" element={<Setup setLang={setLang} setSpeed={setSpeed} setBgm={setBgm} setEfm={setEfm} setRes={setResolution} setBge={setBge} setLoading={setLoading} />} />
 
-                <Route path="/gameMain" element={<GameMain saveData={saveData} changeSaveData={changeSaveData} gameMode={gameMode} setGameMode={setGameMode} showDim={showDim} setShowDim={setShowDim} />} />
+                <Route path="/gameMain" element={<GameMain saveData={saveData} changeSaveData={changeSaveData} gameMode={gameMode} setGameMode={setGameMode} showDim={showDim} setShowDim={setShowDim} setLoading={setLoading} />} />
 
-                <Route path="/home" element={<Home saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/home" element={<Home saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/church" element={<Church saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/church" element={<Church saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/temple" element={<Temple saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/temple" element={<Temple saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/guild" element={<Guild saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/guild" element={<Guild saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/port" element={<Port saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/port" element={<Port saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/townHall" element={<TownHall saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/townHall" element={<TownHall saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/tavern" element={<Tavern saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/tavern" element={<Tavern saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/mystery" element={<Mystery saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/mystery" element={<Mystery saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/cardsList" element={<CharacterList saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/cardsList" element={<CharacterList saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/cards" element={<Cards saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/cards" element={<Cards saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/inven" element={<InvenShop shopType="inven" saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/inven" element={<InvenShop shopType="inven" saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/recruitment" element={<Recruitment saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/cardPlacement" element={<CardPlacement saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/cardPlacement" element={<CardPlacement saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/moveEvent" element={<MoveEvent saveData={saveData} changeSaveData={changeSaveData} gameMode={gameMode} setGameMode={setGameMode}  showDim={showDim} setShowDim={setShowDim} />} />
+                <Route path="/moveEvent" element={<MoveEvent saveData={saveData} changeSaveData={changeSaveData} gameMode={gameMode} setGameMode={setGameMode}  showDim={showDim} setShowDim={setShowDim} setLoading={setLoading} />} />
 
-                <Route path="/EnhancingItem" element={<EnhancingItem saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/blacksmith" element={<Blacksmith saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/enhancingCard" element={<EnhancingCard saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/training" element={<Training saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/composite" element={<Composite saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/composite" element={<Composite saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/equipment" element={<InvenShop shopType="equipment" saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/equipment" element={<InvenShop shopType="equipment" saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/accessory" element={<InvenShop shopType="accessory" saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/accessory" element={<InvenShop shopType="accessory" saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/tool" element={<InvenShop shopType="tool" saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/tool" element={<InvenShop shopType="tool" saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/shipyard" element={<Shipyard saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/shipyard" element={<Shipyard saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/tradingPost" element={<TradingPost saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/map" element={<Sail saveData={saveData} changeSaveData={changeSaveData} />} />
+                <Route path="/map" element={<Sail saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
                 <Route path="/testSkill" element={<TestSkill />} saveData={saveData} />
               </Routes>
             </ContentContainer>
+            <Loading gameData={gameData} lang={contextData.setting.lang} isVisible={isLoading} />
           </Wrapper>
         </RootContainer>
       </AppContext.Provider>

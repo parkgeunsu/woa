@@ -270,11 +270,11 @@ export const ActionChDisplay = ({
     case 'composite':
       skillIdx = 20;
       break;
-    case 'enhancingCard':
-      skillIdx = 17;
+    case 'training':
+      skillIdx = 0;
       break;
-    case 'EnhancingItem':
-      skillIdx = 203;
+    case 'blacksmith':
+      skillIdx = 17;
       break;
     case 'recruitment':
       skillIdx = 22;

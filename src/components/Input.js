@@ -256,7 +256,7 @@ const Select = ({
     }
   }, []);
   return (
-    <SelectArea>
+    <SelectArea {...rest}>
       {children}
       <SelectText {...rest} onClick={() => {
         selectShow();

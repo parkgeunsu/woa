@@ -18,16 +18,6 @@ const InfoTitle = styled.dt`
   strong {
     font-size: 1.25rem;
   }
-  .lvupText {
-    text-shadow:
-      0 0 0 rgba(255, 230, 120, 0),
-      0 0 0 rgba(255, 210, 0, 0);
-    will-change: transform, opacity, text-shadow, filter;
-  }
-  &.animate .lvupText {
-    animation: lvup-bounce 800ms cubic-bezier(.21,1.02,.35,1), 
-              lvup-trail 800ms ease-out;
-  }
 `;
 const InfoContent = styled.dd`
   display: flex;
@@ -47,8 +37,8 @@ const InfoGroup = ({
 }) => {
   return (
     <InfoGroupContainer {...rest}>
-      <InfoTitle className="lvupEffect">
-        {pointTitle && <Text className="lvupText" inline font="point" code="t3" color="main" weight="600" data-value={pointTitle}>{pointTitle}</Text>} <Text inline code="t1" color="main" weight="600">{title}</Text>
+      <InfoTitle>
+        {pointTitle && <Text inline font="point" code="t3" color="main" weight="600" data-value={pointTitle}>{pointTitle}</Text>} <Text inline code="t1" color="main" weight="600">{title}</Text>
           {hasGuide && 
             <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
               guideClick && guideClick();

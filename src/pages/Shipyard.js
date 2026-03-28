@@ -179,6 +179,7 @@ const shipSize = (shipIdx) => {
 const Shipyard = ({
 	saveData,
 	changeSaveData,
+	setLoading,
 }) => {
   const context = useContext(AppContext);
   const lang = React.useMemo(() => {
@@ -263,7 +264,8 @@ const Shipyard = ({
 		}
 	}, [saveData]);
 	useEffect(() => {
-	}, [])
+		setLoading(false);
+	}, []);
   return (
 		<>
 			<Wrap>

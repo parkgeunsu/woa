@@ -179,6 +179,11 @@ export const msg = {
 			ko:'보유',
 			en:'Possessed',
 			jp:'保有',
+		},
+		none:{
+			ko:'없음',
+			en:'None',
+			jp:'なし',
 		}
 	},
 	building: {
@@ -188,9 +193,9 @@ export const msg = {
 			jp:'代表英雄を変更',
 		},
 		home_text1: {
-			ko:'카드 정비',
-			en:'Organize cards',
-			jp:'カード整理',
+			ko:'카드덱 변경',
+			en:'Change card deck',
+			jp:'カードデッキを変更',
 		},
 		equipment_text0: {
 			ko:'투구 구입',
@@ -319,6 +324,11 @@ export const msg = {
 		}
 	},
 	state:{
+		align:{
+			ko:'정렬',
+			en:'Align',
+			jp:'整列',
+		},
 		lds:{
 			ko:'통솔',
 			en:'LDS',
@@ -511,15 +521,25 @@ export const msg = {
 			en:"Morality",
 			jp:"道徳",
 		},
-		exp:{
-			ko:'경험치',
-			en:'Exp',
-			jp:'経験値',
+		lvUpExp:{
+			ko:'레벨업 경험치',
+			en:'Level Up Exp',
+			jp:'レベルアップ経験値',
 		},
 		cumulativeExp:{
 			ko:'누적 경험치',
 			en:'Cumulative Exp',
 			jp:'累積経験値',
+		},
+		needExp:{
+			ko:'필요 경험치',
+			en:'Need Exp',
+			jp:'必要経験値',
+		},
+		hasExp:{
+			ko:'보유 경험치',
+			en:'Has Exp',
+			jp:'保有経験値',
 		},
 		shipBuilder:{
 			ko:'선박 제조가',
@@ -553,6 +573,11 @@ export const msg = {
 		},
 	},
 	title:{
+		loading:{
+			ko:'로딩중...',
+			en:'Loading...',
+			jp:'ロード中...',
+		},
 		noEntry:{
 			ko:'엔트리 없음',
 			en:'No Entry',
@@ -972,15 +997,15 @@ export const msg = {
 			en:'Card placement',
 			jp:'カード配置',
 		},
-		enhancingItem:{
-			ko:'카드 강화',
-			en:'Enhancing Cards',
-			jp:'カード強化',
+		training:{
+			ko:'영웅 강화',
+			en:'Training',
+			jp:'訓練',
 		},
-		enhancingCard:{
-			ko:'스티커 강화',
-			en:'Enhancing Stickers',
-			jp:'ステッカー強化',
+		blacksmith:{
+			ko:'장비 강화',
+			en:'Enhancing Equipment',
+			jp:'装備強化',
 		},
 		composite:{
 			ko:'합성',
@@ -1897,6 +1922,11 @@ export const msg = {
 		},
 	},
 	sentence:{
+		noRemoveLeader:{
+			ko:'리더는 제거할 수 없습니다.',
+			en:'Leader cannot be removed.',
+			jp:'リーダーは削除できません。',
+		},
 		noneSelectCh:{
 			ko:'선택된 인물이 없습니다.',
 			en:'No character is selected.',

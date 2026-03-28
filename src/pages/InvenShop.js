@@ -1218,7 +1218,7 @@ const ShopFooter = ({
 								setMsg(gameData.msg.sentence.goForge[lang]);
 								timeoutRef.current = setTimeout(() => {
 									util.saveHistory({
-										location: 'enhancingCard',
+										location: 'training',
 										navigate: navigate,
 										callback: () => {},
 										state: {
@@ -1241,7 +1241,7 @@ const ShopFooter = ({
 								setMsg(gameData.msg.sentence.goForge[lang]);
 								timeoutRef.current = setTimeout(() => {
 									util.saveHistory({
-										location: 'enhancingCard',
+										location: 'training',
 										navigate: navigate,
 										callback: () => {},
 										state: {
@@ -1687,6 +1687,7 @@ const InvenShop = ({
 	shopType,
 	saveData,
 	changeSaveData,
+	setLoading,
 }) => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
@@ -1787,16 +1788,6 @@ const InvenShop = ({
 			return selectItemFn(sData, state, shopType, selectItemNum);
 		});
 	});
-	// useEffect(() => {
-	// 	setSelectTab(selectTabFn(state, shopType, typeList));
-	// }, [sData, state, shopType, typeList]);
-	useEffect(() => {
-		// setSelectItem(() => {
-		// 	return selectItemArr.map(() => {
-		// 		return selectItemFn(sData, state, shopType, selectItemNum);
-		// 	});
-		// });
-	}, [sData, state, shopType, typeList, selectItemArr, selectItemNum]);
 	const actionCh = React.useMemo(() => sData.actionCh[shopType], [sData]);//행동할 캐릭터 데이터
 	useEffect(() => {
 		if (Object.keys(sData).length !== 0 && shopType !== 'inven') {
@@ -1809,12 +1800,15 @@ const InvenShop = ({
 			});
 		}
 	}, [sData, shopType]);
+	useEffect(() => {
+		setLoading(false);
+	}, []);
   return (
 		<>
 			<ShopWrap>
 				{shopType !== "inven" ?
 				<>
-					<Npc imgSet={imgSet} shopType={shopType} gameData={gameData} lang={lang} setSelectTab={setSelectTab} navigate={navigate}/>
+					<Npc imgSet={imgSet} shopType={shopType} gameData={gameData} lang={lang} selectTab={selectTab} setSelectTab={setSelectTab} navigate={navigate}/>
 					<ShopContainer frameBack={imgSet.etc.frameChBack}>
 						{selectTab === "" && <GreetingText code="t4" color="main" wordBreak="keep-all">{gameData.shop[shopType].greeting[lang]}</GreetingText>}
 						{shopItem.map((scrollData, scrollIdx) => {
