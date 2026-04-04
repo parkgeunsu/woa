@@ -86,10 +86,13 @@ const Npc = ({
   setSelectTab,
   navigate,
   onClick,
+  onMenuClick,
 }) => {
 	return (
 		<NpcContainer>
-      <NpcPic>
+      <NpcPic onClick={() => {
+        onClick && onClick();
+      }}>
         <MergedPic isAbsolute pic="card" idx={40} />
         <MergedPic style={{
           width: "90%",
@@ -108,7 +111,7 @@ const Npc = ({
               } else {
                 util.historyBack(navigate);
               }
-              onClick && onClick();
+              onMenuClick && onMenuClick();
             }}>
               <Text lineHeight={1.2} code="t2" align="center" color="main">{gameData.msg.building[menuData.text][lang]}</Text>
             </NpcTalk>

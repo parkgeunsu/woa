@@ -11955,3 +11955,19 @@
     opacity: 0.7;
   }
 }
+
+/* 별 승급 애니메이션 */
+@keyframes star_up {
+  0% {
+    transform: scale(4);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(0.5);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

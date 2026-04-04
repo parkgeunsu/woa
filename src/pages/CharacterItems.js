@@ -10,7 +10,7 @@ import PopupContainer from "components/PopupContainer";
 import Tooltip from 'components/Tooltip';
 import TooltipContainer from 'components/TooltipContainer';
 import { AppContext } from 'contexts/app-context';
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 const Wrap = styled(FlexBox)`
@@ -20,9 +20,8 @@ const Wrap = styled(FlexBox)`
   box-sizing: border-box;
 `;
 const ActionType = styled.div`
-  position: absolute;
-  right: 5px;
-  bottom: 5px;
+  position: relative;
+  margin: 0 0 10px 0;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -51,27 +50,27 @@ const ItemList = styled.li`
   }
   &:nth-of-type(3) {
     left: 3%;
-    top: 20%;
+    top: calc(20% - 15px);
   }
   &:nth-of-type(4) {
     right: 3%;
-    top: 20%;
+    top: calc(20% - 15px);
   }
   &:nth-of-type(5) {
     left: 3%;
-    top: 40%;
+    top: calc(40% - 35px);
   }
   &:nth-of-type(6) {
     right: 3%;
-    top: 40%;
+    top: calc(40% - 35px);
   }
   &:nth-of-type(7) {
     left: 3%;
-    top: 60%;
+    top: calc(60% - 55px);
   }
   &:nth-of-type(8) {
     right: 3%;
-    top: 60%;
+    top: calc(60% - 55px);
   }
   ${({ empty }) =>
     empty
@@ -100,24 +99,6 @@ const ItemList = styled.li`
     filter: invert(1);
   }
 `;
-const Hole = styled(FlexBox)`
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 3;
-  pointer-events: none;
-  .hole_slot {
-    width: 15%;
-    padding-top: 15%;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.7);
-  }
-  .hole_slot.fixed {
-    background: rgba(255, 172, 47, 0.7);
-  }
-`;
 const EmptyIconPic = styled(IconPic)`
   position: absolute;
   left: 0;
@@ -133,18 +114,37 @@ const EmptyIconPic = styled(IconPic)`
 // .item.item4{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-lightblue) 100%);}
 // .item.item5{background-image:radial-gradient(at 30% 30%,rgba(0,0,0,.3) 0%,var(--color-yellow) 100%);}
 
-const AnimalItemPic = styled(IconPic)`
+const PossibleEquipItem = styled(FlexBox)`
+  position: absolute;
+  left: 5px;
+  bottom: 5px;
+  width: 160px;
+  height: auto;
+  z-index: 1;
+`;
+const PossbileItemContainer = styled.div`
+  margin: 0 2px 2px 0;
+  width: 25px;
+  height: 25px;
+  background-color: ${({ theme, groupIdx }) => `${theme.color["point" + (groupIdx + 1)]}`};
+  border: 1px solid ${({ theme }) => theme.color.grey1};
+  border-radius: 5px;
+  box-sizing: border-box;
+  &:nth-of-type(6n) {
+    margin: 0 0 2px 0;
+  }
+`;
+const PossibleEquipItemIcon = styled(IconPic)`
+`;
+const InfoRight = styled(FlexBox)`
   position: absolute;
   right: 0;
   bottom: 0;
-  padding-top: 70%;
-  width: 70%;
-  height: 0;
+  width: 50%;
+  height: 100%;
 `;
 const PossibleKg = styled(FlexBox)`
-  position: absolute;
-  left: 0;
-  bottom: 0;
+  position: relative;
   width: 100px;
   height: auto;
 `;
@@ -171,9 +171,9 @@ const State = styled(FlexBox)`
   position: absolute;
   left: 25%;
   right: 25%;
-  top: 0;
+  top: 5px;
   width: 50%;
-  height: 100%;
+  height: auto;
   ul {
     width: 100%;
   }
@@ -233,7 +233,12 @@ const ItemBoxList = styled.div`
     filter: invert(1);
   }
 `;
-const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
+const CharacterItems = ({
+  chList,
+  saveData,
+  changeSaveData,
+  slotIdx
+}) => {
   const context = useContext(AppContext);
   const lang = React.useMemo(() => {
     return context.setting.lang;
@@ -244,7 +249,8 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
+  const saveCh = React.useMemo(() => chList[slotIdx], [chList, slotIdx]);
+  console.log(saveCh.possibleEquipment);
   const chData = React.useMemo(
     () => gameData.ch[saveCh.idx],
     [gameData, saveCh]
@@ -255,7 +261,7 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
     return saveCh.items;
   }, [saveCh]);
   const gameItem = React.useMemo(() => gameData.items, [gameData]);
-  
+  const possibleEquipItemNum = useRef(0);
   const possibleKgStatus = React.useMemo(() => {
     let currentKg = 0;
     saveItems.forEach((itemData) => {
@@ -278,12 +284,6 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
       percent: (currentKg / maxKg) * 100
     };
   }, [saveCh, chData, gameItem, saveItems, gameData.animal_size.kg]);
-
-  const animalPic = useCallback((node) => {
-    if (node !== null) {
-      node.setAttribute("size", node.getBoundingClientRect().width);
-    }
-  }, []);
   
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState("");
@@ -351,36 +351,47 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
             });
           }}
         >
-          <PossibleKg
-            direction="column"
-            alignItems="flex-start"
-            justifyContent="flex-start"
-          >
-            <PossibleKgBar>
-              <PossibleKgCurrentBar
-                className="gradient_dark_g"
-                percent={possibleKgStatus.percent}
+          <InfoRight direction="column" justifyContent="flex-end" alignItems="flex-end">
+            <ActionType>
+              <IconPic
+                type="element"
+                isAbsolute={true}
+                isThumb={true}
+                pic="icon100"
+                idx={saveCh.newActionType[0] + 1}
               />
-            </PossibleKgBar>
-            <Text
-              code="t2"
-              color="main"
-            >{`${possibleKgStatus.current.toFixed(1)}kg / ${possibleKgStatus.max.toFixed(1)}kg`}</Text>
-          </PossibleKg>
-          <AnimalItemPic
-            ref={animalPic}
-            pic="animalType"
-            idx={animalIdx}
-          />
-          <ActionType>
-            <IconPic
-              type="element"
-              isAbsolute={true}
-              isThumb={true}
-              pic="icon100"
-              idx={saveCh.newActionType[0] + 1}
-            />
-          </ActionType>
+            </ActionType>
+            <PossibleKg
+              direction="column"
+              alignItems="flex-start"
+              justifyContent="flex-start"
+            >
+              <PossibleKgBar>
+                <PossibleKgCurrentBar
+                  className="gradient_dark_g"
+                  percent={possibleKgStatus.percent}
+                />
+              </PossibleKgBar>
+              <Text
+                code="t2"
+                color="main"
+              >{`${possibleKgStatus.current.toFixed(1)}kg / ${possibleKgStatus.max.toFixed(1)}kg`}</Text>
+            </PossibleKg>
+          </InfoRight>
+          <PossibleEquipItem direction="row" flexWrap="wrap" justifyContent="flex-start" alignItems="flex-start">
+            {saveCh.possibleEquipment.map((itemGroup, index) => {
+              return (itemGroup.map((item, itemIndex) => {
+                const iconNum = index === 1 ? 4 : index === 2 ? 8 : index === 3 ? 19 : index === 4 ? 22 : 0;
+                return item !== 0 && <PossbileItemContainer groupIdx={index} key={`possibleEquipItem${index}_${itemIndex}`} onClick={(e) => {
+                  setTooltipPos(e.target.getBoundingClientRect());
+                  setTooltip(gameData.items.equipName[index][itemIndex][lang]);
+                  setTooltipOn(true);
+                }}>
+                  <PossibleEquipItemIcon pic="icon200" idx={itemIndex + iconNum} />
+                </PossbileItemContainer>
+              }))
+            })}
+          </PossibleEquipItem>
           <EquipItems>
             <EquipItem className="e_items">
               {saveItems &&
@@ -448,10 +459,10 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
                 {gameData.battleStateName.map((bData, idx) => {
                   return (
                     <StateList key={idx} className={bData}>
-                      <StateText code="t2" color="main">
+                      <StateText lineHeight={1.2} code="t2" color="main">
                         {gameData.msg.state[bData][lang]}
                       </StateText>
-                      <Text code="t4" color="set">
+                      <Text lineHeight={1.2} code="t4" color="set">
                         {(saveCh["bSt" + idx] || 0) + (saveCh["iSt" + idx] || 0)}
                       </Text>
                     </StateList>
@@ -472,7 +483,7 @@ const CharacterItems = ({ saveData, changeSaveData, slotIdx }) => {
                   if (itemData.sealed) {
                     chk = true;
                   } else {
-                    chk = !items?.limit && !items?.limit[saveCh.job];
+                    chk = !saveCh.possibleEquipment[items.part - 1][items.category];//items?.limit && !items?.limit[saveCh.job];
                   }
                   return chk;
                 })();

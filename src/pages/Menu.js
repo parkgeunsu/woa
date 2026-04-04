@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 const ContentMainWarp = styled.div`
   display: flex;
+  margin: -50px 0 0 0;
   width: 100%;
   height: 100%;
   background-size: cover;
@@ -43,7 +44,7 @@ const Menu = ({
   return (
     <>
       <ContentMainWarp className="main_wrap">
-        <ContentMenu className="main_menu transition" type={type}>
+        <ContentMenu type={type}>
           <ul className="menu">
             {type === 'new' ?
               <>

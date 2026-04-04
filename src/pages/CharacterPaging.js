@@ -21,15 +21,11 @@ const ChLi = styled.li`
   transition: all 0.3s;
 `;
 const CharacterPaging = ({
-  chLength,
+  chList,
   saveData,
   slotIdx,
   changeChSlot,
 }) => {
-  const sData = React.useMemo(() => {
-    return Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData;
-  }, [saveData]);
-
   const cardWidth = React.useMemo(() => window.innerWidth * 0.1, []);
 
   const scrollMove = useCallback((node) => {
@@ -41,8 +37,8 @@ const CharacterPaging = ({
   }, [slotIdx, cardWidth]);
   return (
     <ChList ref={scrollMove} type="paging">
-      <ChUl chSize={cardWidth} chLength={chLength}>
-        {sData.ch && sData.ch.map((data, idx) => {
+      <ChUl chSize={cardWidth} chLength={chList.length}>
+        {chList && chList.map((data, idx) => {
           const charKey = data.id || `paging-${data.idx}-${idx}`;
           return (
             <ChLi className={`g${data.grade} ${slotIdx === idx ? 'on' : ''}`} key={charKey} onClick={() => {
@@ -55,7 +51,7 @@ const CharacterPaging = ({
               });
               changeChSlot(idx);
             }}>
-              <CharacterCard usedType="paging" saveData={sData} saveCharacter={data} />
+              <CharacterCard usedType="paging" saveData={saveData} saveCharacter={data} />
             </ChLi>
           )
         })}

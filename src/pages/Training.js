@@ -1,5 +1,4 @@
 import { Text } from 'components/Atom';
-import { Button } from 'components/Button';
 import { ActionChDisplay } from 'components/Components';
 import { FlexBox } from 'components/Container';
 import { IconPic, MergedPic, SkillMark } from 'components/ImagePic';
@@ -10,6 +9,8 @@ import Npc from 'components/Npc';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import { AppContext } from 'contexts/app-context';
+import CharacterCard from 'pages/CharacterCard';
+import ChList from 'pages/ChList';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -111,13 +112,31 @@ const TextTotal = styled(Text)`
 	line-height: 1 !important;
 	white-space: nowrap;
 `;
+const GradeUpCh = styled.div`
+	position: relative;
+	width: 40%;
+	padding-top: 40%;
+	box-sizing: border-box;
+  border-radius: 10px;
+	overflow: hidden;
+`;
+const ChUl = styled.ul``;
+const ChLi = styled.li`
+  display: inline-block;
+  position: relative;
+	margin: 0 5px 5px 0;
+  width: calc(20% - 4px);
+  padding-top: calc(20% - 4px);
+  border-radius: 10px;
+  overflow: hidden;
+	&:nth-of-type(5n) {
+		margin: 0 0 5px 0;
+	}
+`;
 const SkillArea = styled(FlexBox)`
 	position: relative;
 	width: 80%;
-`;
-const SkillCoin = styled(FlexBox)`
-	position: relative;
-	width: 30%;
+	height: calc(100% - 10px);
 `;
 const BadgesTxt = styled(Text)`
 `;
@@ -129,17 +148,17 @@ const SkillHorizontal = styled(FlexBox)`
   position: relative;
   margin: 0 auto;
   width: 100%;
-  height: ${({groupIdx}) => groupIdx === 0 ? "50px" : "26%"};
-  & > div {
-    position: relative;
-    height: 40px;
-    width: 100%;
-  }
+  height: 25%;
+	& > .skill_group {
+		position: relative;
+		width: 100%;
+		height: 90%;
+	}
 `;
 const SkillList = styled.div`
   position: absolute;
-  width: 50px;
-  height: 50px;
+  height: 100%;
+	aspect-ratio: 1 / 1;
   box-sizing: border-box;
   border-radius: 30px;
   left: ${({pos}) => {
@@ -147,11 +166,11 @@ const SkillList = styled.div`
       case 0:
         return 0;
       case 1:
-        return `calc(33.3% - 25px)`;
+        return `calc((100% - 200px) * 1/3 + 50px * 1)`;
       case 2:
-        return `calc(66.6% - 37.5px)`;
+        return `calc((100% - 200px) * 2/3 + 50px * 2)`;
       case 3:
-        return `calc(100% - 50px)`;
+        return `calc((100% - 200px) * 3/3 + 50px * 3)`;
       default:
         break;
     }
@@ -163,6 +182,7 @@ const RequiredLine = styled.div`
   bottom: 100%;
   width: 4px;
   height: 62%;
+	outline: 1px solid #999;
   ${({active}) => active ? 
     `
       background: var(--color-w);
@@ -178,7 +198,7 @@ const SkillButton = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  ${({used}) => used ? `` : `filter: grayscale(100%) brightness(0.3);`};
+  ${({used}) => used ? `` : `filter: grayscale(100%)`};
   z-index: 2;
   .limitLv {
     position: absolute;
@@ -191,23 +211,31 @@ const SkillButton = styled.div`
 const SkillLv = styled(Text)`
   position: absolute;
   left: -10px;
-  top: -10px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50% 50% 0 50%;
+  top: 0;
+  height: 40%;
+	aspect-ratio: 1 / 1;
+  border-radius: 50%;
   ${({theme}) => `
     border: 2px solid ${theme.color.sub};
     background-color: ${theme.color.main};
     box-shadow: 0 0 5px ${theme.color.sub};
   `};
-  line-height: 20px;
+  line-height: 1.3;
   z-index: 5;
 `;
-const UpButton = styled(Button)`
+const GradeUpButton = styled.div`
   position: absolute;
 	bottom: 5px;
 	right: 5px;
   padding: 0 5px;
+	z-index: 10;
+`;
+const UpButton = styled.div`
+  position: absolute;
+	bottom: 5px;
+	right: 5px;
+  padding: 0 5px;
+	z-index: 10;
   &:before {
     content: "";
     position: absolute; 
@@ -221,11 +249,9 @@ const UpButton = styled(Button)`
     pointer-events: none;
     filter: blur(0);
   }
-
   &.animate:before {
     animation: lvup-ring 800ms ease-out forwards;
   }
-
   &:after {
     content: "";
     position: absolute; inset: 0;
@@ -247,7 +273,6 @@ const UpButton = styled(Button)`
     -29px  17px 0 0 #ffe37a;
     transform: scale(0.6);
   }
-
   &.animate:after {
     animation: lvup-sparks 800ms ease-out forwards;
   }
@@ -348,10 +373,16 @@ const Training = ({
 	const [selectTab, setSelectTab] = useState("");
 	const [rewardText, setRewardText] = useState("");
 	const lvUpTimeoutRef = useRef([null, null]);
-	const slotIdx = React.useMemo(() => {
-		return sData.actionCh.training.idx;
-	}, [sData.actionCh.training.idx]);
-	const saveCh = React.useMemo(() => saveData.ch?.[slotIdx] || {}, [saveData.ch, slotIdx]);
+	const isAnimationRef = useRef(false);
+	const entries = React.useMemo(() => {
+		return sData.entry.map((entryIdx) => {
+			return sData.ch[entryIdx];
+		});
+	}, [sData]);
+	const actionChIdx = React.useMemo(() => {
+		return sData.actionCh.training.idx <= entries.length - 1 ? sData.actionCh.training.idx : "";
+	}, [entries, sData]);
+	const saveCh = React.useMemo(() => entries[actionChIdx] || {}, [entries, actionChIdx]);
 	const maxExp = React.useMemo(() => {
 		const gradeKey = 'grade' + saveCh.grade;
 		const maxExpArr = gameData.exp?.[gradeKey];
@@ -368,10 +399,18 @@ const Training = ({
 		() => gameData.ch?.[saveCh.idx] || {},
 		[gameData.ch, saveCh.idx]
 	);
+	const heroNumArray = React.useMemo(() => {
+		return sData.hasHeroNum[saveCh.idx] ? Array.from({length: sData.hasHeroNum[saveCh.idx]}, (_, i) => {
+			return gameData.gradeUp[saveCh.grade];
+		}) : [];
+	}, [sData.hasHeroNum, saveCh.idx]);
+	const [isAnimation, setIsAnimation] = useState(false);
+	const [greeting, setGreeting] = useState(gameData.shop.training.greeting[lang]);
 	useEffect(() => {
 		setLoading(false);
     return () => {
       clearTimeout(lvUpTimeoutRef.current);
+      clearTimeout(isAnimationRef.current);
     };
 	}, []);
 	const totalState = React.useMemo(() => {
@@ -381,10 +420,13 @@ const Training = ({
 		<>
 			<Wrap direction="column">
 				<Npc imgSet={imgSet} shopType={'training'} gameData={gameData} lang={lang} selectTab={selectTab} setSelectTab={setSelectTab} navigate={navigate} onClick={() => {
+          setSelectTab("");
+          const randomIdx = Math.floor(Math.random() * gameData.shop.training.randomText.length);
+          setGreeting(gameData.shop.training.randomText[randomIdx][lang]);
 				}}/>
 				<WorkArea frameBack={imgSet.etc.frameChBack}direction="column" alignItems="center" justifyContent="center">
-					{selectTab === "" ? <GreetingText code="t4" color="main" wordBreak="keep-all">{gameData.shop["training"].greeting[lang]}</GreetingText> : 
-					<WorkHeader direction="row" justifyContent="space-between" alignItems="center">
+					{selectTab === "" ? <GreetingText code="t4" color="main" wordBreak="keep-all">{greeting}</GreetingText> : 
+					actionChIdx !== "" && <WorkHeader direction="row" justifyContent="space-between" alignItems="center">
 						<LvName justifyContent="flex-start" className="lvupEffect">
 							<Text font="point" lineHeight={1} className="lvupText" code="t5" color="main" weight="600">Lv.{saveCh.lv} {gameData.ch[saveCh.idx].na1[lang]}</Text>
 						</LvName>
@@ -396,14 +438,14 @@ const Training = ({
 					}}>
 						<StateContainer direction="column" justifyContent="space-around" alignItems="center">
 							{gameData.stateName.map((data, idx) => {
-								const { stateColor } = util.getPercentColor(gameData.stateMax[idx], slotIdx !== "" ? sData.ch?.[slotIdx]?.['st' + idx] : 0);
+								const { stateColor } = util.getPercentColor(gameData.stateMax[idx], actionChIdx !== "" ? saveCh?.['st' + idx] : 0);
 								return (
 									<StateGroup key={`chst${idx}`} justifyContent="flex-start">
 										<StateIcon type="state" pic="icon100" idx={idx} />
 										<StateInner justifyContent="space-between">
 											<StateText code="t2" color="main">{gameData.msg.state[data][lang]}</StateText>
 											<TextTotal code="t4" weight="600" color={stateColor}>
-												{slotIdx !== "" ? sData.ch?.[slotIdx]?.['st' + idx] : 0}
+												{actionChIdx !== "" ? saveCh?.['st' + idx] : 0}
 											</TextTotal>
 										</StateInner>
 									</StateGroup>
@@ -418,7 +460,7 @@ const Training = ({
 										<StateInner justifyContent="space-between">
 											<StateText code="t2" color="main">{gameData.msg.state[data][lang]}</StateText>
 											<TextTotal code="t4" weight="600" color="main">
-												{slotIdx !== "" ? sData.ch?.[slotIdx]?.['bSt' + idx] : 0}
+												{actionChIdx !== "" ? saveCh?.['bSt' + idx] : 0}
 											</TextTotal>
 										</StateInner>
 									</StateGroup>
@@ -434,19 +476,89 @@ const Training = ({
 								</StateInner>
 							</StateGroup>
 						</StateContainer>
+						<UpButton className="lvupEffect" onClick={() => {//레벨업
+							const trainingSkillLv = util.getHasSkillLv({
+								saveData: sData,
+								skillIdx: 27,//훈련
+								slotIdx: actionChIdx,
+							});
+							const trainingMaxExp = trainingSkillLv === 0 ? maxExp : maxExp - Math.round(maxExp * Number(gameData.skill[27].eff[0].num[trainingSkillLv]) / 100);
+							const hasExp = saveHasExp.current;//보유 경험치
+							if (trainingMaxExp <= hasExp) {
+								const saData = {...sData};
+								saData.ch[actionChIdx].hasExp = hasExp - trainingMaxExp;
+								saData.ch[actionChIdx].lv = saData.ch[actionChIdx].lv + 1;
+								const luck = saData.ch[actionChIdx].st7; //행운
+								const isGetAnimalCoin = util.getAnimalCoin({
+									slotIdx: actionChIdx,
+									saveData: saData,
+									luck: luck,
+									lv: saData.ch[actionChIdx].lv,
+								});
+								const skillIdx = util.getSkill({
+									gameData: gameData,
+									slotIdx: actionChIdx,
+									saveData: saData,
+									luck: luck,
+									lv: saData.ch[actionChIdx].lv,
+								});
+								let rewardText = "";
+								console.log(skillIdx, isGetAnimalCoin);
+								if (skillIdx && isGetAnimalCoin) {
+									rewardText = `${gameData.skill[skillIdx].na[lang]} ${gameData.msg.itemInfo.get[lang]} \n${gameData.animalType[chData.animal_type].na[lang]}${gameData.msg.itemInfo.animalBadge[lang]} ${gameData.msg.itemInfo.get[lang]}`;
+								} else {
+									if (skillIdx) {
+										rewardText = `${gameData.skill[skillIdx].na[lang]} ${gameData.msg.itemInfo.get[lang]}`;
+									}
+									if (isGetAnimalCoin) {
+										rewardText = `${gameData.animalType[chData.animal_type].na[lang]}${gameData.msg.itemInfo.animalBadge[lang]} ${gameData.msg.itemInfo.get[lang]}`;
+									}
+								}
+								util.effect.lvUp({
+									timeoutRef: lvUpTimeoutRef,
+									rewardText: rewardText,
+									setRewardText: setRewardText,
+									rewardType: skillIdx && isGetAnimalCoin ? "both" : skillIdx ? "skill" : isGetAnimalCoin ? "animalCoin" : "none",
+								});
+								util.saveCharacter({
+									gameData: gameData,
+									saveData: saData,
+									changeSaveData: changeSaveData,
+									chSlotIdx: actionChIdx,
+								});
+							} else {
+								setMsgOn(true);
+								setMsg(gameData.msg.sentence.lackExp[lang]);
+							}
+						}}>
+							<LvIcon type="commonIcon" pic="icon200" idx={0} />
+						</UpButton>
 					</LvUpContent>}
 					{selectTab === 1 && <GradeUpContent>
-						
-						<UpButton className="lvupEffect" onClick={() => {//그레이드 업
+						{actionChIdx !== "" && <CharacterCard usedType="gradeUp" saveData={sData} saveCharacter={saveCh} isAnimation={isAnimation}/>}
+						<GradeUpButton onClick={() => {//그레이드 업
+							if (heroNumArray.length >= gameData.gradeUp[saveCh.grade] && !isAnimation) {
+								setIsAnimation(true);
+								clearTimeout(isAnimationRef.current);
+								isAnimationRef.current = setTimeout(() => {
+									setIsAnimation(false);
+									sData.hasHeroNum[sData.ch[actionChIdx].idx] -= gameData.gradeUp[saveCh.grade];
+									sData.ch[actionChIdx].grade += 1;
+									changeSaveData(sData);
+								}, 1000);
+							} else {
+								setMsgOn(true);
+								setMsg(gameData.msg.sentence.lackHeroNum[lang]);
+							}
 						}}>
 						<LvIcon type="commonIcon" pic="icon200" idx={2} />
-						</UpButton>
+						</GradeUpButton>
 					</GradeUpContent>}
 					{selectTab === 2 && <SkillUpContent>
 						<SkillArea direction="column">
 							{saveCh.animalSkill && saveCh.animalSkill.map((skGroup, groupIdx) => {
 								return (
-									<SkillHorizontal groupIdx={groupIdx} alignItems="flex-end" key={groupIdx}>
+									<SkillHorizontal alignItems="flex-end" key={`skillHorizontal_${groupIdx}`}>
 										<div className="skill_group" >
 											{skGroup.map((skData, skIdx) => {
 												if (skData.idx !== ""){
@@ -502,9 +614,9 @@ const Training = ({
 																		}
 		
 																		const newSaveData = {
-																			...saveData,
-																			ch: saveData.ch.map((ch, idx) => 
-																				idx === slotIdx ? {
+																			...sData,
+																			ch: sData.ch.map((ch, idx) => 
+																				idx === actionChIdx ? {
 																					...ch,
 																					animalBadge: ch.animalBadge - 1,
 																					animalSkill: updatedAnimalSkill,
@@ -534,7 +646,6 @@ const Training = ({
 												}
 											})}
 										</div>
-										
 									</SkillHorizontal>
 								)
 							})}
@@ -550,59 +661,30 @@ const Training = ({
 							<StyledText code="t3" color="main" align="right">
 								{`${saveHasExp.current} (${saveHasExp.max})`}
 							</StyledText>
-							<UpButton className="lvupEffect" onClick={() => {//레벨업
-								const hasExp = saveHasExp.current;//보유 경험치
-								if (maxExp <= hasExp) {
-									const sData = {...saveData};
-									sData.ch[slotIdx].hasExp = hasExp - maxExp;
-									sData.ch[slotIdx].lv = sData.ch[slotIdx].lv + 1;
-									const luck = sData.ch[slotIdx].st7; //행운
-									const isGetAnimalCoin = util.getAnimalCoin({
-										slotIdx: slotIdx,
-										saveData: sData,
-										luck: luck,
-										lv: sData.ch[slotIdx].lv,
-									});
-									const skillIdx = util.getSkill({
-										gameData: gameData,
-										slotIdx: slotIdx,
-										saveData: sData,
-										luck: luck,
-										lv: sData.ch[slotIdx].lv,
-									});
-									let rewardText = "";
-									console.log(skillIdx, isGetAnimalCoin);
-									if (skillIdx && isGetAnimalCoin) {
-										rewardText = `${gameData.skill[skillIdx].na[lang]} ${gameData.msg.itemInfo.get[lang]} \n${gameData.animalType[chData.animal_type].na[lang]}${gameData.msg.itemInfo.animalBadge[lang]} ${gameData.msg.itemInfo.get[lang]}`;
-									} else {
-										if (skillIdx) {
-											rewardText = `${gameData.skill[skillIdx].na[lang]} ${gameData.msg.itemInfo.get[lang]}`;
-										}
-										if (isGetAnimalCoin) {
-											rewardText = `${gameData.animalType[chData.animal_type].na[lang]}${gameData.msg.itemInfo.animalBadge[lang]} ${gameData.msg.itemInfo.get[lang]}`;
-										}
-									}
-									util.effect.lvUp({
-										timeoutRef: lvUpTimeoutRef,
-										rewardText: rewardText,
-										setRewardText: setRewardText,
-										rewardType: skillIdx && isGetAnimalCoin ? "both" : skillIdx ? "skill" : isGetAnimalCoin ? "animalCoin" : "none",
-									});
-									util.saveCharacter({
-										gameData: gameData,
-										saveData: sData,
-										changeSaveData: changeSaveData,
-										chSlotIdx: slotIdx,
-									});
-								} else {
-									setMsgOn(true);
-									setMsg(gameData.msg.sentence.lackExp[lang]);
-								}
-							}}>
-								<LvIcon type="commonIcon" pic="icon200" idx={0} />
-							</UpButton>
 						</>}
-						{selectTab === 1 && <></>}
+						{selectTab === 1 && <>
+							<FlexBox height="auto" direction="row" justifyContent="space-between">
+								<FlexBox style={{flex: 1}} justifyContent="flex-start">
+									<StyledText code="t2" color="main" align="left">{gameData.msg.title.gradeUpHeroNum[lang]}</StyledText>
+								</FlexBox>
+								<FlexBox width="auto" direction="row">
+									<StyledText code="t4" color={heroNumArray.length >= gameData.gradeUp[saveCh.grade] ? "point3" : "point2"} weight="600">{gameData.gradeUp[saveCh.grade]}</StyledText><StyledText code="t4" color={"main"} weight="600" style={{margin: "0 4px"}}> / </StyledText><StyledText code="t4" color="main" weight="600">{heroNumArray.length}</StyledText>
+								</FlexBox>
+							</FlexBox>
+							<ChList type="action_list" style={{padding: 0}}>
+								<ChUl>
+									{heroNumArray.map((data, idx) => {
+										return (
+											<ChLi key={`chLi_${idx}`} onClick={(e) => {
+												e.stopPropagation();
+											}}>
+												<CharacterCard noInfo usedType="thumb" saveData={true} saveCharacter={saveCh} />
+											</ChLi>
+										)
+									})}
+								</ChUl>
+							</ChList>
+						</>}
 						{selectTab === 2 && <>
 							<SkillPoint>
 								{saveCh.animalBadge <= 0 ? <BadgesTxt code="t3" color="main">{gameData.msg.sentence.noBadges[lang]}</BadgesTxt> : <SkillMark point={saveCh.animalBadge} idx={chData.animal_type}/>}
@@ -623,9 +705,9 @@ const Training = ({
 								});
 	
 								const newSaveData = {
-									...saveData,
-									ch: saveData.ch.map((ch, idx) => 
-										idx === slotIdx ? {
+									...sData,
+									ch: sData.ch.map((ch, idx) => 
+										idx === actionChIdx ? {
 											...ch,
 											animalBadge: util.getAnimalPoint(saveCh.items, chData.animal_type, ch.mark),
 											animalSkill: updatedAnimalSkill,
@@ -642,8 +724,8 @@ const Training = ({
 					</InfoGroup>
 					<ActionPic onClick={() => {
 							setPopupInfo({
-								ch: sData.ch,
-								actionCh: sData.actionCh['training'].idx,
+								ch: entries,
+								actionChIdx: actionChIdx,
 								type: 'training',
 								setMsg: setMsg,
 								setMsgOn: setMsgOn,
@@ -651,10 +733,10 @@ const Training = ({
 							setPopupType('selectCh');
 							setPopupOn(true);
 						}}>
-						<MergedPic isAbsolute pic="card" idx={40 + (sData.ch?.[slotIdx]?.grade || 0)} />
-						{sData.ch?.[slotIdx]?.idx === "" && <NoneChText code="t1" color="red" workBreak="keep-all">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
+						<MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />
+						{!actionChIdx && <NoneChText code="t1" color="red">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
 						<Img imgurl={imgSet.images.transparent800} />
-						<ActionChDisplay type={'training'} saveData={sData} gameData={gameData} actionCh={sData.actionCh['training']} imgSet={imgSet}/>
+						<ActionChDisplay type={'training'} chList={entries} gameData={gameData} actionChIdx={actionChIdx} imgSet={imgSet}/>
 					</ActionPic>
 				</UserContainer>
 				<GetLvReward id="getLvReward">
@@ -662,7 +744,7 @@ const Training = ({
 				</GetLvReward>
 			</Wrap>
 			<PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
+        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={sData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
       </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}

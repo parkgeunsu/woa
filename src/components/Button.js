@@ -59,8 +59,8 @@ const ButtonText = styled.span`
 const StyledIconPic = styled(IconPic)`
   display: inline-block;
   ${({isChildren}) => isChildren ? `margin: 0 5px 0 0;` : ''}
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   flex-shrink: 0;
 `;
 const Button = ({

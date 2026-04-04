@@ -11,7 +11,7 @@ import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import TabMenu from 'components/TabMenu';
 import { AppContext } from 'contexts/app-context';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -34,6 +34,22 @@ const WorkArea = styled(FlexBox)`
 `;
 const GreetingText = styled(Text)`
 	padding: 10%;
+`;
+const EvaluateItem = styled.div`
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	aspect-ratio: 1 / 1;
+	height: 50%;
+	z-index: 2;
+	transform: translate(-50%, -50%);
+`;
+const ButtonGroup = styled.div`
+	position: absolute;
+	right: 5%;
+	bottom: 10px;
+	z-index: 1;
+	transition: all .5s;
 `;
 const CombineBox = styled(FlexBox)`
 	position: relative;
@@ -148,21 +164,34 @@ const Composite = ({
   }, [gameData]);
 	const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const [popupOn, setPopupOn] = useState(false);
-  const [popupInfo, setPopupInfo] = useState({});
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
 	const [selectTab, setSelectTab] = useState("");
 	const [selectItemTab, setSelectItemTab] = useState(0);
 	const [item, setItem] = useState([]);
 	const [selectIdx, setSelectIdx] = useState(0);
-	const [selectItem, setSelectItem] = useState({
+	const [selectItem0, setSelectItem0] = useState({});
+	const [selectItem1, setSelectItem1] = useState({
 		save: Array.from({ length: 16 }, () => ({})),
 		game: Array.from({ length: 16 }, () => ({})),
 		select: Array.from({ length: 16 }, () => ('')),
 		selectTab: Array.from({ length: 16 }, () => (''))
 	});//합성 선택 아이템 save, game
-	const [actionCh, setActionCh] = useState({});//행동할 캐릭터 데이터
-	const actionRef = useRef();//행동할 캐릭터 선택자
+	const entries = React.useMemo(() => {
+		return sData.entry.map((entryIdx) => {
+			return sData.ch[entryIdx];
+		});
+	}, [sData]);
+	const actionChIdx = React.useMemo(() => {
+		return sData.actionCh.composite.idx <= entries.length - 1 ? sData.actionCh.composite.idx : "";
+	}, [entries, sData]);
+	const saveCh = React.useMemo(() => entries[actionChIdx] || {}, [entries, actionChIdx]);
+  const [popupInfo, setPopupInfo] = useState({
+		ch: entries,
+		selectIdx: actionChIdx,
+		type: 'composite'
+	});
+	const [greeting, setGreeting] = useState(gameData.shop.composite.greeting[lang]);
 	useEffect(() => {
 		// equip, hole, upgrade, material, etc
 		if (saveData && Object.keys(saveData).length !== 0) {
@@ -191,14 +220,8 @@ const Composite = ({
 				}
 				// setSelectItem(baseSelectItem); // This might cause infinite loops if not careful
 			}
-			setActionCh(saveData.actionCh.composite);
-			setPopupInfo({
-				ch: saveData.ch,
-				actionCh: saveData.actionCh?.composite?.idx || '',
-				type: 'composite'
-			});
 		}
-	}, [saveData, selectItem.select, gameItem.hole]);
+	}, [saveData, selectItem1.select, gameItem.hole]);
 	useEffect(() => {
 		setLoading(false);
 	}, []);
@@ -206,16 +229,82 @@ const Composite = ({
 		<>
 			<Wrap direction="column">
 				<Npc imgSet={imgSet} shopType={'composite'} gameData={gameData} lang={lang} selectTab={selectTab} setSelectTab={setSelectTab} navigate={navigate} onClick={() => {
+					setSelectTab("");
+          const randomIdx = Math.floor(Math.random() * gameData.shop.composite.randomText.length);
+          setGreeting(gameData.shop.composite.randomText[randomIdx][lang]);
 				}}/>
 				<WorkArea frameBack={imgSet.etc.frameChBack}direction="row" alignItems="center">
-					{selectTab === "" && <GreetingText code="t4" color="main" wordBreak="keep-all">{gameData.shop["composite"].greeting[lang]}</GreetingText>}
-					{selectTab !== "" && 
+					{selectTab === "" && <GreetingText code="t4" color="main" wordBreak="keep-all">{greeting}</GreetingText>}
+					{selectTab === 0 && <>
+						{selectItem0.save && <EvaluateItem>
+							<ItemLayout
+								gameItem={selectItem0.game}
+								icon={{
+									type: "equip",
+									pic: "equip",
+									idx: selectItem0.game.display,
+									mergeColor: selectItem0.save.color,
+								}}
+								num={1}
+								sealed={selectItem0.save.sealed}
+							/>
+						</EvaluateItem>}
+						<ButtonGroup>
+							<button className="button_big" text="true" onClick={(e) => {
+								e.stopPropagation();
+								console.log('감정');
+								if (selectItem0.save.sealed) {
+									util.buttonEvent({
+										event: e,
+										type: 'itemEvaluate',
+										data: {
+											slotIdx: 0,
+											selectItem: selectItem0,
+											setSelectItem: setSelectItem0,
+											gameItem: selectItem0.game,
+											itemSaveSlot: selectItem0.select,
+											saveItemData: selectItem0.save,
+											type: 'equip',
+										},
+										saveData: sData,
+										changeSaveData: changeSaveData,
+										gameData: gameData,
+										msgText: setMsg,
+										showMsg: setMsgOn,
+										showPopup: setPopupOn,
+										lang: lang,
+									}, () => {
+										// util.saveHistory({
+										// 	location: 'inven',
+										// 	navigate: navigate,
+										// 	callback: () => {},
+										// 	state: {
+										// 		dataObj: {
+										// 			saveItemData: saveData.items.equip[selectedItem.itemSaveSlot],
+										// 			gameItem: selectedItem.gameItem,
+										// 			itemSaveSlot: selectedItem.itemSaveSlot,
+										// 			selectTab: selectTab,
+										// 			type: typeList[selectTab].itemCate,
+										// 			selectSlot: selectSlot,
+										// 		}
+										// 	},
+										// 	isNavigate: true,
+										// });
+									});
+								} else {
+									setMsgOn(true);
+									setMsg(gameData.msg.sentence.sealedItem[lang]);
+								}
+							}}>{gameData.msg.button.emotions[lang]}</button>
+						</ButtonGroup>
+					</>}
+					{selectTab === 1 && 
 						<>
 							<CombineBox  justifyContent="center" alignItems="center">
 								<BackPic pic="img800" idx={71} />
 								<ItemBox flexWrap="wrap">
-									{selectItem.save && selectItem.save.map((data, idx) => {
-										const cate = selectItem.selectTab[idx];
+									{selectItem1.save && selectItem1.save.map((data, idx) => {
+										const cate = selectItem1.selectTab[idx];
 										const items = getItem({
 											cate: cate,
 											itemData: data,
@@ -242,13 +331,13 @@ const Composite = ({
 											selectColor={selectIdx === idx ? 2 : ""}
 											onClick={() => {
 												setSelectIdx(idx);
-												if (selectIdx === idx && Object.keys(selectItem.save[idx]).length !== 0) {
-													let cloneSelectItem = {...selectItem};
+												if (selectIdx === idx && Object.keys(selectItem1.save[idx]).length !== 0) {
+													let cloneSelectItem = {...selectItem1};
 													cloneSelectItem.save[idx] = {};
 													cloneSelectItem.game[idx] = {};
 													cloneSelectItem.select[idx] = '';
 													cloneSelectItem.selectTab[idx] = '';
-													setSelectItem(cloneSelectItem);
+													setSelectItem1(cloneSelectItem);
 												}
 											}}
 										/>
@@ -258,14 +347,14 @@ const Composite = ({
 							<ItemButton direction="column" justifyContent="center" alignItems="center">
 								<button className="button_big" text="true" onClick={(e) => {
 									e.stopPropagation();
-									if (actionCh.idx === '' || actionCh.idx === undefined) {
+									if (actionChIdx === '' || actionChIdx === undefined) {
 										setMsgOn(true);
 										setMsg(gameData.msg.sentenceFn?.selectSkillCh?.(lang, gameData.skill?.[203]?.na?.[lang]) || "Select Character");
 										return;
 									}
 									
 									let recipeNum = 0;
-									for (const data of selectItem.select) {
+									for (const data of selectItem1.select) {
 										if (data !== '') {
 											recipeNum++;
 										}
@@ -283,21 +372,21 @@ const Composite = ({
 													let tempItemsToRemove = [];
 													let itemsToRemove = [];
 													let allMatched = recipeData.entry.every((requirement) => {
-														let matchIdx = selectItem.selectTab.findIndex((cate, sIdx) => {
+														let matchIdx = selectItem1.selectTab.findIndex((cate, sIdx) => {
 															if (matchedIndices.has(sIdx) || !cate) return false;
 															if (cate !== requirement.cate) return false;
 															
 															if (typeof requirement.idx === 'number') {
-																return selectItem.game[sIdx]?.idx === requirement.idx;
+																return selectItem1.game[sIdx]?.idx === requirement.idx;
 															} else if (typeof requirement.idx === 'string' && requirement.idx.indexOf('g') >= 0) {
-																return Number(selectItem.save[sIdx]?.grade) === Number(requirement.idx.substr(1));
+																return Number(selectItem1.save[sIdx]?.grade) === Number(requirement.idx.substr(1));
 															}
 															return false;
 														});
 
 														if (matchIdx !== -1) {
 															matchedIndices.add(matchIdx);
-															tempItemsToRemove.push({ cate: selectItem.selectTab[matchIdx], idx: selectItem.select[matchIdx] });
+															tempItemsToRemove.push({ cate: selectItem1.selectTab[matchIdx], idx: selectItem1.select[matchIdx] });
 															return true;
 														}
 														return false;
@@ -307,7 +396,7 @@ const Composite = ({
 														itemsToRemove = tempItemsToRemove;
 														// SUCCESS
 														success = true;
-														setSelectItem({
+														setSelectItem1({
 															save: Array.from({ length: 16 }, () => ({})),
 															game: Array.from({ length: 16 }, () => ({})),
 															select: Array.from({ length: 16 }, () => ('')),
@@ -372,7 +461,7 @@ const Composite = ({
 								}}>{gameData.msg.button?.composite?.[lang] || "Synthesis"}</button>
 								<button className="button_big" text="true" onClick={(e) => {
 									e.stopPropagation();
-									setSelectItem({
+									setSelectItem1({
 										save: Array.from({ length: 16 }, () => ({})),
 										game: Array.from({ length: 16 }, () => ({})),
 										select: Array.from({ length: 16 }, () => ('')),
@@ -391,8 +480,8 @@ const Composite = ({
 							{item[combineList[selectItemTab].keyName] && item[combineList[selectItemTab].keyName].map((data, idx) => {
 								const cate = combineList[selectItemTab].keyName;
 								let select = false;
-								for (const [selectIndex, selectData] of selectItem.selectTab.entries()) {
-									if (selectData === cate && selectItem.select[selectIndex] === idx) {
+								for (const [selectIndex, selectData] of selectItem1.selectTab.entries()) {
+									if (selectData === cate && selectItem1.select[selectIndex] === idx) {
 										select = true;
 										return;//return 시 선택된 아이템이 인벤창에서 사라짐
 									}
@@ -422,43 +511,52 @@ const Composite = ({
 									{...cate === "etc" && {text: items?.displayText}}
 									selectColor={select ? 0 : ""}
 									onClick={() => {
-										let cloneSelectItem = {...selectItem};
-										for (const [selectIndex, selectData] of cloneSelectItem.selectTab.entries()) {
-											if (selectData === cate && selectItem.select[selectIndex] === idx) {
-												cloneSelectItem.save[selectIndex] = {};
-												cloneSelectItem.game[selectIndex] = {};
-												cloneSelectItem.select[selectIndex] = '';
-												cloneSelectItem.selectTab[selectIndex] = '';
-												break;
+										if (selectTab === 0) {
+											console.log(data, items, idx)
+											setSelectItem0({
+												save: data,
+												game: items,
+												select: idx,
+											});
+										} else if (selectTab === 1) {
+											let cloneSelectItem = {...selectItem1};
+											for (const [selectIndex, selectData] of cloneSelectItem.selectTab.entries()) {
+												if (selectData === cate && selectItem1.select[selectIndex] === idx) {
+													cloneSelectItem.save[selectIndex] = {};
+													cloneSelectItem.game[selectIndex] = {};
+													cloneSelectItem.select[selectIndex] = '';
+													cloneSelectItem.selectTab[selectIndex] = '';
+													break;
+												}
 											}
+											cloneSelectItem.save[selectIdx] = data;
+											cloneSelectItem.game[selectIdx] = items;
+											cloneSelectItem.select[selectIdx] = idx;
+											cloneSelectItem.selectTab[selectIdx] = combineList[selectItemTab].keyName;
+											if (cate === "upgrade" || cate === "etc") {
+												cloneSelectItem.num += 1;
+											}
+											setSelectItem1(cloneSelectItem);
 										}
-										cloneSelectItem.save[selectIdx] = data;
-										cloneSelectItem.game[selectIdx] = items;
-										cloneSelectItem.select[selectIdx] = idx;
-										cloneSelectItem.selectTab[selectIdx] = combineList[selectItemTab].keyName;
-										if (cate === "upgrade" || cate === "etc") {
-											cloneSelectItem.num += 1;
-										}
-										setSelectItem(cloneSelectItem);
 									}}
 								/>
 							})}
 						</ScrollArea>
 					</ItemMaterial>
 					<ActionPic onClick={() => {
-							setPopupInfo({
-								ch: sData.ch,
-								actionCh: sData.actionCh['composite'].idx,
-								type: 'composite',
-								setMsg: setMsg,
-								setMsgOn: setMsgOn,
-							});
-							setPopupOn(true);
-						}}>
-						<MergedPic isAbsolute pic="card" idx={40 + (sData.ch?.[actionCh.idx]?.grade || 0)} />
-						{actionCh.idx === "" && <NoneChText code="t1" color="red" workBreak="keep-all">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
+						setPopupInfo({
+							ch: entries,
+							selectIdx: actionChIdx,
+							type: 'composite',
+							setMsg: setMsg,
+							setMsgOn: setMsgOn,
+						});
+						setPopupOn(true);
+					}}>
+						<MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />
+						{actionChIdx === "" && <NoneChText code="t1" color="red" workBreak="keep-all">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
 						<Img imgurl={imgSet.images.transparent800} />
-						<ActionChDisplay type={'composite'} saveData={sData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
+						<ActionChDisplay type="composite" chList={entries} gameData={gameData} actionChIdx={actionChIdx} imgSet={imgSet}/>
 					</ActionPic>
 				</UserContainer>
 			</Wrap>

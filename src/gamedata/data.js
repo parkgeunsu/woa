@@ -86,7 +86,7 @@ export const gameData = {
     items: items,
     ships: ships,
     shop: shop,
-    shopName: ['home','equipment','tool','accessory','composite','training','tradingPost','blacksmith','church','temple','mystery','tavern','shipyard','port','townHall','guild'],
+    shopName: ['home','equipment','tool','accessory','composite','training','tradingPost','blacksmith','church','temple','mystery','shipyard','port','townHall','guild','tavern'],
     //grade (0하급poor, 1일반normal, 2매직magic, 3레어rare, 4에픽epic, 5유니크unique, 6레전드legend)
     itemGrade: {//'#999'
       txt_e: ['','Poor','Normal','Magic','Rare','Epic','Unique','Legend'],
@@ -97,7 +97,7 @@ export const gameData = {
     stateMax:[150,200,200,100,200,100,100,200],//능력치 최대치(통,체,완,순,지,정,매,운) 150,200,200,100,200,100,100,200
     hasMaxExp: [0,50000,80000,120000,150000,200000,250000,300000],
     exp: exp,
-    gradeUp: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,5,5,5,10,10,10,10,10,20,20,20,20,20,25,25,25,30,40],//인물 초월시재료
+    gradeUp: [0,1,2,4,8,15,20],//인물 초월시재료
     element: [{ko:'쪼기',en:'Peck',jp:'ピグテール'},{ko:'할퀴기',en:'Claw',jp:'掻き分け'},{ko:'물기',en:'Bite',jp:'噛むこと'},{ko:'치기',en:'Hit',jp:'打撃'},{ko:'누르기',en:'Crush',jp:'押す'},{ko:'던지기',en:'Throw',jp:'投げる'},{ko:'빛',en:'Light',jp:'光'},{ko:'어둠',en:'Darkness',jp:'暗'},{ko:'물',en:'Water',jp:'水'},{ko:'불',en:'Fire',jp:'火'},{ko:'바람',en:'Wind',jp:'風'},{ko:'땅',en:'Earth',jp:'地'}],
     roulette: [
       {idx: 0, cardIdx: 0, type: 'enemies', amount: 3},

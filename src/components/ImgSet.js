@@ -572,6 +572,8 @@ import ch_54 from 'images/ch/ch_54.png';
 import ch_55 from 'images/ch/ch_55.png';
 import ch_56 from 'images/ch/ch_56.png';
 import ch_57 from 'images/ch/ch_57.png';
+import ch_58 from 'images/ch/ch_58.png';
+import ch_59 from 'images/ch/ch_59.png';
 import ch_6 from 'images/ch/ch_6.png';
 import ch_60 from 'images/ch/ch_60.png';
 import ch_61 from 'images/ch/ch_61.png';
@@ -666,6 +668,8 @@ import chs_54 from 'images/chs/ch_54.png';
 import chs_55 from 'images/chs/ch_55.png';
 import chs_56 from 'images/chs/ch_56.png';
 import chs_57 from 'images/chs/ch_57.png';
+import chs_58 from 'images/chs/ch_58.png';
+import chs_59 from 'images/chs/ch_59.png';
 import chs_6 from 'images/chs/ch_6.png';
 import chs_60 from 'images/chs/ch_60.png';
 import chs_61 from 'images/chs/ch_61.png';
@@ -717,7 +721,7 @@ import itemEtc from 'images/itemEtc.png'; //2000 x 6400, 10, 32
 import map800 from 'images/map800.png'; //4000 x 4000, 5, 8
 import material from 'images/material.png'; //2000 x 3200, 10, 16
 import shop from 'images/shop.png'; //4000 x 2286, 10, 2(1024 x 1792)
-import skill from 'images/skill.png'; //1000 x 4000, 10, 40
+import skill from 'images/skill.png'; //2000 x 6000, 10, 30
 
 import frame0 from 'images/frame0.png';
 
@@ -813,6 +817,8 @@ const chGroup = {
   ch55:ch_55,
   ch56:ch_56,
   ch57:ch_57,
+  ch58:ch_58,
+  ch59:ch_59,
   ch60:ch_60,
   ch61:ch_61,
   ch62:ch_62,
@@ -908,6 +914,8 @@ const chsGroup = {
   chs55:chs_55,
   chs56:chs_56,
   chs57:chs_57,
+  chs58:chs_58,
+  chs59:chs_59,
   chs60:chs_60,
   chs61:chs_61,
   chs62:chs_62,

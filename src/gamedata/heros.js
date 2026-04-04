@@ -8,7 +8,15 @@
 
 //animal_type 0고양이, 1사자, 2호랑이, 3개, 4늑대, 5물개, 6너구리, 7쥐, 8토끼, 9원숭이, 10고릴라, 11캥거루, 12소, 13곰, 14말, 15사슴, 16코뿔소, 17코끼리, 18기린, 19새, 20독수리, 21뱀, 22도마뱀, 23거북이, 24개구리, 25돼지, 26양, 27하마, 28악어, 29하이에나
 
-//region japan0,1,2, korea0,1,2, mongolia0,1,2,3,4, china0,1,2,3,4,5,6,7, saudiArabia0, egypt0, greece0, italy0, france0, spain0, portugal0, unitedKingdom0,1
+//region japan0,1,2, korea0,1,2, mongolia0,1,2,3,4, china0,1,2,3,4,5,6,7, saudiArabia0,egypt0, greece0, italy0, france0, spain0, portugal0, unitedKingdom0,1
+
+//possibleEquipment 장비가능한 부위 
+// 0투구(아주가벼운, 가벼운, 보통, 무거운),
+// 1갑옷(아주가벼운, 가벼운, 보통, 무거운)
+// 2무기(단검, 검, 양손검, 둔기, 창, 도끼, 원거리6,7 타격, 방패9,10)
+// 3반지(금은, 해골, 보석)
+// 4목걸이(금은, 해골, 보석)
+
 const randomNum = (start, max) => {
   return Math.floor(Math.random() * (max - start)) + start;
 }

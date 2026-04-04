@@ -1,4 +1,5 @@
 import { Text } from 'components/Atom';
+import { FlexBox } from 'components/Container';
 import { ChPic, IconPic, MergedPic } from 'components/ImagePic';
 import { AppContext } from 'contexts/app-context';
 import React, { useContext } from 'react';
@@ -11,12 +12,24 @@ const CardContainer = styled.div`
 `;
 const ChCard = styled.div`
   position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
   pointer-events:none;
   overflow:hidden;
+  ${({usedType}) => {
+    switch(usedType) {
+      case 'actionCh':
+        return `
+          inset: 5%;
+          width: 90%;
+          height: 90%;
+        `;
+      default:
+        return `
+          inset: 0;
+          width:100%;
+          height:100%;
+        `;
+    }
+  }}
   ${({size}) => {
     if (size) {
       return `
@@ -271,9 +284,17 @@ const ListActionPoint = styled.div`
   z-index: 6;
 `;
 const ListChStar = styled.div`
-  position: absolute;
-  left: 3%;
-  right: 3%;
+  ${({usedType}) => usedType === 'gradeUp' ? `
+    position: relative;
+    top: 0;
+    width: 90%;
+    text-align: center;
+  ` : `
+    position: absolute;
+    left: 3%;
+    right: 3%;
+    text-align: right;
+  `};
   ${({usedType}) => {
     switch(usedType) {
       case 'gameMain':
@@ -291,13 +312,41 @@ const ListChStar = styled.div`
     }
   }};
   z-index: 5;
-  text-align: right;
+`;
+const SratContainer = styled.div`
+  display: inline-block;
+  position:relative;
+  margin-left: -1.5%;
+  padding-top: 10% !important;
+  width: 10% !important;
+  height: 0 !important;
+`;
+const StarUp = styled(IconPic)`
+  position: absolute;
+  left: -1.5%;
+  top:0;
+  padding-top: 100% !important;
+  height: 0 !important;
+  opacity: ${({isUp}) => !isUp ? 1 : 0};
+  ${({isUp, isAnimation}) => isUp && isAnimation && `
+    animation: star_up ease-in-out 1s infinite;
+    transform: scale(4);
+    z-index: 1;
+  `}
 `;
 const Star = styled(IconPic)`
   margin-left: -1.5%;
   padding-top: 10% !important;
   width: 10% !important;
   height: 0 !important;
+`;
+const GradeUpCh = styled.div`
+  position: relative;
+  width: 40%;
+  padding-top: 40%;
+  box-sizing: border-box;
+  border-radius: 10px;
+  overflow: hidden;
 `;
 const GradeUp = styled(IconPic)`
   padding-top: 100%;
@@ -330,6 +379,7 @@ const ListChCost = styled(Text)`
 const CharacterCard = ({
   size,
   equalSize=false,
+  chList,
   isZoomCard,
   isShowCard,
   saveData,
@@ -341,6 +391,7 @@ const CharacterCard = ({
   grade, 
   showCost,
   showNum,
+  isAnimation=false,
   ...rest
 }) => {
   const context = useContext(AppContext);
@@ -350,19 +401,14 @@ const CharacterCard = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-
   const saveCh = React.useMemo(() => {
     return saveCharacter
       ? saveCharacter 
-      : saveData && Object.keys(saveData).length > 0
-        ? saveData.ch[slotIdx]
-        : '';
-  }, [saveData, slotIdx, saveCharacter]);
-
+      : slotIdx !== "" && slotIdx !== undefined ? chList ? chList[slotIdx] : saveData.ch[slotIdx] : "";
+  }, [chList, slotIdx, saveCharacter]);
   const chData = React.useMemo(() => {
-    return saveData && saveCh?.idx !== undefined ? gameData.ch[saveCh.idx] : '';
-  }, [saveData, gameData, saveCh]);
-
+    return saveCh?.idx !== undefined ? gameData.ch[saveCh.idx] : '';
+  }, [gameData, saveCh]);
   const sizeH = React.useMemo(() => equalSize ? size : size * 1.48, [equalSize, size]);
   if (!saveData) { // 새로운 게임 startGame
     return (
@@ -422,6 +468,26 @@ const CharacterCard = ({
         <>
           <ListCh pic={`chs${chData?.display}`} />
         </>
+      )
+    }
+    if (usedType === 'gradeUp') { //gradeUp 메인 사용
+      const starArr = Array.from({length: saveCh?.gradeMax}, () => '');
+      const starLvUpGrade = saveCh.grade + 1;
+      return (
+        <FlexBox direction="column">
+          <GradeUpCh>
+            <ListCh isRound={10} pic={`chs${chData?.display}`} />
+            <ListElementSmall type="elementBack" pic="card_s" idx={chData?.element[0] - 6 + (saveCh?.lv > 29 ? 20 : 0)} />
+          </GradeUpCh>
+          <ListChStar usedType="gradeUp">
+            {starArr.map((star, idx) => {
+              return <SratContainer>
+                <StarUp idx={saveCh?.grade >= idx + 1 ? idx + 1 : 0} type={saveCh?.gradeUp ? `star${saveCh?.gradeUp}` : 'star'} pic="icon100" key={`start${idx}`} />
+                <StarUp isUp={true} isAnimation={isAnimation && idx === starLvUpGrade - 1} idx={starLvUpGrade} pic="icon100" type={saveCh?.gradeUp ? `star${saveCh?.gradeUp}` : 'star'} />
+              </SratContainer> 
+            })}
+          </ListChStar>
+        </FlexBox>
       )
     }
     if (usedType === 'thumb') { //thumb 사용
@@ -521,7 +587,7 @@ const CharacterCard = ({
     if (usedType === 'actionCh') {
       const starArr = Array.from({length: saveCh?.gradeMax}, () => '');
       return (chData && 
-        <ChCard size={size} className="ch_detail" {...rest}>
+        <ChCard size={size} usedType={usedType} className="ch_detail" {...rest}>
           {!isZoomCard && <ListNameLv elementType={chData?.element[0] - 6} className="name_lv">
             <Lv code="t3" color="main">{saveCh?.lv}</Lv>
             <SubName style={{top: "20%"}} font="point" code="t1" color="main">{chData?.na3[lang]}</SubName>

@@ -1,16 +1,22 @@
 
 import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
+import { IconPic } from 'components/ImagePic';
 import { Select } from 'components/Input';
+import ItemLayout from 'components/ItemLayout';
 import { util } from 'components/Libs';
 import Msg from "components/Msg";
 import MsgContainer from "components/MsgContainer";
 import Npc from 'components/Npc';
+import Popup from 'components/Popup';
+import PopupContainer from 'components/PopupContainer';
+import Tooltip from 'components/Tooltip';
+import TooltipContainer from 'components/TooltipContainer';
 import { AppContext } from 'contexts/app-context';
 import CharacterCard from 'pages/CharacterCard';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
 const Wrap = styled(FlexBox)`
   position: absolute;
@@ -20,63 +26,136 @@ const Wrap = styled(FlexBox)`
   overflow: hidden;
 `;
 const WorkArea = styled(FlexBox)`
-	position: relative;
-	margin: 10px auto 0;
+  position: relative;
+  margin: 10px auto 0;
   flex: 1;
-	width: 90%;
+  width: 90%;
   box-sizing: border-box;
   background: rgba(0,0,0,.7);
   border: 5px solid transparent;
-  border-image: url(${({frameBack}) => frameBack}) 5 round;
+  border-image: url(${({ frameBack }) => frameBack}) 5 round;
 `;
 const GreetingText = styled(Text)`
-	padding: 10%;
+  padding: 10%;
+`;
+const WorkHeader = styled(FlexBox)`
+	height: auto;
+`;
+const LvName = styled(FlexBox)`
+  margin: 0 0 0 15px;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 const StyledSelect = styled(Select)`
   position: relative;
   height: auto;
   width: auto;
   padding: 5px 10px;
-  background: ${({theme}) => theme.color.main};
+  background: ${({ theme }) => theme.color.main};
+`;
+const ChList = styled.div`
+  padding: 10px;
+  width: calc(100% - 20px);
+  height: calc(100% - 20px);
+  overflow-y: auto;
 `;
 const ChUl = styled.ul`
   display: flex;
   width: 100%;
-  height: 100%;
+  height: auto;
   flex-direction: row;
   flex-wrap: wrap;
-  overflow-y: auto;
 `;
 const ChLi = styled.li`
-	position: relative;
-	margin: 0 3px 3px 0;
-	width: calc(20% - 2.4px);
-	height: 0;
-	padding-top: calc(20% - 2.4px);
-	overflow: hidden;
-	border-radius: 10px;
-	font-size: 0;
-	&:nth-of-type(4n) {
-		margin: 0 0 4px 0;
-	}
-	& > span {
-		position: absolute;
-		font-size: 0.625rem;
-	}
-	${({used}) => used ? "" : `
-		filter: grayscale(1) brightness(0.3);
-	`}
+  position: relative;
+  margin: 0 3px 3px 0;
+  width: calc(20% - 2.4px);
+  height: 0;
+  padding-top: calc(20% - 2.4px);
+  overflow: hidden;
+  border-radius: 10px;
+  font-size: 0;
+  ${({ used }) => used ? "" : `
+    filter: grayscale(1) brightness(0.8);
+  `}
+`;
+const LeaderCh = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  z-index: 10;
+`;
+const ChInven = styled.div`
+  position: absolute;
+  inset: 0;
+  border: 5px solid transparent;
+  background: rgba(0,0,0,.8);
+  border-image: url(${({frameBack}) => frameBack}) 5 round;
+  z-index: 3;
+`;
+
+const InvenItems = styled.div`
+  padding: 5px;
+  height: 100%;
+  box-sizing: border-box;
+  .h_items {
+    display: flex;
+    flex-flow: wrap;
+    width: 100%;
+  }
+`;
+const InvenTitle = styled(Text)``;
+const ItemList = styled.li`
+  position: relative;
+  margin: 1%;
+  width: 10.5%;
+  height: 0;
+  padding-top: 10.5%;
+  box-sizing: border-box;
+  border-radius: 10%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  box-shadow: rgb(0, 0, 0) 0px 0px 10px;
+  overflow: hidden;
+  .txt{
+    position:absolute;
+    left:2px;
+    right:2px;
+    bottom:2px;
+    font-size:0.688rem;
+    text-align:center;
+    z-index:1;
+  }
+  .pic{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    top:0;
+    width:100%;
+  }
 `;
 const Home = ({
-	saveData,
-	changeSaveData,
+  saveData,
+  changeSaveData,
   setLoading,
 }) => {
   const context = useContext(AppContext);
   const navigate = useNavigate();
+  const theme = useTheme();
   const [selectTab, setSelectTab] = useState("");
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
+  const [popupOn, setPopupOn] = useState(false);
+  const [popupType, setPopupType] = useState('');
+  const [popupInfo, setPopupInfo] = useState({});
+  const [tooltipOn, setTooltipOn] = useState(false);
+  const [tooltip, setTooltip] = useState('');
+  const [tooltipPos, setTooltipPos] = useState([0,0]);
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -96,92 +175,404 @@ const Home = ({
   }, [gameData, lang]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const [selectSort, setSelectSort] = useState(0);
+
+  const memberNum = React.useMemo(() => {
+    return Math.round(sData.info.morality / 20) + Math.ceil(sData.info.lv / 10);
+  }, [sData]);
   const selectSortList = React.useMemo(() => {
-    return {...sData,
-        ch: sData.ch.map((data, idx) => {
-        return {
-          ...data,
-          slotIdx: idx,
-        }
-      }).sort((a, b) => {
-        return b[`st${selectSort}`] - a[`st${selectSort}`];
-      })
-    }
+    return {
+      ...sData,
+      ch: sData.ch
+        .map((data, idx) => ({ ...data, slotIdx: idx }))
+        .sort((a, b) => b[`st${selectSort}`] - a[`st${selectSort}`])
+    };
   }, [sData, selectSort]);
+
   const [leaderCard, setLeaderCard] = useState(0);
-  const entries = React.useMemo(() => {
-    if (sData.entry.find((data) => data === sData.info.leaderIdx) === undefined) {
-      return [...sData.entry, sData.info.leaderIdx];
-    } else {
-      return sData.entry;
-    }
-  }, [sData.entry, sData.info.leaderIdx]);
+
   useEffect(() => {
-    const newIdx = selectSortList.ch.findIndex((data) => data.slotIdx === sData.info.leaderIdx);
+    const newIdx = selectSortList.ch.findIndex(
+      (data) => data.slotIdx === sData.info.leaderIdx
+    );
     setLeaderCard(newIdx !== -1 ? newIdx : 0);
   }, [selectSortList, sData.info.leaderIdx]);
+
+  const [greeting, setGreeting] = useState(
+    gameData.shop.home.greeting[lang]
+  );
+
+  const handlePopup = useCallback((saveObj) => {
+    const {itemType, itemData, itemSaveSlot} = saveObj,
+      itemIdx = itemData.idx,
+      itemPart = itemData.part,
+      itemGrade = itemData.grade,
+      itemWeaponType = itemData.weaponType;
+    if( itemType ){
+      let saveItemData;
+      if (itemType === 'hequip') {
+        saveItemData = sData.items['equip'][itemSaveSlot];
+      } else {
+        saveItemData = sData.items[itemType][itemSaveSlot];
+      }
+      setPopupType(itemType);
+      const itemsGrade = itemGrade < 5 ? 0 : itemGrade - 5;
+      let gameItemData = '';
+      if (itemType === 'hequip' || itemType === 'equip') {
+        gameItemData = itemPart === 3 ? gameItem['equip'][itemPart][itemWeaponType][itemsGrade][itemIdx] : gameItem['equip'][itemPart][0][itemsGrade][itemIdx];
+      } else {
+        gameItemData = gameItem[itemType][itemIdx];
+      }
+      setPopupInfo({
+        isMoveEvent: false,
+        onlyInven: true,
+        gameItem: gameItemData,
+        itemSaveSlot: itemSaveSlot,
+        saveItemData: saveItemData,
+        type: itemType === 'hequip' ? 'equip' : itemType,
+      });
+    }
+    setPopupOn(prev => !prev);
+  }, [sData, gameItem]);
+  
   useEffect(() => {
     setLoading(false);
   }, []);
+
   return (
     <>
-			<Wrap direction="column">
-				<Npc imgSet={imgSet} shopType={'home'} gameData={gameData} lang={lang} selectTab={selectTab} setSelectTab={setSelectTab} navigate={navigate} onClick={() => {
-				}}/>
-        <WorkArea frameBack={imgSet.etc.frameChBack}direction="column" alignItems="flex-end">
-          {selectTab === "" ? <GreetingText code="t4" color="main" wordBreak="keep-all">{gameData.shop["home"].greeting[lang]}</GreetingText> : <StyledSelect selectIdx={selectSort} setSelectIdx={setSelectSort} onClick={(idx) => {
-            setSelectSort(idx);
-          }} selectOption={selectList} title={`${gameData.msg.state.align[lang]}`}></StyledSelect>}
-          {selectTab === 0 && <ChUl>
-            {selectSortList.ch.map((data, idx) => {
-              return (
-                <ChLi used={leaderCard === idx} onClick={() => {
-                  setLeaderCard(idx);
-                  changeSaveData({
-                    ...sData,
-                    info: {
-                      ...sData.info,
-                      leaderIdx: data.slotIdx,
-                    }
-                  });
-                }} key={idx} data-idx={idx}>
-                  <CharacterCard usedType="thumb" saveData={selectSortList} gameData={gameData} showNum={data[`st${selectSort}`]} slotIdx={idx} />
-                </ChLi>
-              )
-            })}
-          </ChUl>}
-          {selectTab === 1 && <ChUl>
-            {selectSortList.ch.map((data, idx) => {
-              const entrySlot = entries.find((e) => e === data.slotIdx);
-              const isEntry = entrySlot !== undefined;
-              return (
-                <ChLi used={isEntry} onClick={() => {
-                  let newEntry = [...entries];
-                  if (!isEntry) {
-                    newEntry.push(data.slotIdx);
-                  } else {
-                    const findIdx = entries.indexOf(data.slotIdx);
-                    newEntry.splice(findIdx, 1);
-                    if (leaderCard === idx) {
-                      setMsgOn(true);
-                      setMsg(gameData.msg.sentence.noRemoveLeader[lang]);
-                    }
-                  }
-                  changeSaveData({
-                    ...sData,
-                    entry: newEntry,
-                  });
-                }} key={idx} data-idx={data.slotIdx}>
-                  <CharacterCard usedType="thumb" saveData={selectSortList} gameData={gameData} showNum={data[`st${selectSort}`]} slotIdx={idx} />
-                </ChLi>
-              )
-            })}
-          </ChUl>}
+      <Wrap direction="column">
+        <Npc
+          imgSet={imgSet}
+          shopType="home"
+          gameData={gameData}
+          lang={lang}
+          selectTab={selectTab}
+          setSelectTab={setSelectTab}
+          navigate={navigate}
+          onClick={() => {
+            setSelectTab("");
+            const randomIdx = Math.floor(
+              Math.random() * gameData.shop.home.randomText.length
+            );
+            setGreeting(gameData.shop.home.randomText[randomIdx][lang]);
+          }}
+        />
+
+        <WorkArea frameBack={imgSet.etc.frameChBack} direction="column" alignItems="flex-end">
+          {selectTab === "" ? (
+            <GreetingText code="t4" color="main">{greeting}</GreetingText>
+          ) : (
+            <WorkHeader direction="row" justifyContent="space-between" alignItems="center">
+              {selectTab === 0 && <>
+                <Text style={{margin: "0 0 0 10px"}} code="t3" color="main">
+                  {gameData.msg.title.leader[lang]}
+                </Text>
+                <LvName justifyContent="flex-start">
+                  <Text code="t5" color="main" weight="600">
+                    {`Lv.${sData.ch[sData.info.leaderIdx].lv} ${gameData.ch[sData.ch[sData.info.leaderIdx].idx].na1[lang]}`}
+                  </Text>
+                </LvName>
+              </>}
+              {selectTab === 1 && <>
+                <Text style={{margin: "0 0 0 10px"}} code="t3" color="main">
+                  {gameData.msg.title.memberNum[lang]}
+                </Text>
+                <LvName justifyContent="flex-start">
+                  <Text code="t5" color="main" weight="600">
+                    {`${sData.entry.length} / ${memberNum}`}
+                  </Text>
+                </LvName>
+              </>}
+              {selectTab === 2 && <>
+              
+              </>}
+              {(selectTab === 0 || selectTab === 1) && <StyledSelect
+                selectIdx={selectSort}
+                setSelectIdx={setSelectSort}
+                selectOption={selectList}
+                title={`${gameData.msg.state.align[lang]}`}
+                onClick={(idx) => {
+                  setSelectSort(idx);
+                }}
+              />}
+            </WorkHeader>
+          )}
+
+          {/* ✅ Leader 선택 */}
+          {selectTab === 0 && (
+            <ChList>
+              <ChUl>
+                {selectSortList.ch.map((data, idx) => {
+                  const isLeader = leaderCard === idx;
+                  return <ChLi
+                    key={idx}
+                    used={isLeader}
+                    onClick={() => {
+                      const entry = [
+                        data.slotIdx,
+                        ...sData.entry.filter((e) => e !== data.slotIdx),
+                      ];
+
+                      setLeaderCard(idx);
+                      changeSaveData({
+                        ...sData,
+                        info: {
+                          ...sData.info,
+                          leaderIdx: data.slotIdx,
+                        },
+                        entry,
+                      });
+                    }}
+                  >
+                    <CharacterCard
+                      usedType="thumb"
+                      saveCharacter={data}
+                      saveData={sData}
+                      showNum={data[`st${selectSort}`]}
+                      slotIdx={idx}
+                    />
+                    {isLeader && <LeaderCh>
+                      <IconPic type="scenario" pic="icon100" idx={4} />
+                    </LeaderCh>}
+                  </ChLi>
+                })}
+              </ChUl>
+            </ChList>
+          )}
+
+          {/* ✅ Entry 선택 */}
+          {selectTab === 1 && (
+            <ChList>
+              <ChUl>
+                {selectSortList.ch.map((data, idx) => {
+                  const isEntry = sData.entry.includes(data.slotIdx);
+                  const isLeader = data.slotIdx === sData.info.leaderIdx;
+                  return (
+                    <ChLi
+                      key={idx}
+                      used={isEntry}
+                      isLeader={isLeader}
+                      onClick={() => {
+                        let newEntry = [...sData.entry];
+                        if (sData.entry.length >= memberNum) {
+                          setMsgOn(true);
+                          setMsg(gameData.msg.sentence.needMoreMemberNum[lang]);
+                          return;
+                        }
+                        if (!isEntry) {
+                          newEntry.push(data.slotIdx);
+                        } else {
+                          if (isLeader) {
+                            setMsgOn(true);
+                            setMsg(gameData.msg.sentence.noRemoveLeader[lang]);
+                            return;
+                          }
+                          newEntry = newEntry.filter(
+                            (e) => e !== data.slotIdx
+                          );
+                        }
+                        changeSaveData({
+                          ...sData,
+                          entry: newEntry,
+                          actionCh: {
+                            equipment: {idx: ""},
+                            church: {idx: ""},
+                            temple: {idx: ""},
+                            mystery: {idx: ""},
+                            tavern: {idx: ""},
+                            townHall: {idx: ""},
+                            guild: {idx: ""},
+                            port: {idx: ""},
+                            accessory: {idx: ""},
+                            tool: {idx: ""},
+                            shipyard: {idx: ""},
+                            tradingPost: {idx: ""},
+                            blacksmith: {idx: ""},
+                            training: {idx: ""},
+                            training2: {idx: ""},
+                            composite: {idx: ""},
+                            recruitment: {idx: ""}
+                          }
+                        });
+                      }}
+                    >
+                      <CharacterCard
+                        usedType="thumb"
+                        saveCharacter={data}
+                        saveData={sData}
+                        showNum={data[`st${selectSort}`]}
+                        slotIdx={idx}
+                      />
+                      {isLeader && <LeaderCh>
+                        <IconPic type="scenario" pic="icon100" idx={4} />
+                      </LeaderCh>}
+                    </ChLi>
+                  );
+                })}
+              </ChUl>
+            </ChList>
+          )}
+          {selectTab === 2 && <ChInven frameBack={imgSet.etc.frameChBack}>
+            <InvenItems className="has_items scroll-y">
+              <InvenTitle code="t3" color="main">{gameData.msg.menu.equip[lang]}</InvenTitle>
+              <ul className="h_items">
+                {sData.items.equip && sData.items.equip.map((data, idx) => {
+                  const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
+                  const items = data.part === 3 ? gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx] : gameItem.equip[data.part][0][itemsGrade][data.idx];
+                  const itemsHole = data.hole;
+                  return items && (
+                    <ItemList key={`hequip${idx}`} onClick={() => {
+                      handlePopup({
+                        itemType: 'hequip',
+                        itemData: data,
+                        itemSaveSlot: idx,
+                      });
+                    }} data-itemnum={`equip_${data.idx}`}>
+                      <ItemLayout 
+                        gameItem={gameItem}
+                        isEquip
+                        icon={{
+                          type: "equip",
+                          pic: "equip",
+                          idx: items.display,
+                          mergeColor: data.color,
+                        }}
+                        part={data.part}
+                        grade={data.grade}
+                        itemsHole={itemsHole}
+                        sealed={data.sealed}
+                      />
+                    </ItemList>
+                  )
+                })}
+              </ul>
+              <InvenTitle code="t3" color="main">{gameData.msg.menu.hole[lang]}</InvenTitle>
+              <ul className="h_items">
+                {sData.items.hole && sData.items.hole.map((data, idx) => {
+                  const items = gameItem.hole[data.idx];
+                  return (
+                    <ItemList key={`hole${idx}`} data-itemnum={`hole_${data.idx}`} onClick={() => {
+                      handlePopup({
+                        itemType: 'hole',
+                        itemData: data,
+                        itemSaveSlot: idx,
+                      });
+                    }}>
+                      <ItemLayout 
+                        gameItem={gameItem}
+                        isEquip
+                        icon={{
+                          type: "hole",
+                          pic: "itemEtc",
+                          idx: items.display
+                        }}
+                        part="11"
+                        grade={items.grade}
+                        sealed={items.sealed}
+                      />
+                    </ItemList>
+                  )
+                })}
+              </ul>
+              <InvenTitle code="t3" color="main">{gameData.msg.menu.upgrade[lang]}</InvenTitle>
+              <ul className="h_items">
+                {sData.items.upgrade && sData.items.upgrade.map((data, idx) => {
+                  const items = gameItem.upgrade[data.idx];
+                  return (
+                    <ItemList key={`upgrade${idx}`} data-itemnum={`upgrade_${data.idx}`}  onClick={() => {
+                      handlePopup({
+                        itemType: 'upgrade',
+                        itemData: data,
+                        itemSaveSlot: idx,
+                      });
+                    }}>
+                      <ItemLayout 
+                        gameItem={gameItem}
+                        isEquip
+                        icon={{
+                          type: "upgrade",
+                          pic: "itemEtc",
+                          idx: items.display
+                        }}
+                        text={data.num || ""}
+                        part="12"
+                        grade={items.grade}
+                        sealed={items.sealed}
+                      />
+                    </ItemList>
+                  )
+                })}
+              </ul>
+              <InvenTitle code="t3" color="main">{gameData.msg.menu.material[lang]}</InvenTitle>
+              <ul className="h_items">
+                {sData.items.material && sData.items.material.map((data, idx) => {
+                  const items = gameItem.material[data.idx];
+                  return (
+                    <ItemList key={`material${idx}`} data-itemnum={`material_${data.idx}`} onClick={() => {
+                      handlePopup({
+                        itemType: 'material',
+                        itemData: data,
+                        itemSaveSlot: idx,
+                      });
+                    }}>
+                      <ItemLayout 
+                        gameItem={gameItem}
+                        isEquip
+                        icon={{
+                          type: "material",
+                          pic: "material",
+                          idx: items.display
+                        }}
+                        text={data.num || 1}
+                        part="13"
+                        grade={items.grade}
+                        sealed={items.sealed}
+                      />
+                    </ItemList>
+                  )
+                })}
+              </ul>
+              <InvenTitle code="t3" color="main">{gameData.msg.menu.etc[lang]}</InvenTitle>
+              <ul className="h_items">
+                {sData.items.etc && sData.items.etc.map((data, idx) => {
+                  const items = gameItem.etc[data.idx];
+                  return (
+                    <ItemList key={`etc${idx}`} data-itemnum={`etc_${data.idx}`} onClick={() => {
+                      handlePopup({
+                        itemType: 'etc',
+                        itemData: data,
+                        itemSaveSlot: idx,
+                      });
+                    }}>
+                      <ItemLayout 
+                        gameItem={gameItem}
+                        isEquip
+                        icon={{
+                          type: "etc",
+                          pic: "itemEtc",
+                          idx: items.display
+                        }}
+                        part="13"
+                        grade={items.grade}
+                        sealed={items.sealed}
+                      />
+                    </ItemList>
+                  )
+                })}
+              </ul>
+            </InvenItems>
+          </ChInven>}
         </WorkArea>
       </Wrap>
+      <PopupContainer>
+        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={sData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} setTooltip={setTooltip} setTooltipPos={setTooltipPos} setTooltipOn={setTooltipOn} theme={theme}/>}
+      </PopupContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {msgOn && <Msg text={msg} showMsg={setMsgOn} />}
       </MsgContainer>
+			<TooltipContainer>
+				{tooltipOn && <Tooltip isDark={true} pos={tooltipPos} text={tooltip} showTooltip={setTooltipOn} />}
+			</TooltipContainer>
     </>
   );
 };

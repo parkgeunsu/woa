@@ -167,6 +167,7 @@ const LongPress = ({
 }
 
 const CharacterAnimalSkill = ({
+  chList,
   saveData,
   slotIdx,
   changeSaveData,
@@ -178,7 +179,7 @@ const CharacterAnimalSkill = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
+  const saveCh = React.useMemo(() => chList[slotIdx], [chList, slotIdx]);
   const chName = React.useMemo(() => gameData.ch[saveCh.idx].na1[lang], [gameData, saveCh]);
   const animalPoint = React.useMemo(() => {
     return saveCh.animalBadge;

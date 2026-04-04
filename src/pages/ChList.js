@@ -19,6 +19,7 @@ const ChListWrap = styled.div`
           position: relative;
           width: 100%;
           height: 100%;
+          overflow-y: auto;
           li {
             ${Object.entries(gradeColors).map(([g, style]) => `&.${g} { box-shadow: ${style.shadow}; }`).join('\n')}
           }
@@ -31,6 +32,7 @@ const ChListWrap = styled.div`
           right: 20px;
           height: 10.4vh;
           z-index: 1;
+          overflow-x: auto;
           li {
             border-radius: 50%;
             overflow: hidden;
@@ -55,6 +57,7 @@ const ChListWrap = styled.div`
           width: 100%;
           height: 100%;
           box-sizing: border-box;
+          overflow-y: auto;
           li {
             ${Object.entries(gradeColors).map(([g, style]) => `&.${g} { background-color: ${style.color}; }`).join('\n')}
           }
@@ -71,9 +74,10 @@ const ChListWrap = styled.div`
 const ChList = React.forwardRef(({
   type,
   children,
+  ...rest
 }, ref) => {
   return (
-    <ChListWrap ref={ref} type={type} className={type === "paging" ? "scroll-x" : "scroll-y"}>
+    <ChListWrap ref={ref} type={type} {...rest}>
       {children}
     </ChListWrap>
   );

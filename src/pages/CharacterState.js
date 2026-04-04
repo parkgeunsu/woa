@@ -166,20 +166,18 @@ const ElementList = ({
   )
 }
 const CharacterState = ({
+  chList,
   saveData,
   slotIdx,
-  changeSaveData,
 }) => {
   const context = useContext(AppContext);
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
-
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-
-  const saveCh = React.useMemo(() => saveData.ch?.[slotIdx] || {}, [saveData.ch, slotIdx]);
+  const saveCh = React.useMemo(() => chList[slotIdx] || {}, [chList, slotIdx]);
   const chData = React.useMemo(
     () => gameData.ch?.[saveCh.idx] || {},
     [gameData.ch, saveCh.idx]

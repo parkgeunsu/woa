@@ -122,6 +122,7 @@ const Scenario = styled(FlexBox)`
   }
 `;
 const CharacterRelation = ({
+  chList,
   saveData,
   slotIdx,
 }) => {
@@ -129,13 +130,10 @@ const CharacterRelation = ({
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
-  const imgSet = React.useMemo(() => {
-    return context.images;
-  }, [context]);
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const saveCh = React.useMemo(() => saveData.ch?.[slotIdx] || {}, [saveData, slotIdx]);
+  const saveCh = React.useMemo(() => chList[slotIdx] || {}, [chList, slotIdx]);
   const chData = React.useMemo(() => gameData.ch?.[saveCh.idx], [gameData, saveCh]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');

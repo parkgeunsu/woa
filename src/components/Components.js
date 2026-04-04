@@ -2,8 +2,9 @@ import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
 import { IconPic, MergedPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
+import { AppContext } from 'contexts/app-context';
 import CharacterCard from 'pages/CharacterCard';
-import { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
 
@@ -246,35 +247,54 @@ export const Calculator = ({
   );
 }
 
-const ChCard = styled(CharacterCard)`
+const ChCard = styled(CharacterCard)``;
+const TextArea = styled(FlexBox)`
   position: absolute;
-  inset: 5%;
-  width: 90%;
-  height: 90%;
-`
+  right: 5px;
+  top: 5px;
+  width: auto;
+  height: auto;
+  z-index: 10;
+  background: rgba(0,0,0,.7);
+  padding: 5px;
+  border-radius: 5px;
+`;
 export const ActionChDisplay = ({
   type,
-  saveData,
+  chList,
   gameData,
-  actionCh,
+  actionChIdx,
 }) => {
-  let skillIdx = '',
-    hasSkill = false;
+  const context = useContext(AppContext);
+  const lang = React.useMemo(() => {
+    return context.setting.lang;
+  }, [context]);
+  let skillIdx = "",
+    skillLv = "";
   switch(type) {
     case 'tradingPost':
-    case 'equipment':
     case 'accessory':
+    case 'equipment':
+    case 'townhall':
     case 'tool':
       skillIdx = 15;
       break;
     case 'composite':
       skillIdx = 20;
       break;
+    case 'guild':
     case 'training':
+    case 'mystery':
       skillIdx = 0;
       break;
     case 'blacksmith':
       skillIdx = 17;
+      break;
+    case 'church':
+      skillIdx = 25;
+      break;
+    case 'temple':
+      skillIdx = 26;
       break;
     case 'recruitment':
       skillIdx = 22;
@@ -285,22 +305,26 @@ export const ActionChDisplay = ({
     default:
       break;
   }
-  if (actionCh.idx !== '' && actionCh.idx !== undefined) {
-    for (const [idx, skillData] of saveData.ch[actionCh.idx].hasSkill.entries()) {
+  if (actionChIdx !== '' && actionChIdx !== undefined) {
+    for (const [idx, skillData] of chList[actionChIdx].hasSkill.entries()) {
       if (skillData.idx === skillIdx) {
-        hasSkill = true;
+        skillLv = skillData.lv;
         break;
       };
     };
   } else {
-    hasSkill = '';
+    skillLv = "";
   }
-  if (hasSkill) {
-    const displayIdx = gameData.ch[saveData.ch[actionCh.idx].idx].display;
+  if (skillLv !== "") {
+    const displayIdx = gameData.ch[chList[actionChIdx].idx].display;
     return (
       <div>
+        <TextArea direction="column" alignItems="flex-end">
+          <Text font="point" lineHeight="1.2" code="t1" color="main">{`${chList[actionChIdx].actionPoint} / ${chList[actionChIdx].actionMax}`}</Text>
+          <Text font="point" lineHeight="1.2" code="t1" color="main">{`${gameData.skill[skillIdx].na[lang]} Lv.${skillLv}`}</Text>
+        </TextArea>
 				<MergedPic isAbsolute pic="card" idx={40} />
-        <ChCard usedType="actionCh" saveData={saveData} slotIdx={actionCh.idx} />
+        <ChCard usedType="actionCh" saveCharacter={chList[actionChIdx]} saveData={true} slotIdx={actionChIdx} />
       </div>
     )
   } else {

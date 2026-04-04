@@ -116,7 +116,7 @@ const LvBar = styled(FlexBox)`
     border-radius: 0 20px 20px 0;}
 `;
 const CharacterSkill = ({
-  saveData,
+  chList,
   slotIdx,
 }) => {
   const context = useContext(AppContext);
@@ -128,7 +128,7 @@ const CharacterSkill = ({
     return context.gameData;
   }, [context]);
 
-  const saveCh = React.useMemo(() => saveData.ch[slotIdx], [saveData, slotIdx]);
+  const saveCh = React.useMemo(() => chList[slotIdx], [chList, slotIdx]);
   const chName = React.useMemo(() => gameData.ch[saveCh.idx]?.na1[lang], [gameData, saveCh]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');

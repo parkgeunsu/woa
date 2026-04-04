@@ -2709,6 +2709,9 @@ export const util = { //this.loadImage();
   
       //슬롯
       const slotNum = (() => {
+        if ((itemData.part === 4 || itemData.part === 5) && itemData.idx === 2) {//해골목걸이, 해골반지 경우 무조건 1개
+          return 1;
+        }
         if (grade === 1) {
           if (Math.random() < 0.3) {
             return Math.round(Math.random() * (itemData.socket - 1)) + 1;
@@ -2887,7 +2890,7 @@ export const util = { //this.loadImage();
         dataObj.msgText(`<span caution>${gameData.msg.sentence.evaluateItem[dataObj.lang]}</span>`);
         return;
       }
-      if (!dataObj.data.gameItem.limit[saveCh.job]) { //직업 착용가능 확인
+      if (!saveCh.possibleEquipment[dataObj.data.gameItem.part - 1][dataObj.data.gameItem.category]) {//직업 착용가능 확인 !dataObj.data.gameItem.limit[saveCh.job]
         dataObj.showMsg(true);
         dataObj.msgText(`<span caution>${gameData.msg.sentence.unpossibleJob[dataObj.lang]}</span>`);
         return;
@@ -2988,23 +2991,35 @@ export const util = { //this.loadImage();
       dataObj.changeSaveData(sData);//데이터 저장
       dataObj.showPopup(false);
     } else if (dataObj.type === 'itemBuy') { //아이템 구입
-      if (dataObj.data.type === 'equip') {
-        sData.info.money -= (dataObj.data.gameItem.price < 1000 ? 1000 : dataObj.data.gameItem.price) * 2 * dataObj.data.gameItem.grade;
-      } else if (dataObj.data.type === 'hole') {
-        sData.info.money -= dataObj.data.gameItem.price * (dataObj.data.num || 1);
+      if (dataObj.data.actionChIdx === "") {
+        dataObj.showMsg(true);
+        dataObj.msgText(`<span caution>${gameData.msg.sentence.noneSelectCh[dataObj.lang]}</span>`);
       } else {
-        console.log(dataObj.data.num, dataObj.data.gameItem.price);
-        sData.info.money -= dataObj.data.gameItem.price * (dataObj.data.num || 1);//돈 계산
+        if (sData.ch[dataObj.data.actionChIdx].actionPoint >= gameData.actionPoint.usePoint.itemBuy) {
+          sData.ch[dataObj.data.actionChIdx].actionPoint -= gameData.actionPoint.usePoint.itemBuy;//행동력 지불
+  
+          if (dataObj.data.type === 'equip' || dataObj.data.type === 'hole') {
+            sData.info.money -= dataObj.data.itemPrice;
+            //아이템 추가
+            sData.items[dataObj.data.type].push({...dataObj.data.saveItemData});
+            dataObj.data.callback && dataObj.data.callback();
+          } else {
+            sData.info.money -= dataObj.data.itemPrice * (dataObj.data.num || 1);//돈 계산
+            //아이템 갯수 추가
+            const slotIdx = sData.items[dataObj.data.type].findIndex((data) => data.idx === dataObj.data.saveItemData.idx);
+            if (slotIdx >= 0) {
+              sData.items[dataObj.data.type][slotIdx].num = Number(sData.items[dataObj.data.type][slotIdx].num) + Number(dataObj.data.num);
+            } else {
+              sData.items[dataObj.data.type].push({...dataObj.data.saveItemData, num: dataObj.data.num});
+            }
+          }
+          dataObj.changeSaveData(sData);//데이터 저장
+          dataObj.showPopup(false);
+        } else {
+          dataObj.showMsg(true);
+          dataObj.msgText(`<span caution>${gameData.msg.sentenceFn.lackActionPoint(dataObj.lang, gameData.ch[dataObj.data.actionChIdx].na1[dataObj.lang])}</span>`)
+        }
       }
-      //아이템 추가
-      const slotIdx = sData.items[dataObj.data.type].findIndex((data) => data.idx === dataObj.data.saveItemData.idx);
-      if (slotIdx >= 0) {
-        sData.items[dataObj.data.type][slotIdx].num = Number(sData.items[dataObj.data.type][slotIdx].num) + Number(dataObj.data.num);
-      } else {
-        sData.items[dataObj.data.type].push({...dataObj.data.saveItemData, num: dataObj.data.num});
-      }
-      dataObj.changeSaveData(sData);//데이터 저장
-      dataObj.showPopup(false);
     } else if (dataObj.type === 'itemSell') { //아이템 판매
       if (dataObj.data.type === 'equip' || dataObj.data.type === 'hole') {
         //console.log(dataObj.data.gameItem.price, dataObj.data.gameItem.grade);
@@ -3047,7 +3062,7 @@ export const util = { //this.loadImage();
         lang: dataObj.lang
       });
       dataObj.changeSaveData(sData);//데이터 저장
-      dataObj.setItemPopup(false);//팝업 제거
+      dataObj.setItemPopup && dataObj.setItemPopup(false);//팝업 제거
       dataObj.data.setSelectItem(dataObj.data.selectItem.map((item_) => {
         if (dataObj.data.saveItemData.id !== item_.saveItemData.id) {
           return item_;
@@ -3063,7 +3078,7 @@ export const util = { //this.loadImage();
         }
       }));
     } else if (dataObj.type === 'holeEquip') {
-      dataObj.setItemPopup(false);
+      dataObj.setItemPopup && dataObj.setItemPopup(false);
     }
     callback && callback();
   },
@@ -3580,6 +3595,9 @@ export const util = { //this.loadImage();
     }
   },
   iconToStartIdx: (type) => {
+    if (!type) {
+      return 0;
+    }
     switch(type) {
       case 'menu':
       case 'enemies':
@@ -3704,7 +3722,7 @@ export const util = { //this.loadImage();
       case 'material':
         return [10, 16];
       case 'skill':
-        return [20, 40];
+        return [20, 30];
       case 'shop':
         return [10, 2];
       default:
@@ -3971,6 +3989,24 @@ export const util = { //this.loadImage();
     saveData.scenario = updatedScenario;
     return saveData;
   },
+  getHasSkillLv: ({saveData, slotIdx, skillIdx}) => {
+    if (slotIdx === "") return 0;
+    const chData = saveData.ch[slotIdx];
+    const skillLv = chData.sk.find((v, i) => {
+      return v.idx === skillIdx ? v.lv : 0;
+    });
+    return skillLv ? skillLv.lv : 0;
+  },
+  itemPrice: ({gameItem, saveItemData, skill, isBuy, skLv}) => {
+    const discount = isBuy ? -1 : 1,
+      itemGrade = saveItemData.grade || gameItem.grade,
+      isSellPrice = isBuy ? gameItem.price * 2 : gameItem.price * 0.5;
+    const price = isSellPrice + Math.round(isSellPrice * (skLv === "" ? 1 : Number(skill.eff[0].num[skLv]) / 100) * discount);
+    return {
+      str: `₩${util.comma(price * itemGrade)}`,
+      num: price * itemGrade,
+    };
+  },
   makeCard: ({
     heroArr, //영웅분류
     gachaNum, //가챠횟수
@@ -4084,9 +4120,7 @@ export const util = { //this.loadImage();
           luckyGradePoint = 1;
         }
       }
-      const cardG = cardGrade.arr[i] + luckyGradePoint,
-        maxGradePoint = Math.round(Math.random() * ((gameData.ch[newIdx].grade > 4 ? 7 : 6) - cardG)),
-        maxG = Math.max(cardG + Math.min(maxGradePoint, 0), 7);
+      const cardG = cardGrade.arr[i] + luckyGradePoint;
       const animalAction = gameData.animalType[gameData.ch[newIdx].animal_type].actionType,
         actionType = animalAction[Math.floor(Math.random() * animalAction.length)];//공격타입
       const jobs = gameData.ch[newIdx].job,
@@ -4097,7 +4131,7 @@ export const util = { //this.loadImage();
       chArr.push({
         idx: newIdx,
         grade: cardG,
-        gradeMax: maxG,
+        gradeMax: gameData.ch[newIdx].maxGrade,
         chSlotIdx: saveData.ch.length + i,
       });
       //시나리오 heroNum 증가
@@ -4105,6 +4139,11 @@ export const util = { //this.loadImage();
         gameData: gameData,
         saveData: saveData,
       });
+      if (sData.hasHeroNum[newIdx]) {
+        sData.hasHeroNum[newIdx] += 1;
+      } else {
+        sData.hasHeroNum[newIdx] = 1;
+      }
       saveData = sData;
       const chScenario = gameData.ch[newIdx].scenarioRegion;
       const jobElementType = job === 1 ? Math.floor(Math.random() * 4) : job === 6 ? Math.floor(Math.random() * 2) : "";//특정 직업의 속성 설정(마법사, 도사)
@@ -4128,6 +4167,12 @@ export const util = { //this.loadImage();
       }
       //동물뱃지 획득
       const animalBadge = Math.floor(Math.random()*2);
+      //장비가능한 부위
+      const possibleEquipment = [...gameData.job[job].possibleEquipment];
+      gameData.ch[newIdx].possibleEquipment?.forEach((v, i) => {
+        const vIdx = v.split("-");
+        possibleEquipment[vIdx[0]][vIdx[1]] = 1;
+      });
       chDataArr.push(util.saveLvState('', {
         itemEff: util.getItemEff(),
         grade: cardG,
@@ -4147,13 +4192,14 @@ export const util = { //this.loadImage();
           battleBadge: [0,0,0,0],
           animalBadge: animalBadge,//총 보유 동물뱃지
           grade: cardG,
-          gradeMax: maxG,
+          gradeMax: gameData.ch[newIdx].maxGrade,
           gradeUp: 0,
           mark: animalBadge,//동물뱃지 추가보유여부(상점에서 exp로 구입가능)
           idx: newIdx,
           items: [{}, {}, {}, {}, {}, {}, {}, {}],
           lv: 1,
           sk: skill,
+          possibleEquipment: possibleEquipment,
           animalSkill: util.makeSkillTree({
             gameData: gameData,
             idx: newIdx,

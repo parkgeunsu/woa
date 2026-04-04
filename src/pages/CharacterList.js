@@ -58,14 +58,17 @@ const ChracterList = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const sData = React.useMemo(() => {
-    return Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData;
-  }, [saveData]);
-  const isMoveEvent = React.useMemo(() => {
+  const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') ?? {} : {...saveData}, [saveData]);
+  const isMoveEvent = React.useMemo(() => {//지역 이동인지
     return util.loadData("historyParam")?.moveEvent && Object.keys(util.loadData("historyParam").moveEvent).length > 0;
   }, []);
+  const entries = React.useMemo(() => {
+    return sData.entry.map((entryIdx) => {
+      return sData.ch[entryIdx];
+    });
+  }, [sData]);
   const chData = React.useMemo(() => {
-    const ch = isMoveEvent ? util.loadData("historyParam").moveEvent.ch : sData.ch;
+    const ch = isMoveEvent ? util.loadData("historyParam").moveEvent.ch : entries;
     if (isMoveEvent) {
       const moveChIdxs = new Set(ch.map(c => c.idx));
       return {
@@ -77,7 +80,7 @@ const ChracterList = ({
       moveCh: [],
       moveNotCh: ch,
     };
-  }, [sData, isMoveEvent]);
+  }, [sData, entries, isMoveEvent]);
   useLayoutEffect(() => {
     if (sData.ch.length === 0) {
       navigate('../');

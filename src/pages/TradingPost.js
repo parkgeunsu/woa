@@ -160,10 +160,16 @@ const TradingPost = ({
 	const [showCal, setShowCal] = useState(false);
 	const [item, setItem] = useState([]);
 	const [selectItem, setSelectItem] = useState({save:{},game:{},select:'',selectTab:'',buttonType:[]});
-	const actionCh = React.useMemo(() => sData.actionCh['tradingPost'], [sData]);//행동할 캐릭터 데이터
-	useEffect(() => {
-		console.log(rangeValue)
-	}, [rangeValue])
+	const entries = React.useMemo(() => {
+		return sData.entry.map((entryIdx) => {
+			return sData.ch[entryIdx];
+		});
+	}, [sData]);
+	const actionChIdx = React.useMemo(() => {
+		return sData.actionCh.tradingPost.idx <= entries.length - 1 ? sData.actionCh.tradingPost.idx : "";
+	}, [entries, sData]);//행동할 캐릭터 데이터
+	const saveCh = React.useMemo(() => entries[actionChIdx] || {}, [entries, actionChIdx]);
+	const [greeting, setGreeting] = useState(gameData.shop.tradingPost.greeting[lang]);
 	const shopItem = React.useMemo(() => {
 		const cityData = sData.city?.[stayIdx];
 		let materialItems = [];
@@ -185,11 +191,15 @@ const TradingPost = ({
   return (
 		<>
 			<Wrap direction="column">
-				<Npc imgSet={imgSet} shopType={'tradingPost'} gameData={gameData} lang={lang} selectTab={selectTab} setSelectTab={setSelectTab} navigate={navigate} onClick={() => { 
+				<Npc imgSet={imgSet} shopType={'tradingPost'} gameData={gameData} lang={lang} selectTab={selectTab} setSelectTab={setSelectTab} navigate={navigate} onMenuClick={() => { 
 					setSelectItem({save:{},game:{},select:'',selectTab:'',buttonType:[]});
-				}}/>
+				}} onClick={() => { 
+					setSelectTab("");
+          const randomIdx = Math.floor(Math.random() * gameData.shop.tradingPost.randomText.length);
+          setGreeting(gameData.shop.tradingPost.randomText[randomIdx][lang]);
+				}} />
 				<TradingContainer frameBack={imgSet.etc.frameChBack}>
-					{selectTab === "" && <GreetingText code="t4" color="main" wordBreak="keep-all">{gameData.shop["tradingPost"].greeting[lang]}</GreetingText>}
+					{selectTab === "" && <GreetingText code="t4" color="main" wordBreak="keep-all">{greeting}</GreetingText>}
 					{selectTab !== "" && shopItem.map((scrollData, scrollIdx) => {
 							return <ShopItem selected={selectTab === scrollIdx} key={`scrollContent${scrollIdx}`}>
 								{scrollData.map((invenData, invenIdx) => {
@@ -267,13 +277,13 @@ const TradingPost = ({
 										case 'buy':
 											return (
 												<button text="true" className="button_small" onClick={(e) => {
-													if (actionCh.idx === '' || actionCh.idx === undefined) {
+													if (actionChIdx === '' || actionChIdx === undefined) {
 														setMsgOn(true);
 														setMsg(gameData.msg?.sentenceFn?.selectSkillCh?.(lang,gameData.skill?.[15]?.na) || "Select Character");
 														return;
 													}
 													let saveD = JSON.parse(JSON.stringify(saveData));
-													const charData = saveD.ch?.[actionCh.idx];
+													const charData = saveD.ch?.[actionChIdx];
 													if (charData && charData.actionPoint >= (gameData.actionPoint?.itemBuy || 0)) {//행동력 지불
 														if (saveD.info.money >= rangeValue * selectItem.game.price) {//소유금이 더 많을경우
 															if (saveD.city[stayIdx]?.tradingPost?.goods[selectItem.select] && typeof saveD.city[stayIdx].tradingPost.goods[selectItem.select].num === 'number') { //수량이 정해져 있을경우
@@ -313,13 +323,13 @@ const TradingPost = ({
 										case 'sell':
 											return (
 												<button text="true" className="button_small" onClick={(e) => {
-													if (actionCh.idx === '' || actionCh.idx === undefined) {
+													if (actionChIdx === '' || actionChIdx === undefined) {
 														setMsgOn(true);
 														setMsg(gameData.msg?.sentenceFn?.selectSkillCh?.(lang,gameData.skill?.[201]?.na) || "Select Character");
 														return;
 													}
 													let saveD = JSON.parse(JSON.stringify(saveData));
-													const charData = saveD.ch?.[actionCh.idx];
+													const charData = saveD.ch?.[actionChIdx];
 													if (charData && charData.actionPoint >= (gameData.actionPoint?.itemSell || 0)) {//행동력 지불
 														if (rangeValue) {
 															charData.actionPoint -= (gameData.actionPoint?.itemSell || 0);
@@ -362,8 +372,8 @@ const TradingPost = ({
 					</SliderContainer>
 					<ActionPic onClick={() => {
 							setPopupInfo({
-								ch: sData.ch,
-								actionCh: sData.actionCh['tradingPost'].idx,
+								ch: entries,
+								actionChIdx: actionChIdx,
 								type: 'tradingPost',
 								setMsg: setMsg,
 								setMsgOn: setMsgOn,
@@ -371,10 +381,10 @@ const TradingPost = ({
 							setPopupType('selectCh');
 							setPopupOn(true);
 						}}>
-						<MergedPic isAbsolute pic="card" idx={40 + (sData.ch?.[actionCh.idx]?.grade || 0)} />
-						{actionCh.idx === "" && <NoneChText code="t1" color="red" workBreak="keep-all">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
+						<MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />
+						{actionChIdx === "" && <NoneChText code="t1" color="red" workBreak="keep-all">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
 						<Img imgurl={imgSet.images.transparent800} />
-						<ActionChDisplay type={'tradingPost'} saveData={sData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
+						<ActionChDisplay type={'tradingPost'} chList={entries} gameData={gameData} actionChIdx={actionChIdx} imgSet={imgSet}/>
 					</ActionPic>
 				</UserContainer>
 				{showCal && <Calculator value={rangeValue} max={item[selectItem.select].num} setValue={setRangeValue} showCal={setShowCal}/>}

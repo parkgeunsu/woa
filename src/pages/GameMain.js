@@ -80,6 +80,9 @@ const GameMain = ({
 }) => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
+  const classification = React.useMemo(() => {
+    return context.classification;
+  }, [context]);
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -160,6 +163,63 @@ const GameMain = ({
   }, []);
   return (
     <Wrap direction="column">
+      <div style={{position:"absolute",right:"20%",bottom:0,zIndex:100, backgroundColor: '#fff'}}>
+        <button onClick={() => {
+          util.getItem({
+            saveData: sData,
+            gameData: gameData,
+            changeSaveData: changeSaveData,
+            option: {
+              type:'equip',
+              items:Math.ceil(Math.random()*3),//장비만 해당
+              //아이템종류, 세부종류(검,단검), 매직등급
+              lv:Math.round(Math.random()*100),
+              sealed:true,
+            },
+            isSave: true,
+            lang: lang,
+          });
+        }}>아이템 추가</button><br/>
+        <button onClick={() => {
+          const card = util.makeCard({
+            heroArr: classification,
+            gachaNum: 1,
+            gachaType: "p",
+            gameData: gameData,
+            saveData: sData,
+          });
+          const newSaveDataAdd = {
+            ...sData,
+            ch: [...sData.ch, card.chDataArr[0]]
+          };
+          changeSaveData(newSaveDataAdd);
+        }}>영웅 추가</button><br/>
+        <button onClick={() => {
+          if (sData.ch.length > 0) {
+            const newSaveDataDel = {
+              ...sData,
+              ch: sData.ch.slice(0, -1)
+            };
+            changeSaveData(newSaveDataDel);
+          }
+        }}>영웅 삭제</button><br/>
+        <button onClick={() => {
+          const option = {
+            type:'equip',
+            items:Math.ceil(Math.random()*2),//장비만 해당
+            lv:Math.round(Math.random()*100),
+            sealed:true,
+          }
+          util.getItem({
+            saveData: sData,
+            gameData: gameData,
+            changeSaveData: changeSaveData,
+            option: option,
+            isSave: true,
+            lang: lang,
+          });
+        }}>동물스킬 리셋</button>
+      </div>
       <QuickMenu type="main" stay={stay} gameMode={gameMode} showDim={showDim} setShowDim={setShowDim}/>
       <CountryTitle alignItems="center" back={imgSet.back.countryTitle}>
         <StyledText code="t4" color="shadow">{gameData.country.regions[util.getRegionToIdx(stay)]?.name[lang]}</StyledText>
@@ -256,40 +316,42 @@ const GameMain = ({
                     isNavigate: true,
                   });//히스토리 저장
                   break;
-                case 11: //주점
-                  util.saveHistory({
-                    location: 'tavern',
-                    navigate: navigate,
-                    isNavigate: true,
-                  });//히스토리 저장
-                  break;
-                case 12: //조선소
+                case 11: //조선소
                   util.saveHistory({
                     location: 'shipyard',
                     navigate: navigate,
                     isNavigate: true,
                   });//히스토리 저장
                   break;
-                case 13: //항구
+                case 12: //항구
                   util.saveHistory({
                     location: 'port',
                     navigate: navigate,
                     isNavigate: true,
                   });//히스토리 저장
                   break;
-                case 14: //마을회관
+                case 13: //마을회관
                   util.saveHistory({
                     location: 'townhall',
                     navigate: navigate,
                     isNavigate: true,
                   });//히스토리 저장
                   break;
-                case 15: //길드
+                case 14: //길드
                   util.saveHistory({
                     location: 'guild',
                     navigate: navigate,
                     isNavigate: true,
                   });//히스토리 저장
+                  break;
+                case 15: //주점
+                  util.saveHistory({
+                    location: 'tavern',
+                    navigate: navigate,
+                    isNavigate: true,
+                  });//히스토리 저장
+                  break;
+                default:
                   break;
               }
             }}>

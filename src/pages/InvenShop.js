@@ -17,7 +17,7 @@ import { AppContext } from 'contexts/app-context';
 import 'css/shop.css';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
 const ShopWrap = styled.div`
 	display: flex;
@@ -62,7 +62,7 @@ const ItemContainer = styled.ul`
 	flex-direction: column;
 	width: 100%;
 	height: 100%;
-	background: rgba(0,0,0,.7);
+	background: rgba(0,0,0,.9);
   border-image: url(${({frameBack}) => frameBack}) 5 round;
 	box-sizing: border-box;
 	& > div {
@@ -354,7 +354,9 @@ const buttonType = (button, itemData) => {
 	}
 	return button;
 }
-const holeEffectText = (gameData, holeData, lang) => {
+const holeEffectText = ({
+  gameData, holeData, theme, lang
+}) => {
   let eff = [],
     effText = `${gameData.items.hole[holeData.idx].na[lang]}<br/>`;
   gameData.items.hole[holeData.idx]?.eff?.forEach((data) => {
@@ -379,7 +381,7 @@ const holeEffectText = (gameData, holeData, lang) => {
     }
   });
   eff.forEach((data, idx) => {
-    effText += `${util.getEffectType(idx, lang)}: ${data}<br/>`;
+    effText += `<span style="color: ${theme.color[`st${idx}`]};">${util.getEffectType(idx, lang)}: ${data}</span><br/>`;
   });
   effText = effText.slice(0, -5);
   return effText;
@@ -404,9 +406,12 @@ const ShopFooter = ({
 	setTooltipPos,
 	setTooltipOn,
 	setItemPopup,
+	actionChIdx,
+	stayIdx,
 }) => {
   const context = useContext(AppContext);
   const navigate = useNavigate();
+	const theme = useTheme();
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -425,6 +430,17 @@ const ShopFooter = ({
 		gameData: gameData,
 		cate: selectedItem,
 	}) : [], [selectedItem, gameData]);
+	const itemPrice = React.useMemo(() => util.itemPrice({
+		gameItem: selectedItem.gameItem,
+		saveItemData: selectedItem.saveItemData,
+		skill: gameData.skill[15],
+		isBuy: selectedItem.buttonType[0] === 'buy' ? true : false,
+		skLv: shopType === 'inven' ? "" : util.getHasSkillLv({
+			saveData: saveData,
+			skillIdx: 15,//협상
+			slotIdx: actionChIdx,
+		})
+	}), [selectedItem, gameData, saveData, shopType, actionChIdx]);
 	const timeoutRef = useRef(null); //timeout
   const handlePopup = useCallback((saveObj) => {
 		const {saveItemData, itemType, itemIdx} = saveObj;
@@ -500,8 +516,16 @@ const ShopFooter = ({
 								<span key={`hole${idx}`}>
 									<ItemHoleBack fixed={holePic !== 0} onClick={(e) => {
 										e.stopPropagation();
+										if (!holeData) {
+											return;
+										}
 										setTooltipPos(e.target.getBoundingClientRect());
-                    setTooltip(holeEffectText(gameData, holeData, lang));
+                    setTooltip(holeEffectText({
+                      gameData: gameData,
+                      holeData: holeData,
+                      theme: theme,
+                      lang: lang
+                    }));
                     setTooltipOn(true);
 									}}>
 										<ItemPic pic="itemEtc" type="hole" idx={holePic} />
@@ -517,7 +541,7 @@ const ShopFooter = ({
 						if (eff.type === 100) {
 							return (
 								<ItemEffs alignItems="center" justifyContent="space-between" key={idx}>
-									<ItemEffText type="skill" code="t1" weight="600" color="#00a90c">{util.getEffectType(eff.type, lang)}</ItemEffText>
+									<ItemEffText type="skill" code="t1" weight="600" color="#fff">{util.getEffectType(eff.type, lang)}</ItemEffText>
 									{eff.skList.map((sk, skIndex) => {
 										return (
 											<ItemEffText type="skill" code="t2" align="right" color="main" key={`skIndex${skIndex}`}>{`${gameData.skill[sk.idx].na[lang]} LV.${sk.lv}`}</ItemEffText>
@@ -528,81 +552,17 @@ const ShopFooter = ({
 						} else {
 							return (
 								<ItemEffs alignItems="center" justifyContent="space-between" key={idx}>
-									<ItemEffText code="t1" weight="600" color="#00a90c">{util.getEffectType(eff.type, lang)}</ItemEffText>
-									<ItemEffText code="t2" align="right" color="#2f73ff">{eff.base || "-"}</ItemEffText>
-									<ItemEffText code="t2" align="right" color="#ffac2f">{eff.add || "-"}</ItemEffText>
-									<ItemEffText code="t2" align="right" color="#e14040">{eff.hole || "-"}</ItemEffText>
-									<ItemEffText code="t2" align="right" color="main">{selectedItem.saveItemData.sealed ? eff.base : eff.base + eff.add + eff.hole}</ItemEffText>
+									<ItemEffText code="t2" weight="600" color={`st${eff.type}`}>{util.getEffectType(eff.type, lang)}</ItemEffText>
+									<ItemEffText code="t2" align="right" color="main">{eff.base || "-"}</ItemEffText>
+									<ItemEffText code="t2" align="right" color="grey1">{eff.add ? `+ ${eff.add}` : "-"}</ItemEffText>
+									<ItemEffText code="t2" align="right" color="grey2">{eff.hole ? `+ ${eff.hole}` : "-"}</ItemEffText>
+									<ItemEffText code="t3" align="right" color={`st${eff.type}`}>{selectedItem.saveItemData.sealed ? eff.base : eff.base + eff.add + eff.hole}</ItemEffText>
 								</ItemEffs>
 							)
 						}
 					})}
 				</ItemList>
 				<div style={{width:"100%"}} className="scroll-y">
-					{selectedItem.saveItemData.baseEff.length > 0 && (
-						<ItemList type="eff">
-							<ItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.basicEffect[lang]}</ItemTitle>
-							{selectedItem.saveItemData.baseEff.map((data, idx) => {
-								const grade = selectedItem.saveItemData.grade > 3 ? 3 : selectedItem.saveItemData.grade - 1;
-								return (
-									<ItemEffs alignItems="center" justifyContent="space-between" key={idx}>
-										<ItemEffText code="t1" weight="600" color="#2f73ff">
-											{util.getEffectType(data.type, lang)}
-										</ItemEffText>
-										<ItemEffText code="t2" align="right"  color="#2f73ff">{`${selectedItem.saveItemData.sealed ? data.num : data.num[grade]}`}</ItemEffText>
-									</ItemEffs>
-								) 
-							})}
-						</ItemList>
-					)}
-					{selectedItem.saveItemData.addEff.length > 0 && (
-						<ItemList type="eff">
-							<ItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.addEffect[lang]}</ItemTitle>
-							{selectedItem.saveItemData.addEff.map((eff, idx) => {
-								const grade = selectedItem.saveItemData.grade > 3 ? 3 : selectedItem.saveItemData.grade - 1;
-								if (eff.type === 100) {
-									return (
-										<ItemEffs alignItems="center" justifyContent="space-between" color="#ffac2f" key={idx}>
-											<ItemEffText code="t1" weight="600" color="#ffac2f">
-												{util.getEffectType(eff.type, lang)}
-											</ItemEffText>
-											<ItemEffText code="t2" align="right"  color="#ffac2f">
-												{`${gameData.skill[eff.skIdx].na[lang]} LV.${eff.skLv}`}
-											</ItemEffText>
-										</ItemEffs>
-									)
-								} else {
-									return (
-										<ItemEffs alignItems="center" justifyContent="space-between" color="#ffac2f" key={idx}>
-											<ItemEffText code="t1" weight="600" color="#ffac2f">
-												{util.getEffectType(eff.type, lang)}
-											</ItemEffText>
-											<ItemEffText code="t2" align="right"  color="#ffac2f">
-												{eff.num[0]}
-											</ItemEffText>
-										</ItemEffs>
-									)
-								}
-							})}
-						</ItemList>
-					)}
-					{selectedItem.saveItemData.hole.length > 0 && (
-						<ItemList type="eff">
-							<ItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.socketEffect[lang]}</ItemTitle>
-							{totalEff.map((data, idx) => {
-								if (data.hole > 0) {
-									return (
-										<ItemEffs alignItems="center" justifyContent="space-between" key={idx}>
-											<ItemEffText code="t1" weight="600" color="#e14040">
-												{util.getEffectType(data.type, lang)}
-											</ItemEffText>
-											<ItemEffText code="t2" align="right"  color="#e14040" key={`skIndex${idx}`}>{`${data.hole}`}</ItemEffText>
-										</ItemEffs>
-									)
-								}
-							})}
-						</ItemList>
-					)}
 					{selectedItem.gameItem.set !== 0 && (<ItemList type="set">
 						<div className="item_setNa">{gameData.items.set_type[selectedItem.gameItem.set].na}</div>
 					</ItemList>
@@ -712,18 +672,15 @@ const ShopFooter = ({
 		<ItemList type="footer" frameBack={imgSet.etc.frameChBack} color={selectItemArr[selectItemNum]}>
 			<ItemPrice justifyContent="flex-start">
 				{selectedItem.buttonType[0] === 'buy' ? <>
-					<ItemEffText code="t2" color="#c80">{gameData.msg.itemInfo.buyPrice[lang]}</ItemEffText>
-					<ItemEffText code="t2"  color="main">
-						{selectedItem.gameItem?.part <= 3 ?
-							`₩${util.comma((selectedItem.gameItem.price < 1000 ? 
-								1000 : 
-								selectedItem.gameItem.price) * 2 * (selectedItem.saveItemData.grade))}` : 
-							`₩${util.comma(selectedItem.gameItem.price * (selectedItem.saveItemData.grade || selectedItem.gameItem.grade))}`
-						}
+					<ItemEffText code="t3" color="#c80">{gameData.msg.itemInfo.buyPrice[lang]}</ItemEffText>
+					<ItemEffText code="t3"  color="main">
+						{itemPrice.str}
 					</ItemEffText>
 				</> : <>
-					<ItemEffText code="t2" color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</ItemEffText>
-					<ItemEffText code="t2" margin={10} color="main">{`₩${util.comma(selectedItem.gameItem?.price * (selectedItem.gameItem?.grade || selectedItem.saveItemData?.grade))}`}</ItemEffText>
+					<ItemEffText code="t3" color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</ItemEffText>
+					<ItemEffText code="t3" margin={10} color="main">
+						{itemPrice.str}
+					</ItemEffText>
 				</>
 				}
 			</ItemPrice> 
@@ -740,10 +697,7 @@ const ShopFooter = ({
 										// 	setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[201].na));
 										// 	return;
 										// }
-										let saveD = JSON.parse(JSON.stringify(saveData));
-										// if (saveD.ch[actionCh.idx].actionPoint >= gameData.actionPoint.itemBuy) {//행동력 지불
-										// 	saveD.ch[actionCh.idx].actionPoint -= gameData.actionPoint.itemBuy;
-										//	saveD.city[stayIdx].shop[typeList[selectedItem.selectTab].na].splice(selectedItem.itemSaveSlot, 1);
+										//let saveD = JSON.parse(JSON.stringify(saveData));
 										util.buttonEvent({
 											event: e,
 											type: 'itemBuy',
@@ -754,8 +708,13 @@ const ShopFooter = ({
 												gameItem: selectedItem.gameItem,
 												saveItemData: selectedItem.saveItemData,
 												type: "equip",
+												itemPrice: itemPrice.num,
+												actionChIdx: actionChIdx,
+												callback: () => {
+													saveData.city[stayIdx][shopType][typeList[selectTab].na].splice(selectedItem.itemSaveSlot, 1);//도시 아이템 삭제
+												}
 											},
-											saveData: saveD,
+											saveData: saveData,
 											changeSaveData: changeSaveData,
 											gameData: gameData,
 											msgText: setMsg,
@@ -773,10 +732,6 @@ const ShopFooter = ({
 											buttonType: [],
 										}
 										setSelectItem(cloneSelectItem);
-										// } else {
-										// 	setMsgOn(true);
-										// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1[lang]));
-										// }
 									} else {
 										setMsgOn(true);
 										setMsg(gameData.msg.sentence.goTool[lang]);
@@ -842,7 +797,7 @@ const ShopFooter = ({
 													saveItemData: selectedItem.saveItemData,
 													type: typeList[selectTab].itemCate,
 												},
-												saveData: saveD,
+												saveData: saveData,
 												changeSaveData: changeSaveData,
 												gameData: gameData,
 												msgText: setMsg,
@@ -988,7 +943,7 @@ const ShopFooter = ({
 									if (typeof selectedItem.gameItem?.part === 'number') { //장비면
 										if (selectedItem.gameItem?.part <= 3) { //투구,갑옷,무기이면
 											setMsgOn(true);
-											setMsg(gameData.msg.sentence.goShop[lang]);
+											setMsg(gameData.msg.sentence.goTool[lang]);
 											timeoutRef.current = setTimeout(() => {
 												util.saveHistory({
 													location: 'tool',
@@ -1126,7 +1081,7 @@ const ShopFooter = ({
 											setMsg(gameData.msg.sentence.goShop[lang]);
 											timeoutRef.current = setTimeout(() => {
 												util.saveHistory({
-													location: 'inven',
+													location: 'equipment',
 													navigate: navigate,
 													callback: () => {},
 													state: {
@@ -1135,7 +1090,7 @@ const ShopFooter = ({
 															gameItem: selectedItem.gameItem,
 															itemSaveSlot: selectedItem.itemSaveSlot,
 															selectTab: 3,
-															type: selectedItem.itemCate,
+															type: 'equip',
 															selectSlot: selectSlot,
 														}
 													},
@@ -1370,12 +1325,12 @@ const ShopFooter = ({
 
 const selectTabFn = (state, shopType, typeList) => {
 	if (!state || Object.keys(state).length <= 0) {
-		return 0;
+		return shopType === "inven" ? 0 : "";
 	}
 	if (typeof state.dataObj?.selectTab === 'number') {
 		return state.dataObj.selectTab;
 	}
-	let _selectTab = 0;
+	let _selectTab = "";
 	switch (shopType) {
 		case 'accessory':
 		case 'equipment':
@@ -1474,7 +1429,7 @@ const selectItemFn = (sData, state, shopType, selectSlot) => {
 		}
 	}
 }
-const SHOP_HORIZONTAL_NUM = 6; //가로 갯수
+const SHOP_HORIZONTAL_NUM = 8; //가로 갯수
 const ShopList = ({
 	gameData,
 	shopType,
@@ -1671,12 +1626,6 @@ const ActionPic = styled(FlexBox)`
   background: rgb(0, 0, 0, 0.5);
   z-index: 3;
 `;
-const ActionChPic = styled(MergedPic)`
-	width: 90%;
-	height: 90%;
-	left: 5%;
-	top: 5%;
-`;
 const NoneChText = styled(Text)`
 	position: absolute;
 	top: 50%;
@@ -1782,18 +1731,30 @@ const InvenShop = ({
 	const invenNa = useRef(['equip', 'hole', 'upgrade', 'material', 'etc']);
 	const selectItemArr = ['#ffeB91','#0cf','#de570e','#36A886','#006043','#917600'];
 	const [selectItemNum, setSelectItemNum] = useState(0);
-	const [selectTab, setSelectTab] = useState("");
+	const [selectTab, setSelectTab] = useState(selectTabFn(state, shopType, typeList));
 	const [selectItem, setSelectItem] = useState(() => {
 		return selectItemArr.map(() => {
 			return selectItemFn(sData, state, shopType, selectItemNum);
 		});
 	});
-	const actionCh = React.useMemo(() => sData.actionCh[shopType], [sData]);//행동할 캐릭터 데이터
+	const [greeting, setGreeting] = useState(shopType !== "inven" ? gameData.shop[shopType].greeting[lang] : "");
+	useEffect(() => {
+		setSelectTab(selectTabFn(state, shopType, typeList));
+	}, [state, shopType, typeList]);
+	const entries = React.useMemo(() => {
+		return sData.entry.map((entryIdx) => {
+			return sData.ch[entryIdx];
+		});
+	}, [sData]);
+	const actionChIdx = React.useMemo(() => {
+		return shopType === 'inven' ? -1 : sData.actionCh[shopType].idx <= entries.length - 1 ? sData.actionCh[shopType].idx : "";
+	}, [entries, sData]);//행동할 캐릭터 데이터
+	const saveCh = React.useMemo(() => entries[actionChIdx] || {}, [entries, actionChIdx]);
 	useEffect(() => {
 		if (Object.keys(sData).length !== 0 && shopType !== 'inven') {
 			setPopupInfo({
-				ch: sData.ch,
-				actionCh: sData.actionCh[shopType].idx,
+				ch: entries,
+				actionChIdx: actionChIdx,
 				type: shopType,
 				setMsg: setMsg,
 				setMsgOn: setMsgOn,
@@ -1808,9 +1769,13 @@ const InvenShop = ({
 			<ShopWrap>
 				{shopType !== "inven" ?
 				<>
-					<Npc imgSet={imgSet} shopType={shopType} gameData={gameData} lang={lang} selectTab={selectTab} setSelectTab={setSelectTab} navigate={navigate}/>
+					<Npc imgSet={imgSet} shopType={shopType} gameData={gameData} lang={lang} selectTab={selectTab} setSelectTab={setSelectTab} navigate={navigate} onClick={() => {
+						setSelectTab("");
+						const randomIdx = Math.floor(Math.random() * gameData.shop[shopType].randomText.length);
+						setGreeting(gameData.shop[shopType].randomText[randomIdx][lang]);
+					}}/>
 					<ShopContainer frameBack={imgSet.etc.frameChBack}>
-						{selectTab === "" && <GreetingText code="t4" color="main" wordBreak="keep-all">{gameData.shop[shopType].greeting[lang]}</GreetingText>}
+						{selectTab === "" && <GreetingText code="t4" color="main" wordBreak="keep-all">{greeting}</GreetingText>}
 						{shopItem.map((scrollData, scrollIdx) => {
 							return <ShopItem selected={selectTab === scrollIdx} key={`scrollContent${scrollIdx}`}>
 								{typeList[scrollIdx].na === 'inven' ? 
@@ -1883,10 +1848,10 @@ const InvenShop = ({
 								setPopupType('selectCh');
 								setPopupOn(true);
 							}}>
-							<MergedPic isAbsolute pic="card" idx={40 + (sData.ch?.[actionCh.idx]?.grade || 0)} />
-							{actionCh.idx === "" && <NoneChText code="t1" color="red" workBreak="keep-all">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
+							<MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />
+							{actionChIdx === "" && <NoneChText code="t1" color="red" workBreak="keep-all">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
 							<Img imgurl={imgSet.images.transparent800} />
-							<ActionChDisplay type={shopType} saveData={sData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
+							<ActionChDisplay type={shopType} chList={entries} gameData={gameData} actionChIdx={actionChIdx} imgSet={imgSet} />
 						</ActionPic>
 					</UserContainer>
 				</>
@@ -1941,7 +1906,9 @@ const InvenShop = ({
 							setTooltip={setTooltip}
 							setTooltipPos={setTooltipPos}
 							setTooltipOn={setTooltipOn}
-							setItemPopup={setItemPopup} />
+							setItemPopup={setItemPopup}
+							actionChIdx={actionChIdx}
+							stayIdx={stayIdx} />
 					</ItemContainer>
 				</ShopPopup>}
 			</ShopWrap>

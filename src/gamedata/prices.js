@@ -55,9 +55,9 @@ export const prices = {
 
 export const actionPoint = {
   recoveryTime: 50000,
-	usePoine: {
-		itemBuy: 3,
-		itemSell: 3,
-		training: 5,
+	usePoint: {
+		itemBuy: 10,//아이템 구매
+		itemSell: 10,//아이템 판매
+		training: 5,//레벨업, 스킬업
 	}
 }

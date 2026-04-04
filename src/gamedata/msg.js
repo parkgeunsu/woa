@@ -193,9 +193,14 @@ export const msg = {
 			jp:'代表英雄を変更',
 		},
 		home_text1: {
-			ko:'카드덱 변경',
-			en:'Change card deck',
-			jp:'カードデッキを変更',
+			ko:'팀구성 변경',
+			en:'Change team',
+			jp:'チーム構成変更',
+		},
+		home_text2: {
+			ko:'소지품',
+			en:'Possessions',
+			jp:'所持品',
 		},
 		equipment_text0: {
 			ko:'투구 구입',
@@ -238,6 +243,11 @@ export const msg = {
 			jp:'貿易',
 		},
 		composite_text0: {
+			ko:'아이템 감정',
+			en:'Item Appraisal',
+			jp:'アイテム鑑定',
+		},
+		composite_text1: {
 			ko:'아이템 합성',
 			en:'Item Synthesis',
 			jp:'アイテム合成',
@@ -257,40 +267,50 @@ export const msg = {
 			en:'Skill Level Upgrade',
 			jp:'スキルレベル強化',
 		},
-		blackMarket_text0: {
-			ko:'장비 강화',
-			en:'Equipment Upgrade',
-			jp:'装備強化',
-		},
-		blackMarket_text1: {
+		blacksmith_text0: {
 			ko:'아이템 소켓 강화',
 			en:'Item Socket Upgrade',
 			jp:'アイテムソケット強化',
 		},
+		blacksmith_text1: {
+			ko:'장비 강화',
+			en:'Equipment Upgrade',
+			jp:'装備強化',
+		},
 		church_text0: {
+			ko:'기부',
+			en:'Donate',
+			jp:'寄付',
+		},
+		church_text1: {
 			ko:'장비 정화',
 			en:'Equipment Purification',
 			jp:'装備浄化',
 		},
 		temple_text0: {
+			ko:'명상',
+			en:'Meditation',
+			jp:'瞑想',
+		},
+		temple_text1: {
 			ko:'영웅 정화',
 			en:'Hero Purification',
 			jp:'英雄浄化',
 		},
 		mystery_text0: {
-			ko:'비밀 무기',
-			en:'Secret Weapon',
-			jp:'秘密武器',
+			ko:'경험을 댓가로',
+			en:'Experience Exchange',
+			jp:'経験を댓価로',
 		},
 		mystery_text1: {
-			ko:'비밀 장신구',
-			en:'Secret Accessory',
-			jp:'秘密アクセサリー',
+			ko:'돈을 댓가로',
+			en:'Money Exchange',
+			jp:'お金を댓価로',
 		},
 		mystery_text2: {
-			ko:'비밀 장신구',
-			en:'Secret Accessory',
-			jp:'秘密アクセサリー',
+			ko:'목숨을 댓가로',
+			en:'Life Exchange',
+			jp:'命を댓価로',
 		},
 		tavern_text0: {
 			ko:'술집',
@@ -303,14 +323,19 @@ export const msg = {
 			jp:'造船所',
 		},
 		port_text0: {
-			ko:'항구',
-			en:'Port',
-			jp:'港',
+			ko:'출항',
+			en:'Sail',
+			jp:'出航',
 		},
 		townHall_text0: {
-			ko:'마을회관',
-			en:'Townhall',
-			jp:'町役場',
+			ko:'투자',
+			en:'Invest',
+			jp:'投資',
+		},
+		guild_text0: {
+			ko:'임무',
+			en:'Mission',
+			jp:'ミッション',
 		},
 		sell_item: {
 			ko: '아이템 판매',
@@ -573,6 +598,16 @@ export const msg = {
 		},
 	},
 	title:{
+		leader:{ 
+			ko:'리더',
+			en:'Leader',
+			jp:'リーダー',
+		},
+		memberNum:{ 
+			ko:'출동 인원',
+			en:'Member Number',
+			jp:'出動人員',
+		},
 		loading:{
 			ko:'로딩중...',
 			en:'Loading...',
@@ -587,6 +622,16 @@ export const msg = {
 			ko:'획득 영웅',
 			en:'Obtained Hero',
 			jp:'獲得英雄',
+		},
+		gradeUpHeroNum:{
+			ko:'영웅 수(필요 / 보유)',
+			en:'Hero Number (required / owned)',
+			jp:'英雄数(必要 / 保有)',
+		},
+		getHeroNum:{
+			ko:'획득 영웅 수',
+			en:'Obtained Hero Number',
+			jp:'獲得英雄数',
 		},
 		getItem:{
 			ko:'획득 아이템',
@@ -1922,6 +1967,16 @@ export const msg = {
 		},
 	},
 	sentence:{
+		sealedItem:{
+			ko:'이미 감정되어 있는 장비입니다.',
+			en:'The equipment has already been identified.',
+			jp:'すでに鑑定されている装備です。',
+		},
+		needMoreMemberNum:{
+			ko:'출동 가능 인원을 더 늘려야 합니다.',
+			en:'You need to increase the number of deployable personnel.',
+			jp:'出動可能人員を増やさなければなりません。',
+		},
 		noRemoveLeader:{
 			ko:'리더는 제거할 수 없습니다.',
 			en:'Leader cannot be removed.',
@@ -2076,6 +2131,11 @@ export const msg = {
 			ko:'소지금이 부족합니다.',
 			en:'You don\'t have enough money.',
 			jp:'所持金が不足しています。',
+		},
+		lackHeroNum:{
+			ko:'영웅이 부족합니다.',
+			en:'You don\'t have enough heroes.',
+			jp:'英雄が足りません。',
 		},
 		selectItem:{
 			ko:'아이템을 선택해 주세요.',

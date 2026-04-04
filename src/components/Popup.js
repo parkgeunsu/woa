@@ -282,7 +282,7 @@ const PopupItemContainer = styled.ul`
   margin: auto auto;
   width: 90%;
   max-height: 90%;
-  background: rgba(0,0,0,.7);
+  background: rgba(0,0,0,.9);
   border: 5px solid transparent;
   border-image: url(${({frameBack}) => frameBack}) 5 round;
   box-sizing: border-box;
@@ -515,7 +515,7 @@ const PopupItem = styled.div`
   }}
 `;
 const PopupItemEffs = styled(FlexBox)`
-  margin: 0 0 5px 15px;
+  margin: 0 0 3px 0;
   width: auto;
   ${({color}) => color ? `color: ${color}` : ''}
 `;
@@ -620,7 +620,9 @@ const SkillDescription = styled(Text)``;
 const SkillEff = styled(Text)`
   text-align:center;
 `;
-const holeEffectText = (gameData, holeData, lang) => {
+const holeEffectText = ({
+  gameData, holeData, theme, lang
+}) => {
   let eff = [],
     effText = `${gameData.items.hole[holeData.idx].na[lang]}<br/>`;
   gameData.items.hole[holeData.idx]?.eff?.forEach((data) => {
@@ -645,12 +647,12 @@ const holeEffectText = (gameData, holeData, lang) => {
     }
   });
   eff.forEach((data, idx) => {
-    effText += `${util.getEffectType(idx, lang)}: ${data}<br/>`;
+    effText += `<span style="color: ${theme.color[`st${idx}`]};">${util.getEffectType(idx, lang)}: ${data}</span><br/>`;
   });
   effText = effText.slice(0, -5);
   return effText;
 }
-const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, setTooltip, setTooltipPos, setTooltipOn, showPopup, lang, navigate, timeoutRef}) => {
+const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, setTooltip, setTooltipPos, setTooltipOn, showPopup, theme, lang, navigate, timeoutRef}) => {
   const isMoveEvent = dataObj.isMoveEvent;
 	if (type === 'relation') {
     const member = dataObj.relation.member;
@@ -706,7 +708,6 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
               <PopupItemDescription code="t1"  color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></PopupItemDescription>
               <PopupItemKg code="t2"  weight="600" color="#bbb" align="right">{items.kg || 0}kg</PopupItemKg>
             </PopupItemInfo>
-            {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
           </div>
         </PopupItemList>
         <PopupItemList type="animalCoin_slot">
@@ -720,8 +721,16 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
                 <div key={`hole${idx}`}>
                   <PopupItemHoleBack fixed={holePic !== 0} onClick={(e) => {
 										e.stopPropagation();
+										if (!holeData) {
+											return;
+										}
                     setTooltipPos(e.target.getBoundingClientRect());
-                    setTooltip(holeEffectText(gameData, holeData, lang));
+                    setTooltip(holeEffectText({
+                      gameData: gameData,
+                      holeData: holeData,
+                      theme: theme,
+                      lang: lang
+                    }));
                     setTooltipOn(true);
 									}}>
                     <ItemPic pic="itemEtc" type="hole" idx={holePic} />
@@ -737,7 +746,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
             if (eff.type === 100) {
               return (
                 <PopupItemEffs justifyContent="space-between" alignItems="center" key={idx}>
-                  <PopupItemEffText type="skill" code="t1" weight="600" color="#00a90c">{util.getEffectType(eff.type, lang)}</PopupItemEffText>
+                  <PopupItemEffText type="skill" code="t1" weight="600" color={`st${eff.type}`}>{util.getEffectType(eff.type, lang)}</PopupItemEffText>
                   {eff.skList.map((sk, skIndex) => {
                     return (
                       <PopupItemEffText type="skill" code="t2" align="right"  color="main" key={`skIndex${skIndex}`}>{`${gameData.skill?.[sk.idx]?.na?.[lang]} LV.${sk.lv}`}</PopupItemEffText>
@@ -748,85 +757,17 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
             } else {
               return (
                 <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx}>
-                  <PopupItemEffText code="t1" weight="600" color="#00a90c" className="cate">{util.getEffectType(eff.type, lang)}</PopupItemEffText>
-                  <PopupItemEffText code="t1"  margin={5}  weight="600" color="#2f73ff" className="base">{eff.base || "-"}</PopupItemEffText>
-                  <PopupItemEffText code="t1" margin={5}  weight="600" color="#ffac2f" className="add">{eff.add || "-"}</PopupItemEffText>
-                  <PopupItemEffText code="t1" margin={5}  weight="600" color="#e14040" className="hole">{eff.hole || "-"}</PopupItemEffText>
-                  <PopupItemEffText style={{flex: 1}} code="t2"  align="right" weight="600" color="main" className="total">{eff.base + eff.add + eff.hole}</PopupItemEffText>
+                  <PopupItemEffText code="t2" weight="600" color={`st${eff.type}`}>{util.getEffectType(eff.type, lang)}</PopupItemEffText>
+                  <PopupItemEffText code="t2"  margin={5}  weight="600" color="main">{eff.base || "-"}</PopupItemEffText>
+                  <PopupItemEffText code="t2" margin={5}  weight="600" color="grey1">{eff.add ? `+ ${eff.add}` : "-"}</PopupItemEffText>
+                  <PopupItemEffText code="t2" margin={5}  weight="600" color="grey2">{eff.hole ? `+ ${eff.hole}` : "-"}</PopupItemEffText>
+                  <PopupItemEffText code="t3"  align="right" weight="600" color={`st${eff.type}`}>{eff.base + eff.add + eff.hole}</PopupItemEffText>
                 </PopupItemEffs>
               )
             }
           })}
         </PopupItemList>
         <div style={{width:"100%"}} className="scroll-y">
-          {saveItems.baseEff.length > 0 && (
-            <PopupItemList type="eff">
-              <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.basicEffect[lang]}</PopupItemTitle>
-              {saveItems.baseEff.map((data, idx) => {
-                const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
-                return (
-                  <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx}>
-                    <PopupItemEffText code="t1" weight="600" color="#2f73ff">
-                      {util.getEffectType(data.type, lang)}
-                    </PopupItemEffText>
-                    <PopupItemEffText code="t2" align="right"  color="#2f73ff" key={`skIndex${idx}`}>
-                      {data.num[grade]}
-                    </PopupItemEffText>
-                  </PopupItemEffs>
-                ) 
-              })}
-            </PopupItemList>
-          )}
-          {saveItems.addEff.length > 0 && (
-            <PopupItemList type="eff">
-              <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.addEffect[lang]}</PopupItemTitle>
-              {saveItems.addEff.map((data, idx) => {
-                const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
-                if (data.type === 100) {
-                  return (
-                    <PopupItemEffs alignItems="center" justifyContent="space-between" color="#ffac2f" key={`skIndex${idx}`}>
-                      <PopupItemEffText code="t1" weight="600" color="#ffac2f">
-                        {util.getEffectType(data.type, lang)}
-                      </PopupItemEffText>
-                      <PopupItemEffText code="t2" align="right"  color="#ffac2f">
-                        {`${gameData.skill[data.skIdx].na[lang]} LV.${data.skLv}`}
-                      </PopupItemEffText>
-                    </PopupItemEffs>
-                  )
-                } else {
-                  return (
-                    <PopupItemEffs alignItems="center" justifyContent="space-between" color="#ffac2f" key={`skIndex${idx}`}>
-                      <PopupItemEffText code="t1" weight="600" color="#2f73ff">
-                        {util.getEffectType(data.type, lang)}
-                      </PopupItemEffText>
-                      <PopupItemEffText code="t2" align="right"  color="#2f73ff">
-                        {data.num[0]}
-                      </PopupItemEffText>
-                    </PopupItemEffs>
-                  )
-                } 
-              })}
-            </PopupItemList>
-          )}
-          {saveItems.hole.length > 0 && (
-            <PopupItemList type="eff">
-              <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.socketEffect[lang]}</PopupItemTitle>
-              {totalEff.map((data, idx) => {
-                if (data.hole > 0) {
-                  return (
-                    <PopupItemEffs alignItems="center" justifyContent="space-between" key={`skIndex${idx}`} className="hole">
-                      <PopupItemEffText code="t1" weight="600" color="#e14040">
-                      {util.getEffectType(data.type, lang)}
-                      </PopupItemEffText>
-                      <PopupItemEffText code="t2" align="right"  color="#e14040">
-                        {data.hole}
-                      </PopupItemEffText>
-                    </PopupItemEffs>
-                  )
-                }
-              })}
-            </PopupItemList>
-          )}
           {setsInfo.part && <PopupItemList type="set">
             <div className="item_setNa">{setsInfo.na}</div>
             {setsInfo.part.map((data, idx) => {
@@ -893,7 +834,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
         </PopupItemList>
         <PopupItemList>
           <PopupItem part={items.part} grade={saveItems.grade} sealed={sealed}>
-            <ItemPic type="equip" pic="equip" idx={items.display} />
+            <ItemPic type="equip" pic="equip" idx={items.display} mergeColor={saveItems.color} />
           </PopupItem>
           <div flex-h="true" style={{flex: 1,}}>
             <PopupItemInfo direction="column" justifyContent="space-between">
@@ -903,7 +844,6 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
               <PopupItemDescription code="t1"  color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></PopupItemDescription>
               <PopupItemKg code="t2"  weight="600" color="#bbb" align="right">{items.kg}kg</PopupItemKg>
             </PopupItemInfo>
-            {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
           </div>
         </PopupItemList>
         <PopupItemList type="animalCoin_slot">
@@ -917,8 +857,16 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
                 <div key={`hole${holeIdx}`}>
                   <PopupItemHoleBack fixed={holePic !== 0} onClick={(e) => {
 										e.stopPropagation();
+										if (!holeData) {
+											return;
+										}
                     setTooltipPos(e.target.getBoundingClientRect());
-                    setTooltip(holeEffectText(gameData, holeData, lang));
+                    setTooltip(holeEffectText({
+                      gameData: gameData,
+                      holeData: holeData,
+                      theme: theme,
+                      lang: lang
+                    }));
                     setTooltipOn(true);
 									}}>
                     <ItemPic pic="itemEtc" type="hole" idx={holePic} />
@@ -929,12 +877,11 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
           </PopupItemSlot>
         </PopupItemList>
         <PopupItemList type="eff">
-          <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.itemEffect[lang]}</PopupItemTitle>
           {totalEff.map((eff, idx) => {
             if (eff.type === 100) {
               return (
                 <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx}>
-                  <PopupItemEffText type="skill" code="t1"  weight="600" color="#00a90c" className="cate">{util.getEffectType(eff.type, lang)}</PopupItemEffText>
+                  <PopupItemEffText type="skill" code="t1"  weight="600" color={`st${eff.type}`} className="cate">{util.getEffectType(eff.type, lang)}</PopupItemEffText>
                   {eff.skList.map((sk, skIndex) => {
                     return (
                       <PopupItemEffText type="skill" code="t2"  weight="600" color="main" key={`skIndex${skIndex}`} className="total">{`${gameData.skill[sk.idx].na[lang]} LV.${sk.lv}`}</PopupItemEffText>
@@ -945,85 +892,17 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
             } else {
               return (
                 <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx}>
-                  <PopupItemEffText code="t1"  weight="600" color="#00a90c" className="cate">{util.getEffectType(eff.type, lang)}</PopupItemEffText>
-                  <PopupItemEffText code="t1"  weight="600" color="#2f73ff" className="base">{eff.base || "-"}</PopupItemEffText>
-                  <PopupItemEffText code="t1"  weight="600" color="#ffac2f" className="add">{eff.add || "-"}</PopupItemEffText>
-                  <PopupItemEffText code="t1"  weight="600" color="#e14040" className="hole">{eff.hole || "-"}</PopupItemEffText>
-                  <PopupItemEffText code="t2"  weight="600" color="main" className="total">{sealed ? eff.base : eff.base + eff.add + eff.hole}</PopupItemEffText>
+                  <PopupItemEffText code="t2"  weight="600" color={`st${eff.type}`}>{util.getEffectType(eff.type, lang)}</PopupItemEffText>
+                  <PopupItemEffText code="t2"  weight="600" color="main">{eff.base || "-"}</PopupItemEffText>
+                  <PopupItemEffText code="t2"  weight="600" color="grey1">{eff.add ? `+ ${eff.add}` : "-"}</PopupItemEffText>
+                  <PopupItemEffText code="t2"  weight="600" color="grey2">{eff.hole ? `+ ${eff.hole}` : "-"}</PopupItemEffText>
+                  <PopupItemEffText code="t3"  weight="600" color={`st${eff.type}`}>{sealed ? eff.base : eff.base + eff.add + eff.hole}</PopupItemEffText>
                 </PopupItemEffs>
               )
             }
           })}
         </PopupItemList>
         <div style={{width:"100%"}} className="scroll-y">
-          {!sealed && (
-            <PopupItemList type="eff">
-              <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.basicEffect[lang]}</PopupItemTitle>
-              {saveItems.baseEff && saveItems.baseEff.map((data, idx) => {
-                const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
-                return (
-                  <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx}>
-                    <PopupItemEffText code="t1" weight="600" color="#2f73ff">
-                      {util.getEffectType(data.type, lang)}
-                    </PopupItemEffText>
-                    <PopupItemEffText code="t2" align="right" color="#2f73ff" key={`skIndex${idx}`}>
-                      {data.num[grade]}
-                    </PopupItemEffText>
-                  </PopupItemEffs>
-                ) 
-              })}
-            </PopupItemList>
-          )}
-          {saveItems.addEff.length > 0 && (
-            <PopupItemList type="eff">
-              <PopupItemTitle align="left" code="t1" color="grey">{gameData.msg.itemInfo.addEffect[lang]}</PopupItemTitle>
-              {saveItems.addEff.map((data, idx) => {
-                const grade = saveItems.grade > 3 ? 3 : saveItems.grade - 1;
-                if (data.type === 100) {
-										return (
-											<PopupItemEffs alignItems="center" justifyContent="space-between" color="#ffac2f" key={idx}>
-                        <PopupItemEffText code="t1" weight="600" color="#ffac2f">
-                          {util.getEffectType(data.type, lang)}
-                        </PopupItemEffText>
-                        <PopupItemEffText code="t2" align="right" color="#ffac2f" key={`skIndex${idx}`}>
-                          {`${gameData.skill[data.skIdx].na[lang]} LV.${data.skLv}`}
-                        </PopupItemEffText>
-                      </PopupItemEffs>
-										)
-                } else {
-                  return (
-                    <PopupItemEffs alignItems="center" justifyContent="space-between" color="#ffac2f" key={idx}>
-                      <PopupItemEffText code="t1" weight="600" color="#ffac2f">
-                        {util.getEffectType(data.type, lang)}
-                      </PopupItemEffText>
-                      <PopupItemEffText code="t2" align="right" color="#ffac2f" key={`skIndex${idx}`}>
-                        {data.num[0]}
-                      </PopupItemEffText>
-                    </PopupItemEffs>
-                  )
-                }
-              })}
-            </PopupItemList>
-          )}
-          {saveItems.hole.length > 0 && (
-            <PopupItemList type="eff">
-              <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.socketEffect[lang]}</PopupItemTitle>
-              {totalEff.map((data, idx) => {
-                if (data.hole > 0) {
-                  return (
-                    <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx} className="hole">
-                      <PopupItemEffText code="t1" weight="600" color="#e14040">
-                      {util.getEffectType(data.type, lang)}
-                      </PopupItemEffText>
-                      <PopupItemEffText code="t2" align="right"  color="main" key={`skIndex${idx}`}>
-                        {data.hole}
-                      </PopupItemEffText>
-                    </PopupItemEffs>
-                  )
-                }
-              })}
-            </PopupItemList>
-          )}
           {setsInfo.part && <PopupItemList className="item_set" type="set">
             <div className="item_setNa">{setsInfo.na}</div>
             {setsInfo.part.map((data, idx) => {
@@ -1042,19 +921,13 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
             <ButtonArea justifyContent="flex-end">
               <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:25}} onClick={() => {//감정
                 showMsg(true);
-                msgText(gameData.msg.sentence.goInven[lang]);
+                msgText(gameData.msg.sentence.goLab[lang]);
                 timeoutRef.current = setTimeout(() => {
                   util.saveHistory({
-                    location: 'inven',
+                    location: 'composite',
                     navigate: navigate,
                     callback: () => {},
-                    state: {
-                      dataObj: {
-                        ...dataObj,
-                        selectTab: 'equip',
-                        selectSlot: 1,
-                      }
-                    },
+                    state: {},
                     isNavigate: true,
                   });
                 }, 1800);
@@ -1065,7 +938,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
                   msgText(gameData.msg.sentence.goShop[lang]);
                   timeoutRef.current = setTimeout(() => {
                     util.saveHistory({
-                      location: 'shop',
+                      location: 'equipment',
                       navigate: navigate,
                       callback: () => {},
                       state: {
@@ -1101,7 +974,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
             </ButtonArea>
           ) : (//개봉
             <ButtonArea justifyContent="flex-end">
-              <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:20}} onClick={(e) => {//장착
+              {!dataObj.onlyInven && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:20}} onClick={(e) => {//장착
                 util.buttonEvent({
                   event: e,
                   type: 'itemEquip',
@@ -1121,13 +994,13 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
                     invenOpened: true,
                   }
                 }});
-              }} data-buttontype="itemEquip" />
+              }} data-buttontype="itemEquip" />}
               {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:21}} onClick={() => {//강화
                 showMsg(true);
                 msgText(gameData.msg.sentence.goForge[lang]);
                 timeoutRef.current = setTimeout(() => {
                   util.saveHistory({
-                    location: 'training',
+                    location: 'blacksmith',
                     navigate: navigate,
                     callback: () => {},
                     state: {
@@ -1147,7 +1020,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
                 msgText(gameData.msg.sentence.goForge[lang]);
                 timeoutRef.current = setTimeout(() => {
                   util.saveHistory({
-                    location: 'training',
+                    location: 'blacksmith',
                     navigate: navigate,
                     callback: () => {},
                     state: {
@@ -1168,14 +1041,14 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
                   msgText(gameData.msg.sentence.goShop[lang]);
                   timeoutRef.current = setTimeout(() => {
                     util.saveHistory({
-                      location: 'shop',
+                      location: 'equipment',
                       navigate: navigate,
                       callback: () => {},
                       state: {
                         dataObj: {
                           ...dataObj,
-                          selectTab: 'inven',
-                          selectSlot: 1,
+                          selectTab: 3,
+                          selectSlot: dataObj.saveItemData.slot,
                         }
                       },
                       isNavigate: true,
@@ -1186,7 +1059,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
                   msgText(gameData.msg.sentence.goTool[lang]);
                   timeoutRef.current = setTimeout(() => {
                     util.saveHistory({
-                      location: 'tool',
+                      location: 'accessory',
                       navigate: navigate,
                       callback: () => {},
                       state: {
@@ -1755,24 +1628,32 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
       </PopupDescription>
     );
   } else if (type === 'selectCh') {
-    const chData = dataObj.ch;
     let skillIdx = '',
       possibleCh = 0;
     switch(dataObj.type) {
       case 'tradingPost':
       case 'accessory':
       case 'equipment':
+      case 'townhall':
       case 'tool':
         skillIdx = 15;
         break;
       case 'composite':
         skillIdx = 20;
         break;
+      case 'guild':
       case 'training':
+      case 'mystery':
         skillIdx = 0;
         break;
       case 'blacksmith':
         skillIdx = 17;
+        break;
+      case 'church':
+        skillIdx = 25;
+        break;
+      case 'temple':
+        skillIdx = 26;
         break;
       case 'recruitment':
         skillIdx = 22;
@@ -1783,31 +1664,29 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
       default:
         break;
     }
-    const saveCh = saveData.ch[dataObj.selectIdx];
-    const skillLv = dataObj.selectIdx !== "" ? saveCh.sk.find((skill) => skill.idx === skillIdx)?.lv || 0 : 0,
-      possibleLvUp = dataObj.selectIdx !== "" && saveCh.hasExp > gameData.exp[`grade${saveCh.grade}`][saveCh.lv],
-      possibleGradeUp = dataObj.selectIdx !== "" && saveCh.grade <= 7 && saveData.ch.filter((ch) => {
-        return ch.idx === dataObj.selectIdx
-      }).length >= 2,
-      possibleSkillUp = dataObj.selectIdx !== "" && saveCh.animalBadge > 0;
+    const saveCh = dataObj.ch[dataObj.selectIdx];
+    const skillLv = saveCh ? saveCh?.sk.find((skill) => skill.idx === skillIdx)?.lv || 0 : 0,
+      possibleLvUp = saveCh ? saveCh.lv < 50 && saveCh.hasExp > gameData.exp[`grade${saveCh.grade}`][saveCh.lv] : false,
+      possibleGradeUp = saveCh ? saveCh.grade < 7 && gameData.gradeUp[saveCh.grade] <= saveData.hasHeroNum[saveCh.idx]: false,
+      possibleSkillUp = saveCh ? saveCh?.animalBadge > 0 : false;
 		return (
       <ActionChWrap direction="column">
         <ActionCh>
           <ChDisplay>
             <Img imgurl={imgSet.images.transparent800} />
-            <ChCard usedType="actionCh" saveData={saveData} slotIdx={dataObj.selectIdx} />
+            <ChCard usedType="actionCh" saveCharacter={saveCh} saveData={dataObj.ch} slotIdx={dataObj.selectIdx} />
             <ChBack type="cardBack" pic="card" idx={0} />
           </ChDisplay>
           <StateContainer direction="column" justifyContent="space-around" alignItems="center">
             {gameData.stateName.map((data, idx) => {
-              const { stateColor } = util.getPercentColor(gameData.stateMax[idx], dataObj.selectIdx !== "" ? chData[dataObj.selectIdx]['st' + idx] : 0);
+              const { stateColor } = util.getPercentColor(gameData.stateMax[idx], saveCh ? saveCh?.['st' + idx] : 0);
               return (
                 <StateGroup key={`chst${idx}`} justifyContent="flex-start">
                   <StateIcon type="state" pic="icon100" idx={idx} />
                   <StateInner>
                     <StateText code="t2" color="main">{gameData.msg.state[data][lang]}</StateText>
                     <TextTotal code="t4" weight="600" color={stateColor}>
-                      {dataObj.selectIdx !== "" ? chData[dataObj.selectIdx]['st' + idx] : 0}
+                      {saveCh ? saveCh?.['st' + idx] : 0}
                     </TextTotal>
                   </StateInner>
                 </StateGroup>
@@ -1815,15 +1694,17 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
             })}
           </StateContainer>
         </ActionCh>
-        {dataObj.selectIdx !== "" && <ChSkillActionPoint dirction="row" justifyContent="space-between">
-          {dataObj.type !== "training" ? 
-          <ChSkill justifyContent="flex-start">
+        {saveCh && <ChSkillActionPoint dirction="row" justifyContent="space-between">
+          {dataObj.type !== "training" && dataObj.type !== "mystery" && <ChSkill justifyContent="flex-start">
             <ActionSkillIcon><IconPic type="skill" pic="skill" idx={skillIdx} /></ActionSkillIcon>
-            <Text code="t4" color="main" weight="600">{saveCh.hasExp > 0 && `${gameData.skill[skillIdx].na[lang]} Lv.${skillLv} `}</Text>
-          </ChSkill> : 
-          <ChSkill justifyContent="flex-start">
+            <Text code="t4" color="main" weight="600">{`${gameData.skill[skillIdx].na[lang]} Lv.${skillLv}`}</Text>
+          </ChSkill>}
+          {dataObj.type === "mystery" && <ChSkill justifyContent="flex-start">
+            <Text code="t4" color="main" weight="600">{`${gameData.msg.info.hasExp[lang]}: ${saveCh.hasExp}`}</Text>
+          </ChSkill>}
+          {dataObj.type === "training" && <ChSkill justifyContent="flex-start">
             {possibleLvUp && <UpIcon type="commonIcon" pic="icon200" idx={1} />}
-            {possibleGradeUp && <UpIcon type="commonIcon" pic="icon200" idx={3} />}
+            {possibleGradeUp && <UpIcon type="commonIcon" pic="icon200" idx={9} />}
             {possibleSkillUp && <UpIcon type="commonIcon" pic="icon200" idx={7} />}
           </ChSkill>}
           <ChActionPoint justifyContent="flex-end">
@@ -1832,10 +1713,9 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
         </ChSkillActionPoint>}
         <ChList type="action_list">
           <ChUl>
-          {chData.map((data, idx) => {
-            const saveCh = saveData.ch[idx];
+          {dataObj.ch.map((data, idx) => {
             let hasSkill = false;
-            for (const [idx, skillData] of saveCh.sk.entries()) {
+            for (const [idx, skillData] of data.sk.entries()) {
               if (skillData.idx === skillIdx) {
                 hasSkill = true;
                 break;
@@ -1846,7 +1726,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
               possibleCh ++;
             }
             return (
-              <ChLi select={dataObj.selectIdx === idx} hasSkill={hasSkill} grade={saveCh.grade} key={`chLi_${idx}`} onClick={(e) => {
+              <ChLi select={dataObj.selectIdx === idx} hasSkill={hasSkill} grade={data.grade} key={`chLi_${idx}`} onClick={(e) => {
                 e.stopPropagation();
                 if (hasSkill) {
                   dataObj.setSelectIdx(idx);
@@ -1855,7 +1735,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
                   dataObj.setMsgOn(true);
                 }
               }}>
-                <CharacterCard usedType="thumb" saveData={saveData} saveCharacter={saveCh} />
+                <CharacterCard usedType="thumb" saveData={dataObj.ch} saveCharacter={data} />
               </ChLi>
             )
           })}
@@ -1890,6 +1770,7 @@ const Popup = ({
   setTooltip,
   setTooltipPos,
   setTooltipOn,
+  theme,
 }) => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
@@ -1902,7 +1783,7 @@ const Popup = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const [selectIdx, setSelectIdx] = useState(dataObj.actionCh);
+  const [selectIdx, setSelectIdx] = useState(dataObj.actionChIdx);
   const [content, setContent] = useState();
   const timeoutRef = useRef(null);
   useEffect(() => {
@@ -1923,6 +1804,7 @@ const Popup = ({
       setTooltipPos: setTooltipPos,
       setTooltipOn: setTooltipOn,
       showPopup: showPopup,
+      theme: theme,
       lang: lang,
       navigate: navigate,
       timeoutRef: timeoutRef

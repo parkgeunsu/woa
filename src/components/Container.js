@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 const FlexContainer = styled.div`
   display: flex;
-  width: 100%;
-  height: 100%;
+  width: ${({width}) => width};
+  height: ${({height}) => height};
   flex-direction: ${({direction}) => direction};
   align-items: ${({alignItems}) => alignItems};
   align-content: ${({alignContent}) => alignContent};
@@ -20,11 +20,13 @@ const FlexBox = ({
   direction="row",
   flexWrap="nowrap",
   alignContent="stretch",
+  width="100%",
+  height="100%",
   children,
   ...rest
 }) => {
   return (
-    <FlexContainer direction={direction} alignItems={alignItems} alignContent={alignContent} justifyContent={justifyContent} flexWrap={flexWrap} {...rest}>
+    <FlexContainer width={width} height={height} direction={direction} alignItems={alignItems} alignContent={alignContent} justifyContent={justifyContent} flexWrap={flexWrap} {...rest}>
       {children}
     </FlexContainer>
   )

@@ -360,6 +360,13 @@ const classification = (gameData) => {
 const makeSaveData = (saveData) => {
   saveData.actionCh = {
     equipment: {idx:''},
+    church: {idx:''},
+    temple: {idx:''},
+    mystery: {idx:''},
+    tavern: {idx:''},
+    townHall: {idx:''},
+    guild: {idx:''},
+    port: {idx:''},
     accessory: {idx:''},
     tool: {idx:''},
     shipyard: {idx:''},
@@ -370,17 +377,19 @@ const makeSaveData = (saveData) => {
     composite: {idx:''},
     recruitment: {idx:''}
   }
+  saveData.hasHeroNum = [];
   saveData.info = {
     id:'',
     lv:1,
     diamond:0,
     money:0,
     morality:100,
+    memberNum:0,
     stay:0,
     leaderIdx:0,
     shipIdx:0,
   }
-  saveData.entry = [];
+  saveData.entry = [0];
   saveData.lineup = {
     select: 0,
     save_slot: Array.from({length: 8}, () => {

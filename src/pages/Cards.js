@@ -295,7 +295,6 @@ const setPageIdxFn = (state) => {
 const Cards = ({
   saveData,
   changeSaveData,
-  currentTime,
 }) => {
   const context = useContext(AppContext);
   const navigate = useNavigate();
@@ -312,9 +311,6 @@ const Cards = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const classification = React.useMemo(() => {
-    return context.classification;
-  }, [context]);
   const [isZoomCard, setZoomCard] = useState(false);
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');
@@ -329,7 +325,12 @@ const Cards = ({
   const invenItems = React.useMemo(() => {
     return sData.items;
   }, [sData]);
-  const chLength = React.useMemo(() => sData?.ch?.length ,[sData]);
+  const entries = React.useMemo(() => {
+    return sData.entry.map((entryIdx) => {
+      return sData.ch[entryIdx];
+    });
+  }, [sData]);
+  const chLength = React.useMemo(() => entries.length ,[sData]);
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
@@ -381,78 +382,20 @@ const Cards = ({
     <>
       <Wrap className="ch_wrap">
         <ChArea>
-          <div style={{position:"absolute",right:"20%",bottom:0,zIndex:100, backgroundColor: '#fff'}}>
-            <button onClick={() => {
-              util.getItem({
-                saveData: sData,
-                gameData: gameData,
-                changeSaveData: changeSaveData,
-                option: {
-                  type:'equip',
-                  items:Math.ceil(Math.random()*3),//장비만 해당
-                  //아이템종류, 세부종류(검,단검), 매직등급
-                  lv:Math.round(Math.random()*100),
-                  sealed:true,
-                },
-                isSave: true,
-                lang: lang,
-              });
-            }}>아이템 추가</button><br/>
-            <button onClick={() => {
-              const card = util.makeCard({
-                heroArr: classification,
-                gachaNum: 1,
-                gachaType: "p",
-                gameData: gameData,
-                saveData: sData,
-              });
-              const newSaveDataAdd = {
-                ...sData,
-                ch: [...sData.ch, card.chDataArr[0]]
-              };
-              changeSaveData(newSaveDataAdd);
-            }}>영웅 추가</button><br/>
-            <button onClick={() => {
-              if (sData.ch.length > 0) {
-                const newSaveDataDel = {
-                  ...sData,
-                  ch: sData.ch.slice(0, -1)
-                };
-                changeSaveData(newSaveDataDel);
-              }
-            }}>영웅 삭제</button><br/>
-            <button onClick={() => {
-              const option = {
-                type:'equip',
-                items:Math.ceil(Math.random()*2),//장비만 해당
-                lv:Math.round(Math.random()*100),
-                sealed:true,
-              }
-              util.getItem({
-                saveData: sData,
-                gameData: gameData,
-                changeSaveData: changeSaveData,
-                option: option,
-                isSave: true,
-                lang: lang,
-              });
-            }}>동물스킬 리셋</button>
-            {currentTime}
-          </div>
-          {Object.keys(sData).length > 0 && sData.ch.length > 0 && <ChCard className="ch_card" isZoomCard={isZoomCard} gradeUp={sData.ch[slotIdx]?.gradeUp} chPage={chPage} frameBack={imgSet.etc.frameChBack} onClick={() => {
+          {entries.length > 0 && <ChCard className="ch_card" isZoomCard={isZoomCard} gradeUp={sData.ch[slotIdx]?.gradeUp} chPage={chPage} frameBack={imgSet.etc.frameChBack} onClick={() => {
             if (chPage === 0) {
               setZoomCard(prev => !prev);
             }
           }}>
             <Img imgurl={imgSet.images.transparent800} />
-            {chPage === 0 ? <CharacterCard saveData={sData} slotIdx={slotIdx} isZoomCard={isZoomCard} /> : <ChBack type="cardBack" pic="card" idx={0} />}
-            {chPage === 1 && <CharacterState saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
-            {chPage === 2 && <CharacterAnimalSkill saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
-            {chPage === 3 && <CharacterSkill saveData={sData} slotIdx={slotIdx} />}
-            {chPage === 4 && <CharacterRelation saveData={sData} slotIdx={slotIdx} />}
-            {chPage === 5 && <CharacterItems saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
+            {chPage === 0 ? <CharacterCard chList={entries} saveData={sData} slotIdx={slotIdx} isZoomCard={isZoomCard} /> : <ChBack type="cardBack" pic="card" idx={0} />}
+            {chPage === 1 && <CharacterState chList={entries} saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
+            {chPage === 2 && <CharacterAnimalSkill chList={entries} saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
+            {chPage === 3 && <CharacterSkill chList={entries} slotIdx={slotIdx} />}
+            {chPage === 4 && <CharacterRelation chList={entries} saveData={sData} slotIdx={slotIdx} />}
+            {chPage === 5 && <CharacterItems chList={entries} saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
           </ChCard>}
-          <CharacterPaging chLength={chLength} saveData={sData} changeChSlot={changeChSlot} slotIdx={slotIdx} />
+          <CharacterPaging chList={entries} saveData={sData} changeChSlot={changeChSlot} slotIdx={slotIdx} />
           <TopBtnGroup>
             <FlexBox>
               <TopBtn>
@@ -523,7 +466,7 @@ const Cards = ({
                     if (data.sealed) {
                       chk = true;
                     } else {
-                      chk = !items.limit[sData.ch[slotIdx].job];
+                      chk = !sData.ch[slotIdx].possibleEquipment[items.part - 1][items.category]; //!items.limit[sData.ch[slotIdx].job];
                     }
                     return chk;
                   })();
