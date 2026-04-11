@@ -173,7 +173,6 @@ const TradingPost = ({
 	const shopItem = React.useMemo(() => {
 		const cityData = sData.city?.[stayIdx];
 		let materialItems = [];
-		console.log(cityData?.tradingPost?.goods);
 		if (cityData?.tradingPost?.goods) {
 			for (const [idx, item] of cityData.tradingPost.goods.entries()) {
 				materialItems[idx] = item;

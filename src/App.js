@@ -16,6 +16,7 @@ import Church from 'pages/Church';
 import Composite from 'pages/Composite';
 import Recruitment from 'pages/Gacha';
 import GameMain from 'pages/GameMain';
+import Gate from 'pages/Gate';
 import Guild from 'pages/Guild';
 import Header from 'pages/Header';
 import Home from 'pages/Home';
@@ -34,7 +35,7 @@ import TownHall from 'pages/TownHall';
 import TradingPost from 'pages/TradingPost';
 import Training from 'pages/Training';
 import React, { useEffect, useRef, useState } from 'react';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 
 import Loading from 'components/Loading';
@@ -555,9 +556,17 @@ const App = ({
         };
     }
   }
-  const changeSaveData = (objData) => {
-    setSaveData(objData);
-    util.saveData('saveData', objData);
+  const changeSaveData = (updater) => {
+    setSaveData(prev => {
+      const nextData =
+        typeof updater === 'function'
+          ? updater(prev)
+          : updater;
+
+      util.saveData('saveData', nextData);
+      return nextData;
+    });
+
   }
   const setLang = (data) => {
     const setting = util.loadData('setting');
@@ -682,7 +691,7 @@ const App = ({
       });
       if (!location || location === 'start') {
         util.saveHistory({
-          location: 'gameMain',
+          prevLocation: 'gameMain',
           navigate: navigate,
           callback: () => {},
           isNavigate: false,
@@ -762,6 +771,8 @@ const App = ({
             {showDim && (location === "gameMain" || location === "setup" || location === "chat") && <BackgroundShadow />}
             <ContentContainer location={location} direction="column" className="content">
               <Routes>
+                <Route path="*" element={<Navigate to="/gameMain" replace />} />
+
                 <Route path="/" element={<Menu type="new" />} />
 
                 <Route path="/start" element={<StartGame saveData={saveData} changeSaveData={changeSaveData} setLang={setLang} setLoading={setLoading}/>} />
@@ -786,6 +797,8 @@ const App = ({
 
                 <Route path="/mystery" element={<Mystery saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
+                <Route path="/gate" element={<Gate saveData={saveData} changeSaveData={changeSaveData} setGameMode={setGameMode} setShowDim={setShowDim} setLoading={setLoading} />} />
+
                 <Route path="/cardsList" element={<CharacterList saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
                 <Route path="/cards" element={<Cards saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
@@ -798,7 +811,7 @@ const App = ({
 
                 <Route path="/battle" element={<Battle saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
-                <Route path="/moveEvent" element={<MoveEvent saveData={saveData} changeSaveData={changeSaveData} gameMode={gameMode} setGameMode={setGameMode}  showDim={showDim} setShowDim={setShowDim} setLoading={setLoading} />} />
+                <Route path="/moveEvent" element={<MoveEvent saveData={saveData} changeSaveData={changeSaveData} gameMode={gameMode} setGameMode={setGameMode} showDim={showDim} setShowDim={setShowDim} setLoading={setLoading} />} />
 
                 <Route path="/blacksmith" element={<Blacksmith saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 

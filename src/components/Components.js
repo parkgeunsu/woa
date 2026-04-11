@@ -264,6 +264,7 @@ export const ActionChDisplay = ({
   chList,
   gameData,
   actionChIdx,
+  changeSaveData,
 }) => {
   const context = useContext(AppContext);
   const lang = React.useMemo(() => {
@@ -285,12 +286,13 @@ export const ActionChDisplay = ({
     case 'guild':
     case 'training':
     case 'mystery':
+    case 'church0':
       skillIdx = 0;
       break;
     case 'blacksmith':
       skillIdx = 17;
       break;
-    case 'church':
+    case 'church1':
       skillIdx = 25;
       break;
     case 'temple':
@@ -303,6 +305,7 @@ export const ActionChDisplay = ({
       skillIdx = 17;
       break;
     default:
+      skillIdx = 0;
       break;
   }
   if (actionChIdx !== '' && actionChIdx !== undefined) {

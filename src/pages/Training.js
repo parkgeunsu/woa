@@ -403,7 +403,7 @@ const Training = ({
 		return sData.hasHeroNum[saveCh.idx] ? Array.from({length: sData.hasHeroNum[saveCh.idx]}, (_, i) => {
 			return gameData.gradeUp[saveCh.grade];
 		}) : [];
-	}, [sData.hasHeroNum, saveCh.idx]);
+	}, [sData, saveCh]);
 	const [isAnimation, setIsAnimation] = useState(false);
 	const [greeting, setGreeting] = useState(gameData.shop.training.greeting[lang]);
 	useEffect(() => {
@@ -485,25 +485,21 @@ const Training = ({
 							const trainingMaxExp = trainingSkillLv === 0 ? maxExp : maxExp - Math.round(maxExp * Number(gameData.skill[27].eff[0].num[trainingSkillLv]) / 100);
 							const hasExp = saveHasExp.current;//보유 경험치
 							if (trainingMaxExp <= hasExp) {
-								const saData = {...sData};
-								saData.ch[actionChIdx].hasExp = hasExp - trainingMaxExp;
-								saData.ch[actionChIdx].lv = saData.ch[actionChIdx].lv + 1;
-								const luck = saData.ch[actionChIdx].st7; //행운
+								saveCh.hasExp = hasExp - trainingMaxExp;
+								saveCh.lv = saveCh.lv + 1;
+								const luck = saveCh.st7; //행운
 								const isGetAnimalCoin = util.getAnimalCoin({
-									slotIdx: actionChIdx,
-									saveData: saData,
+									ch: saveCh,
 									luck: luck,
-									lv: saData.ch[actionChIdx].lv,
+									lv: saveCh.lv,
 								});
 								const skillIdx = util.getSkill({
+									ch: saveCh,
 									gameData: gameData,
-									slotIdx: actionChIdx,
-									saveData: saData,
 									luck: luck,
-									lv: saData.ch[actionChIdx].lv,
+									lv: saveCh.lv,
 								});
 								let rewardText = "";
-								console.log(skillIdx, isGetAnimalCoin);
 								if (skillIdx && isGetAnimalCoin) {
 									rewardText = `${gameData.skill[skillIdx].na[lang]} ${gameData.msg.itemInfo.get[lang]} \n${gameData.animalType[chData.animal_type].na[lang]}${gameData.msg.itemInfo.animalBadge[lang]} ${gameData.msg.itemInfo.get[lang]}`;
 								} else {
@@ -521,10 +517,10 @@ const Training = ({
 									rewardType: skillIdx && isGetAnimalCoin ? "both" : skillIdx ? "skill" : isGetAnimalCoin ? "animalCoin" : "none",
 								});
 								util.saveCharacter({
-									gameData: gameData,
-									saveData: saData,
+									saveData: sData,
 									changeSaveData: changeSaveData,
 									chSlotIdx: actionChIdx,
+									gameData: gameData,
 								});
 							} else {
 								setMsgOn(true);
@@ -542,8 +538,8 @@ const Training = ({
 								clearTimeout(isAnimationRef.current);
 								isAnimationRef.current = setTimeout(() => {
 									setIsAnimation(false);
-									sData.hasHeroNum[sData.ch[actionChIdx].idx] -= gameData.gradeUp[saveCh.grade];
-									sData.ch[actionChIdx].grade += 1;
+									sData.hasHeroNum[saveCh.idx] -= gameData.gradeUp[saveCh.grade];
+									saveCh.grade += 1;
 									changeSaveData(sData);
 								}, 1000);
 							} else {

@@ -111,7 +111,7 @@ const Npc = ({
               } else {
                 util.historyBack(navigate);
               }
-              onMenuClick && onMenuClick();
+              onMenuClick && onMenuClick(menuIdx);
             }}>
               <Text lineHeight={1.2} code="t2" align="center" color="main">{gameData.msg.building[menuData.text][lang]}</Text>
             </NpcTalk>

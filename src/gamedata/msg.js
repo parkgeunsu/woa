@@ -337,6 +337,11 @@ export const msg = {
 			en:'Mission',
 			jp:'ミッション',
 		},
+		gate_text0: {
+			ko:'이동',
+			en:'Move',
+			jp:'移動',
+		},
 		sell_item: {
 			ko: '아이템 판매',
 			en: 'Sell Item',
@@ -542,9 +547,9 @@ export const msg = {
 	},
 	info:{
 		moral:{
-			ko:"도덕성",
+			ko:"도덕심",
 			en:"Morality",
-			jp:"道徳",
+			jp:"道徳心",
 		},
 		lvUpExp:{
 			ko:'레벨업 경험치',
@@ -722,6 +727,21 @@ export const msg = {
 			ko:'지역',
 			en:'Region',
 			jp:'地域',
+		},
+		village:{
+			ko:'마을',
+			en:'Village',
+			jp:'村',
+		},
+		activity:{
+			ko:'활동',
+			en:'Activity',
+			jp:'活動',
+		},
+		move:{
+			ko:'이동',
+			en:'Move',
+			jp:'移動',
 		},
 		wildlife:{
 			ko:'동물수',
@@ -1161,6 +1181,21 @@ export const msg = {
 			ko:'채팅',
 			en:'Chat',
 			jp:'チャット',
+		},
+		regionScenario:{
+			ko:'지역시나리오',
+			en:'Region Scenario',
+			jp:'地域シナリオ',
+		},
+		regionEvent:{
+			ko:'지역이벤트',
+			en:'Region Event',
+			jp:'地域イベント',
+		},
+		heroScenario:{
+			ko:'영웅시나리오',
+			en:'Hero Scenario',
+			jp:'英雄シナリオ',
 		},
 		exploreRegions:{
 			ko:'지역탐색',

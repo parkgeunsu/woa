@@ -4,12 +4,11 @@ import { IconPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import { AppContext } from 'contexts/app-context';
 import GameMainFooter from 'pages/GameMainFooter';
-import MoveRegion from 'pages/MoveRegion';
 import QuickMenu from 'pages/QuickMenu';
 import Roulette from 'pages/Roulette';
 import Scenario from 'pages/Scenario';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)``;
@@ -29,44 +28,30 @@ const CountryTitle = styled(FlexBox)`
 const StyledText = styled(Text)`
   ${({theme}) => `text-shadow:0 0 10px ${theme.color.menu}, 0 0 2px ${theme.color.sub}`}
 `;
-const ShopGroup = styled(FlexBox)`
+const EventIconGroup = styled(FlexBox)`
   position: absolute;
-  inset: 15% 10% 25% 10%;
+  inset: 5% 10% 5% 10%;
   width: 80%;
-  height: 60%;
+  height: 90%;
+  place-content: start;
+  row-gap: 7%;
+  column-gap: 4%;
 `;
-const ShopIcon = styled.div`
-  position: absolute;
-  ${({idx}) => {
-    switch(idx % 3) {
-      case 0: 
-        return `
-          left: 0;
-          top: ${Math.floor(idx / 3) * 25}%;
-        `;
-      case 1: 
-        return `
-          left: 50%;
-          top: ${Math.floor(idx / 3) * 25}%;
-          transform: translateX(-50%);
-        `;
-      case 2: 
-        return `
-          right: 0;
-          top: ${Math.floor(idx / 3) * 25}%;
-        `;
-    }
-  }}
-  width: 20%;
-  padding-top: 20%;
+const EventIcon = styled.div`
+  position: relative;
+  width: 22%;
+  padding-top: 22%;
   height: 0;
+  background: rgba(0,0,0,.7);
+  border-radius: 10px;
   box-shadow: 0 0 10px ${({theme}) => theme.color.sub}, 0 0 5px ${({theme}) => theme.color.sub}, 0 0 2px ${({theme}) => theme.color.sub};
 `;
-const ShopText = styled(Text)`
+const EventText = styled(Text)`
   position: absolute;
   left: 50%;
-  top: 100%;
+  top: 105%;
   transform: translate(-50%, 0);
+  text-shadow: 0 0 5px ${({theme}) => theme.color.sub}, 0 0 2px ${({theme}) => theme.color.sub};
   white-space: nowrap;
 `;
 const GameMain = ({
@@ -79,6 +64,7 @@ const GameMain = ({
   setLoading,
 }) => {
   const navigate = useNavigate();
+  const {state} = useLocation();
   const context = useContext(AppContext);
   const classification = React.useMemo(() => {
     return context.classification;
@@ -99,6 +85,8 @@ const GameMain = ({
     return (Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData) || {};
   }, [saveData]);
   const stay = React.useMemo(() => sData?.info?.stay, [sData]);
+  const regionEvent = ["regionScenario", "regionEvent", "exploreRegions", "heroScenario"];
+  const [regionIdx, setRegionIdx] = useState(typeof state?.tab === "number" ? state.tab : "");
   //roulette
   const [rouletteState, setRouletteState] = useState([]);
   const [selectRoulettePos, setSelectRoulettePos] = useState([]);
@@ -128,8 +116,6 @@ const GameMain = ({
       gameData.roulette[15],
     ]},
   ]);
-  const [selectMoveRegion, setSelectMoveRegion] = useState('');
-  const [moveRegionEntry, setMoveRegionEntry] = useState([]);
   const gameModeAttr = (gameMode) => {
     switch (gameMode) {
       case "roulette":
@@ -147,13 +133,6 @@ const GameMain = ({
         return {
           selectScenario: selectScenario,
         };
-      case "moveRegion":
-        return {
-          selectMoveRegion: selectMoveRegion,
-          moveRegionEntry: moveRegionEntry,
-          setMoveRegionEntry: setMoveRegionEntry,
-          setShowDim: setShowDim,
-        };
       default: 
         return {};
     }
@@ -163,7 +142,7 @@ const GameMain = ({
   }, []);
   return (
     <Wrap direction="column">
-      <div style={{position:"absolute",right:"20%",bottom:0,zIndex:100, backgroundColor: '#fff'}}>
+      <div style={{position:"absolute",right:0,bottom:0,zIndex:100, backgroundColor: '#fff'}}>
         <button onClick={() => {
           util.getItem({
             saveData: sData,
@@ -221,147 +200,59 @@ const GameMain = ({
         }}>동물스킬 리셋</button>
       </div>
       <QuickMenu type="main" stay={stay} gameMode={gameMode} showDim={showDim} setShowDim={setShowDim}/>
-      <CountryTitle alignItems="center" back={imgSet.back.countryTitle}>
-        <StyledText code="t4" color="shadow">{gameData.country.regions[util.getRegionToIdx(stay)]?.name[lang]}</StyledText>
-      </CountryTitle>
       {gameMode === "roulette" && <Roulette saveData={sData} rouletteState={rouletteState} setRouletteState={setRouletteState} selectRoulettePos={selectRoulettePos} setSelectRoulettePos={setSelectRoulettePos} rouletteArr={rouletteArr.current} rouletteEnemy={rouletteEnemy} setRouletteEnemy={setRouletteEnemy} />}
       {gameMode === "scenarioRegion" && <Scenario saveData={sData} changeSaveData={changeSaveData} stay={stay} selectScenario={selectScenario} setSelectScenario={setSelectScenario} />}
-      {gameMode === "moveRegion" && <MoveRegion saveData={sData} stay={stay} selectMoveRegion={selectMoveRegion} setSelectMoveRegion={setSelectMoveRegion} 
-      moveRegionEntry={moveRegionEntry} setMoveRegionEntry={setMoveRegionEntry} />}
-      <ShopGroup alignItems="center" justifyContent="space-around">
+
+      {regionIdx === "" && <CountryTitle alignItems="center" back={imgSet.back.countryTitle}>
+        <StyledText code="t4" color="shadow">{gameData.country.regions[util.getRegionToIdx(stay)]?.name[lang]}</StyledText>
+      </CountryTitle>}
+      {regionIdx === 0 &&<EventIconGroup alignItems="flex-start" justifyContent="flex-start" flexWrap="wrap">
         {gameData.country.regions[util.getRegionToIdx(stay)].shop.map((shop, idx) => {
           return (
-            <ShopIcon idx={shop} key={`shop_${idx}`} onClick={() => {
+            <EventIcon idx={shop} key={`shop_${shop}`} onClick={() => {
               setLoading(true);
-              switch(shop) {
-                case 0: //집
-                  util.saveHistory({
-                    location: 'home',
-                    navigate: navigate,
-                    isNavigate: true,
-                  });//히스토리 저장
+              util.saveHistory({
+                location: gameData.shopName[shop],
+                prevLocation: 'gameMain',
+                navigate: navigate,
+                isNavigate: true,
+                state: {
+                  tab: 0,
+                }
+              });//히스토리 저장
+            }}>
+              <IconPic isAbsolute type="shop" pic="town" idx={shop} />
+              <EventText code="t1" color="main">{gameData.shop[gameData.shopName[shop]]?.name[lang]}</EventText>
+            </EventIcon>
+          );
+        })}
+      </EventIconGroup>}
+      {regionIdx === 1 && <EventIconGroup alignItems="flex-start" justifyContent="flex-start" flexWrap="wrap">
+        {regionEvent.map((event, idx) => {
+          return (
+            <EventIcon idx={idx} key={`event_${idx}`} onClick={() => {
+              switch(idx) {
+                case 0: //regionScenario
                   break;
-                case 1: //무기상
-                  util.saveHistory({
-                    location: 'equipment',
-                    navigate: navigate,
-                    isNavigate: true,
-                  });//히스토리 저장
+                case 1: //regionEvent
                   break;
-                case 2: //도구상
-                  util.saveHistory({
-                    location: 'tool',
-                    navigate: navigate,
-                    isNavigate: true,
-                  });//히스토리 저장
+                case 2: //heroScenario
+                  setGameMode('scenarioRegion');
                   break;
-                case 3: //악세사리상
-                  util.saveHistory({
-                    location: 'accessory',
-                    navigate: navigate,
-                    isNavigate: true,
-                  });//히스토리 저장
-                  break;
-                  break;
-                case 4: //연금술소
-                  util.saveHistory({//합성
-                    location: 'composite',
-                    navigate: navigate,
-                    callback: () => {},
-                    isNavigate: true,
-                  });//히스토리 저장
-                  break;
-                case 5: //훈련소
-                  util.saveHistory({//카드 강화
-                    location: 'training',
-                    navigate: navigate,
-                    callback: () => {},
-                    isNavigate: true,
-                  });//히스토리 저장
-                  break;
-                case 6: //교역소
-                  util.saveHistory({
-                    location: 'tradingPost',
-                    navigate: navigate,
-                    callback: () => {},
-                    isNavigate: true,
-                  });
-                  break;
-                case 7: //대장간
-                  util.saveHistory({//아이템 강화
-                    location: 'blacksmith',
-                    navigate: navigate,
-                    callback: () => {},
-                    isNavigate: true,
-                  });//히스토리 저장
-                  break;
-                case 8: //교회
-                  util.saveHistory({
-                    location: 'church',
-                    navigate: navigate,
-                    isNavigate: true,
-                  });//히스토리 저장
-                  break;
-                case 9: //절
-                  util.saveHistory({
-                    location: 'temple',
-                    navigate: navigate,
-                    isNavigate: true,
-                  });//히스토리 저장
-                  break;
-                case 10: //비밀상점
-                  util.saveHistory({
-                    location: 'mystery',
-                    navigate: navigate,
-                    isNavigate: true,
-                  });//히스토리 저장
-                  break;
-                case 11: //조선소
-                  util.saveHistory({
-                    location: 'shipyard',
-                    navigate: navigate,
-                    isNavigate: true,
-                  });//히스토리 저장
-                  break;
-                case 12: //항구
-                  util.saveHistory({
-                    location: 'port',
-                    navigate: navigate,
-                    isNavigate: true,
-                  });//히스토리 저장
-                  break;
-                case 13: //마을회관
-                  util.saveHistory({
-                    location: 'townhall',
-                    navigate: navigate,
-                    isNavigate: true,
-                  });//히스토리 저장
-                  break;
-                case 14: //길드
-                  util.saveHistory({
-                    location: 'guild',
-                    navigate: navigate,
-                    isNavigate: true,
-                  });//히스토리 저장
-                  break;
-                case 15: //주점
-                  util.saveHistory({
-                    location: 'tavern',
-                    navigate: navigate,
-                    isNavigate: true,
-                  });//히스토리 저장
+                case 3: //exploreRegions
+                  setGameMode('roulette');
                   break;
                 default:
                   break;
               }
             }}>
-              <IconPic isAbsolute type="shop" pic="icon200" idx={shop} />
-              <ShopText code="t1" color="main">{gameData.shop[gameData.shopName[shop]]?.name[lang]}</ShopText>
-            </ShopIcon>
+              <IconPic isAbsolute type="event" pic="town" idx={idx} />
+              <EventText code="t1" color="main">{gameData.msg.button[event][lang]}</EventText>
+            </EventIcon>
           );
         })}
-      </ShopGroup>
-      <GameMainFooter saveData={sData} changeSaveData={changeSaveData} gameMode={gameMode} setGameMode={setGameMode} stay={stay} 
+      </EventIconGroup>}
+      <GameMainFooter saveData={sData} changeSaveData={changeSaveData} gameMode={gameMode} setGameMode={setGameMode} regionIdx={regionIdx} setRegionIdx={setRegionIdx} stay={stay} 
       {...gameModeAttr(gameMode)}  />
     </Wrap>
   );

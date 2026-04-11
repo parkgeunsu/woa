@@ -146,40 +146,6 @@ export const shop = {
     ]
 
   },
-  tradingPost: {
-    name: {
-      ko:"교역소",
-      en:"Trading Post",
-      jp:"交易所"
-    },
-    greeting: {
-      ko: "교역소에 온 걸 환영해 꿀꿀! 네가 가져온 물건, 한번 살펴볼까 꿀꿀?",
-      en: "Welcome to the trading post! Let's take a look at what you've brought, oink.",
-      jp: "交易所へようこそブー！持ってきた品を見せてもらおうかブー。"
-    },
-    menu: [
-      {idx: 0, text: 'tradingPost_text0'},
-      {idx: 1, text: 'sell_item'},
-      {idx: 2, text: 'getOut'}
-    ],
-    randomText: [
-      {
-        ko: "흠, 뭔가 교환할 게 있나? 좋은 물건이라면 내가 꽤 쳐줄 수도 있지.",
-        en: "Hmm, got something to trade? If it’s good quality, I might give you a nice deal.",
-        jp: "ふむ、交換したい物はあるかブー？いい品なら高く買ってやるブー。"
-      },
-      {
-        ko: "오늘은 먼 곳에서 특별한 물건이 들어왔지! 관심 있나 꿀?",
-        en: "A special item came from far away today! Interested, oink?",
-        jp: "今日は遠い国から特別な品が入荷したブー！興味あるかブー？"
-      },
-      {
-        ko: "가격이 궁금하면 편하게 물어봐! 돼지 사장이 정직하게 알려주지.",
-        en: "If you're curious about the price, feel free to ask! I’ll give you an honest answer.",
-        jp: "値段が気になるなら気軽に聞くブー！正直に教えてあげるブー。"
-      }
-    ]
-  },
   composite: {
     name: {
       ko:"연금술 상점",
@@ -246,6 +212,40 @@ export const shop = {
         ko: "준비가 됐다면 말해라. 언제든 바로 시작해줄 테니.",
         en: "Tell me when you're ready. We can start anytime.",
         jp: "準備ができたら言え。いつでも始めてやる。"
+      }
+    ]
+  },
+  tradingPost: {
+    name: {
+      ko:"교역소",
+      en:"Trading Post",
+      jp:"交易所"
+    },
+    greeting: {
+      ko: "교역소에 온 걸 환영해 꿀꿀! 네가 가져온 물건, 한번 살펴볼까 꿀꿀?",
+      en: "Welcome to the trading post! Let's take a look at what you've brought, oink.",
+      jp: "交易所へようこそブー！持ってきた品を見せてもらおうかブー。"
+    },
+    menu: [
+      {idx: 0, text: 'tradingPost_text0'},
+      {idx: 1, text: 'sell_item'},
+      {idx: 2, text: 'getOut'}
+    ],
+    randomText: [
+      {
+        ko: "흠, 뭔가 교환할 게 있나? 좋은 물건이라면 내가 꽤 쳐줄 수도 있지.",
+        en: "Hmm, got something to trade? If it’s good quality, I might give you a nice deal.",
+        jp: "ふむ、交換したい物はあるかブー？いい品なら高く買ってやるブー。"
+      },
+      {
+        ko: "오늘은 먼 곳에서 특별한 물건이 들어왔지! 관심 있나 꿀?",
+        en: "A special item came from far away today! Interested, oink?",
+        jp: "今日は遠い国から特別な品が入荷したブー！興味あるかブー？"
+      },
+      {
+        ko: "가격이 궁금하면 편하게 물어봐! 돼지 사장이 정직하게 알려주지.",
+        en: "If you're curious about the price, feel free to ask! I’ll give you an honest answer.",
+        jp: "値段が気になるなら気軽に聞くブー！正直に教えてあげるブー。"
       }
     ]
   },
@@ -518,6 +518,44 @@ export const shop = {
     ]
 
   },
+  tavern: {
+    name: {
+      ko:"주점",
+      en:"Tavern",
+      jp:"酒場"
+    },
+    greeting: {
+      ko: "어서 오세요~ 여행자님! 편하게 쉬어가세요. 따뜻한 술 한 잔 준비해드릴게요.",
+      en: "Welcome, traveler! Make yourself comfortable. I’ll prepare a warm drink for you.",
+      jp: "いらっしゃいませ、旅人さん！ゆっくりしていってね。温かい一杯を用意するよ。"
+    },
+    menu: [
+      {idx: 0, text: 'tavern_text0'},
+      {idx: 1, text: 'getOut'}
+    ],
+    randomText: [
+      {
+        ko: "주점에 온 걸 환영해요~ 편하게 앉으세요. 따뜻한 한 잔 준비해드릴게요.",
+        en: "Welcome to the tavern~ Have a seat. I’ll get you a warm drink.",
+        jp: "酒場へようこそ〜。ゆっくり座ってね。温かい一杯を用意するよ。"
+      },
+      {
+        ko: "오늘은 향 좋은 술이 들어왔어요. 한 번 맛보고 가시겠어요?",
+        en: "We got a wonderfully aromatic drink today. Care to try it?",
+        jp: "今日は香りのいいお酒が入ったよ。試してみないかい？"
+      },
+      {
+        ko: "여기는 여행자들이 쉬어가는 곳이죠. 고민이 있다면 술과 함께 털어놓아요.",
+        en: "This is where travelers rest. If something’s on your mind, share it over a drink.",
+        jp: "ここは旅人が休む場所さ。悩みがあるなら一杯飲みながら話してごらん。"
+      },
+      {
+        ko: "밤이 길어질 것 같다면 말해주세요. 사슴 주인이 분위기 좋은 술을 추천해드릴게요.",
+        en: "If you think it’ll be a long night, let me know. I’ll recommend something special.",
+        jp: "今夜が長くなりそうなら言ってね。雰囲気に合うお酒をおすすめするよ。"
+      }
+    ]
+  },
   guild: {
     name: {
       ko:"길드",
@@ -571,42 +609,22 @@ export const shop = {
       }
     ]
   },
-  tavern: {
+  gate: {
     name: {
-      ko:"주점",
-      en:"Tavern",
-      jp:"酒場"
+      ko:"게이트",
+      en:"Gate",
+      jp:"ゲート"
     },
     greeting: {
-      ko: "어서 오세요~ 여행자님! 편하게 쉬어가세요. 따뜻한 술 한 잔 준비해드릴게요.",
-      en: "Welcome, traveler! Make yourself comfortable. I’ll prepare a warm drink for you.",
-      jp: "いらっしゃいませ、旅人さん！ゆっくりしていってね。温かい一杯を用意するよ。"
+      ko: "좋은 여행되시게",
+      en: "Have a good trip",
+      jp: "良い旅を"
     },
     menu: [
-      {idx: 0, text: 'tavern_text0'},
+      {idx: 0, text: 'gate_text0'},
       {idx: 1, text: 'getOut'}
     ],
     randomText: [
-      {
-        ko: "주점에 온 걸 환영해요~ 편하게 앉으세요. 따뜻한 한 잔 준비해드릴게요.",
-        en: "Welcome to the tavern~ Have a seat. I’ll get you a warm drink.",
-        jp: "酒場へようこそ〜。ゆっくり座ってね。温かい一杯を用意するよ。"
-      },
-      {
-        ko: "오늘은 향 좋은 술이 들어왔어요. 한 번 맛보고 가시겠어요?",
-        en: "We got a wonderfully aromatic drink today. Care to try it?",
-        jp: "今日は香りのいいお酒が入ったよ。試してみないかい？"
-      },
-      {
-        ko: "여기는 여행자들이 쉬어가는 곳이죠. 고민이 있다면 술과 함께 털어놓아요.",
-        en: "This is where travelers rest. If something’s on your mind, share it over a drink.",
-        jp: "ここは旅人が休む場所さ。悩みがあるなら一杯飲みながら話してごらん。"
-      },
-      {
-        ko: "밤이 길어질 것 같다면 말해주세요. 사슴 주인이 분위기 좋은 술을 추천해드릴게요.",
-        en: "If you think it’ll be a long night, let me know. I’ll recommend something special.",
-        jp: "今夜が長くなりそうなら言ってね。雰囲気に合うお酒をおすすめするよ。"
-      }
     ]
   },
 }

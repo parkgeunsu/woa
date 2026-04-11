@@ -268,6 +268,11 @@ const CardPlacement = ({
 	const sData = React.useMemo(() => {
 		return Object.keys(saveData).length !== 0 ? saveData : util.loadData('saveData');
 	}, [saveData]);
+	const entries = React.useMemo(() => {
+		return sData.entry.map((entryIdx) => {
+			return sData.ch[entryIdx];
+		});
+	}, [sData]);
 	const [msgOn, setMsgOn] = useState(false);
 	const [msg, setMsg] = useState("");
 	const isMoveEvent = React.useMemo(() => {
@@ -275,7 +280,7 @@ const CardPlacement = ({
 	}, []);
 	const [infoShow, setInfoShow] = useState(false);
 	const chData = React.useMemo(() => {
-		const ch = isMoveEvent ? util.loadData("historyParam").moveEvent.ch : sData.ch;
+		const ch = isMoveEvent ? util.loadData("historyParam").moveEvent.ch : entries;
 		if (isMoveEvent) {
 			const moveChIdxs = new Set(ch.map(c => Number(c.idx)));
 			return {
@@ -294,7 +299,7 @@ const CardPlacement = ({
 				partyIdx: idx,
 			})),
 		};
-	}, [sData.ch, isMoveEvent]);
+	}, [sData, isMoveEvent]);
 	const lineupData = React.useMemo(() => {
 		return isMoveEvent ? sData?.eventLineup : 
 			scenarioState?.type === "scenario" ? sData?.ch[scenarioState?.slotIdx].scenario[scenarioState?.chScenarioIdx]?.stage[scenarioState?.stageIdx].lineup : sData?.lineup;

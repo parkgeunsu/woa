@@ -1324,7 +1324,7 @@ const ShopFooter = ({
 }
 
 const selectTabFn = (state, shopType, typeList) => {
-	if (!state || Object.keys(state).length <= 0) {
+	if (!state?.dataObj || Object.keys(state.dataObj).length <= 0) {
 		return shopType === "inven" ? 0 : "";
 	}
 	if (typeof state.dataObj?.selectTab === 'number') {
@@ -1356,11 +1356,10 @@ const selectTabFn = (state, shopType, typeList) => {
 	}
 }
 const selectItemFn = (sData, state, shopType, selectSlot) => {
-	if (state && Object.keys(state).length > 0) {
+	if (state?.dataObj && Object.keys(state.dataObj).length > 0) {
 		if (state.dataObj.selectSlot === selectSlot) {
 			const saveItems = sData.items[state.dataObj.type][state.dataObj.itemSaveSlot].sealed ? state.dataObj.saveItemData : sData.items[state.dataObj.type][state.dataObj.itemSaveSlot];
 			const button = buttonType(['sell'], saveItems);
-			console.log(shopType);
 			switch (shopType) {
 				case 'equipment':
 					return {

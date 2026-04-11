@@ -56,13 +56,13 @@ export const util = { //this.loadImage();
   removeData: (key) => {
     localStorage.removeItem(key);
   },
-  saveHistory: ({location, navigate, callback, isNavigate, state}) => {
+  saveHistory: ({location, prevLocation, navigate, callback, isNavigate, state}) => {
     let history = isNavigate ? util.loadData('history') || [] : [];
     setTimeout(() => {
-      const prevLocation = history.length > 0 ? history[0] : '';
-      if (location !== prevLocation.location) {
+      //const prevLocation = history.length > 0 ? history[0] : '';
+      if (location !== prevLocation) {
         history.unshift({
-          location: location,
+          prevLocation: prevLocation,
           state: state ? {
             ...state,
           } : '',
@@ -75,16 +75,16 @@ export const util = { //this.loadImage();
   },
   historyBack: (navigate) => {
     const history = util.loadData('history');
-    history && history.shift();//첫 history 삭제
     if (history === null || history === undefined || history.length === 0 || history[1] === '') {
       navigate('/gameMain');
     } else {
-      navigate(`/${history[0].location}`, {
+      navigate(`/${history[0].prevLocation}`, {
         state: {
           ...history[0].state,
         }
       });
     }
+    history && history.shift();//첫 history 삭제
     util.saveData('history', history);
   },
   getEnemyState: (enemyData, gameData) => {
@@ -841,33 +841,30 @@ export const util = { //this.loadImage();
     return skill;
   },
   getAnimalCoin: ({
-    slotIdx, saveData, luck, lv
+    ch, luck, lv
   }) => {
     const coin = (lv % 10 === 0) ? 1 : (Math.random() < luck / 400) ? 1 : 0; //10레벨마다 획득, 행운치에 따라서 획득
-    saveData.ch[slotIdx].mark = saveData.ch[slotIdx].mark + coin;
-    saveData.ch[slotIdx].animalBadge = saveData.ch[slotIdx].animalBadge + coin;
+    ch.mark = ch.mark + coin;
+    ch.animalBadge = ch.animalBadge + coin;
     return coin === 0 ? false : true;
   },
   getSkill: ({
+    ch,
     gameData,
-    slotIdx,
-    saveData,
     luck,
     lv,
   }) => {
-    const saveCh = saveData.ch[slotIdx];
-    const intelligence = saveCh.st4; //지능
+    const intelligence = ch.st4; //지능
     const isGet = lv % 5 === 0 || Math.random() < (luck + intelligence) / 600; //5레벨마다 획득, 행운 + 지능에 따라서 획득
     if (!isGet) {
       return "";
     }
-    const lvGroup = gameData.job[saveCh.job].skill[saveCh.lv === 50 ? "maxLv" : `lv${util.fnPercent([50,30,15,5])}`];
+    const lvGroup = gameData.job[ch.job].skill[ch.lv === 50 ? "maxLv" : `lv${util.fnPercent([50,30,15,5])}`];
     const skillNum = Math.floor(Math.random() * lvGroup.length),
       skillIdx = lvGroup[skillNum];
     const lvExp = [100,50,25,25];
     let hasSkill = '';
-    console.log(skillIdx, skillNum);
-    saveData.ch[slotIdx].sk.forEach((data, idx) => {
+    ch.sk.forEach((data, idx) => {
       if (data.idx === skillIdx) {
         data.exp += lvExp[data.lv - 1];
         if (data.exp >= 100) {
@@ -880,7 +877,7 @@ export const util = { //this.loadImage();
     });
     if (skillIdx !== undefined) {
       if (!hasSkill) {
-        saveData.ch[slotIdx].sk.push({
+        ch.sk.push({
           idx: skillIdx,
           lv: 1,
           exp: 0,
@@ -3560,6 +3557,7 @@ export const util = { //this.loadImage();
   },
   isCondition: (type, category, itemIdx) => {
     const saveData = util.loadData('saveData');
+    return 40;
     const idx = saveData[type][category].findIndex((v, i) => {
       return v.idx === itemIdx;
     });
@@ -3607,6 +3605,7 @@ export const util = { //this.loadImage();
       case 'eventBack':
       case 'worldMap':
       case 'etc':
+      case 'shop':
         return 0;
       case 'lv':
       case 'quickMenu':
@@ -3625,10 +3624,10 @@ export const util = { //this.loadImage();
       case 'scenario':
         return 5;
       case 'hunting':
+      case 'event':
         return 6;
       case 'mutate':
       case 'elevation':
-      case 'shop':
       case 'pattern':
         return 7;
       case 'skillType':
@@ -3714,6 +3713,7 @@ export const util = { //this.loadImage();
       case 'icon150':
         return [10, 10];
       case 'icon200':
+      case 'town':
         return [10, 32];
       case 'map800':
         return [5, 8];

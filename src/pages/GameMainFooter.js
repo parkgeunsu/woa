@@ -53,6 +53,11 @@ const StyledButton = styled(Button)`
   background: url(${({btnImg}) => btnImg}) no-repeat center center !important;
   background-size: 100% 100% !important;
   font-size: ${({theme}) => theme.font.t2};
+  ${({isSelected, theme}) => isSelected ? `
+    color: ${theme.color.point3};
+  ` : `
+    color: ${theme.color.main};
+  `}
 `;
 const StyledIcon = styled(IconPic)`
   width: 16px;
@@ -67,6 +72,8 @@ const GameMainFooter = ({
   changeSaveData,
   gameMode,
   setGameMode,
+  regionIdx,
+  setRegionIdx,
   setShowDim,
   stay,
   ...props
@@ -107,16 +114,18 @@ const GameMainFooter = ({
     <>
       <Wrapper className="footer">
         {gameMode === '' && <ButtonWrap gameMode={gameMode === ''} isRoot={true}>
-          <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
-            setGameMode('roulette');
-          }}>{gameData.msg.button['exploreRegions'][lang]}</StyledButton>
-          <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
-            setGameMode('scenarioRegion');
-          }}>{gameData.msg.button['scenarios'][lang]}</StyledButton>
-          <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
-            setGameMode('moveRegion');
-          }}>{gameData.msg.button['moveRegion'][lang]}</StyledButton>
+          <StyledButton width="100%" isSelected={regionIdx === 0} btnImg={imgSet.button.btnMD} onClick={() => {
+            setRegionIdx(prev => prev === 0 ? "" : 0);
+            //setGameMode('roulette');
+          }}>{gameData.msg.title.village[lang]}</StyledButton>
+          <StyledButton width="100%" isSelected={regionIdx === 1} btnImg={imgSet.button.btnMD} onClick={() => {
+            setRegionIdx(prev => prev === 1 ? "" : 1);
+            //setGameMode('scenarioRegion');
+          }}>{gameData.msg.title.activity[lang]}</StyledButton>
         </ButtonWrap>}
+
+
+
         {gameMode === "roulette" && <ButtonWrap alignItems="self-end" gameMode={gameMode === "roulette"}>
           {rouletteIdx === 0 && <StyledButton className="smallSize" btnImg={imgSet.button.btnSD} onClick={() => {
             setRouletteIdx(0);
@@ -283,9 +292,9 @@ const GameMainFooter = ({
           }
           </>}
         </ButtonWrap>}
-        {gameMode === "moveRegion" && <ButtonWrap alignItems="self-end" gameMode={gameMode === "moveRegion"}>
+        {gameMode === "gate" && <ButtonWrap alignItems="self-end" gameMode={gameMode === "gate"}>
           <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="smallSize"  onClick={() => {
-            setGameMode('');
+            util.historyBack(navigate);
           }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
           <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
             if (props.selectMoveRegion === '') {
@@ -300,7 +309,7 @@ const GameMainFooter = ({
                 setMsg(gameData.msg.sentence['createTravelEntry'][lang]);
               } else {
                 const countryCode = util.getStringToCountryIdx(props.selectMoveRegion),
-                  itemIdx = 31 + countryCode,
+                  itemIdx = 30 + countryCode,
                   isCondition = util.isCondition("items", "etc", itemIdx),
                   conditionName = gameData.items.etc[itemIdx].na[lang],
                   conditionNum = props.moveRegionEntry.length;

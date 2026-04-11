@@ -101,18 +101,16 @@ const ItemGroup = styled(FlexBox)`
 `;
 const ItemBox = styled(FlexBox)`
 	flex-wrap: wrap;
+	margin: 0 0 0 5px;
 	width: 50%;
 	background: rgba(0,0,0,.7);
 	box-sizing: border-box;
 	overflow-y: auto;
-	${({type}) => type === "select1" ? `
-		padding:5px;
-		border:3px solid #ffac2f;
-	` : `
-		padding:5px;
-		margin:0 0 0 5px;
-		border:3px solid #e14040;
-	`} 
+	padding: 3px;
+	border: 1px solid ${({theme}) => theme.color.grey1};
+	&:first-of-type {
+		margin: 0;
+	}
 `;
 const ColorArea = styled.div`
 	&:after{
@@ -423,8 +421,8 @@ const UpgradeMaterial = styled.div`
 	left: 30%;
 	top: 25%;
 	transform: translate(-50%,-50%);
-	width: 140px;
-	height: 140px;
+	aspect-ratio: 1 / 1;
+	height: 40%;
 	z-index: 2;
 `;
 const UpgradeShadow = styled.div`

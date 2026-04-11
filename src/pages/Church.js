@@ -1,5 +1,5 @@
 import { Text } from 'components/Atom';
-import { ActionChDisplay } from 'components/Components';
+import { ActionChDisplay, Calculator, RangeSlider } from 'components/Components';
 import { FlexBox } from 'components/Container';
 import { MergedPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
@@ -35,6 +35,19 @@ const GreetingText = styled(Text)`
 `;
 const WorkHeader = styled(FlexBox)`
 	height: auto;
+`;
+const Morality = styled(FlexBox)`
+  margin: 0 0 0 15px;
+	flex: 1;
+`;
+const SliderContainer = styled(FlexBox)`
+	position: relative;
+	flex: 1;
+	margin: 0 10px 0 0;
+	padding: 10px;
+	height: 100%;
+	box-sizing: border-box;
+	background: rgba(0,0,0,.5);
 `;
 const ChurchContent = styled(FlexBox)`
 	flex: 1;
@@ -106,11 +119,14 @@ const Church = ({
   const [popupInfo, setPopupInfo] = useState({});
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
+  const [actionChType, setActionChType] = useState("");
   const entries = React.useMemo(() => {
     return sData.entry.map((entryIdx) => {
       return sData.ch[entryIdx];
     });
   }, [sData]);
+  const [rangeValue, setRangeValue] = useState(0);
+  const [showCal, setShowCal] = useState(false);
   const actionChIdx = React.useMemo(() => {
     return sData.actionCh.church.idx <= entries.length - 1 ? sData.actionCh.church.idx : "";
   }, [entries, sData]);
@@ -126,15 +142,34 @@ const Church = ({
           setSelectTab("");
           const randomIdx = Math.floor(Math.random() * gameData.shop.church.randomText.length);
           setGreeting(gameData.shop.church.randomText[randomIdx][lang]);
-				}}/>
+				}} onMenuClick={(idx) => {
+          changeSaveData(prev => {
+            return {
+              ...prev,
+              actionCh: {
+                ...prev.actionCh,
+                church: {
+                  idx: "",
+                }
+              }
+            }
+          });
+          setActionChType(`church${idx}`);
+        }}/>
         <WorkArea frameBack={imgSet.etc.frameChBack}direction="column" alignItems="center" justifyContent="center">
 					{selectTab === "" ? <GreetingText code="t4" color="main" wordBreak="keep-all">{greeting}</GreetingText> : 
 					actionChIdx !== "" && <WorkHeader direction="row" justifyContent="space-between" alignItems="center">
-
+            {selectTab === 0 && <>
+              <Morality>
+                <Text font="point" lineHeight={1} className="lvupText" code="t5" color="main" weight="600">{gameData.msg.info.moral[lang]} {sData.info.morality}</Text>
+              </Morality>
+            </>}
           </WorkHeader>}
           {selectTab === 0 && <ChurchContent direction="row" justifyContent="center" alignItems="flex-start" onClick={() => {
-            }}>
-
+          }}>
+            {selectTab === 0 && <SliderContainer direction="column">
+              <RangeSlider min={0} max={sData.info.money} step={1} value={0} pirce={1} setValue={setRangeValue} showCal={setShowCal}/>
+            </SliderContainer>}
           </ChurchContent>}
         </WorkArea>
         <UserContainer justifyContent="space-between">
@@ -154,9 +189,10 @@ const Church = ({
 						<MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />
 						{!actionChIdx && <NoneChText code="t1" color="red">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
 						<Img imgurl={imgSet.images.transparent800} />
-						<ActionChDisplay type={'church'} saveData={sData} gameData={gameData} actionChIdx={actionChIdx} imgSet={imgSet}/>
+						<ActionChDisplay type={actionChType} chList={entries} gameData={gameData} actionChIdx={actionChIdx} imgSet={imgSet}/>
 					</ActionPic>
         </UserContainer>
+        {showCal && <Calculator value={rangeValue} max={sData.info.money} setValue={setRangeValue} showCal={setShowCal}/>}
       </Wrap>
 			<PopupContainer>
         {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}

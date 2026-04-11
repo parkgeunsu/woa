@@ -1644,12 +1644,13 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
       case 'guild':
       case 'training':
       case 'mystery':
+      case 'church0':
         skillIdx = 0;
         break;
       case 'blacksmith':
         skillIdx = 17;
         break;
-      case 'church':
+      case 'church1':
         skillIdx = 25;
         break;
       case 'temple':
@@ -1662,6 +1663,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
         skillIdx = 17;
         break;
       default:
+        skillIdx = 0;
         break;
     }
     const saveCh = dataObj.ch[dataObj.selectIdx];

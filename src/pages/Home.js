@@ -28,8 +28,8 @@ const Wrap = styled(FlexBox)`
 const WorkArea = styled(FlexBox)`
   position: relative;
   margin: 10px auto 0;
-  flex: 1;
   width: 90%;
+  height: calc(70% - 10px);
   box-sizing: border-box;
   background: rgba(0,0,0,.7);
   border: 5px solid transparent;
@@ -80,6 +80,9 @@ const ChLi = styled.li`
   ${({ used }) => used ? "" : `
     filter: grayscale(1) brightness(0.8);
   `}
+  &:nth-of-type(5n) {
+    margin: 0 0 3px 0;
+  }
 `;
 const LeaderCh = styled.div`
   position: absolute;
