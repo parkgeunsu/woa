@@ -195,11 +195,12 @@ const getItemType = (spType) => {
     case 9:
     case 10:
     case 11:
-    case 12:
       return `3-${spType - 3}`;
-    case 13:
+    case 12:
       return Math.round(Math.random()) + 4;
-    case 14:
+    case 13:
+      return "gold";
+    default:
       return "gold";
   }
 }
