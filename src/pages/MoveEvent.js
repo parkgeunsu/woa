@@ -492,7 +492,7 @@ const MoveEvent = ({
         }}>다음 스텝</button>
       </div>
       <QuickMenu type="move" gameMode={gameMode} showDim={showDim} setShowDim={setShowDim} stay={sData.info.stay} />
-      <MoveEventBack className="back" type="areaBackMoveRegion" pic="areaBack" idx={sData.moveEvent.bg ? sData.moveEvent.bg : 0} completeStep={currentStep / sData.moveEvent.distance * 0.8 + 0.2}/>
+      <MoveEventBack className="back" type="areaBackMoveRegion" pic="areaBack2" idx={sData.moveEvent.bg ? sData.moveEvent.bg : 0} completeStep={currentStep / sData.moveEvent.distance * 0.8 + 0.2}/>
       <EventAll size={EVENT_HEIGHT} length={sData.moveEvent.distance}>
         <EventShadow completeStep={(currentStep + 1) / (sData.moveEvent.distance + 1)} />
         {events.map((eventData, eventIdx) => {

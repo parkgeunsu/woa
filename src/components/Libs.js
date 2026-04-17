@@ -3615,6 +3615,7 @@ export const util = { //this.loadImage();
       case 'worldMap':
       case 'etc':
       case 'shop':
+      case 'areaBackMoveRegion':
         return 0;
       case 'lv':
       case 'quickMenu':
@@ -3627,7 +3628,6 @@ export const util = { //this.loadImage();
       case 'moveEventReward':
         return 3;
       case 'cardBack':
-      case 'areaBackMoveRegion':
       case 'commonIcon':
         return 4;
       case 'scenario':
