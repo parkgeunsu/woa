@@ -20,6 +20,7 @@ const Wrap = styled.div`
   width: 100%;
   height: 100%;
   background-color: var(--color-b);
+  z-index: 9;
 `;
 const MoveEventBack = styled(MergedPic)`
   position: absolute;
@@ -180,11 +181,12 @@ const EventText = styled(FlexBox)`
 `;
 const getItemType = (spType) => {
   switch (spType) {
-    case 1:
+    case 0:
       return "hero";
+    case 1:
     case 2:
-    case 3:
       return spType - 1;
+    case 3:
     case 4:
     case 5:
     case 6:
