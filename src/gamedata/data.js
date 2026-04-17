@@ -94,7 +94,8 @@ export const gameData = {
     items: items,
     ships: ships,
     shop: shop,
-    shopName: ['home','equipment','tool','accessory','composite','training','tradingPost','blacksmith','church','temple','mystery','shipyard','port','townHall','tavern','guild','gate','prison'],
+    shopName: ['home','equipment','tool','accessory','composite','training','tradingPost','blacksmith','church','temple','mystery','shipyard','port','townHall','tavern','guild','prison','gate'],
+    shopPic: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,16],
     //grade (0하급poor, 1일반normal, 2매직magic, 3레어rare, 4에픽epic, 5유니크unique, 6레전드legend)
     itemGrade: {//'#999'
       txt_e: ['','Poor','Normal','Magic','Rare','Epic','Unique','Legend'],

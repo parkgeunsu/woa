@@ -234,7 +234,7 @@ const GameMain = ({
                 }
               });//히스토리 저장
             }}>
-              <IconPic isAbsolute type="shop" pic="town" idx={shop} />
+              <IconPic isAbsolute type="shop" pic="town" idx={gameData.shopPic[shop]} />
               <EventText code="t1" color="main">{gameData.shop[gameData.shopName[shop]]?.name[lang]}</EventText>
             </EventIcon>
           );
