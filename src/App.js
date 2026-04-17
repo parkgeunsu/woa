@@ -815,7 +815,7 @@ const App = ({
       const sData = makeSaveData(saveNew);
       sData.city = setCity({
         gameData: gameData,
-        saveData: saveData,
+        saveData: sData,
         countryData: gameData.country.regions,
         goodsData: gameData.items.material,
         classification: classificationData,
