@@ -1253,7 +1253,7 @@ const Blacksmith = ({
 											pic: "itemEtc",
 											idx: items.display,
 										}}
-										num={4}
+										num={3}
 										key={`hole_${idx}`}
 										grade={grade}
 										selectColor={select.length > 0 ? 2 : ""}
@@ -1347,7 +1347,7 @@ const Blacksmith = ({
 											idx: items.display,
 											mergeColor: data.color,
 										}}
-										num={4}
+										num={3}
 										key={`hole_${idx}`}
 										grade={grade}
 										selectColor={selectItem3.select === idx ? 2 : ""}

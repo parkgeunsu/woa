@@ -1428,7 +1428,7 @@ const selectItemFn = (sData, state, shopType, selectSlot) => {
 		}
 	}
 }
-const SHOP_HORIZONTAL_NUM = 8; //가로 갯수
+const SHOP_HORIZONTAL_NUM = 5; //가로 갯수
 const ShopList = ({
 	gameData,
 	shopType,

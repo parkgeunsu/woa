@@ -115,9 +115,9 @@ const InvenTitle = styled(Text)``;
 const ItemList = styled.li`
   position: relative;
   margin: 1%;
-  width: 10.5%;
+  width: 14.66%;
   height: 0;
-  padding-top: 10.5%;
+  padding-top: 14.66%;
   box-sizing: border-box;
   border-radius: 10%;
   background-position: center center;
@@ -357,12 +357,12 @@ const Home = ({
                       isLeader={isLeader}
                       onClick={() => {
                         let newEntry = [...sData.entry];
-                        if (sData.entry.length >= memberNum) {
-                          setMsgOn(true);
-                          setMsg(gameData.msg.sentence.needMoreMemberNum[lang]);
-                          return;
-                        }
                         if (!isEntry) {
+                          if (sData.entry.length >= memberNum) {
+                            setMsgOn(true);
+                            setMsg(gameData.msg.sentence.needMoreMemberNum[lang]);
+                            return;
+                          }
                           newEntry.push(data.slotIdx);
                         } else {
                           if (isLeader) {

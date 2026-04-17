@@ -213,7 +213,7 @@ const TradingPost = ({
 											pic: 'material',
 											idx: items.display,
 										}}
-										num={6}
+										num={5}
 										key={`items${invenIdx}`}
 										grade={invenData.grade || items?.grade}
 										text={invenData?.num ? util.comma(invenData.num) : invenData.num}

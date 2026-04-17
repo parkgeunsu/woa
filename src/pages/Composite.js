@@ -504,7 +504,7 @@ const Composite = ({
 										mergeColor: data.color,
 									}}
 									text={data.num || ""}
-									num={6}
+									num={5}
 									key={`items${idx}`}
 									{...isEquip && {
 										sealed: data.sealed,

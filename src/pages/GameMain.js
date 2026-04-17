@@ -192,6 +192,9 @@ const GameMain = ({
             changeSaveData(newSaveDataDel);
           }
         }}>도시 이동</button><br/>
+        <button onClick={() => {
+          util.saveData("continueGame", false);
+        }}>데이터 초기화</button>
         {/* <button onClick={() => {
           const option = {
             type:'equip',
