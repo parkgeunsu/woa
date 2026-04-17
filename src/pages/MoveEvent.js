@@ -484,15 +484,15 @@ const MoveEvent = ({
     }
   }, []);
   return <>
+    <div style={{position:"absolute",right:0,bottom:"40px",zIndex:100, backgroundColor: '#fff'}}>
+      <button onClick={() => {
+        decreaseStep();
+      }}>이전 스텝</button><br/>
+      <button onClick={() => {
+        increaseStep();
+      }}>다음 스텝</button>
+    </div>
     <Wrap className="scroll-y" ref={EventAllScroll} >
-      <div style={{position:"absolute",right:0,bottom:0,zIndex:100, backgroundColor: '#fff'}}>
-        <button onClick={() => {
-          decreaseStep();
-        }}>이전 스텝</button><br/>
-        <button onClick={() => {
-          increaseStep();
-        }}>다음 스텝</button>
-      </div>
       <QuickMenu type="move" gameMode={gameMode} showDim={showDim} setShowDim={setShowDim} stay={sData.info.stay} />
       <MoveEventBack className="back" type="areaBackMoveRegion" pic="areaBack2" idx={sData.moveEvent.bg ? sData.moveEvent.bg : 0} completeStep={currentStep / sData.moveEvent.distance * 0.8 + 0.2}/>
       <EventAll size={EVENT_HEIGHT} length={sData.moveEvent.distance}>
