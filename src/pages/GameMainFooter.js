@@ -100,16 +100,6 @@ const GameMainFooter = ({
   const [rouletteIdx, setRouletteIdx] = useState(currentStep);
   const [pickMsg, setPickMsg] = useState(gameData.msg.button[pickMsgArr[currentStep]][lang]);
   const stayIdx = useRef(util.getRegionToIdx(stay));
-  const moveEventCh = () => {
-    return props.moveRegionEntry.map((idx) => {
-      const char = saveData && saveData.ch && saveData.ch[idx];
-      return {
-        idx: idx,
-        hp: char ? char.bSt0 : 0,
-        hp_: char ? char.bSt0 : 0,
-      }
-    });
-  }
   return (
     <>
       <Wrapper className="footer">
@@ -291,97 +281,6 @@ const GameMainFooter = ({
               }}>{`${gameData?.scenario[stay][props.selectScenario.dynastyIdx]?.scenarioList[props.selectScenario.dynastyScenarioIdx].stage?.[props.selectScenario.stageIdx]?.title[lang]} ${gameData.msg.button['startBattle'][lang]}` || ''}</StyledButton>
           }
           </>}
-        </ButtonWrap>}
-        {gameMode === "gate" && <ButtonWrap alignItems="self-end" gameMode={gameMode === "gate"}>
-          <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="smallSize"  onClick={() => {
-            util.historyBack(navigate);
-          }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
-          <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
-            if (props.selectMoveRegion === '') {
-              setMsgOn(true);
-              setMsg(gameData.msg.sentence['selectMoveCountry'][lang]);
-            } else if (stayIdx.current === props.selectMoveRegion) {
-              setMsgOn(true);
-              setMsg(gameData.msg.sentence['sameCountry'][lang]);
-            } else {
-              if (props.moveRegionEntry.length === 0) {
-                setMsgOn(true);
-                setMsg(gameData.msg.sentence['createTravelEntry'][lang]);
-              } else {
-                const countryCode = util.getStringToCountryIdx(props.selectMoveRegion),
-                  itemIdx = 30 + countryCode,
-                  isCondition = util.isCondition("items", "etc", itemIdx),
-                  conditionName = gameData.items.etc[itemIdx].na[lang],
-                  conditionNum = props.moveRegionEntry.length;
-                  console.log(stayIdx.current, countryCode, itemIdx);
-                if (isCondition < conditionNum) {
-                  setMsgOn(true);
-                  setMsg(gameData.msg.sentenceFn.lackOfCondition(lang, conditionName));
-                } else {
-                  setModalOn(true);
-                  setModalData({
-                    submitFn: () => {//moveEvent로 이동
-                      setShowDim(false);
-                      changeSaveData(util.deleteItems({
-                        saveData: saveData,
-                        itemObj: {
-                          type: "items",
-                          cate: "etc",
-                          idx: itemIdx,
-                        },
-                        num: conditionNum,
-                      }));//인벤에서 아이템 제거
-                      util.saveHistory({
-                        location: 'moveEvent',
-                        navigate: navigate,
-                        callback: () => {
-                          //조건 체크
-                          setGameMode("moveEvent");
-                          const distance = util.getDistanceToEvent(gameData.country.regions[stayIdx.current].distancePosition, gameData.country.regions[props.selectMoveRegion]?.distancePosition) + gameData.countryEventsNum;
-                          const historyP = JSON.parse(JSON.stringify(util.loadData('historyParam') || {}));
-                          util.saveData('historyParam', {
-                            ...historyP,
-                            moveEvent: {
-                              ch: moveEventCh(),
-                              moveTo: props.selectMoveRegion,
-                              bg: Math.floor(Math.random() * 6),
-                              distance: distance,
-                              blockArr: {
-                                type: Array.from({length:distance}, (v, idx) => {
-                                  return idx % 3 === 0 ? Math.round(Math.random()) : util.fnPercent(gameData.percent.eventsPercent)
-                                }),
-                              },
-                              spBlockArr: Array.from({length:Math.floor(distance / 4) + 1}, () => { return {type: util.fnPercent(gameData.percent.bigEventsPercent), get: false}}),
-                              currentStep: 0,
-                            }
-                          });
-                        },
-                        isNavigate: true,
-                      });
-                    },
-                  });
-                  setModalInfo({
-                    type: 'confirm',
-                    msg: `${gameData.msg.sentence.questionMoveCountry[lang]}<br/><span class="des">${gameData.msg.sentenceFn.useItem(lang, conditionName)}</span>`,
-                    info: {},
-                    bt: [
-                      {txt:gameData.msg.button.use[lang],action:'itemEn'},{txt:gameData.msg.button.cancel[lang],action:'popClose'}
-                    ],
-                  })
-                  console.log('지역이동');
-                }
-              }
-            }
-          }}>
-            <FlexBox>
-              {stayIdx.current === props.selectMoveRegion ? <>
-                {gameData.msg.sentence['sameCountry'][lang]}
-              </> : <>
-                {gameData.country.regions[util.getRegionToIdx(stay)].name[lang]} <StyledIcon type="commonBtn" pic="icon100" idx="0" /> {props.selectMoveRegion !== '' && gameData.country.regions[props.selectMoveRegion].name[lang]}
-              </>
-              }
-            </FlexBox>
-          </StyledButton>
         </ButtonWrap>}
         {gameMode === "moveEvent" && <ButtonWrap alignItems="self-end" gameMode={gameMode === "moveEvent"}>
           <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="smallSize"  onClick={() => {

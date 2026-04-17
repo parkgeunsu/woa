@@ -3768,6 +3768,7 @@ const passiveBuff = ({gameData, battleAlly, battleEnemy, allyEnemyPassive, allyP
 		});
 	});
 	battleEnemy = battleEnemyCopy;
+	console.log(allyPassive, enemyPassive);
 	setAllyEnemyPassive([allyPassive, enemyPassive]);//패시브효과 전달
 	setAllyEnemyBuff([allyBuff, enemyBuff]);//버프효과 전달
 	return {
@@ -3809,8 +3810,6 @@ const Battle = ({
 	const [tooltipOn, setTooltipOn] = useState(false);
 	const [tooltip, setTooltip] = useState('');
 	const [tooltipPos, setTooltipPos] = useState([0,0]);
-	const isMoveEvent = React.useMemo(() => util.loadData("historyParam")?.moveEvent && Object.keys(util.loadData("historyParam")?.moveEvent)?.length > 0
-	, []);
 	const sData = React.useMemo(() => saveData && Object.keys(saveData).length !== 0 ? saveData : util.loadData('saveData'), [saveData]);
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
@@ -3819,9 +3818,15 @@ const Battle = ({
 		return paramData?.battle.type;
 	}, [paramData]);
 	const useLineup = React.useMemo(() => {
-		const scenarioBattleData = paramData.battle.scenario;
-		return isMoveEvent ? sData.eventLineup : battleType === "scenarioRegion" ? sData.ch[scenarioBattleData.slotIdx].scenario[scenarioBattleData.chScenarioIdx]?.stage[scenarioBattleData.stageIdx].lineup : sData.lineup;
-	}, [sData, isMoveEvent]);
+		if (battleType === "scenarioRegion") {
+			const scenarioBattleData = paramData.battle.scenario;
+			return sData.ch[scenarioBattleData.slotIdx].scenario[scenarioBattleData.chScenarioIdx]?.stage[scenarioBattleData.stageIdx].lineup;
+		} else if (battleType === "moveEvent") {
+			return sData.eventLineup;
+		} else {
+			return sData.lineup;
+		}
+	}, [sData, battleType]);
 	const battleData = React.useMemo(() => {
 		if (battleType === "scenarioRegion") {
 			const scenarioBattleData = paramData.battle.scenario;
@@ -3885,8 +3890,7 @@ const Battle = ({
 			}
 		}
 		if (battleType === "moveEvent") {
-			const countryHeros = classification.country?.[paramData.battle.country];
-			console.log(countryHeros);
+			const regionHeros = classification.region?.[paramData.battle.region] || classification.region?.[100];
 			return {
 				title: paramData.battle.title,
 				lineup: 0,
@@ -3896,7 +3900,7 @@ const Battle = ({
 						land = num % 3;
 					return (5 * landType) + land;
 				}),
-				entry: Array.from({length:10}, (v, idx) => ({pos:idx,idx:countryHeros[Math.round(Math.random() * (countryHeros.length - 1))],lv:1,grade:1,items:[
+				entry: Array.from({length:10}, (v, idx) => ({pos:idx,idx:regionHeros[Math.round(Math.random() * (regionHeros.length - 1))],lv:1,grade:1,items:[
 					{idx:0, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
 					{idx:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
 					{idx:2, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
@@ -3910,13 +3914,17 @@ const Battle = ({
 		}
 	}, [gameData, battleType, paramData]);
 	const viewScenario = React.useMemo(() => {
-		const scenarioBattleData = paramData.battle.scenario;
-		if (scenarioBattleData) {
-			return battleType === "scenarioRegion" ? sData.ch[scenarioBattleData.slotIdx].scenario[scenarioBattleData.chScenarioIdx]?.stage[scenarioBattleData.stageIdx].first : "";
-		} else {
-			navigate('../gameMain');
-			return "";
+		if (battleType === "scenarioRegion") {
+			const scenarioBattleData = paramData.battle.scenario;
+			console.log(scenarioBattleData);
+			if (scenarioBattleData) {
+				return sData.ch[scenarioBattleData.slotIdx].scenario[scenarioBattleData.chScenarioIdx]?.stage[scenarioBattleData.stageIdx].first;
+			} else {
+				navigate('../gameMain');
+				return "";
+			}
 		}
+		return "";
 	}, [sData, battleType, paramData]);
 	const mapLand = React.useMemo(() => battleData?.map || [], [battleData]);
 	const allyDeck = useRef(
@@ -3930,7 +3938,6 @@ const Battle = ({
 			return battleData.entry;
 		}
 		if (battleType === "moveEvent") {
-			console.log(paramData.battle);
 			return battleData.entry;
 		}
 	}, [battleType, battleData, paramData.battle]);
@@ -5472,7 +5479,7 @@ const Battle = ({
 											<div className="ch_box">
 												{passive && passive.map((passiveData, idx) => {
 													return (
-														<Passive key={idx} className={`ch_passive passive${idx}`} effImg={imgSet.passive[passiveData]} idx={idx} passive={passiveData}/>
+														<Passive key={idx} className={`ch_passive passive${idx}`} effImg={imgSet.effect[passiveData]} idx={idx} passive={passiveData}/>
 													);
 												})}
 												<CardMutate className="card_mutate" type="mutate" isAbsolute={true} isThumb={true} pic="icon150" idx={0} />
@@ -5530,6 +5537,7 @@ const Battle = ({
 									const actionState = allyAction[currentAllyIdx.current] || "";
 									const iconIdx = /[0-9]+/g.exec(actionState);
 									const passive = allyEnemyPassive[0][currentAllyIdx.current];
+									console.log(passive);
 									{/* const buffEff = allyEnemyBuff[0][currentAllyIdx.current]; */}
 									currentAllyIdx.current ++;
 									return (
@@ -5546,7 +5554,7 @@ const Battle = ({
 											<div className="ch_box">
 												{passive && passive.map((passiveData, idx) => {
 													return (
-														<Passive key={idx} className={`ch_passive passive${idx}`} effImg={imgSet.passive[passiveData]} idx={idx} passive={passiveData}/>
+														<Passive key={idx} className={`ch_passive passive${idx}`} effImg={imgSet.effect[passiveData]} idx={idx} passive={passiveData}/>
 													);
 												})}
 												<CardMutate className="card_mutate" type="mutate" isAbsolute={true} isThumb={true} pic="icon150" idx={0} />

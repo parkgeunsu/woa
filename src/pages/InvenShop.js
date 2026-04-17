@@ -1257,7 +1257,7 @@ const ShopFooter = ({
 									});
 								} else {
 									setMsgOn(true);
-									setMsg(gameData.msg.sentence.goInven[lang]);
+								setMsg(gameData.msg.sentence.goInven[lang]);
 									timeoutRef.current = setTimeout(() => {
 										util.saveHistory({
 											location: 'inven',
@@ -1742,7 +1742,10 @@ const InvenShop = ({
 	}, [state, shopType, typeList]);
 	const entries = React.useMemo(() => {
 		return sData.entry.map((entryIdx) => {
-			return sData.ch[entryIdx];
+			return {
+				...sData.ch[entryIdx],
+				slotIdx: entryIdx,
+			};
 		});
 	}, [sData]);
 	const actionChIdx = React.useMemo(() => {

@@ -87,6 +87,9 @@ export const util = { //this.loadImage();
     history && history.shift();//첫 history 삭제
     util.saveData('history', history);
   },
+  getSum: (arr) => {
+    return arr.reduce((acc, cur) => acc + cur, 0);
+  },
   getEnemyState: (enemyData, gameData) => {
     let battleState_ = [];
     let enemy = {};
@@ -2151,6 +2154,8 @@ export const util = { //this.loadImage();
         return 26;
       case 'unitedKingdom1':
         return 27;
+      case 'etc':
+        return 100;
       default:
         return '';
     }
@@ -2197,6 +2202,8 @@ export const util = { //this.loadImage();
       case 'unitedKingdom0':
       case 'unitedKingdom1':
         return 11;
+      case 'etc':
+        return 100;
       default:
         return '';
     }
@@ -2804,9 +2811,8 @@ export const util = { //this.loadImage();
           save.items[type].unshift(itemObj);
         }
         changeSaveData(save);
-      } else {
-        return itemObj;
       }
+      return itemObj;
     } else {
       const itemObj = {
         idx: itemData.idx,
@@ -2814,6 +2820,7 @@ export const util = { //this.loadImage();
       console.log("pgs", itemObj);
       save.items[type].unshift(itemObj);
       changeSaveData(save);
+      return itemObj;
     }
   },
   getAnimalPoint: (items, animal, addMark) => {
@@ -3083,9 +3090,8 @@ export const util = { //this.loadImage();
     const dataIdx = colorSet.split('_');
     return gameData.items.colorant[dataIdx[0]][dataIdx[1]];
   },
-  comma:(result) => {
-    result = String(result);
-    return result.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  comma:(num) => {//돈단위 점찍기
+    return String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   },
   removeComma:(num) => {
     return num.replace(/,/g, "");
@@ -3426,6 +3432,9 @@ export const util = { //this.loadImage();
       {ko:'미확인 아이템 식별 가능',en:'Can identify unidentified items',jp:'未確認アイテム識別可能'},
       {ko:'저주받은 아이템 정화 가능',en:'Can purify cursed items',jp:'呪われたアイテム浄化可能'},
       {ko:'저주받은 카드 정화 가능',en:'Can purify cursed cards',jp:'呪われたカード浄化可能'},
+      {ko:'훈련 성능 향상',en:'Training performance improvement',jp:'訓練性能向上'},
+      {ko:'주사위 한번 더 굴리기 가능',en:'Can roll dice again',jp:'ダイスをもう一度振る'},
+      {ko:'주사위 갯수 추가',en:'Add dice',jp:'ダイス追加'},
     ];
     return jobText[jobIdx][lang];
   },
@@ -3622,13 +3631,16 @@ export const util = { //this.loadImage();
       case 'commonIcon':
         return 4;
       case 'scenario':
+      case 'dice0':
         return 5;
       case 'hunting':
       case 'event':
+      case 'dice1':
         return 6;
       case 'mutate':
       case 'elevation':
       case 'pattern':
+      case 'dice2':
         return 7;
       case 'skillType':
       case 'battleState':
@@ -3704,7 +3716,8 @@ export const util = { //this.loadImage();
       case 'img400':
         return [10, 5];
       case 'country':
-      case 'areaBack':
+      case 'areaBack1':
+      case 'areaBack2':
         return [8,5];
       case 'img800':
         return [10,8];
@@ -4013,6 +4026,7 @@ export const util = { //this.loadImage();
     heroIdxArr, //영웅인덱스
     gachaType, //가챠종류
     isStart, //최초여부
+    isPrison, //죄수인지
     gameData, 
     saveData,
   }) => {
@@ -4068,7 +4082,6 @@ export const util = { //this.loadImage();
           ch_arr.push(resultGrade);
         }
       }
-      console.log(ch_arr);
       const cloneArr = ch_arr.slice();
       const maxGrade = ch_arr.sort((a,b)=>b-a)[0];
       return {
@@ -4166,7 +4179,7 @@ export const util = { //this.loadImage();
         skill.push({ idx: getRandomSkillIdx, lv: 1, exp: 0 });
       }
       //동물뱃지 획득
-      const animalBadge = Math.floor(Math.random()*2);
+      const animalBadge = Math.floor(Math.random() * (isPrison ? 5 : 2));
       //장비가능한 부위
       const possibleEquipment = [...gameData.job[job].possibleEquipment];
       gameData.ch[newIdx].possibleEquipment?.forEach((v, i) => {
@@ -4188,7 +4201,7 @@ export const util = { //this.loadImage();
           job: job,
           ...(typeof jobElementType === "number" ? {jobElement: jobElementType} : {}),
           kg: kg,
-          hasExp: 500,
+          hasExp: isPrison ? Math.round(Math.random() * 20) * 100 : 0,
           battleBadge: [0,0,0,0],
           animalBadge: animalBadge,//총 보유 동물뱃지
           grade: cardG,
@@ -4196,8 +4209,9 @@ export const util = { //this.loadImage();
           gradeUp: 0,
           mark: animalBadge,//동물뱃지 추가보유여부(상점에서 exp로 구입가능)
           idx: newIdx,
-          items: [{}, {}, {}, {}, {}, {}, {}, {}],
+          items: isPrison ? [{}, {}, {}, {}, {}, {}, {}, {}] : [{}, {}, {}, {}, {}, {}, {}, {}],
           lv: 1,
+          relation: isPrison ? [16] : [],
           sk: skill,
           possibleEquipment: possibleEquipment,
           animalSkill: util.makeSkillTree({
@@ -4371,6 +4385,65 @@ export const util = { //this.loadImage();
         default:
           return "";
       }
+    }
+  },
+  msToDayHourMin: (startDate, ms, lang) => {//밀리세컨드 일,시,분 변환
+    const totalTime = (startDate + ms) - new Date().getTime();
+    const totalMinutes = Math.floor(totalTime / 1000 / 60);
+    const days = Math.floor(totalMinutes / (24 * 60));
+    const hours = Math.floor((totalMinutes % (24 * 60)) / 60);
+    const minutes = totalMinutes % 60;
+    const day = {
+      ko: "일",
+      en: "day",
+      jp: "日",
+    }
+    const hour = {
+      ko: "시간",
+      en: "hour",
+      jp: "時間",
+    }
+    const minute = {
+      ko: "분",
+      en: "minute",
+      jp: "分",
+    }
+    return `${days !== 0 ? `${days}${day[lang]} ` : ""}${hours !== 0 ? `${hours}${hour[lang]} ` : ""}${minutes !== 0 ? `${minutes}${minute[lang]}` : ""}`;
+  },
+  isDelayPassed: (startDate, delayMs) => {//형량계산
+    if (typeof startDate !== 'number') return false;
+    if (typeof delayMs !== 'number') return false;
+    const now = Date.now(); // 현재 시간(ms)
+    return now - startDate >= delayMs;
+  },
+  getActionTypeSkill: (actionType) => {//상점 타입별 필요스킬
+    switch(actionType) {
+      case 'tradingPost':
+      case 'accessory':
+      case 'equipment':
+      case 'townhall':
+      case 'tool':
+      case 'prison':
+        return 15;
+      case 'composite':
+        return 20;
+      case 'guild':
+      case 'training':
+      case 'mystery':
+      case 'church0':
+        return 0;
+      case 'blacksmith':
+        return 17;
+      case 'church1':
+        return 25;
+      case 'temple':
+        return 26;
+      case 'recruitment':
+        return 22;
+      case 'shipyard':
+        return 17;
+      default:
+        return 0;
     }
   }
 }

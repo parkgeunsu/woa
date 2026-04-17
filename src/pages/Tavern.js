@@ -109,7 +109,10 @@ const Tavern = ({
   const [msg, setMsg] = useState("");
   const entries = React.useMemo(() => {
     return sData.entry.map((entryIdx) => {
-      return sData.ch[entryIdx];
+      return {
+        ...sData.ch[entryIdx],
+        slotIdx: entryIdx,
+      };
     });
   }, [sData]);
   const actionChIdx = React.useMemo(() => {

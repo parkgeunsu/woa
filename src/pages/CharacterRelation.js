@@ -133,7 +133,7 @@ const CharacterRelation = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const saveCh = React.useMemo(() => chList[slotIdx] || {}, [chList, slotIdx]);
+  const saveCh = React.useMemo(() => chList ? chList[slotIdx] : saveData.ch[slotIdx] || {}, [chList, saveData, slotIdx]);
   const chData = React.useMemo(() => gameData.ch?.[saveCh.idx], [gameData, saveCh]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');

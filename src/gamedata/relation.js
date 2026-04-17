@@ -151,4 +151,14 @@ export const relation = [
         ta_:0,ta:[23],
         buff:[{type:0,num:['30%']},{type:26,num:['1']}],
         member:[17,18],limit:[0]},//계백, 관창
+    {idx:16,
+        na:{
+            ko:'감옥 동기',
+            en:'Prison mate',
+            jp:'監獄の同期'},
+        cate:30,
+        txt:'<area>, <buff>',
+        ta_:0,ta:[23],
+        buff:[{type:0,num:['30%']},{type:26,num:['1']}],
+        member:[17,18],limit:[0]},//계백, 관창
 ];

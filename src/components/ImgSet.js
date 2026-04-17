@@ -514,7 +514,8 @@ import custom01 from 'images/effect/custom/30FPS_custom01.png';
 // import map0 from 'images/map/map0.png';
 // import map1 from 'images/map/map1.png';
 
-import areaBack from 'images/areaBack.png'; //8192 x 8960, 10, 5(1024 x 1792)
+import areaBack1 from 'images/areaBack1.png'; //8192 x 8960, 10, 5(1024 x 1792)
+import areaBack2 from 'images/areaBack2.png'; //8192 x 8960, 10, 5(1024 x 1792)
 import card from 'images/card.png'; //8000 x 7110, 10, 6
 import card_s from 'images/card_s.png'; //2000 x 1200, 10, 6
 
@@ -994,7 +995,7 @@ export const effect = {
 export const images = {
   ...chGroup,
   ...chsGroup,
-  card:card,card_s:card_s,country:country,shop:shop,areaBack:areaBack,skill:skill,icon100:icon100,icon150:icon150,icon200:icon200,town:town,equip:equip,img400:img400,img800:img800,map800:map800,itemEtc:itemEtc,material:material,
+  card:card,card_s:card_s,country:country,shop:shop,areaBack1:areaBack1,areaBack2:areaBack2,skill:skill,icon100:icon100,icon150:icon150,icon200:icon200,town:town,equip:equip,img400:img400,img800:img800,map800:map800,itemEtc:itemEtc,material:material,
   frame0:frame0,
   transparent:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAAtJREFUGFdjYAACAAAFAAGq1chRAAAAAElFTkSuQmCC',
   red:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDYuMC1jMDA2IDc5LmRhYmFjYmIsIDIwMjEvMDQvMTQtMDA6Mzk6NDQgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCAyMi40IChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjVFM0Q0RkMwMDE5OTExRUZCMkY4QzZDM0YyRDUzRjBBIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjVFM0Q0RkMxMDE5OTExRUZCMkY4QzZDM0YyRDUzRjBBIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MkIzRTE2NjEwMTc3MTFFRkIyRjhDNkMzRjJENTNGMEEiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MkIzRTE2NjIwMTc3MTFFRkIyRjhDNkMzRjJENTNGMEEiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz72wd/gAAAADklEQVR42mL4b8oAEGAAA2sBNUl4lb4AAAAASUVORK5CYII=',

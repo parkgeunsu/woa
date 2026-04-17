@@ -49,12 +49,12 @@ export const events = {
         { name: "attack" },
         { name: "run" },
     ]}, action2: {
-      picIdx: 2, 
+      picIdx: 3, 
       title: "eventText0_2",
       list:[
         { name: "next" },
     ]}, action3: {
-      picIdx: 3, 
+      picIdx: 2, 
       title: "eventText0_3",
       list:[
         { name: "attack" },

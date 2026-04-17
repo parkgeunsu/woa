@@ -177,7 +177,7 @@ const CharacterState = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const saveCh = React.useMemo(() => chList[slotIdx] || {}, [chList, slotIdx]);
+  const saveCh = React.useMemo(() => chList ? chList[slotIdx] : saveData.ch[slotIdx] || {}, [chList, saveData, slotIdx]);
   const chData = React.useMemo(
     () => gameData.ch?.[saveCh.idx] || {},
     [gameData.ch, saveCh.idx]

@@ -270,44 +270,8 @@ export const ActionChDisplay = ({
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
-  let skillIdx = "",
-    skillLv = "";
-  switch(type) {
-    case 'tradingPost':
-    case 'accessory':
-    case 'equipment':
-    case 'townhall':
-    case 'tool':
-      skillIdx = 15;
-      break;
-    case 'composite':
-      skillIdx = 20;
-      break;
-    case 'guild':
-    case 'training':
-    case 'mystery':
-    case 'church0':
-      skillIdx = 0;
-      break;
-    case 'blacksmith':
-      skillIdx = 17;
-      break;
-    case 'church1':
-      skillIdx = 25;
-      break;
-    case 'temple':
-      skillIdx = 26;
-      break;
-    case 'recruitment':
-      skillIdx = 22;
-      break;
-    case 'shipyard':
-      skillIdx = 17;
-      break;
-    default:
-      skillIdx = 0;
-      break;
-  }
+  let skillLv = "";
+  const skillIdx = util.getActionTypeSkill(type);
   if (actionChIdx !== '' && actionChIdx !== undefined) {
     for (const [idx, skillData] of chList[actionChIdx].hasSkill.entries()) {
       if (skillData.idx === skillIdx) {

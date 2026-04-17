@@ -19,6 +19,19 @@ const ChLi = styled.li`
   font-size: 0;
   transform: translate(0, calc(50% + 2vh));
   transition: all 0.3s;
+  border-radius: 50%;
+  overflow: hidden;
+  & > div {
+    opacity: 0.5;
+  }
+  ${({selected}) => selected && `
+    transform: scale(1.15);
+    transform-origin: center 0;
+    z-index: 1;
+    & > div {
+      opacity: 1;
+    }
+  `}
 `;
 const CharacterPaging = ({
   chList,
@@ -41,7 +54,7 @@ const CharacterPaging = ({
         {chList && chList.map((data, idx) => {
           const charKey = data.id || `paging-${data.idx}-${idx}`;
           return (
-            <ChLi className={`g${data.grade} ${slotIdx === idx ? 'on' : ''}`} key={charKey} onClick={() => {
+            <ChLi selected={slotIdx === idx} key={charKey} onClick={() => {
               const currentHistory = util.loadData('historyParam') || {};
               util.saveData('historyParam', {
                 ...currentHistory,

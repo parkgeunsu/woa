@@ -11,6 +11,22 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+const ChHeroCard = styled.div`
+  position: relative;
+  transition: all 0.5s;
+  ${({frameBack}) => `
+    width: 90%;
+    border: 5px solid transparent;
+    border-image: url(${frameBack}) 5 round;
+  `};
+  overflow: hidden;
+  font-size: 0;
+  & > img {
+    width: 100%;
+    pointer-events: none;
+  }
+`;
+
 const StyledIconPic = styled(IconPic)`
   position: absolute;
   z-index: 1;
@@ -652,7 +668,7 @@ const holeEffectText = ({
   effText = effText.slice(0, -5);
   return effText;
 }
-const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, setTooltip, setTooltipPos, setTooltipOn, showPopup, theme, lang, navigate, timeoutRef}) => {
+const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPage, gameData, imgSet, msgText, showMsg, setTooltip, setTooltipPos, setTooltipOn, showPopup, theme, lang, navigate, timeoutRef}) => {
   const isMoveEvent = dataObj.isMoveEvent;
 	if (type === 'relation') {
     const member = dataObj.relation.member;
@@ -782,7 +798,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
             <PopupItemEffText code="t2" color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemEffText>
             <PopupItemEffText code="t2" margin={10} color="main">{`₩${items.price * saveItems.grade}`}</PopupItemEffText>
           </PopupItemPrice>
-          <PopupItemButton justifyContent="flex-end">
+          {!dataObj.noneButton && <PopupItemButton justifyContent="flex-end">
             <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:27}} onClick={(e) => {//해제
               util.buttonEvent({
                 event: e,
@@ -804,7 +820,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
                 }
               }});
             }} data-buttontype="itemRelease" />
-          </PopupItemButton>
+          </PopupItemButton>}
         </PopupItemList>
       </PopupItemContainer>
 		);
@@ -918,7 +934,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
             <PopupItemEffText code="t2" margin={10} color="main">{`₩${items.price * saveItems.grade}`}</PopupItemEffText>
           </PopupItemPrice>
           {sealed ? (//밀봉
-            <ButtonArea justifyContent="flex-end">
+            !dataObj.noneButton && <ButtonArea justifyContent="flex-end">
               <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:25}} onClick={() => {//감정
                 showMsg(true);
                 msgText(gameData.msg.sentence.goLab[lang]);
@@ -973,7 +989,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
               }} data-buttontype="itemSell" />}
             </ButtonArea>
           ) : (//개봉
-            <ButtonArea justifyContent="flex-end">
+            !dataObj.noneButton && <ButtonArea justifyContent="flex-end">
               {!dataObj.onlyInven && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:20}} onClick={(e) => {//장착
                 util.buttonEvent({
                   event: e,
@@ -1628,44 +1644,8 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
       </PopupDescription>
     );
   } else if (type === 'selectCh') {
-    let skillIdx = '',
-      possibleCh = 0;
-    switch(dataObj.type) {
-      case 'tradingPost':
-      case 'accessory':
-      case 'equipment':
-      case 'townhall':
-      case 'tool':
-        skillIdx = 15;
-        break;
-      case 'composite':
-        skillIdx = 20;
-        break;
-      case 'guild':
-      case 'training':
-      case 'mystery':
-      case 'church0':
-        skillIdx = 0;
-        break;
-      case 'blacksmith':
-        skillIdx = 17;
-        break;
-      case 'church1':
-        skillIdx = 25;
-        break;
-      case 'temple':
-        skillIdx = 26;
-        break;
-      case 'recruitment':
-        skillIdx = 22;
-        break;
-      case 'shipyard':
-        skillIdx = 17;
-        break;
-      default:
-        skillIdx = 0;
-        break;
-    }
+    let possibleCh = 0;
+    const skillIdx = util.getActionTypeSkill(dataObj.type);
     const saveCh = dataObj.ch[dataObj.selectIdx];
     const skillLv = saveCh ? saveCh?.sk.find((skill) => skill.idx === skillIdx)?.lv || 0 : 0,
       possibleLvUp = saveCh ? saveCh.lv < 50 && saveCh.hasExp > gameData.exp[`grade${saveCh.grade}`][saveCh.lv] : false,
@@ -1747,7 +1727,6 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
         <ButtonArea justifyContent="flex-end">
           <button className="button_big" text="true" onClick={(e) => {
             e.stopPropagation();
-            e.stopPropagation();
             let sData = JSON.parse(JSON.stringify(saveData));
             if (sData.actionCh?.[dataObj.type]) {
               sData.actionCh[dataObj.type].idx = dataObj.selectIdx;
@@ -1758,6 +1737,14 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, gameData, imgSe
         </ButtonArea>
       </ActionChWrap>
 		);
+  } else if (type === 'hero') {
+    const slotIdx = saveData.ch.length - 1;
+    return <FlexBox direction="column">
+      <ChHeroCard gradeUp={saveData.ch[slotIdx]?.gradeUp} chPage={chPage} frameBack={imgSet.etc.frameChBack}>
+        <Img imgurl={imgSet.images.transparent800} />
+        <CharacterCard saveData={saveData} slotIdx={slotIdx} />
+      </ChHeroCard>
+    </FlexBox>
   }
 }
 

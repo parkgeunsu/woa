@@ -25,6 +25,7 @@ import Menu from 'pages/Menu';
 import MoveEvent from 'pages/MoveEvent';
 import Mystery from 'pages/Mystery';
 import Port from 'pages/Port';
+import Prison from 'pages/Prison';
 import Sail from 'pages/Sail';
 import Setup from 'pages/Setup';
 import Shipyard from 'pages/Shipyard';
@@ -160,118 +161,166 @@ const ContentContainer = styled(FlexBox)`
   }
 `;
 const setCity = ({
+  gameData,
+  saveData,
   countryData,
   goodsData,
+  classification,
   lang
 }) => {
-  const cityD = Array.from({length:countryData.length}, (v, idx) => ({
-    idx: idx,
-    cityName: countryData[idx].name[lang],
-    price: Number((Math.random() * 1.9 + 0.1).toFixed(2)), //물가 (일주일에 한번씩 랜덤 변동 0.1 ~ 2.0)
-    tool: {
-      price: 1,
-      upgrade: [{idx:0},{idx:1},{idx:6},{idx:7}],
-      etc: [{idx:20}, {idx:21}, {idx:22}, {idx: util.getStringToCountryIdx(countryData[idx].id) + 30}],
-    },
-    accessory: {
-      price: 1,
-      ring: Array.from({length:20}, () => {
-        return {...util.getItem({
-          saveData: false,
-          gameData: gameData,
-          changeSaveData: false,
-          option: {
-            type:'equip',
-            items: 4,
-            lv:Math.round(Math.random()*100),
-            sealed:false,
-          },
-          isSave: false,
-          lang:lang
-        })}
-      }),
-      amulet: Array.from({length:20}, () => {
-        return {...util.getItem({
-          saveData: false,
-          gameData: gameData,
-          changeSaveData: false,
-          option: {
-            type:'equip',
-            items: 5,
-            lv:Math.round(Math.random()*100),
-            sealed:false,
-          },
-          isSave: false,
-          lang:lang
-        })}
-      }),
-    },
-    equipment: {
-      price: 1,
-      helm: Array.from({length:20}, () => {
-        return {...util.getItem({
-          saveData: false,
-          gameData: gameData,
-          changeSaveData: false,
-          option: {
-            type:'equip',
-            items: 1,
-            lv:Math.round(Math.random()*100),
-            sealed:false,
-          },
-          isSave: false,
-          lang:lang
-        })}
-      }),
-      armor:Array.from({length:20}, () => {
-        return {...util.getItem({
-          saveData: false,
-          gameData: gameData,
-          changeSaveData: false,
-          option: {
-            type:'equip',
-            items: 2,
-            lv:Math.round(Math.random()*100),
-            sealed:false,
-          },
-          isSave: false,
-          lang:lang
-        })}
-      }),
-      weapon:Array.from({length:20}, () => {
-        return {...util.getItem({
-          saveData: false,
-          gameData: gameData,
-          changeSaveData: false,
-          option: {
-            type:'equip',
-            items: 3,
-            lv:Math.round(Math.random()*100),
-            sealed:false,
-          },
-          isSave: false,
-          lang:lang
-        })}
-      }),
-    },
-    tradingPost: {
-      price: 1,
-      goods: countryData[idx].goods.map((goods, goodsIdx) => {
-        return {
-          idx: goods,
-          num: goodsData[goods].numSize,
-        }
-      })
-    },
-    shipyard:{
-      blueprint:[30],
-      wood:[0,3,4,5,7],
-      sail:[0,1,2,5],
-      figure:[0,5,6,7,20,22,35,40,47],
-      anchor:[0,1,2,6],
-      cannon:[0,1,2,3,4,5,6]
+  const cityD = Array.from({length:countryData.length}, (v, idx) => {
+    const crimeRate = Number((Math.random() * 0.9 + 0.1).toFixed(2));//범죄율 (일주일에 한번씩 랜덤 변동 0.1 ~ 1.0)
+    return {
+      idx: idx,
+      cityName: countryData[idx].name[lang],
+      price: Number((Math.random() * 1.9 + 0.1).toFixed(2)), //물가 (일주일에 한번씩 랜덤 변동 0.1 ~ 2.0)
+      crimeRate: crimeRate, 
+      tool: {
+        price: 1,
+        upgrade: [{idx:0},{idx:1},{idx:6},{idx:7}],
+        etc: [{idx:20}, {idx:21}, {idx:22}, {idx: util.getStringToCountryIdx(countryData[idx].id) + 30}],
+      },
+      accessory: {
+        price: 1,
+        ring: Array.from({length:20}, () => {
+          return {...util.getItem({
+            saveData: false,
+            gameData: gameData,
+            changeSaveData: false,
+            option: {
+              type:'equip',
+              items: 4,
+              lv:Math.round(Math.random()*100),
+              sealed:false,
+            },
+            isSave: false,
+            lang:lang
+          })}
+        }),
+        amulet: Array.from({length:20}, () => {
+          return {...util.getItem({
+            saveData: false,
+            gameData: gameData,
+            changeSaveData: false,
+            option: {
+              type:'equip',
+              items: 5,
+              lv:Math.round(Math.random()*100),
+              sealed:false,
+            },
+            isSave: false,
+            lang:lang
+          })}
+        }),
+      },
+      equipment: {
+        price: 1,
+        helm: Array.from({length:20}, () => {
+          return {...util.getItem({
+            saveData: false,
+            gameData: gameData,
+            changeSaveData: false,
+            option: {
+              type:'equip',
+              items: 1,
+              lv:Math.round(Math.random()*100),
+              sealed:false,
+            },
+            isSave: false,
+            lang:lang
+          })}
+        }),
+        armor:Array.from({length:20}, () => {
+          return {...util.getItem({
+            saveData: false,
+            gameData: gameData,
+            changeSaveData: false,
+            option: {
+              type:'equip',
+              items: 2,
+              lv:Math.round(Math.random()*100),
+              sealed:false,
+            },
+            isSave: false,
+            lang:lang
+          })}
+        }),
+        weapon:Array.from({length:20}, () => {
+          return {...util.getItem({
+            saveData: false,
+            gameData: gameData,
+            changeSaveData: false,
+            option: {
+              type:'equip',
+              items: 3,
+              lv:Math.round(Math.random()*100),
+              sealed:false,
+            },
+            isSave: false,
+            lang:lang
+          })}
+        }),
+      },
+      tradingPost: {
+        price: 1,
+        goods: countryData[idx].goods.map((goods, goodsIdx) => {
+          return {
+            idx: goods,
+            num: goodsData[goods].numSize,
+          }
+        })
+      },
+      prison: {
+        criminal: Array.from({length:Math.round(crimeRate * 10)}, () => {
+          const crimeNum = Math.floor(Math.random() * 6);
+          const ch = util.makeCard({
+            heroArr: classification,
+            gachaNum: 1,
+            gachaType: "p",
+            gameData: gameData,
+            saveData: saveData,
+            isPrison: true,
+          }).chDataArr[0];
+          const skills = [...ch.hasSkill.filter((hSkill) => {
+            return !["", 0, 1, 2].includes(hSkill.idx);
+          }), ...ch.animalSkill.flatMap((animalSkill) => {
+            return animalSkill.filter((skill) => {
+              return !["", 0, 1, 2].includes(skill.idx);
+            })
+          })]
+          const equipGrade = ch.items.filter((item) => {
+            return Object.keys(item).length > 0;
+          })?.grade;
+          const money = Math.floor(Math.random() * 100) * 100;
+          const info = [
+            [...skills.map((skill) => {
+              return `hasSkill_${skill.idx}`;
+            }), `totalSkillNum_${skills.length}`],
+            [`hasEquipment_${equipGrade}`],
+            [`hasGrade_${ch.grade}`,`hasJob_${ch.job}`,`hasBadge_${ch.animalBadge}`,`hasExp_${ch.hasExp}`],
+            ["hasState_st0","hasState_st1","hasState_st2","hasState_st3","hasState_st4","hasState_st5","hasState_st6","hasState_st7"],
+            [`hasKg_${ch.kg}`,`hasMoney_${money}`]
+          ];
+          return {
+            crime: crimeNum,
+            sentence: gameData.crime[crimeNum].sentence,
+            ch: ch,
+            info: info,
+            arrestDate: new Date().getTime(),
+            openInfo: [],
+          }
+        })
+      },
+      shipyard: {
+        blueprint:[30],
+        wood:[0,3,4,5,7],
+        sail:[0,1,2,5],
+        figure:[0,5,6,7,20,22,35,40,47],
+        anchor:[0,1,2,6],
+        cannon:[0,1,2,3,4,5,6]
+      },
     }
-  }));
+  });
   return cityD;
 }
 const setDifficultLv = (gameData) => {
@@ -318,6 +367,8 @@ const classification = (gameData) => {
     region: [],
     regionGrade:[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]],
   };
+  classification.countryGrade[100] = [];
+  classification.regionGrade[100] = [];
   gameData.ch.forEach((chData) => {
     if (!chData?.na1) return;
     if (!classification.grade[chData.grade]) {
@@ -361,7 +412,8 @@ const classification = (gameData) => {
 const makeSaveData = (saveData) => {
   saveData.actionCh = {
     equipment: {idx:''},
-    church: {idx:''},
+    church0: {idx:''},
+    church1: {idx:''},
     temple: {idx:''},
     mystery: {idx:''},
     tavern: {idx:''},
@@ -371,6 +423,7 @@ const makeSaveData = (saveData) => {
     accessory: {idx:''},
     tool: {idx:''},
     shipyard: {idx:''},
+    prison: {idx:''},
     tradingPost: {idx:''},
     blacksmith: {idx:''},
     training: {idx:''},
@@ -434,10 +487,16 @@ const App = ({
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
+  const isMoveEvent = React.useMemo(() => {
+    return util.loadData("historyParam")?.moveEvent && Object.keys(util.loadData("historyParam").moveEvent).length > 0;
+  }, []);
   const theme = {
     color: ColorSet,
     font: FontSet,
   }
+  const classificationData = React.useMemo(() => {
+    return classification(gameData);
+  }, [gameData]);
   const [contextData, setContextData] = useState({
     images: loadData,
     gameData: {
@@ -451,98 +510,222 @@ const App = ({
       bge: false,
       speed: 2,
     },
-    classification: classification(gameData),
+    classification: classificationData,
     difficultLv: setDifficultLv(gameData),
   });
   const setBack = (location) => {
     switch(location) {
-      case "cardsList":
-      case "cards":
+      case "home":
         return {
-          pic: "areaBack",
+          pic: "areaBack1",
           idx: 0
         };
-      case "inven":
+      case "temple":
         return {
-          pic: "areaBack",
+          pic: "areaBack1",
           idx: 1
         };
       case "cardPlacement":
         return {
-          pic: "areaBack",
+          pic: "areaBack1",
           idx: 2
         };
       case "training":
         return {
-          pic: "areaBack",
+          pic: "areaBack1",
           idx: 3
         };
-      case "blacksmith":
+      case "church":
         return {
-          pic: "areaBack",
+          pic: "areaBack1",
           idx: 4
         };
-      case "composite":
+      case "accessory":
         return {
-          pic: "areaBack",
+          pic: "areaBack1",
           idx: 5
         };
       case "equipment":
         return {
-          pic: "areaBack",
+          pic: "areaBack1",
           idx: 6
+        };
+      case "tradingPost":
+        return {
+          pic: "areaBack1",
+          idx: 7
+        };
+      case "mystery":
+        return {
+          pic: "areaBack1",
+          idx: 8
         };
       case "tool":
         return {
-          pic: "areaBack",
-          idx: 7
-        };
-      case "trade":
-        return {
-          pic: "areaBack",
-          idx: 8
-        };
-      case "ship":
-        return {
-          pic: "areaBack",
+          pic: "areaBack1",
           idx: 9
+        };
+      case "blacksmith":
+        return {
+          pic: "areaBack1",
+          idx: 10
+        };
+      case "tavern":
+        return {
+          pic: "areaBack1",
+          idx: 11
+        };
+      case "townHall":
+        return {
+          pic: "areaBack1",
+          idx: 12
+        };
+      case "guild":
+        return {
+          pic: "areaBack1",
+          idx: 13
+        };
+      case "port":
+        return {
+          pic: "areaBack1",
+          idx: 14
+        };
+      case "shipyard":
+        return {
+          pic: "areaBack1",
+          idx: 15
+        };
+      case "composite":
+        return {
+          pic: "areaBack1",
+          idx: 16
+        };
+      case "gate":
+        return {
+          pic: "areaBack1",
+          idx: 17
         };
       case "prison":
         return {
-          pic: "areaBack",
-          idx: 10
-        };
-      case "accessory":
-        return {
-          pic: "areaBack",
-          idx: 12
-        };
-      case "secretShop":
-        return {
-          pic: "areaBack",
-          idx: 13
+          pic: "areaBack1",
+          idx: 18
         };
       case "post":
         return {
-          pic: "areaBack",
+          pic: "areaBack1",
+          idx: 19
+        };
+      case "greeting":
+        return {
+          pic: "areaBack1",
+          idx: 20
+        };
+      case "cardsList":
+      case "cards":
+        return {
+          pic: "areaBack1",
+          idx: 21
+        }
+      case "explorationLight":
+        return {
+          pic: "areaBack2",
+          idx: 0
+        };
+      case "explorationDark":
+        return {
+          pic: "areaBack2",
+          idx: 1
+        };
+      case "explorationRain":
+        return {
+          pic: "areaBack2",
+          idx: 2
+        };
+      case "explorationFire":
+        return {
+          pic: "areaBack2",
+          idx: 3
+        };
+      case "explorationWind":
+        return {
+          pic: "areaBack2",
+          idx: 4
+        };
+      case "explorationSnow":
+        return {
+          pic: "areaBack2",
+          idx: 5
+        };
+      case "explorationRock":
+        return {
+          pic: "areaBack2",
+          idx: 6
+        };
+      case "explorationField":
+        return {
+          pic: "areaBack2",
+          idx: 7
+        };
+      case "explorationTown":
+        return {
+          pic: "areaBack2",
+          idx: 8
+        };
+      case "tower":
+        return {
+          pic: "areaBack2",
+          idx: 9
+        };
+      case "explorationDesert":
+        return {
+          pic: "areaBack2",
+          idx: 10
+        };
+      case "explorationJungle":
+        return {
+          pic: "areaBack2",
+          idx: 11
+        };
+      case "explorationMarsh":
+        return {
+          pic: "areaBack2",
+          idx: 12
+        };
+      case "explorationDungeon":
+        return {
+          pic: "areaBack2",
+          idx: 13
+        };
+      case "sail":
+        return {
+          pic: "areaBack2",
           idx: 14
+        };
+      case "surrounded":
+        return {
+          pic: "areaBack2",
+          idx: 15
         };
       case "battleWin":
         return {
-          pic: "areaBack",
+          pic: "areaBack2",
           idx: 16
         };
       case "battleLose":
         return {
-          pic: "areaBack",
+          pic: "areaBack2",
           idx: 17
         };
-      case "sail":
+      case "treasure1":
         return {
-          pic: "areaBack",
+          pic: "areaBack2",
           idx: 18
         };
-      case "gameMain":
+      case "treasure2":
+        return {
+          pic: "areaBack2",
+          idx: 19
+        };
       case "message":
       case "setup":
         return {
@@ -610,7 +793,7 @@ const App = ({
   }
   const setBge = (data) => {
     const setting = util.loadData('setting');
-    setting.bgm = data;
+    setting.bge = data;
     util.saveData('setting', setting);
     let cloneContextData = {...contextData};
     cloneContextData.setting.bge = data;
@@ -631,8 +814,11 @@ const App = ({
       }
       const sData = makeSaveData(saveNew);
       sData.city = setCity({
+        gameData: gameData,
+        saveData: saveData,
         countryData: gameData.country.regions,
         goodsData: gameData.items.material,
+        classification: classificationData,
         lang: contextData.setting.lang
       });
       util.saveData("saveData", sData);
@@ -643,6 +829,7 @@ const App = ({
         bgm: true,
         efm: true,
         resolution: 1,
+        bge: true,
         speed: 2,
       });
       util.saveData("history",[]);
@@ -667,11 +854,16 @@ const App = ({
       const is7DaysPast = !lastResetStr || isNaN(parsedTime) || (currentTime - parsedTime >= 7 * 24 * 60 * 60 * 1000);
       
       if (is7DaysPast && useSaveData) {
-        useSaveData.city = setCity({
+        const cloneCity = setCity({
+          gameData: gameData,
+          saveData: saveData,
           countryData: gameData.country.regions,
           goodsData: gameData.items.material,
+          classification: classificationData,
           lang: setting.lang,
         });
+        cloneCity.prison = useSaveData.city.prison;
+        useSaveData.city = cloneCity;
         util.saveData("saveData", useSaveData);
         localStorage.setItem('lastCityReset', currentTime.toString());
       }
@@ -734,11 +926,16 @@ const App = ({
       
       if (!lastResetStr || isNaN(parsedTime) || (currentTime - parsedTime >= 7 * 24 * 60 * 60 * 1000)) {
         const lang = util.loadData('setting')?.lang || 'ko';
-        cloneData.city = setCity({
+        const cloneCity = setCity({
+          gameData: gameData,
+          saveData: saveData,
           countryData: gameData.country.regions,
           goodsData: gameData.items.material,
+          classification: classificationData,
           lang: lang,
         });
+        cloneCity.prison = cloneData.city.prison;
+        cloneData.city = cloneCity;
         localStorage.setItem('lastCityReset', currentTime.toString());
         isChanged = true;
       }
@@ -771,7 +968,7 @@ const App = ({
             {showDim && (location === "gameMain" || location === "setup" || location === "chat") && <BackgroundShadow />}
             <ContentContainer location={location} direction="column" className="content">
               <Routes>
-                <Route path="*" element={<Navigate to="/gameMain" replace />} />
+                <Route path="*" element={<Navigate to={isMoveEvent ? "/moveEvent" : "/gameMain"} replace />} />
 
                 <Route path="/" element={<Menu type="new" />} />
 
@@ -798,6 +995,8 @@ const App = ({
                 <Route path="/mystery" element={<Mystery saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
                 <Route path="/gate" element={<Gate saveData={saveData} changeSaveData={changeSaveData} setGameMode={setGameMode} setShowDim={setShowDim} setLoading={setLoading} />} />
+
+                <Route path="/prison" element={<Prison saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 
                 <Route path="/cardsList" element={<CharacterList saveData={saveData} changeSaveData={changeSaveData} setLoading={setLoading} />} />
 

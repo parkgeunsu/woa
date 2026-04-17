@@ -611,20 +611,79 @@ export const shop = {
   },
   gate: {
     name: {
-      ko:"게이트",
+      ko:"성문",
       en:"Gate",
       jp:"ゲート"
     },
     greeting: {
-      ko: "좋은 여행되시게",
-      en: "Have a good trip",
-      jp: "良い旅を"
+      ko: "어디로 향하는가?",
+      en: "Where are you headed?",
+      jp: "どこへ向かうのか？"
     },
     menu: [
       {idx: 0, text: 'gate_text0'},
-      {idx: 1, text: 'getOut'}
+      {idx: 1, text: 'stay'}
     ],
     randomText: [
+      {
+        ko: "어디로 향하는가?",
+        en: "Where are you headed?",
+        jp: "どこへ向かうのか？"
+      },
+      {
+        ko: "도시 밖은 위험하니 조심하게나.",
+        en: "The world outside the city is dangerous, so be careful.",
+        jp: "街の外は危険だから気をつけるんだ"
+      },
+      {
+        ko: "정비는 충분히 했나? 무기, 방어구, 물약까지.",
+        en: "Have you prepared enough? Weapons, armor, potions...",
+        jp: "準備は十分か？ 武器、防具、ポーションまでな。"
+      },
     ]
   },
+  prison: {
+    name: {
+      ko:"감옥",
+      en:"Prison",
+      jp:"監獄"
+    },
+    greeting: {
+      ko: "면회? 구속? 무슨 죄를 지었는가?",
+      en: "Visit? Imprisonment? What crime did you commit?",
+      jp: "面会？ 拘束？ どんな罪を犯したのか？"
+    },
+    menu: [
+      {idx: 0, text: 'prison_text0'},
+      {idx: 1, text: 'prison_text1'},
+      {idx: 2, text: 'getOut'}
+    ],
+    randomText: [
+      {
+        ko: "감옥 열쇠만 있다면 죄수를 풀어줄 수 있지. 하지만 책임이 따르지.",
+        en: "If you have a prison key, you can release the prisoner. But it comes with responsibility.",
+        jp: "監獄の鍵さえあれば、囚人を解放できるぞ。だが、責任が伴う。"
+      },
+      {
+        ko: "죄의 경중에 따라 구속기간이 결정되지.",
+        en: "The duration of imprisonment is determined by the severity of the crime.",
+        jp: "罪の重さに応じて拘束期間が決まる。"
+      },
+      {
+        ko: "나쁜 짓을 하면 벌을 받게 되어 있어.",
+        en: "If you do bad things, you will be punished.",
+        jp: "悪いことをすれば罰を受けることになる。"
+      },
+      {
+        ko: "나쁜 짓을 하면 벌을 받게 되어 있어.",
+        en: "If you do bad things, you will be punished.",
+        jp: "悪いことをすれば罰を受けることになる。"
+      },
+      {
+        ko: "자수하면 형량이 줄어들어.",
+        en: "If you surrender, your sentence will be reduced.",
+        jp: "自首すれば刑期が短くなるぞ。"
+      },
+    ]
+  }
 }

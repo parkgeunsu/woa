@@ -11,7 +11,7 @@ import { job } from 'gamedata/job';
 import { lineup } from 'gamedata/lineup';
 import { msg } from 'gamedata/msg';
 import { percent } from 'gamedata/percent';
-import { actionPoint, prices } from 'gamedata/prices';
+import { actionPoint, diceCount, prices, reward } from 'gamedata/prices';
 import { recipe } from 'gamedata/recipe';
 import { relation } from 'gamedata/relation';
 import { scenario } from 'gamedata/scenario';
@@ -81,12 +81,20 @@ export const gameData = {
       ],
       size:[80,500],//[소,중]
     },
+    crime: [
+      {name: {ko:'절도',en:'Theft',jp:'窃盗'}, sentence: 6 * 60 * 60 * 1000, needMoral: 10},
+      {name: {ko:'사기',en:'Fraud',jp:'詐欺'}, sentence: 12 * 60 * 60 * 1000, needMoral: 20},
+      {name: {ko:'폭행',en:'Assault',jp:'暴行'}, sentence: 1 * 24 * 60 * 60 * 1000, needMoral: 30},
+      {name: {ko:'방화',en:'Arson',jp:'放火'}, sentence: 5 * 24 * 60 * 60 * 1000, needMoral: 50},
+      {name: {ko:'반역',en:'Treason',jp:'反逆'}, sentence: 15 * 24 * 60 * 60 * 1000, needMoral: 70},
+      {name: {ko:'살인',en:'Murder',jp:'殺人'}, sentence: 30 * 24 * 60 * 60 * 1000, needMoral: 100},
+    ],
     ch: ch,
     job: job,//직업
     items: items,
     ships: ships,
     shop: shop,
-    shopName: ['home','equipment','tool','accessory','composite','training','tradingPost','blacksmith','church','temple','mystery','shipyard','port','townHall','tavern','guild','gate'],
+    shopName: ['home','equipment','tool','accessory','composite','training','tradingPost','blacksmith','church','temple','mystery','shipyard','port','townHall','tavern','guild','gate','prison'],
     //grade (0하급poor, 1일반normal, 2매직magic, 3레어rare, 4에픽epic, 5유니크unique, 6레전드legend)
     itemGrade: {//'#999'
       txt_e: ['','Poor','Normal','Magic','Rare','Epic','Unique','Legend'],
@@ -123,7 +131,9 @@ export const gameData = {
     relation: relation,
     scenario: scenario,
     prices: prices,
+    reward: reward,
     actionPoint: actionPoint,
+    diceCount: diceCount,
     guide: guide,
     recipe: recipe,
     msg: msg,

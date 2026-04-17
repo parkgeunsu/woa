@@ -86,7 +86,7 @@ const StartGame = ({
   const [countryList, setCountryList] = useState([]); //국가 선택 글자
   const [languageList, setLanguageList] = useState([]); //언어 선택 글자
   const [selectCardTypeIdx, setSelectCardTypeIdx] = useState(paramData?.start?.selectType ?? ''); //시작 카드 유형 index
-  const [hasMoney, setHasMoney] = useState(typeof selectCardTypeIdx === 'number' ? String(gameData.startCardArr[selectCardTypeIdx].gold).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : 0); //소지금
+  const [hasMoney, setHasMoney] = useState(typeof selectCardTypeIdx === 'number' ? util.comma(gameData.startCardArr[selectCardTypeIdx].gold) : 0); //소지금
   const [selectCountryIdx, setSelectCountryIdx] = useState(paramData?.start?.country || ''); //시작 국가 선택 index
   const [selectLanguageIdx, setSelectLanguageIdx] = useState(paramData?.recruitment?.language || 0); //게임 언어 선택 index
   useEffect(() => {
@@ -136,7 +136,7 @@ const StartGame = ({
               <Select selectIdx={selectCardTypeIdx} setSelectIdx={setSelectCardTypeIdx} onClick={(idx) => {
                 setSelectCardTypeIdx(idx);
                 const gold = gameData.startCardArr?.[idx]?.gold || 0;
-                setHasMoney(String(gold).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+                setHasMoney(util.comma(gold));
                 setSelectGradeArr(gameData.startCardArr?.[idx] || []);
                 const hParam = util.loadData('historyParam') || {};
                 if (hParam.start) {

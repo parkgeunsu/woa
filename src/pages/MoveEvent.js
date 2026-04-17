@@ -1,14 +1,17 @@
 import { Text } from 'components/Atom';
 import { Button } from 'components/Button';
 import { FlexBox } from 'components/Container';
+import Dice from 'components/Dice';
 import { IconPic, MergedPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
+import Popup from 'components/Popup';
+import PopupContainer from 'components/PopupContainer';
 import { AppContext } from 'contexts/app-context';
 import GameMainFooter from 'pages/GameMainFooter';
 import QuickMenu from 'pages/QuickMenu';
-import React, { useCallback, useContext, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -175,18 +178,87 @@ const EventText = styled(FlexBox)`
   height: auto;
   width: auto;
 `;
+const getItemType = (spType) => {
+  switch (spType) {
+    case 1:
+      return "hero";
+    case 2:
+    case 3:
+      return spType - 1;
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+      return `3-${spType - 3}`;
+    case 13:
+      return Math.round(Math.random()) + 4;
+    case 14:
+      return "gold";
+  }
+}
+const actionDice = ({
+  diceNum,
+  type,
+  blockType,
+  eventPhase,
+  setEventPhase,
+  limitDiceCount,
+  timeoutRef,
+  increaseStep,
+}) => {
+  const isSuccess = limitDiceCount <= diceNum;
+  clearTimeout(timeoutRef.current);
+  timeoutRef.current = setTimeout(() => {
+    switch (blockType) {
+      case 0:
+        switch (type) {
+          case "run":
+              setEventPhase(eventPhase === 0 ? 1 : 3);
+            if (isSuccess) {
+              increaseStep();
+            } else {
+              setEventPhase(eventPhase === 0 ? 1 : 3);
+            }
+          break;
+        }
+        break;
+      case 1:
+        switch (type) {
+          case "run":
+            if (isSuccess) {
+              increaseStep();
+            } else {
+              setEventPhase(1);
+            }
+          break;
+        }
+        break;
+      case 2:
+        break;
+      case 3:
+        break;
+      case 4:
+        break;
+    }
+  }, 500);
+}
 const action = ({
   type,
   gameData,
   saveData,
   changeSaveData,
   increaseStep,
+  setShowDice,
   setEventPhase,
   setEventBack,
   timeoutRef,
   setMsg,
   setMsgOn,
-  paramData,
   navigate,
   lang,
 }) => {
@@ -194,9 +266,19 @@ const action = ({
     case "attack":
       let lv = 2,
         enemyNum = 0;
-      const currentMoveEvent = paramData && paramData.moveEvent;
+      const currentMoveEvent = saveData && saveData.moveEvent;
       if (!currentMoveEvent) return;
-
+      let isEmptyEntry = true;
+      saveData.eventLineup.save_slot[saveData.eventLineup.select].entry.forEach((entryData) => {
+        if (entryData !== '') {
+          isEmptyEntry = false;
+        }
+      });
+      if (isEmptyEntry) {
+        setMsgOn(true);
+        setMsg(gameData.msg.sentence['organizeCard'][lang]);
+        return;
+      }
       if (currentMoveEvent.blockArr?.type?.[currentMoveEvent.currentStep] === 0) {
         lv = Math.max((saveData.info?.lv || 1) + Math.round(Math.random() * 10 - 5), 2);
         enemyNum = util.battleEnemyNum(3);
@@ -211,7 +293,7 @@ const action = ({
       const battleDataObj = {
         type: "moveEvent",
         title: gameData.msg.moveEvent[ currentMoveEvent.currentStep === 0 ? "enemy" : "sEnemy"]?.[lang] || "Battle",
-        country: currentMoveEvent.moveTo,
+        region: currentMoveEvent.moveTo,
         enemy: {
           lv: lv,
           lv1Hero: lv1Hero,
@@ -223,6 +305,7 @@ const action = ({
       };
 
       util.saveHistory({
+        prevLocation: 'moveEvent',
         location: 'battle',
         navigate: navigate,
         callback: () => {
@@ -239,6 +322,7 @@ const action = ({
       });
       break;
     case "save":
+      setShowDice(true);
       if ((saveData.info?.morality || 0) + Math.random() * 100 > 100) {
         //setEventBack(21);
         //timeoutRef = setTimeout(() => {
@@ -254,12 +338,14 @@ const action = ({
       console.log(saveData.info?.morality)
       break;
     case "run":
-      increaseStep();
+      setShowDice(true);
+      //increaseStep();
       break;
     case "drink":
       break;
     case "ignore":
-      increaseStep();
+      setShowDice(true);
+      //increaseStep();
       break;
     case "conversation":
       break;
@@ -293,9 +379,10 @@ const MoveEvent = ({
 }) => {
   const navigate = useNavigate();
   const context = useContext(AppContext);
-  const sData = React.useMemo(() => {
-    return Object.keys(saveData).length > 0 ? saveData : util.loadData("saveData");
-  }, [saveData]);
+  const classification = React.useMemo(() => {
+    return context.classification;
+  }, [context]);
+  const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -305,31 +392,21 @@ const MoveEvent = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const paramData = React.useMemo(() => {
-    const rawData = util.loadData('historyParam') || {};
-    return {
-      ...rawData,
-      moveEvent: rawData.moveEvent || { 
-        blockArr: { type: [] }, 
-        currentStep: 0, 
-        distance: 0, 
-        spBlockArr: [], 
-        moveTo: 'korea' 
-      }
-    };
-  }, []);
+  const [popupOn, setPopupOn] = useState(false);
+  const [popupType, setPopupType] = useState('');
+  const [popupInfo, setPopupInfo] = useState({});
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
-  const [currentStep, setCurrentStep] = useState(paramData.moveEvent.currentStep);
-  const blockType = paramData.moveEvent.blockArr?.type?.[currentStep] || 0;
+  const [currentStep, setCurrentStep] = useState(sData.moveEvent.currentStep);
+  const blockType = sData.moveEvent.blockArr?.type?.[currentStep] || 0;
   const [eventPhase, setEventPhase] = useState(0);
   const actionData = React.useMemo(() => {
-    if (currentStep + 1 === paramData.moveEvent.distance) {
+    if (currentStep + 1 === sData.moveEvent.distance) {
       return gameData.events.lastEvent;
     }
     return gameData.events.eventProcess?.[blockType] || gameData.events.eventProcess[0];
-  }, [gameData, blockType, currentStep, paramData]);
-  const [eventBack, setEventBack] = useState(paramData.moveEvent.blockArr?.type?.[currentStep] || 0);
+  }, [gameData, blockType, currentStep, sData]);
+  const [eventBack, setEventBack] = useState(sData.moveEvent.blockArr?.type?.[currentStep] || 0);
   const [showEvent, setShowEvent] = useState(true);
   const timeoutRef = useRef(null);
   // useLayoutEffect(() => {
@@ -341,55 +418,206 @@ const MoveEvent = ({
   //   }
   // }, []);
   const increaseStep = () => {
-    const historyP = JSON.parse(JSON.stringify(util.loadData('historyParam') || {}));
-    if (historyP.moveEvent) {
-      historyP.moveEvent.currentStep = (historyP.moveEvent.currentStep || 0) + 1;
-      util.saveData('historyParam', historyP);
-      setCurrentStep(historyP.moveEvent.currentStep);
+    if (sData.moveEvent) {
+      const step = sData.moveEvent.currentStep + 1;
+      changeSaveData(prev => ({
+        ...prev,
+        moveEvent: {
+          ...prev.moveEvent,
+          currentStep: step,
+        }
+      }));
+      setCurrentStep(step);
+    }
+    setEventPhase(0);
+  }
+  const decreaseStep = () => {
+    if (sData.moveEvent) {
+      const step = sData.moveEvent.currentStep - 1;
+      changeSaveData(prev => ({
+        ...prev,
+        moveEvent: {
+          ...prev.moveEvent,
+          currentStep: step,
+        }
+      }));
+      setCurrentStep(step);
     }
     setEventPhase(0);
   }
   const events = React.useMemo(() => {
-    const eventArr = Array.from({length:paramData.moveEvent.distance}, () => []);
+    const eventArr = Array.from({length:sData.moveEvent.distance}, () => []);
     return eventArr;
-  }, [paramData]);
+  }, [sData]);
   // const spEvents = React.useMemo(() => {
-  //   return Array.from({length:Math.ceil(paramData.moveEvent.distance / 4)}, () => {
+  //   return Array.from({length:Math.ceil(sData.moveEvent.distance / 4)}, () => {
   //     return {type: util.fnPercent(gameData.percent.bigEventsPercent)};
   //   });
-  // }, [paramData]);
+  // }, [sData]);
   const EventAllScroll = useCallback((node) => {
     if (node !== null) {
       node.scrollTo(0, 2000);
     }
   }, []);
+  const [showDice, setShowDice] = useState(false);
+  const [actionType, setActionType] = useState("");
+  const limitDiceCount = React.useMemo(() => {
+    return gameData.diceCount.moveEvent[actionType];
+  }, [gameData, actionType]);
+  const leaderDiceSkill = React.useMemo(() => {
+    let hasSkill = [false, false];
+    for (const [idx, skillData] of sData.ch[sData.info.leaderIdx].hasSkill.entries()) {
+      if (skillData.idx === 28) {
+        hasSkill[0] = true;
+      };
+      if (skillData.idx === 29) {
+        hasSkill[1] = true;
+      };
+    };
+    return hasSkill;
+  }, [sData]);
+  useEffect(() => {
+    return () => {
+      clearTimeout(timeoutRef.current);
+    }
+  }, []);
   return <>
     <Wrap className="scroll-y" ref={EventAllScroll} >
+      <div style={{position:"absolute",right:0,bottom:0,zIndex:100, backgroundColor: '#fff'}}>
+        <button onClick={() => {
+          decreaseStep();
+        }}>이전 스텝</button><br/>
+        <button onClick={() => {
+          increaseStep();
+        }}>다음 스텝</button>
+      </div>
       <QuickMenu type="move" gameMode={gameMode} showDim={showDim} setShowDim={setShowDim} stay={sData.info.stay} />
-      <MoveEventBack className="back" type="areaBackMoveRegion" pic="areaBack" idx={paramData.moveEvent.bg ? paramData.moveEvent.bg : 0} completeStep={currentStep / paramData.moveEvent.distance * 0.8 + 0.2}/>
-      <EventAll size={EVENT_HEIGHT} length={paramData.moveEvent.distance}>
-        <EventShadow completeStep={(currentStep + 1) / (paramData.moveEvent.distance + 1)} />
+      <MoveEventBack className="back" type="areaBackMoveRegion" pic="areaBack" idx={sData.moveEvent.bg ? sData.moveEvent.bg : 0} completeStep={currentStep / sData.moveEvent.distance * 0.8 + 0.2}/>
+      <EventAll size={EVENT_HEIGHT} length={sData.moveEvent.distance}>
+        <EventShadow completeStep={(currentStep + 1) / (sData.moveEvent.distance + 1)} />
         {events.map((eventData, eventIdx) => {
           //(한국0, 일본1, 중국2, 몽골3, 사우디아라비아4, 이집트5, 그리스6, 이탈리아7, 영국8, 프랑스9, 스페인10, 포르투칼11)
-          const blockHead = gameData.eventsHead[util.getStringToCountryIdx(paramData.moveEvent.moveTo || 'korea')],
-            blockType = paramData.moveEvent.blockArr?.type?.[eventIdx] || 0;
+          const blockHead = gameData.eventsHead[util.getStringToCountryIdx(sData.moveEvent.moveTo || 'korea')],
+            blockType = sData.moveEvent.blockArr?.type?.[eventIdx] || 0;
           //idx={eventIdx}
-          return <MapPiece idx={eventIdx} size={EVENT_HEIGHT} key={`event${eventIdx}`}>
+          return <MapPiece idx={eventIdx} size={EVENT_HEIGHT} key={`event${eventIdx}`} {...currentStep === eventIdx && {onClick: () => {setShowEvent(true);}}}>
             <Block type="moveEventBlock" pic="icon200" isAbsolute={true} idx={0} />
             <BlockHead type="moveEventBlockHead" pic="icon200" isAbsolute={true} idx={eventIdx % 3 === 0 ? 9 : blockHead} nowIdx={eventIdx} />
-            <BlockType type="moveEventBlockType" pic="icon200" isAbsolute={true} currentStep={currentStep} idx={blockType} nowIdx={eventIdx} />
+            <BlockType type="moveEventBlockType" pic="icon200" isAbsolute={true} currentStep={currentStep} idx={blockType} nowIdx={eventIdx}/>
           </MapPiece>
         })}
-        <MapPiece last idx={paramData.moveEvent.distance} size={EVENT_HEIGHT}>
+        <MapPiece last idx={sData.moveEvent.distance} size={EVENT_HEIGHT} {...currentStep === sData.moveEvent.distance && {onClick: () => {setShowEvent(true);}}}>
           <Block last type="moveEventBlock" pic="icon200" isAbsolute={true} idx={0} />
-          <BlockHead last type="moveEventBlockHead" pic="icon200" isAbsolute={true} idx={gameData.eventsHead[util.getStringToCountryIdx(paramData.moveEvent.moveTo || 'korea')]} nowIdx={paramData.moveEvent.distance} />
-          <BlockType last type="moveEventFinish" pic="img400" isAbsolute={true} currentStep={currentStep} nowIdx={paramData.moveEvent.distance} idx={util.getStringToCountryIdx(paramData.moveEvent.moveTo || 'korea')} />
+          <BlockHead last type="moveEventBlockHead" pic="icon200" isAbsolute={true} idx={gameData.eventsHead[util.getStringToCountryIdx(sData.moveEvent.moveTo || 'korea')]} nowIdx={sData.moveEvent.distance} />
+          <BlockType last type="moveEventFinish" pic="img400" isAbsolute={true} currentStep={currentStep} nowIdx={sData.moveEvent.distance} idx={util.getStringToCountryIdx(sData.moveEvent.moveTo || 'korea')} />
         </MapPiece>
-        {paramData.moveEvent.spBlockArr?.map((spEvent, spEventIdx) => {
+        {sData.moveEvent.spBlockArr?.map((spEvent, spEventIdx) => {
           return (
-            <EventStatue key={`spEvent${spEventIdx}`} size={EVENT_HEIGHT} idx={spEventIdx} currentStep={currentStep}  backPos={[gameData.eventsHead[paramData.moveEvent.moveTo || 'korea'], 1]}>
+            <EventStatue key={`spEvent${spEventIdx}`} size={EVENT_HEIGHT} idx={spEventIdx} currentStep={currentStep} backPos={[gameData.eventsHead[sData.moveEvent.moveTo || 'korea'], 1]} onClick={() => {
+              const canOpen = Math.floor(currentStep / 3)>= spEventIdx + 1,
+                opened = spEvent.open,
+                getItem = spEvent.get;
+              if (!canOpen) {
+                setMsgOn(true);
+                setMsg(gameData.msg.sentence['moreStepChest'][lang]);
+                return;
+              }
+              //보물상자 열기
+              if (canOpen && !opened) {
+                changeSaveData(prev => ({
+                  ...prev,
+                  moveEvent: {
+                    ...prev.moveEvent,
+                    spBlockArr: prev.moveEvent.spBlockArr.map((spData, spIdx) => {
+                      return spEventIdx === spIdx ? {
+                        ...spData,
+                        open: true,
+                      } : spData;
+                    })
+                  }
+                }));
+              }
+              if (canOpen && opened && getItem) {
+                setMsgOn(true);
+                setMsg(gameData.msg.sentence['alreadyChest'][lang]);
+                return;
+              }
+              //아이템 획득
+              if (canOpen && opened && !getItem) {
+                const itemType = getItemType(spEvent.type);
+                let acquiredThings = "";
+                if (itemType === "hero") {
+                  acquiredThings = util.makeCard({
+                    heroArr: classification,
+                    gachaNum: 1,
+                    gachaType: "p",
+                    gameData: gameData,
+                    saveData: sData,
+                  });
+                  changeSaveData(prev => ({
+                    ...prev,
+                    ch: [
+                      ...prev.ch,
+                      acquiredThings.chDataArr[0],
+                    ]
+                  }));
+                  setPopupType("hero");
+							    setPopupOn(true);
+                } else if (itemType === "gold") {
+                  acquiredThings = gameData.reward.moveEvent.gold;
+                  changeSaveData(prev => ({
+                    ...prev,
+                    info: {
+                      ...prev.info,
+                      money: prev.info.money + acquiredThings,
+                    }
+                  }));
+                  setMsgOn(true);
+                  setMsg(gameData.msg.sentenceFn.getGold(lang, acquiredThings));
+                } else {
+                  acquiredThings = util.getItem({
+                    saveData: sData,
+                    gameData: gameData,
+                    changeSaveData: changeSaveData,
+                    option: {
+                      type: 'equip',
+                      items: itemType,
+                      //아이템종류, 세부종류(검,단검), 매직등급
+                      lv: Math.round(Math.random()*100),
+                      sealed: false,
+                    },
+                    isSave: true,
+                    lang: lang,
+                  });
+                  const itemCate = itemType.split('-')
+                  const gameItemData = gameData.items.equip[itemCate[0]][itemCate[1]][0][acquiredThings.idx];
+                  setPopupInfo({
+                    chSlotIdx: "",
+                    gameItem: gameItemData,
+                    itemSaveSlot: 0,
+                    saveItemData: acquiredThings,
+                    noneButton: true,
+                    type: "hequip",
+                  });
+                  setPopupType("hequip");
+							    setPopupOn(true);
+                }
+                changeSaveData(prev => ({
+                  ...prev,
+                  moveEvent: {
+                    ...prev.moveEvent,
+                    spBlockArr: prev.moveEvent.spBlockArr.map((spData, spIdx) => {
+                      return spEventIdx === spIdx ? {
+                        ...spData,
+                        get: true,
+                      } : spData;
+                    })
+                  }
+                }));
+              }
+            }}>
               <RewardBlockHead type="moveEventReward" pic="img400" isAbsolute={true} idx={19} />
-              <RewardBlockType type="moveEventReward" pic="img400" isAbsolute={true} idx={spEvent.get ? spEvent.type + 1 : 0} distance={paramData.moveEvent.distance} nowIdx={spEventIdx} currentStep={currentStep} eventClear={spEvent.get} />
+              <RewardBlockType type="moveEventReward" pic="img400" isAbsolute={true} idx={spEvent.get ? 15 : spEvent.open ? spEvent.type + 1 : 0} distance={sData.moveEvent.distance} nowIdx={spEventIdx} currentStep={currentStep} eventClear={spEvent.get} />
             </EventStatue>
           )
         })}
@@ -397,7 +625,7 @@ const MoveEvent = ({
       <EventView frameImg={imgSet.images.frame0} onClick={() => {
         setShowEvent(prev => !prev);
       }}>
-        {showEvent && (currentStep + 1 === paramData.moveEvent.distance ? <>
+        {showEvent && (currentStep === sData.moveEvent.distance ? <>
             <EventBack type="eventBack" pic="img800" idx={1} />
             <EventTitle code="t2" color="main" frameImg={imgSet.images.frame0}>
               {gameData.msg.moveEvent[gameData.events.lastEvent[`action${eventPhase}`].title][lang]}
@@ -408,18 +636,19 @@ const MoveEvent = ({
                   action({
                     type: aData.name,
                     gameData: gameData,
-                    saveData: saveData,
+                    saveData: sData,
                     changeSaveData: changeSaveData,
+                    setShowDice: setShowDice,
                     increaseStep: increaseStep,
                     setEventPhase: setEventPhase,
                     setEventBack: setEventBack,
                     timeoutRef: timeoutRef.current,
                     setMsg: setMsg,
                     setMsgOn: setMsgOn,
-                    paramData: paramData,
                     navigate: navigate,
                     lang: lang,
                   });
+                  setActionType(aData.name);
                   e.stopPropagation();
                 }}>{aIdx + 1}. {gameData.msg.moveEvent[aData.name][lang]}</Button>
               })}
@@ -435,18 +664,19 @@ const MoveEvent = ({
                   action({
                     type: aData.name,
                     gameData: gameData,
-                    saveData: saveData,
+                    saveData: sData,
                     changeSaveData: changeSaveData,
+                    setShowDice: setShowDice,
                     increaseStep: increaseStep,
                     setEventPhase: setEventPhase,
                     setEventBack: setEventBack,
                     timeoutRef: timeoutRef.current,
                     setMsg: setMsg,
                     setMsgOn: setMsgOn,
-                    paramData: paramData,
                     navigate: navigate,
                     lang: lang,
                   });
+                  setActionType(aData.name);
                   e.stopPropagation();
                 }}>{aIdx + 1}. {gameData.msg.moveEvent[aData.name][lang]}</Button>
               })}
@@ -454,8 +684,23 @@ const MoveEvent = ({
           </>
         )}
       </EventView>
+      {showDice && <Dice successNum={limitDiceCount} bg={0} num={leaderDiceSkill[1] ? 3 : 2} isPlay={leaderDiceSkill[0] ? 2 : 1} setShowDice={setShowDice} setMsg={setMsg} setMsgOn={setMsgOn}callback={(v) => {
+        actionDice({
+          diceNum: util.getSum(v.diceArr),
+          blockType: blockType,
+          type: actionType,
+          eventPhase: eventPhase,
+          setEventPhase: setEventPhase,
+          limitDiceCount: limitDiceCount,
+          increaseStep: increaseStep,
+          timeoutRef: timeoutRef,
+        });
+      }} />}
     </Wrap>
-    <GameMainFooter saveData={sData} gameMode={"moveEvent"} setGameMode={setGameMode} stay={sData.info.stay} moveData={paramData.moveEvent} actionData={actionData} showEvent={showEvent} setShowEvent={setShowEvent} setShowDim={setShowDim} eventPhase={eventPhase} />
+    <GameMainFooter saveData={sData} gameMode={"moveEvent"} setGameMode={setGameMode} stay={sData.info.stay} moveData={sData.moveEvent} actionData={actionData} showEvent={showEvent} setShowEvent={setShowEvent} setShowDim={setShowDim} eventPhase={eventPhase} />
+    <PopupContainer>
+      {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
+    </PopupContainer>
     <MsgContainer>
       {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
     </MsgContainer>

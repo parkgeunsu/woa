@@ -1,3 +1,4 @@
+import { Text } from 'components/Atom';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -127,9 +128,9 @@ const SelectArea = styled.div`
   width: 100%;
   height: 100%;
 `;
-const SelectText = styled.div`
-  color: ${({theme}) => theme.color.point5};
-  font-size: ${({theme}) => theme.font.t2};
+const SelectText = styled(Text)`
+  color: ${({color, theme}) => color ? theme.color[color] : theme.color.point5};
+  font-size: ${({theme}) => theme.font.t3};
 `;
 const SelectOptionArea = styled.div`
   position: fixed;
@@ -230,6 +231,8 @@ const Select = ({
   selectIdx,
   setSelectIdx,
   selectOption,
+  fontColor,
+  code,
   onClick,
   children,
   ...rest
@@ -258,7 +261,7 @@ const Select = ({
   return (
     <SelectArea {...rest}>
       {children}
-      <SelectText {...rest} onClick={() => {
+      <SelectText code={code ? code : "t3"} weight="600" color={fontColor} {...rest} onClick={() => {
         selectShow();
       }}>{selectIdx !== "" ? selectOption[selectIdx] : title}</SelectText>
       {showOption && 

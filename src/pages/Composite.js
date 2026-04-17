@@ -179,7 +179,10 @@ const Composite = ({
 	});//합성 선택 아이템 save, game
 	const entries = React.useMemo(() => {
 		return sData.entry.map((entryIdx) => {
-			return sData.ch[entryIdx];
+			return {
+				...sData.ch[entryIdx],
+				slotIdx: entryIdx,
+			};
 		});
 	}, [sData]);
 	const actionChIdx = React.useMemo(() => {
@@ -275,7 +278,7 @@ const Composite = ({
 										lang: lang,
 									}, () => {
 										// util.saveHistory({
-										// 	location: 'inven',
+										// 	prevLocation: 'inven',
 										// 	navigate: navigate,
 										// 	callback: () => {},
 										// 	state: {

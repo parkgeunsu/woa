@@ -2879,7 +2879,7 @@ const common = [
       en:`Raccoon`,
       jp:`アライグマ`
     },
-    "region":"","period":0,"scenarioRegion":""
+    "region":"etc","period":0,"scenarioRegion":""
   },
   {
     "idx":201,"na1":{
@@ -2904,7 +2904,7 @@ const common = [
       en:`Eagle`,
       jp:`アゲー`
     },
-    "region":"","period":0,"scenarioRegion":""
+    "region":"etc","period":0,"scenarioRegion":""
   },
   {
     "idx":202,"na1":{
@@ -2929,7 +2929,7 @@ const common = [
       en:`Eagle`,
       jp:`アゲー`
     },
-    "region":"","period":0,"scenarioRegion":""
+    "region":"etc","period":0,"scenarioRegion":""
   },
   {
     "idx":203,"na1":{
@@ -2954,7 +2954,7 @@ const common = [
       en:`Bear`,
       jp:`クマ`
     },
-    "region":"","period":0,"scenarioRegion":""
+    "region":"etc","period":0,"scenarioRegion":""
   },
   {
     "idx":204,"na1":{
@@ -2979,7 +2979,7 @@ const common = [
       en:`Hyena`,
       jp:`ハイエナ`
     },
-    "region":"","period":0,"scenarioRegion":""
+    "region":"etc","period":0,"scenarioRegion":""
   },
 ];
 const ch = [...hero, 

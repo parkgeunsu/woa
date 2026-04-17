@@ -108,7 +108,10 @@ const Mystery = ({
   const [msg, setMsg] = useState("");
   const entries = React.useMemo(() => {
     return sData.entry.map((entryIdx) => {
-      return sData.ch[entryIdx];
+      return {
+        ...sData.ch[entryIdx],
+        slotIdx: entryIdx,
+      };
     });
   }, [sData]);
   const actionChIdx = React.useMemo(() => {
@@ -154,7 +157,7 @@ const Mystery = ({
             <MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />
             {!actionChIdx && <NoneChText code="t1" color="red">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
             <Img imgurl={imgSet.images.transparent800} />
-            <ActionChDisplay type={'mystery'} saveData={sData} gameData={gameData} actionChIdx={actionChIdx} imgSet={imgSet}/>
+            <ActionChDisplay type={'mystery'} chList={entries} gameData={gameData} actionChIdx={actionChIdx} imgSet={imgSet}/>
           </ActionPic>
         </UserContainer>
       </Wrap>

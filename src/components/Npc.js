@@ -66,6 +66,10 @@ const getShopType = (type) => {
       return 14;
     case 'guild':
       return 15;
+    case 'gate':
+      return 16;
+    case 'prison':
+      return 17;
 		default:
 			return 0;
 	}

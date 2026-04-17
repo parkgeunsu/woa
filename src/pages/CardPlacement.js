@@ -270,7 +270,10 @@ const CardPlacement = ({
 	}, [saveData]);
 	const entries = React.useMemo(() => {
 		return sData.entry.map((entryIdx) => {
-			return sData.ch[entryIdx];
+			return {
+				...sData.ch[entryIdx],
+				slotIdx: entryIdx,
+			};
 		});
 	}, [sData]);
 	const [msgOn, setMsgOn] = useState(false);
@@ -282,21 +285,22 @@ const CardPlacement = ({
 	const chData = React.useMemo(() => {
 		const ch = isMoveEvent ? util.loadData("historyParam").moveEvent.ch : entries;
 		if (isMoveEvent) {
-			const moveChIdxs = new Set(ch.map(c => Number(c.idx)));
 			return {
 				moveCh: ch.map((c) => ({
-					...sData.ch[c.idx],
-					partyIdx: Number(c.idx),
+					...sData.ch[c],
+					slotIdx: c,
 				})),
-				moveNotCh: sData.ch.map((c, idx) => ({ ...c, partyIdx: idx }))
-					.filter((_, idx) => !moveChIdxs.has(idx))
+				moveNotCh: sData.ch.map((c, idx) => ({
+					...c,
+					slotIdx: idx
+				})).filter((_, idx) => !ch.includes(idx))
 			};
 		}
 		return {
 			moveCh: [],
 			moveNotCh: ch.map((c, idx) => ({
 				...c,
-				partyIdx: idx,
+				slotIdx: idx,
 			})),
 		};
 	}, [sData, isMoveEvent]);
@@ -364,7 +368,7 @@ const CardPlacement = ({
 		let updatedEntry = JSON.parse(JSON.stringify(lineupSlotData.entry || []));
 
 		if (isMoveEvent) {
-			const moveNotChIdxs = new Set(chData.moveNotCh.map(c => c.partyIdx));
+			const moveNotChIdxs = new Set(chData.moveNotCh.map(c => c.slotIdx));
 			const removeIdx = updatedEntry.findIndex((entry) => entry !== "" && moveNotChIdxs.has(entry));
 			if (removeIdx >= 0) {
 				updatedEntry[removeIdx] = "";
@@ -533,7 +537,7 @@ const CardPlacement = ({
 				{!isMoveEvent ? 
 					<ChUl>
 						{chData.moveNotCh.map((data, idx) => {
-							const used = checkUseList(useList, data.partyIdx);
+							const used = checkUseList(useList, data.slotIdx);
 							return (
 								<ChLi used={used} key={idx} onClick={() => {
 									if ((formationLeaderIdx !== selectFormationPosition && leadership < limitLeadership + gameData.ch[data.idx].cost) || (formationLeaderIdx === selectFormationPosition && gameData.ch[data.idx].st0 < limitLeadership)) {
@@ -548,11 +552,11 @@ const CardPlacement = ({
 									if (!used) {//선택되지 않은
 										if (formationLeaderIdx === selectFormationPosition) {
 											cloneUseList = cloneUseList.map((useCh) => useCh === leaderIdx ? "" : useCh);
-											const lFormationArr = makeLeaderformationArr(data.partyIdx);
+											const lFormationArr = makeLeaderformationArr(data.slotIdx);
 											const newFormationIdx = gameData.lineup[lFormationArr[0]].entry[0][0];
 											
-											cloneUseList[newFormationIdx] = data.partyIdx;
-											leader = data.partyIdx;
+											cloneUseList[newFormationIdx] = data.slotIdx;
+											leader = data.slotIdx;
 											newSelectLineup = 0;
 											
 											setLeaderformationArr(lFormationArr);
@@ -562,10 +566,10 @@ const CardPlacement = ({
 											setLeaderIdx(leader);
 										} else {
 											leader = leaderIdx;
-											cloneUseList[selectFormationPosition] = data.partyIdx;
+											cloneUseList[selectFormationPosition] = data.slotIdx;
 										}
 									} else {//선택된
-										if (cloneUseList[formationLeaderIdx] === data.partyIdx) {
+										if (cloneUseList[formationLeaderIdx] === data.slotIdx) {
 											cloneUseList[formationLeaderIdx] = "";
 											if (formationLeaderIdx === selectFormationPosition) {
 												leader = "";
@@ -575,19 +579,19 @@ const CardPlacement = ({
 											setLeaderIdx(leader);
 											setLeaderformationArr(makeLeaderformationArr(leader));
 										} else {
-											if (cloneUseList[selectFormationPosition] === data.partyIdx) {
+											if (cloneUseList[selectFormationPosition] === data.slotIdx) {
 												cloneUseList[selectFormationPosition] = "";
 											} else {
 												if (formationLeaderIdx === selectFormationPosition) {
-													leader = data.partyIdx;
-													const lFormationArr = makeLeaderformationArr(data.partyIdx);
+													leader = data.slotIdx;
+													const lFormationArr = makeLeaderformationArr(data.slotIdx);
 													const newFormationIdx = gameData.lineup[lFormationArr[0]].entry[0][0];
 													setLeaderIdx(leader);
 													setLeaderformationArr(lFormationArr);
 													setFormationLeaderIdx(newFormationIdx);
 												}
-												cloneUseList = cloneUseList.map((useCh) => useCh === data.partyIdx ? "" : useCh);
-												cloneUseList[selectFormationPosition] = data.partyIdx;
+												cloneUseList = cloneUseList.map((useCh) => useCh === data.slotIdx ? "" : useCh);
+												cloneUseList[selectFormationPosition] = data.slotIdx;
 											}
 										}
 									}
@@ -616,7 +620,7 @@ const CardPlacement = ({
 									setUseList(cloneUseList);
 									changeSaveData(finalSaveData);
 								}}>
-									<CharacterCard usedType="thumb" saveData={sData} gameData={gameData} showCost={true} slotIdx={data.partyIdx} />
+									<CharacterCard usedType="thumb" saveData={sData} gameData={gameData} showCost={true} slotIdx={data.slotIdx} />
 								</ChLi>
 							);
 						})}
@@ -624,7 +628,8 @@ const CardPlacement = ({
 						<ChGroup color="main" code="t3" borderColor="sub" align="left">{gameData.msg.title.travelCard[lang]}</ChGroup>
 						<ChUl>
 							{chData.moveCh.map((data, idx) => {
-								const used = checkUseList(useList, data.partyIdx);
+								const used = checkUseList(useList, data.slotIdx);
+								console.log(data);
 								return (
 									<ChLi used={used} key={idx} onClick={() => {
 										if (leadership < limitLeadership + gameData.ch[data.idx].cost && formationLeaderIdx !== selectFormationPosition) {
@@ -637,14 +642,14 @@ const CardPlacement = ({
 										let newSelectLineup = selectLineup;
 
 										if (!used) {
-											cloneUseList[selectFormationPosition] = data.partyIdx;
+											cloneUseList[selectFormationPosition] = data.slotIdx;
 											if (formationLeaderIdx === selectFormationPosition) {
 												cloneUseList = cloneUseList.map((useCh) => useCh === leaderIdx ? "" : useCh);
-												const lFormationArr = makeLeaderformationArr(data.partyIdx);
+												const lFormationArr = makeLeaderformationArr(data.slotIdx);
 												const newFormationIdx = gameData.lineup[lFormationArr[0]].entry[0][0];
 												
-												cloneUseList[newFormationIdx] = data.partyIdx;
-												leader = data.partyIdx;
+												cloneUseList[newFormationIdx] = data.slotIdx;
+												leader = data.slotIdx;
 												newSelectLineup = 0;
 
 												setLeaderformationArr(lFormationArr);
@@ -654,7 +659,7 @@ const CardPlacement = ({
 												setLeaderIdx(leader);
 											}
 										} else {
-											if (cloneUseList[formationLeaderIdx] === data.partyIdx) {
+											if (cloneUseList[formationLeaderIdx] === data.slotIdx) {
 												cloneUseList[formationLeaderIdx] = "";
 												if (formationLeaderIdx === selectFormationPosition) {
 													leader = "";
@@ -663,8 +668,8 @@ const CardPlacement = ({
 													setLeaderIdx("");
 												}
 											} else {
-												cloneUseList = cloneUseList.map((useCh) => useCh === data.partyIdx ? "" : useCh);
-												cloneUseList[formationLeaderIdx] = data.partyIdx;
+												cloneUseList = cloneUseList.map((useCh) => useCh === data.slotIdx ? "" : useCh);
+												cloneUseList[formationLeaderIdx] = data.slotIdx;
 											}
 										}
 										const finalSaveData = util.setLineupSt({
@@ -682,7 +687,7 @@ const CardPlacement = ({
 										setUseList(cloneUseList);
 										changeSaveData(finalSaveData);
 									}}>
-										<CharacterCard usedType="thumb" saveData={sData} gameData={gameData} showCost={true} slotIdx={data.partyIdx} />
+										<CharacterCard usedType="thumb" saveData={sData} gameData={gameData} showCost={true} slotIdx={data.slotIdx} />
 									</ChLi>
 								);
 							})}
@@ -690,13 +695,13 @@ const CardPlacement = ({
 						<ChGroup color="main" code="t3" borderColor="sub" align="left">{gameData.msg.title.nonTravelCard[lang]}</ChGroup>
 						<ChUl>
 							{chData.moveNotCh.map((data, idx) => {
-								const used = checkUseList(useList, data.partyIdx);
+								const used = checkUseList(useList, data.slotIdx);
 								return (
 									<ChLi used={used} onClick={() => {
 										setMsgOn(true);
                   	setMsg(gameData.msg.sentence.onlyTravelHero[lang]);
 									}} key={idx} data-idx={idx}>
-										<CharacterCard usedType="thumb" saveData={sData} gameData={gameData} showCost={true} slotIdx={data.partyIdx} />
+										<CharacterCard usedType="thumb" saveData={sData} gameData={gameData} showCost={true} slotIdx={data.slotIdx} />
 									</ChLi>
 								);
 							})}

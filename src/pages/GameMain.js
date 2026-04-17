@@ -79,9 +79,6 @@ const GameMain = ({
     return context.gameData;
   }, [context]);
   const sData = React.useMemo(() => {
-    // if (Object.keys(saveData).length === 0) {
-    //   util.saveData('continueGame', false);
-    // }
     return (Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData) || {};
   }, [saveData]);
   const stay = React.useMemo(() => sData?.info?.stay, [sData]);
@@ -183,6 +180,19 @@ const GameMain = ({
           }
         }}>영웅 삭제</button><br/>
         <button onClick={() => {
+          const stay = Math.floor(Math.random() * 28);
+          if (sData.info.stay) {
+            const newSaveDataDel = {
+              ...sData,
+              info: {
+                ...sData.info,
+                stay: util.getIdxToRegion(stay),
+              }
+            };
+            changeSaveData(newSaveDataDel);
+          }
+        }}>도시 이동</button><br/>
+        {/* <button onClick={() => {
           const option = {
             type:'equip',
             items:Math.ceil(Math.random()*2),//장비만 해당
@@ -197,7 +207,7 @@ const GameMain = ({
             isSave: true,
             lang: lang,
           });
-        }}>동물스킬 리셋</button>
+        }}>동물스킬 리셋</button> */}
       </div>
       <QuickMenu type="main" stay={stay} gameMode={gameMode} showDim={showDim} setShowDim={setShowDim}/>
       {gameMode === "roulette" && <Roulette saveData={sData} rouletteState={rouletteState} setRouletteState={setRouletteState} selectRoulettePos={selectRoulettePos} setSelectRoulettePos={setSelectRoulettePos} rouletteArr={rouletteArr.current} rouletteEnemy={rouletteEnemy} setRouletteEnemy={setRouletteEnemy} />}

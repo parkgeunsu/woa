@@ -42,6 +42,26 @@ const ChLi = styled.li`
   &:nth-of-type(4n) {
     margin: 0 0 4px 0;
   }
+  box-shadow: 0 5px 0 ${({grade}) => {
+    switch(grade) {
+      case 1:
+        return `#fff`;
+      case 2:
+        return `#00a90c`;
+      case 3:
+        return `#0090ff`;
+      case 4:
+        return `#a800ff`;
+      case 5:
+        return `#ffcc15`;
+      case 6:
+        return `#ff2a00`;
+      case 7:
+        return `#ff8000`;
+      default:
+        return '';
+    }
+  }}
 `;
 const ChracterList = ({
   saveData,
@@ -52,9 +72,6 @@ const ChracterList = ({
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
-  // const imgSet = React.useMemo(() => {
-  //   return context.images;
-  // }, [context]);
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
@@ -64,18 +81,26 @@ const ChracterList = ({
   }, []);
   const entries = React.useMemo(() => {
     return sData.entry.map((entryIdx) => {
-      return sData.ch[entryIdx];
+      return {
+        ...sData.ch[entryIdx],
+        slotIdx: entryIdx,
+      };
     });
   }, [sData]);
   const chData = React.useMemo(() => {
     const ch = isMoveEvent ? util.loadData("historyParam").moveEvent.ch : entries;
     if (isMoveEvent) {
-      const moveChIdxs = new Set(ch.map(c => c.idx));
-      return {
-        moveCh: ch.map((c) => sData.ch[c.idx]),
-        moveNotCh: sData.ch.filter((_, idx) => !moveChIdxs.has(idx)),
-      };
-    }
+			return {
+				moveCh: ch.map((c) => ({
+					...sData.ch[c],
+					slotIdx: c,
+				})),
+				moveNotCh: sData.ch.map((c, idx) => ({
+					...c,
+					slotIdx: idx
+				})).filter((_, idx) => !ch.includes(idx))
+			};
+		}
     return {
       moveCh: [],
       moveNotCh: ch,
@@ -102,22 +127,23 @@ const ChracterList = ({
             <ChUl>
               {chData.moveNotCh.map((data, idx) => {
                 return (
-                  <ChLi className={`g${data.grade}`} key={idx} onClick={() => {
+                  <ChLi grade={data.grade} key={idx} onClick={() => {
                     util.saveHistory({
+                      prevLocation: 'cardsList',
                       location: 'cards',
                       navigate: navigate,
                       callback: () => {
                         util.saveData('historyParam', {
                           ...util.loadData('historyParam'),
                           cards: {
-                            chSlotIdx: idx,
+                            chSlotIdx: data.slotIdx,
                             chTabIdx: 0,
                           }
                         });
                       },
                       state: {
                         dataObj: {
-                          chSlotIdx: idx,
+                          chSlotIdx: data.slotIdx,
                           chTabIdx: 0,
                         }
                       },
@@ -133,22 +159,23 @@ const ChracterList = ({
               <ChUl>
                 {chData.moveCh.map((data, idx) => {
                   return (
-                    <ChLi className={`g${data.grade}`} key={idx} onClick={() => {
+                    <ChLi grade={data.grade} key={idx} onClick={() => {
                       util.saveHistory({
+                        prevLocation: 'cardsList',
                         location: 'cards',
                         navigate: navigate,
                         callback: () => {
                           util.saveData('historyParam', {
                             ...util.loadData('historyParam'),
                             cards: {
-                              chSlotIdx: idx,
+                              chSlotIdx: data.slotIdx,
                               chTabIdx: 0,
                             }
                           });
                         },
                         state: {
                           dataObj: {
-                            chSlotIdx: idx,
+                            chSlotIdx: data.slotIdx,
                             chTabIdx: 0,
                           }
                         },
@@ -164,22 +191,25 @@ const ChracterList = ({
               <ChUl>
                 {chData.moveNotCh.map((data, idx) => {
                   return (
-                    <ChLi className={`g${data.grade}`} key={idx} onClick={() => {
+                    <ChLi grade={data.grade} key={idx} onClick={() => {
                       util.saveHistory({
+                        prevLocation: 'cardsList',
                         location: 'cards',
                         navigate: navigate,
                         callback: () => {
                           util.saveData('historyParam', {
                             ...util.loadData('historyParam'),
                             cards: {
-                              chSlotIdx: idx,
+                              isMoveNotCh: true,
+                              chSlotIdx: data.slotIdx,
                               chTabIdx: 0,
                             }
                           });
                         },
                         state: {
                           dataObj: {
-                            chSlotIdx: idx,
+                            isMoveNotCh: true,
+                            chSlotIdx: data.slotIdx,
                             chTabIdx: 0,
                           }
                         },

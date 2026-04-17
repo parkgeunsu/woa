@@ -110,9 +110,6 @@ const Church = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const gameItem = React.useMemo(() => {
-    return gameData.items;
-  }, [gameData]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');
@@ -122,14 +119,18 @@ const Church = ({
   const [actionChType, setActionChType] = useState("");
   const entries = React.useMemo(() => {
     return sData.entry.map((entryIdx) => {
-      return sData.ch[entryIdx];
+      return {
+        ...sData.ch[entryIdx],
+        slotIdx: entryIdx,
+      };
     });
   }, [sData]);
   const [rangeValue, setRangeValue] = useState(0);
   const [showCal, setShowCal] = useState(false);
   const actionChIdx = React.useMemo(() => {
-    return sData.actionCh.church.idx <= entries.length - 1 ? sData.actionCh.church.idx : "";
-  }, [entries, sData]);
+    if (!actionChType) return "";
+    return sData.actionCh[actionChType].idx <= entries.length - 1 ? sData.actionCh[actionChType].idx : "";
+  }, [entries, sData, actionChType]);
   const saveCh = React.useMemo(() => entries[actionChIdx] || {}, [entries, actionChIdx]);
   const [greeting, setGreeting] = useState(gameData.shop.church.greeting[lang]);
   useEffect(() => {
@@ -140,6 +141,7 @@ const Church = ({
 			<Wrap direction="column">
 				<Npc imgSet={imgSet} shopType={'church'} gameData={gameData} lang={lang} selectTab={selectTab} setSelectTab={setSelectTab} navigate={navigate} onClick={() => {
           setSelectTab("");
+          
           const randomIdx = Math.floor(Math.random() * gameData.shop.church.randomText.length);
           setGreeting(gameData.shop.church.randomText[randomIdx][lang]);
 				}} onMenuClick={(idx) => {
@@ -148,7 +150,7 @@ const Church = ({
               ...prev,
               actionCh: {
                 ...prev.actionCh,
-                church: {
+                [actionChType]: {
                   idx: "",
                 }
               }
@@ -167,25 +169,30 @@ const Church = ({
           </WorkHeader>}
           {selectTab === 0 && <ChurchContent direction="row" justifyContent="center" alignItems="flex-start" onClick={() => {
           }}>
-            {selectTab === 0 && <SliderContainer direction="column">
+            <SliderContainer direction="column">
               <RangeSlider min={0} max={sData.info.money} step={1} value={0} pirce={1} setValue={setRangeValue} showCal={setShowCal}/>
-            </SliderContainer>}
+            </SliderContainer>
           </ChurchContent>}
         </WorkArea>
         <UserContainer justifyContent="space-between">
           <InfoGroup>
 					</InfoGroup>
 					<ActionPic onClick={() => {
-							setPopupInfo({
-								ch: entries,
-								actionChIdx: actionChIdx,
-								type: 'church',
-								setMsg: setMsg,
-								setMsgOn: setMsgOn,
-							});
-							setPopupType('selectCh');
-							setPopupOn(true);
-						}}>
+            if (selectTab === "") {
+              setMsg(gameData.msg.sentence.noneSelectAction[lang]);
+              setMsgOn(true);
+              return;
+            };
+            setPopupInfo({
+              ch: entries,
+              actionChIdx: actionChIdx,
+              type: actionChType,
+              setMsg: setMsg,
+              setMsgOn: setMsgOn,
+            });
+            setPopupType('selectCh');
+            setPopupOn(true);
+          }}>
 						<MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />
 						{!actionChIdx && <NoneChText code="t1" color="red">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
 						<Img imgurl={imgSet.images.transparent800} />

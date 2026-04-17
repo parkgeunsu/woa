@@ -121,12 +121,12 @@ const Header = ({
           </HeaderList>
           <HeaderList className={`diamond ${minusDia === '' ? '' : 'on'}`}>
             <IconPic className="ico" type="commonBtn" pic="icon100" idx={2} />
-            <span className="txt won number_w">{String(saveData?.info?.diamond).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+            <span className="txt won number_w">{util.comma(saveData?.info?.diamond)}</span>
             <span className={`num ${diaColor}`}>{minusDia}</span>
           </HeaderList>
           <HeaderList className={`money ${minusMoney === '' ? '' : 'on'}`}>
             <IconPic className="ico" type="commonBtn" pic="icon100" idx={3} />
-            <span className="txt won number_w">{String(saveData?.info?.money).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</span>
+            <span className="txt won number_w">{util.comma(saveData?.info?.money)}</span>
             <span className={`num ${moneyColor}`}>{minusMoney}</span>
           </HeaderList>
           {/* <span class="frame_bar"><span class="bar"></span><span class="txt number_w">80</span></span> */}

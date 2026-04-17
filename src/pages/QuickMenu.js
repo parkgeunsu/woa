@@ -78,6 +78,8 @@ const QuickMenu = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
+  const isMoveEvent = React.useMemo(() => util.loadData("historyParam")?.moveEvent && Object.keys(util.loadData("historyParam")?.moveEvent)?.length > 0
+	, []);
   return <QuickMenuBox showDim={showDim} type={type} gameMode={gameMode} className="transition">
     <QuickMenuTitle onClick={() => {
       setShowDim(prev => !prev);
@@ -88,6 +90,7 @@ const QuickMenu = ({
     <QuickMenuBody>
       <li><IconPic type="quickMenu" pic="icon100" idx={0} onClick={() => {
         util.saveHistory({
+          prevLocation: isMoveEvent ? 'moveEvent' : 'gameMain',
           location: 'cardsList',
           navigate: navigate,
           callback: () => {},
@@ -103,6 +106,7 @@ const QuickMenu = ({
       }}/><Text className="text">{gameData.msg?.button?.['cards']?.[lang] || "Cards"}</Text></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={1} onClick={() => {
         util.saveHistory({
+          prevLocation: isMoveEvent ? 'moveEvent' : 'gameMain',
           location: 'inven',
           navigate: navigate,
           isNavigate: true,
@@ -110,6 +114,7 @@ const QuickMenu = ({
       }}/><Text className="text">{gameData.msg?.button?.['inven']?.[lang] || "Inven"}</Text></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={2} onClick={() => {
         util.saveHistory({
+          prevLocation: isMoveEvent ? 'moveEvent' : 'gameMain',
           location: 'cardPlacement',
           navigate: navigate,
           callback: () => {},

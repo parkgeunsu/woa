@@ -54,10 +54,26 @@ export const prices = {
 }
 
 export const actionPoint = {
-  recoveryTime: 50000,
+  recoveryTime: 90000,
 	usePoint: {
 		itemBuy: 10,//아이템 구매
 		itemSell: 10,//아이템 판매
 		training: 5,//레벨업, 스킬업
+		prisonRelease: 50,//수감 캐릭터 획득
+		prisonInfo: 10,//감옥 정보
 	}
 }
+
+export const diceCount = {
+	moveEvent: {
+		steal: 10,
+		save: 8,
+		run: 5,
+	}
+}
+
+export const reward = {
+	moveEvent: {
+		gold: 10000,
+	}
+}	

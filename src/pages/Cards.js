@@ -127,6 +127,7 @@ const StyledButton = styled(Button)`
 const ChOrder = styled.div`
   white-space: nowrap;
   text-align: center;
+  overflow-x: auto;
 `;
 const StyledIconPic = styled(IconPic)`
   display: inline-block;
@@ -276,7 +277,7 @@ const Hole = styled(FlexBox)`
     background: rgba(255, 172, 47, 0.7);
   }
 `;
-const setSlotIdxFn = (state, paramData, navigate) => {
+const setSlotIdxFn = (state, paramData, navigate, entryGroup) => {
   if (!state && Object.keys(paramData).length === 0) {
     navigate('../');
     return 0;
@@ -284,7 +285,11 @@ const setSlotIdxFn = (state, paramData, navigate) => {
   if (!state) {
 		return paramData.cards.selectIdx || 0;
 	}
-  return state.dataObj.chSlotIdx;
+  if (state.dataObj.isMoveNotCh) {
+    return state.dataObj.chSlotIdx;
+  }
+  const findIdx = entryGroup.findIndex((entryIdx) => entryIdx === state.dataObj.chSlotIdx);
+  return findIdx;
 }
 const setPageIdxFn = (state) => {
   if (!state) {
@@ -299,9 +304,6 @@ const Cards = ({
   const context = useContext(AppContext);
   const navigate = useNavigate();
 	const {state} = useLocation();
-  const isMoveEvent = React.useMemo(() => {
-    return util.loadData("historyParam")?.moveEvent && Object.keys(util.loadData("historyParam").moveEvent)?.length > 0;
-  }, []);
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -325,19 +327,33 @@ const Cards = ({
   const invenItems = React.useMemo(() => {
     return sData.items;
   }, [sData]);
+  const isMoveEvent = React.useMemo(() => {
+    return util.loadData("historyParam")?.moveEvent && Object.keys(util.loadData("historyParam").moveEvent)?.length > 0;
+  }, []);
+  const entryGroup = React.useMemo(() => {
+    if (state.dataObj.isMoveNotCh) {
+      return Array.from({length: sData.ch.length}, (_,idx) => idx).filter((idx) => !util.loadData("historyParam").moveEvent.ch.includes(idx));
+    }
+    return isMoveEvent ? util.loadData("historyParam").moveEvent.ch : sData.entry;
+  }, [isMoveEvent, sData]);
   const entries = React.useMemo(() => {
-    return sData.entry.map((entryIdx) => {
-      return sData.ch[entryIdx];
+    return entryGroup.map((entryIdx) => {
+      return {
+        ...sData.ch[entryIdx],
+        slotIdx: entryIdx,
+      };
     });
-  }, [sData]);
-  const chLength = React.useMemo(() => entries.length ,[sData]);
+  }, [entryGroup, sData]);
+  console.log(entries);
+  const chLength = React.useMemo(() => entries.length ,[entries]);
   const paramData = React.useMemo(() => {
     return util.loadData('historyParam');
   }, []);
-  const [slotIdx, setSlotIdx] = useState(setSlotIdxFn(state, paramData, navigate));
+  const [slotIdx, setSlotIdx] = useState(setSlotIdxFn(state, paramData, navigate, entryGroup));
   const [chPage, setChPage] = useState(setPageIdxFn(state));
   useEffect(() => {
-		setSlotIdx(setSlotIdxFn(state, paramData, navigate));
+    console.log(slotIdx);
+		setSlotIdx(setSlotIdxFn(state, paramData, navigate, entryGroup));
 		setChPage(setPageIdxFn(state));
 	}, [state, paramData]);
   const changeChPage = (idx) => {
@@ -388,12 +404,12 @@ const Cards = ({
             }
           }}>
             <Img imgurl={imgSet.images.transparent800} />
-            {chPage === 0 ? <CharacterCard chList={entries} saveData={sData} slotIdx={slotIdx} isZoomCard={isZoomCard} /> : <ChBack type="cardBack" pic="card" idx={0} />}
-            {chPage === 1 && <CharacterState chList={entries} saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
-            {chPage === 2 && <CharacterAnimalSkill chList={entries} saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
-            {chPage === 3 && <CharacterSkill chList={entries} slotIdx={slotIdx} />}
-            {chPage === 4 && <CharacterRelation chList={entries} saveData={sData} slotIdx={slotIdx} />}
-            {chPage === 5 && <CharacterItems chList={entries} saveData={sData} slotIdx={slotIdx} changeSaveData={changeSaveData} />}
+            {chPage === 0 ? <CharacterCard saveData={sData} slotIdx={entries[slotIdx].slotIdx} isZoomCard={isZoomCard} /> : <ChBack type="cardBack" pic="card" idx={0} />}
+            {chPage === 1 && <CharacterState saveData={sData} slotIdx={entries[slotIdx].slotIdx} changeSaveData={changeSaveData} />}
+            {chPage === 2 && <CharacterAnimalSkill saveData={sData} slotIdx={entries[slotIdx].slotIdx} changeSaveData={changeSaveData} />}
+            {chPage === 3 && <CharacterSkill saveData={sData} slotIdx={entries[slotIdx].slotIdx} />}
+            {chPage === 4 && <CharacterRelation saveData={sData} slotIdx={entries[slotIdx].slotIdx} />}
+            {chPage === 5 && <CharacterItems saveData={sData} slotIdx={entries[slotIdx].slotIdx} changeSaveData={changeSaveData} />}
           </ChCard>}
           <CharacterPaging chList={entries} saveData={sData} changeChSlot={changeChSlot} slotIdx={slotIdx} />
           <TopBtnGroup>
@@ -624,7 +640,7 @@ const Cards = ({
               return prevSlot < 0 ? chLength - 1 : prevSlot;
             });
           }}>이전</StyledButton>
-          <ChOrder className="scroll-x">
+          <ChOrder>
           {gameData.chMenu.map((data, idx) => {
             return (
               <StyledIconPic selected={idx === chPage} key={`chmenubutton${idx}`} pic="icon100" idx={idx} onClick={() => {

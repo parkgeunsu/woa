@@ -338,9 +338,19 @@ export const msg = {
 			jp:'ミッション',
 		},
 		gate_text0: {
-			ko:'이동',
-			en:'Move',
-			jp:'移動',
+			ko:'도시 이동',
+			en:'Move city',
+			jp:'街移動',
+		},
+		prison_text0: {
+			ko:'면회',
+			en:'Visit',
+			jp:'面会',
+		},
+		prison_text1: {
+			ko:'자수',
+			en:'Surrender',
+			jp:'自首',
 		},
 		sell_item: {
 			ko: '아이템 판매',
@@ -351,6 +361,11 @@ export const msg = {
 			ko: '밖으로 이동',
 			en: 'Move out',
 			jp: '外へ移動',
+		},
+		stay: {
+			ko: '도시에 머무르기',
+			en: 'Stay in city',
+			jp: '街に留まる',
 		}
 	},
 	state:{
@@ -546,6 +561,31 @@ export const msg = {
 		},
 	},
 	info:{
+		sentence:{
+			ko:"형량",
+			en:"Sentence",
+			jp:"刑期",
+		},
+		crime:{
+			ko:"죄명",
+			en:"Crime",
+			jp:"罪名",
+		},
+		bail:{
+			ko:"보석조건 (도덕심/금액)",
+			en:"Bail (Morality/Amount)",
+			jp:"保釈条件 (道徳心/金額)",
+		},
+		previousCriminal:{
+			ko:"이전 죄수",
+			en:"Previous Criminal",
+			jp:"以前の囚人",
+		},
+		nextCriminal:{
+			ko:"다음 죄수",
+			en:"Next Criminal",
+			jp:"次の囚人",
+		},
 		moral:{
 			ko:"도덕심",
 			en:"Morality",
@@ -603,6 +643,16 @@ export const msg = {
 		},
 	},
 	title:{
+		diceSum:{
+			ko:'주사위 합',
+			en:'Dice Sum',
+			jp:'ダイス合計',
+		},
+		entryTicket:{
+			ko:'입장티켓 / 이벤트',
+			en:'Entry Ticket / Event',
+			jp:'入場チケット / イベント',
+		},
 		leader:{ 
 			ko:'리더',
 			en:'Leader',
@@ -997,6 +1047,16 @@ export const msg = {
 		},
 	},
 	button:{
+		askInfo:{
+			ko:'정보 물어보기',
+			en:'Ask Info',
+			jp:'情報を尋ねる',
+		},
+		payBail:{
+			ko:'보석금 지불',
+			en:'Pay Bail',
+			jp:'保釈金を支払う',
+		},
 		close:{
 			ko:'닫기',
 			en:'Close',
@@ -1206,6 +1266,11 @@ export const msg = {
 			ko:'시나리오',
 			en:'Scenarios',
 			jp:'シナリオ',
+		},
+		move:{
+			ko:'이동하기',
+			en:'Move',
+			jp:'移動する',
 		},
 		moveRegion:{
 			ko:'지역이동',
@@ -2002,6 +2067,31 @@ export const msg = {
 		},
 	},
 	sentence:{
+		noMoreInfo: {
+			ko:'더이상 가르쳐 드릴 정보가 없습니다.',
+			en:'There is no more information to teach you.',
+			jp:'これ以上教える情報はありません。',
+		},
+		alreadyChest: {
+			ko:'이미 보물상자를 획득했습니다.',
+			en:'Treasure chest already obtained.',
+			jp:'宝箱はすでに獲得済みです。',
+		},
+		moreStepChest: {
+			ko:'단계를 더 진행해야 보물상자를 얻을 수 있습니다.',
+			en:'Advance further to obtain the treasure chest.',
+			jp:'宝箱を入手するには、さらに進む必要があります。',
+		},
+		diceSuccess: {
+			ko:'성공했습니다.',
+			en:'Success.',
+			jp:'成功しました。',
+		},
+		diceFailed: {
+			ko:'실패했습니다.',
+			en:'Failed.',
+			jp:'失敗しました。',
+		},
 		sealedItem:{
 			ko:'이미 감정되어 있는 장비입니다.',
 			en:'The equipment has already been identified.',
@@ -2021,6 +2111,11 @@ export const msg = {
 			ko:'선택된 인물이 없습니다.',
 			en:'No character is selected.',
 			jp:'選択された人物がいません。',
+		},
+		noneSelectAction:{
+			ko:'실행할 메뉴를 먼저 선택하세요.',
+			en:'Please select an action first.',
+			jp:'実行するメニューを選択してください。',
 		},
 		needMoreHero:{
 			ko:'해당 난이도를 도전하려면 영웅이 더 필요합니다.',
@@ -2166,6 +2261,11 @@ export const msg = {
 			ko:'소지금이 부족합니다.',
 			en:'You don\'t have enough money.',
 			jp:'所持金が不足しています。',
+		},
+		lackMorality: {
+			ko:'도덕심이 부족합니다.',
+			en:'Not enough morality.',
+			jp:'道徳心が足りません。',
 		},
 		lackHeroNum:{
 			ko:'영웅이 부족합니다.',
@@ -2440,6 +2540,138 @@ export const msg = {
 		}
 	},
 	sentenceFn:{
+		hasSkill:(lang, txt) => {
+			switch(lang) {
+				case 'ko':
+					return `<strong>${txt}</strong> 스킬을 습득했습니다.`;
+				case 'en':
+					return `I have learned <strong>${txt}</strong> skill.`;
+				case 'jp':
+					return `<strong>${txt}</strong> スキルを習得しました。`;
+				default:
+					break;
+			}
+		},
+		totalSkillNum:(lang, txt) => {
+			switch(lang) {
+				case 'ko':
+					return `<strong>${txt}</strong>개의 스킬을 가지고 있습니다.`;
+				case 'en':
+					return `I have <strong>${txt}</strong> skills.`;
+				case 'jp':
+					return `<strong>${txt}</strong>個のスキルを持っています。`;
+				default:
+					break;
+			}
+		},
+		hasGrade:(lang, txt) => {
+			switch(lang) {
+				case 'ko':
+					return `<strong>${txt}</strong>등급 입니다.`;
+				case 'en':
+					return `I have <strong>${txt}</strong> grade.`;
+				case 'jp':
+					return `<strong>${txt}</strong>の等級です。`;
+				default:
+					break;
+			}
+		},
+		hasState:(lang, state, txt) => {
+			switch(lang) {
+				case 'ko':
+					return `<em>${state}</em>은/는 <strong>${txt}</strong>입니다.`;
+				case 'en':
+					return `<em>${state}</em> is <strong>${txt}</strong>.`;
+				case 'jp':
+					return `<em>${state}</em>は <strong>${txt}</strong> です。`;
+				default:
+					break;
+			}
+		},
+		hasEquipment:(lang, txt) => {
+			switch(lang) {
+				case 'ko':
+					return `<strong>${txt}</strong> 등급의 장비를 가지고 있습니다.`;
+				case 'en':
+					return `I have <strong>${txt}</strong> equipment.`;
+				case 'jp':
+					return `<strong>${txt}</strong>等級の装備を持っています。`;
+				default:
+					break;
+			}
+		},
+		hasBadge:(lang, txt) => {
+			switch(lang) {
+				case 'ko':
+					return `<strong>${txt}</strong>개의 동물 뱃지를 보유하고 있습니다.`;
+				case 'en':
+					return `I have <strong>${txt}</strong> animal badges.`;
+				case 'jp':
+					return `<strong>${txt}</strong>個の動物バッジを保有しています。`;
+				default:
+					break;
+			}
+		},
+		hasJob:(lang, txt) => {
+			switch(lang) {
+				case 'ko':
+					return `직업은 <strong>${txt}</strong> 입니다.`;
+				case 'en':
+					return `Job is <strong>${txt}</strong>.`;
+				case 'jp':
+					return `職業は <strong>${txt}</strong> です。`;
+				default:
+					break;
+			}
+		},
+		hasExp:(lang, txt) => {
+			switch(lang) {
+				case 'ko':
+					return `경험치는 <strong>${txt}</strong>을 보유하고 있습니다.`;
+				case 'en':
+					return `I have <strong>${txt}</strong> experience.`;
+				case 'jp':
+					return `経験値は <strong>${txt}</strong> を保有しています。`;
+				default:
+					break;
+			}
+		},
+		hasKg:(lang, txt) => {
+			switch(lang) {
+				case 'ko':
+					return `무게는 <strong>${txt}</strong> kg 입니다.`;
+				case 'en':
+					return `Weight is <strong>${txt}</strong> kg.`;
+				case 'jp':
+					return `重さは <strong>${txt}</strong> kg です。`;
+				default:
+					break;
+			}
+		},
+		hasMoney:(lang, txt) => {
+			switch(lang) {
+				case 'ko':
+					return `<strong>${txt}</strong> 금화를 가지고 있습니다.`;
+				case 'en':
+					return `I have <strong>${txt}</strong> gold.`;
+				case 'jp':
+					return `金貨 <strong>${txt}</strong>枚を持っています。`;
+				default:
+					break;
+			}
+		},
+		getGold:(lang, gold) => {
+			switch(lang) {
+				case 'ko':
+					return `금화 ${gold}개를 획득했습니다.`;
+				case 'en':
+					return `You acquired ${gold} gold.`;
+				case 'jp':
+					return `金貨 ${gold}枚を獲得しました。`;
+				default:
+					break;
+			}
+		},
 		beforeSkill:(lang, txt, lv) => {
 			switch(lang) {
 				case 'ko':
