@@ -2102,6 +2102,11 @@ export const msg = {
 		},
 	},
 	sentence:{
+		selectActionHero:{
+			ko:"행동할 영웅이 없습니다.",
+			en:"Select your active hero.",
+			jp:"行動する英雄を選択せよ。",
+		},
 		noHome:{
 			ko:"도시에 집이 없습니다.",
 			en:"There is no home in this city.",

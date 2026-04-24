@@ -958,6 +958,11 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
               });
               if (shopName === dataObj[type].location.name) {
                 const actionCh = saveData.ch[saveData.actionCh[shopName].idx];
+                if (!actionCh) {
+                  showMsg(true);
+                  msgText(gameData.msg.sentence.selectActionHero[lang]);
+                  return;
+                }
                 if (actionCh.actionPoint >= gameData.actionPoint.usePoint.itemSell) {//행동력 지불
                 actionCh.actionPoint -= gameData.actionPoint.usePoint.itemSell;
                 // changeSaveData(saveData);
@@ -999,6 +1004,11 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
               });
               if (shopName === dataObj[type].location.name) {
                 const actionCh = saveData.ch[saveData.actionCh[shopName].idx];
+                if (!actionCh) {
+                  showMsg(true);
+                  msgText(gameData.msg.sentence.selectActionHero[lang]);
+                  return;
+                }
                 if (actionCh.actionPoint >= gameData.actionPoint.usePoint.itemSell) {//행동력 지불
                   actionCh.actionPoint -= gameData.actionPoint.usePoint.itemSell;
                   // changeSaveData(saveData);
