@@ -12,6 +12,10 @@ const ItemLayoutContainer = styled.div`
   `
    : 'position: relative;'};
   margin: 1%;
+  ${({sealed}) => sealed ? `
+    & > div {
+      opacity: 0.6;
+    }` : ''}
   ${({isEquip, num, size}) => {
     if (isEquip) {
       return `
@@ -163,7 +167,7 @@ const ItemLayoutContainer = styled.div`
       }
     }
   }}
-  ${({sealed, impossible}) => {
+  ${({sealed, impossible, largeQuestion}) => {
     if (sealed) {
       return `
         & > div:first-of-type {
@@ -176,7 +180,10 @@ const ItemLayoutContainer = styled.div`
           transform: translate(-50%, -50%);
           content: "?";
           z-index: 1;
-          font-size: 1.25rem;
+          font-family: 'myFont_e';
+          font-weight: 600;
+          font-size: ${largeQuestion ? '3.5rem' : '1.25rem'};
+          text-shadow: 0 0 10px #000, 0 0 5px #000;
         }
       `
     } else {
@@ -326,6 +333,7 @@ const ItemLayout = ({
     pic: "etc",
     idx: 0,
     mergeColor: "",
+    largeQuestion: false,
   },
   text,
   size="18%",
@@ -338,7 +346,7 @@ const ItemLayout = ({
   impossible,
   onClick,
 }) => {
-	return icon.idx !== undefined ? <ItemLayoutContainer 
+	return icon.type !== "" ? <ItemLayoutContainer 
     num={num}
     isEquip={isEquip}
     impossible={impossible}
@@ -348,7 +356,8 @@ const ItemLayout = ({
     {...sealed && {sealed:sealed}}
     {...favorite && {favorite:favorite}}
     {...onClick && {onClick: onClick}}
-    selected={selectColor}>
+    selected={selectColor}
+    largeQuestion={icon.largeQuestion}>
     <ItemPic type={icon.type} pic={icon.pic} idx={icon.idx} mergeColor={icon.mergeColor} isAbsolute>
       {text && <DisplayText code="t1" color="main">{text}</DisplayText>}
     </ItemPic>

@@ -538,7 +538,7 @@ const ScenarioList = ({
                       gameItem={gameData.items}
                       icon={{
                         type: {dropType},
-                        pic: "itemEtc",
+                        pic: items.pic,
                         idx: items.display,
                       }}
                       size="15%"
@@ -557,7 +557,7 @@ const ScenarioList = ({
                       gameItem={gameData.items}
                       icon={{
                         type: dropType,
-                        pic: "itemEtc",
+                        pic: items.pic,
                         idx: items.display,
                       }}
                       size="15%"
@@ -577,7 +577,7 @@ const ScenarioList = ({
                       gameItem={gameData.items}
                       icon={{
                         type: {dropType},
-                        pic: "itemEtc",
+                        pic: items.pic,
                         idx: items.display,
                       }}
                       size="15%"
@@ -597,7 +597,7 @@ const ScenarioList = ({
                       gameItem={gameData.items}
                       icon={{
                         type: {dropType},
-                        pic: "itemEtc",
+                        pic: items.pic,
                         idx: items.display,
                       }}
                       size="15%"
@@ -617,7 +617,7 @@ const ScenarioList = ({
                       gameItem={gameData.items}
                       icon={{
                         type: {dropType},
-                        pic: "itemEtc",
+                        pic: items.pic,
                         idx: items.display,
                       }}
                       size="15%"
@@ -661,7 +661,7 @@ const ScenarioList = ({
                       gameItem={gameData.items}
                       icon={{
                         type: "equip",
-                        pic: "equip",
+                        pic: items.pic,
                         idx: items.display,
                       }}
                       size="15%"
@@ -680,7 +680,7 @@ const ScenarioList = ({
                       gameItem={gameData.items}
                       icon={{
                         type: dropType,
-                        pic: "itemEtc",
+                        pic: items.pic,
                         idx: items.display,
                       }}
                       size="15%"
@@ -700,7 +700,7 @@ const ScenarioList = ({
                       gameItem={gameData.items}
                       icon={{
                         type: dropType,
-                        pic: "itemEtc",
+                        pic: items.pic,
                         idx: items.display,
                       }}
                       size="15%"
@@ -720,7 +720,7 @@ const ScenarioList = ({
                       gameItem={gameData.items}
                       icon={{
                         type: dropType,
-                        pic: "itemEtc",
+                        pic: items.pic,
                         idx: items.display,
                       }}
                       size="15%"
@@ -739,7 +739,7 @@ const ScenarioList = ({
                       gameItem={gameData.items}
                       icon={{
                         type: dropType,
-                        pic: "itemEtc",
+                        pic: items.pic,
                         idx: items.display,
                       }}
                       size="15%"
@@ -784,6 +784,7 @@ const Scenario = ({
   const [tooltip, setTooltip] = useState('');
   const [tooltipPos, setTooltipPos] = useState([0,0]);
   const [popupOn, setPopupOn] = useState(false);
+  const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
@@ -815,10 +816,14 @@ const Scenario = ({
     <>
       <Wrap direction="column">
         <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
+          setPopupType('guide');
+          setPopupInfo(prev => ({
+            ...prev,
+            guide: {
+              data: gameData.guide?.['scenarioHero'],
+            }
+          }));
           setPopupOn(true);
-          setPopupInfo({
-            data: gameData.guide?.['scenarioHero'],
-          });
         }} />
         <ScrollWrap className="scroll-y">
           {hasPeriodScenario.length === 0 ? <FlexBox justifyContent={"center"} alignItems={"center"}>
@@ -845,7 +850,7 @@ const Scenario = ({
 				{tooltipOn && <Tooltip pos={tooltipPos} text={tooltip} showTooltip={setTooltipOn} />}
 			</TooltipContainer>
       <PopupContainer>
-        {popupOn && <Popup type={'guide'} dataObj={popupInfo} showPopup={setPopupOn} />}
+        {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} />}
       </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}

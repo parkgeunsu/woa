@@ -202,6 +202,11 @@ export const msg = {
 			en:'Possessions',
 			jp:'所持品',
 		},
+		home_text3: {
+			ko:'보유 영웅',
+			en:'Possessed hero',
+			jp:'保有英雄',
+		},
 		equipment_text0: {
 			ko:'투구 구입',
 			en:'Buy a helmet',
@@ -698,6 +703,11 @@ export const msg = {
 			en:'Starting card selection type',
 			jp:'スタートカード選択タイプ'
 		},
+		joinHero:{
+			ko:'함께 할 영웅',
+			en:'Hero to join',
+			jp:'一緒にやる英雄'
+		},
 		startingCard:{
 			ko:'시작 카드',
 			en:'Starting Card',
@@ -717,11 +727,6 @@ export const msg = {
 			ko:'언어 선택',
 			en:'Select Language',
 			jp:'言語の選択'
-		},
-		cardDeck:{
-			ko:'카드 덱',
-			en:'Deck of Cards',
-			jp:'カードデッキ'
 		},
 		selectRegion:{
 			ko:'지역 선택',
@@ -743,10 +748,40 @@ export const msg = {
 			en:'Corps Name',
 			jp:'軍団名'
 		},
+		corps:{
+			ko:'군단',
+			en:'Corps',
+			jp:'軍団'
+		},
 		selectedCard:{
 			ko:'선택된 카드',
 			en:'Selected Card',
 			jp:'選択したカード'
+		},
+		helm:{
+			ko:'투구',
+			en:'Helm',
+			jp:'兜'
+		},
+		armor:{
+			ko:'갑옷',
+			en:'Armor',
+			jp:'鎧'
+		},
+		weapon:{
+			ko:'무기',
+			en:'Weapon',
+			jp:'武器'
+		},
+		ring:{
+			ko:'반지',
+			en:'Ring',
+			jp:'指輪'
+		},
+		necklace:{
+			ko:'목걸이',
+			en:'Necklace',
+			jp:'ネックレス'
 		},
 		socketJewelry:{
 			ko:'소켓보석',
@@ -2067,6 +2102,41 @@ export const msg = {
 		},
 	},
 	sentence:{
+		noHome:{
+			ko:"도시에 집이 없습니다.",
+			en:"There is no home in this city.",
+			jp:"この街に家がありません。",
+		},
+		noTradingPost: {
+			ko:'도시에 교역소가 없습니다.',
+			en:'There is no trading post in this city.',
+			jp:'この街には交易所がありません。',
+		},
+		noComposite: {
+			ko:'도시에 연금술상점이 없습니다.',
+			en:'There is no alchemy shop in this city.',
+			jp:'この街には錬金術屋がありません。',
+		},
+		noEquipment: {
+			ko:'도시에 장비상점이 없습니다.',
+			en:'There is no equipment shop in this city.',
+			jp:'この街には装備屋がありません。',
+		},
+		noTool: {
+			ko:'도시에 도구상점이 없습니다.',
+			en:'There is no tool shop in this city.',
+			jp:'この街には道具屋がありません。',
+		},
+		noAccessory: {
+			ko:'도시에 장신구상점이 없습니다.',
+			en:'There is no accessory shop in this city.',
+			jp:'この街にはアクセサリー屋がありません。',
+		},
+		noBlacksmith: {
+			ko:'도시에 대장간이 없습니다.',
+			en:'There is no blacksmith in this city.',
+			jp:'この街には鍛冶屋がありません。',
+		},
 		noMoreInfo: {
 			ko:'더이상 가르쳐 드릴 정보가 없습니다.',
 			en:'There is no more information to teach you.',
@@ -2232,6 +2302,11 @@ export const msg = {
 			en:'There are not enough animal badges.',
 			jp:'動物バッジが不足しています。',
 		},
+		noSockets:{
+			ko:'소켓이 없습니다.',
+			en:'There are no sockets.',
+			jp:'ソケットがありません。',
+		},
 		noBadges:{
 			ko:'동물 뱃지가 없습니다.',
 			en:'There are no animal badges.',
@@ -2392,22 +2467,27 @@ export const msg = {
 			en:'Animal Skills have been reset.',
 			jp:'動物スキルが初期化されました。'
 		},
-		goShop:{
-			ko:'상점으로 이동합니다.',
-			en:'Go to the store.',
-			jp:'ショップに移動します。',
+		goAccessoryShop:{
+			ko:'액세서리 상점으로 이동합니다.',
+			en:'Go to the accessory shop.',
+			jp:'アクセサリーショップに移動します。',
+		},
+		goEquipmentShop:{
+			ko:'장비 상점으로 이동합니다.',
+			en:'Go to the equipment shop.',
+			jp:'装備ショップに移動します。',
 		},
 		goInven:{
 			ko:'창고로 이동합니다.',
 			en:'Go to your warehouse.',
 			jp:'倉庫に移動します。',
 		},
-		goTool:{
-			ko:'도구점으로 이동합니다.',
-			en:'Go to the toolbar.',
-			jp:'工具店に移動します。',
+		goToolShop:{
+			ko:'도구 상점으로 이동합니다.',
+			en:'Go to the tool shop.',
+			jp:'道具屋へ移動します。',
 		},
-		goTrade:{
+		goTradingPost:{
 			ko:'교역소로 이동합니다.',
 			en:'Go to the trading post.',
 			jp:'交易所に移動します。',
@@ -2423,9 +2503,9 @@ export const msg = {
 			jp:'鍛冶場に移動します。',
 		},
 		goItemEquip:{
-			ko:'아이템 장착하러 이동합니다.',
+			ko:'아이템을 착용하러 이동합니다.',
 			en:'Go to Equip Item.',
-			jp:'アイテム装着に移動します。',
+			jp:'アイテムを装着しに移動します。',
 		},
 		questionMoveCountry:{
 			ko:'이동 하시겠습니까?',
@@ -2540,14 +2620,26 @@ export const msg = {
 		}
 	},
 	sentenceFn:{
+		myCrime:(lang, txt1, txt2) => {
+			switch(lang) {
+				case 'ko':
+					return `나의 죄는 <strong>${txt1}</strong>이고 형량은 <strong>${txt2}</strong>을 선고 받았다.`;
+				case 'en':
+					return `My crime is <strong>${txt1}</strong> and I was sentenced to <strong>${txt2}</strong>.`;
+				case 'jp':
+					return `私の罪は <strong>${txt1}</strong> で、刑は <strong>${txt2}</strong> です。`;
+				default:
+					break;
+			}
+		},
 		hasSkill:(lang, txt) => {
 			switch(lang) {
 				case 'ko':
-					return `<strong>${txt}</strong> 스킬을 습득했습니다.`;
+					return `<strong>${txt}</strong> 스킬을 습득했다.`;
 				case 'en':
 					return `I have learned <strong>${txt}</strong> skill.`;
 				case 'jp':
-					return `<strong>${txt}</strong> スキルを習得しました。`;
+					return `<strong>${txt}</strong> スキルを習得した。`;
 				default:
 					break;
 			}
@@ -2555,11 +2647,11 @@ export const msg = {
 		totalSkillNum:(lang, txt) => {
 			switch(lang) {
 				case 'ko':
-					return `<strong>${txt}</strong>개의 스킬을 가지고 있습니다.`;
+					return `<strong>${txt}</strong>개의 스킬을 가지고 있다.`;
 				case 'en':
 					return `I have <strong>${txt}</strong> skills.`;
 				case 'jp':
-					return `<strong>${txt}</strong>個のスキルを持っています。`;
+					return `<strong>${txt}</strong>個のスキルを持っている。`;
 				default:
 					break;
 			}
@@ -2567,11 +2659,11 @@ export const msg = {
 		hasGrade:(lang, txt) => {
 			switch(lang) {
 				case 'ko':
-					return `<strong>${txt}</strong>등급 입니다.`;
+					return `<strong>${txt}</strong>등급이다.`;
 				case 'en':
 					return `I have <strong>${txt}</strong> grade.`;
 				case 'jp':
-					return `<strong>${txt}</strong>の等級です。`;
+					return `<strong>${txt}</strong>の等級だ。`;
 				default:
 					break;
 			}
@@ -2579,11 +2671,11 @@ export const msg = {
 		hasState:(lang, state, txt) => {
 			switch(lang) {
 				case 'ko':
-					return `<em>${state}</em>은/는 <strong>${txt}</strong>입니다.`;
+					return `<em>${state}</em>은/는 <strong>${txt}</strong>이다.`;
 				case 'en':
 					return `<em>${state}</em> is <strong>${txt}</strong>.`;
 				case 'jp':
-					return `<em>${state}</em>は <strong>${txt}</strong> です。`;
+					return `<em>${state}</em>は <strong>${txt}</strong> だ。`;
 				default:
 					break;
 			}
@@ -2591,11 +2683,11 @@ export const msg = {
 		hasEquipment:(lang, txt) => {
 			switch(lang) {
 				case 'ko':
-					return `<strong>${txt}</strong> 등급의 장비를 가지고 있습니다.`;
+					return `<strong>${txt}</strong> 등급의 장비를 가지고 있다.`;
 				case 'en':
 					return `I have <strong>${txt}</strong> equipment.`;
 				case 'jp':
-					return `<strong>${txt}</strong>等級の装備を持っています。`;
+					return `<strong>${txt}</strong>等級の装備を持っている。`;
 				default:
 					break;
 			}
@@ -2603,11 +2695,11 @@ export const msg = {
 		hasBadge:(lang, txt) => {
 			switch(lang) {
 				case 'ko':
-					return `<strong>${txt}</strong>개의 동물 뱃지를 보유하고 있습니다.`;
+					return `<strong>${txt}</strong>개의 동물 뱃지를 보유하고 있다.`;
 				case 'en':
 					return `I have <strong>${txt}</strong> animal badges.`;
 				case 'jp':
-					return `<strong>${txt}</strong>個の動物バッジを保有しています。`;
+					return `<strong>${txt}</strong>個の動物バッジを保有している。`;
 				default:
 					break;
 			}
@@ -2615,11 +2707,11 @@ export const msg = {
 		hasJob:(lang, txt) => {
 			switch(lang) {
 				case 'ko':
-					return `직업은 <strong>${txt}</strong> 입니다.`;
+					return `직업은 <strong>${txt}</strong> 다.`;
 				case 'en':
 					return `Job is <strong>${txt}</strong>.`;
 				case 'jp':
-					return `職業は <strong>${txt}</strong> です。`;
+					return `職業は <strong>${txt}</strong> だ。`;
 				default:
 					break;
 			}
@@ -2627,11 +2719,11 @@ export const msg = {
 		hasExp:(lang, txt) => {
 			switch(lang) {
 				case 'ko':
-					return `경험치는 <strong>${txt}</strong>을 보유하고 있습니다.`;
+					return `경험치는 <strong>${txt}</strong>을 보유하고 있다.`;
 				case 'en':
 					return `I have <strong>${txt}</strong> experience.`;
 				case 'jp':
-					return `経験値は <strong>${txt}</strong> を保有しています。`;
+					return `経験値は <strong>${txt}</strong> を保有している。`;
 				default:
 					break;
 			}
@@ -2639,11 +2731,11 @@ export const msg = {
 		hasKg:(lang, txt) => {
 			switch(lang) {
 				case 'ko':
-					return `무게는 <strong>${txt}</strong> kg 입니다.`;
+					return `무게는 <strong>${txt}</strong> kg 이다.`;
 				case 'en':
 					return `Weight is <strong>${txt}</strong> kg.`;
 				case 'jp':
-					return `重さは <strong>${txt}</strong> kg です。`;
+					return `重さは <strong>${txt}</strong> kg だ。`;
 				default:
 					break;
 			}
@@ -2651,11 +2743,11 @@ export const msg = {
 		hasMoney:(lang, txt) => {
 			switch(lang) {
 				case 'ko':
-					return `<strong>${txt}</strong> 금화를 가지고 있습니다.`;
+					return `<strong>${txt}</strong> 금화를 가지고 있다.`;
 				case 'en':
 					return `I have <strong>${txt}</strong> gold.`;
 				case 'jp':
-					return `金貨 <strong>${txt}</strong>枚を持っています。`;
+					return `金貨 <strong>${txt}</strong>枚を持っている。`;
 				default:
 					break;
 			}

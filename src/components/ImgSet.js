@@ -3,6 +3,7 @@ import countryTitle from 'images/back/countryTitle.png';
 // import itemEn1 from 'images/back/itemEn1.png';
 import scroll from 'images/back/scroll.png';
 import stamp from 'images/back/stamp.png';
+import talkbox from 'images/back/talkbox.png';
 import color from 'images/colorpicker.jpg';
 
 import bar0 from 'images/frame/bar0.png';
@@ -728,7 +729,7 @@ import town from 'images/town.png'; //2000, 10, 32
 import frame0 from 'images/frame0.png';
 
 export const back = {
-  scroll:scroll,stamp:stamp,countryTitle:countryTitle,
+  scroll:scroll,talkbox:talkbox,stamp:stamp,countryTitle:countryTitle,
 };
 export const etc = {
   frameChBack:frameChBack,frameRope:frameRope,bar0:bar0,bar1:bar1,frameMain:frameMain,wind:wind,color:color,

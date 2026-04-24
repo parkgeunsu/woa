@@ -279,11 +279,11 @@ const CardPlacement = ({
 	const [msgOn, setMsgOn] = useState(false);
 	const [msg, setMsg] = useState("");
 	const isMoveEvent = React.useMemo(() => {
-		return util.loadData("historyParam")?.moveEvent && Object.keys(util.loadData("historyParam").moveEvent).length > 0;
+		return sData?.moveEvent && Object.keys(sData?.moveEvent)?.length > 0;
 	}, []);
 	const [infoShow, setInfoShow] = useState(false);
 	const chData = React.useMemo(() => {
-		const ch = isMoveEvent ? util.loadData("historyParam").moveEvent.ch : entries;
+		const ch = isMoveEvent ? sData?.moveEvent?.ch : entries;
 		if (isMoveEvent) {
 			return {
 				moveCh: ch.map((c) => ({

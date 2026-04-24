@@ -5280,7 +5280,7 @@ const Battle = ({
 											isEquip
 											icon={{
 												type: "equip",
-												pic: "equip",
+												pic: itemData.pic,
 												idx: itemData.display
 											}}
 											grade={itemData.grade}
@@ -5293,7 +5293,7 @@ const Battle = ({
 											isEquip
 											icon={{
 												type: item.type,
-												pic: "itemEtc",
+												pic: itemData.pic,
 												idx: itemData.display
 											}}
 											grade={itemData.grade}

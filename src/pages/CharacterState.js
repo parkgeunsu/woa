@@ -229,9 +229,12 @@ const CharacterState = ({
         <InfoGroup pointTitle={`Lv.${saveCh.lv} ${chName}`} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.state[lang]}`} guideClick={() => {
           setPopupType('guide');
           setPopupOn(true);
-          setPopupInfo({
-            data: gameData.guide["characterState"],
-          });
+          setPopupInfo(prev => ({
+            ...prev,
+            guide: {
+              data: gameData.guide["characterState"],
+            }
+          }));
         }}>
           <StateArea>
             <ChInfoContainer direction="row">

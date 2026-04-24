@@ -2,6 +2,7 @@ import { Text } from 'components/Atom';
 import { ActionChDisplay } from 'components/Components';
 import { FlexBox } from 'components/Container';
 import { MergedPic } from 'components/ImagePic';
+import ItemLayout from 'components/ItemLayout';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
@@ -9,8 +10,8 @@ import Npc from 'components/Npc';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import { AppContext } from 'contexts/app-context';
-import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
@@ -20,27 +21,30 @@ const Wrap = styled(FlexBox)`
   box-sizing: border-box;
   overflow: hidden;
 `;
-const WorkArea = styled(FlexBox)`
+const MysteryContent = styled(FlexBox)`
 	position: relative;
 	margin: 10px auto 0;
-  flex: 1;
+	height: 45%;
 	width: 90%;
-  box-sizing: border-box;
   background: rgba(0,0,0,.7);
   border: 5px solid transparent;
   border-image: url(${({frameBack}) => frameBack}) 5 round;
+	box-sizing: border-box;
 `;
 const GreetingText = styled(Text)`
 	padding: 10%;
 `;
-const WorkHeader = styled(FlexBox)`
-	height: auto;
-`;
-const MysteryContent = styled(FlexBox)`
-	flex: 1;
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
+const ShopItem = styled.div`
+	position: absolute;
+	inset: 0;
+	overflow-y: auto;
+	${({selected}) => selected ? `
+		pointer-events: unset;
+		opacity: 1;
+	` : `
+		pointer-events: none;
+		opacity: 0;
+	`};
 `;
 const UserContainer = styled(FlexBox)`
 	position: relative;
@@ -85,9 +89,10 @@ const Mystery = ({
 	changeSaveData,
   setLoading,
 }) => {
-  const context = useContext(AppContext);
   const navigate = useNavigate();
-  const [selectTab, setSelectTab] = useState("");
+  const context = useContext(AppContext);
+  const {state} = useLocation();
+  const [selectTab, setSelectTab] = useState(typeof state?.tab === "number" ? state.tab : "");
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -101,6 +106,7 @@ const Mystery = ({
     return gameData.items;
   }, [gameData]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
+  const stayIdx = React.useMemo(() => util.getRegionToIdx(sData?.info?.stay), [sData]);
   const [popupOn, setPopupOn] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
@@ -118,7 +124,16 @@ const Mystery = ({
     return sData.actionCh.mystery.idx <= entries.length - 1 ? sData.actionCh.mystery.idx : "";
   }, [entries, sData]);
   const saveCh = React.useMemo(() => entries[actionChIdx] || {}, [entries, actionChIdx]);
-  const [greeting, setGreeting] = useState(gameData.shop.home.greeting[lang]);
+  const [greeting, setGreeting] = useState(gameData.shop.mystery.greeting[lang]);
+  const itemCate = useRef(['equip', 'hole', 'upgrade', 'material', 'etc']);
+  const shopItem = React.useMemo(() => {
+    const cityData = sData.city[stayIdx];
+    return [
+      [...cityData.mystery.exp],
+      [...cityData.mystery.money],
+      [...cityData.mystery.life],
+    ];
+  }, [stayIdx, sData]);
   useEffect(() => {
     setLoading(false);
   }, []);
@@ -130,30 +145,86 @@ const Mystery = ({
           const randomIdx = Math.floor(Math.random() * gameData.shop.mystery.randomText.length);
           setGreeting(gameData.shop.mystery.randomText[randomIdx][lang]);
 				}}/>
-        <WorkArea frameBack={imgSet.etc.frameChBack}direction="column" alignItems="center" justifyContent="center">
-          {selectTab === "" ? <GreetingText code="t4" color="main" wordBreak="keep-all">{greeting}</GreetingText> : 
-          actionChIdx !== "" && <WorkHeader direction="row" justifyContent="space-between" alignItems="center">
-
-          </WorkHeader>}
-          {selectTab === 0 && <MysteryContent direction="row" justifyContent="center" alignItems="flex-start" onClick={() => {
-            }}>
-
-          </MysteryContent>}
-        </WorkArea>
+        <MysteryContent frameBack={imgSet.etc.frameChBack}>
+          {selectTab === "" && <GreetingText code="t4" color="main" wordBreak="keep-all">{greeting}</GreetingText>}
+          {shopItem.map((scrollData, scrollIdx) => {
+            return <ShopItem selected={selectTab === scrollIdx} key={`scrollContent${scrollIdx}`}>
+              {scrollData.map((itemData, itemIdx) => {
+                if (typeof itemData.part === 'number') {
+                  const itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5;
+                  const items = itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx] : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx];
+                  return <ItemLayout 
+                    gameItem={gameItem}
+                    icon={{
+                      type: itemData.itemCate,
+                      pic: items.pic,
+                      idx: items.display,
+                    }}
+                    num={5}
+                    key={`items${itemIdx}`}
+                    grade={itemData.grade}
+                    selectColor={itemData.color}
+                    onClick={() => {
+                      setPopupType("equip");
+                      setPopupInfo(prev => ({
+                        ...prev,
+                        item: {
+                          itemAreaType: 'shop',//아직 안쓰임
+                          gameItem: items,
+                          saveItemData: itemData,
+                          type: "equip",
+                        }
+                      }));
+                      setPopupOn(true);
+                    }}/>
+                } else {
+				          const items = gameItem[itemData.type][itemData.idx];
+				          const grade = itemData.grade || items?.grade || 0;
+                  return <ItemLayout 
+                    gameItem={gameItem}
+                    icon={{
+                      type: itemData.type,
+                      pic: items?.pic,
+                      idx: items.display
+                    }}
+                    num={5}
+                    key={`items${itemIdx}`}
+                    grade={grade}
+                    onClick={() => {
+                      setPopupType(itemData.type);
+                      setPopupInfo(prev => ({
+                        ...prev,
+                        item: {
+                          gameItem: items,
+                          saveItemData: itemData,
+                          type: itemData.type,
+                        }
+                      }));
+                      setPopupOn(true);
+                    }}
+                  />
+                }
+              })}
+            </ShopItem>
+          })}
+        </MysteryContent>
         <UserContainer justifyContent="space-between">
           <InfoGroup>
           </InfoGroup>
           <ActionPic onClick={() => {
-              setPopupInfo({
+            setPopupType('selectCh');
+            setPopupInfo(prev => ({
+              ...prev,
+              selectCh: {
                 ch: entries,
                 actionChIdx: actionChIdx,
                 type: 'mystery',
                 setMsg: setMsg,
                 setMsgOn: setMsgOn,
-              });
-              setPopupType('selectCh');
-              setPopupOn(true);
-            }}>
+              }
+            }));
+            setPopupOn(true);
+          }}>
             <MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />
             {!actionChIdx && <NoneChText code="t1" color="red">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
             <Img imgurl={imgSet.images.transparent800} />

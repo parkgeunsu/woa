@@ -201,9 +201,12 @@ const CharacterAnimalSkill = ({
         <InfoGroup pointTitle={`Lv.${saveCh.lv} ${chName}`} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.animalSkill[lang]}`} guideClick={() => {
           setPopupType('guide');
           setPopupOn(true);
-          setPopupInfo({
-            data:gameData.guide["characterAnimalSkill"],
-          });
+          setPopupInfo(prev => ({
+            ...prev,
+            guide: {
+              data:gameData.guide["characterAnimalSkill"],
+            }
+          }));
         }}>
           <SkillHeader>
             <div onClick={() => {
@@ -317,14 +320,17 @@ const CharacterAnimalSkill = ({
                             }}>{skData.lv}</SkillLv>
                             <IconPic pic="skill" idx={skData.idx} 
                             onClick={() => {
-                              setPopupInfo({
-                                sk: sk,
-                                skData: skData,
-                                chLv: saveCh.lv,
-                                activeRequired: activeRequired,
-                                requiredSkill: requiredSkill,
-                              });
                               setPopupType('skillDescription');
+                              setPopupInfo(prev => ({
+                                ...prev,
+                                skillDescription: {
+                                  sk: sk,
+                                  skData: skData,
+                                  chLv: saveCh.lv,
+                                  activeRequired: activeRequired,
+                                  requiredSkill: requiredSkill,
+                                }
+                              }));
                               setPopupOn(true);
                             }}/>
                           </SkillButton>

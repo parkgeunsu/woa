@@ -186,10 +186,13 @@ const CharacterRelation = ({
         <InfoGroup pointTitle={`Lv.${saveCh.lv} ${chData?.na1[lang]}`} title={`${gameData?.msg?.grammar?.conjunction[lang]} ${gameData?.msg?.menu?.biography[lang]}`} guideClick={() => {
           setPopupType('guide');
           setPopupOn(true);
-          setPopupInfo({
-            data: gameData?.guide?.["characterRelation"],
-            lang: lang,
-          });
+          setPopupInfo(prev => ({
+            ...prev,
+            guide: {
+              data: gameData?.guide?.["characterRelation"],
+              lang: lang,
+            }
+          }));
         }}>
           <BiographyWrap className="scroll-y">
             <ChRelation direction="column" justifyContent="flex-start">

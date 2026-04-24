@@ -14,7 +14,8 @@ export const shop = {
       {idx: 0, text: 'home_text0'},
       {idx: 1, text: 'home_text1'},
       {idx: 2, text: 'home_text2'},
-      {idx: 3, text: 'getOut'}
+      {idx: 3, text: 'home_text3'},
+      {idx: 4, text: 'getOut'}
     ],
     randomText: [
       {

@@ -177,8 +177,8 @@ const setCity = ({
       crimeRate: crimeRate, 
       tool: {
         price: 1,
-        upgrade: [{idx:0},{idx:1},{idx:6},{idx:7}],
-        etc: [{idx:20}, {idx:21}, {idx:22}, {idx: util.getStringToCountryIdx(countryData[idx].id) + 30}],
+        upgrade: [{idx:0, type:'upgrade'},{idx:1, type:'upgrade'},{idx:6, type:'upgrade'},{idx:7, type:'upgrade'}],
+        etc: [{idx:20, type:'etc'}, {idx:21, type:'etc'}, {idx:22, type:'etc'}, {idx: util.getStringToCountryIdx(countryData[idx].id) + 30, type:'etc'}],
       },
       accessory: {
         price: 1,
@@ -190,6 +190,7 @@ const setCity = ({
             option: {
               type:'equip',
               items: 4,
+              grade: Math.ceil(Math.random() * 2),
               lv:Math.round(Math.random()*100),
               sealed:false,
             },
@@ -205,6 +206,7 @@ const setCity = ({
             option: {
               type:'equip',
               items: 5,
+              grade: Math.ceil(Math.random() * 2),
               lv:Math.round(Math.random()*100),
               sealed:false,
             },
@@ -223,6 +225,7 @@ const setCity = ({
             option: {
               type:'equip',
               items: 1,
+              grade: Math.ceil(Math.random() * 2),
               lv:Math.round(Math.random()*100),
               sealed:false,
             },
@@ -238,6 +241,7 @@ const setCity = ({
             option: {
               type:'equip',
               items: 2,
+              grade: Math.ceil(Math.random() * 2),
               lv:Math.round(Math.random()*100),
               sealed:false,
             },
@@ -253,8 +257,56 @@ const setCity = ({
             option: {
               type:'equip',
               items: 3,
+              grade: Math.ceil(Math.random() * 2),
               lv:Math.round(Math.random()*100),
               sealed:false,
+            },
+            isSave: false,
+            lang:lang
+          })}
+        }),
+      },
+      mystery: {
+        exp: Array.from({length:15}, () => {
+          return {...util.getItem({
+            saveData: false,
+            gameData: gameData,
+            changeSaveData: false,
+            option: {
+              type:'etc',
+              items: Math.floor(Math.random() * 23) + 50,
+            },
+            isSave: false,
+            lang:lang
+          })}
+        }),
+        money: Array.from({length:20}, () => {
+          return {...util.getItem({
+            saveData: false,
+            gameData: gameData,
+            changeSaveData: false,
+            option: {
+              type:'equip',
+              items: Math.ceil(Math.random() * 5),
+              grade: Math.ceil(Math.random() * 2) + 2,
+              lv: Math.round(Math.random()*100),
+              sealed: false,
+            },
+            isSave: false,
+            lang:lang
+          })}
+        }),
+        life: Array.from({length:20}, () => {
+          return {...util.getItem({
+            saveData: false,
+            gameData: gameData,
+            changeSaveData: false,
+            option: {
+              type:'equip',
+              items: Math.ceil(Math.random() * 5),
+              grade: Math.ceil(Math.random() * 2),
+              lv: Math.round(Math.random()*100),
+              sealed: false,
             },
             isSave: false,
             lang:lang
@@ -267,6 +319,7 @@ const setCity = ({
           return {
             idx: goods,
             num: goodsData[goods].numSize,
+            type: 'material',
           }
         })
       },
@@ -488,7 +541,7 @@ const App = ({
     return util.loadData('historyParam');
   }, []);
   const isMoveEvent = React.useMemo(() => {
-    return util.loadData("historyParam")?.moveEvent && Object.keys(util.loadData("historyParam").moveEvent).length > 0;
+    return saveData?.moveEvent && Object.keys(saveData?.moveEvent)?.length > 0;
   }, []);
   const theme = {
     color: ColorSet,

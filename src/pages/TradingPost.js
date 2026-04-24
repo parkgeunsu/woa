@@ -11,7 +11,7 @@ import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import { AppContext } from 'contexts/app-context';
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
@@ -131,8 +131,10 @@ const TradingPost = ({
 	changeSaveData,
 	setLoading,
 }) => {
-  const context = useContext(AppContext);
 	const navigate = useNavigate();
+  const context = useContext(AppContext);
+	const {state} = useLocation();
+	const [selectTab, setSelectTab] = useState(typeof state?.tab === "number" ? state.tab : "");
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -155,11 +157,16 @@ const TradingPost = ({
 	const [popupType, setPopupType] = useState('');
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
-	const [selectTab, setSelectTab] = useState("");
+	console.log(state, selectTab);
 	const [rangeValue, setRangeValue] = useState(0);
 	const [showCal, setShowCal] = useState(false);
 	const [item, setItem] = useState([]);
-	const [selectItem, setSelectItem] = useState({save:{},game:{},select:'',selectTab:'',buttonType:[]});
+	const [selectItem, setSelectItem] = useState(state?.items ? {
+		save: state.items.saveItemData,
+		game: state.items.gameItem,
+		select: state.itemSaveSlot,
+		buttonType: ['sell'],
+	} : {save:{},game:{},select:'',selectTab:'',buttonType:[]});
 	const entries = React.useMemo(() => {
 		return sData.entry.map((entryIdx) => {
 			return {
@@ -210,7 +217,7 @@ const TradingPost = ({
 										gameItem={gameData.items}
 										icon={{
 											type: 'material',
-											pic: 'material',
+											pic: items.pic,
 											idx: items.display,
 										}}
 										num={5}
@@ -272,7 +279,7 @@ const TradingPost = ({
 					<SliderContainer direction="column">
 						{selectItem.select !== "" && (
 							<>
-								{selectTab === 0 ? <RangeSlider min={0} max={item[selectItem.select].num} step={1} value={[rangeValue]} pirce={gameItem.material[item[selectItem.select].idx].price} setValue={setRangeValue} showCal={setShowCal}/> : <RangeSlider min={0} max={selectItem.save[selectItem.select].num} step={1} value={[rangeValue]} pirce={gameItem.material[item[selectItem.select].idx].price} setValue={setRangeValue} showCal={setShowCal}/>}
+								{selectTab === 0 ? <RangeSlider min={0} max={item[selectItem.select].num} step={1} value={[rangeValue]} pirce={gameItem.material[item[selectItem.select].idx].price} setValue={setRangeValue} showCal={setShowCal}/> : <RangeSlider min={0} max={selectItem.save.num} step={1} value={[rangeValue]} pirce={gameItem.material[selectItem.save.idx].price} setValue={setRangeValue} showCal={setShowCal}/>}
 								<ItemButton justifyContent="flex-end">
 								{selectItem.buttonType.map((button, idx) => {
 									switch(button) {
@@ -373,14 +380,17 @@ const TradingPost = ({
 						)}
 					</SliderContainer>
 					<ActionPic onClick={() => {
-							setPopupInfo({
-								ch: entries,
-								actionChIdx: actionChIdx,
-								type: 'tradingPost',
-								setMsg: setMsg,
-								setMsgOn: setMsgOn,
-							});
 							setPopupType('selectCh');
+							setPopupInfo(prev => ({
+                ...prev,
+                selectCh: {
+                  ch: entries,
+                  actionChIdx: actionChIdx,
+                  type: 'tradingPost',
+                  setMsg: setMsg,
+                  setMsgOn: setMsgOn,
+                }
+              }));
 							setPopupOn(true);
 						}}>
 						<MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />

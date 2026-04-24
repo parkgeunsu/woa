@@ -141,9 +141,12 @@ const CharacterSkill = ({
         <InfoGroup pointTitle={`Lv.${saveCh.lv} ${chName}`} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.jobSkill[lang]}`} guideClick={() => {
           setPopupType('guide');
           setPopupOn(true);
-          setPopupInfo({
-            data: gameData.guide["characterSkill"],
-          });
+          setPopupInfo(prev => ({
+            ...prev,
+            guide: {
+              data: gameData.guide["characterSkill"],
+            }
+          }));
         }}>
           <SkillGroup>
           {saveSkill && saveSkill.map((skillData, idx) => {

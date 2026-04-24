@@ -237,6 +237,8 @@ const CharacterItems = ({
   chList,
   saveData,
   changeSaveData,
+  isShowItemBox,
+  itemEquipType,
   slotIdx
 }) => {
   const context = useContext(AppContext);
@@ -255,7 +257,7 @@ const CharacterItems = ({
     [gameData, saveCh]
   );
   const animalIdx = React.useMemo(() => chData.animal_type, [chData]);
-  const [equipType, setEquipType] = useState(0);
+  const [equipType, setEquipType] = useState(itemEquipType || 0);
   const saveItems = React.useMemo(() => {
     return saveCh.items;
   }, [saveCh]);
@@ -293,7 +295,7 @@ const CharacterItems = ({
   const [tooltip, setTooltip] = useState('');
   const [tooltipPos, setTooltipPos] = useState([0,0]);
 
-  const [itemBoxShow, setItemBoxShow] = useState(false);
+  const [itemBoxShow, setItemBoxShow] = useState(isShowItemBox ? true : false);
   const [possibleEquipItem, setPossibleEquipItem] = useState([]);
   const handlePopup = useCallback(
     ({itemType, itemIdx, itemSaveSlot, itemPart, itemGrade, itemWeaponType}) => {
@@ -310,13 +312,16 @@ const CharacterItems = ({
         } else {
           gameItemData = gameItem[itemType][itemIdx];
         }
-        setPopupInfo({
-          chSlotIdx: slotIdx,
-          gameItem: gameItemData,
-          itemSaveSlot: itemSaveSlot,
-          saveItemData: saveItemData,
-          type: itemType === "hequip" ? "equip" : itemType,
-        });
+        setPopupInfo(prev => ({
+          ...prev,
+          item: {
+            chSlotIdx: slotIdx,
+            gameItem: gameItemData,
+            itemSaveSlot: itemSaveSlot,
+            saveItemData: saveItemData,
+            type: itemType === "hequip" ? "equip" : itemType,
+          }
+        }));
       }
       setPopupOn((prev) => !prev);
     },
@@ -345,9 +350,12 @@ const CharacterItems = ({
           guideClick={() => {
             setPopupType("guide");
             setPopupOn(true);
-            setPopupInfo({
-              data: gameData.guide["characterItem"],
-            });
+            setPopupInfo(prev => ({
+              ...prev,
+              guide: {
+                data: gameData.guide["characterItem"],
+              }
+            }));
           }}
         >
           <InfoRight direction="column" justifyContent="flex-end" alignItems="flex-end">
@@ -426,7 +434,7 @@ const CharacterItems = ({
                           isEquip
                           icon={{
                             type: "equip",
-                            pic: "equip",
+                            pic: items.pic,
                             idx: items.display,
                             mergeColor: data.color,
                           }}
@@ -503,7 +511,7 @@ const CharacterItems = ({
                       isEquip
                       icon={{
                         type: "equip",
-                        pic: "equip",
+                        pic: items.pic,
                         idx: items.display,
                         mergeColor: itemDataValue.color,
                       }}

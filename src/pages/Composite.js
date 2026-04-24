@@ -12,7 +12,7 @@ import PopupContainer from 'components/PopupContainer';
 import TabMenu from 'components/TabMenu';
 import { AppContext } from 'contexts/app-context';
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
@@ -43,6 +43,15 @@ const EvaluateItem = styled.div`
 	height: 50%;
 	z-index: 2;
 	transform: translate(-50%, -50%);
+`;
+const ItemShadow = styled.div`
+	position: absolute;
+	inset: 0;
+	background: radial-gradient(ellipse at 50% 50%,${({gradeColor}) => gradeColor},transparent 40%);
+	filter: blur(4px);
+	border-radius: 50%;
+	pointer-events: none;
+	animation: item_shadow 2s linear infinite alternate;
 `;
 const ButtonGroup = styled.div`
 	position: absolute;
@@ -148,8 +157,9 @@ const Composite = ({
 	changeSaveData,
 	setLoading,
 }) => {
-  const context = useContext(AppContext);
 	const navigate = useNavigate();
+  const context = useContext(AppContext);
+	const {state} = useLocation();
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -164,13 +174,18 @@ const Composite = ({
   }, [gameData]);
 	const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const [popupOn, setPopupOn] = useState(false);
+	const [popupType, setPopupType] = useState('');
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
-	const [selectTab, setSelectTab] = useState("");
+	const [selectTab, setSelectTab] = useState(typeof state?.tab === 'number' ? state.tab : "");
 	const [selectItemTab, setSelectItemTab] = useState(0);
 	const [item, setItem] = useState([]);
 	const [selectIdx, setSelectIdx] = useState(0);
-	const [selectItem0, setSelectItem0] = useState({});
+	const [selectItem0, setSelectItem0] = useState(state?.items ? {
+		save: state.items.saveItemData,
+		game: state.items.gameItem,
+		select: state.itemSaveSlot,
+	} : {});
 	const [selectItem1, setSelectItem1] = useState({
 		save: Array.from({ length: 16 }, () => ({})),
 		game: Array.from({ length: 16 }, () => ({})),
@@ -239,14 +254,37 @@ const Composite = ({
 				<WorkArea frameBack={imgSet.etc.frameChBack}direction="row" alignItems="center">
 					{selectTab === "" && <GreetingText code="t4" color="main" wordBreak="keep-all">{greeting}</GreetingText>}
 					{selectTab === 0 && <>
-						{selectItem0.save && <EvaluateItem>
+						{selectItem0.save && <EvaluateItem onClick={(e) => {
+							e.stopPropagation();
+							setPopupType('item');
+							setPopupInfo(prev => ({
+								...prev,
+								item: {
+									isMoveEvent: false,
+									itemAreaType: selectItem0.game.type,//아직 안쓰임
+									gameItem: selectItem0.game,
+									itemSaveSlot: selectItem0.select,
+									saveItemData: selectItem0.save,
+									type: 'composite',
+									buttons: ['sell'],
+									location: {
+										name: 'composite',
+										tab: 0,
+									},
+									callback: () => {
+									},
+								}
+							}));
+							setPopupOn(prev => !prev);
+						}}>
 							<ItemLayout
 								gameItem={selectItem0.game}
 								icon={{
 									type: "equip",
-									pic: "equip",
+									pic: selectItem0.game.pic,
 									idx: selectItem0.game.display,
 									mergeColor: selectItem0.save.color,
+									largeQuestion: true,
 								}}
 								num={1}
 								sealed={selectItem0.save.sealed}
@@ -263,7 +301,6 @@ const Composite = ({
 										data: {
 											slotIdx: 0,
 											selectItem: selectItem0,
-											setSelectItem: setSelectItem0,
 											gameItem: selectItem0.game,
 											itemSaveSlot: selectItem0.select,
 											saveItemData: selectItem0.save,
@@ -276,23 +313,12 @@ const Composite = ({
 										showMsg: setMsgOn,
 										showPopup: setPopupOn,
 										lang: lang,
-									}, () => {
-										// util.saveHistory({
-										// 	prevLocation: 'inven',
-										// 	navigate: navigate,
-										// 	callback: () => {},
-										// 	state: {
-										// 		dataObj: {
-										// 			saveItemData: saveData.items.equip[selectedItem.itemSaveSlot],
-										// 			gameItem: selectedItem.gameItem,
-										// 			itemSaveSlot: selectedItem.itemSaveSlot,
-										// 			selectTab: selectTab,
-										// 			type: typeList[selectTab].itemCate,
-										// 			selectSlot: selectSlot,
-										// 		}
-										// 	},
-										// 	isNavigate: true,
-										// });
+									}, (openedItem) => {
+										setSelectItem0({
+											save: openedItem,
+											game: selectItem0.game,
+											select: selectItem0.select,
+										});
 									});
 								} else {
 									setMsgOn(true);
@@ -300,6 +326,7 @@ const Composite = ({
 								}
 							}}>{gameData.msg.button.emotions[lang]}</button>
 						</ButtonGroup>
+						<ItemShadow className={`itemEn_shadowArea`} gradeColor={gameData.itemGrade.color[selectItem0?.save?.grade]} />
 					</>}
 					{selectTab === 1 && 
 						<>
@@ -318,7 +345,7 @@ const Composite = ({
 											gameItem={gameData.items}
 											icon={{
 												type: cate,
-												pic: isEquip ? "equip" : cate === "material" ? "material" : "itemEtc",
+												pic: items?.pic,
 												idx: items?.display,
 												mergeColor: data.color,
 											}}
@@ -499,7 +526,7 @@ const Composite = ({
 									gameItem={gameData.items}
 									icon={{
 										type: combineList[selectItemTab].keyName,
-										pic: isEquip ? "equip" : cate === "material" ? "material" : "itemEtc",
+										pic: items.pic,
 										idx: items?.display,
 										mergeColor: data.color,
 									}}
@@ -547,13 +574,17 @@ const Composite = ({
 						</ScrollArea>
 					</ItemMaterial>
 					<ActionPic onClick={() => {
-						setPopupInfo({
-							ch: entries,
-							selectIdx: actionChIdx,
-							type: 'composite',
-							setMsg: setMsg,
-							setMsgOn: setMsgOn,
-						});
+						setPopupType('selectCh');
+						setPopupInfo(prev => ({
+							...prev,
+							selectCh: {
+								ch: entries,
+								selectIdx: actionChIdx,
+								type: 'composite',
+								setMsg: setMsg,
+								setMsgOn: setMsgOn,
+							}
+						}));
 						setPopupOn(true);
 					}}>
 						<MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />
@@ -564,7 +595,7 @@ const Composite = ({
 				</UserContainer>
 			</Wrap>
 			<PopupContainer>
-        {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
+        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
       </PopupContainer>
       <MsgContainer>
         {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}

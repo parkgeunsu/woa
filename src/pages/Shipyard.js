@@ -8,6 +8,7 @@ import TabMenu from 'components/TabMenu';
 import { AppContext } from 'contexts/app-context';
 import 'css/ship.css';
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrap = styled.div`
@@ -181,7 +182,10 @@ const Shipyard = ({
 	changeSaveData,
 	setLoading,
 }) => {
-  const context = useContext(AppContext);
+  const navigate = useNavigate();
+	const context = useContext(AppContext);
+	const {state} = useLocation();
+	const [selectTab, setSelectTab] = useState(typeof state?.tab === "number" ? state.tab : "");
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -201,7 +205,6 @@ const Shipyard = ({
   const [popupOn, setPopupOn] = useState(false);
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
-	const [selectTab, setSelectTab] = useState(0);
 	const [selectCate, setSelectCate] = useState('');
 	const [showPicker, setShowPicker] = useState(false);
 	const [ctx, setCtx] = useState();
@@ -244,11 +247,14 @@ const Shipyard = ({
 			}
 			if (saveData.actionCh?.shipyard) {
 				setActionCh(saveData.actionCh.shipyard);
-				setPopupInfo({
-					ch:saveData.ch || [],
-					actionCh:saveData.actionCh.shipyard.idx,
-					type:'shipyard'
-				});
+				setPopupInfo(prev => ({
+					...prev,
+					selectCh: {
+						ch:saveData.ch || [],
+						actionCh:saveData.actionCh.shipyard.idx,
+						type:'shipyard'
+					}
+				}));
 			}
 			let itemL = [[],[],[],[],[],[],[],[],[],[]];
 			if (saveData.items) {

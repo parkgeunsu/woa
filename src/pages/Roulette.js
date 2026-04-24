@@ -139,6 +139,7 @@ const Roulette = ({
   }, [context]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const [popupOn, setPopupOn] = useState(false);
+  const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
   const currentStep = React.useMemo(() => {
       const historyP = util.loadData('historyParam');
@@ -166,10 +167,14 @@ const Roulette = ({
     <>
       <Wrap direction="column">
         <GuideQuestion size={20} pos={["right","top"]} colorSet={"black"} onclick={() => {
+          setPopupType('guide');
+          setPopupInfo(prev => ({
+            ...prev,
+            guide: {
+              data: gameData.guide?.['exploreRegions'],
+            }
+          }));
           setPopupOn(true);
-          setPopupInfo({
-            data: gameData.guide?.['exploreRegions'],
-          });
         }} />
         <SpinContainer>
           {rouletteArr.map((cardsData, idx) => {
@@ -214,7 +219,7 @@ const Roulette = ({
         </LineupContainer>
       </Wrap>
       <PopupContainer>
-        {popupOn && <Popup type={'guide'} dataObj={popupInfo} showPopup={setPopupOn} />}
+        {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} />}
       </PopupContainer>
     </>
   );

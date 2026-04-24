@@ -77,7 +77,7 @@ const ChracterList = ({
   }, [context]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') ?? {} : {...saveData}, [saveData]);
   const isMoveEvent = React.useMemo(() => {//지역 이동인지
-    return util.loadData("historyParam")?.moveEvent && Object.keys(util.loadData("historyParam").moveEvent).length > 0;
+    return sData?.moveEvent && Object.keys(sData?.moveEvent)?.length > 0;
   }, []);
   const entries = React.useMemo(() => {
     return sData.entry.map((entryIdx) => {

@@ -12,7 +12,7 @@ import { AppContext } from 'contexts/app-context';
 import CharacterCard from 'pages/CharacterCard';
 import ChList from 'pages/ChList';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
@@ -350,8 +350,10 @@ const Training = ({
 	changeSaveData,
 	setLoading,
 }) => {
-  const context = useContext(AppContext);
-	const navigate = useNavigate();
+  const navigate = useNavigate();
+	const context = useContext(AppContext);
+	const {state} = useLocation();
+	const [selectTab, setSelectTab] = useState(typeof state?.tab === "number" ? state.tab : "");
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -370,7 +372,6 @@ const Training = ({
   const [popupInfo, setPopupInfo] = useState({});
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
-	const [selectTab, setSelectTab] = useState("");
 	const [rewardText, setRewardText] = useState("");
 	const lvUpTimeoutRef = useRef([null, null]);
 	const isAnimationRef = useRef(false);
@@ -629,14 +630,17 @@ const Training = ({
 																}}>{skData.lv}</SkillLv>
 																<IconPic pic="skill" idx={skData.idx} 
 																onClick={() => {
-																	setPopupInfo({
-																		sk: sk,
-																		skData: skData,
-																		chLv: saveCh.lv,
-																		activeRequired: activeRequired,
-																		requiredSkill: requiredSkill,
-																	});
 																	setPopupType('skillDescription');
+																	setPopupInfo(prev => ({
+																		...prev,
+																		skillDescription: {
+																			sk: sk,
+																			skData: skData,
+																			chLv: saveCh.lv,
+																			activeRequired: activeRequired,
+																			requiredSkill: requiredSkill,
+																		}
+																	}));
 																	setPopupOn(true);
 																}}/>
 															</SkillButton>
@@ -722,14 +726,17 @@ const Training = ({
 						</>}
 					</InfoGroup>
 					<ActionPic onClick={() => {
-							setPopupInfo({
-								ch: entries,
-								actionChIdx: actionChIdx,
-								type: 'training',
-								setMsg: setMsg,
-								setMsgOn: setMsgOn,
-							});
 							setPopupType('selectCh');
+							setPopupInfo(prev => ({
+								...prev,
+								selectCh: {
+									ch: entries,
+									actionChIdx: actionChIdx,
+									type: 'training',
+									setMsg: setMsg,
+									setMsgOn: setMsgOn,
+								}
+							}));
 							setPopupOn(true);
 						}}>
 						<MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />

@@ -212,7 +212,7 @@ const GameMain = ({
           });
         }}>동물스킬 리셋</button> */}
       </div>
-      <QuickMenu type="main" stay={stay} gameMode={gameMode} showDim={showDim} setShowDim={setShowDim}/>
+      <QuickMenu type="main" saveData={sData} stay={stay} gameMode={gameMode} showDim={showDim} setShowDim={setShowDim}/>
       {gameMode === "roulette" && <Roulette saveData={sData} rouletteState={rouletteState} setRouletteState={setRouletteState} selectRoulettePos={selectRoulettePos} setSelectRoulettePos={setSelectRoulettePos} rouletteArr={rouletteArr.current} rouletteEnemy={rouletteEnemy} setRouletteEnemy={setRouletteEnemy} />}
       {gameMode === "scenarioRegion" && <Scenario saveData={sData} changeSaveData={changeSaveData} stay={stay} selectScenario={selectScenario} setSelectScenario={setSelectScenario} />}
 
@@ -230,6 +230,9 @@ const GameMain = ({
                 navigate: navigate,
                 isNavigate: true,
                 state: {
+                  tab: 0,
+                },
+                prevState: {
                   tab: 0,
                 }
               });//히스토리 저장

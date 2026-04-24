@@ -9,12 +9,10 @@ import ModalContainer from 'components/ModalContainer';
 import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Npc from 'components/Npc';
-import Popup from 'components/Popup';
-import PopupContainer from 'components/PopupContainer';
 import { AppContext } from 'contexts/app-context';
 import CharacterCard from "pages/CharacterCard";
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
@@ -211,9 +209,10 @@ const Gate = ({
   setShowDim,
   setLoading,
 }) => {
-  const context = useContext(AppContext);
   const navigate = useNavigate();
-  const [selectTab, setSelectTab] = useState("");
+  const context = useContext(AppContext);
+  const {state} = useLocation();
+  const [selectTab, setSelectTab] = useState(typeof state?.tab === "number" ? state.tab : "");
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -227,9 +226,6 @@ const Gate = ({
   const [modalOn, setModalOn] = useState(false);
   const [modalInfo, setModalInfo] = useState({});
   const [modalData, setModalData] = useState({});
-  const [popupOn, setPopupOn] = useState(false);
-  const [popupType, setPopupType] = useState('');
-  const [popupInfo, setPopupInfo] = useState({});
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
   const entries = React.useMemo(() => {
@@ -507,9 +503,6 @@ const Gate = ({
           </SelectEntries>
         </UserContainer>
       </Wrap>
-			<PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
-      </PopupContainer>
 			<ModalContainer>
 				{modalOn && <Modal submitFn={modalData.submitFn} payment={modalData.payment} imgSet={imgSet} type={"confirm"} dataObj={modalInfo} saveData={saveData} changeSaveData={changeSaveData} onClose={() => {
 					setModalOn(false);

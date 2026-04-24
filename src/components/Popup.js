@@ -120,8 +120,7 @@ const TextTotal = styled(Text)`
 `;
 const ButtonArea = styled(FlexBox)`
   position: relative;
-  height: 10%;
-  width: 100%;
+  width: auto;
 `;
 const ChUl = styled.ul``;
 const ChLi = styled.li`
@@ -231,6 +230,7 @@ const Img = styled.img.attrs(
   })
 )``;
 const StyledButton = styled(Button)`
+  padding: 0;
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), rgba(255,255,255,0.5));
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.5), 0 0 1px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0,0,0,1);
   border-radius: 20px;
@@ -407,8 +407,10 @@ const PopupItemInfo = styled(FlexBox)`
 const PopupItemTop = styled(FlexBox)`
   height: auto;
 `;
-const PopupItemGrade = styled(Text)`
-  color: ${({ color }) => color};
+const PopupItemGradePic = styled(IconPic)`
+  margin: 0 10px 0 0;
+  width: 30px;
+  height: 30px;
 `;
 const PopupItemType = styled(Text)``;
 const PopupItemDescription = styled(Text)`
@@ -579,7 +581,9 @@ const PopupItemEffText = styled(Text)`
   line-height: 1;
 `;
 const PopupItemPrice = styled(FlexBox)``;
-const PopupItemButton = styled(FlexBox)``;
+const PopupItemPriceText = styled(Text)`
+  margin: ${({margin}) => margin ? `0 0 0 ${margin}px` : 0};
+`;
 const SkillImg = styled.div`
   position: relative;
   margin: 0 10px 0 0;
@@ -668,10 +672,93 @@ const holeEffectText = ({
   effText = effText.slice(0, -5);
   return effText;
 }
+const itemData = ({
+  itemCate,
+  itemGrade,
+  saveItem,
+  gameItem,
+}) => {
+  switch (itemCate) {
+    case 'equip':
+      return saveItem.part === 3 ? 
+      gameItem?.[itemCate]?.[saveItem.part]?.[saveItem.weaponType]?.[itemGrade]?.[saveItem.idx] : 
+      gameItem?.[itemCate]?.[saveItem.part]?.[0]?.[itemGrade]?.[saveItem.idx];
+    case 'hole':
+    case 'upgrade':
+    case 'material':
+    case 'etc':
+      return gameItem?.[itemCate]?.[saveItem.idx];
+  }
+}
+const itemCateColor = ({
+  itemCate,
+  items,
+}) => {
+  switch (itemCate) {
+    case 'equip':
+      return items.part;
+    case 'hole':
+      return 11;
+    case 'upgrade':
+      return 12;
+    case 'etc':
+      return 13;
+    case 'material':
+      return 14;
+  }
+}
+const itemCateName = ({
+  itemCate,
+  items,
+}) => {
+  if (itemCate === 'equip') {
+    switch (items.part) {
+      case 1:
+        return 'helm';
+      case 2:
+        return 'armor';
+      case 3:
+        return 'weapon';
+      case 4:
+        return 'ring';
+      case 5:
+        return 'necklace';
+    }
+  } else {
+    switch (itemCate) {
+      case 'hole':
+        return 'socketJewelry';
+      case 'upgrade':
+        return 'reinforcedMaterial';
+      case 'etc':
+        return 'etc';
+      case 'material':
+        return 'material';
+    }
+  }
+}
+const itemCateShopName = ({
+  itemCate,
+  saveItem,
+}) => {
+  switch (itemCate) {
+    case 'equip':
+      return saveItem.part < 4 ? 'equipment' : 'accessory';
+    case 'hole':
+      return 'accessory';
+    case 'etc':
+    case 'upgrade':
+      return 'tool';
+    case 'material':
+      return 'tradingPost';
+    default:
+      return '';
+  }
+}
 const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPage, gameData, imgSet, msgText, showMsg, setTooltip, setTooltipPos, setTooltipOn, showPopup, theme, lang, navigate, timeoutRef}) => {
-  const isMoveEvent = dataObj.isMoveEvent;
+  const isMoveEvent = saveData?.moveEvent && Object.keys(saveData?.moveEvent)?.length > 0;
 	if (type === 'relation') {
-    const member = dataObj.relation.member;
+    const member = dataObj[type].relation.member;
 		return (
 			<PopupRelation flex-center="true" className="people">
         {member && member.map((data ,idx) => {
@@ -690,437 +777,131 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
         })}
 			</PopupRelation>
 		);
-	} else if (type === 'equip') {
-    const itemsGrade = dataObj.saveItemData.grade < 5 ? 0 : dataObj.saveItemData.grade - 5;
-    const items = dataObj.saveItemData.part === 3 ? 
-      gameData.items?.equip?.[dataObj.saveItemData.part]?.[dataObj.saveItemData.weaponType]?.[itemsGrade]?.[dataObj.saveItemData.idx] : 
-      gameData.items?.equip?.[dataObj.saveItemData.part]?.[0]?.[itemsGrade]?.[dataObj.saveItemData.idx];
-    
-    if (!items) return null;
-
-    const saveItems = dataObj.saveItemData;
-    const grade = saveItems.grade || items.grade;
-    const setsInfo = gameData.items?.set_type?.[items.set] || {};
-    const totalEff = util.getTotalEff({
-      saveItems: saveItems,
-      gameData: gameData,
-      cate: "",
+	} else if (type === 'item') {
+    const saveItem = dataObj[type].saveItemData,
+      itemCate = saveItem.type,
+      gameItem = gameData.items,
+      itemGrade = saveItem.grade ? saveItem.grade : dataObj[type].gameItem.grade,
+      areaType = dataObj[type].itemAreaType,//아직 안쓰임
+      buttons = dataObj[type].buttons;
+    const items = itemData({
+      itemCate: itemCate,
+      itemGrade: saveItem.grade ? 
+      saveItem.grade < 5 ? 0 : saveItem.grade - 5 : 0, 
+      saveItem: saveItem,
+      gameItem: gameItem,
     });
-		return (
-			<PopupItemContainer frameBack={imgSet.etc.frameChBack}>
-        <PopupItemList frameBack={imgSet.etc.frameChBack} type="header">
-          <PopupItemName code="t3" grade={gameData.itemGrade.color[grade]} color="main" weight="600" dangerouslySetInnerHTML={{__html: `${saveItems.colorantSet ? util.getColorant(saveItems.colorantSet, gameData).na[lang] : ''} ${saveItems.modifier[lang]}<br/>${items.na[lang]}`}}>
-          </PopupItemName>
-        </PopupItemList>
-        <PopupItemList>
-          <PopupItem part={items.part} grade={saveItems.grade}>
-            <ItemPic type="equip" pic="equip" idx={items.display} />
-          </PopupItem>
-          <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemInfo direction="column" justifyContent="space-between">
-              <PopupItemTop justifyContent="space-between" className="item_top">
-                <PopupItemGrade code="t1"  color={gameData.itemGrade.color[grade]}>{lang === 'ko' ? gameData.itemGrade.txt_k[grade] : gameData.itemGrade.txt_e[grade]}</PopupItemGrade><PopupItemType code="t1"  color="#bbb">{gameData.itemType[items.part][lang]}</PopupItemType>
-              </PopupItemTop>
-              <PopupItemDescription code="t1"  color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></PopupItemDescription>
-              <PopupItemKg code="t2"  weight="600" color="#bbb" align="right">{items.kg || 0}kg</PopupItemKg>
-            </PopupItemInfo>
-          </div>
-        </PopupItemList>
-        <PopupItemList type="animalCoin_slot">
-          <PopupItemCoin justifyContent="flex-start">
-            <MarkPic length={saveItems.markNum} pic="icon100" idx={saveItems.mark} />
-          </PopupItemCoin>
-          <PopupItemSlot justifyContent="flex-end">
-            {saveItems.hole.map((holeData, idx) => {
-              const holePic = holeData !== 0 ? gameData.items.hole[holeData.idx].display : 0;
-              return (
-                <div key={`hole${idx}`}>
-                  <PopupItemHoleBack fixed={holePic !== 0} onClick={(e) => {
-										e.stopPropagation();
-										if (!holeData) {
-											return;
-										}
-                    setTooltipPos(e.target.getBoundingClientRect());
-                    setTooltip(holeEffectText({
-                      gameData: gameData,
-                      holeData: holeData,
-                      theme: theme,
-                      lang: lang
-                    }));
-                    setTooltipOn(true);
-									}}>
-                    <ItemPic pic="itemEtc" type="hole" idx={holePic} />
-                  </PopupItemHoleBack>
-                </div>
-              )
-            })}
-          </PopupItemSlot>
-        </PopupItemList>
-        <PopupItemList type="eff">
-          <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.itemEffect[lang]}</PopupItemTitle>
-          {totalEff.map((eff, idx) => {
-            if (eff.type === 100) {
-              return (
-                <PopupItemEffs justifyContent="space-between" alignItems="center" key={idx}>
-                  <PopupItemEffText type="skill" code="t1" weight="600" color={`st${eff.type}`}>{util.getEffectType(eff.type, lang)}</PopupItemEffText>
-                  {eff.skList.map((sk, skIndex) => {
-                    return (
-                      <PopupItemEffText type="skill" code="t2" align="right"  color="main" key={`skIndex${skIndex}`}>{`${gameData.skill?.[sk.idx]?.na?.[lang]} LV.${sk.lv}`}</PopupItemEffText>
-                    )
-                  })}
-                </PopupItemEffs>
-              )
-            } else {
-              return (
-                <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx}>
-                  <PopupItemEffText code="t2" weight="600" color={`st${eff.type}`}>{util.getEffectType(eff.type, lang)}</PopupItemEffText>
-                  <PopupItemEffText code="t2"  margin={5}  weight="600" color="main">{eff.base || "-"}</PopupItemEffText>
-                  <PopupItemEffText code="t2" margin={5}  weight="600" color="grey1">{eff.add ? `+ ${eff.add}` : "-"}</PopupItemEffText>
-                  <PopupItemEffText code="t2" margin={5}  weight="600" color="grey2">{eff.hole ? `+ ${eff.hole}` : "-"}</PopupItemEffText>
-                  <PopupItemEffText code="t3"  align="right" weight="600" color={`st${eff.type}`}>{eff.base + eff.add + eff.hole}</PopupItemEffText>
-                </PopupItemEffs>
-              )
-            }
-          })}
-        </PopupItemList>
-        <div style={{width:"100%"}} className="scroll-y">
-          {setsInfo.part && <PopupItemList type="set">
-            <div className="item_setNa">{setsInfo.na}</div>
-            {setsInfo.part.map((data, idx) => {
-              return (
-                <div key={idx} className={`item_set_piece ${dataObj.chSlotIdx ? getSetChk(saveData.ch?.[dataObj.chSlotIdx]?.items || [], data) : ''}`}>{gameData.items?.equip?.[data]?.na}</div>
-              ) 
-            })}
-          </PopupItemList>}
-        </div>
-        <PopupItemList frameBack={imgSet.etc.frameChBack} type="footer">
-          <PopupItemPrice justifyContent="flex-start">
-            <PopupItemEffText code="t2" color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemEffText>
-            <PopupItemEffText code="t2" margin={10} color="main">{`₩${items.price * saveItems.grade}`}</PopupItemEffText>
-          </PopupItemPrice>
-          {!dataObj.noneButton && <PopupItemButton justifyContent="flex-end">
-            <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:27}} onClick={(e) => {//해제
-              util.buttonEvent({
-                event: e,
-                type: 'itemRelease',
-                data: dataObj,
-                saveData: saveData,
-                changeSaveData: changeSaveData,
-                gameData: gameData,
-                msgText: msgText,
-                showMsg: showMsg,
-                showPopup: showPopup,
-                lang: lang,
-              });
-              navigate('../cards', {state: {
-                dataObj: {
-                  chSlotIdx: dataObj.chSlotIdx,
-                  chTabIdx: 5,
-                  invenOpened: true,
-                }
-              }});
-            }} data-buttontype="itemRelease" />
-          </PopupItemButton>}
-        </PopupItemList>
-      </PopupItemContainer>
-		);
-	} else if (type === 'hequip') {
-    const itemsGrade = dataObj.saveItemData.grade < 5 ? 0 : dataObj.saveItemData.grade - 5;
-    const items = dataObj.saveItemData.part === 3 ? 
-      gameData.items?.equip?.[dataObj.saveItemData.part]?.[dataObj.saveItemData.weaponType]?.[itemsGrade]?.[dataObj.saveItemData.idx] : 
-      gameData.items?.equip?.[dataObj.saveItemData.part]?.[0]?.[itemsGrade]?.[dataObj.saveItemData.idx];
-    
     if (!items) return null;
-
-    const saveItems = dataObj.saveItemData;
-    const grade = saveItems.grade || items.grade;
-    const setsInfo = gameData.items?.set_type?.[items.set] || {};
-    const sealed = dataObj.saveItemData.sealed;
-    const hasSocket = dataObj.saveItemData.slot;
-    //아이템 기본, 추가, 홀 효과
+    const sealed = saveItem?.sealed,
+      hasSocket = saveItem?.slot > 0,
+      setsInfo = gameData.items?.set_type?.[items.set] || {};
     const totalEff = util.getTotalEff({
-      saveItems: saveItems,
+      saveItem: saveItem,
       gameData: gameData,
-      cate: "",
+      cate: itemCate,
     });
-    return (
-      <PopupItemContainer frameBack={imgSet.etc.frameChBack}>
-        <PopupItemList type="header" frameBack={imgSet.etc.frameChBack}>
-          <PopupItemName code="t3"  color="main" weight="600" grade={gameData.itemGrade.color[grade]} dangerouslySetInnerHTML={{__html: `${saveItems.colorantSet ? util.getColorant(saveItems.colorantSet, gameData).na[lang] : ''} ${saveItems.modifier[lang]}<br/>${items.na[lang]}`}}></PopupItemName>
-        </PopupItemList>
-        <PopupItemList>
-          <PopupItem part={items.part} grade={saveItems.grade} sealed={sealed}>
-            <ItemPic type="equip" pic="equip" idx={items.display} mergeColor={saveItems.color} />
-          </PopupItem>
-          <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemInfo direction="column" justifyContent="space-between">
-              <PopupItemTop justifyContent="space-between" className="item_top">
-                <PopupItemGrade code="t1"  color={gameData.itemGrade.color[grade]}>{lang === 'ko' ? gameData.itemGrade.txt_k[grade] : gameData.itemGrade.txt_e[grade]}</PopupItemGrade><PopupItemType code="t1"  color="#bbb">{gameData.itemType[items.part][lang]}</PopupItemType>
-              </PopupItemTop>
-              <PopupItemDescription code="t1"  color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></PopupItemDescription>
-              <PopupItemKg code="t2"  weight="600" color="#bbb" align="right">{items.kg}kg</PopupItemKg>
-            </PopupItemInfo>
-          </div>
-        </PopupItemList>
-        <PopupItemList type="animalCoin_slot">
-          <PopupItemCoin justifyContent="flex-start">
-            <MarkPic length={saveItems.markNum} pic="icon100" idx={saveItems.mark} />
-          </PopupItemCoin>
-          <PopupItemSlot justifyContent="flex-end">
-            {saveItems.hole.map((holeData, holeIdx) => {
-              const holePic = holeData !== 0 ? gameData.items.hole[holeData.idx].display : 0;
-              return (
-                <div key={`hole${holeIdx}`}>
-                  <PopupItemHoleBack fixed={holePic !== 0} onClick={(e) => {
-										e.stopPropagation();
-										if (!holeData) {
-											return;
-										}
-                    setTooltipPos(e.target.getBoundingClientRect());
-                    setTooltip(holeEffectText({
-                      gameData: gameData,
-                      holeData: holeData,
-                      theme: theme,
-                      lang: lang
-                    }));
-                    setTooltipOn(true);
-									}}>
-                    <ItemPic pic="itemEtc" type="hole" idx={holePic} />
-                  </PopupItemHoleBack>
-                </div>
-              )
-            })}
-          </PopupItemSlot>
-        </PopupItemList>
-        <PopupItemList type="eff">
-          {totalEff.map((eff, idx) => {
-            if (eff.type === 100) {
-              return (
-                <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx}>
-                  <PopupItemEffText type="skill" code="t1"  weight="600" color={`st${eff.type}`} className="cate">{util.getEffectType(eff.type, lang)}</PopupItemEffText>
-                  {eff.skList.map((sk, skIndex) => {
-                    return (
-                      <PopupItemEffText type="skill" code="t2"  weight="600" color="main" key={`skIndex${skIndex}`} className="total">{`${gameData.skill[sk.idx].na[lang]} LV.${sk.lv}`}</PopupItemEffText>
-                    )
-                  })}
-                </PopupItemEffs>
-              )
-            } else {
-              return (
-                <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx}>
-                  <PopupItemEffText code="t2"  weight="600" color={`st${eff.type}`}>{util.getEffectType(eff.type, lang)}</PopupItemEffText>
-                  <PopupItemEffText code="t2"  weight="600" color="main">{eff.base || "-"}</PopupItemEffText>
-                  <PopupItemEffText code="t2"  weight="600" color="grey1">{eff.add ? `+ ${eff.add}` : "-"}</PopupItemEffText>
-                  <PopupItemEffText code="t2"  weight="600" color="grey2">{eff.hole ? `+ ${eff.hole}` : "-"}</PopupItemEffText>
-                  <PopupItemEffText code="t3"  weight="600" color={`st${eff.type}`}>{sealed ? eff.base : eff.base + eff.add + eff.hole}</PopupItemEffText>
-                </PopupItemEffs>
-              )
-            }
-          })}
-        </PopupItemList>
-        <div style={{width:"100%"}} className="scroll-y">
-          {setsInfo.part && <PopupItemList className="item_set" type="set">
-            <div className="item_setNa">{setsInfo.na}</div>
-            {setsInfo.part.map((data, idx) => {
-              return (
-                <div key={idx} className={`item_set_piece ${dataObj.chSlotIdx ? getSetChk(saveData.ch?.[dataObj.chSlotIdx]?.items || [], data) : ''}`}>{gameData.items?.equip?.[data]?.na}</div>
-              ) 
-            })}
-          </PopupItemList>}
+    console.log(dataObj, totalEff);
+    const part = itemCateColor({
+      itemCate: itemCate,
+      items: items,
+    }),
+      cateName = itemCateName({
+        itemCate: itemCate,
+        items: items,
+      });
+    const itemPrice = util.itemPrice({
+      gameItem: items,
+      saveItemData: saveItem,
+      skill: gameData.skill[15],
+      skLv: util.getHasSkillLv({
+        saveData: saveData,
+        skillIdx: 15,//협상
+        chData: saveData.ch[saveData.actionCh?.[dataObj[type].location.name]?.idx],
+      })
+    });
+    return <PopupItemContainer frameBack={imgSet.etc.frameChBack}>
+      <PopupItemList type="header" frameBack={imgSet.etc.frameChBack}>
+        <PopupItemName code="t3" grade={gameData.itemGrade.color[itemGrade]} color="main" weight="600" dangerouslySetInnerHTML={{__html: `${saveItem.colorantSet ? util.getColorant(saveItem.colorantSet, gameData).na[lang] : ''} ${saveItem.modifier ? saveItem.modifier[lang] : ''}<br/>${items.na[lang]}`}}/>
+      </PopupItemList>
+      <PopupItemList>
+        <PopupItem part={part} grade={itemGrade} sealed={sealed}>
+          <ItemPic type={itemCate} pic={items.pic} idx={items.display} mergeColor={saveItem.color} />
+        </PopupItem>
+        <div flex-h="true" style={{flex: 1,}}>
+          <PopupItemInfo direction="column" justifyContent="space-between">
+            <PopupItemTop justifyContent="flex-start">
+              <PopupItemGradePic type="itemGrade" pic="icon100" idx={itemGrade - 1} />
+              <PopupItemType code="t2" weight="600"
+              color={gameData.itemGrade.color[itemGrade]}>{gameData.itemGrade.txt[itemGrade][lang]} {gameData.msg.title[cateName][lang]}</PopupItemType>
+            </PopupItemTop>
+            <PopupItemDescription code="t1"  color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></PopupItemDescription>
+            {itemCate === "equip" && <PopupItemKg code="t2"  weight="600" color="#bbb" align="right">{items.kg || 0}kg</PopupItemKg>}
+          </PopupItemInfo>
         </div>
-        <PopupItemList frameBack={imgSet.etc.frameChBack} type="footer">
-          <PopupItemPrice justifyContent="flex-start">
-            <PopupItemEffText code="t2" color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemEffText>
-            <PopupItemEffText code="t2" margin={10} color="main">{`₩${items.price * saveItems.grade}`}</PopupItemEffText>
-          </PopupItemPrice>
-          {sealed ? (//밀봉
-            !dataObj.noneButton && <ButtonArea justifyContent="flex-end">
-              <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:25}} onClick={() => {//감정
-                showMsg(true);
-                msgText(gameData.msg.sentence.goLab[lang]);
-                timeoutRef.current = setTimeout(() => {
-                  util.saveHistory({
-                    location: 'composite',
-                    navigate: navigate,
-                    callback: () => {},
-                    state: {},
-                    isNavigate: true,
-                  });
-                }, 1800);
-              }} data-buttontype="itemEvaluate" />
-              {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={() => {//판매
-                if (dataObj.saveItemData.part < 4) {
-                  showMsg(true);
-                  msgText(gameData.msg.sentence.goShop[lang]);
-                  timeoutRef.current = setTimeout(() => {
-                    util.saveHistory({
-                      location: 'equipment',
-                      navigate: navigate,
-                      callback: () => {},
-                      state: {
-                        dataObj: {
-                          ...dataObj,
-                          selectTab: 'inven',
-                          selectSlot: 1,
-                        }
-                      },
-                      isNavigate: true,
-                    });
-                  }, 1800);
-                } else {
-                  showMsg(true);
-                  msgText(gameData.msg.sentence.goTool[lang]);
-                  timeoutRef.current = setTimeout(() => {
-                    util.saveHistory({
-                      location: 'tool',
-                      navigate: navigate,
-                      callback: () => {},
-                      state: {
-                        dataObj: {
-                          ...dataObj,
-                          selectTab: 'inven',
-                          selectSlot: 1,
-                        }
-                      },
-                      isNavigate: true,
-                    });
-                  }, 1800);
-                }
-              }} data-buttontype="itemSell" />}
-            </ButtonArea>
-          ) : (//개봉
-            !dataObj.noneButton && <ButtonArea justifyContent="flex-end">
-              {!dataObj.onlyInven && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:20}} onClick={(e) => {//장착
-                util.buttonEvent({
-                  event: e,
-                  type: 'itemEquip',
-                  data: dataObj,
-                  saveData: saveData,
-                  changeSaveData: changeSaveData,
-                  gameData: gameData,
-                  msgText: msgText,
-                  showMsg: showMsg,
-                  showPopup: showPopup,
-                  lang: lang,
-                });
-                navigate('../cards', {state: {
-                  dataObj: {
-                    chSlotIdx: dataObj.chSlotIdx,
-                    chTabIdx: 5,
-                    invenOpened: true,
+      </PopupItemList>
+      {itemCate === "equip" && <PopupItemList type="animalCoin_slot">
+        <PopupItemCoin justifyContent="flex-start">
+          <MarkPic length={saveItem.markNum} pic="icon100" idx={saveItem.mark} />
+        </PopupItemCoin>
+        <PopupItemSlot justifyContent="flex-end">
+          {saveItem.hole.map((holeData, idx) => {
+            const holePic = holeData !== 0 ? gameData.items.hole[holeData.idx].display : 0;
+            return (
+              <div key={`hole${idx}`}>
+                <PopupItemHoleBack fixed={holePic !== 0} onClick={(e) => {
+                  e.stopPropagation();
+                  if (!holeData) {
+                    return;
                   }
-                }});
-              }} data-buttontype="itemEquip" />}
-              {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:21}} onClick={() => {//강화
-                showMsg(true);
-                msgText(gameData.msg.sentence.goForge[lang]);
-                timeoutRef.current = setTimeout(() => {
-                  util.saveHistory({
-                    location: 'blacksmith',
-                    navigate: navigate,
-                    callback: () => {},
-                    state: {
-                      dataObj: {
-                        gameItem: dataObj.gameItem,
-                        saveItemData: dataObj.saveItemData,
-                        itemSaveSlot: dataObj.itemSaveSlot,
-                      },
-                      tabIdx: 1
-                    },
-                    isNavigate: true,
-                  });
-                }, 1800);
-              }} data-buttontype="training" />}
-              {!isMoveEvent && hasSocket > 0 && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:22}} onClick={(e) => {//소켓
-                showMsg(true);
-                msgText(gameData.msg.sentence.goForge[lang]);
-                timeoutRef.current = setTimeout(() => {
-                  util.saveHistory({
-                    location: 'blacksmith',
-                    navigate: navigate,
-                    callback: () => {},
-                    state: {
-                      dataObj: {
-                        gameItem: dataObj.gameItem,
-                        saveItemData: dataObj.saveItemData,
-                        itemSaveSlot: dataObj.itemSaveSlot,
-                      },
-                      tabIdx: 0
-                    },
-                    isNavigate: true,
-                  });
-                }, 1800);
-              }} data-buttontype="itemSocket" />}
-              {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {//판매
-                if (dataObj.saveItemData.part < 4) {
-                  showMsg(true);
-                  msgText(gameData.msg.sentence.goShop[lang]);
-                  timeoutRef.current = setTimeout(() => {
-                    util.saveHistory({
-                      location: 'equipment',
-                      navigate: navigate,
-                      callback: () => {},
-                      state: {
-                        dataObj: {
-                          ...dataObj,
-                          selectTab: 3,
-                          selectSlot: dataObj.saveItemData.slot,
-                        }
-                      },
-                      isNavigate: true,
-                    });
-                  }, 1800);
-                } else {
-                  showMsg(true);
-                  msgText(gameData.msg.sentence.goTool[lang]);
-                  timeoutRef.current = setTimeout(() => {
-                    util.saveHistory({
-                      location: 'accessory',
-                      navigate: navigate,
-                      callback: () => {},
-                      state: {
-                        dataObj: {
-                          ...dataObj,
-                          selectTab: 'inven',
-                          selectSlot: 1,
-                        }
-                      },
-                      isNavigate: true,
-                    });
-                  }, 1800);
-                }
-              }} data-buttontype="itemSell" />}
-            </ButtonArea>
-          )}
-        </PopupItemList>
-      </PopupItemContainer>
-    );
-  } else if (type === 'hole') {
-    const items = gameData.items?.hole?.[dataObj.saveItemData.idx];
-    if (!items) return null;
-    const saveItems = dataObj.saveItemData;
-    return (
-			<PopupItemContainer frameBack={imgSet.etc.frameChBack}>
-        <PopupItemList type="header" frameBack={imgSet.etc.frameChBack}>
-          <PopupItemName code="t3"  color="main" weight="600" grade={gameData.itemGrade.color[items.grade]}>{items.na[lang]}</PopupItemName>
-        </PopupItemList>
-        <PopupItemList>
-          <PopupItem part="11">
-            <ItemPic pic="itemEtc" type="hole" idx={items.display} />
-          </PopupItem>
-          <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemInfo direction="column" justifyContent="space-between">
-              <PopupItemTop justifyContent="space-between" className="item_top">
-                <PopupItemGrade code="t1"  color={gameData.itemGrade.color[items.grade]}>{lang === 'ko' ? gameData.itemGrade.txt_k[items.grade] : gameData.itemGrade.txt_e[items.grade]}</PopupItemGrade><PopupItemType code="t1"  color="#bbb">{gameData.msg.title.socketJewelry[lang]}</PopupItemType>
-              </PopupItemTop>
-              <PopupItemDescription code="t1"  color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></PopupItemDescription>
-            </PopupItemInfo>
-            {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
-          </div>
-        </PopupItemList>
+                  setTooltipPos(e.target.getBoundingClientRect());
+                  setTooltip(holeEffectText({
+                    gameData: gameData,
+                    holeData: holeData,
+                    theme: theme,
+                    lang: lang
+                  }));
+                  setTooltipOn(true);
+                }}>
+                  <ItemPic pic="itemEtc" type="hole" idx={holePic} />
+                </PopupItemHoleBack>
+              </div>
+            )
+          })}
+        </PopupItemSlot>
+      </PopupItemList>}
+
+
+      {itemCate === "equip" && <PopupItemList type="eff">
+        <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.itemEffect[lang]}</PopupItemTitle>
+        {totalEff.map((eff, idx) => {
+          if (eff.type === 100) {
+            return (
+              <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx}>
+                <PopupItemEffText type="skill" code="t1" weight="600" color={`st${eff.type}`}>{util.getEffectType(eff.type, lang)}</PopupItemEffText>
+                {eff.skList.map((sk, skIndex) => {
+                  return (
+                    <PopupItemEffText type="skill" code="t2" align="right"  color="main" key={`skIndex${skIndex}`}>{`${gameData.skill?.[sk.idx]?.na?.[lang]} LV.${sk.lv}`}</PopupItemEffText>
+                  )
+                })}
+              </PopupItemEffs>
+            )
+          } else {
+            return (
+              <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx}>
+                <PopupItemEffText code="t2" weight="600" color={`st${eff.type}`}>{util.getEffectType(eff.type, lang)}</PopupItemEffText>
+                <PopupItemEffText code="t2"  margin={5}  weight="600" color="main">{eff.base || "-"}</PopupItemEffText>
+                <PopupItemEffText code="t2" margin={5}  weight="600" color="grey1">{eff.add ? `+ ${eff.add}` : "-"}</PopupItemEffText>
+                <PopupItemEffText code="t2" margin={5}  weight="600" color="grey2">{eff.hole ? `+ ${eff.hole}` : "-"}</PopupItemEffText>
+                <PopupItemEffText code="t3"  align="right" weight="600" color={`st${eff.type}`}>{eff.base + eff.add + eff.hole}</PopupItemEffText>
+              </PopupItemEffs>
+            )
+          }
+        })}
+      </PopupItemList>}
+      {itemCate === "hole" && <>
         <PopupItemList type="eff">
           <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.basicEffect[lang]}</PopupItemTitle>
-          {saveItems.baseEff && saveItems.baseEff.map((data, idx) => {
+          {saveItem.baseEff && saveItem.baseEff.map((data, idx) => {
             return (
               <PopupItemEffs alignItems="center" justifyContent="space-between" key={idx}>
                 <PopupItemEffText code="t1" weight="600" color="#2f73ff">
@@ -1133,10 +914,10 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
             ) 
           })}
         </PopupItemList>
-        {saveItems.addEff?.length > 0 && (
+        {saveItem.addEff?.length > 0 && (
           <PopupItemList type="eff">
             <PopupItemTitle align="left"  code="t1" color="grey">{gameData.msg.itemInfo.addEffect[lang]}</PopupItemTitle>
-            {saveItems.addEff.map((data, idx) => {
+            {saveItem.addEff.map((data, idx) => {
               return (
                 <PopupItemEffs alignItems="center" justifyContent="space-between" color="#ffac2f" key={idx}>
                   <PopupItemEffText code="t1" weight="600" color="#ffac2f">
@@ -1150,27 +931,302 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
             })}
           </PopupItemList>
         )}
+        </>}
+
+
+        {itemCate === "equip" && <div style={{width:"100%"}} className="scroll-y">
+          {setsInfo.part && <PopupItemList type="set">
+            <div className="item_setNa">{setsInfo.na}</div>
+            {setsInfo.part.map((data, idx) => {
+              return (
+                <div key={idx} className={`item_set_piece ${dataObj[type].chSlotIdx ? getSetChk(saveData.ch?.[dataObj[type].chSlotIdx]?.items || [], data) : ''}`}>{gameData.items?.equip?.[data]?.na}</div>
+              ) 
+            })}
+          </PopupItemList>}
+        </div>}
         <PopupItemList frameBack={imgSet.etc.frameChBack} type="footer">
           <PopupItemPrice justifyContent="flex-start">
-            <PopupItemEffText code="t2" color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemEffText>
-            <PopupItemEffText code="t2" margin={10} color="main">{`₩${items.price}`}</PopupItemEffText>
+            <PopupItemPriceText code="t3" weight="600" color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemPriceText>
+            <PopupItemPriceText code="t4" weight="600" margin={10} color="main">{`${itemPrice[buttons[0]].str}`}</PopupItemPriceText>
           </PopupItemPrice>
-          <ButtonArea justifyContent="flex-end">
-            {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:22}} onClick={() => {//소켓
+          {!isMoveEvent && <ButtonArea justifyContent="flex-end">
+            {buttons.includes("buy") && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:24}} onClick={(e) => {//구입
+              e.stopPropagation();
+              const shopName = itemCateShopName({
+                itemCate: itemCate,
+                saveItem: saveItem,
+              });
+              if (shopName === dataObj[type].location.name) {
+                const actionCh = saveData.ch[saveData.actionCh[shopName].idx];
+                if (actionCh.actionPoint >= gameData.actionPoint.usePoint.itemSell) {//행동력 지불
+                actionCh.actionPoint -= gameData.actionPoint.usePoint.itemSell;
+                // changeSaveData(saveData);
+                if (shopName === "equipment") {//장비면
+                  util.buttonEvent({
+                    event: e,
+                    type: 'itemBuy',
+                    price: itemPrice.buy.num,
+                    data: {
+                      saveItemData: dataObj[type].saveItemData,
+                      gameItem: dataObj[type].gameItem,
+                      itemSaveSlot: dataObj[type].itemSaveSlot,
+                      type: dataObj[type].type,
+                    },
+                    saveData: saveData,
+                    changeSaveData: changeSaveData,
+                    gameData: gameData,
+                    msgText: msgText,
+                    showMsg: showMsg,
+                    showPopup: showPopup,
+                    lang: lang,
+                  });
+                }
+              } else {
+                showMsg(true);
+                msgText(`<span caution>${gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[actionCh.idx].na1[lang])}</span>`);
+                return;
+              }
+              } else {
+                
+              }
+            }}>
+            </StyledButton>}
+            {buttons.includes("sell") && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {//판매
+              e.stopPropagation();
+              const shopName = itemCateShopName({
+                itemCate: itemCate,
+                saveItem: saveItem,
+              });
+              if (shopName === dataObj[type].location.name) {
+                const actionCh = saveData.ch[saveData.actionCh[shopName].idx];
+                if (actionCh.actionPoint >= gameData.actionPoint.usePoint.itemSell) {//행동력 지불
+                  actionCh.actionPoint -= gameData.actionPoint.usePoint.itemSell;
+                  // changeSaveData(saveData);
+                  if (shopName === "equipment") {//장비면
+                    util.buttonEvent({
+                      event: e,
+                      type: 'itemSell',
+                      price: itemPrice.sell.num,
+                      data: {
+                        saveItemData: dataObj[type].saveItemData,
+                        gameItem: dataObj[type].gameItem,
+                        itemSaveSlot: dataObj[type].itemSaveSlot,
+                        type: dataObj[type].type,
+                      },
+                      saveData: saveData,
+                      changeSaveData: changeSaveData,
+                      gameData: gameData,
+                      msgText: msgText,
+                      showMsg: showMsg,
+                      showPopup: showPopup,
+                      lang: lang,
+                    }, () => {
+                      // if (saveData.items[dataObj[type].type][dataObj[type].itemSaveSlot]) { //다음 아이템이 있으면
+                      //   const itemData = saveData.items[dataObj[type].type][dataObj[type].itemSaveSlot],
+                      //     itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5,
+                      //     nextItem = itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx] : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx];
+                      //   util.saveHistory({
+                      //     location: 'equipment',
+                      //     navigate: navigate,
+                      //     callback: () => {},
+                      //     state: {
+                      //       dataObj: {
+                      //         saveItemData: saveData.items[dataObj[type].type][dataObj[type].itemSaveSlot],
+                      //         gameItem: nextItem,
+                      //         itemSaveSlot: dataObj[type].itemSaveSlot,
+                      //         selectTab: dataObj[type].selectTab,
+                      //         type: dataObj[type].type,
+                      //         selectSlot: dataObj[type].selectSlot,
+                      //       }
+                      //     },
+                      //     isNavigate: true,
+                      //   });
+                      // } else {
+                      // }
+                    });
+                  } 
+                } else {
+                  showMsg(true);
+                  msgText(`<span caution>${gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[actionCh.idx].na1[lang])}</span>`);
+                  return;
+                }
+              } else {
+                const shopIdx = gameData.shopName.findIndex((shop) => shop === shopName);
+                if (shopIdx < 0) {
+                  showMsg(true);
+                  msgText(gameData.msg.sentence[`no${shopName.charAt(0).toUpperCase() + shopName.slice(1)}`][lang]);
+                  return;
+                }
+                if (shopName === "equipment") {
+                  showMsg(true);
+                  msgText(gameData.msg.sentence.goEquipmentShop[lang]);
+                  timeoutRef.current = setTimeout(() => {
+                    util.saveHistory({
+                      prevLocation: dataObj[type].location.name,
+                      location: shopName,
+                      navigate: navigate,
+                      callback: () => {},
+                      state: {
+                        items: {
+                          gameItem: dataObj[type].gameItem,
+                          saveItemData: dataObj[type].saveItemData,
+                        },
+                        tab: 3,
+                        itemSaveSlot: dataObj[type].itemSaveSlot,
+                        location: shopName,
+                      },
+                      prevState: {
+                        tab: dataObj[type].location.tab || ""
+                      },
+                      isNavigate: true,
+                    });
+                  }, 1800);
+                } else if (shopName === "accessory") {
+                  showMsg(true);
+                  msgText(gameData.msg.sentence.goAccessoryShop[lang]);
+                  timeoutRef.current = setTimeout(() => {
+                    util.saveHistory({
+                      prevLocation: dataObj[type].location.name,
+                      location: shopName,
+                      navigate: navigate,
+                      callback: () => {},
+                      state: {
+                        items: {
+                          gameItem: dataObj[type].gameItem,
+                          saveItemData: dataObj[type].saveItemData,
+                        },
+                        tab: 2,
+                        itemSaveSlot: dataObj[type].itemSaveSlot,
+                        location: shopName,
+                      },
+                      prevState: {
+                        tab: dataObj[type].location.tab || ""
+                      },
+                      isNavigate: true,
+                    });
+                  }, 1800);
+                } else if (shopName === "tool") {
+                  showMsg(true);
+                  msgText(gameData.msg.sentence.goToolShop[lang]);
+                  timeoutRef.current = setTimeout(() => {
+                    util.saveHistory({
+                      prevLocation: dataObj[type].location.name,
+                      location: shopName,
+                      navigate: navigate,
+                      callback: () => {},
+                      state: {
+                        items: {
+                          gameItem: dataObj[type].gameItem,
+                          saveItemData: dataObj[type].saveItemData,
+                        },
+                        tab: 2,
+                        itemSaveSlot: dataObj[type].itemSaveSlot,
+                        location: shopName,
+                      },
+                      prevState: {
+                        tab: dataObj[type].location.tab || ""
+                      },
+                      isNavigate: true,
+                    });
+                  }, 1800);
+                } else if (shopName === "tradingPost") {
+                  showMsg(true);
+                  msgText(gameData.msg.sentence.goTradingPost[lang]);
+                  timeoutRef.current = setTimeout(() => {
+                    util.saveHistory({
+                      prevLocation: dataObj[type].location.name,
+                      location: shopName,
+                      navigate: navigate,
+                      callback: () => {},
+                      state: {
+                        items: {
+                          gameItem: dataObj[type].gameItem,
+                          saveItemData: dataObj[type].saveItemData,
+                        },
+                        tab: 1,
+                        itemSaveSlot: dataObj[type].itemSaveSlot,
+                        location: shopName,
+                      },
+                      prevState: {
+                        tab: dataObj[type].location.tab || ""
+                      },
+                      isNavigate: true,
+                    });
+                  }, 1800);
+                }
+              }
+            }} data-buttontype="itemSell" />}
+            {buttons.includes("use") && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:26}} onClick={(e) => {//사용
+              e.stopPropagation();
+              util.buttonEvent({
+                event: e,
+                type: 'itemUse',
+                data: dataObj,
+                saveData: saveData,
+                changeSaveData: changeSaveData,
+                gameData: gameData,
+                msgText: msgText,
+                showMsg: showMsg,
+                showPopup: showPopup,
+                lang: lang,
+              })
+            }} data-buttontype="itemUse" />}
+            {buttons.includes("upgrade") && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:21}} onClick={() => {//강화
+              const shopIdx = gameData.shopName.findIndex((shop) => shop === 'blacksmith');
+              if (shopIdx < 0) {
+                showMsg(true);
+                msgText(gameData.msg.sentence.noBlacksmith[lang]);
+                return;
+              }
               showMsg(true);
               msgText(gameData.msg.sentence.goForge[lang]);
               timeoutRef.current = setTimeout(() => {
                 util.saveHistory({
-                  location: 'training',
+                  prevLocation: dataObj[type].location.name,
+                  location: 'blacksmith',
                   navigate: navigate,
                   callback: () => {},
                   state: {
-                    dataObj: {
-                      gameItem: dataObj.gameItem,
-                      saveItemData: dataObj.saveItemData,
-                      itemSaveSlot: 0,
+                    items: {
+                      gameItem: dataObj[type].gameItem,
+                      saveItemData: dataObj[type].saveItemData,
                     },
-                    tabIdx: 0,
+                    tab: 1,
+                    itemSaveSlot: dataObj[type].itemSaveSlot,
+                  },
+                  prevState: {
+                    tab: dataObj[type].location.tab || ""
+                  },
+                  isNavigate: true,
+                });
+              }, 1800);
+            }} data-buttontype="itemUpgrade" />}
+            {buttons.includes("socket") && hasSocket && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:22}} onClick={(e) => {//소켓
+              e.stopPropagation();
+              const shopIdx = gameData.shopName.findIndex((shop) => shop === 'blacksmith');
+              if (shopIdx < 0) {
+                showMsg(true);
+                msgText(gameData.msg.sentence.noBlacksmith[lang]);
+                return;
+              }
+              showMsg(true);
+              msgText(gameData.msg.sentence.goForge[lang]);
+              timeoutRef.current = setTimeout(() => {
+                util.saveHistory({
+                  prevLocation: dataObj[type].location.name,
+                  location: 'blacksmith',
+                  navigate: navigate,
+                  callback: () => {},
+                  state: {
+                    items: {
+                      gameItem: dataObj[type].gameItem,
+                      saveItemData: dataObj[type].saveItemData,
+                    },
+                    tab: 0,
+                    itemSaveSlot: dataObj[type].itemSaveSlot,
+                  },
+                  prevState: {
+                    tab: dataObj[type].location.tab || "",
                   },
                   isNavigate: true,
                 });
@@ -1188,27 +1244,35 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
               //   lang: lang,
               // });
             }} data-buttontype="itemSocket" />}
-            {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {//판매
+            {buttons.includes("wear") && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:20}} onClick={(e) => {//장착
+              e.stopPropagation();
+              const shopIdx = gameData.shopName.findIndex((shop) => shop === 'home');
+              if (shopIdx < 0) {
+                showMsg(true);
+                msgText(gameData.msg.sentence.noHome[lang]);
+                return;
+              }
               showMsg(true);
-              msgText(gameData.msg.sentence.goTool[lang]);
-              timeoutRef.current = setTimeout(() => {
-                util.saveHistory({
-                  location: 'tool',
-                  navigate: navigate,
-                  callback: () => {},
-                  state: {
-                    dataObj: {
-                      ...dataObj,
-                      selectTab: 'inven',
-                      selectSlot: 1,
-                    }
-                  },
-                  isNavigate: true,
-                });
-              }, 1800);
+              msgText(gameData.msg.sentence.goItemEquip[lang]);
+              util.saveHistory({
+                prevLocation: dataObj[type].location.name,
+                location: 'cards',
+                navigate: navigate,
+                callback: () => {},
+                state: {
+                  chSlotIdx: 0,
+                  chTabIdx: 5,
+                  itemBoxOpened: true,
+                  itemEquipType: saveItem.part,
+                },
+                prevState: {
+                  tab: dataObj[type].location.tab || "",
+                },
+                isNavigate: true,
+              });
               // util.buttonEvent({
               //   event: e,
-              //   type: 'itemSell',
+              //   type: 'itemEquip',
               //   data: dataObj,
               //   saveData: saveData,
               //   changeSaveData: changeSaveData,
@@ -1217,199 +1281,14 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
               //   showMsg: showMsg,
               //   showPopup: showPopup,
               //   lang: lang,
-              // })
-            }} data-buttontype="itemSell" />}
-          </ButtonArea>
-        </PopupItemList>
-      </PopupItemContainer>
-    )
-  } else if (type === 'upgrade') {
-    const items = gameData.items?.upgrade?.[dataObj.saveItemData.idx];
-    if (!items) return null;
-    return (
-			<PopupItemContainer frameBack={imgSet.etc.frameChBack}>
-        <PopupItemList type="header" frameBack={imgSet.etc.frameChBack}>
-          <PopupItemName code="t3"  color="main" weight="600" grade={gameData.itemGrade.color[items.grade]}>{items.na[lang]}</PopupItemName>
-        </PopupItemList>
-        <PopupItemList>
-          <PopupItem part="12">
-            <ItemPic pic="itemEtc" type="upgrade" idx={items.display} />
-          </PopupItem>
-          <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemInfo direction="column" justifyContent="space-between">
-              <PopupItemTop justifyContent="space-between" className="item_top">
-                <PopupItemGrade code="t1"  color={gameData.itemGrade.color[items.grade]}>{lang === 'ko' ? gameData.itemGrade.txt_k[items.grade] : gameData.itemGrade.txt_e[items.grade]}</PopupItemGrade><PopupItemType code="t1"  color="#bbb">{gameData.msg.title.reinforcedMaterial[lang]}</PopupItemType>
-              </PopupItemTop>
-              <PopupItemDescription code="t1"  color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></PopupItemDescription>
-            </PopupItemInfo>
-            {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
-          </div>
-        </PopupItemList>
-        <PopupItemList frameBack={imgSet.etc.frameChBack} type="footer">
-          <PopupItemPrice justifyContent="flex-start">
-            <PopupItemEffText code="t2" color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemEffText>
-            <PopupItemEffText code="t2" margin={10} color="main">{`₩${items.price}`}</PopupItemEffText>
-          </PopupItemPrice>
-          <ButtonArea justifyContent="flex-end">
-            {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:21}} onClick={() => {//강화
-              showMsg(true);
-              msgText(gameData.msg.sentence.goForge[lang]);
-              timeoutRef.current = setTimeout(() => {
-                util.saveHistory({
-                  location: 'training',
-                  navigate: navigate,
-                  callback: () => {},
-                  state: {
-                    dataObj: {
-                      gameItem: dataObj.gameItem,
-                      saveItemData: dataObj.saveItemData,
-                      itemSaveSlot: 0,
-                    },
-                    tabIdx: 1
-                  },
-                  isNavigate: true,
-                });
-              }, 1800);
-              // util.buttonEvent({
-              //   event: e,
-              //   type: 'itemUse',
-              //   data: dataObj,
-              //   saveData: saveData,
-              //   changeSaveData: changeSaveData,
-              //   gameData: gameData,
-              //   msgText: msgText,
-              //   showMsg: showMsg,
-              //   showPopup: showPopup,
-              //   lang: lang,
-              // })
-            }} data-buttontype="training" />}
-            {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {//판매
-              showMsg(true);
-              msgText(gameData.msg.sentence.goTool[lang]);
-              timeoutRef.current = setTimeout(() => {
-                util.saveHistory({
-                  location: 'tool',
-                  navigate: navigate,
-                  callback: () => {},
-                  state: {
-                    dataObj: {
-                      ...dataObj,
-                      selectTab: 'inven',
-                      selectSlot: 1,
-                    }
-                  },
-                  isNavigate: true,
-                });
-              }, 1800);
-              // util.buttonEvent({
-              //   event: e,
-              //   type: 'itemSell',
-              //   data: dataObj,
-              //   saveData: saveData,
-              //   changeSaveData: changeSaveData,
-              //   gameData: gameData,
-              //   msgText: msgText,
-              //   showMsg: showMsg,
-              //   showPopup: showPopup,
-              //   lang: lang,
-              // })
-            }} data-buttontype="itemSell" />}
-          </ButtonArea>
-        </PopupItemList>
-      </PopupItemContainer>
-    )
-  } else if (type === 'material') {
-    const items = gameData.items?.material?.[dataObj.saveItemData.idx];
-    if (!items) return null;
-    return (
-			<PopupItemContainer frameBack={imgSet.etc.frameChBack}>
-        <PopupItemList type="header" frameBack={imgSet.etc.frameChBack}>
-          <PopupItemName code="t3"  color="main" weight="600" grade={gameData.itemGrade.color[items.grade]}>{items.na[lang]}</PopupItemName>
-        </PopupItemList>
-        <PopupItemList>
-          <PopupItem part="14">
-            <ItemPic pic="material" type="material" idx={items.display} />
-          </PopupItem>
-          <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemInfo direction="column" justifyContent="space-between">
-              <PopupItemTop justifyContent="space-between" className="item_top">
-                <PopupItemGrade code="t1"  color={gameData.itemGrade.color[items.grade]}>{lang === 'ko' ? gameData.itemGrade.txt_k[items.grade] : gameData.itemGrade.txt_e[items.grade]}</PopupItemGrade><PopupItemType code="t1"  color="#bbb">{gameData.msg.title.material[lang]}</PopupItemType>
-              </PopupItemTop>
-              <PopupItemDescription code="t1"  color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></PopupItemDescription>
-            </PopupItemInfo>
-            {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
-          </div>
-        </PopupItemList>
-        <PopupItemList frameBack={imgSet.etc.frameChBack} type="footer">
-          <PopupItemPrice justifyContent="flex-start">
-            <PopupItemEffText code="t2" color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemEffText>
-            <PopupItemEffText code="t2" margin={10} color="main">{`₩${items.price}`}</PopupItemEffText>
-          </PopupItemPrice>
-          <ButtonArea justifyContent="flex-end">
-            {!isMoveEvent && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {//판매
-              showMsg(true);
-              msgText(gameData.msg.sentence.goTrade[lang]);
-              timeoutRef.current = setTimeout(() => {
-                util.saveHistory({
-                  location: 'tradingPost',
-                  navigate: navigate,
-                  callback: () => {},
-                  state: {
-                    dataObj: dataObj
-                  },
-                  isNavigate: true,
-                });
-              }, 1800);
-              // util.buttonEvent({
-              //   event: e,
-              //   type: 'itemSell',
-              //   data: dataObj,
-              //   saveData: saveData,
-              //   changeSaveData: changeSaveData,
-              //   gameData: gameData,
-              //   msgText: msgText,
-              //   showMsg: showMsg,
-              //   showPopup: showPopup,
-              //   lang: lang,
-              // })
-            }} data-buttontype="itemSell" />}
-          </ButtonArea>
-        </PopupItemList>
-      </PopupItemContainer>
-    )
-  } else if (type === 'etc') {
-    const items = gameData.items?.etc?.[dataObj.saveItemData.idx];
-    if (!items) return null;
-    return (
-			<PopupItemContainer frameBack={imgSet.etc.frameChBack}>
-        <PopupItemList type="header" frameBack={imgSet.etc.frameChBack}>
-          <PopupItemName code="t3"  color="main" weight="600" grade={gameData.itemGrade.color[items.grade]}>{items.na[lang]}</PopupItemName>
-        </PopupItemList>
-        <PopupItemList>
-          <PopupItem part="13">
-            <ItemPic pic="itemEtc" type="etc" idx={items.display} />
-          </PopupItem>
-          <div flex-h="true" style={{flex: 1,}}>
-            <PopupItemInfo direction="column" justifyContent="space-between">
-              <PopupItemTop justifyContent="space-between" className="item_top">
-                <PopupItemGrade code="t1"  color={gameData.itemGrade.color[items.grade]}>{lang === 'ko' ? gameData.itemGrade.txt_k[items.grade] : gameData.itemGrade.txt_e[items.grade]}</PopupItemGrade><PopupItemType code="t1"  color="#bbb">{gameData.msg.title.etc[lang]}</PopupItemType>
-              </PopupItemTop>
-              <PopupItemDescription code="t1"  color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></PopupItemDescription>
-            </PopupItemInfo>
-            {/* ${gameData.itemGrade.txt_e[items.grade]}  */}
-          </div>
-        </PopupItemList>
-        <PopupItemList frameBack={imgSet.etc.frameChBack} type="footer">
-          <PopupItemPrice justifyContent="flex-start">
-            <PopupItemEffText code="t2" color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemEffText>
-            <PopupItemEffText code="t2" margin={10} color="main">{`₩${items.price}`}</PopupItemEffText>
-          </PopupItemPrice>
-          <ButtonArea justifyContent="flex-end">
-            <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:26}} onClick={(e) => {//사용
+              // });
+            }} data-buttontype="itemEquip" />}
+            {buttons.includes("release") && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:27}} onClick={(e) => {//해제
+              e.stopPropagation();
               util.buttonEvent({
                 event: e,
-                type: 'itemUse',
-                data: dataObj,
+                type: 'itemRelease',
+                data: dataObj[type],
                 saveData: saveData,
                 changeSaveData: changeSaveData,
                 gameData: gameData,
@@ -1417,49 +1296,55 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                 showMsg: showMsg,
                 showPopup: showPopup,
                 lang: lang,
-              })
-            }} data-buttontype="itemUse" />
-            {!isMoveEvent && <Button type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {
+              });
+              // navigate('../cards', {state: {
+              //   dataObj: {
+              //     chSlotIdx: dataObj[type].chSlotIdx,
+              //     chTabIdx: 5,
+              //     invenOpened: true,
+              //   }
+              // }});
+            }} data-buttontype="itemRelease" />}
+            {buttons.includes("evaluate") && sealed &&  <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:25}} onClick={(e) => {//감정
+              e.stopPropagation();
+              const shopIdx = gameData.shopName.findIndex((shop) => shop === 'composite');
+              if (shopIdx < 0) {
+                showMsg(true);
+                msgText(gameData.msg.sentence.noComposite[lang]);
+                return;
+              }
               showMsg(true);
-              msgText(gameData.msg.sentence.goTool[lang]);
+              msgText(gameData.msg.sentence.goLab[lang]);
               timeoutRef.current = setTimeout(() => {
                 util.saveHistory({
-                  location: 'tool',
+                  prevLocation: dataObj[type].location.name,
+                  location: 'composite',
                   navigate: navigate,
                   callback: () => {},
                   state: {
-                    dataObj: {
-                      ...dataObj,
-                      selectTab: 'inven',
-                      selectSlot: 1,
-                    }
+                    items: {
+                      gameItem: dataObj[type].gameItem,
+                      saveItemData: dataObj[type].saveItemData,
+                    },
+                    tab: 0,
+                    itemSaveSlot: dataObj[type].itemSaveSlot,
+                  },
+                  prevState: {
+                    tab: dataObj[type].location.tab || "",
                   },
                   isNavigate: true,
                 });
               }, 1800);
-              // util.buttonEvent({
-              //   event: e,
-              //   type: 'itemSell',
-              //   data: dataObj,
-              //   saveData: saveData,
-              //   changeSaveData: changeSaveData,
-              //   gameData: gameData,
-              //   msgText: msgText,
-              //   showMsg: showMsg,
-              //   showPopup: showPopup,
-              //   lang: lang,
-              // })
-            }} data-buttontype="itemSell" />}
-          </ButtonArea>
+            }} data-buttontype="itemEvaluate" />}
+          </ButtonArea>}
         </PopupItemList>
-      </PopupItemContainer>
-    )
+    </PopupItemContainer>
   } else if (type === 'guide') {
-    const guide_txt = dataObj.data?.txt?.[lang];
+    const guide_txt = dataObj[type].data?.txt?.[lang];
     return (
       <PopupGuide>
         <dl>
-          <dt className="guide_title">{dataObj.data?.title?.[lang]}</dt>
+          <dt className="guide_title">{dataObj[type].data?.title?.[lang]}</dt>
           <dd className="guide_cont">
             <ul>
             {guide_txt && guide_txt.map((txt, idx) => {
@@ -1473,12 +1358,12 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
       </PopupGuide>
     );
   } else if (type === 'skillDescription') {
-    const skData = dataObj.sk,
-      skillLv = dataObj.skData.lv,
-      skillLimit = dataObj.skData.lvLimit,
-      chLv = dataObj.chLv,
-      requiredSkillName = dataObj.requiredSkill ? dataObj.requiredSkill.na[lang] : "",
-      activeRequired = dataObj.activeRequired;
+    const skData = dataObj[type].sk,
+      skillLv = dataObj[type].skData.lv,
+      skillLimit = dataObj[type].skData.lvLimit,
+      chLv = dataObj[type].chLv,
+      requiredSkillName = dataObj[type].requiredSkill ? dataObj[type].requiredSkill.na[lang] : "",
+      activeRequired = dataObj[type].activeRequired;
     const {skillText, skillType, skillCate} = util.getSkillText({
       skill: skData,
       lv: skillLv,
@@ -1540,7 +1425,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                 </>
               }
               <SkillTitle code="t3" color="main" weight="600">
-                {`${skillLv > 0 ? 'Lv.' + skillLv : '(' + gameData.msg.info.unlearned[lang]+')'} ${dataObj.sk.na[lang]}`}
+                {`${skillLv > 0 ? 'Lv.' + skillLv : '(' + gameData.msg.info.unlearned[lang]+')'} ${dataObj[type].sk.na[lang]}`}
               </SkillTitle>
             </dt>
             <dd>
@@ -1548,7 +1433,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
             </dd>
           </dl>
           <ul className="skill_eff">
-            {(skillCate === 2 || skillCate === 4 || skillCate === 5 || skillCate === 6 || skillCate === 12) && dataObj.sk.buff.map((skillEff) => {
+            {(skillCate === 2 || skillCate === 4 || skillCate === 5 || skillCate === 6 || skillCate === 12) && dataObj[type].sk.buff.map((skillEff) => {
               return skillEff.num.map((eff, idx) => {
                 return (
                   <li key={idx}>
@@ -1566,11 +1451,11 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                 )
               });
             })}
-            {skillCate !== 2 && skillCate !== 4 && skillCate !== 5 && skillCate !== 6 && skillCate !== 10 && skillCate !== 11 && skillCate !== 12 && skillCate !== 13 && dataObj.sk.eff[0].num.map((skillEff, skillIdx) => {
+            {skillCate !== 2 && skillCate !== 4 && skillCate !== 5 && skillCate !== 6 && skillCate !== 10 && skillCate !== 11 && skillCate !== 12 && skillCate !== 13 && dataObj[type].sk.eff[0].num.map((skillEff, skillIdx) => {
               let skill = '';
-              return dataObj.sk.eff.map((eff, idx) => {
-                skill += `Lv.${skillIdx + 1}: ${dataObj.sk.cate !== 3 ? util.getEffectType(eff.type, lang) : ''} ${dataObj.sk.eff[idx].num[skillIdx]}${idx === 0 && dataObj.sk.eff.length !== 1 ? "," : ""} `;
-                if(idx === dataObj.sk.eff.length - 1) {
+              return dataObj[type].sk.eff.map((eff, idx) => {
+                skill += `Lv.${skillIdx + 1}: ${dataObj[type].sk.cate !== 3 ? util.getEffectType(eff.type, lang) : ''} ${dataObj[type].sk.eff[idx].num[skillIdx]}${idx === 0 && dataObj[type].sk.eff.length !== 1 ? "," : ""} `;
+                if(idx === dataObj[type].sk.eff.length - 1) {
                   return <li key={idx}>
                     <SkillEff {...skillLv === skillIdx + 1 ? {
                       "code": "t3",
@@ -1587,11 +1472,11 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                 }
               })
             })}
-            {skillCate === 13 && dataObj.sk.eff[0].num.map((skillEff, skillIdx) => {
+            {skillCate === 13 && dataObj[type].sk.eff[0].num.map((skillEff, skillIdx) => {
               let skill = '';
-              return dataObj.sk.eff.map((eff, idx) => {
-                skill += `Lv.${skillIdx + 1}: ${dataObj.sk.cate !== 3 ? util.getEffectType(eff.type, lang) : ''} ${dataObj.sk.eff[idx].num[skillIdx]}${idx === 0 && dataObj.sk.eff.length !== 1 ? "," : ""} `;
-                if(idx === dataObj.sk.eff.length - 1) {
+              return dataObj[type].sk.eff.map((eff, idx) => {
+                skill += `Lv.${skillIdx + 1}: ${dataObj[type].sk.cate !== 3 ? util.getEffectType(eff.type, lang) : ''} ${dataObj[type].sk.eff[idx].num[skillIdx]}${idx === 0 && dataObj[type].sk.eff.length !== 1 ? "," : ""} `;
+                if(idx === dataObj[type].sk.eff.length - 1) {
                   return <li key={idx}>
                     <SkillEff {...skillLv === skillIdx + 1 ? {
                       "code": "t3",
@@ -1608,7 +1493,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                 }
               })
             })}
-            {skillCate === 10 && dataObj.sk.buff.map((skillEff) => {
+            {skillCate === 10 && dataObj[type].sk.buff.map((skillEff) => {
               return skillEff.num.map((eff, idx) => {
                 return (
                   <li key={idx}>
@@ -1628,7 +1513,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                 )
               });
             })}
-            {skillCate === 11 && dataObj.sk.eff.map((skillEff) => {
+            {skillCate === 11 && dataObj[type].sk.eff.map((skillEff) => {
               return skillEff.num.map((eff, idx) => {
                 return (
                   <li className={`skill_eff_list ${skillLv === idx + 1 ? 'on' : ''}`} key={idx}>
@@ -1645,8 +1530,8 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
     );
   } else if (type === 'selectCh') {
     let possibleCh = 0;
-    const skillIdx = util.getActionTypeSkill(dataObj.type);
-    const saveCh = dataObj.ch[dataObj.selectIdx];
+    const skillIdx = util.getActionTypeSkill(dataObj[type].type);
+    const saveCh = dataObj[type].ch[dataObj[type].selectIdx];
     const skillLv = saveCh ? saveCh?.sk.find((skill) => skill.idx === skillIdx)?.lv || 0 : 0,
       possibleLvUp = saveCh ? saveCh.lv < 50 && saveCh.hasExp > gameData.exp[`grade${saveCh.grade}`][saveCh.lv] : false,
       possibleGradeUp = saveCh ? saveCh.grade < 7 && gameData.gradeUp[saveCh.grade] <= saveData.hasHeroNum[saveCh.idx]: false,
@@ -1656,7 +1541,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
         <ActionCh>
           <ChDisplay>
             <Img imgurl={imgSet.images.transparent800} />
-            <ChCard usedType="actionCh" saveCharacter={saveCh} saveData={dataObj.ch} slotIdx={dataObj.selectIdx} />
+            <ChCard usedType="actionCh" saveCharacter={saveCh} saveData={dataObj[type].ch} slotIdx={dataObj[type].selectIdx} />
             <ChBack type="cardBack" pic="card" idx={0} />
           </ChDisplay>
           <StateContainer direction="column" justifyContent="space-around" alignItems="center">
@@ -1677,14 +1562,14 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
           </StateContainer>
         </ActionCh>
         {saveCh && <ChSkillActionPoint dirction="row" justifyContent="space-between">
-          {dataObj.type !== "training" && dataObj.type !== "mystery" && <ChSkill justifyContent="flex-start">
+          {dataObj[type].type !== "training" && dataObj[type].type !== "mystery" && <ChSkill justifyContent="flex-start">
             <ActionSkillIcon><IconPic type="skill" pic="skill" idx={skillIdx} /></ActionSkillIcon>
             <Text code="t4" color="main" weight="600">{`${gameData.skill[skillIdx].na[lang]} Lv.${skillLv}`}</Text>
           </ChSkill>}
-          {dataObj.type === "mystery" && <ChSkill justifyContent="flex-start">
+          {dataObj[type].type === "mystery" && <ChSkill justifyContent="flex-start">
             <Text code="t4" color="main" weight="600">{`${gameData.msg.info.hasExp[lang]}: ${saveCh.hasExp}`}</Text>
           </ChSkill>}
-          {dataObj.type === "training" && <ChSkill justifyContent="flex-start">
+          {dataObj[type].type === "training" && <ChSkill justifyContent="flex-start">
             {possibleLvUp && <UpIcon type="commonIcon" pic="icon200" idx={1} />}
             {possibleGradeUp && <UpIcon type="commonIcon" pic="icon200" idx={9} />}
             {possibleSkillUp && <UpIcon type="commonIcon" pic="icon200" idx={7} />}
@@ -1695,7 +1580,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
         </ChSkillActionPoint>}
         <ChList type="action_list">
           <ChUl>
-          {dataObj.ch.map((data, idx) => {
+          {dataObj[type].ch.map((data, idx) => {
             let hasSkill = false;
             for (const [idx, skillData] of data.sk.entries()) {
               if (skillData.idx === skillIdx) {
@@ -1708,16 +1593,16 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
               possibleCh ++;
             }
             return (
-              <ChLi select={dataObj.selectIdx === idx} hasSkill={hasSkill} grade={data.grade} key={`chLi_${idx}`} onClick={(e) => {
+              <ChLi select={dataObj[type].selectIdx === idx} hasSkill={hasSkill} grade={data.grade} key={`chLi_${idx}`} onClick={(e) => {
                 e.stopPropagation();
                 if (hasSkill) {
-                  dataObj.setSelectIdx(idx);
+                  dataObj[type].setSelectIdx(idx);
                 } else {
-                  dataObj.setMsg(gameData.msg.sentenceFn.selectSkillCh(lang, gameData.skill[skillIdx].na));
-                  dataObj.setMsgOn(true);
+                  dataObj[type].setMsg(gameData.msg.sentenceFn.selectSkillCh(lang, gameData.skill[skillIdx].na));
+                  dataObj[type].setMsgOn(true);
                 }
               }}>
-                <CharacterCard usedType="thumb" saveData={dataObj.ch} saveCharacter={data} />
+                <CharacterCard usedType="thumb" saveData={dataObj[type].ch} saveCharacter={data} />
               </ChLi>
             )
           })}
@@ -1728,8 +1613,8 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
           <button className="button_big" text="true" onClick={(e) => {
             e.stopPropagation();
             let sData = JSON.parse(JSON.stringify(saveData));
-            if (sData.actionCh?.[dataObj.type]) {
-              sData.actionCh[dataObj.type].idx = dataObj.selectIdx;
+            if (sData.actionCh?.[dataObj[type].type]) {
+              sData.actionCh[dataObj[type].type].idx = dataObj[type].selectIdx;
               changeSaveData(sData);
             }
             showPopup(false);
@@ -1772,13 +1657,13 @@ const Popup = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const [selectIdx, setSelectIdx] = useState(dataObj.actionChIdx);
+  const [selectIdx, setSelectIdx] = useState(type === "selectCh" ? dataObj[type].actionChIdx : "");
   const [content, setContent] = useState();
   const timeoutRef = useRef(null);
   useEffect(() => {
     if (type === 'selectCh') {
-      dataObj.selectIdx = selectIdx;
-      dataObj.setSelectIdx = setSelectIdx;
+      dataObj[type].selectIdx = selectIdx;
+      dataObj[type].setSelectIdx = setSelectIdx;
     }
     setContent(typeAsContent({
       type: type,
@@ -1803,7 +1688,7 @@ const Popup = ({
     // if (dataObj?.saveItemData?.sealed) {
     //   setContent(typeAsContent(type, {
     //     ...dataObj,
-    //     saveItemData: saveData.items[dataObj.type][dataObj.itemSaveSlot],
+    //     saveItemData: saveData.items[dataObj[type].type][dataObj[type].itemSaveSlot],
     //   }, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, showPopup, lang));
     // }
   }, []);

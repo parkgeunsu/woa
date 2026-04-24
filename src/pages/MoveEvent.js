@@ -594,15 +594,18 @@ const MoveEvent = ({
                   });
                   const itemCate = itemType.split('-')
                   const gameItemData = gameData.items.equip[itemCate[0]][itemCate[1]][0][acquiredThings.idx];
-                  setPopupInfo({
-                    chSlotIdx: "",
-                    gameItem: gameItemData,
-                    itemSaveSlot: 0,
-                    saveItemData: acquiredThings,
-                    noneButton: true,
-                    type: "hequip",
-                  });
                   setPopupType("hequip");
+                  setPopupInfo(prev => ({
+                    ...prev,
+                    hequip: {
+                      chSlotIdx: "",
+                      gameItem: gameItemData,
+                      itemSaveSlot: 0,
+                      saveItemData: acquiredThings,
+                      itemAreaType: "",//아직 안쓰임
+                      type: "hequip",
+                    },
+                  }));
 							    setPopupOn(true);
                 }
                 changeSaveData(prev => ({

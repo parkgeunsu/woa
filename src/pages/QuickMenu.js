@@ -62,6 +62,7 @@ const QuickMenuBody = styled.ul`
 
 const QuickMenu = ({
   type,
+  saveData,
   gameMode,
   showDim,
   setShowDim,
@@ -78,7 +79,8 @@ const QuickMenu = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const isMoveEvent = React.useMemo(() => util.loadData("historyParam")?.moveEvent && Object.keys(util.loadData("historyParam")?.moveEvent)?.length > 0
+  const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
+  const isMoveEvent = React.useMemo(() => sData?.moveEvent && Object.keys(sData?.moveEvent)?.length > 0
 	, []);
   return <QuickMenuBox showDim={showDim} type={type} gameMode={gameMode} className="transition">
     <QuickMenuTitle onClick={() => {
@@ -88,7 +90,7 @@ const QuickMenu = ({
       <FlagIcon type="flag" pic="icon200" isAbsolute={true} idx={util.getStringToCountryIdx(stay)}/>
     </QuickMenuTitle>
     <QuickMenuBody>
-      <li><IconPic type="quickMenu" pic="icon100" idx={0} onClick={() => {
+      {isMoveEvent && <li><IconPic type="quickMenu" pic="icon100" idx={0} onClick={() => {
         util.saveHistory({
           prevLocation: isMoveEvent ? 'moveEvent' : 'gameMain',
           location: 'cardsList',
@@ -103,7 +105,7 @@ const QuickMenu = ({
         //   const dd = cc.concat(cc);
         //   sData.ch = dd;
         //   changeSaveData(sData);
-      }}/><Text className="text">{gameData.msg?.button?.['cards']?.[lang] || "Cards"}</Text></li>
+      }}/><Text className="text">{gameData.msg?.button?.['cards']?.[lang] || "Cards"}</Text></li>}
       <li><IconPic type="quickMenu" pic="icon100" idx={1} onClick={() => {
         util.saveHistory({
           prevLocation: isMoveEvent ? 'moveEvent' : 'gameMain',

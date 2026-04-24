@@ -285,17 +285,17 @@ const setSlotIdxFn = (state, paramData, navigate, entryGroup) => {
   if (!state) {
 		return paramData.cards.selectIdx || 0;
 	}
-  if (state.dataObj.isMoveNotCh) {
-    return state.dataObj.chSlotIdx;
+  if (state?.isMoveNotCh) {
+    return state.chSlotIdx;
   }
-  const findIdx = entryGroup.findIndex((entryIdx) => entryIdx === state.dataObj.chSlotIdx);
+  const findIdx = entryGroup.findIndex((entryIdx) => entryIdx === state.chSlotIdx);
   return findIdx;
 }
 const setPageIdxFn = (state) => {
   if (!state) {
 		return 0;
 	}
-  return state.dataObj.chTabIdx;
+  return state.chTabIdx;
 }
 const Cards = ({
   saveData,
@@ -304,6 +304,7 @@ const Cards = ({
   const context = useContext(AppContext);
   const navigate = useNavigate();
 	const {state} = useLocation();
+  console.log(state);
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -321,20 +322,23 @@ const Cards = ({
   const [msg, setMsg] = useState("");
   const gameItem = React.useMemo(() => gameData.items, [gameData]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') ?? {} : {...saveData}, [saveData]);
-  const [showInven, setShowInven] = useState(state?.dataObj.invenOpened);
+  const [showInven, setShowInven] = useState(state?.invenOpened);  
   const [showSetting, setShowSetting] = useState(false);
   const [showState, setShowState] = useState(false);
   const invenItems = React.useMemo(() => {
     return sData.items;
   }, [sData]);
   const isMoveEvent = React.useMemo(() => {
-    return util.loadData("historyParam")?.moveEvent && Object.keys(util.loadData("historyParam").moveEvent)?.length > 0;
+    return sData?.moveEvent && Object.keys(sData.moveEvent)?.length > 0;
   }, []);
   const entryGroup = React.useMemo(() => {
-    if (state.dataObj.isMoveNotCh) {
-      return Array.from({length: sData.ch.length}, (_,idx) => idx).filter((idx) => !util.loadData("historyParam").moveEvent.ch.includes(idx));
+    if (state?.isMoveNotCh) {
+      return Array.from({length: sData.ch.length}, (_,idx) => idx).filter((idx) => !sData.moveEvent.ch.includes(idx));
     }
-    return isMoveEvent ? util.loadData("historyParam").moveEvent.ch : sData.entry;
+    if (isMoveEvent) {
+      return sData.moveEvent.ch;
+    }
+    return sData.entry;
   }, [isMoveEvent, sData]);
   const entries = React.useMemo(() => {
     return entryGroup.map((entryIdx) => {
@@ -352,7 +356,6 @@ const Cards = ({
   const [slotIdx, setSlotIdx] = useState(setSlotIdxFn(state, paramData, navigate, entryGroup));
   const [chPage, setChPage] = useState(setPageIdxFn(state));
   useEffect(() => {
-    console.log(slotIdx);
 		setSlotIdx(setSlotIdxFn(state, paramData, navigate, entryGroup));
 		setChPage(setPageIdxFn(state));
 	}, [state, paramData]);
@@ -383,14 +386,17 @@ const Cards = ({
       } else {
         gameItemData = gameItem[itemType][itemIdx];
       }
-      setPopupInfo({
-        isMoveEvent: isMoveEvent,
-        chSlotIdx: slotIdx,
-        gameItem: gameItemData,
-        itemSaveSlot: itemSaveSlot,
-        saveItemData: saveItemData,
-        type: itemType === 'hequip' ? 'equip' : itemType,
-      });
+      setPopupInfo(prev => ({
+        ...prev,
+        item: {
+          isMoveEvent: isMoveEvent,
+          chSlotIdx: slotIdx,
+          gameItem: gameItemData,
+          itemSaveSlot: itemSaveSlot,
+          saveItemData: saveItemData,
+          type: itemType === 'hequip' ? 'equip' : itemType,
+        }
+      }));
     }
     setPopupOn(prev => !prev);
   }, [invenItems, slotIdx, isMoveEvent, gameItem]);
@@ -409,7 +415,7 @@ const Cards = ({
             {chPage === 2 && <CharacterAnimalSkill saveData={sData} slotIdx={entries[slotIdx].slotIdx} changeSaveData={changeSaveData} />}
             {chPage === 3 && <CharacterSkill saveData={sData} slotIdx={entries[slotIdx].slotIdx} />}
             {chPage === 4 && <CharacterRelation saveData={sData} slotIdx={entries[slotIdx].slotIdx} />}
-            {chPage === 5 && <CharacterItems saveData={sData} slotIdx={entries[slotIdx].slotIdx} changeSaveData={changeSaveData} />}
+            {chPage === 5 && <CharacterItems saveData={sData} slotIdx={entries[slotIdx].slotIdx} changeSaveData={changeSaveData} isShowItemBox={state?.itemBoxOpened} itemEquipType={state?.itemEquipType} />}
           </ChCard>}
           <CharacterPaging chList={entries} saveData={sData} changeChSlot={changeChSlot} slotIdx={slotIdx} />
           <TopBtnGroup>
@@ -499,7 +505,7 @@ const Cards = ({
                         isEquip
                         icon={{
                           type: "equip",
-                          pic: "equip",
+                          pic: items.pic,
                           idx: items.display,
                           mergeColor: data.color,
                         }}
@@ -530,7 +536,7 @@ const Cards = ({
                         isEquip
                         icon={{
                           type: "hole",
-                          pic: "itemEtc",
+                          pic: items.pic,
                           idx: items.display
                         }}
                         part="11"
@@ -558,7 +564,7 @@ const Cards = ({
                         isEquip
                         icon={{
                           type: "upgrade",
-                          pic: "itemEtc",
+                          pic: items.pic,
                           idx: items.display
                         }}
                         text={data.num || ""}
@@ -587,7 +593,7 @@ const Cards = ({
                         isEquip
                         icon={{
                           type: "material",
-                          pic: "material",
+                          pic: items.pic,
                           idx: items.display
                         }}
                         text={data.num || 1}
@@ -616,7 +622,7 @@ const Cards = ({
                         isEquip
                         icon={{
                           type: "etc",
-                          pic: "itemEtc",
+                          pic: items.pic,
                           idx: items.display
                         }}
                         part="13"
@@ -633,7 +639,7 @@ const Cards = ({
           {/* <CharacterItemEnhance saveData={sData} slotIdx={slotIdx} />
           <CharacterChEnhance saveData={sData} slotIdx={slotIdx} /> */}
         </ChArea>
-        <ButtonArea justifyContent="flex-start">
+        <ButtonArea justifyContent="space-between">
           <StyledButton onClick={() => {
             setSlotIdx((prevSlot) => {
               prevSlot--;

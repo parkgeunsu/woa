@@ -15,7 +15,7 @@ import TooltipContainer from 'components/TooltipContainer';
 import { AppContext } from 'contexts/app-context';
 import CharacterCard from 'pages/CharacterCard';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { useTheme } from 'styled-components';
 
 const Wrap = styled(FlexBox)`
@@ -95,24 +95,32 @@ const LeaderCh = styled.div`
 const ChInven = styled.div`
   position: absolute;
   inset: 0;
-  border: 5px solid transparent;
   background: rgba(0,0,0,.8);
-  border-image: url(${({frameBack}) => frameBack}) 5 round;
   z-index: 3;
 `;
-
 const InvenItems = styled.div`
   padding: 5px;
   height: 100%;
   box-sizing: border-box;
-  .h_items {
-    display: flex;
-    flex-flow: wrap;
-    width: 100%;
+  overflow-y: auto;
+`;
+const InvenTitle = styled(FlexBox)`
+  height: auto;
+`;
+const InvenText = styled(Text)``;
+const StyledIconPic = styled(IconPic)`
+  margin: 0 5px 0 0;
+  width: 20px;
+  height: 20px;
+`;
+const Items = styled(FlexBox)`
+  margin: 0 0 10px 0;
+  height: auto;
+  &:last-of-type {
+    margin: 0;
   }
 `;
-const InvenTitle = styled(Text)``;
-const ItemList = styled.li`
+const ItemList = styled.div`
   position: relative;
   margin: 1%;
   width: 14.66%;
@@ -147,10 +155,11 @@ const Home = ({
   changeSaveData,
   setLoading,
 }) => {
-  const context = useContext(AppContext);
   const navigate = useNavigate();
+  const context = useContext(AppContext);
+  const {state} = useLocation();
+  const [selectTab, setSelectTab] = useState(typeof state?.tab === "number" ? state.tab : "");
   const theme = useTheme();
-  const [selectTab, setSelectTab] = useState("");
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
   const [popupOn, setPopupOn] = useState(false);
@@ -190,7 +199,6 @@ const Home = ({
         .sort((a, b) => b[`st${selectSort}`] - a[`st${selectSort}`])
     };
   }, [sData, selectSort]);
-
   const [leaderCard, setLeaderCard] = useState(0);
 
   useEffect(() => {
@@ -217,22 +225,33 @@ const Home = ({
       } else {
         saveItemData = sData.items[itemType][itemSaveSlot];
       }
-      setPopupType(itemType);
+      setPopupType("item");
       const itemsGrade = itemGrade < 5 ? 0 : itemGrade - 5;
-      let gameItemData = '';
+      let gameItemData = '',
+        buttons = [];
       if (itemType === 'hequip' || itemType === 'equip') {
         gameItemData = itemPart === 3 ? gameItem['equip'][itemPart][itemWeaponType][itemsGrade][itemIdx] : gameItem['equip'][itemPart][0][itemsGrade][itemIdx];
+        buttons = ['sell', 'wear', 'socket', 'upgrade', 'evaluate']
       } else {
         gameItemData = gameItem[itemType][itemIdx];
+        buttons = ['sell', 'evaluate'];
       }
-      setPopupInfo({
-        isMoveEvent: false,
-        onlyInven: true,
-        gameItem: gameItemData,
-        itemSaveSlot: itemSaveSlot,
-        saveItemData: saveItemData,
-        type: itemType === 'hequip' ? 'equip' : itemType,
-      });
+      setPopupInfo(prev => ({
+        ...prev,
+        item: {
+          isMoveEvent: false,
+          itemAreaType: 'homeInven',//아직 안쓰임
+          gameItem: gameItemData,
+          itemSaveSlot: itemSaveSlot,
+          saveItemData: saveItemData,
+          type: itemType === 'hequip' ? 'equip' : itemType,
+          buttons: buttons,
+          location: {
+            name: "home",
+            tab: 2
+          },
+        }
+      }));
     }
     setPopupOn(prev => !prev);
   }, [sData, gameItem]);
@@ -286,10 +305,7 @@ const Home = ({
                   </Text>
                 </LvName>
               </>}
-              {selectTab === 2 && <>
-              
-              </>}
-              {(selectTab === 0 || selectTab === 1) && <StyledSelect
+              {(selectTab === 0 || selectTab === 1 || selectTab === 3) && <StyledSelect
                 selectIdx={selectSort}
                 setSelectIdx={setSelectSort}
                 selectOption={selectList}
@@ -342,8 +358,6 @@ const Home = ({
               </ChUl>
             </ChList>
           )}
-
-          {/* ✅ Entry 선택 */}
           {selectTab === 1 && (
             <ChList>
               <ChUl>
@@ -415,10 +429,13 @@ const Home = ({
               </ChUl>
             </ChList>
           )}
-          {selectTab === 2 && <ChInven frameBack={imgSet.etc.frameChBack}>
-            <InvenItems className="has_items scroll-y">
-              <InvenTitle code="t3" color="main">{gameData.msg.menu.equip[lang]}</InvenTitle>
-              <ul className="h_items">
+          {selectTab === 2 && <ChInven>
+            <InvenItems>
+              <InvenTitle justifyContent="flex-start" alignItems="center">
+                <StyledIconPic type="item" pic="icon100" idx={1} />
+                <InvenText code="t3" color="main">{gameData.msg.menu.equip[lang]}</InvenText>
+              </InvenTitle>
+              <Items flexWrap="wrap" justifyContent="flex-start">
                 {sData.items.equip && sData.items.equip.map((data, idx) => {
                   const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
                   const items = data.part === 3 ? gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx] : gameItem.equip[data.part][0][itemsGrade][data.idx];
@@ -436,7 +453,7 @@ const Home = ({
                         isEquip
                         icon={{
                           type: "equip",
-                          pic: "equip",
+                          pic: items.pic,
                           idx: items.display,
                           mergeColor: data.color,
                         }}
@@ -448,9 +465,12 @@ const Home = ({
                     </ItemList>
                   )
                 })}
-              </ul>
-              <InvenTitle code="t3" color="main">{gameData.msg.menu.hole[lang]}</InvenTitle>
-              <ul className="h_items">
+              </Items>
+              <InvenTitle justifyContent="flex-start" alignItems="center">
+                <StyledIconPic type="item" pic="icon100" idx={4} />
+                <InvenText code="t3" color="main">{gameData.msg.menu.hole[lang]}</InvenText>
+              </InvenTitle>
+              <Items flexWrap="wrap" justifyContent="flex-start">
                 {sData.items.hole && sData.items.hole.map((data, idx) => {
                   const items = gameItem.hole[data.idx];
                   return (
@@ -466,19 +486,22 @@ const Home = ({
                         isEquip
                         icon={{
                           type: "hole",
-                          pic: "itemEtc",
+                          pic: items.pic,
                           idx: items.display
                         }}
                         part="11"
-                        grade={items.grade}
+                        grade={data.grade || items.grade}
                         sealed={items.sealed}
                       />
                     </ItemList>
                   )
                 })}
-              </ul>
-              <InvenTitle code="t3" color="main">{gameData.msg.menu.upgrade[lang]}</InvenTitle>
-              <ul className="h_items">
+              </Items>
+              <InvenTitle justifyContent="flex-start" alignItems="center">
+                <StyledIconPic type="item" pic="icon100" idx={5} />
+                <InvenText code="t3" color="main">{gameData.msg.menu.upgrade[lang]}</InvenText>
+              </InvenTitle>
+              <Items flexWrap="wrap" justifyContent="flex-start">
                 {sData.items.upgrade && sData.items.upgrade.map((data, idx) => {
                   const items = gameItem.upgrade[data.idx];
                   return (
@@ -494,7 +517,7 @@ const Home = ({
                         isEquip
                         icon={{
                           type: "upgrade",
-                          pic: "itemEtc",
+                          pic: items.pic,
                           idx: items.display
                         }}
                         text={data.num || ""}
@@ -505,9 +528,12 @@ const Home = ({
                     </ItemList>
                   )
                 })}
-              </ul>
-              <InvenTitle code="t3" color="main">{gameData.msg.menu.material[lang]}</InvenTitle>
-              <ul className="h_items">
+              </Items>
+              <InvenTitle justifyContent="flex-start" alignItems="center">
+                <StyledIconPic type="item" pic="icon100" idx={6} />
+                <InvenText code="t3" color="main">{gameData.msg.menu.material[lang]}</InvenText>
+              </InvenTitle>
+              <Items flexWrap="wrap" justifyContent="flex-start">
                 {sData.items.material && sData.items.material.map((data, idx) => {
                   const items = gameItem.material[data.idx];
                   return (
@@ -523,7 +549,7 @@ const Home = ({
                         isEquip
                         icon={{
                           type: "material",
-                          pic: "material",
+                          pic: items.pic,
                           idx: items.display
                         }}
                         text={data.num || 1}
@@ -534,9 +560,12 @@ const Home = ({
                     </ItemList>
                   )
                 })}
-              </ul>
-              <InvenTitle code="t3" color="main">{gameData.msg.menu.etc[lang]}</InvenTitle>
-              <ul className="h_items">
+              </Items>
+              <InvenTitle justifyContent="flex-start" alignItems="center">
+                <StyledIconPic type="item" pic="icon100" idx={7} />
+                <InvenText code="t3" color="main">{gameData.msg.menu.etc[lang]}</InvenText>
+              </InvenTitle>
+              <Items flexWrap="wrap" justifyContent="flex-start">
                 {sData.items.etc && sData.items.etc.map((data, idx) => {
                   const items = gameItem.etc[data.idx];
                   return (
@@ -552,7 +581,7 @@ const Home = ({
                         isEquip
                         icon={{
                           type: "etc",
-                          pic: "itemEtc",
+                          pic: items.pic,
                           idx: items.display
                         }}
                         part="13"
@@ -562,9 +591,64 @@ const Home = ({
                     </ItemList>
                   )
                 })}
-              </ul>
+              </Items>
             </InvenItems>
           </ChInven>}
+          {selectTab === 3 && (
+            <ChList>
+              <ChUl>
+                {selectSortList.ch.map((data, idx) => {
+                  const isLeader = data.slotIdx === sData.info.leaderIdx;
+                  return (
+                    <ChLi
+                      key={idx}
+                      isLeader={isLeader}
+                      used={true}
+                      onClick={() => {
+                        util.saveHistory({
+                          prevLocation: 'home',
+                          location: 'cards',
+                          navigate: navigate,
+                          callback: () => {
+                            util.saveData('historyParam', {
+                              ...util.loadData('historyParam'),
+                              cards: {
+                                isAll: true,
+                                chSlotIdx: data.slotIdx,
+                                chTabIdx: 0,
+                              }
+                            });
+                          },
+                          state: {
+                            dataObj: {
+                              isAll: true,
+                              chSlotIdx: data.slotIdx,
+                              chTabIdx: 0,
+                            }
+                          },
+                          prevState: {
+                            tab: 3,
+                          },
+                          isNavigate: true,
+                        });//히스토리 저장
+                      }}
+                    >
+                      <CharacterCard
+                        usedType="thumb"
+                        saveCharacter={data}
+                        saveData={sData}
+                        showNum={data[`st${selectSort}`]}
+                        slotIdx={idx}
+                      />
+                      {isLeader && <LeaderCh>
+                        <IconPic type="scenario" pic="icon100" idx={4} />
+                      </LeaderCh>}
+                    </ChLi>
+                  );
+                })}
+              </ChUl>
+            </ChList>
+          )}
         </WorkArea>
       </Wrap>
       <PopupContainer>

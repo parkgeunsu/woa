@@ -10,7 +10,7 @@ import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import { AppContext } from 'contexts/app-context';
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Wrap = styled(FlexBox)`
@@ -85,9 +85,10 @@ const Temple = ({
 	changeSaveData,
   setLoading,
 }) => {
-  const context = useContext(AppContext);
   const navigate = useNavigate();
-  const [selectTab, setSelectTab] = useState("");
+  const context = useContext(AppContext);
+  const {state} = useLocation();
+  const [selectTab, setSelectTab] = useState(typeof state?.tab === "number" ? state.tab : "");
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -144,14 +145,17 @@ const Temple = ({
           <InfoGroup>
           </InfoGroup>
           <ActionPic onClick={() => {
-              setPopupInfo({
-                ch: entries,
-                actionChIdx: actionChIdx,
-                type: 'temple',
-                setMsg: setMsg,
-                setMsgOn: setMsgOn,
-              });
               setPopupType('selectCh');
+              setPopupInfo(prev => ({
+                ...prev,
+                selectCh: {
+                  ch: entries,
+                  actionChIdx: actionChIdx,
+                  type: 'temple',
+                  setMsg: setMsg,
+                  setMsgOn: setMsgOn,
+                }
+              }));
               setPopupOn(true);
             }}>
             <MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />

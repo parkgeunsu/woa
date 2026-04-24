@@ -82,17 +82,17 @@ const Criminal = styled(FlexBox)`
 `;
 const CriminalInfo = styled(FlexBox)`
   flex: 1;
-  margin: 5px 0 5px 10px;
+  padding: 20px 10px 5px 40px;
   width: 100%;
   border-radius: 10px;
-  background: ${({theme}) => theme.color.shadow};
+  background: url(${({back}) => back}) no-repeat center center;
+  background-size: 100%;
   overflow-y: auto;
   overflow-x: hidden;
 `;
 const InfoText = styled(Text)`
   margin: 5px 0 0 0;
-  padding: 0 10px;
-  width: calc(100% - 20px);
+  width: 100%
   &:last-of-type {
     margin: 5px 0 10px 0;
   }
@@ -104,10 +104,6 @@ const InfoText = styled(Text)`
   }
   em {
     color: ${({theme}) => theme.color.point3};
-  }
-  &:before {
-    content: '-';
-    margin: 0 5px 0 0;
   }
 `;
 const CriminalPic = styled.div`
@@ -280,9 +276,6 @@ const Prison = ({
 					{selectTab === "" ? <GreetingText code="t4" color="main" wordBreak="keep-all">{greeting}</GreetingText> : <WorkHeader direction="row" justifyContent="space-between" alignItems="center">
             {selectTab === 0 && <>
               <Morality direction="row" justifyContent="space-between" alignItems="center">
-                <Text code="t2" color="main">
-                  {`${gameData.msg.info.bail[lang]}: ${util.comma((Prisoner.crime + 1) * 10)}/${util.comma((Prisoner.crime + 1) * PrisonerData.grade * 10000)}`}
-                </Text>
                 <Text font="point" lineHeight={1} className="lvupText" code="t5" color="main" weight="600">{gameData.msg.info.moral[lang]} {sData.info.morality}</Text>
               </Morality>
             </>}
@@ -301,14 +294,15 @@ const Prison = ({
                   </Criminal>
                   <CriminalText direction="column" justifyContent="flex-start" alignItems="flex-start">
                     <Text code="t2" color="main">
-                      {`${gameData.msg.info.crime[lang]}: ${gameData.crime[Prisoner.crime].name[lang]}`}
+                      {`${gameData.msg.info.bail[lang]}`}
                     </Text>
                     <Text code="t2" color="main">
-                      {`${gameData.msg.info.sentence[lang]}: ${util.msToDayHourMin(Prisoner.arrestDate, Prisoner.sentence, lang)}`}
+                      {`${util.comma((Prisoner.crime + 1) * 10)} / ${util.comma((Prisoner.crime + 1) * PrisonerData.grade * 10000)}`}
                     </Text>
                   </CriminalText>
                 </FlexBox>
-                <CriminalInfo direction="column" justifyContent="flex-start" alignItems="flex-start">
+                <CriminalInfo direction="column" justifyContent="flex-start" alignItems="flex-start" back={imgSet.back.talkbox}>
+                  <InfoText code="t1" color="sub" font="point" lineHeight={1.1} isDynamic align="left" dangerouslySetInnerHTML={{__html: gameData.msg.sentenceFn.myCrime(lang, gameData.crime[Prisoner.crime].name[lang], util.msToDayHourMin(Prisoner.arrestDate, Prisoner.sentence, lang))}} />
                   {Prisoner.openInfo.map((infoData, infoIdx) => {
                     const info = infoMake({
                       gameData: gameData,
@@ -316,7 +310,7 @@ const Prison = ({
                       info: infoData,
                       lang: lang,
                     });
-                    return <InfoText code="t1" color="main" font="point" lineHeight={1.2} isDynamic align="left" key={'criminalInfo' + infoIdx} dangerouslySetInnerHTML={{__html: info}} />
+                    return <InfoText code="t1" color="sub" font="point" lineHeight={1} isDynamic align="left" key={'criminalInfo' + infoIdx} dangerouslySetInnerHTML={{__html: info}} />
                   })}
                 </CriminalInfo>
               </CriminalContainer>
@@ -452,14 +446,17 @@ const Prison = ({
               setMsgOn(true);
               return;
             };
-            setPopupInfo({
-              ch: entries,
-              actionChIdx: actionChIdx,
-              type: "prison",
-              setMsg: setMsg,
-              setMsgOn: setMsgOn,
-            });
             setPopupType('selectCh');
+            setPopupInfo(prev => ({
+              ...prev,
+              selectCh: {
+                ch: entries,
+                actionChIdx: actionChIdx,
+                type: "prison",
+                setMsg: setMsg,
+                setMsgOn: setMsgOn,
+              }
+            }));
             setPopupOn(true);
 					}}>
 						<MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />

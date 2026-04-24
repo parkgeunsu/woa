@@ -13,7 +13,7 @@ import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import { AppContext } from 'contexts/app-context';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 /* .itemEn_colorArea .colorant:before{
 content:'';position:absolute;left:0;top:0;width:100%;height:100%;border-radius:15px;background:linear-gradient(135deg, rgba(255,255,255,0) 10%,rgba(255,255,255,.5) 20%,rgba(255,255,255,0) 30%);z-index:1;
@@ -296,6 +296,13 @@ const Colorant = styled.div`
 		pointer-events: none;
 	}
 `;
+const NoSocketText = styled(Text)`
+	position: absolute;
+	left: 50%;
+	top: 10%;
+	transform: translate(-50%,0);
+	
+`;
 const ItemColorant = styled.div`
 	position: absolute;
 	width: 100%;
@@ -425,7 +432,7 @@ const UpgradeMaterial = styled.div`
 	height: 40%;
 	z-index: 2;
 `;
-const UpgradeShadow = styled.div`
+const ItemShadow = styled.div`
 	position: absolute;
 	inset: 0;
 	background: radial-gradient(ellipse at 50% 50%,${({gradeColor}) => gradeColor},transparent 40%);
@@ -437,78 +444,12 @@ const UpgradeShadow = styled.div`
 const UpgradePercent = styled(Text)`
 	position: absolute;
 	left: 50%;
-	bottom: 15%;
+	top: 10%;
 	transform: translate(-50%, 0);
 	text-shadow: ${({theme}) => `0 0 20px ${theme.color.main}, 0 0 10px ${theme.color.main}, 0 0 5px ${theme.color.main}`};
 	z-index: 2;
 	&:after {
 		content: '%';
-	}
-`;
-const ItemTotalEff = styled.div`
-	position: absolute;
-	inset: 20px;
-	padding: 20px;
-	background: rgba(0,0,0,.7);
-	z-index: 10;
-	border:5px solid transparent;
-  border-image: url(${({frameBack}) => frameBack}) 5 round;
-	.item_header {
-		text-align: center;
-	}
-	.item_name {
-		line-height: 1.2;
-		color: ${({color}) => color};
-		font-size: 0.875rem;
-		font-weight: 600;
-	}
-	.item_list {
-		display: flex;
-		margin: 10px 0 0 0;
-		flex-direction: column;
-	}
-	.item_list .item_title {
-		margin: 0 0 5px 0;
-		font-size: 0.75rem;
-		color: #ddd;
-	}
-	.item_effs{
-		display: flex;
-		align-items: center;
-		margin: 0 0 5px 5px;
-		color: #2f73ff;
-		font-weight: 600;
-	}
-	.item_effs.add {
-		color: #ffac2f;
-	}
-	.item_effs.hole {
-		color #e14040;
-	}
-	.item_effs span {
-		display: block;
-		font-weight: 600;
-	}
-	.item_effs .cate {
-		margin: 0 10px 0 0;
-		color: #00a90c;
-	}
-	.item_effs .base {
-		margin: 0 5px 0 0;
-		color: #2f73ff;
-	}
-	.item_effs .add {
-		margin: 0 5px 0 0;
-		color: #ffac2f;
-	}
-	.item_effs .hole {
-		color: #e14040;
-	}
-	.item_effs .total {
-		flex: 1;
-		text-align: right;
-		font-size: 0.938rem;
-		color: #fff;
 	}
 `;
 const LockIcon = styled(IconPic)`
@@ -560,6 +501,7 @@ const Img = styled.img.attrs(
 	height: 100%;
 `;
 const colorMix = (util, mainColor, color) => {
+	console.log(mainColor);
 	let colorNum = [0,0,0];
 	const rgbaColor = mainColor.indexOf('rgba') === -1 && mainColor.indexOf('Hsl') === -1 ? mainColor.replace(/rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/gi,'rgba($1, $2, $3, 1)') : mainColor;
 	const mRgb = rgbaColor.indexOf('hsl') >= 0 ? util.getHslaToRgba(rgbaColor).replace(/\s/g,'').replace(/rgba\(([0-9]{1,3})\,([0-9]{1,3})\,([0-9]{1,3})\,[0-9,\.]{1,5}\)/g,`$1,$2,$3`).split(',') : rgbaColor.replace(/\s/g,'').replace(/rgba\(([0-9]{1,3})\,([0-9]{1,3})\,([0-9]{1,3})\,[0-9,\.]{1,5}\)/g,`$1,$2,$3`).split(',');
@@ -676,6 +618,7 @@ const Blacksmith = ({
 	setLoading,
 }) => {
 	const navigate = useNavigate();
+	const {state} = useLocation();
   const context = useContext(AppContext);
   const lang = React.useMemo(() => {
     return context.setting.lang;
@@ -698,7 +641,7 @@ const Blacksmith = ({
 	const [popupInfo, setPopupInfo] = useState({});
   const [msgOn, setMsgOn] = useState(false);
   const [msg, setMsg] = useState("");
-	const [selectTab, setSelectTab] = useState("");
+	const [selectTab, setSelectTab] = useState(typeof state?.tab === "number" ? state.tab : "");
 	const entries = React.useMemo(() => {
 		return sData.entry.map((entryIdx) => {
 			return {
@@ -711,18 +654,15 @@ const Blacksmith = ({
 		return sData.actionCh.blacksmith.idx <= entries.length - 1 ? sData.actionCh.blacksmith.idx : "";
 	}, [entries, sData]);
 	const saveCh = React.useMemo(() => entries[actionChIdx] || {}, [entries, actionChIdx]);
-	const [item, setItem] = useState(Object.keys(saveData).length > 0 ? saveData?.items : []);
-
+	console.log(state);
 	const [selectItem1, setSelectItem1] = useState(() => {
-		return item.length > 0 ? {
-		save:item.equip[0],
-		game:gameItem.equip[item.equip[0].part][item.equip[0].weaponType][item.equip[0].grade < 5 ? 0 : item.equip[0].grade - 5][item.equip[0].idx],
-		select:0,
-	} : {
-		save:{},
-		game:{},
-		select:'',
-	}});//좌측 장비 save, game
+		const saveItem = (state && typeof state.itemSaveSlot === 'number') ? sData?.items.equip[state.itemSaveSlot] : sData?.items.equip[0];
+		return {
+			save: saveItem,
+			game: gameItem.equip[saveItem.part][saveItem.weaponType][saveItem.grade < 5 ? 0 : saveItem.grade - 5][saveItem.idx],
+			select:typeof state.itemSaveSlot === 'number' ? state.itemSaveSlot : 0,
+		}
+	},[sData]);//좌측 장비 save, game
 	const [possibleHole, setPossibleHole] = useState([]);
 	const [selectItem2, setSelectItem2] = useState({
 		save: Array.from({ length: 16 }, () => ({})),
@@ -735,9 +675,7 @@ const Blacksmith = ({
 		game:{}
 	});//탭2 우측 홀 save, game
 	const [colorantIdx, setColorantIdx] = useState(0);
-	const [mainColor, setMainColor] = useState(saveData?.items?.equip[0] ? saveData.items.equip[0].color : '');//합성된 장비 색상
-	const [itemEffShow, setItemEffShow] = useState(false);//아이템 효과 보기
-	const [mItemEff, setMItemEff] = useState();//아이템 효과 문구
+	const [mainColor, setMainColor] = useState(selectItem1.game.color);//합성된 장비 색상
 	const [upgradeOn, setUpgradeOn] = useState('');//업그레이드 애니메이션 동작
 	const [upgradePercent, setUpgradePercent] = useState(setPercent(selectItem1?.save, selectItem3?.game));
 	const timeoutRef = useRef(null);
@@ -788,7 +726,6 @@ const Blacksmith = ({
 	}, []);
 	useEffect(() => {
 		//equip, hole, upgrade, merterial, etc
-		setItem(saveData.items);
 		let baseSelectItem = {save:[],select:[],game:[]},
 		possibleColorantIdx = '';
 		let pHole = [];
@@ -808,11 +745,6 @@ const Blacksmith = ({
 			setPossibleHole(pHole);
 			setSelectItem2(baseSelectItem);
 			setColorantIdx(possibleColorantIdx);
-			setMItemEff(util.getTotalEff({
-				saveItems: selectItem1.save,
-				gameData: gameData,
-				cate: baseSelectItem
-			}));
 		}
 	}, [saveData]);
 	//selectItem1.save.colorantSet 셋트 아이템 idx 저장
@@ -839,9 +771,6 @@ const Blacksmith = ({
 					{selectTab === "" && <GreetingText code="t4" color="main" wordBreak="keep-all">{greeting}</GreetingText>}
 					{selectTab === 0 && <SocketContent direction="row" justifyContent="center" alignItems="flex-start" onClick={(e) => {
 						e.stopPropagation();
-						if (itemEffShow) {
-							setItemEffShow(false);
-						}
 					}}>
 						<ButtonGroup isShow={Object.keys(selectItem1.save).length > 0} className="button_group">
 							<button className="button_big" text="true" onClick={(e) => {
@@ -909,74 +838,44 @@ const Blacksmith = ({
 								setColorantIdx(possibleColorantIdx);
 							}}>{gameData.msg.button.confirm[lang]}</button>
 						</ButtonGroup>
-						{itemEffShow && <ItemTotalEff frameBack={imgSet.etc.frameChBack} className="main_itemEff scroll-y" color={gameData.itemGrade.color[selectItem1.save.grade]}>
-							<ul>
-								<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.save.colorantSet ? util.getColorant(selectItem1.save.colorantSet, gameData).na[lang] : ''} ${selectItem1.save.modifier[lang]} ${selectItem1.game.na[lang]}`}}></span></li>
-								<li className="item_list item_eff">
-									<div className="item_title">{gameData.msg.itemInfo.itemEffect[lang]}</div>
-									{mItemEff && mItemEff.map((eff, idx) => {
-										return (
-											<div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
-										)
-									})}
-								</li>
-								<div style={{width:"100%"}}>
-									{selectItem1.save.baseEff.length > 0 && (
-										<li className="item_list item_eff">
-											<div className="item_title">{gameData.msg.itemInfo.basicEffect[lang]}</div>
-											{selectItem1.save.baseEff.map((data, idx) => {
-												const grade = selectItem1.save.grade > 3 ? 3 : selectItem1.save.grade - 1;
-												return (
-													<div key={`base${idx}`} className="item_effs">{`${util.getEffectType(data.type, lang)} ${data.num[grade]}`}</div>
-												) 
-											})}
-										</li>
-									)}
-									{selectItem1.save.addEff.length > 0 && (
-										<li className="item_list item_eff">
-											<div className="item_title">{gameData.msg.itemInfo.addEffect[lang]}</div>
-											{selectItem1.save.addEff.map((data, idx) => {
-												return (
-													<div key={`add${idx}`} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
-												) 
-											})}
-										</li>
-									)}
-									{selectItem1.save.hole.length > 0 && (
-										<li className="item_list item_hole">
-											<div className="item_title">{gameData.msg.itemInfo.socketEffect[lang]}</div>
-											{mItemEff && mItemEff.map((data, idx) => {
-												if (data.hole > 0) {
-													return (
-														<div key={idx} className="item_effs hole">{`${util.getEffectType(data.type, lang)} ${data.hole}`}</div>
-													)
-												}
-											})}
-										</li>
-									)}
-									{selectItem1.game.set !== 0 && (<li className="item_list item_set">
-										<div className="item_setNa">{gameData.items.set_type[selectItem1.game.set].na}</div>
-									</li>
-									)}
-								</div>
-							</ul>
-						</ItemTotalEff>}
 						<ColorArea mainColor={mainColor} color={selectItem2.game}>
 							<ColorantItem onClick={() => {
-								setItemEffShow(true);
+								setPopupType('item');
+								setPopupInfo(prev => ({
+									...prev,
+									item: {
+										isMoveEvent: false,
+										itemAreaType: selectItem1.game.type,//아직 안쓰임
+										gameItem: selectItem1.game,
+										itemSaveSlot: selectItem1.select,
+										saveItemData: selectItem1.save,
+										type: 'blacksmith',
+										buttons: [],
+										location: {
+											name: 'blacksmith',
+											tab: 0,
+										},
+										callback: () => {
+										},
+									}
+								}));
+								setPopupOn(prev => !prev);
 							}}>
 								{Object.keys(selectItem1.save).length !== 0 && <ItemLayout
 									gameItem={gameData.items}
 									icon={{
 										type: "equip",
-										pic: "equip",
+										pic: selectItem1.game.pic,
 										idx: selectItem1.game.display,
 										mergeColor: mainColor || selectItem1.save.color,
+										largeQuestion: true,
 									}}
 									num={1}
 									sealed={selectItem1.save.sealed}
 								/>}
 							</ColorantItem>
+							{selectItem1?.save?.hole.length === 0 && <NoSocketText code="t3" weight="600" color="red">{gameData.msg.sentence.noSockets[lang]}</NoSocketText>}
+							<ItemShadow className={`itemEn_shadowArea`} gradeColor={gameData.itemGrade.color[selectItem1.save.grade]} />
 							{selectItem1.save?.hole && selectItem1.save?.hole.map((data, idx) => {
 								let cColor = '';
 								if (selectItem1.save.colorantSet) {
@@ -1001,11 +900,6 @@ const Blacksmith = ({
 												const mColor = colorMix(util,selectItem1.save.color, cloneColor);
 												// saveColor[0] = mColor;
 												setMainColor(mColor);
-												setMItemEff(util.getTotalEff({
-													saveItems: selectItem1.save,
-													gameData: gameData,
-													cate: cloneSelectItem2
-												}));
 											}
 											setColorantIdx(idx);
 										}
@@ -1042,9 +936,6 @@ const Blacksmith = ({
 					</SocketContent>}
 					{selectTab === 1 && <UpgradeContent direction="row" justifyContent="center" alignItems="flex-start" onClick={(e) => {
 						e.stopPropagation();
-						if (itemEffShow) {
-							setItemEffShow(false);
-						}
 					}}>
 						<ButtonGroup isShow={Object.keys(selectItem1.save).length > 0} className="button_group">
 							<button className="button_big" text="true" onClick={(e) => {
@@ -1088,16 +979,36 @@ const Blacksmith = ({
 						</ButtonGroup>
 						<UpgradeArea>
 							<UpgradeItem onClick={() => {
-								setItemEffShow(true);
+								setPopupType('item');
+								setPopupInfo(prev => ({
+									...prev,
+									item: {
+										isMoveEvent: false,
+										itemAreaType: selectItem1.game.type,//아직 안쓰임
+										gameItem: selectItem1.game,
+										itemSaveSlot: selectItem1.select,
+										saveItemData: selectItem1.save,
+										type: 'blacsmith',
+										buttons: [],
+										location: {
+											name: 'blacsmith',
+											tab: 1,
+										},
+										callback: () => {
+										},
+									}
+								}));
+								setPopupOn(prev => !prev);
 							}}>
 								{Object.keys(selectItem1.save).length !== 0 && 
 								<ItemLayout
 									gameItem={gameData.items}
 									icon={{
 										type: "equip",
-										pic: "equip",
+										pic: selectItem1.game.pic,
 										idx: selectItem1.game.display,
 										mergeColor: selectItem1.save.color,
+										largeQuestion: true,
 									}}
 									num={1}
 									color={selectItem1.save.colorantSet ? selectItem1.save.colorantColor : mainColor || selectItem1.save.color}
@@ -1110,7 +1021,7 @@ const Blacksmith = ({
 									gameItem={gameData.items}
 									icon={{
 										type: "upgrade",
-										pic: "itemEtc",
+										pic: selectItem3.game.pic,
 										idx: selectItem3.game.display
 									}}
 									num={1}
@@ -1119,60 +1030,8 @@ const Blacksmith = ({
 									}}/>
 								</UpgradeMaterial>
 							)}
-							{itemEffShow && <ItemTotalEff frameBack={imgSet.etc.frameChBack} className="main_itemEff scroll-y" color={gameData.itemGrade.color[selectItem1.save.grade]}>
-								<ul>
-									<li className="item_header" flex-center="true"><span className="item_name" dangerouslySetInnerHTML={{__html: `${selectItem1.save.colorantSet ? util.getColorant(selectItem1.save.colorantSet, gameData).na[lang] : ''} ${selectItem1.save.modifier[lang]} ${selectItem1.game.na[lang]}`}}></span></li>
-									<li className="item_list item_eff">
-										<div className="item_title">{gameData.msg.itemInfo.itemEffect[lang]}</div>
-										{mItemEff && mItemEff.map((eff, idx) => {
-											return (
-												<div key={idx} className="item_effs"><span className="cate">{util.getEffectType(eff.type, lang)}</span>{eff.base > 0 && <span className="base">{eff.base}</span>}{eff.add > 0 && <span className="add">{eff.add}</span>}{eff.hole > 0 && <span className="hole">{eff.hole}</span>}<span className="total">{eff.base + eff.add + eff.hole}</span></div>
-											)
-										})}
-									</li>
-									<div style={{width:"100%"}}>
-										{selectItem1.save.baseEff.length > 0 && (
-											<li className="item_list item_eff">
-												<div className="item_title">{gameData.msg.itemInfo.basicEffect[lang]}</div>
-												{selectItem1.save.baseEff.map((data, idx) => {
-													const grade = selectItem1.save.grade > 3 ? 3 : selectItem1.save.grade - 1;
-													return (
-														<div key={`base${idx}`} className="item_effs">{`${util.getEffectType(data.type, lang)} ${data.num[grade]}`}</div>
-													) 
-												})}
-											</li>
-										)}
-										{selectItem1.save.addEff.length > 0 && (
-											<li className="item_list item_eff">
-												<div className="item_title">{gameData.msg.itemInfo.addEffect[lang]}</div>
-												{selectItem1.save.addEff.map((data, idx) => {
-													return (
-														<div key={`add${idx}`} className="item_effs add">{`${util.getEffectType(data.type, lang)} ${data.num[0]}`}</div>
-													) 
-												})}
-											</li>
-										)}
-										{selectItem1.save.hole.length > 0 && (
-											<li className="item_list item_hole">
-												<div className="item_title">{gameData.msg.itemInfo.socketEffect[lang]}</div>
-												{mItemEff && mItemEff.map((data, idx) => {
-													if (data.hole > 0) {
-														return (
-															<div key={idx} className="item_effs hole">{`${util.getEffectType(data.type, lang)} ${data.hole}`}</div>
-														)
-													}
-												})}
-											</li>
-										)}
-										{selectItem1.game.set !== 0 && (<li className="item_list item_set">
-											<div className="item_setNa">{gameData.items.set_type[selectItem1.game.set].na}</div>
-										</li>
-										)}
-									</div>
-								</ul>
-							</ItemTotalEff>}
-							<UpgradeShadow className={`itemEn_shadowArea`} gradeColor={gameData.itemGrade.color[selectItem1.save.grade]} />
-							<UpgradePercent code="t8" weight="600" color="main">{upgradePercent}</UpgradePercent>
+							<ItemShadow className={`itemEn_shadowArea`} gradeColor={gameData.itemGrade.color[selectItem1.save.grade]} />
+							<UpgradePercent code="t6" weight="600" color="main">{upgradePercent}</UpgradePercent>
 						</UpgradeArea>
 					</UpgradeContent>}
 				</WorkArea>
@@ -1180,7 +1039,7 @@ const Blacksmith = ({
 					<ItemGroup justifyContent="space-between" direction="row" animate={upgradeOn}>
 						{selectTab === 0 && <>
 							<ItemBox justifyContent="flex-start" alignContent="flex-start" alignItems="flex-start" type="select1">
-								{item?.equip && item?.equip.map((data, idx) => {
+								{sData?.items?.equip && sData?.items?.equip.map((data, idx) => {
 									const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
 									const items = gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx];
 									const grade = data.grade || items.grade;
@@ -1189,7 +1048,7 @@ const Blacksmith = ({
 										gameItem={gameData.items}
 										icon={{
 											type: "equip",
-											pic: "equip",
+											pic: items.pic,
 											idx: items.display,
 											mergeColor: data.color,
 										}}
@@ -1231,16 +1090,11 @@ const Blacksmith = ({
 											setPossibleHole(pHole);
 											setColorantIdx(possibleColorantIdx);
 											setSelectItem2(baseSelectItem);
-											setMItemEff(util.getTotalEff({
-												saveItems: data,
-												gameData: gameData,
-												cate: baseSelectItem
-											}));
 									}}/>
 								})}
 							</ItemBox>
 							<ItemBox justifyContent="flex-start" alignContent="flex-start" alignItems="flex-start" type="select2">
-								{item?.hole && item?.hole.map((data, idx) => {
+								{sData?.items?.hole && sData?.items?.hole.map((data, idx) => {
 									const items = gameItem.hole[data.idx];
 									const grade = data.grade || items.grade;
 									const select = selectItem2.select.filter((select) => {
@@ -1250,7 +1104,7 @@ const Blacksmith = ({
 										gameItem={gameData.items}
 										icon={{
 											type: "hole",
-											pic: "itemEtc",
+											pic: items.pic,
 											idx: items.display,
 										}}
 										num={3}
@@ -1278,11 +1132,6 @@ const Blacksmith = ({
 												// saveColor[0] = mColor;
 												setMainColor(mColor);
 												
-												setMItemEff(util.getTotalEff({
-													saveItems: selectItem1.save,
-													gameData: gameData,
-													cate: cloneSelectItem2
-												}));
 												//메인 아이템 컬러 설정
 												let colorArr = [...selectItem1.save.color];
 												colorArr[0] = mColor;
@@ -1294,7 +1143,7 @@ const Blacksmith = ({
 						</>}
 						{selectTab === 1 && <>
 							<ItemBox justifyContent="flex-start" alignContent="flex-start" alignItems="flex-start" type="select1">
-								{item.equip && item.equip.map((data, idx) => {
+								{sData?.items.equip && sData?.items.equip.map((data, idx) => {
 									const itemsGrade = data.grade < 5 ? 0 : data.grade - 5;
 									const items = gameItem.equip[data.part][data.weaponType][itemsGrade][data.idx];
 									const grade = data.grade || items.grade;
@@ -1303,7 +1152,7 @@ const Blacksmith = ({
 										gameItem={gameData.items}
 										icon={{
 											type: "equip",
-											pic: "equip",
+											pic: items.pic,
 											idx: items.display,
 											mergeColor: data.color,
 										}}
@@ -1326,24 +1175,19 @@ const Blacksmith = ({
 												select:idx,
 												game:items,
 											});
-											setMItemEff(util.getTotalEff({
-												saveItems: data,
-												gameData: gameData,
-												cate: baseSelectItem
-											}));
 										}}
 									/>
 								})}
 							</ItemBox>
 							<ItemBox justifyContent="flex-start" alignContent="flex-start" alignItems="flex-start" type="select2">
-								{item.upgrade && item.upgrade.map((data, idx) => {
+								{sData?.items.upgrade && sData?.items.upgrade.map((data, idx) => {
 									const items = gameItem.upgrade[data.idx];
 									const grade = data.grade || items.grade;
 									return <ItemLayout 
 										gameItem={gameData.items}
 										icon={{
 											type: "upgrade",
-											pic: "itemEtc",
+											pic: items.pic,
 											idx: items.display,
 											mergeColor: data.color,
 										}}
@@ -1365,13 +1209,16 @@ const Blacksmith = ({
 						</>}
 					</ItemGroup>
 					<ActionPic onClick={() => {
-						setPopupInfo({
-							ch: entries,
-							actionChIdx: actionChIdx,
-							type: 'blacksmith',
-							setMsg: setMsg,
-							setMsgOn: setMsgOn,
-						});
+						setPopupInfo(prev => ({
+							...prev,
+							selectCh: {
+								ch: entries,
+								actionChIdx: actionChIdx,
+								type: 'blacksmith',
+								setMsg: setMsg,
+								setMsgOn: setMsgOn,
+							}
+						}));
 						setPopupType('selectCh');
 						setPopupOn(true);
 					}}>

@@ -22,7 +22,6 @@ import { timeDelay } from 'gamedata/timeDelay';
 //etc 0, hole 100, colorance 200, upgrade 300, material 400
 export const version = "0.1";
 export const gameData = {
-    itemType: [{ko:'',en:''},{ko:'투구',en:'Helm'},{ko:'갑옷',en:'Armor'},{ko:'무기',en:'Weapon'},{ko:'반지',en:'Ring'},{ko:'목걸이',en:'Necklace'}],
     stateName: ['lds', 'sta', 'str', 'spd', 'int', 'men', 'chr', 'luk'],
     battleStateName: ['hp','sp','rsp','atk','def','mak','mdf','rcv','spd','luk'],
     chMenu: ['display', 'state', 'animalSkill', 'skill', 'relation', 'item'],
@@ -86,8 +85,8 @@ export const gameData = {
       {name: {ko:'사기',en:'Fraud',jp:'詐欺'}, sentence: 12 * 60 * 60 * 1000, needMoral: 20},
       {name: {ko:'폭행',en:'Assault',jp:'暴行'}, sentence: 1 * 24 * 60 * 60 * 1000, needMoral: 30},
       {name: {ko:'방화',en:'Arson',jp:'放火'}, sentence: 5 * 24 * 60 * 60 * 1000, needMoral: 50},
-      {name: {ko:'반역',en:'Treason',jp:'反逆'}, sentence: 15 * 24 * 60 * 60 * 1000, needMoral: 70},
-      {name: {ko:'살인',en:'Murder',jp:'殺人'}, sentence: 30 * 24 * 60 * 60 * 1000, needMoral: 100},
+      {name: {ko:'뇌물수수',en:'Bribery',jp:'贈収賄'}, sentence: 15 * 24 * 60 * 60 * 1000, needMoral: 70},
+      {name: {ko:'반역',en:'Treason',jp:'反逆'}, sentence: 30 * 24 * 60 * 60 * 1000, needMoral: 100},
     ],
     ch: ch,
     job: job,//직업
@@ -98,8 +97,16 @@ export const gameData = {
     shopPic: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,16],
     //grade (0하급poor, 1일반normal, 2매직magic, 3레어rare, 4에픽epic, 5유니크unique, 6레전드legend)
     itemGrade: {//'#999'
-      txt_e: ['','Poor','Normal','Magic','Rare','Epic','Unique','Legend'],
-      txt_k: ['','일반','매직','레어','에픽','세트','유니크','레전드'],
+      txt: [
+        {},
+        {ko:"일반", en:"Normal", jp:"一般"},
+        {ko:"매직", en:"Magic", jp:"マジック"},
+        {ko:"레어", en:"Rare", jp:"レア"},
+        {ko:"에픽", en:"Epic", jp:"エピック"},
+        {ko:"세트", en:"Set", jp:"セット"},
+        {ko:"유니크", en:"Unique", jp:"ユニーク"},
+        {ko:"레전드", en:"Legend", jp:"レジェンド"},
+      ],
       color: ['','#fff','#0090ff','#ffcc15','#a800ff','#00a90c','#ff2a00','#ff8800']
     },
     chGradeColor:['#fff','#00a90c','#0090ff','#a800ff','#ffcc15','#ff2a00','#ff8000'],
