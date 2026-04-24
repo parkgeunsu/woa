@@ -153,10 +153,10 @@ const Mystery = ({
                 if (typeof itemData.part === 'number') {
                   const itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5;
                   const items = itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx] : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx];
-                  return <ItemLayout 
+                  return items && <ItemLayout 
                     gameItem={gameItem}
                     icon={{
-                      type: itemData.itemCate,
+                      type: itemData.type,
                       pic: items.pic,
                       idx: items.display,
                     }}
@@ -165,14 +165,23 @@ const Mystery = ({
                     grade={itemData.grade}
                     selectColor={itemData.color}
                     onClick={() => {
-                      setPopupType("equip");
+                      setPopupType("item");
                       setPopupInfo(prev => ({
                         ...prev,
                         item: {
-                          itemAreaType: 'shop',//아직 안쓰임
+                          isMoveEvent: false,
+                          itemAreaType: 'mystery',//아직 안쓰임
                           gameItem: items,
+                          itemSaveSlot: itemData.slot,
                           saveItemData: itemData,
                           type: "equip",
+                          buttons: ['buy'],
+                          location: {
+                            name: 'mystery',
+                            tab: selectTab,
+                          },
+                          callback: () => {
+                          },
                         }
                       }));
                       setPopupOn(true);
@@ -191,13 +200,23 @@ const Mystery = ({
                     key={`items${itemIdx}`}
                     grade={grade}
                     onClick={() => {
-                      setPopupType(itemData.type);
+                      setPopupType('item');
                       setPopupInfo(prev => ({
                         ...prev,
                         item: {
+                          isMoveEvent: false,
+                          itemAreaType: 'mystery',//아직 안쓰임
                           gameItem: items,
+                          itemSaveSlot: itemData.slot,
                           saveItemData: itemData,
                           type: itemData.type,
+                          buttons: ['buy'],
+                          location: {
+                            name: 'mystery',
+                            tab: selectTab,
+                          },
+                          callback: () => {
+                          },
                         }
                       }));
                       setPopupOn(true);
