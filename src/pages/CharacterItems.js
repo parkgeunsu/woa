@@ -3,6 +3,7 @@ import { FlexBox } from "components/Container";
 import { IconPic } from "components/ImagePic";
 import InfoGroup from "components/InfoGroup";
 import ItemLayout from 'components/ItemLayout';
+import { util } from 'components/Libs';
 import Msg from "components/Msg";
 import MsgContainer from "components/MsgContainer";
 import Popup from "components/Popup";
@@ -208,16 +209,15 @@ const ItemBoxNoList = styled(FlexBox)`
 `;
 const ItemBoxList = styled.div`
   position: relative;
-  padding-top: calc(25% - 5px);
-  width: calc(25% - 5px);
+  padding-top: 25%;
+  width: 25%;
   height: 0;
-  border: 1px solid ${({ gradeColor }) => gradeColor || "#fff"};
   .txt {
     position: absolute;
     left: 2px;
     right: 2px;
     bottom: 2px;
-   font-size: 0.688rem;
+    font-size: 0.688rem;
     text-align: center;
     z-index: 1;
   }
@@ -234,6 +234,7 @@ const ItemBoxList = styled.div`
   }
 `;
 const CharacterItems = ({
+  state,
   chList,
   saveData,
   changeSaveData,
@@ -241,6 +242,7 @@ const CharacterItems = ({
   itemEquipType,
   slotIdx
 }) => {
+  console.log(state);
   const context = useContext(AppContext);
   const lang = React.useMemo(() => {
     return context.setting.lang;
@@ -251,6 +253,8 @@ const CharacterItems = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
+  const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
+  const gameItem = React.useMemo(() => gameData.items, [gameData]);
   const saveCh = React.useMemo(() => chList ? chList[slotIdx] : saveData.ch[slotIdx] || {}, [chList, saveData, slotIdx]);
   const chData = React.useMemo(
     () => gameData.ch[saveCh.idx],
@@ -261,7 +265,6 @@ const CharacterItems = ({
   const saveItems = React.useMemo(() => {
     return saveCh.items;
   }, [saveCh]);
-  const gameItem = React.useMemo(() => gameData.items, [gameData]);
   const possibleEquipItemNum = useRef(0);
   const possibleKgStatus = React.useMemo(() => {
     let currentKg = 0;
@@ -286,44 +289,63 @@ const CharacterItems = ({
     };
   }, [saveCh, chData, gameItem, saveItems, gameData.animal_size.kg]);
   
-  const [popupOn, setPopupOn] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState("");
   const [popupInfo, setPopupInfo] = useState({});
-  const [msgOn, setMsgOn] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
-  const [tooltipOn, setTooltipOn] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const [tooltip, setTooltip] = useState('');
   const [tooltipPos, setTooltipPos] = useState([0,0]);
 
   const [itemBoxShow, setItemBoxShow] = useState(isShowItemBox ? true : false);
   const [possibleEquipItem, setPossibleEquipItem] = useState([]);
-  const handlePopup = useCallback(
-    ({itemType, itemIdx, itemSaveSlot, itemPart, itemGrade, itemWeaponType}) => {
+  const handlePopup = useCallback((saveObj) => {
+    const {itemType, itemData, itemSaveSlot} = saveObj,
+      itemIdx = itemData.idx,
+      itemPart = itemData.part,
+      itemGrade = itemData.grade,
+      itemWeaponType = itemData.weaponType;
       if (itemType) {
-        const saveItemData = itemType === "hequip" ? saveData.items.equip[itemSaveSlot] : saveItems[itemSaveSlot];
-        setPopupType(itemType);
+        let saveItemData;
+        if (itemType === 'hequip') {
+          saveItemData = sData.items['equip'][itemSaveSlot];
+        } else {
+          saveItemData = saveItems[itemSaveSlot];
+        }
+        setPopupType('item');
         const itemsGrade = itemGrade < 5 ? 0 : itemGrade - 5;
-        let gameItemData = "";
-        if (itemType === "hequip" || itemType === "equip") {
-          gameItemData =
-            itemPart === 3
-              ? gameItem["equip"][itemPart][itemWeaponType][itemsGrade][itemIdx]
-              : gameItem["equip"][itemPart][0][itemsGrade][itemIdx];
+        let gameItemData = '',
+          buttons = [];
+        if (itemType === "hequip") {
+          gameItemData = itemPart === 3 ? gameItem["equip"][itemPart][itemWeaponType][itemsGrade][itemIdx] : gameItem["equip"][itemPart][0][itemsGrade][itemIdx];
+          buttons = ['sell', 'wear', 'socket', 'upgrade', 'evaluate'];
+        } else if (itemType === "equip") {
+          gameItemData = itemPart === 3 ? gameItem["equip"][itemPart][itemWeaponType][itemsGrade][itemIdx] : gameItem["equip"][itemPart][0][itemsGrade][itemIdx];
+          buttons = ['sell', 'release', 'socket', 'upgrade', 'evaluate'];
         } else {
           gameItemData = gameItem[itemType][itemIdx];
+          buttons = ['sell', 'evaluate'];
         }
         setPopupInfo(prev => ({
           ...prev,
+          chSlotIdx: slotIdx,
           item: {
-            chSlotIdx: slotIdx,
+            isMoveEvent: false,
+            itemAreaType: 'homeInven',//아직 안쓰임
             gameItem: gameItemData,
             itemSaveSlot: itemSaveSlot,
             saveItemData: saveItemData,
             type: itemType === "hequip" ? "equip" : itemType,
-          }
+            buttons: buttons,
+          },
+          tab: 5,
+          ...(state?.isAllEntry && {
+            isAllEntry: true,
+          })
         }));
       }
-      setPopupOn((prev) => !prev);
+      setShowPopup((prev) => !prev);
     },
     [saveItems, slotIdx, gameItem]
   );
@@ -340,7 +362,7 @@ const CharacterItems = ({
     setPossibleEquipItem(saveData?.items?.equip.map((value, index) => ({value, index})).filter((itemData) => {
       return itemData.value.part === equipType;
     }));
-  }, [popupOn, equipType]);
+  }, [showPopup, equipType]);
   return (
     <>
       <Wrap className="items">
@@ -349,7 +371,7 @@ const CharacterItems = ({
           title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.equipment[lang]}`}
           guideClick={() => {
             setPopupType("guide");
-            setPopupOn(true);
+            setShowPopup(true);
             setPopupInfo(prev => ({
               ...prev,
               guide: {
@@ -392,7 +414,7 @@ const CharacterItems = ({
                 return item !== 0 && <PossbileItemContainer groupIdx={index} key={`possibleEquipItem${index}_${itemIndex}`} onClick={(e) => {
                   setTooltipPos(e.target.getBoundingClientRect());
                   setTooltip(gameData.items.equipName[index][itemIndex][lang]);
-                  setTooltipOn(true);
+                  setShowTooltip(true);
                 }}>
                   <PossibleEquipItemIcon pic="icon200" idx={itemIndex + iconNum} />
                 </PossbileItemContainer>
@@ -421,11 +443,8 @@ const CharacterItems = ({
                           e.stopPropagation();
                           handlePopup({
                             itemType: "equip",
-                            itemIdx: data.idx,
+                            itemData: data,
                             itemSaveSlot: idx,
-                            itemPart: data.part,
-                            itemGrade: data.grade,
-                            itemWeaponType: data.weaponType
                           });
                         }}
                       >
@@ -439,6 +458,7 @@ const CharacterItems = ({
                             mergeColor: data.color,
                           }}
                           grade={data.grade}
+                          tier={data.tier || 0}
                           part={gameData.animalType[animalIdx].equip[idx]}
                           itemsHole={itemsHole}/>
                       </ItemList>
@@ -499,11 +519,8 @@ const CharacterItems = ({
                     e.stopPropagation();
                     handlePopup({
                       itemType: 'hequip',
-                      itemIdx: itemDataValue.idx,
+                      itemData: itemDataValue,
                       itemSaveSlot: itemData.index,
-                      itemPart: itemDataValue.part,
-                      itemGrade: itemDataValue.grade,
-                      itemWeaponType: itemDataValue.weaponType
                     });
                   }} data-itemnum={`equip_${itemDataValue.idx}`}>
                     <ItemLayout 
@@ -516,6 +533,7 @@ const CharacterItems = ({
                         mergeColor: itemDataValue.color,
                       }}
                       grade={itemDataValue.grade}
+                      tier={itemDataValue.tier || 0}
                       part={itemDataValue.part}
                       sealed={itemDataValue.sealed}
                       impossible={equipPossible}
@@ -528,26 +546,26 @@ const CharacterItems = ({
         </InfoGroup>
       </Wrap>
       <PopupContainer>
-        {popupOn && (
+        {showPopup && (
           <Popup
             type={popupType}
             dataObj={popupInfo}
             saveData={saveData}
             changeSaveData={changeSaveData}
-            showPopup={setPopupOn}
-            msgText={setMsg}
-            showMsg={setMsgOn}
+            setShowPopup={setShowPopup}
+            setMsg={setMsg}
+            setShowMsg={setShowMsg}
             setTooltip={setTooltip}
             setTooltipPos={setTooltipPos}
-            setTooltipOn={setTooltipOn}
+            setShowTooltip={setShowTooltip}
           />
         )}
       </PopupContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
 			<TooltipContainer>
-				{tooltipOn && <Tooltip isDark={true} pos={tooltipPos} text={tooltip} showTooltip={setTooltipOn} />}
+				{showTooltip && <Tooltip isDark={true} pos={tooltipPos} text={tooltip} setShowTooltip={setShowTooltip} />}
 			</TooltipContainer>
     </>
   );

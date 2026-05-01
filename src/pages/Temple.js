@@ -102,10 +102,10 @@ const Temple = ({
     return gameData.items;
   }, [gameData]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
-  const [popupOn, setPopupOn] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
-  const [msgOn, setMsgOn] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
   const entries = React.useMemo(() => {
     return sData.entry.map((entryIdx) => {
@@ -153,10 +153,10 @@ const Temple = ({
                   actionChIdx: actionChIdx,
                   type: 'temple',
                   setMsg: setMsg,
-                  setMsgOn: setMsgOn,
+                  setShowMsg: setShowMsg,
                 }
               }));
-              setPopupOn(true);
+              setShowPopup(true);
             }}>
             <MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />
             {!actionChIdx && <NoneChText code="t1" color="red">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
@@ -166,10 +166,10 @@ const Temple = ({
         </UserContainer>
       </Wrap>
 			<PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} />}
       </PopupContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
     </>
   );

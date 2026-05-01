@@ -327,9 +327,9 @@ const ScenarioList = ({
   selectScenario,
   setSelectScenario,
   setTooltip,
-  setTooltipOn,
+  setShowTooltip,
   setTooltipPos,
-  setMsgOn,
+  setShowMsg,
   setMsg,
   lang,
 }) => {
@@ -421,7 +421,7 @@ const ScenarioList = ({
       return <ScenarioStage key={`stageGroup${stageIdx}`}>
         <StageName key={`stageName${stageIdx}`} currentStage={currentStage} btnBack={imgSet.button.btnLL} justifyContent={'space-between'} onClick={() => {
           if (!currentStage) {
-            setMsgOn(true);
+            setShowMsg(true);
             setMsg(gameData.msg.sentence.prevStageClear[lang]);
             return;
           }
@@ -457,7 +457,7 @@ const ScenarioList = ({
                   iconIdx={possibleIdx}
                   onClick={(e) => {
                     if (saveStage.heroNum < possibleStage) {
-                      setMsgOn(true);
+                      setShowMsg(true);
                       setMsg(gameData.msg.sentence.needMoreHero[lang]);
                       return;
                     }
@@ -527,7 +527,7 @@ const ScenarioList = ({
                       onClick={(e) => {
                         setTooltipPos(e.target.getBoundingClientRect());
                         setTooltip([gameData.msg.title?.['gold']?.[lang] || "Gold", util.comma(dropFirst.num), gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
-                        setTooltipOn(true);
+                        setShowTooltip(true);
                       }}/>
                   } else if (dropFirst.type === 'Equip' && typeof dropFirst.idx === 'string'){
                     const itemSeparate = dropFirst.idx.split('-');
@@ -544,10 +544,11 @@ const ScenarioList = ({
                       size="15%"
                       key={`dropFirst${dropFirstIdx}`}
                       grade={dropFirst.grade}
+                      tier={dropFirst.tier}
                       onClick={(e) => {
                         setTooltipPos(e.target.getBoundingClientRect());
                         setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
-                        setTooltipOn(true);
+                        setShowTooltip(true);
                     }}/>
                   } else if (dropFirst.type === 'Etc') {
                     const dropType = dropFirst.type.toLowerCase(),
@@ -564,10 +565,11 @@ const ScenarioList = ({
                       key={`dropFirst${dropFirstIdx}`} 
                       text={items.displayText}
                       grade={items.grade}
+                      tier={items.tier}
                       onClick={(e) => {
                         setTooltipPos(e.target.getBoundingClientRect());
                         setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
-                        setTooltipOn(true);
+                        setShowTooltip(true);
                     }}/>
                   } else if (dropFirst.type === 'Material'){
                     const dropType = dropFirst.type.toLowerCase(),
@@ -584,10 +586,11 @@ const ScenarioList = ({
                       key={`dropFirst${dropFirstIdx}`} 
                       text={dropFirst.num}
                       grade={items.grade}
+                      tier={items.tier}
                       onClick={(e) => {
                         setTooltipPos(e.target.getBoundingClientRect());
                         setTooltip([items.na?.[lang] || "", dropFirst.num, gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
-                        setTooltipOn(true);
+                        setShowTooltip(true);
                     }}/>
                   } else if (dropFirst.type === 'Upgrade'){
                     const dropType = dropFirst.type.toLowerCase(),
@@ -604,10 +607,11 @@ const ScenarioList = ({
                       key={`dropFirst${dropFirstIdx}`} 
                       text={dropFirst.num}
                       grade={items.grade}
+                      tier={items.tier}
                       onClick={(e) => {
                         setTooltipPos(e.target.getBoundingClientRect());
                         setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
-                        setTooltipOn(true);
+                        setShowTooltip(true);
                     }}/>
                   } else if (dropFirst.type === 'Hole'){
                     const dropType = dropFirst.type.toLowerCase(),
@@ -623,10 +627,11 @@ const ScenarioList = ({
                       size="15%"
                       key={`dropFirst${dropFirstIdx}`}
                       grade={items.grade}
+                      tier={items.tier}
                       onClick={(e) => {
                         setTooltipPos(e.target.getBoundingClientRect());
                         setTooltip([items.na?.[lang] || "", '', gameData.msg.title?.['firstGet']?.[lang] || "First time obtain"]);
-                        setTooltipOn(true);
+                        setShowTooltip(true);
                     }}/>
                   } else {
                     return '';
@@ -651,7 +656,7 @@ const ScenarioList = ({
                       onClick={(e) => {
                         setTooltipPos(e.target.getBoundingClientRect());
                         setTooltip([gameData.msg.title?.['gold']?.[lang] || "Gold", util.comma(dropAlways.num), '100%']);
-                        setTooltipOn(true);
+                        setShowTooltip(true);
                     }}/>
                   } else if (dropAlways.type === 'Equip' && typeof dropAlways.idx === 'string'){
                     const itemSeparate = dropAlways.idx.split('-');
@@ -667,10 +672,11 @@ const ScenarioList = ({
                       size="15%"
                       key={`dropAlways${dropAlwaysIdx}`}
                       grade={dropAlways.grade}
+                      tier={dropAlways.tier}
                       onClick={(e) => {
                         setTooltipPos(e.target.getBoundingClientRect());
                         setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
-                        setTooltipOn(true);
+                        setShowTooltip(true);
                     }}/>
                   } else if (dropAlways.type === 'Etc') {
                     const dropType = dropAlways.type.toLowerCase(),
@@ -687,10 +693,11 @@ const ScenarioList = ({
                       key={`dropAlways${dropAlwaysIdx}`}
                       text={items.displayText}
                       grade={items.grade}
+                      tier={items.tier}
                       onClick={(e) => {
                         setTooltipPos(e.target.getBoundingClientRect());
                         setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
-                        setTooltipOn(true);
+                        setShowTooltip(true);
                     }}/>
                   } else if (dropAlways.type === 'Material'){
                     const dropType = dropAlways.type.toLowerCase(),
@@ -707,10 +714,11 @@ const ScenarioList = ({
                       key={`dropAlways${dropAlwaysIdx}`}
                       text={dropAlways.num}
                       grade={items.grade}
+                      tier={items.tier}
                       onClick={(e) => {
                         setTooltipPos(e.target.getBoundingClientRect());
                         setTooltip([items.na?.[lang] || "", dropAlways.num, dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
-                        setTooltipOn(true);
+                        setShowTooltip(true);
                     }}/>
                   } else if (dropAlways.type === 'Upgrade'){
                     const dropType = dropAlways.type.toLowerCase(),
@@ -726,10 +734,11 @@ const ScenarioList = ({
                       size="15%"
                       key={`dropAlways${dropAlwaysIdx}`}
                       grade={items.grade}
+                      tier={items.tier}
                       onClick={(e) => {
                         setTooltipPos(e.target.getBoundingClientRect());
                         setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
-                        setTooltipOn(true);
+                        setShowTooltip(true);
                     }}/>
                   } else if (dropAlways.type === 'Hole'){
                     const dropType = dropAlways.type.toLowerCase(),
@@ -745,10 +754,11 @@ const ScenarioList = ({
                       size="15%"
                       key={`dropAlways${dropAlwaysIdx}`}
                       grade={items.grade}
+                      tier={items.tier}
                       onClick={(e) => {
                         setTooltipPos(e.target.getBoundingClientRect());
                         setTooltip([items.na?.[lang] || "", '', dropAlways.percent ? `${dropAlways.percent * 100}%` : '100%']);
-                        setTooltipOn(true);
+                        setShowTooltip(true);
                     }}/>
                   } else {
                     return '';
@@ -780,13 +790,13 @@ const Scenario = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const [tooltipOn, setTooltipOn] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const [tooltip, setTooltip] = useState('');
   const [tooltipPos, setTooltipPos] = useState([0,0]);
-  const [popupOn, setPopupOn] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
-  const [msgOn, setMsgOn] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
   const [scenarioData, setScenarioData] = useState([]);
   const hasPeriodScenario = React.useMemo(() => {
@@ -823,7 +833,7 @@ const Scenario = ({
               data: gameData.guide?.['scenarioHero'],
             }
           }));
-          setPopupOn(true);
+          setShowPopup(true);
         }} />
         <ScrollWrap className="scroll-y">
           {hasPeriodScenario.length === 0 ? <FlexBox justifyContent={"center"} alignItems={"center"}>
@@ -839,7 +849,7 @@ const Scenario = ({
                 stageDifficult = saveStage?.heroNum;
               return <CountryScenario key={`countryData${scenarioIdx}`}>
                 <CountryPeriod btnBack={imgSet.button?.btnLD}>{gameData.msg.regions?.[dynastyScenario?.name]?.[lang] || ""}</CountryPeriod>
-                {stageDifficult >= 0 && <ScenarioList navigate={navigate} gameData={gameData} saveData={saveData} slotIdx={scenarioData.slotIdx} chScenarioIdx={scenarioData.scenarioIdx} changeSaveData={changeSaveData} stay={stay} dynastyIdx={scenarioInfo[1]} dynastyScenarioIdx={scenarioInfo[2]} dynastyScenario={scenarioList} imgSet={imgSet} selectScenario={selectScenario} setSelectScenario={setSelectScenario} setTooltip={setTooltip} setTooltipOn={setTooltipOn} setTooltipPos={setTooltipPos} setMsg={setMsg} setMsgOn={setMsgOn} lang={lang} />
+                {stageDifficult >= 0 && <ScenarioList navigate={navigate} gameData={gameData} saveData={saveData} slotIdx={scenarioData.slotIdx} chScenarioIdx={scenarioData.scenarioIdx} changeSaveData={changeSaveData} stay={stay} dynastyIdx={scenarioInfo[1]} dynastyScenarioIdx={scenarioInfo[2]} dynastyScenario={scenarioList} imgSet={imgSet} selectScenario={selectScenario} setSelectScenario={setSelectScenario} setTooltip={setTooltip} setShowTooltip={setShowTooltip} setTooltipPos={setTooltipPos} setMsg={setMsg} setShowMsg={setShowMsg} lang={lang} />
                 }
               </CountryScenario>
             })}
@@ -847,13 +857,13 @@ const Scenario = ({
         </ScrollWrap>
       </Wrap>
 			<TooltipContainer>
-				{tooltipOn && <Tooltip pos={tooltipPos} text={tooltip} showTooltip={setTooltipOn} />}
+				{showTooltip && <Tooltip pos={tooltipPos} text={tooltip} setShowTooltip={setShowTooltip} />}
 			</TooltipContainer>
       <PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} />}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} setShowPopup={setShowPopup} />}
       </PopupContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
     </>
   )

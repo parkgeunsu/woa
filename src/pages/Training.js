@@ -367,10 +367,10 @@ const Training = ({
     return gameData.items;
   }, [gameData]);
 	const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
-  const [popupOn, setPopupOn] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 	const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
-  const [msgOn, setMsgOn] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
 	const [rewardText, setRewardText] = useState("");
 	const lvUpTimeoutRef = useRef([null, null]);
@@ -527,7 +527,7 @@ const Training = ({
 									gameData: gameData,
 								});
 							} else {
-								setMsgOn(true);
+								setShowMsg(true);
 								setMsg(gameData.msg.sentence.lackExp[lang]);
 							}
 						}}>
@@ -542,12 +542,28 @@ const Training = ({
 								clearTimeout(isAnimationRef.current);
 								isAnimationRef.current = setTimeout(() => {
 									setIsAnimation(false);
-									sData.hasHeroNum[saveCh.idx] -= gameData.gradeUp[saveCh.grade];
-									saveCh.grade += 1;
-									changeSaveData(sData);
+									changeSaveData({
+										...sData,
+										ch: sData.ch.map((chData, chIdx) => {
+											if (chIdx === saveCh.slotIdx) {
+												return {
+													...chData,
+													grade: chData.grade + 1,
+													hasHeroNum: chData.hasHeroNum - gameData.gradeUp[chData.grade],
+												};
+											}
+											return chData;
+										}),
+										hasHeroNum: sData.hasHeroNum.map((heroNum, heroIdx) => {
+											if (heroIdx === saveCh.idx) {
+												return heroNum - gameData.gradeUp[saveCh.grade];
+											}
+											return heroNum;
+										})
+									});
 								}, 1000);
 							} else {
-								setMsgOn(true);
+								setShowMsg(true);
 								setMsg(gameData.msg.sentence.lackHeroNum[lang]);
 							}
 						}}>
@@ -575,22 +591,22 @@ const Training = ({
 																<SkillLv code="t3" weight="600" color="sub" 
 																onClick={() => {
 																	if (saveCh.animalBadge <= 0) {
-																		setMsgOn(true);
+																		setShowMsg(true);
 																		setMsg(gameData.msg.sentence.lackBadges[lang]);
 																	} else {
 																		if (saveCh.animalSkill[groupIdx][skIdx].lv > 4) {//스킬레벨5 최대일때
-																			setMsgOn(true);
+																			setShowMsg(true);
 																			setMsg(gameData.msg.sentence.maxSkillLv[lang]);
 																			return;
 																		}
 																		if (saveCh.animalSkill[groupIdx - 1] && saveCh.animalSkill[groupIdx - 1][skIdx].idx !== "" && saveCh.animalSkill[groupIdx - 1][skIdx].lv === 0) {//선챙 스킬이 없을때
-																			setMsgOn(true);
+																			setShowMsg(true);
 																			const beforeSkill = gameData.skill[saveCh.animalSkill[groupIdx - 1][skIdx].idx].na[lang];
 																			setMsg(gameData.msg.sentenceFn.beforeSkill(lang, beforeSkill, groupIdx));
 																			return;
 																		}
 																		if (saveCh.lv < saveCh.animalSkill[groupIdx][skIdx].lvLimit) {//레벨제한보다 적을때
-																			setMsgOn(true);
+																			setShowMsg(true);
 																			setMsg(gameData.msg.sentence.lackLv[lang]);
 																			return;
 																		}
@@ -641,7 +657,7 @@ const Training = ({
 																			requiredSkill: requiredSkill,
 																		}
 																	}));
-																	setPopupOn(true);
+																	setShowPopup(true);
 																}}/>
 															</SkillButton>
 														</SkillList>
@@ -670,7 +686,7 @@ const Training = ({
 								<FlexBox style={{flex: 1}} justifyContent="flex-start">
 									<StyledText code="t2" color="main" align="left">{gameData.msg.title.gradeUpHeroNum[lang]}</StyledText>
 								</FlexBox>
-								<FlexBox width="auto" direction="row">
+								<FlexBox style={{"white-space": "nowrap"}} width="auto" direction="row">
 									<StyledText code="t4" color={heroNumArray.length >= gameData.gradeUp[saveCh.grade] ? "point3" : "point2"} weight="600">{gameData.gradeUp[saveCh.grade]}</StyledText><StyledText code="t4" color={"main"} weight="600" style={{margin: "0 4px"}}> / </StyledText><StyledText code="t4" color="main" weight="600">{heroNumArray.length}</StyledText>
 								</FlexBox>
 							</FlexBox>
@@ -720,7 +736,7 @@ const Training = ({
 								};
 	
 								changeSaveData(newSaveData);
-								setMsgOn(true);
+								setShowMsg(true);
 								setMsg(gameData.msg.sentence.resetAnimalSkill[lang]);
 							}}>{gameData.msg.button.skillReset[lang]}</button>
 						</>}
@@ -734,10 +750,10 @@ const Training = ({
 									actionChIdx: actionChIdx,
 									type: 'training',
 									setMsg: setMsg,
-									setMsgOn: setMsgOn,
+									setShowMsg: setShowMsg,
 								}
 							}));
-							setPopupOn(true);
+							setShowPopup(true);
 						}}>
 						<MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />
 						{!actionChIdx && <NoneChText code="t1" color="red">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
@@ -750,10 +766,10 @@ const Training = ({
 				</GetLvReward>
 			</Wrap>
 			<PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={sData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={sData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} />}
       </PopupContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
 		</>
   );

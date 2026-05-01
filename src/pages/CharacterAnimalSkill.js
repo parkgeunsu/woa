@@ -189,9 +189,9 @@ const CharacterAnimalSkill = ({
   }, [saveCh]);
   const itemPoint = React.useMemo(() => saveCh.items, [saveCh]);
   const animalType = React.useMemo(() => gameData.ch[saveCh.idx].animal_type, [gameData, saveCh]);
-  const [msgOn, setMsgOn] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
-  const [popupOn, setPopupOn] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
   
@@ -200,7 +200,7 @@ const CharacterAnimalSkill = ({
       <Wrap className="skillAnimal scroll-y">
         <InfoGroup pointTitle={`Lv.${saveCh.lv} ${chName}`} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.animalSkill[lang]}`} guideClick={() => {
           setPopupType('guide');
-          setPopupOn(true);
+          setShowPopup(true);
           setPopupInfo(prev => ({
             ...prev,
             guide: {
@@ -237,7 +237,7 @@ const CharacterAnimalSkill = ({
               };
 
               changeSaveData(newSaveData);
-              setMsgOn(true);
+              setShowMsg(true);
               setMsg(gameData.msg.sentence.resetAnimalSkill[lang]);
             }}>{gameData.msg.button.skillReset[lang]}</div>
             <SkillPoint>
@@ -255,7 +255,6 @@ const CharacterAnimalSkill = ({
                       const sk = gameData.skill[skData.idx],
                         requiredSkill = groupIdx !== 0 && gameData.skill[animalSkill[groupIdx - 1][skIdx].idx];
                       const activeRequired = groupIdx === 0 || (groupIdx !== 0 && animalSkill[groupIdx - 1][skIdx].lv > 0);
-                      console.log(sk);
                       //const skillCate = sk.cate;
                       return (
                         <SkillList key={skIdx} pos={skIdx % 4}>
@@ -265,22 +264,22 @@ const CharacterAnimalSkill = ({
                             <SkillLv code="t3" weight="600" color="sub" 
                             onClick={() => {
                               if (saveCh.animalBadge <= 0) {
-                                setMsgOn(true);
+                                setShowMsg(true);
                                 setMsg(gameData.msg.sentence.lackBadges[lang]);
                               } else {
                                 if (saveCh.animalSkill[groupIdx][skIdx].lv > 4) {//스킬레벨5 최대일때
-                                  setMsgOn(true);
+                                  setShowMsg(true);
                                   setMsg(gameData.msg.sentence.maxSkillLv[lang]);
                                   return;
                                 }
                                 if (saveCh.animalSkill[groupIdx - 1] && saveCh.animalSkill[groupIdx - 1][skIdx].idx !== "" && saveCh.animalSkill[groupIdx - 1][skIdx].lv === 0) {//선챙 스킬이 없을때
-                                  setMsgOn(true);
+                                  setShowMsg(true);
                                   const beforeSkill = gameData.skill[saveCh.animalSkill[groupIdx - 1][skIdx].idx].na[lang];
                                   setMsg(gameData.msg.sentenceFn.beforeSkill(lang, beforeSkill, groupIdx));
                                   return;
                                 }
                                 if (saveCh.lv < animalSkill[groupIdx][skIdx].lvLimit) {//레벨제한보다 적을때
-                                  setMsgOn(true);
+                                  setShowMsg(true);
                                   setMsg(gameData.msg.sentence.lackLv[lang]);
                                   return;
                                 }
@@ -331,7 +330,7 @@ const CharacterAnimalSkill = ({
                                   requiredSkill: requiredSkill,
                                 }
                               }));
-                              setPopupOn(true);
+                              setShowPopup(true);
                             }}/>
                           </SkillButton>
                         </SkillList>
@@ -347,10 +346,10 @@ const CharacterAnimalSkill = ({
         </InfoGroup>
       </Wrap>
       <PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} />}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} setShowPopup={setShowPopup} />}
       </PopupContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
     </>
   );

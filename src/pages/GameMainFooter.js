@@ -92,7 +92,7 @@ const GameMainFooter = ({
   const [modalOn, setModalOn] = useState(false);
   const [modalInfo, setModalInfo] = useState({});
   const [modalData, setModalData] = useState({});
-  const [msgOn, setMsgOn] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
   const currentStep = React.useMemo(() => {
     return util.exploreArea.checkStep(util.loadData('historyParam')?.roulette) || 0
@@ -130,7 +130,7 @@ const GameMainFooter = ({
                   }
                 });
                 if (isEmptyEntry) {
-                  setMsgOn(true);
+                  setShowMsg(true);
                   setMsg(gameData.msg.sentence['organizeCard'][lang]);
                   return;
                 }
@@ -238,7 +238,7 @@ const GameMainFooter = ({
                     }
                   });
                   if (isEmptyEntry) {
-                    setMsgOn(true);
+                    setShowMsg(true);
                     setMsg(gameData.msg.sentence['organizeCard'][lang]);
                     return;
                   }
@@ -309,7 +309,7 @@ const GameMainFooter = ({
 				}} gameData={gameData}/>}
 			</ModalContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
     </>
   );

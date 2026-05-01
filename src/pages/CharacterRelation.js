@@ -135,10 +135,10 @@ const CharacterRelation = ({
   }, [context]);
   const saveCh = React.useMemo(() => chList ? chList[slotIdx] : saveData.ch[slotIdx] || {}, [chList, saveData, slotIdx]);
   const chData = React.useMemo(() => gameData.ch?.[saveCh.idx], [gameData, saveCh]);
-  const [popupOn, setPopupOn] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
-  const [tooltipOn, setTooltipOn] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const [tooltip, setTooltip] = useState('');
   const [tooltipPos, setTooltipPos] = useState([0,0]);
   const chRelation = React.useMemo(() => chData.relation, [chData]);
@@ -185,7 +185,7 @@ const CharacterRelation = ({
       <Wrap className="relation">
         <InfoGroup pointTitle={`Lv.${saveCh.lv} ${chData?.na1[lang]}`} title={`${gameData?.msg?.grammar?.conjunction[lang]} ${gameData?.msg?.menu?.biography[lang]}`} guideClick={() => {
           setPopupType('guide');
-          setPopupOn(true);
+          setShowPopup(true);
           setPopupInfo(prev => ({
             ...prev,
             guide: {
@@ -214,7 +214,7 @@ const CharacterRelation = ({
                             <Member key={`relationMember_${mStatus.idx}`} onClick={(e) => {
                               setTooltipPos(e.target.getBoundingClientRect());
                               setTooltip(mStatus.chData.na1[lang]);
-                              setTooltipOn(true);
+                              setShowTooltip(true);
                             }}>
                               <ChBox active={mStatus.hasMember}>
                                 <CardCh>
@@ -281,10 +281,10 @@ const CharacterRelation = ({
         </InfoGroup>
       </Wrap>
       <PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} />}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} setShowPopup={setShowPopup} />}
       </PopupContainer>
 			<TooltipContainer>
-				{tooltipOn && <Tooltip pos={tooltipPos} text={tooltip} showTooltip={setTooltipOn} />}
+				{showTooltip && <Tooltip pos={tooltipPos} text={tooltip} setShowTooltip={setShowTooltip} />}
 			</TooltipContainer>
     </>
   );

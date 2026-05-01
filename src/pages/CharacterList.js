@@ -132,20 +132,16 @@ const ChracterList = ({
                       prevLocation: 'cardsList',
                       location: 'cards',
                       navigate: navigate,
-                      callback: () => {
-                        util.saveData('historyParam', {
-                          ...util.loadData('historyParam'),
-                          cards: {
-                            chSlotIdx: data.slotIdx,
-                            chTabIdx: 0,
-                          }
-                        });
-                      },
+                      // callback: () => {
+                      //   util.saveData('historyParam', {
+                      //     ...util.loadData('historyParam'),
+                      //     cards: {
+                      //       chSlotIdx: data.slotIdx,
+                      //     }
+                      //   });
+                      // },
                       state: {
-                        dataObj: {
-                          chSlotIdx: data.slotIdx,
-                          chTabIdx: 0,
-                        }
+                        chSlotIdx: data.slotIdx,
                       },
                       isNavigate: true,
                     });//히스토리 저장
@@ -165,19 +161,15 @@ const ChracterList = ({
                         location: 'cards',
                         navigate: navigate,
                         callback: () => {
-                          util.saveData('historyParam', {
-                            ...util.loadData('historyParam'),
-                            cards: {
-                              chSlotIdx: data.slotIdx,
-                              chTabIdx: 0,
-                            }
-                          });
+                          // util.saveData('historyParam', {
+                          //   ...util.loadData('historyParam'),
+                          //   cards: {
+                          //     chSlotIdx: data.slotIdx,
+                          //   }
+                          // });
                         },
                         state: {
-                          dataObj: {
-                            chSlotIdx: data.slotIdx,
-                            chTabIdx: 0,
-                          }
+                          chSlotIdx: data.slotIdx,
                         },
                         isNavigate: true,
                       });//히스토리 저장
@@ -197,21 +189,17 @@ const ChracterList = ({
                         location: 'cards',
                         navigate: navigate,
                         callback: () => {
-                          util.saveData('historyParam', {
-                            ...util.loadData('historyParam'),
-                            cards: {
-                              isMoveNotCh: true,
-                              chSlotIdx: data.slotIdx,
-                              chTabIdx: 0,
-                            }
-                          });
+                          // util.saveData('historyParam', {
+                          //   ...util.loadData('historyParam'),
+                          //   cards: {
+                          //     isMoveNotCh: true,
+                          //     chSlotIdx: data.slotIdx,
+                          //   }
+                          // });
                         },
                         state: {
-                          dataObj: {
-                            isMoveNotCh: true,
-                            chSlotIdx: data.slotIdx,
-                            chTabIdx: 0,
-                          }
+                          isMoveNotCh: true,
+                          chSlotIdx: data.slotIdx,
                         },
                         isNavigate: true,
                       });//히스토리 저장

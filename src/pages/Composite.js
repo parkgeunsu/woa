@@ -10,6 +10,8 @@ import Npc from 'components/Npc';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import TabMenu from 'components/TabMenu';
+import Tooltip from 'components/Tooltip';
+import TooltipContainer from 'components/TooltipContainer';
 import { AppContext } from 'contexts/app-context';
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -173,9 +175,12 @@ const Composite = ({
     return gameData.items;
   }, [gameData]);
 	const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
-  const [popupOn, setPopupOn] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 	const [popupType, setPopupType] = useState('');
-  const [msgOn, setMsgOn] = useState(false);
+	const [showTooltip, setShowTooltip] = useState(false);
+	const [tooltip, setTooltip] = useState('');
+	const [tooltipPos, setTooltipPos] = useState([0,0]);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
 	const [selectTab, setSelectTab] = useState(typeof state?.tab === 'number' ? state.tab : "");
 	const [selectItemTab, setSelectItemTab] = useState(0);
@@ -261,33 +266,31 @@ const Composite = ({
 								...prev,
 								item: {
 									isMoveEvent: false,
-									itemAreaType: selectItem0.game.type,//아직 안쓰임
-									gameItem: selectItem0.game,
-									itemSaveSlot: selectItem0.select,
-									saveItemData: selectItem0.save,
+									itemAreaType: selectItem0?.game.type,//아직 안쓰임
+									gameItem: selectItem0?.game,
+									itemSaveSlot: selectItem0?.select,
+									saveItemData: selectItem0?.save,
 									type: 'composite',
 									buttons: ['sell'],
-									location: {
-										name: 'composite',
-										tab: 0,
-									},
 									callback: () => {
 									},
+									tab: 1,
 								}
 							}));
-							setPopupOn(prev => !prev);
+							setShowPopup(prev => !prev);
 						}}>
 							<ItemLayout
-								gameItem={selectItem0.game}
+								gameItem={selectItem0?.game}
 								icon={{
 									type: "equip",
-									pic: selectItem0.game.pic,
-									idx: selectItem0.game.display,
-									mergeColor: selectItem0.save.color,
+									pic: selectItem0?.game.pic,
+									idx: selectItem0?.game.display,
+									mergeColor: selectItem0?.save.color,
 									largeQuestion: true,
 								}}
 								num={1}
-								sealed={selectItem0.save.sealed}
+                tier={selectItem0?.save.tier || 0}
+								sealed={selectItem0?.save.sealed}
 							/>
 						</EvaluateItem>}
 						<ButtonGroup>
@@ -309,9 +312,9 @@ const Composite = ({
 										saveData: sData,
 										changeSaveData: changeSaveData,
 										gameData: gameData,
-										msgText: setMsg,
-										showMsg: setMsgOn,
-										showPopup: setPopupOn,
+										setMsg: setMsg,
+										setShowMsg: setShowMsg,
+										setShowPopup: setShowPopup,
 										lang: lang,
 									}, (openedItem) => {
 										setSelectItem0({
@@ -321,7 +324,7 @@ const Composite = ({
 										});
 									});
 								} else {
-									setMsgOn(true);
+									setShowMsg(true);
 									setMsg(gameData.msg.sentence.sealedItem[lang]);
 								}
 							}}>{gameData.msg.button.emotions[lang]}</button>
@@ -354,7 +357,8 @@ const Composite = ({
 											key={`item${idx}`}
 											{...isEquip && {
 												sealed: data.sealed,
-												itemsHole: data.hole}
+												itemsHole: data.hole,
+                        tier: data.tier || 0}
 											}
 											grade={data.grade || items?.grade}
 											{...cate === "etc" && {text: items?.displayText}}
@@ -378,7 +382,7 @@ const Composite = ({
 								<button className="button_big" text="true" onClick={(e) => {
 									e.stopPropagation();
 									if (actionChIdx === '' || actionChIdx === undefined) {
-										setMsgOn(true);
+										setShowMsg(true);
 										setMsg(gameData.msg.sentenceFn?.selectSkillCh?.(lang, gameData.skill?.[203]?.na?.[lang]) || "Select Character");
 										return;
 									}
@@ -391,7 +395,7 @@ const Composite = ({
 									}
 
 									if (!recipeNum) {
-										setMsgOn(true);
+										setShowMsg(true);
 										setMsg(gameData.msg.sentence?.selectItem?.[lang] || "Select Item");
 									} else {
 										let success = false;
@@ -484,7 +488,7 @@ const Composite = ({
 											}
 										}
 										if (!success) {
-											setMsgOn(true);
+											setShowMsg(true);
 											setMsg(gameData.msg.sentence?.none?.[lang] || "No Recipe found");
 										}
 									}
@@ -526,7 +530,7 @@ const Composite = ({
 									gameItem={gameData.items}
 									icon={{
 										type: combineList[selectItemTab].keyName,
-										pic: items.pic,
+										pic: items?.pic,
 										idx: items?.display,
 										mergeColor: data.color,
 									}}
@@ -535,7 +539,8 @@ const Composite = ({
 									key={`items${idx}`}
 									{...isEquip && {
 										sealed: data.sealed,
-										itemsHole: data.hole}
+										itemsHole: data.hole,
+										tier: data.tier || 0}
 									}
 									grade={data.grade || items?.grade}
 									{...cate === "etc" && {text: items?.displayText}}
@@ -582,10 +587,10 @@ const Composite = ({
 								selectIdx: actionChIdx,
 								type: 'composite',
 								setMsg: setMsg,
-								setMsgOn: setMsgOn,
+								setShowMsg: setShowMsg,
 							}
 						}));
-						setPopupOn(true);
+						setShowPopup(true);
 					}}>
 						<MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />
 						{actionChIdx === "" && <NoneChText code="t1" color="red" workBreak="keep-all">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
@@ -595,11 +600,14 @@ const Composite = ({
 				</UserContainer>
 			</Wrap>
 			<PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} setTooltip={setTooltip} setTooltipPos={setTooltipPos} setShowTooltip={setShowTooltip} />}
       </PopupContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
+			<TooltipContainer>
+				{showTooltip && <Tooltip isDark={true} pos={tooltipPos} text={tooltip} setShowTooltip={setShowTooltip} />}
+			</TooltipContainer>
 		</>
   );
 }

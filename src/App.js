@@ -182,7 +182,7 @@ const setCity = ({
       },
       accessory: {
         price: 1,
-        ring: Array.from({length:20}, () => {
+        ring: Array.from({length:24}, () => {
           return {...util.getItem({
             saveData: false,
             gameData: gameData,
@@ -198,7 +198,7 @@ const setCity = ({
             lang:lang
           })}
         }),
-        amulet: Array.from({length:20}, () => {
+        amulet: Array.from({length:24}, () => {
           return {...util.getItem({
             saveData: false,
             gameData: gameData,
@@ -217,7 +217,7 @@ const setCity = ({
       },
       equipment: {
         price: 1,
-        helm: Array.from({length:20}, () => {
+        helm: Array.from({length:24}, () => {
           return {...util.getItem({
             saveData: false,
             gameData: gameData,
@@ -233,7 +233,7 @@ const setCity = ({
             lang:lang
           })}
         }),
-        armor:Array.from({length:20}, () => {
+        armor:Array.from({length:24}, () => {
           return {...util.getItem({
             saveData: false,
             gameData: gameData,
@@ -249,7 +249,7 @@ const setCity = ({
             lang:lang
           })}
         }),
-        weapon:Array.from({length:20}, () => {
+        weapon:Array.from({length:24}, () => {
           return {...util.getItem({
             saveData: false,
             gameData: gameData,
@@ -258,8 +258,8 @@ const setCity = ({
               type:'equip',
               items: 3,
               grade: Math.ceil(Math.random() * 2),
-              lv:Math.round(Math.random()*100),
-              sealed:false,
+              lv: Math.round(Math.random()*100),
+              sealed: false,
             },
             isSave: false,
             lang:lang
@@ -267,7 +267,7 @@ const setCity = ({
         }),
       },
       mystery: {
-        exp: Array.from({length:15}, () => {
+        exp: Array.from({length:24}, () => {
           return {...util.getItem({
             saveData: false,
             gameData: gameData,
@@ -280,7 +280,7 @@ const setCity = ({
             lang:lang
           })}
         }),
-        money: Array.from({length:20}, () => {
+        money: Array.from({length:24}, () => {
           return {...util.getItem({
             saveData: false,
             gameData: gameData,
@@ -296,7 +296,7 @@ const setCity = ({
             lang:lang
           })}
         }),
-        life: Array.from({length:20}, () => {
+        life: Array.from({length:24}, () => {
           return {...util.getItem({
             saveData: false,
             gameData: gameData,
@@ -496,6 +496,7 @@ const makeSaveData = (saveData) => {
     leaderIdx:0,
     shipIdx:0,
   }
+  saveData.testMode = true;
   saveData.entry = [0];
   saveData.lineup = {
     select: 0,

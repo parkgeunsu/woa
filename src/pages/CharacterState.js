@@ -92,6 +92,7 @@ const TextTotal = styled(Text)`
   width: 30px;
   line-height: 1 !important;
   white-space: nowrap;
+  text-shadow: 0 0 4px ${({theme}) => theme.color.sub};
 `;
 const ElementContainer = styled(FlexBox)`
   flex-wrap: wrap;
@@ -199,10 +200,10 @@ const CharacterState = ({
     };
   }, [gameData.hasMaxExp, saveCh.grade, saveCh.hasExp]);
 
-  const [popupOn, setPopupOn] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
-  const [msgOn, setMsgOn] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
 
   const animalKg = React.useMemo(() => {
@@ -228,7 +229,7 @@ const CharacterState = ({
       <Wrap className="state">
         <InfoGroup pointTitle={`Lv.${saveCh.lv} ${chName}`} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.state[lang]}`} guideClick={() => {
           setPopupType('guide');
-          setPopupOn(true);
+          setShowPopup(true);
           setPopupInfo(prev => ({
             ...prev,
             guide: {
@@ -307,10 +308,10 @@ const CharacterState = ({
         </InfoGroup>
       </Wrap>
       <PopupContainer>
-        {popupOn && <Popup type={popupType} saveData={saveData} dataObj={popupInfo} showPopup={setPopupOn} />}
+        {showPopup && <Popup type={popupType} saveData={saveData} dataObj={popupInfo} setShowPopup={setShowPopup} />}
       </PopupContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
     </>
   );

@@ -56,12 +56,12 @@ const CharacterPaging = ({
           return (
             <ChLi selected={slotIdx === idx} key={charKey} onClick={() => {
               const currentHistory = util.loadData('historyParam') || {};
-              util.saveData('historyParam', {
-                ...currentHistory,
-                cards: {
-                  selectIdx: idx,
-                }
-              });
+              // util.saveData('historyParam', {
+              //   ...currentHistory,
+              //   cards: {
+              //     selectIdx: idx,
+              //   }
+              // });
               changeChSlot(idx);
             }}>
               <CharacterCard usedType="paging" saveData={saveData} saveCharacter={data} />

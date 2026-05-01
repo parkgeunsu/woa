@@ -226,7 +226,7 @@ const Gate = ({
   const [modalOn, setModalOn] = useState(false);
   const [modalInfo, setModalInfo] = useState({});
   const [modalData, setModalData] = useState({});
-  const [msgOn, setMsgOn] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
   const entries = React.useMemo(() => {
     return sData.entry.map((entryIdx) => {
@@ -341,7 +341,7 @@ const Gate = ({
                 <EntryList grade={chData.grade} selected={sortEntry(chData.slotIdx) >= 0} onClick={(e) => {
                   e.stopPropagation();
                   if (moveRegionEntry[chIdx] === sData.info.leaderIdx) {
-                    setMsgOn(true);
+                    setShowMsg(true);
                     setMsg(gameData.msg.sentence['noRemoveLeader'][lang]);
                     return;
                   }
@@ -378,14 +378,14 @@ const Gate = ({
             )}
             <ItemButton direction="column" alignItems="center" justifyContent="center" onClick={(e) => {
               if (selectMoveRegion === '') {
-                setMsgOn(true);
+                setShowMsg(true);
                 setMsg(gameData.msg.sentence['selectMoveCountry'][lang]);
               } else if (stayIdx === selectMoveRegion) {
-                setMsgOn(true);
+                setShowMsg(true);
                 setMsg(gameData.msg.sentence['sameCountry'][lang]);
               } else {
                 if (moveRegionEntry.length === 0) {
-                  setMsgOn(true);
+                  setShowMsg(true);
                   setMsg(gameData.msg.sentence['createTravelEntry'][lang]);
                 } else {
                   const countryCode = util.getStringToCountryIdx(selectMoveRegion),
@@ -394,7 +394,7 @@ const Gate = ({
                     conditionName = gameData.items.etc[itemIdx].na[lang],
                     conditionNum = moveRegionEntry.length;
                   if (isCondition < conditionNum) {
-                    setMsgOn(true);
+                    setShowMsg(true);
                     setMsg(gameData.msg.sentenceFn.lackOfCondition(lang, conditionName));
                   } else {
                     setModalOn(true);
@@ -473,7 +473,7 @@ const Gate = ({
                   <EntryCards grade={sData.ch[eCard].grade} key={`entry${cardIdx}`} onClick={() => {
                     if (moveRegionEntry[cardIdx] === sData.info.leaderIdx) {
                       if (showEntryList) {
-                        setMsgOn(true);
+                        setShowMsg(true);
                         setMsg(gameData.msg.sentence['noRemoveLeader'][lang]);
                       }
                       return;
@@ -509,7 +509,7 @@ const Gate = ({
 				}} gameData={gameData}/>}
 			</ModalContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
     </>
   );

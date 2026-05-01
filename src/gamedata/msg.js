@@ -318,9 +318,9 @@ export const msg = {
 			jp:'命を댓価로',
 		},
 		tavern_text0: {
-			ko:'술집',
-			en:'Tavern',
-			jp:'酒場',
+			ko:'한잔 돌리기',
+			en:'Buy A Drink',
+			jp:'一杯ご馳走する',
 		},
 		shipyard_text0: {
 			ko:'조선소',
@@ -2102,6 +2102,11 @@ export const msg = {
 		},
 	},
 	sentence:{
+		equippedItem:{
+			ko:"이미 착용 가능한 장비입니다.",
+			en:"This equipment is already equipped.",
+			jp:"この装備はすでに装備されています。",
+		},
 		selectActionHero:{
 			ko:"행동할 영웅이 없습니다.",
 			en:"Select your active hero.",
@@ -2471,6 +2476,11 @@ export const msg = {
 			ko:'동물스킬이 초기화 되었습니다.',
 			en:'Animal Skills have been reset.',
 			jp:'動物スキルが初期化されました。'
+		},
+		goHeroEquipment:{
+			ko:'영웅 장비탭으로 이동합니다.',
+			en:'Go to the hero equipment tab.',
+			jp:'英雄装備タブへ移動します。',
 		},
 		goAccessoryShop:{
 			ko:'액세서리 상점으로 이동합니다.',

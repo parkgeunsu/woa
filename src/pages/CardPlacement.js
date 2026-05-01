@@ -276,7 +276,7 @@ const CardPlacement = ({
 			};
 		});
 	}, [sData]);
-	const [msgOn, setMsgOn] = useState(false);
+	const [showMsg, setShowMsg] = useState(false);
 	const [msg, setMsg] = useState("");
 	const isMoveEvent = React.useMemo(() => {
 		return sData?.moveEvent && Object.keys(sData?.moveEvent)?.length > 0;
@@ -416,10 +416,10 @@ const CardPlacement = ({
 						<LineupLeader onClick={() => {
 							setSelectFormationPosition(formationLeaderIdx);
 							if (useList[formationLeaderIdx] !== "") {
-								setMsgOn(true);
+								setShowMsg(true);
 								setMsg(gameData.msg.sentenceFn.selectedLeader(lang, gameData.ch[sData.ch[useList[formationLeaderIdx]].idx].na1[lang]));
 							} else {
-								setMsgOn(true);
+								setShowMsg(true);
 								setMsg(gameData.msg.sentence.selectLeader[lang]);
 							}
 						}}>
@@ -541,7 +541,7 @@ const CardPlacement = ({
 							return (
 								<ChLi used={used} key={idx} onClick={() => {
 									if ((formationLeaderIdx !== selectFormationPosition && leadership < limitLeadership + gameData.ch[data.idx].cost) || (formationLeaderIdx === selectFormationPosition && gameData.ch[data.idx].st0 < limitLeadership)) {
-										setMsgOn(true);
+										setShowMsg(true);
 										setMsg(gameData.msg.sentence.lackLeadership[lang]);
 										return;
 									}
@@ -633,7 +633,7 @@ const CardPlacement = ({
 								return (
 									<ChLi used={used} key={idx} onClick={() => {
 										if (leadership < limitLeadership + gameData.ch[data.idx].cost && formationLeaderIdx !== selectFormationPosition) {
-											setMsgOn(true);
+											setShowMsg(true);
 											setMsg(gameData.msg.sentence.lackLeadership[lang]);
 											return;
 										}
@@ -698,7 +698,7 @@ const CardPlacement = ({
 								const used = checkUseList(useList, data.slotIdx);
 								return (
 									<ChLi used={used} onClick={() => {
-										setMsgOn(true);
+										setShowMsg(true);
                   	setMsg(gameData.msg.sentence.onlyTravelHero[lang]);
 									}} key={idx} data-idx={idx}>
 										<CharacterCard usedType="thumb" saveData={sData} gameData={gameData} showCost={true} slotIdx={data.slotIdx} />
@@ -710,7 +710,7 @@ const CardPlacement = ({
 				</LineupChList>
 			</Wrap>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
     </>
   );

@@ -1,6 +1,6 @@
 import { Text } from 'components/Atom';
 import { FlexBox } from 'components/Container';
-import { ItemPic } from 'components/ImagePic';
+import { IconPic, ItemPic } from 'components/ImagePic';
 import styled from 'styled-components';
 
 const ItemLayoutContainer = styled.div`
@@ -174,11 +174,11 @@ const ItemLayoutContainer = styled.div`
           filter: brightness(0.3) drop-shadow(0px 0px 1px #fff);
         }
         &:before {
+          content: "?";
           position: absolute;
           left: 50%;
           top: 50%;
           transform: translate(-50%, -50%);
-          content: "?";
           z-index: 1;
           font-family: 'myFont_e';
           font-weight: 600;
@@ -288,6 +288,13 @@ const ItemLayoutContainer = styled.div`
 // }
 
 
+const TierIcon = styled(IconPic)`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50% !important;
+  height: 50% !important;
+`;
 const Hole = styled(FlexBox)`
   position: absolute;
   inset: 5%;
@@ -316,12 +323,14 @@ const HoleSlot = styled.span`
 const DisplayText = styled(Text)`
   display: block;
   position: absolute;
-  top: 2%;
-  width: 100%;
+  bottom: 2%;
+  left: 2%;
+  right: 2%;
   background: rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   text-align: center;
   pointer-events: none;
+  white-space: nowrap;
 `;
 
 const ItemLayout = ({
@@ -341,10 +350,12 @@ const ItemLayout = ({
   selectColor,
   itemsHole,
   grade,
+  tier,
   part,
   isEquip,
   impossible,
   onClick,
+  ...rest
 }) => {
 	return icon.type !== "" ? <ItemLayoutContainer 
     num={num}
@@ -357,10 +368,13 @@ const ItemLayout = ({
     {...favorite && {favorite:favorite}}
     {...onClick && {onClick: onClick}}
     selected={selectColor}
-    largeQuestion={icon.largeQuestion}>
-    <ItemPic type={icon.type} pic={icon.pic} idx={icon.idx} mergeColor={icon.mergeColor} isAbsolute>
-      {text && <DisplayText code="t1" color="main">{text}</DisplayText>}
+    largeQuestion={icon.largeQuestion}
+    {...rest}
+    >
+    <ItemPic type={icon.type} pic={icon.pic} idx={icon.idx} mergeColor={icon.mergeColor} sealed={sealed} isAbsolute>
+      {text && <DisplayText lineHeight="1.5" code="t1" color="main">{text}</DisplayText>}
     </ItemPic>
+    {tier > 0 && <TierIcon type="tier" pic="icon100" idx={tier - 1} />}
     {itemsHole && <Hole alignItems="flex-end" justifyContent="space-between">
       {itemsHole.map((holeData, holeidx) => {
         const holePic = holeData !== 0 ? gameItem.hole[holeData.idx].display : 0;

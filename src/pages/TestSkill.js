@@ -1721,7 +1721,7 @@ const TestSkill = ({
   const [selectEffectSize, setSelectEffectSize] = useState(1);
   const [selectEffectRotate, setSelectEffectRotate] = useState(0);
 	const sData = React.useMemo(() => saveData && Object.keys(saveData).length !== 0 ? saveData : util.loadData('saveData'), [saveData]);
-	const [msgOn, setMsgOn] = useState(false); 
+	const [showMsg, setShowMsg] = useState(false); 
 	const [msg, setMsg] = useState("");
 	const containerWH = useRef([0,0]);
 	const mapSize = React.useMemo(() => 20, []);
@@ -2052,7 +2052,7 @@ const TestSkill = ({
 		}
 		if (mode === 'area') {
 			if (battleAlly.current[orderIdx].sp < currentSkill.current.sp) {
-				setMsgOn(true);
+				setShowMsg(true);
 				setMsg(gameData.msg.sentence.lackSkillPoint[lang]);
 			} else {
 				if (e.target.classList.contains('effect')) {
@@ -2085,7 +2085,7 @@ const TestSkill = ({
 					setEffectAllyArea([]);
 				} else {
 					if (battleAlly.current[orderIdx].sp < currentSkill.current.sp + 5) {
-						setMsgOn(true);
+						setShowMsg(true);
 						setMsg(gameData.msg.sentence.lackSkillPoint[lang]);
 					} else {
 						targetAreaArr.current = util.getEffectArea({
@@ -2104,7 +2104,7 @@ const TestSkill = ({
 		}
 		if (mode === 'area') {
 			if (battleAlly.current[orderIdx].sp < currentSkill.current.sp) {
-				setMsgOn(true);
+				setShowMsg(true);
 				setMsg(gameData.msg.sentence.lackSkillPoint[lang]);
 			} else {
 				if (e.target.classList.contains('effect')) {
@@ -2796,7 +2796,7 @@ const TestSkill = ({
       </BattleOrder>
     </Warp>
     <MsgContainer>
-      {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+      {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
     </MsgContainer>
     </>
   );

@@ -1,7 +1,8 @@
 import { Text } from 'components/Atom';
 import TooltipContainer from 'components/TooltipContainer';
 // import { util } from 'components/Libs';
-import { useState } from 'react';
+import { AppContext } from 'contexts/app-context';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 const Wrap = styled.div`
   position: fixed;
@@ -13,10 +14,11 @@ const Wrap = styled.div`
 `;
 const TooltipCont = styled.div`
   position: fixed;
-  padding: 2px 8px;
+  padding: 5px 8px;
   max-width: 100px;
   border-radius: 4px;
-  background: ${({theme, isDark}) => isDark ? theme.color.grey2 : theme.color.shadow};
+  box-sizing: border-box;
+  background: ${({theme, isDark}) => isDark ? theme.color.menu : theme.color.land0};
   ${({size, pos, direction}) => {
     return direction === "left" ? `
       left: ${pos.left - (size - pos.width) / 2}px;
@@ -25,22 +27,30 @@ const TooltipCont = styled.div`
       right: ${window.screen.width - pos.right - (size - pos.width) / 2}px;
       top: ${pos.height + pos.top}px;
     `;
-  }}
+  }};
+  ${({frameBack}) => `
+    border: 5px solid transparent;
+    border-image: url(${frameBack}) 5 round;
+  `}
 `;
 const Tooltip = ({
   text,
-  showTooltip,
+  setShowTooltip,
   pos,
   isDark,
 }) => {
+  const context = useContext(AppContext);
+  const imgSet = React.useMemo(() => {
+    return context.images;
+  }, [context]);
   const [size, setSize] = useState(100);
 	return (
     <>
       <TooltipContainer>
         <Wrap onClick={(e) => {
-            showTooltip(false);
+            setShowTooltip(false);
           }}>
-          <TooltipCont ref={(node) => {
+          <TooltipCont frameBack={imgSet.etc.frameChBack} ref={(node) => {
             if (node) {
               setSize(node.offsetWidth);
             }
@@ -58,7 +68,7 @@ const Tooltip = ({
                 </Text>
               </>
             :
-              <Text code="t2" color={isDark ? "sub" : "main"} dangerouslySetInnerHTML={{__html: text}}/>
+              <Text code="t2" {...isDark && {borderColor: "sub"}} weight={600} lineHeight={1.2} color={isDark ? "unique" : "menu"} dangerouslySetInnerHTML={{__html: text}}/>
             }
           </TooltipCont>
         </Wrap>

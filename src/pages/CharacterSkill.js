@@ -130,7 +130,7 @@ const CharacterSkill = ({
   }, [context]);
   const saveCh = React.useMemo(() => chList ? chList[slotIdx] : saveData.ch[slotIdx] || {}, [chList, saveData, slotIdx]);
   const chName = React.useMemo(() => gameData.ch[saveCh.idx]?.na1[lang], [gameData, saveCh]);
-  const [popupOn, setPopupOn] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
   const saveSkill = React.useMemo(() => saveCh.sk, [saveCh]);
@@ -140,7 +140,7 @@ const CharacterSkill = ({
       <Wrap className="skill scroll-y">
         <InfoGroup pointTitle={`Lv.${saveCh.lv} ${chName}`} title={`${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.menu.jobSkill[lang]}`} guideClick={() => {
           setPopupType('guide');
-          setPopupOn(true);
+          setShowPopup(true);
           setPopupInfo(prev => ({
             ...prev,
             guide: {
@@ -201,7 +201,7 @@ const CharacterSkill = ({
         </InfoGroup>
       </Wrap>
       <PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} showPopup={setPopupOn} />}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} setShowPopup={setShowPopup} />}
       </PopupContainer>
     </>
   );

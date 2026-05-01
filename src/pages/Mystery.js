@@ -1,7 +1,7 @@
 import { Text } from 'components/Atom';
 import { ActionChDisplay } from 'components/Components';
 import { FlexBox } from 'components/Container';
-import { MergedPic } from 'components/ImagePic';
+import { IconPic, MergedPic } from 'components/ImagePic';
 import ItemLayout from 'components/ItemLayout';
 import { util } from 'components/Libs';
 import Msg from 'components/Msg';
@@ -9,8 +9,10 @@ import MsgContainer from 'components/MsgContainer';
 import Npc from 'components/Npc';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
+import Tooltip from 'components/Tooltip';
+import TooltipContainer from 'components/TooltipContainer';
 import { AppContext } from 'contexts/app-context';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -46,6 +48,13 @@ const ShopItem = styled.div`
 		opacity: 0;
 	`};
 `;
+const PossibleItemLayout = styled(ItemLayout)`
+  ${({isPossible}) => isPossible ? `
+    filter: grayscale(0%);
+  ` : `
+    filter: grayscale(100%);
+  `}
+`;
 const UserContainer = styled(FlexBox)`
 	position: relative;
 	padding: 10px 20px 0 20px;
@@ -56,11 +65,29 @@ const InfoGroup = styled(FlexBox)`
 	position: relative;
 	flex: 1;
 	margin: 0 10px 0 0;
-	padding: 10px 20px;
+	padding: 10px;
 	height: 100%;
 	box-sizing: border-box;
 	background: rgba(0,0,0,.8);
 `;
+const PossibleEquipItem = styled(FlexBox)`
+  overflow-y: auto;
+`;
+const PossbileItemContainer = styled.div`
+  margin: 0 5px 5px 0;
+  padding-top: calc(20% - 4px);
+  width: calc(20% - 4px);
+  height: 0;
+  position: relative;
+  background-color: ${({ theme, groupIdx }) => `${theme.color["point" + (groupIdx + 1)]}`};
+  border: 1px solid ${({ theme }) => theme.color.grey1};
+  border-radius: 5px;
+  box-sizing: border-box;
+  &:nth-of-type(5n) {
+    margin: 0 0 5px 0;
+  }
+`;
+const PossibleEquipItemIcon = styled(IconPic)``;
 const ActionPic = styled(FlexBox)`
 	position: relative;
 	width: auto;
@@ -107,10 +134,13 @@ const Mystery = ({
   }, [gameData]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const stayIdx = React.useMemo(() => util.getRegionToIdx(sData?.info?.stay), [sData]);
-  const [popupOn, setPopupOn] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
-  const [msgOn, setMsgOn] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [tooltip, setTooltip] = useState('');
+  const [tooltipPos, setTooltipPos] = useState([0,0]);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
   const entries = React.useMemo(() => {
     return sData.entry.map((entryIdx) => {
@@ -121,11 +151,11 @@ const Mystery = ({
     });
   }, [sData]);
   const actionChIdx = React.useMemo(() => {
+    console.log(sData.actionCh.mystery.idx);
     return sData.actionCh.mystery.idx <= entries.length - 1 ? sData.actionCh.mystery.idx : "";
   }, [entries, sData]);
   const saveCh = React.useMemo(() => entries[actionChIdx] || {}, [entries, actionChIdx]);
   const [greeting, setGreeting] = useState(gameData.shop.mystery.greeting[lang]);
-  const itemCate = useRef(['equip', 'hole', 'upgrade', 'material', 'etc']);
   const shopItem = React.useMemo(() => {
     const cityData = sData.city[stayIdx];
     return [
@@ -144,7 +174,17 @@ const Mystery = ({
           setSelectTab("");
           const randomIdx = Math.floor(Math.random() * gameData.shop.mystery.randomText.length);
           setGreeting(gameData.shop.mystery.randomText[randomIdx][lang]);
-				}}/>
+				}} onMenuClick={(idx) => {
+          if (actionChIdx !== "" && (idx === 1 || idx === 2)) {
+            const isHasSkillCh = saveCh.hasSkill.findIndex(hSkill => hSkill.idx === 15);
+            if (isHasSkillCh < 0) {
+              const saveD = {...sData};
+              saveD.actionCh.mystery.idx = "";
+              changeSaveData(saveD);
+              console.log(actionChIdx);
+            }
+          }
+        }}/>
         <MysteryContent frameBack={imgSet.etc.frameChBack}>
           {selectTab === "" && <GreetingText code="t4" color="main" wordBreak="keep-all">{greeting}</GreetingText>}
           {shopItem.map((scrollData, scrollIdx) => {
@@ -153,16 +193,29 @@ const Mystery = ({
                 if (typeof itemData.part === 'number') {
                   const itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5;
                   const items = itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx] : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx];
+                  const itemPrice = util.itemPrice({
+                    gameItem: items,
+                    saveItemData: itemData,
+                    skill: gameData.skill[15],//협상
+                    skLv: util.getHasSkillLv({
+                      saveData: sData,
+                      skillIdx: 15,
+                      chData: sData.ch[sData.actionCh?.["mystery"]?.idx],
+                    }),
+                  });
                   return items && <ItemLayout 
                     gameItem={gameItem}
                     icon={{
                       type: itemData.type,
                       pic: items.pic,
                       idx: items.display,
+										  mergeColor: itemData.color,
                     }}
                     num={5}
                     key={`items${itemIdx}`}
                     grade={itemData.grade}
+                    tier={itemData.tier || 0}
+                    text={itemPrice.buy.str}
                     selectColor={itemData.color}
                     onClick={() => {
                       setPopupType("item");
@@ -176,30 +229,42 @@ const Mystery = ({
                           saveItemData: itemData,
                           type: "equip",
                           buttons: ['buy'],
-                          location: {
-                            name: 'mystery',
-                            tab: selectTab,
-                          },
                           callback: () => {
                           },
+                          tab: selectTab,
                         }
                       }));
-                      setPopupOn(true);
+                      setShowPopup(true);
                     }}/>
                 } else {
 				          const items = gameItem[itemData.type][itemData.idx];
 				          const grade = itemData.grade || items?.grade || 0;
-                  return <ItemLayout 
+                  const isPossible = actionChIdx !== "" && saveCh.possibleEquipment.flat()[itemData.idx - 50];
+                  return <PossibleItemLayout 
+                    isPossible={!isPossible}
                     gameItem={gameItem}
                     icon={{
                       type: itemData.type,
                       pic: items?.pic,
-                      idx: items.display
+                      idx: items.display,
+										  mergeColor: itemData.color,
                     }}
                     num={5}
                     key={`items${itemIdx}`}
                     grade={grade}
+                    tier={itemData.tier || 0}
+                    text={util.comma(items.price)}
                     onClick={() => {
+                      if (selectTab === 0 && actionChIdx === "") {
+                        setShowMsg(true);
+                        setMsg(gameData.msg.sentence.selectActionHero[lang]);
+                        return;
+                      }
+                      if (isPossible) {
+                        setShowMsg(true);
+                        setMsg(gameData.msg.sentence.equippedItem[lang]);
+                        return;
+                      }
                       setPopupType('item');
                       setPopupInfo(prev => ({
                         ...prev,
@@ -211,15 +276,12 @@ const Mystery = ({
                           saveItemData: itemData,
                           type: itemData.type,
                           buttons: ['buy'],
-                          location: {
-                            name: 'mystery',
-                            tab: selectTab,
-                          },
                           callback: () => {
                           },
+                          tab: selectTab,
                         }
                       }));
-                      setPopupOn(true);
+                      setShowPopup(true);
                     }}
                   />
                 }
@@ -229,6 +291,20 @@ const Mystery = ({
         </MysteryContent>
         <UserContainer justifyContent="space-between">
           <InfoGroup>
+            {selectTab === 0 && <PossibleEquipItem direction="row" flexWrap="wrap" justifyContent="flex-start" alignItems="flex-start" alignContent="flex-start">
+              {actionChIdx !== "" && saveCh.possibleEquipment.map((itemGroup, index) => {
+                return (itemGroup.map((item, itemIndex) => {
+                  const iconNum = index === 1 ? 4 : index === 2 ? 8 : index === 3 ? 19 : index === 4 ? 22 : 0;
+                  return item !== 0 && <PossbileItemContainer groupIdx={index} key={`possibleEquipItem${index}_${itemIndex}`} onClick={(e) => {
+                    setTooltipPos(e.target.getBoundingClientRect());
+                    setTooltip(gameData.items.equipName[index][itemIndex][lang]);
+                    setShowTooltip(true);
+                  }}>
+                    <PossibleEquipItemIcon pic="icon200" idx={itemIndex + iconNum} isAbsolute />
+                  </PossbileItemContainer>
+                }))
+              })}
+            </PossibleEquipItem>}
           </InfoGroup>
           <ActionPic onClick={() => {
             setPopupType('selectCh');
@@ -239,10 +315,10 @@ const Mystery = ({
                 actionChIdx: actionChIdx,
                 type: 'mystery',
                 setMsg: setMsg,
-                setMsgOn: setMsgOn,
+                setShowMsg: setShowMsg,
               }
             }));
-            setPopupOn(true);
+            setShowPopup(true);
           }}>
             <MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />
             {!actionChIdx && <NoneChText code="t1" color="red">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
@@ -252,11 +328,14 @@ const Mystery = ({
         </UserContainer>
       </Wrap>
 			<PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} setTooltip={setTooltip} setTooltipPos={setTooltipPos} setShowTooltip={setShowTooltip} />}
       </PopupContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
+			<TooltipContainer>
+				{showTooltip && <Tooltip isDark={true} pos={tooltipPos} text={tooltip} setShowTooltip={setShowTooltip} />}
+			</TooltipContainer>
     </>
   );
 };

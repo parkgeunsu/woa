@@ -85,7 +85,7 @@ const GameMainFooter = ({
   const [modalOn, setModalOn] = useState(false);
   const [modalInfo, setModalInfo] = useState({});
   const [modalData, setModalData] = useState({});
-  const [msgOn, setMsgOn] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
   const currentStep = React.useMemo(() => {
     return util.exploreArea.checkStep(util.loadData('historyParam')?.roulette) || 0
@@ -131,7 +131,7 @@ const GameMainFooter = ({
                   }
                 });
                 if (isEmptyEntry) {
-                  setMsgOn(true);
+                  setShowMsg(true);
                   setMsg(gameData.msg.sentence['organizeCard'][lang]);
                   return;
                 }
@@ -239,7 +239,7 @@ const GameMainFooter = ({
                     }
                   });
                   if (isEmptyEntry) {
-                    setMsgOn(true);
+                    setShowMsg(true);
                     setMsg(gameData.msg.sentence['organizeCard'][lang]);
                     return;
                   }
@@ -289,14 +289,14 @@ const GameMainFooter = ({
           }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
           <StyledButton width="100%" btnImg={imgSet.button.btnMD} onClick={() => {
             if (props.selectMoveRegion === '') {
-              setMsgOn(true);
+              setShowMsg(true);
               setMsg(gameData.msg.sentence['selectMoveCountry'][lang]);
             } else if (stayIdx.current === props.selectMoveRegion) {
-              setMsgOn(true);
+              setShowMsg(true);
               setMsg(gameData.msg.sentence['sameCountry'][lang]);
             } else {
               if (props.moveRegionEntry.length === 0) {
-                setMsgOn(true);
+                setShowMsg(true);
                 setMsg(gameData.msg.sentence['createTravelEntry'][lang]);
               } else {
                 const countryCode = util.getStringToCountryIdx(props.selectMoveRegion),
@@ -306,7 +306,7 @@ const GameMainFooter = ({
                   conditionNum = props.moveRegionEntry.length;
                   console.log(stayIdx.current, countryCode, itemIdx);
                 if (isCondition < conditionNum) {
-                  setMsgOn(true);
+                  setShowMsg(true);
                   setMsg(gameData.msg.sentenceFn.lackOfCondition(lang, conditionName));
                 } else {
                   setModalOn(true);
@@ -401,7 +401,7 @@ const GameMainFooter = ({
 				}} gameData={gameData}/>}
 			</ModalContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
     </>
   );

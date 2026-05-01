@@ -106,7 +106,7 @@ const Dice = ({
   width = 50,
   isPlay,
   setMsg,
-  setMsgOn,
+  setShowMsg,
   setShowDice,
   onClick,
   callback,
@@ -144,7 +144,7 @@ const Dice = ({
         setDiceSelect(Array.from({length: num}, (_) => ""));
       } else {
         const countArr = diceSelect.map(() => Math.floor(Math.random() * 6) + 1);
-        setMsgOn(true);
+        setShowMsg(true);
         if (util.getSum(countArr) >= successNum) {
           setIsSuccess(true);
           setMsg(gameData.msg.sentence['diceSuccess'][lang]);

@@ -3807,7 +3807,7 @@ const Battle = ({
 	const difficultLv = React.useMemo(() => {
 		return context.difficultLv;
 	}, [context]);
-	const [tooltipOn, setTooltipOn] = useState(false);
+	const [showTooltip, setShowTooltip] = useState(false);
 	const [tooltip, setTooltip] = useState('');
 	const [tooltipPos, setTooltipPos] = useState([0,0]);
 	const sData = React.useMemo(() => saveData && Object.keys(saveData).length !== 0 ? saveData : util.loadData('saveData'), [saveData]);
@@ -4011,7 +4011,7 @@ const Battle = ({
 	const timeLineRef = useRef(null);//타임라인 참조
 	const conversationTimeout = useRef();
 	const [conversationMsg, setConversationMsg] = useState();//대화 내용
-	const [msgOn, setMsgOn] = useState(false);
+	const [showMsg, setShowMsg] = useState(false);
 	const [msg, setMsg] = useState("");
 	const conversationBoxRef = useRef(null);
 	const conversationInterval = useCallback(() => {
@@ -4539,7 +4539,7 @@ const Battle = ({
 		}
 		if (mode === 'area') {
 			if (battleAlly.current[orderIdx].sp < currentSkill.current.sp[currentSkill.current.skLv - 1]) {
-				setMsgOn(true);
+				setShowMsg(true);
 				setMsg(gameData.msg.sentence.lackSkillPoint[lang]);
 			} else {
 				if (e.target.classList.contains('effect')) {
@@ -4597,7 +4597,7 @@ const Battle = ({
 						skillAreaNum === 52 ||
 						skillAreaNum === 53) { //랜덤 범위시에 위치 재배치시 sp5 소모
 						if (battleAlly.current[orderIdx].sp < currentSkill.current.sp[currentSkill.current.skLv - 1] + 5) {
-							setMsgOn(true);
+							setShowMsg(true);
 							setMsg(gameData.msg.sentence.lackSkillPoint[lang]);
 						} else {
 							targetAreaArr.current = util.getEffectArea({
@@ -4633,7 +4633,7 @@ const Battle = ({
 		}
 		if (mode === 'area') {
 			if (battleAlly.current[orderIdx].sp < currentSkill.current.sp[currentSkill.current.skLv - 1]) {
-				setMsgOn(true);
+				setShowMsg(true);
 				setMsg(gameData.msg.sentence.lackSkillPoint[lang]);
 			} else {
 				if (e.target.classList.contains('effect')) {
@@ -4680,7 +4680,7 @@ const Battle = ({
 						skillAreaNum === 52 ||
 						skillAreaNum === 53) { //랜덤 범위시에 위치 재배치시 sp5 소모
 						if (battleAlly.current[orderIdx].sp < currentSkill.current.sp[currentSkill.current.skLv - 1] + 5) {
-							setMsgOn(true);
+							setShowMsg(true);
 							setMsg(gameData.msg.sentence.lackSkillPoint[lang]);
 						} else {
 							battleAlly.current[orderIdx].sp -= 5;
@@ -4770,7 +4770,7 @@ const Battle = ({
 				case 4: //active(방어)
 				case 10: //날씨 변경
 					if (battleAlly.current[orderIdx].sp < currentSkill.current.sp[currentSkill.current.skLv - 1]) {
-						setMsgOn(true);
+						setShowMsg(true);
 						setMsg(gameData.msg.sentence.lackSkillPoint[lang]);
 					} else {
 						if (orderIdx < battleAlly.current.length - 1) {
@@ -5243,7 +5243,7 @@ const Battle = ({
 									e.stopPropagation();
 									setTooltipPos(e.target.getBoundingClientRect());
 									setTooltip(heroData.na1?.[lang]);
-									setTooltipOn(true);
+									setShowTooltip(true);
 								}}>
 									<ChCard key={`lootCard${idx}`} direction="column">
 										<CharacterCard usedType="small" size="60" equalSize={true} saveData={saveData} saveCharacter={heroData}/>
@@ -5272,7 +5272,7 @@ const Battle = ({
 									e.stopPropagation();
 									setTooltipPos(e.target.getBoundingClientRect());
 									setTooltip(itemData.na?.[lang]);
-									setTooltipOn(true);
+									setShowTooltip(true);
 								}}>
 									{isEquip ? (
 										<ItemLayout 
@@ -5284,6 +5284,7 @@ const Battle = ({
 												idx: itemData.display
 											}}
 											grade={itemData.grade}
+											tier={itemData.tier}
 											itemsHole={itemData.hole}
 											sealed={itemData.sealed}
 										/>
@@ -5739,10 +5740,10 @@ const Battle = ({
 				</BattleOrder>
 			</Warp>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
 			<TooltipContainer>
-				{tooltipOn && <Tooltip pos={tooltipPos} text={tooltip} showTooltip={setTooltipOn} />}
+				{showTooltip && <Tooltip pos={tooltipPos} text={tooltip} setShowTooltip={setShowTooltip} />}
 			</TooltipContainer>
     </>
   ) : (

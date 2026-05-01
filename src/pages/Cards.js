@@ -8,6 +8,8 @@ import Msg from 'components/Msg';
 import MsgContainer from 'components/MsgContainer';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
+import Tooltip from 'components/Tooltip';
+import TooltipContainer from 'components/TooltipContainer';
 import { AppContext } from 'contexts/app-context';
 import CharacterAnimalSkill from 'pages/CharacterAnimalSkill';
 import CharacterCard from 'pages/CharacterCard';
@@ -144,7 +146,7 @@ const StyledIconPic = styled(IconPic)`
     filter: unset;
   ` : `
     opacity: .3;
-    filter: brightness(10);
+    filter: grayscale(1) brightness(4);
   `}
 `;
 const TopBtnGroup = styled.div`
@@ -235,6 +237,7 @@ const InvenItems = styled.div`
   padding: 5px;
   height: 100%;
   box-sizing: border-box;
+  overflow-y: auto;
   .h_items {
     display: flex;
     flex-flow: wrap;
@@ -285,7 +288,7 @@ const setSlotIdxFn = (state, paramData, navigate, entryGroup) => {
   if (!state) {
 		return paramData.cards.selectIdx || 0;
 	}
-  if (state?.isMoveNotCh) {
+  if (state.isMoveNotCh) {
     return state.chSlotIdx;
   }
   const findIdx = entryGroup.findIndex((entryIdx) => entryIdx === state.chSlotIdx);
@@ -295,7 +298,7 @@ const setPageIdxFn = (state) => {
   if (!state) {
 		return 0;
 	}
-  return state.chTabIdx;
+  return state.tab || 0;
 }
 const Cards = ({
   saveData,
@@ -304,7 +307,6 @@ const Cards = ({
   const context = useContext(AppContext);
   const navigate = useNavigate();
 	const {state} = useLocation();
-  console.log(state);
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
@@ -315,10 +317,13 @@ const Cards = ({
     return context.gameData;
   }, [context]);
   const [isZoomCard, setZoomCard] = useState(false);
-  const [popupOn, setPopupOn] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
-  const [msgOn, setMsgOn] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [tooltip, setTooltip] = useState('');
+  const [tooltipPos, setTooltipPos] = useState([0,0]);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
   const gameItem = React.useMemo(() => gameData.items, [gameData]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') ?? {} : {...saveData}, [saveData]);
@@ -332,6 +337,9 @@ const Cards = ({
     return sData?.moveEvent && Object.keys(sData.moveEvent)?.length > 0;
   }, []);
   const entryGroup = React.useMemo(() => {
+    if (state?.isAllEntry) {
+      return Array.from({length: sData.ch.length}, (_,idx) => idx);
+    }
     if (state?.isMoveNotCh) {
       return Array.from({length: sData.ch.length}, (_,idx) => idx).filter((idx) => !sData.moveEvent.ch.includes(idx));
     }
@@ -378,13 +386,16 @@ const Cards = ({
       } else {
         saveItemData = invenItems[itemType][itemSaveSlot];
       }
-      setPopupType(itemType);
+      setPopupType('item');
       const itemsGrade = itemGrade < 5 ? 0 : itemGrade - 5;
-      let gameItemData = '';
+      let gameItemData = '',
+        buttons = [];
       if (itemType === 'hequip' || itemType === 'equip') {
         gameItemData = itemPart === 3 ? gameItem['equip'][itemPart][itemWeaponType][itemsGrade][itemIdx] : gameItem['equip'][itemPart][0][itemsGrade][itemIdx];
+        buttons = ['sell', 'wear', 'socket', 'upgrade', 'evaluate'];
       } else {
         gameItemData = gameItem[itemType][itemIdx];
+        buttons = ['sell', 'evaluate'];
       }
       setPopupInfo(prev => ({
         ...prev,
@@ -395,10 +406,11 @@ const Cards = ({
           itemSaveSlot: itemSaveSlot,
           saveItemData: saveItemData,
           type: itemType === 'hequip' ? 'equip' : itemType,
+          buttons: buttons,
         }
       }));
     }
-    setPopupOn(prev => !prev);
+    setShowPopup(prev => !prev);
   }, [invenItems, slotIdx, isMoveEvent, gameItem]);
   return (
     <>
@@ -410,12 +422,12 @@ const Cards = ({
             }
           }}>
             <Img imgurl={imgSet.images.transparent800} />
-            {chPage === 0 ? <CharacterCard saveData={sData} slotIdx={entries[slotIdx].slotIdx} isZoomCard={isZoomCard} /> : <ChBack type="cardBack" pic="card" idx={0} />}
+            {chPage === 0 ? <CharacterCard saveData={sData} slotIdx={entries[slotIdx].slotIdx} isZoomCard={isZoomCard} setShowTooltip={setShowTooltip} setTooltipPos={setTooltipPos} setTooltip={setTooltip} /> : <ChBack type="cardBack" pic="card" idx={0} />}
             {chPage === 1 && <CharacterState saveData={sData} slotIdx={entries[slotIdx].slotIdx} changeSaveData={changeSaveData} />}
             {chPage === 2 && <CharacterAnimalSkill saveData={sData} slotIdx={entries[slotIdx].slotIdx} changeSaveData={changeSaveData} />}
             {chPage === 3 && <CharacterSkill saveData={sData} slotIdx={entries[slotIdx].slotIdx} />}
             {chPage === 4 && <CharacterRelation saveData={sData} slotIdx={entries[slotIdx].slotIdx} />}
-            {chPage === 5 && <CharacterItems saveData={sData} slotIdx={entries[slotIdx].slotIdx} changeSaveData={changeSaveData} isShowItemBox={state?.itemBoxOpened} itemEquipType={state?.itemEquipType} />}
+            {chPage === 5 && <CharacterItems saveData={sData} state={state} slotIdx={entries[slotIdx].slotIdx} changeSaveData={changeSaveData} isShowItemBox={state?.itemBoxOpened} itemEquipType={state?.itemEquipType} />}
           </ChCard>}
           <CharacterPaging chList={entries} saveData={sData} changeChSlot={changeChSlot} slotIdx={slotIdx} />
           <TopBtnGroup>
@@ -476,7 +488,7 @@ const Cards = ({
             }}>
               <Text code="t1">{gameData.msg.button.close[lang]}</Text>
             </CloseBtn>
-            <InvenItems className="has_items scroll-y">
+            <InvenItems>
               <InvenTitle code="t3" color="main">{gameData.msg.menu.equip[lang]}</InvenTitle>
               <ul className="h_items">
                 {invenItems.equip && invenItems.equip.map((data, idx) => {
@@ -511,6 +523,7 @@ const Cards = ({
                         }}
                         part={data.part}
                         grade={data.grade}
+                        tier={data.tier || 0}
                         itemsHole={itemsHole}
                         impossible={equipPossible}
                         sealed={data.sealed}
@@ -664,11 +677,14 @@ const Cards = ({
         </ButtonArea>
       </Wrap>
       <PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={sData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={sData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} />}
       </PopupContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
+			<TooltipContainer>
+				{showTooltip && <Tooltip isDark={true} pos={tooltipPos} text={tooltip} setShowTooltip={setShowTooltip} />}
+			</TooltipContainer>
     </>
   );
 }

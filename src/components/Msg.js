@@ -78,7 +78,7 @@ const MsgCont = styled(FlexBox)`
 `;
 const Msg = ({
   text,
-	showMsg,
+	setShowMsg,
 }) => {
 	const timeRef = useRef(null);
 	const msgRef = useRef(null);
@@ -86,7 +86,7 @@ const Msg = ({
 		timeRef.current = setTimeout(() => {
 			msgRef.current.classList.add("fadeOut");
 			timeRef.current = setTimeout(() => {
-				showMsg(prev => !prev);
+				setShowMsg(prev => !prev);
 			}, 300);
 		}, 1500);
 		return () => {
@@ -96,7 +96,7 @@ const Msg = ({
 	return (
 		<MsgContinaer>
 			<MsgWrap ref={msgRef} className="transition" onClick={() => {
-				showMsg(prev => !prev);
+				setShowMsg(prev => !prev);
 			}}>
 				<MsgCont direction="column">
 					<Text code="t3" color="main" dangerouslySetInnerHTML={{__html: text}} />

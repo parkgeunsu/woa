@@ -160,12 +160,12 @@ const Home = ({
   const {state} = useLocation();
   const [selectTab, setSelectTab] = useState(typeof state?.tab === "number" ? state.tab : "");
   const theme = useTheme();
-  const [msgOn, setMsgOn] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
-  const [popupOn, setPopupOn] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
-  const [tooltipOn, setTooltipOn] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const [tooltip, setTooltip] = useState('');
   const [tooltipPos, setTooltipPos] = useState([0,0]);
   const lang = React.useMemo(() => {
@@ -246,14 +246,11 @@ const Home = ({
           saveItemData: saveItemData,
           type: itemType === 'hequip' ? 'equip' : itemType,
           buttons: buttons,
-          location: {
-            name: "home",
-            tab: 2
-          },
-        }
+        },
+        tab: 2,
       }));
     }
-    setPopupOn(prev => !prev);
+    setShowPopup(prev => !prev);
   }, [sData, gameItem]);
   
   useEffect(() => {
@@ -373,14 +370,14 @@ const Home = ({
                         let newEntry = [...sData.entry];
                         if (!isEntry) {
                           if (sData.entry.length >= memberNum) {
-                            setMsgOn(true);
+                            setShowMsg(true);
                             setMsg(gameData.msg.sentence.needMoreMemberNum[lang]);
                             return;
                           }
                           newEntry.push(data.slotIdx);
                         } else {
                           if (isLeader) {
-                            setMsgOn(true);
+                            setShowMsg(true);
                             setMsg(gameData.msg.sentence.noRemoveLeader[lang]);
                             return;
                           }
@@ -459,6 +456,7 @@ const Home = ({
                         }}
                         part={data.part}
                         grade={data.grade}
+                        tier={data.tier || 0}
                         itemsHole={itemsHole}
                         sealed={data.sealed}
                       />
@@ -609,22 +607,18 @@ const Home = ({
                           prevLocation: 'home',
                           location: 'cards',
                           navigate: navigate,
-                          callback: () => {
-                            util.saveData('historyParam', {
-                              ...util.loadData('historyParam'),
-                              cards: {
-                                isAll: true,
-                                chSlotIdx: data.slotIdx,
-                                chTabIdx: 0,
-                              }
-                            });
-                          },
+                          // callback: () => {
+                          //   util.saveData('historyParam', {
+                          //     ...util.loadData('historyParam'),
+                          //     cards: {
+                          //       isAllEntry: true,
+                          //       chSlotIdx: data.slotIdx,
+                          //     }
+                          //   });
+                          // },
                           state: {
-                            dataObj: {
-                              isAll: true,
-                              chSlotIdx: data.slotIdx,
-                              chTabIdx: 0,
-                            }
+                            isAllEntry: true,
+                            chSlotIdx: data.slotIdx,
                           },
                           prevState: {
                             tab: 3,
@@ -652,13 +646,13 @@ const Home = ({
         </WorkArea>
       </Wrap>
       <PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={sData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} setTooltip={setTooltip} setTooltipPos={setTooltipPos} setTooltipOn={setTooltipOn} theme={theme}/>}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={sData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} setTooltip={setTooltip} setTooltipPos={setTooltipPos} setShowTooltip={setShowTooltip} theme={theme}/>}
       </PopupContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn} />}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg} />}
       </MsgContainer>
 			<TooltipContainer>
-				{tooltipOn && <Tooltip isDark={true} pos={tooltipPos} text={tooltip} showTooltip={setTooltipOn} />}
+				{showTooltip && <Tooltip isDark={true} pos={tooltipPos} text={tooltip} setShowTooltip={setShowTooltip} />}
 			</TooltipContainer>
     </>
   );

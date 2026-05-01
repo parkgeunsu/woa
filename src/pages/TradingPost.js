@@ -152,10 +152,10 @@ const TradingPost = ({
   // const [modalOn, setModalOn] = useState(false);
 	// const [modalInfo, setModalInfo] = useState({});
   // const [modalType, setModalType] = useState();
-  const [popupOn, setPopupOn] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [popupInfo, setPopupInfo] = useState({});
 	const [popupType, setPopupType] = useState('');
-  const [msgOn, setMsgOn] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
 	console.log(state, selectTab);
 	const [rangeValue, setRangeValue] = useState(0);
@@ -287,7 +287,7 @@ const TradingPost = ({
 											return (
 												<button text="true" className="button_small" onClick={(e) => {
 													if (actionChIdx === '' || actionChIdx === undefined) {
-														setMsgOn(true);
+														setShowMsg(true);
 														setMsg(gameData.msg?.sentenceFn?.selectSkillCh?.(lang,gameData.skill?.[15]?.na) || "Select Character");
 														return;
 													}
@@ -313,18 +313,18 @@ const TradingPost = ({
 																saveData: saveData,
 																changeSaveData: changeSaveData,
 																gameData: gameData,
-																msgText: setMsg,
-																showMsg: setMsgOn,
-																showPopup: setPopupOn,
+																setMsg: setMsg,
+																setShowMsg: setShowMsg,
+																setShowPopup: setShowPopup,
 																lang: lang,
 															});
 															setRangeValue(0);
 														} else {
-															setMsgOn(true);
+															setShowMsg(true);
 															setMsg(gameData.msg?.sentence?.lackMoney?.[lang] || "Not enough money");
 														}
 													} else {
-														setMsgOn(true);
+														setShowMsg(true);
 														setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1[lang]) || "Not enough Action Point");
 													}
 												}} data-buttontype="itemBuy">{gameData.msg?.button?.buy?.[lang] || "Buy"}</button>
@@ -333,7 +333,7 @@ const TradingPost = ({
 											return (
 												<button text="true" className="button_small" onClick={(e) => {
 													if (actionChIdx === '' || actionChIdx === undefined) {
-														setMsgOn(true);
+														setShowMsg(true);
 														setMsg(gameData.msg?.sentenceFn?.selectSkillCh?.(lang,gameData.skill?.[201]?.na) || "Select Character");
 														return;
 													}
@@ -355,18 +355,18 @@ const TradingPost = ({
 																saveData: saveData,
 																changeSaveData: changeSaveData,
 																gameData: gameData,
-																msgText: setMsg,
-																showMsg: setMsgOn,
-																showPopup: setPopupOn,
+																setMsg: setMsg,
+																setShowMsg: setShowMsg,
+																setShowPopup: setShowPopup,
 																lang: lang,
 															});
 															setSelectItem({save:{},game:{},select:'',selectTab:'',buttonType:[]});
 														} else {
-															setMsgOn(true);
+															setShowMsg(true);
 															setMsg(gameData.msg?.sentence?.selectQuantity?.[lang] || "Select Quantity");
 														}
 													} else {
-														setMsgOn(true);
+														setShowMsg(true);
 														setMsg(gameData.msg?.sentenceFn?.lackActionPoint?.(lang, gameData.ch?.[charData?.idx]?.na1[lang]) || "Not enough Action Point");
 													}
 												}} data-buttontype="itemSell">{gameData.msg?.button?.sell?.[lang] || "Sell"}</button>
@@ -388,10 +388,10 @@ const TradingPost = ({
                   actionChIdx: actionChIdx,
                   type: 'tradingPost',
                   setMsg: setMsg,
-                  setMsgOn: setMsgOn,
+                  setShowMsg: setShowMsg,
                 }
               }));
-							setPopupOn(true);
+							setShowPopup(true);
 						}}>
 						<MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />
 						{actionChIdx === "" && <NoneChText code="t1" color="red" workBreak="keep-all">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
@@ -402,10 +402,10 @@ const TradingPost = ({
 				{showCal && <Calculator value={rangeValue} max={item[selectItem.select].num} setValue={setRangeValue} showCal={setShowCal}/>}
 			</Wrap>
 			<PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} />}
       </PopupContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
 		</>
   );

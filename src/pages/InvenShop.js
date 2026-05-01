@@ -10,6 +10,8 @@ import Npc from 'components/Npc';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
 import TabMenu from 'components/TabMenu';
+import Tooltip from 'components/Tooltip';
+import TooltipContainer from 'components/TooltipContainer';
 import { AppContext } from 'contexts/app-context';
 import 'css/shop.css';
 import React, { useContext, useEffect, useRef, useState } from 'react';
@@ -94,12 +96,15 @@ const selectTabFn = (state, shopType, typeList) => {
 const SHOP_HORIZONTAL_NUM = 6; //가로 갯수
 const ShopList = ({
 	gameData,
+	saveData,
 	shopType,
 	list,
+	isInven,
 	selectTab,
 	setPopupType,
 	setPopupInfo,
-	setPopupOn,
+	setShowPopup,
+	location,
 }) => {
 	const gameItem = gameData.items;
 	return <>
@@ -107,6 +112,16 @@ const ShopList = ({
 			if (typeof itemData.part === 'number') { // 장비인지
 				const itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5;
 				const items = itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx] : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx];
+				const itemPrice = !isInven ? util.itemPrice({
+					gameItem: items,
+					saveItemData: itemData,
+					skill: gameData.skill[15],//협상
+					skLv: util.getHasSkillLv({
+						saveData: saveData,
+						skillIdx: 15,
+						chData: saveData.ch[saveData.actionCh?.["mystery"]?.idx],
+					}),
+				}) : "";
 				return items && <ItemLayout 
 					gameItem={gameItem}
 					icon={{
@@ -118,53 +133,62 @@ const ShopList = ({
 					num={SHOP_HORIZONTAL_NUM}
 					key={`items${idx}`}
 					grade={itemData.grade}
+					tier={itemData.tier || 0}
+					{...(!isInven && {text: itemPrice.buy.str})}
 					itemsHole={itemData.hole}
 					sealed={itemData.sealed}
 					favorite={itemData.favorite}
 					onClick={() => {
-						console.log(itemData,"aaa");
 						setPopupType("item");
-						let buttons = [];
+						let buttons = itemData.sealed ? ['evaluate'] : [];
 						switch(shopType) {
 							case 'equipment':
-								buttons = selectTab === 3 ? ['sell'] : ['buy'];
+								buttons = selectTab === 3 ? ['sell', ...buttons] : ['buy', ...buttons];
 								break;
 							case 'accessory':
-								buttons = selectTab === 2 ? ['sell'] : ['buy'];
+								buttons = selectTab === 2 ? ['sell', ...buttons] : ['buy', ...buttons];
 								break;
 							case 'tool':
-								buttons = selectTab === 2 ? ['sell'] : ['buy'];
+								buttons = selectTab === 2 ? ['sell', ...buttons] : ['buy', ...buttons];
 								break;
 							case 'inven':
-								buttons = ['sell'];
+								buttons = ['sell', ...buttons];
 								break;
 							default:
 								break;
 						}
+						console.log(itemData);
 						setPopupInfo(prev => ({
 							...prev,
 							item: {
 								isMoveEvent: false,
           			itemAreaType: 'equipment',//아직 안쓰임
 								gameItem: items,
-          			itemSaveSlot: itemData.slot,
+          			itemSaveSlot: idx,
 								saveItemData: itemData,
 								type: shopType,
 								buttons: buttons,
-								location: {
-									name: shopType,
-									tab: selectTab,
-								},
 								callback: () => {
 									// saveData.city[stayIdx][shopType][typeList[selectTab].na].splice(selectedItem.itemSaveSlot, 1);//도시 아이템 삭제
 								},
+								tab: selectTab,
 							}
 						}));
-      			setPopupOn((prev) => !prev);
+      			setShowPopup((prev) => !prev);
 					}}/>
 			} else {
 				const items = gameItem[itemData.type][itemData.idx];
 				const grade = itemData.grade || items?.grade || 0;
+				const itemPrice = !isInven ? util.itemPrice({
+					gameItem: items,
+					saveItemData: itemData,
+					skill: gameData.skill[15],//협상
+					skLv: util.getHasSkillLv({
+						saveData: saveData,
+						skillIdx: 15,
+						chData: saveData.ch[saveData.actionCh?.["mystery"]?.idx],
+					}),
+				}) : "";
 				return items && <ItemLayout 
 					gameItem={gameItem}
 					icon={{
@@ -175,7 +199,7 @@ const ShopList = ({
 					num={SHOP_HORIZONTAL_NUM}
 					key={`items${idx}`}
 					grade={grade}
-					text={itemData.num}
+					{...(!isInven && {text: itemPrice.buy.str})}
 					onClick={() => {
 						setPopupType("item");
 						let buttons = [];
@@ -202,20 +226,17 @@ const ShopList = ({
 								isMoveEvent: false,
           			itemAreaType: 'equipment',//아직 안쓰임
 								gameItem: items,
-          			itemSaveSlot: itemData.slot,
+          			itemSaveSlot: idx,
 								saveItemData: itemData,
 								type: shopType,
 								buttons: buttons,
-								location: {
-									name: shopType,
-									tab: selectTab,
-								},
 								callback: () => {
 									// saveData.city[stayIdx][shopType][typeList[selectTab].na].splice(selectedItem.itemSaveSlot, 1);//도시 아이템 삭제
 								},
-							}
+							},
+							tab: selectTab,
 						}));
-      			setPopupOn((prev) => !prev);
+      			setShowPopup((prev) => !prev);
 					}} />
 			}
 		})}
@@ -293,7 +314,7 @@ const InvenShop = ({
   }, [context]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
 	const stayIdx = React.useMemo(() => util.getRegionToIdx(sData?.info?.stay), [sData]);
-  const [popupOn, setPopupOn] = useState(state?.items ? true : false);
+  const [showPopup, setShowPopup] = useState(state?.items ? true : false);
   const [popupInfo, setPopupInfo] = useState(state?.items ? {
 		item: {
       isMoveEvent: false,
@@ -304,13 +325,15 @@ const InvenShop = ({
 			type: state?.items?.saveItemData.type,
 			buttons: ['sell'],
 			location: {
-				name: state?.location,
 				tab: state?.location === "tool" ? 2 : 3,
 			}
 		},
 	} : {});
   const [popupType, setPopupType] = useState(state?.items ? 'item' : '');
-  const [msgOn, setMsgOn] = useState(false);
+	const [showTooltip, setShowTooltip] = useState(false);
+	const [tooltip, setTooltip] = useState('');
+	const [tooltipPos, setTooltipPos] = useState([0,0]);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
 	const shopItem = React.useMemo(() => {
 		if(Object.keys(sData).length === 0) return [];
@@ -408,7 +431,7 @@ const InvenShop = ({
 					actionChIdx: actionChIdx,
 					type: shopType,
 					setMsg: setMsg,
-					setMsgOn: setMsgOn,
+					setShowMsg: setShowMsg,
 				}
 			}));
 		}
@@ -440,12 +463,14 @@ const InvenShop = ({
 												</InvenTitle>
 												<ShopList 
 													gameData={gameData}
+													saveData={sData}
 													shopType={shopType} 
 													list={invenData}
+													isInven={true}
 													selectTab={selectTab} 
 													setPopupType={setPopupType}
 													setPopupInfo={setPopupInfo}
-													setPopupOn={setPopupOn}
+													setShowPopup={setShowPopup}
 												/>
 											</InvenItems>
 										)
@@ -453,12 +478,13 @@ const InvenShop = ({
 								: 
 									<ShopList 
 										gameData={gameData}
+										saveData={sData}
 										shopType={shopType} 
-										list={scrollData} 
+										list={scrollData}
 										selectTab={selectTab}
 										setPopupType={setPopupType}
 										setPopupInfo={setPopupInfo}
-										setPopupOn={setPopupOn}
+										setShowPopup={setShowPopup}
 									/>
 								}
 							</ShopItem>
@@ -468,7 +494,7 @@ const InvenShop = ({
 						<ActionDetail></ActionDetail>
 						<ActionPic onClick={() => {
 								setPopupType('selectCh');
-								setPopupOn(true);
+								setShowPopup(true);
 							}}>
 							<MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />
 							{actionChIdx === "" && <NoneChText code="t1" color="red" workBreak="keep-all">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
@@ -488,12 +514,13 @@ const InvenShop = ({
 								<div key={`inven${scrollIdx}`}>
 									<ShopList 
 										gameData={gameData}
+										saveData={sData}
 										shopType={shopType}
 										list={scrollData}
 										selectTab={selectTab}
 										setPopupType={setPopupType}
 										setPopupInfo={setPopupInfo}
-										setPopupOn={setPopupOn}
+										setShowPopup={setShowPopup}
 									/>
 								</div>
 							</ShopItem>
@@ -503,11 +530,14 @@ const InvenShop = ({
 				}
 			</ShopWrap>
 			<PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={sData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={sData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} setTooltip={setTooltip} setTooltipPos={setTooltipPos} setShowTooltip={setShowTooltip} />}
       </PopupContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
+			<TooltipContainer>
+				{showTooltip && <Tooltip isDark={true} pos={tooltipPos} text={tooltip} setShowTooltip={setShowTooltip} />}
+			</TooltipContainer>
 		</>
   );
 }

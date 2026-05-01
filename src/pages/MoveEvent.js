@@ -261,7 +261,7 @@ const action = ({
   setEventBack,
   timeoutRef,
   setMsg,
-  setMsgOn,
+  setShowMsg,
   navigate,
   lang,
 }) => {
@@ -278,7 +278,7 @@ const action = ({
         }
       });
       if (isEmptyEntry) {
-        setMsgOn(true);
+        setShowMsg(true);
         setMsg(gameData.msg.sentence['organizeCard'][lang]);
         return;
       }
@@ -332,7 +332,7 @@ const action = ({
           const cloneSaveData = JSON.parse(JSON.stringify(saveData));
           if (cloneSaveData.info) cloneSaveData.info.morality += 1;
           setMsg(gameData.msg.sentenceFn.increaseDecrease(lang, gameData.msg.info.moral?.[lang] || "Morality", 1));
-          setMsgOn(true);
+          setShowMsg(true);
           changeSaveData(cloneSaveData);
         //}, 2000);
       } else {
@@ -395,10 +395,10 @@ const MoveEvent = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const [popupOn, setPopupOn] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
-  const [msgOn, setMsgOn] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
   const [currentStep, setCurrentStep] = useState(sData.moveEvent.currentStep);
   const blockType = sData.moveEvent.blockArr?.type?.[currentStep] || 0;
@@ -521,7 +521,7 @@ const MoveEvent = ({
                 opened = spEvent.open,
                 getItem = spEvent.get;
               if (!canOpen) {
-                setMsgOn(true);
+                setShowMsg(true);
                 setMsg(gameData.msg.sentence['moreStepChest'][lang]);
                 return;
               }
@@ -541,7 +541,7 @@ const MoveEvent = ({
                 }));
               }
               if (canOpen && opened && getItem) {
-                setMsgOn(true);
+                setShowMsg(true);
                 setMsg(gameData.msg.sentence['alreadyChest'][lang]);
                 return;
               }
@@ -565,7 +565,7 @@ const MoveEvent = ({
                     ]
                   }));
                   setPopupType("hero");
-							    setPopupOn(true);
+							    setShowPopup(true);
                 } else if (itemType === "gold") {
                   acquiredThings = gameData.reward.moveEvent.gold;
                   changeSaveData(prev => ({
@@ -575,7 +575,7 @@ const MoveEvent = ({
                       money: prev.info.money + acquiredThings,
                     }
                   }));
-                  setMsgOn(true);
+                  setShowMsg(true);
                   setMsg(gameData.msg.sentenceFn.getGold(lang, acquiredThings));
                 } else {
                   acquiredThings = util.getItem({
@@ -606,7 +606,7 @@ const MoveEvent = ({
                       type: "hequip",
                     },
                   }));
-							    setPopupOn(true);
+							    setShowPopup(true);
                 }
                 changeSaveData(prev => ({
                   ...prev,
@@ -650,7 +650,7 @@ const MoveEvent = ({
                     setEventBack: setEventBack,
                     timeoutRef: timeoutRef.current,
                     setMsg: setMsg,
-                    setMsgOn: setMsgOn,
+                    setShowMsg: setShowMsg,
                     navigate: navigate,
                     lang: lang,
                   });
@@ -678,7 +678,7 @@ const MoveEvent = ({
                     setEventBack: setEventBack,
                     timeoutRef: timeoutRef.current,
                     setMsg: setMsg,
-                    setMsgOn: setMsgOn,
+                    setShowMsg: setShowMsg,
                     navigate: navigate,
                     lang: lang,
                   });
@@ -690,7 +690,7 @@ const MoveEvent = ({
           </>
         )}
       </EventView>
-      {showDice && <Dice successNum={limitDiceCount} bg={0} num={leaderDiceSkill[1] ? 3 : 2} isPlay={leaderDiceSkill[0] ? 2 : 1} setShowDice={setShowDice} setMsg={setMsg} setMsgOn={setMsgOn}callback={(v) => {
+      {showDice && <Dice successNum={limitDiceCount} bg={0} num={leaderDiceSkill[1] ? 3 : 2} isPlay={leaderDiceSkill[0] ? 2 : 1} setShowDice={setShowDice} setMsg={setMsg} setShowMsg={setShowMsg}callback={(v) => {
         actionDice({
           diceNum: util.getSum(v.diceArr),
           blockType: blockType,
@@ -705,10 +705,10 @@ const MoveEvent = ({
     </Wrap>
     <GameMainFooter saveData={sData} gameMode={"moveEvent"} setGameMode={setGameMode} stay={sData.info.stay} moveData={sData.moveEvent} actionData={actionData} showEvent={showEvent} setShowEvent={setShowEvent} setShowDim={setShowDim} eventPhase={eventPhase} />
     <PopupContainer>
-      {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
+      {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} />}
     </PopupContainer>
     <MsgContainer>
-      {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+      {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
     </MsgContainer>
   </>
 }

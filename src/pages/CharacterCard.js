@@ -11,9 +11,8 @@ const CardContainer = styled.div`
   height: ${({sizeH}) => sizeH}px;
 `;
 const ChCard = styled.div`
-  position:absolute;
-  pointer-events:none;
-  overflow:hidden;
+  position: absolute;
+  overflow: hidden;
   ${({usedType}) => {
     switch(usedType) {
       case 'actionCh':
@@ -180,7 +179,6 @@ const ListJobAction = styled.div`
   top: 3%;
   left: 4%;
   width: 15%;
-  pointer-events: none;
   z-index: 6;
   & > span {
     display: block;
@@ -392,6 +390,9 @@ const CharacterCard = ({
   showCost,
   showNum,
   isAnimation=false,
+  setShowTooltip,
+  setTooltip,
+  setTooltipPos,
   ...rest
 }) => {
   const context = useContext(AppContext);
@@ -629,7 +630,7 @@ const CharacterCard = ({
               {!isZoomCard && 
                 <>
                 <ListJobAction>
-                  <ListChJob className="job">
+                  <ListChJob>
                     <IconPic type={saveCh?.gradeUp ? `job${saveCh?.gradeUp}` : 'job'} isAbsolute={true} pic="icon100" idx={saveCh?.job} />
                   </ListChJob>
                   {saveCh?.newActionType?.map((data, idx) => {
@@ -660,12 +661,22 @@ const CharacterCard = ({
             </ListNameLv>}
             <ListCh type="profile" isRound={0} pic={`ch${chData?.display}`} />
             {!isZoomCard && <ListJobAction>
-              <ListChJob className="job">
+              <ListChJob onClick={(e) => {
+                e.stopPropagation();
+                setTooltipPos(e.target.getBoundingClientRect());
+                setTooltip(gameData.job[saveCh?.job].na[lang]);
+                setShowTooltip(true);
+              }}>
                 <IconPic type={saveCh?.gradeUp ? `job${saveCh?.gradeUp}` : 'job'} isAbsolute={true} pic="icon100" idx={saveCh?.job} />
               </ListChJob>
               {saveCh?.newActionType.map((data, idx) => {
                 return (
-                  <ListChActionType key={'action'+idx} className="action_type">
+                  <ListChActionType key={'action'+idx} onClick={(e) => {
+                    e.stopPropagation();
+                    setTooltipPos(e.target.getBoundingClientRect());
+                    setTooltip(gameData.skill[201 + data].na[lang]);
+                    setShowTooltip(true);
+                  }}>
                     <IconPic type={saveCh?.gradeUp ? `element${saveCh?.gradeUp}`: 'element'} isAbsolute={true} isThumb={true} pic="icon100" idx={data + 1} />
                   </ListChActionType>
                 )

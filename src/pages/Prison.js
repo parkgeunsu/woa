@@ -206,10 +206,10 @@ const Prison = ({
     return context.gameData;
   }, [context]);
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
-  const [popupOn, setPopupOn] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState('');
   const [popupInfo, setPopupInfo] = useState({});
-  const [msgOn, setMsgOn] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
   const entries = React.useMemo(() => {
     return sData.entry.map((entryIdx) => {
@@ -342,14 +342,14 @@ const Prison = ({
               <button text="true" className="button_small" onClick={(e) => {
                 if(actionChIdx === "") {
                   setMsg(gameData.msg.sentence.noneSelectCh[lang]);
-                  setMsgOn(true);
+                  setShowMsg(true);
                   return;
                 }
                 if (sData.ch[actionChIdx].actionPoint >= gameData.actionPoint.usePoint.prisonInfo) {
                   sData.ch[actionChIdx].actionPoint -= gameData.actionPoint.usePoint.prisonInfo;
                 } else {
                   setMsg(`<span caution>${gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[sData.ch[actionChIdx].idx].na1[lang])}</span>`);
-                  setMsgOn(true);
+                  setShowMsg(true);
                   return;
                 }
                 const skillIdx = util.getActionTypeSkill('prison0');
@@ -360,7 +360,7 @@ const Prison = ({
                   .flat();
                 if (prisonerInfo.length === 0) {
                   setMsg(gameData.msg.sentence.noMoreInfo[lang]);
-                  setMsgOn(true);
+                  setShowMsg(true);
                   changeSaveData(sData);
                   return;
                 }
@@ -397,24 +397,24 @@ const Prison = ({
               <button text="true" className="button_small" onClick={(e) => {
                 if(actionChIdx === "") {
                   setMsg(gameData.msg.sentence.noneSelectCh[lang]);
-                  setMsgOn(true);
+                  setShowMsg(true);
                   return;
                 }
                 if (sData.ch[actionChIdx].actionPoint < gameData.actionPoint.usePoint.prisonRelease) {
                   setMsg(`<span caution>${gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[sData.ch[actionChIdx].idx].na1[lang])}</span>`);
-                  setMsgOn(true);
+                  setShowMsg(true);
                   return;
                 }
                 const bailMorality = (Prisoner.crime + 1) * 10,
                   bailMoney = (Prisoner.crime + 1) * PrisonerData.grade * 10000;
                 if (sData.info.morality < bailMorality) {
                   setMsg(gameData.msg.sentence.lackMorality[lang]);
-                  setMsgOn(true);
+                  setShowMsg(true);
                   return;
                 }
                 if (sData.info.money < bailMoney) {
                   setMsg(gameData.msg.sentence.lackMoney[lang]);
-                  setMsgOn(true);
+                  setShowMsg(true);
                   return;
                 }
                 changeSaveData({
@@ -443,7 +443,7 @@ const Prison = ({
 					<ActionPic onClick={() => {
             if (selectTab === "") {
               setMsg(gameData.msg.sentence.noneSelectAction[lang]);
-              setMsgOn(true);
+              setShowMsg(true);
               return;
             };
             setPopupType('selectCh');
@@ -454,10 +454,10 @@ const Prison = ({
                 actionChIdx: actionChIdx,
                 type: "prison",
                 setMsg: setMsg,
-                setMsgOn: setMsgOn,
+                setShowMsg: setShowMsg,
               }
             }));
-            setPopupOn(true);
+            setShowPopup(true);
 					}}>
 						<MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />
 						{!actionChIdx && <NoneChText code="t1" color="red">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
@@ -467,10 +467,10 @@ const Prison = ({
         </UserContainer>
       </Wrap>
 			<PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} />}
       </PopupContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
     </>
   );

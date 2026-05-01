@@ -86,7 +86,7 @@ const StartGame = ({
     return util.loadData('historyParam');
   }, []);
   const [selectCard, setSelectCard] = useState(paramData?.start?.card);
-  const [msgOn, setMsgOn] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
   const [selectGradeArr, setSelectGradeArr] = useState([]); //시작 카드 유형 배열
   const [nameID, setNameID] = useState(saveData.info?.id ? saveData.info.id : ''); //덱 이름
@@ -133,7 +133,7 @@ const StartGame = ({
                   setNameID(value);
                 }} text={nameID} />
                 <Button onClick={() => {
-                  setMsgOn(true);
+                  setShowMsg(true);
                   setMsg(gameData.msg.sentence?.[`sumitId${Math.floor(Math.random()*3)}`]?.[lang] || "ID confirmed.");
                   const newSaveData = JSON.parse(JSON.stringify(saveData || {}));
                   if (newSaveData.info) newSaveData.info.id = nameID;
@@ -264,17 +264,17 @@ const StartGame = ({
 
                 //필드 유효성 검사
                 if (!saveData.info?.id) {
-                  setMsgOn(true);
+                  setShowMsg(true);
                   setMsg(gameData.msg.sentence?.['enterIDSubmit']?.[lang] || "Enter name first.");
                   return;
                 }
                 if (Object.keys(saveData.ch || {}).length === 0) {
-                  setMsgOn(true);
+                  setShowMsg(true);
                   setMsg(gameData.msg.sentence?.['selectCards']?.[lang] || "Select starting cards.");
                   return;
                 }
                 if (!saveData.info?.stay) {
-                  setMsgOn(true);
+                  setShowMsg(true);
                   setMsg(gameData.msg.sentence?.['selectCountry']?.[lang] || "Select starting area.");
                   return;
                 }
@@ -287,7 +287,7 @@ const StartGame = ({
         </Scroll>
       </Wrap>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
     </>
   );

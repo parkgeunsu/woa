@@ -202,8 +202,8 @@ const Shipyard = ({
     return gameData.ships;
   }, [gameData]);
   const [popupInfo, setPopupInfo] = useState({});
-  const [popupOn, setPopupOn] = useState(false);
-  const [msgOn, setMsgOn] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
 	const [selectCate, setSelectCate] = useState('');
 	const [showPicker, setShowPicker] = useState(false);
@@ -336,7 +336,7 @@ const Shipyard = ({
 											return (
 												<ShipOption className={`ship_option none ship_${data.classNa} ${selectCate === idx ? 'on' : ''}`} key={`shipList${idx}`} onClick={() => {
 													if (selectShip.shipIdx === '' && idx > 0) {
-														setMsgOn(true);
+														setShowMsg(true);
 														setMsg(gameData.msg.sentence?.selectBlueprint?.[lang] || "Select blueprint first.");
 													} else {
 														setSelectCate(idx);
@@ -456,7 +456,7 @@ const Shipyard = ({
 						<div className="action_select">
 							{Object.keys(actionCh || {}).length !== 0 && (
 								<div ref={actionRef} className={`ch_select_area ${actionCh.idx ? 'g' + (saveData.ch?.[actionCh.idx]?.grade || 1) : ''}`} onClick={() => {
-									setPopupOn(true);
+									setShowPopup(true);
 								}}>
 									<ActionChDisplay type="shipyard" saveData={saveData} gameData={gameData} actionCh={actionCh} imgSet={imgSet}/>
 								</div>
@@ -702,32 +702,32 @@ const Shipyard = ({
 								e.stopPropagation();
 								if (selectShip.wood === '') {
 									setShipInfoOn(false);
-									setMsgOn(true);
+									setShowMsg(true);
 									setMsg(gameData.msg.sentence?.selectWood?.[lang] || "Select wood material.");
 									return;
 								} else if (selectShip.sail0 === '' && selectShip.sail1 === '' && selectShip.sail2 === '') {
 									setShipInfoOn(false);
-									setMsgOn(true);
+									setShowMsg(true);
 									setMsg(gameData.msg.sentence?.selectSail?.[lang] || "Select sail material.");
 									return;
 								} else if (selectShip.anchor === ''){
 									setShipInfoOn(false);
-									setMsgOn(true);
+									setShowMsg(true);
 									setMsg(gameData.msg.sentence?.selectAnchor?.[lang] || "Select anchor material.");
 									return;
 								} else if (shipInfo.name === ''){
-									setMsgOn(true);
+									setShowMsg(true);
 									setMsg(gameData.msg.sentence?.selectShipName?.[lang] || "Enter ship name.");
 									if (shipNameRef.current) shipNameRef.current.focus();
 									return;
 								}
 								if (actionCh.idx === '') {
-									setMsgOn(true);
+									setShowMsg(true);
 									setMsg(gameData.msg.sentenceFn?.selectSkillCh?.(lang, gameData.skill?.[202]?.na || "Shipwright") || "Select a shipwright.");
 									return;
 								}
 								if (saveData.info?.money < shipInfo.price) {
-									setMsgOn(true);
+									setShowMsg(true);
 									setMsg(gameData.msg.sentence?.lackMoney?.[lang] || "Not enough money.");
 									return;
 								} else  {
@@ -778,10 +778,10 @@ const Shipyard = ({
 				</div>}
 			</Wrap>
 			<PopupContainer>
-        {popupOn && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
+        {showPopup && <Popup type={'selectCh'} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} />}
       </PopupContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
 		</>
   );

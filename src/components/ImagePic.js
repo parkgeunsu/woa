@@ -43,6 +43,7 @@ const ItemPic = ({
   mergeColor="rgba(255,255,255,0)",
   isAbsolute=false,
   children,
+  sealed,
   ...rest
 }) => {
   const context = useContext(AppContext);
@@ -72,7 +73,7 @@ const ItemPic = ({
       <StyledItemPic ref={picSize} url={imgSet.images[pic]} startIdx={startIdx} className="pic" itemPic={pic} idx={idx} {...rest}>
         {children}
       </StyledItemPic>
-      {mergeColor && <MaskArea ref={maskSize} isBright={isBright} mergeColor={mergeColor} url={imgSet.images[pic]}></MaskArea>}
+      {!sealed &&mergeColor && <MaskArea ref={maskSize} isBright={isBright} mergeColor={mergeColor} url={imgSet.images[pic]}></MaskArea>}
     </ItemContainer>
   )
 }
@@ -221,32 +222,22 @@ const ChPic = ({//merged 된 이미지에서 좌표를 찾는 방식
 }
 
 const MarkWrap = styled.div`
-  display: inline-block;
-  position: relative;
-  margin: 0 5px 0 0;
+  display: block;
+  position: absolute;
+  left: ${({idx}) => idx * 25}px;
   width: 40px;
   height: 40px;
   box-sizing: border-box;
   border: 2px solid #895910;
   background-color: #ffc719;
   border-radius: 20px;
-  text-align: center;
   box-shadow: 0px 4px 10px #000;
-  z-index: 1;
-  &:nth-of-type(2) {
-    transform: translate(-20px,0);
-  }
-  &:nth-of-type(3) {
-    transform: translate(-40px,0);
-  }
-  &:nth-of-type(4) {
-    transform: translate(-60px,0);
-  }
 `;
 const MarkPic = ({
   length,
   pic,
   idx,
+  onClick,
 }) => {
   // const context = useContext(AppContext);
   const [size, setSize] = useState(0);
@@ -259,7 +250,7 @@ const MarkPic = ({
   return (
     mark.map((markData, markIdx) => {
       return (
-        <MarkWrap ref={picSize} size={size} key={`markIdx${markIdx}`}>
+        <MarkWrap ref={picSize} size={size} key={`markIdx${markIdx}`} idx={markIdx} onClick={(e) => onClick && onClick(e)}>
           <IconPic pic={pic} type="animalType" idx={idx} />
         </MarkWrap>
       )

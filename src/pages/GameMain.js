@@ -147,7 +147,7 @@ const GameMain = ({
             changeSaveData: changeSaveData,
             option: {
               type:'equip',
-              items:Math.ceil(Math.random()*3),//장비만 해당
+              items:Math.ceil(Math.random()*5),//장비만 해당
               //아이템종류, 세부종류(검,단검), 매직등급
               lv:Math.round(Math.random()*100),
               sealed:true,
@@ -171,14 +171,31 @@ const GameMain = ({
           changeSaveData(newSaveDataAdd);
         }}>영웅 추가</button><br/>
         <button onClick={() => {
-          if (sData.ch.length > 0) {
-            const newSaveDataDel = {
-              ...sData,
-              ch: sData.ch.slice(0, -1)
-            };
-            changeSaveData(newSaveDataDel);
-          }
-        }}>영웅 삭제</button><br/>
+          const newSaveDataDel = {
+            ...sData,
+            info: {
+              ...sData.info,
+              money: !sData.info.money ? 10000 :sData.info.money + 10000,
+            },
+          };
+          changeSaveData(newSaveDataDel);
+        }}>돈 10000 추가</button><br/>
+        <button onClick={() => {
+          const newSaveDataDel = {
+            ...sData,
+            ch: sData.ch.map((ch, idx) => {
+              if (idx === 0) {
+                return {
+                  ...ch,
+                  actionPoint: 100,
+                }
+              } else {
+                return ch;
+              }
+            }),
+          };
+          changeSaveData(newSaveDataDel);
+        }}>행동력 추가</button><br/>
         <button onClick={() => {
           const stay = Math.floor(Math.random() * 28);
           if (sData.info.stay) {
@@ -230,7 +247,6 @@ const GameMain = ({
                 navigate: navigate,
                 isNavigate: true,
                 state: {
-                  tab: 0,
                 },
                 prevState: {
                   tab: 0,

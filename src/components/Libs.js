@@ -607,14 +607,14 @@ export const util = { //this.loadImage();
     let totalEff = [];
     const grade = saveItem.hole ? saveItem.grade : 1;
     if (cate === "hole") {
-      gameData.items[cate][saveItem.idx].eff.forEach((data, idx) => {
+      gameData.items[cate][saveItem.idx].eff.forEach((data, _) => {
         if (totalEff[data.type] === undefined) {
           totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
         }
         totalEff[data.type].hole += parseInt(data.num);
       });
     }
-    saveItem.baseEff?.forEach((data, idx) => {
+    saveItem.baseEff?.forEach((data, _) => {
       if (totalEff[data.type] === undefined) {
         totalEff[data.type] = {type: data.type, base: 0, add:0, hole:0};
       }
@@ -624,17 +624,24 @@ export const util = { //this.loadImage();
         totalEff[data.type].base += parseInt(data.num[grade - 1]);
       }
     });
-    saveItem.addEff?.forEach((data, idx) => {
+    saveItem.addEff?.forEach((data, _) => {
       if (totalEff[data.type] === undefined) {
         totalEff[data.type] = data.type === 100 ? {type: data.type, skList: []} : {type: data.type, base: 0, add:0, hole:0};
       }
-      if (data.type === 100) {
+      if (data.type === 100) {//스킬일때
         totalEff[data.type].skList.push({
           lv: data.skLv[0],
           idx: data.skIdx,
         });
-      } else {
-        totalEff[data.type].add += parseInt(data.num[0]);
+      } else {//스킬이 아닐때
+        const baseNum = saveItem.baseEff.find(baseType => baseType.type === data.type)?.num[grade - 1];
+        if (data.num[0].includes("%")) {//퍼센트일때
+          const percent = 1 + parseFloat(data.num[0]) / 100;
+          console.log(parseFloat(baseNum) * percent);
+          totalEff[data.type].add += Math.round(parseFloat(baseNum) * percent);
+        } else {//숫자일때
+          totalEff[data.type].add += parseInt(data.num[0]);
+        }
       }
     });
     if (saveItem.hole) {
@@ -2339,13 +2346,19 @@ export const util = { //this.loadImage();
       if (type === 'equip') {//장비일 경우
         const cate = String(option.items);
         if (cate.length > 1) {
-          if(cate[0] === "3") {//무기일 경우
-            itemLength = gameData.items[type][cate[0]][cate[1]][0].length;
-            itemData = gameData.items[type][cate[0]][cate[1]][0][Math.floor(Math.random() * itemLength)];
-            weaponType = cate[1];
-          } else {//무기가 아닐 경우
-            itemLength = gameData.items[type][option.items][0].length;
-            itemData = gameData.items[type][option.items][0][Math.floor(Math.random() * itemLength)];
+          switch (cate[0]) {
+            case "3":
+              itemLength = gameData.items[type][cate[0]][cate[1]][0].length;
+              itemData = gameData.items[type][cate[0]][cate[1]][0][Math.floor(Math.random() * itemLength)];
+              weaponType = cate[1];
+              break;
+            case "1":
+            case "2":
+            case "4":
+            case "5":
+              itemLength = gameData.items[type][option.items][0].length;
+              itemData = gameData.items[type][option.items][0][Math.floor(Math.random() * itemLength)];
+              break;
           }
         } else {
           const itemTypeLength = gameData.items[type][cate].length,
@@ -2604,7 +2617,6 @@ export const util = { //this.loadImage();
         changeSaveData(save);
         return;
       }
-
       const addEff = [];
       //슬롯
       if (itemLv > 0) {
@@ -2680,10 +2692,10 @@ export const util = { //this.loadImage();
           slot: 0,//아이템 홀착용 갯수
           hole: [],
           color: "",
-          baseEff: [{
+          ...itemData.eff && itemData.eff.length > 0 && {baseEff: [{
             type: itemData.eff[0].type,
             num: itemData.eff[0].num[0] + ' ~ ' + itemData.eff[0].num[1],
-          }],
+          }]},
           addEff: [],
           mark: '',
           markNum: 0,
@@ -2699,6 +2711,26 @@ export const util = { //this.loadImage();
       }
       const color = util.getRgbColor();
       // const color = util.getHslColor(Math.floor(Math.random() * 3),1);
+      
+      const tier = (() => {//normal:0, exceptional:1, elite:2,
+        if (itemData.part !== 1 && itemData.part !== 2 && itemData.part !== 3) {
+          return 0;
+        }
+        const tierNumber = Math.random();
+        if (itemLv < 50) {
+          if (tierNumber < 0.9) return 0;
+          if (tierNumber < 0.98) return 1;
+          return 2;
+        } else if (itemLv < 80) {
+          if (tierNumber < 0.7) return 0;
+          if (tierNumber < 0.95) return 1;
+          return 2;
+        } else {
+          if (tierNumber < 0.5) return 0;
+          if (tierNumber < 0.9) return 1;
+          return 2;
+        }
+      })();
       const baseEff = itemData.eff.map((data) => {
         let num = [];
         num[0] = String(Math.round(Math.random() * (Number(data.num[1]) - Number(data.num[0]))) + (Number(data.num[1]) - Number(data.num[0])));
@@ -2792,6 +2824,7 @@ export const util = { //this.loadImage();
         idx: itemData.idx,
         part: itemData.part,
         grade: grade,
+        tier: tier || 0,
         itemLv: option.lv,
         slot: slotNum,//아이템 홀착용 갯수
         hole: new Array(slotNum).fill(0),
@@ -2896,13 +2929,13 @@ export const util = { //this.loadImage();
       }
       const chType = gameData.ch[saveCh.idx].animal_type;
       if (dataObj.data.saveItemData.sealed) { //개봉된 아이템인지 확인
-        dataObj.showMsg(true);
-        dataObj.msgText(`<span caution>${gameData.msg.sentence.evaluateItem[dataObj.lang]}</span>`);
+        dataObj.setShowMsg(true);
+        dataObj.setMsg(`<span caution>${gameData.msg.sentence.evaluateItem[dataObj.lang]}</span>`);
         return;
       }
       if (!saveCh.possibleEquipment[dataObj.data.gameItem.part - 1][dataObj.data.gameItem.category]) {//직업 착용가능 확인 !dataObj.data.gameItem.limit[saveCh.job]
-        dataObj.showMsg(true);
-        dataObj.msgText(`<span caution>${gameData.msg.sentence.unpossibleJob[dataObj.lang]}</span>`);
+        dataObj.setShowMsg(true);
+        dataObj.setMsg(`<span caution>${gameData.msg.sentence.unpossibleJob[dataObj.lang]}</span>`);
         return;
       }
       for (const [itemSlot, item] of saveCh.items.entries()) {
@@ -2910,8 +2943,8 @@ export const util = { //this.loadImage();
           if (item.idx === undefined) { //해당 슬롯이 비었을 비었을 경우
             currentKg += dataObj.data.gameItem.kg
             if (currentKg > totalKg) { //가능 무게를 넘어 갈 경우
-              dataObj.showMsg(true);
-              dataObj.msgText(`<span caution>${gameData.msg.sentence.heavyKg[dataObj.lang]}</span>`);
+              dataObj.setShowMsg(true);
+              dataObj.setMsg(`<span caution>${gameData.msg.sentence.heavyKg[dataObj.lang]}</span>`);
             } else { //착용 가능 무게일 경우
               saveCh.items[itemSlot] = { ...sData.items['equip'][dataObj.data.itemSaveSlot] };//캐릭에 아이템 넣기
               if (dataObj.data.saveItemData.mark === gameData.ch[saveCh.idx].animal_type) {//동물 뱃지 수정
@@ -2928,7 +2961,7 @@ export const util = { //this.loadImage();
                 gameData: gameData,
                 changeSaveData: dataObj.changeSaveData,
               });
-              dataObj.showPopup(false);
+              dataObj.setShowPopup(false);
               itemSubmit = true;
               break;
             }
@@ -2936,12 +2969,12 @@ export const util = { //this.loadImage();
         }
       }
       if (!itemSubmit) { //해당 슬롯에 아이템이 있을 경우, 아이템 다른부위로 적용된 경우 파악
-        dataObj.showMsg(true);
-        dataObj.msgText(`<span caution>${gameData.msg.sentence.nonePart[dataObj.lang]}</span>`);
+        dataObj.setShowMsg(true);
+        dataObj.setMsg(`<span caution>${gameData.msg.sentence.nonePart[dataObj.lang]}</span>`);
       }
     } else if (dataObj.type === 'itemRelease') { //아이템 해제
       const saveCh = sData.ch[dataObj.data.chSlotIdx];
-      sData.items['equip'] = [...sData.items['equip'], saveItem];//인벤에 아이템 넣기
+      sData.items['equip'] = [saveItem, ...sData.items['equip']];//인벤에 아이템 넣기
       saveCh.items[dataObj.data.itemSaveSlot] = {}; //아이템 삭제
       if (saveItem.mark === gameData.ch[saveCh.idx].animal_type) {//동물 뱃지 수정
         saveCh.animalBadge = util.getAnimalPoint(saveCh.items, gameData.ch[saveCh.idx].animal_type, saveCh.mark);
@@ -2972,7 +3005,7 @@ export const util = { //this.loadImage();
         gameData: gameData,
         changeSaveData: dataObj.changeSaveData,
       });
-      dataObj.showPopup(false);
+      dataObj.setShowPopup(false);
     } else if (dataObj.type === 'itemUse') { //아이템 사용
       const saveCh = sData.ch[dataObj.data.chSlotIdx];
       switch (dataObj.data.gameItem.action) {
@@ -2993,23 +3026,19 @@ export const util = { //this.loadImage();
           });
           break;
         default:
-          dataObj.showMsg(true);
-          dataObj.msgText(`<span caution>${gameData.msg.sentence.none[dataObj.lang]}</span>`);
+          dataObj.setShowMsg(true);
+          dataObj.setMsg(`<span caution>${gameData.msg.sentence.none[dataObj.lang]}</span>`);
           break;
       } //사용 타입
       sData.items[itemType].splice(dataObj.data.itemSaveSlot, 1);//인벤에서 아이템 제거
       dataObj.changeSaveData(sData);//데이터 저장
-      dataObj.showPopup(false);
+      dataObj.setShowPopup(false);
     } else if (dataObj.type === 'itemBuy') { //아이템 구입
-      console.log(dataObj.price);
       if (sData.info.money >= dataObj.price) {
-        sData.info.money -= dataObj.price * (dataObj.data.num || 1);//돈 계산
+        sData.info.money -= dataObj.price * (dataObj.data.saveItemData.num || 1);//돈 계산
   
-        const slotIdx = dataObj.data.itemSaveSlot;
-        if (itemType === 'equip' || itemType === 'hole') {
-          sData.info.money -= dataObj.data.itemPrice;
-          //아이템 추가
-          sData.items[itemType].push({...saveItem});
+        if (!dataObj.data.saveItemData.num) { //아이템 갯수가 존재하면
+          sData.items[itemType].unshift({...saveItem});//아이템 추가
           dataObj.data.callback && dataObj.data.callback();
         } else {
           //아이템 갯수 추가
@@ -3017,14 +3046,14 @@ export const util = { //this.loadImage();
           if (slotIdx >= 0) {
             sData.items[itemType][slotIdx].num = Number(sData.items[itemType][slotIdx].num) + Number(dataObj.data.num);
           } else {
-            sData.items[itemType].push({...saveItem, num: dataObj.data.num});
+            sData.items[itemType].unshift({...saveItem, num: dataObj.data.num});
           }
         }
         dataObj.changeSaveData(sData);//데이터 저장
-        dataObj.showPopup(false);
+        dataObj.setShowPopup(false);
       } else {
-        dataObj.showMsg(true);
-        dataObj.msgText(`<span caution>${gameData.msg.sentence.lackMoney[dataObj.lang]}</span>`);
+        dataObj.setShowMsg(true);
+        dataObj.setMsg(`<span caution>${gameData.msg.sentence.lackMoney[dataObj.lang]}</span>`);
       }
     } else if (dataObj.type === 'itemSell') { //아이템 판매
       sData.info.money += dataObj.price * (dataObj.data.num || 1);//돈 계산
@@ -3037,10 +3066,10 @@ export const util = { //this.loadImage();
           sData.items[itemType].splice(slotIdx, 1);//인벤에서 아이템 제거
         }
       } else {
-        sData.items[itemType].splice(dataObj.data.itemSaveSlot, 1);//인벤에서 아이템 제거
+        sData.items[itemType].splice(slotIdx, 1);//인벤에서 아이템 제거
       }
       dataObj.changeSaveData(sData);//데이터 저장
-      dataObj.showPopup(false);
+      dataObj.setShowPopup(false);
     } else if (dataObj.type === 'itemEvaluate') { //아이템 확인
       // sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
       const itemInfo = saveItem.part === 3 ? `${saveItem.part}-${saveItem.weaponType}-${saveItem.idx}` : `${saveItem.part}-${saveItem.idx}`;
@@ -3075,6 +3104,151 @@ export const util = { //this.loadImage();
       console.log('itemUpgrade')
     }
     callback && callback();
+  },
+  payActionPoint: ({
+    gameData,
+    actionCh,
+    setShowMsg,
+    setMsg,
+    lang,
+    callback,
+  }) => {
+    if (!actionCh) {
+      setShowMsg(true);
+      setMsg(gameData.msg.sentence.selectActionHero[lang]);
+      return;
+    }
+    if (actionCh.actionPoint >= gameData.actionPoint.usePoint.itemSell) {//행동력 지불
+      actionCh.actionPoint -= gameData.actionPoint.usePoint.itemSell;
+      callback && callback();
+    } else {
+      setShowMsg(true);
+      setMsg(`<span caution>${gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[actionCh.idx].na1[lang])}</span>`);
+      return;
+    }
+  },
+  goShop: ({
+    util,
+    gameData,
+    shopName,
+    setShowMsg,
+    setMsg,
+    lang,
+    timeoutRef,
+    navigate,
+    location,
+    dataObj,
+  }) => {
+    const shopIdx = gameData.shopName.findIndex((shop) => shop === shopName);
+    if (shopIdx < 0) {
+      setShowMsg(true);
+      setMsg(gameData.msg.sentence[`no${shopName.charAt(0).toUpperCase() + shopName.slice(1)}`][lang]);
+      return;
+    }
+    switch (shopName) {
+      case  "equipment":
+        setShowMsg(true);
+        setMsg(gameData.msg.sentence.goEquipmentShop[lang]);
+        timeoutRef.current = setTimeout(() => {
+          util.saveHistory({
+            prevLocation: location.pathname.replace(/\//g, ""),
+            location: shopName,
+            navigate: navigate,
+            callback: () => {},
+            state: {
+              items: {
+                gameItem: dataObj.gameItem,
+                saveItemData: dataObj.saveItemData,
+              },
+              tab: 3,
+              itemSaveSlot: dataObj.itemSaveSlot,
+              location: shopName,
+            },
+            prevState: {
+              tab: dataObj.tab || ""
+            },
+            isNavigate: true,
+          });
+        }, 1800);
+        break;
+      case "accessory":
+        setShowMsg(true);
+        setMsg(gameData.msg.sentence.goAccessoryShop[lang]);
+        timeoutRef.current = setTimeout(() => {
+          util.saveHistory({
+            prevLocation: location.pathname.replace(/\//g, ""),
+            location: shopName,
+            navigate: navigate,
+            callback: () => {},
+            state: {
+              items: {
+                gameItem: dataObj.gameItem,
+                saveItemData: dataObj.saveItemData,
+              },
+              tab: 2,
+              itemSaveSlot: dataObj.itemSaveSlot,
+              location: shopName,
+            },
+            prevState: {
+              tab: dataObj.tab || ""
+            },
+            isNavigate: true,
+          });
+        }, 1800);
+        break;
+      case "tool":
+        setShowMsg(true);
+        setMsg(gameData.msg.sentence.goToolShop[lang]);
+        timeoutRef.current = setTimeout(() => {
+          util.saveHistory({
+            prevLocation: location.pathname.replace(/\//g, ""),
+            location: shopName,
+            navigate: navigate,
+            callback: () => {},
+            state: {
+              items: {
+                gameItem: dataObj.gameItem,
+                saveItemData: dataObj.saveItemData,
+              },
+              tab: 2,
+              itemSaveSlot: dataObj.itemSaveSlot,
+              location: shopName,
+            },
+            prevState: {
+              tab: dataObj.tab || ""
+            },
+            isNavigate: true,
+          });
+        }, 1800);
+        break;
+      case "tradingPost":
+        setShowMsg(true);
+        setMsg(gameData.msg.sentence.goTradingPost[lang]);
+        timeoutRef.current = setTimeout(() => {
+          util.saveHistory({
+            prevLocation: location.pathname.replace(/\//g, ""),
+            location: shopName,
+            navigate: navigate,
+            callback: () => {},
+            state: {
+              items: {
+                gameItem: dataObj.gameItem,
+                saveItemData: dataObj.saveItemData,
+              },
+              tab: 1,
+              itemSaveSlot: dataObj.itemSaveSlot,
+              location: shopName,
+            },
+            prevState: {
+              tab: dataObj.tab || ""
+            },
+            isNavigate: true,
+          });
+        }, 1800);
+        break;
+      default:
+        break;
+    }
   },
   getColorant:(colorSet, gameData) => {
     const dataIdx = colorSet.split('_');
@@ -3694,6 +3868,8 @@ export const util = { //this.loadImage();
         return 49;
       case 'state':
         return 51;
+      case 'tier':
+        return 53;
       default:
         return 0;
     }
@@ -4003,16 +4179,20 @@ export const util = { //this.loadImage();
   },
   itemPrice: ({gameItem, saveItemData, skill, skLv}) => {
     const itemGrade = saveItemData.grade || gameItem.grade,
-      isPrice = [gameItem.price * 2, gameItem.price * 0.5]; //buy, sell
+      isSealed = saveItemData.sealed,
+      isPrice = [gameItem.price * 2, gameItem.price * 0.5],//buy, sell
+      addEffNum = saveItemData.addEff ? saveItemData.addEff.length : 0,
+      socketNum = saveItemData.hole ? saveItemData.hole.length : 0,
+      coinNum = saveItemData.markNum ? saveItemData.markNum : 0;
     const price = [isPrice[0] + Math.round(isPrice[0] * (skLv === "" ? 1 : Number(skill.eff[0].num[skLv]) / 100)), isPrice[1] + Math.round(isPrice[1] * (skLv === "" ? 1 : Number(skill.eff[0].num[skLv]) / 100))];
     return {
       buy: {
-        str: `${util.comma(price[0] * itemGrade)}`,
-        num: price[0] * itemGrade,
+        str: `${util.comma(price[0] * itemGrade + price[0] * addEffNum + price[0] * socketNum + price[0] * coinNum)}`,
+        num: price[0] * itemGrade + price[0] * addEffNum + price[0] * socketNum + price[0] * coinNum,
       }, 
       sell: {
-        str: `${util.comma(price[1] * itemGrade)}`,
-        num: price[1] * itemGrade,
+        str: `${util.comma(isSealed ? price[1] : price[1] * itemGrade)}`,
+        num: isSealed ? price[1] : price[1] * itemGrade,
       },
     };
   },
@@ -4174,6 +4354,8 @@ export const util = { //this.loadImage();
       } else {
         skill.push({ idx: getRandomSkillIdx, lv: 1, exp: 0 });
       }
+      //배울 수 있는 무기타입 횟수
+      const learnEquipmentType = Math.floor(Math.random() * 3);
       //동물뱃지 획득
       const animalBadge = Math.floor(Math.random() * (isPrison ? 5 : 2));
       //장비가능한 부위
@@ -4196,6 +4378,7 @@ export const util = { //this.loadImage();
           newActionType : [actionType],
           job: job,
           ...(typeof jobElementType === "number" ? {jobElement: jobElementType} : {}),
+          learnEquipmentType: learnEquipmentType,
           kg: kg,
           hasExp: isPrison ? Math.round(Math.random() * 20) * 100 : 0,
           battleBadge: [0,0,0,0],

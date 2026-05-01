@@ -8,7 +8,7 @@ import { AppContext } from 'contexts/app-context';
 import CharacterCard from 'pages/CharacterCard';
 import ChList from 'pages/ChList';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const ChHeroCard = styled.div`
@@ -381,8 +381,14 @@ const PopupItemList = styled.li`
     font-weight: 600;
   }
 `;
-const PopupItemCoin = styled(FlexBox)``;
-const PopupItemSlot = styled(FlexBox)``;
+const PopupItemCoin = styled(FlexBox)`
+  position: relative;
+  height: 40px;
+`;
+const PopupItemSlot = styled(FlexBox)`
+  position: relative;
+  height: 40px;
+`;
 const PopupItemHoleBack = styled(FlexBox)`
   display: inline-block;
   border-radius: 20px;
@@ -440,15 +446,20 @@ const PopupItem = styled.div`
   height: 80px;
   border: 5px double #c80;
   ${({sealed}) => sealed ? `
-    filter: brightness(0.3) drop-shadow(0px 0px 1px #fff);
+    & > div:first-of-type {
+      filter: brightness(0.3) drop-shadow(0px 0px 1px #fff);
+    }
     &:before{
-      content: '?';
+      content: "?";
       position: absolute;
       left: 50%;
       top: 50%;
       transform: translate(-50%,-50%);
       z-index: 1;
+      font-family: 'myFont_e';
+      font-weight: 600;
       font-size: 2.5rem;
+      text-shadow: 0 0 10px #000, 0 0 5px #000;
     }
   `: ''}
   ${({part, grade}) => {
@@ -531,6 +542,13 @@ const PopupItem = styled.div`
       }
     }
   }}
+`;
+const TierIcon = styled(IconPic)`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 50%;
 `;
 const PopupItemEffs = styled(FlexBox)`
   margin: 0 0 3px 0;
@@ -755,7 +773,7 @@ const itemCateShopName = ({
       return '';
   }
 }
-const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPage, gameData, imgSet, msgText, showMsg, setTooltip, setTooltipPos, setTooltipOn, showPopup, theme, lang, navigate, timeoutRef}) => {
+const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPage, gameData, imgSet, setMsg, setShowMsg, setTooltip, setTooltipPos, setShowTooltip, setShowPopup, theme, lang, location, navigate, timeoutRef}) => {
   const isMoveEvent = saveData?.moveEvent && Object.keys(saveData?.moveEvent)?.length > 0;
 	if (type === 'relation') {
     const member = dataObj[type].relation.member;
@@ -816,23 +834,27 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
       skLv: util.getHasSkillLv({
         saveData: saveData,
         skillIdx: 15,//협상
-        chData: saveData.ch[saveData.actionCh?.[dataObj[type].location.name]?.idx],
+        chData: saveData.ch[saveData.actionCh?.[location]?.idx],
       })
     });
+    console.log(buttons);
+    const modifyName = (saveItem.colorantSet ? util.getColorant(saveItem.colorantSet, gameData).na[lang] : '') + (saveItem.modifier ? saveItem.modifier[lang] : '');
+    const itemName = (part === 1 || part === 2 || part === 3) ? items.na[saveItem.tier || 0][lang] : items.na[lang];
     return <PopupItemContainer frameBack={imgSet.etc.frameChBack}>
       <PopupItemList type="header" frameBack={imgSet.etc.frameChBack}>
-        <PopupItemName code="t3" grade={gameData.itemGrade.color[itemGrade]} color="main" weight="600" dangerouslySetInnerHTML={{__html: `${saveItem.colorantSet ? util.getColorant(saveItem.colorantSet, gameData).na[lang] : ''} ${saveItem.modifier ? saveItem.modifier[lang] : ''}<br/>${items.na[lang]}`}}/>
+        <PopupItemName code="t3" grade={gameData.itemGrade.color[itemGrade]} color="main" weight="600" dangerouslySetInnerHTML={{__html: `${modifyName ? modifyName + '<br/>' + itemName : itemName}`}}/>
       </PopupItemList>
       <PopupItemList>
         <PopupItem part={part} grade={itemGrade} sealed={sealed}>
-          <ItemPic type={itemCate} pic={items.pic} idx={items.display} mergeColor={saveItem.color} />
+          <ItemPic type={itemCate} pic={items.pic} idx={items.display} mergeColor={saveItem.color} sealed={sealed}/>
+          {saveItem.tier > 0 && <TierIcon type="tier" pic="icon100" idx={saveItem.tier - 1} />}
         </PopupItem>
         <div flex-h="true" style={{flex: 1,}}>
           <PopupItemInfo direction="column" justifyContent="space-between">
             <PopupItemTop justifyContent="flex-start">
               <PopupItemGradePic type="itemGrade" pic="icon100" idx={itemGrade - 1} />
               <PopupItemType code="t2" weight="600"
-              color={gameData.itemGrade.color[itemGrade]}>{gameData.itemGrade.txt[itemGrade][lang]} {gameData.msg.title[cateName][lang]}</PopupItemType>
+              color={gameData.itemGrade.color[itemGrade]}>{gameData.itemGrade.txt[itemGrade][lang]} {saveItem.tier > 0 && gameData.itemTier[saveItem.tier || 0][lang]} {gameData.msg.title[cateName][lang]}</PopupItemType>
             </PopupItemTop>
             <PopupItemDescription code="t1"  color="#d3a859" weight="600" dangerouslySetInnerHTML={{__html: `"${items.txt[lang]}"`}}></PopupItemDescription>
             {itemCate === "equip" && <PopupItemKg code="t2"  weight="600" color="#bbb" align="right">{items.kg || 0}kg</PopupItemKg>}
@@ -840,10 +862,18 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
         </div>
       </PopupItemList>
       {itemCate === "equip" && <PopupItemList type="animalCoin_slot">
-        <PopupItemCoin justifyContent="flex-start">
-          <MarkPic length={saveItem.markNum} pic="icon100" idx={saveItem.mark} />
-        </PopupItemCoin>
-        <PopupItemSlot justifyContent="flex-end">
+        {saveItem.markNum > 0 &&<PopupItemCoin justifyContent="flex-start">
+          <MarkPic length={saveItem.markNum} pic="icon100" idx={saveItem.mark} onClick={(e) => {
+            e.stopPropagation();
+            if (!saveItem.mark) {
+              return;
+            }
+            setTooltipPos(e.target.getBoundingClientRect());
+            setTooltip(`${gameData.animalType[saveItem.mark].na[lang]} ${gameData.msg.itemInfo.animalBadge[lang]} x ${saveItem.markNum}`);
+            setShowTooltip(true);
+          }}/>
+        </PopupItemCoin>}
+        {saveItem.hole.length > 0 &&<PopupItemSlot justifyContent="flex-end">
           {saveItem.hole.map((holeData, idx) => {
             const holePic = holeData !== 0 ? gameData.items.hole[holeData.idx].display : 0;
             return (
@@ -860,14 +890,14 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                     theme: theme,
                     lang: lang
                   }));
-                  setTooltipOn(true);
+                  setShowTooltip(true);
                 }}>
                   <ItemPic pic="itemEtc" type="hole" idx={holePic} />
                 </PopupItemHoleBack>
               </div>
             )
           })}
-        </PopupItemSlot>
+        </PopupItemSlot>}
       </PopupItemList>}
 
 
@@ -892,7 +922,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                 <PopupItemEffText code="t2"  margin={5}  weight="600" color="main">{eff.base || "-"}</PopupItemEffText>
                 <PopupItemEffText code="t2" margin={5}  weight="600" color="grey1">{eff.add ? `+ ${eff.add}` : "-"}</PopupItemEffText>
                 <PopupItemEffText code="t2" margin={5}  weight="600" color="grey2">{eff.hole ? `+ ${eff.hole}` : "-"}</PopupItemEffText>
-                <PopupItemEffText code="t3"  align="right" weight="600" color={`st${eff.type}`}>{eff.base + eff.add + eff.hole}</PopupItemEffText>
+                <PopupItemEffText code="t3"  align="right" weight="600" color={`st${eff.type}`}>{sealed ? eff.base : eff.base + eff.add + eff.hole}</PopupItemEffText>
               </PopupItemEffs>
             )
           }
@@ -950,222 +980,116 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
             <PopupItemPriceText code="t4" weight="600" margin={10} color="main">{`${itemPrice[buttons[0]].str}`}</PopupItemPriceText>
           </PopupItemPrice>
           {!isMoveEvent && <ButtonArea justifyContent="flex-end">
+
             {buttons.includes("buy") && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:24}} onClick={(e) => {//구입
               e.stopPropagation();
               const shopName = itemCateShopName({
                 itemCate: itemCate,
                 saveItem: saveItem,
               });
-              if (shopName === dataObj[type].location.name) {
-                const actionCh = saveData.ch[saveData.actionCh[shopName].idx];
-                if (!actionCh) {
-                  showMsg(true);
-                  msgText(gameData.msg.sentence.selectActionHero[lang]);
-                  return;
-                }
-                if (actionCh.actionPoint >= gameData.actionPoint.usePoint.itemSell) {//행동력 지불
-                actionCh.actionPoint -= gameData.actionPoint.usePoint.itemSell;
-                // changeSaveData(saveData);
-                if (shopName === "equipment") {//장비면
-                  util.buttonEvent({
-                    event: e,
-                    type: 'itemBuy',
-                    price: itemPrice.buy.num,
-                    data: {
-                      saveItemData: dataObj[type].saveItemData,
-                      gameItem: dataObj[type].gameItem,
-                      itemSaveSlot: dataObj[type].itemSaveSlot,
-                      type: dataObj[type].type,
-                    },
-                    saveData: saveData,
-                    changeSaveData: changeSaveData,
-                    gameData: gameData,
-                    msgText: msgText,
-                    showMsg: showMsg,
-                    showPopup: showPopup,
-                    lang: lang,
-                  });
-                }
+              if (location.pathname.includes("mystery") || location.pathname.includes(shopName)) {
+                const actionCh = saveData.ch[saveData.
+                actionCh[shopName].idx];
+                util.payActionPoint({
+                  gameData: gameData,
+                  actionCh: actionCh,
+                  setShowMsg: setShowMsg,
+                  setMsg: setMsg,
+                  lang: lang,
+                  callback: () => {
+                    if (shopName !== "tradingPost") {
+                      util.buttonEvent({
+                        event: e,
+                        type: 'itemBuy',
+                        price: itemPrice.buy.num,
+                        data: {
+                          saveItemData: dataObj[type].saveItemData,
+                          gameItem: dataObj[type].gameItem,
+                          itemSaveSlot: dataObj[type].itemSaveSlot,
+                          type: dataObj[type].type,
+                        },
+                        saveData: saveData,
+                        changeSaveData: changeSaveData,
+                        gameData: gameData,
+                        setMsg: setMsg,
+                        setShowMsg: setShowMsg,
+                        setShowPopup: setShowPopup,
+                        lang: lang,
+                      });
+                    }
+                  }
+                })
               } else {
-                showMsg(true);
-                msgText(`<span caution>${gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[actionCh.idx].na1[lang])}</span>`);
-                return;
-              }
-              } else {
-                
+                util.goShop({
+                  util: util,
+                  gameData: gameData,
+                  shopName: shopName,
+                  setShowMsg: setShowMsg,
+                  setMsg: setMsg,
+                  lang: lang,
+                  timeoutRef: timeoutRef,
+                  navigate: navigate,
+                  location: location,
+                  dataObj: dataObj[type],
+                });
               }
             }}>
             </StyledButton>}
+
             {buttons.includes("sell") && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:23}} onClick={(e) => {//판매
               e.stopPropagation();
               const shopName = itemCateShopName({
                 itemCate: itemCate,
                 saveItem: saveItem,
               });
-              if (shopName === dataObj[type].location.name) {
+              if (location.pathname.includes(shopName)) {
                 const actionCh = saveData.ch[saveData.actionCh[shopName].idx];
-                if (!actionCh) {
-                  showMsg(true);
-                  msgText(gameData.msg.sentence.selectActionHero[lang]);
-                  return;
-                }
-                if (actionCh.actionPoint >= gameData.actionPoint.usePoint.itemSell) {//행동력 지불
-                  actionCh.actionPoint -= gameData.actionPoint.usePoint.itemSell;
-                  // changeSaveData(saveData);
-                  if (shopName === "equipment") {//장비면
-                    util.buttonEvent({
-                      event: e,
-                      type: 'itemSell',
-                      price: itemPrice.sell.num,
-                      data: {
-                        saveItemData: dataObj[type].saveItemData,
-                        gameItem: dataObj[type].gameItem,
-                        itemSaveSlot: dataObj[type].itemSaveSlot,
-                        type: dataObj[type].type,
-                      },
-                      saveData: saveData,
-                      changeSaveData: changeSaveData,
-                      gameData: gameData,
-                      msgText: msgText,
-                      showMsg: showMsg,
-                      showPopup: showPopup,
-                      lang: lang,
-                    }, () => {
-                      // if (saveData.items[dataObj[type].type][dataObj[type].itemSaveSlot]) { //다음 아이템이 있으면
-                      //   const itemData = saveData.items[dataObj[type].type][dataObj[type].itemSaveSlot],
-                      //     itemsGrade = itemData.grade < 5 ? 0 : itemData.grade - 5,
-                      //     nextItem = itemData.part === 3 ? gameItem.equip[itemData.part][itemData.weaponType][itemsGrade][itemData.idx] : gameItem.equip[itemData.part][0][itemsGrade][itemData.idx];
-                      //   util.saveHistory({
-                      //     location: 'equipment',
-                      //     navigate: navigate,
-                      //     callback: () => {},
-                      //     state: {
-                      //       dataObj: {
-                      //         saveItemData: saveData.items[dataObj[type].type][dataObj[type].itemSaveSlot],
-                      //         gameItem: nextItem,
-                      //         itemSaveSlot: dataObj[type].itemSaveSlot,
-                      //         selectTab: dataObj[type].selectTab,
-                      //         type: dataObj[type].type,
-                      //         selectSlot: dataObj[type].selectSlot,
-                      //       }
-                      //     },
-                      //     isNavigate: true,
-                      //   });
-                      // } else {
-                      // }
-                    });
-                  } 
-                } else {
-                  showMsg(true);
-                  msgText(`<span caution>${gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[actionCh.idx].na1[lang])}</span>`);
-                  return;
-                }
+                util.payActionPoint({
+                  gameData: gameData,
+                  actionCh: actionCh,
+                  setShowMsg: setShowMsg,
+                  setMsg: setMsg,
+                  lang: lang,
+                  callback: () => {
+                    changeSaveData(saveData);
+                    if (shopName !== "tradingPost") {//장비면
+                      util.buttonEvent({
+                        event: e,
+                        type: 'itemSell',
+                        price: itemPrice.sell.num,
+                        data: {
+                          saveItemData: dataObj[type].saveItemData,
+                          gameItem: dataObj[type].gameItem,
+                          itemSaveSlot: dataObj[type].itemSaveSlot,
+                          type: dataObj[type].type,
+                        },
+                        saveData: saveData,
+                        changeSaveData: changeSaveData,
+                        gameData: gameData,
+                        setMsg: setMsg,
+                        setShowMsg: setShowMsg,
+                        setShowPopup: setShowPopup,
+                        lang: lang,
+                      });
+                    } 
+                  }
+                });
               } else {
-                const shopIdx = gameData.shopName.findIndex((shop) => shop === shopName);
-                if (shopIdx < 0) {
-                  showMsg(true);
-                  msgText(gameData.msg.sentence[`no${shopName.charAt(0).toUpperCase() + shopName.slice(1)}`][lang]);
-                  return;
-                }
-                if (shopName === "equipment") {
-                  showMsg(true);
-                  msgText(gameData.msg.sentence.goEquipmentShop[lang]);
-                  timeoutRef.current = setTimeout(() => {
-                    util.saveHistory({
-                      prevLocation: dataObj[type].location.name,
-                      location: shopName,
-                      navigate: navigate,
-                      callback: () => {},
-                      state: {
-                        items: {
-                          gameItem: dataObj[type].gameItem,
-                          saveItemData: dataObj[type].saveItemData,
-                        },
-                        tab: 3,
-                        itemSaveSlot: dataObj[type].itemSaveSlot,
-                        location: shopName,
-                      },
-                      prevState: {
-                        tab: dataObj[type].location.tab || ""
-                      },
-                      isNavigate: true,
-                    });
-                  }, 1800);
-                } else if (shopName === "accessory") {
-                  showMsg(true);
-                  msgText(gameData.msg.sentence.goAccessoryShop[lang]);
-                  timeoutRef.current = setTimeout(() => {
-                    util.saveHistory({
-                      prevLocation: dataObj[type].location.name,
-                      location: shopName,
-                      navigate: navigate,
-                      callback: () => {},
-                      state: {
-                        items: {
-                          gameItem: dataObj[type].gameItem,
-                          saveItemData: dataObj[type].saveItemData,
-                        },
-                        tab: 2,
-                        itemSaveSlot: dataObj[type].itemSaveSlot,
-                        location: shopName,
-                      },
-                      prevState: {
-                        tab: dataObj[type].location.tab || ""
-                      },
-                      isNavigate: true,
-                    });
-                  }, 1800);
-                } else if (shopName === "tool") {
-                  showMsg(true);
-                  msgText(gameData.msg.sentence.goToolShop[lang]);
-                  timeoutRef.current = setTimeout(() => {
-                    util.saveHistory({
-                      prevLocation: dataObj[type].location.name,
-                      location: shopName,
-                      navigate: navigate,
-                      callback: () => {},
-                      state: {
-                        items: {
-                          gameItem: dataObj[type].gameItem,
-                          saveItemData: dataObj[type].saveItemData,
-                        },
-                        tab: 2,
-                        itemSaveSlot: dataObj[type].itemSaveSlot,
-                        location: shopName,
-                      },
-                      prevState: {
-                        tab: dataObj[type].location.tab || ""
-                      },
-                      isNavigate: true,
-                    });
-                  }, 1800);
-                } else if (shopName === "tradingPost") {
-                  showMsg(true);
-                  msgText(gameData.msg.sentence.goTradingPost[lang]);
-                  timeoutRef.current = setTimeout(() => {
-                    util.saveHistory({
-                      prevLocation: dataObj[type].location.name,
-                      location: shopName,
-                      navigate: navigate,
-                      callback: () => {},
-                      state: {
-                        items: {
-                          gameItem: dataObj[type].gameItem,
-                          saveItemData: dataObj[type].saveItemData,
-                        },
-                        tab: 1,
-                        itemSaveSlot: dataObj[type].itemSaveSlot,
-                        location: shopName,
-                      },
-                      prevState: {
-                        tab: dataObj[type].location.tab || ""
-                      },
-                      isNavigate: true,
-                    });
-                  }, 1800);
-                }
+                util.goShop({
+                  util: util,
+                  gameData: gameData,
+                  shopName: shopName,
+                  setShowMsg: setShowMsg,
+                  setMsg: setMsg,
+                  lang: lang,
+                  timeoutRef: timeoutRef,
+                  navigate: navigate,
+                  location: location,
+                  dataObj: dataObj[type],
+                });
               }
             }} data-buttontype="itemSell" />}
+
             {buttons.includes("use") && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:26}} onClick={(e) => {//사용
               e.stopPropagation();
               util.buttonEvent({
@@ -1175,24 +1099,25 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                 saveData: saveData,
                 changeSaveData: changeSaveData,
                 gameData: gameData,
-                msgText: msgText,
-                showMsg: showMsg,
-                showPopup: showPopup,
+                setMsg: setMsg,
+                setShowMsg: setShowMsg,
+                setShowPopup: setShowPopup,
                 lang: lang,
               })
             }} data-buttontype="itemUse" />}
+
             {buttons.includes("upgrade") && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:21}} onClick={() => {//강화
               const shopIdx = gameData.shopName.findIndex((shop) => shop === 'blacksmith');
               if (shopIdx < 0) {
-                showMsg(true);
-                msgText(gameData.msg.sentence.noBlacksmith[lang]);
+                setShowMsg(true);
+                setMsg(gameData.msg.sentence.noBlacksmith[lang]);
                 return;
               }
-              showMsg(true);
-              msgText(gameData.msg.sentence.goForge[lang]);
+              setShowMsg(true);
+              setMsg(gameData.msg.sentence.goForge[lang]);
               timeoutRef.current = setTimeout(() => {
                 util.saveHistory({
-                  prevLocation: dataObj[type].location.name,
+                  prevLocation: location.pathname.replace(/\//g, ""),
                   location: 'blacksmith',
                   navigate: navigate,
                   callback: () => {},
@@ -1205,25 +1130,28 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                     itemSaveSlot: dataObj[type].itemSaveSlot,
                   },
                   prevState: {
-                    tab: dataObj[type].location.tab || ""
+                    tab: dataObj.tab || "",
+                    ...(dataObj.chSlotIdx !== undefined ? {chSlotIdx: dataObj.chSlotIdx} : {}),
+                    ...(dataObj.isAllEntry !== undefined ? {isAllEntry: true} : {}),
                   },
                   isNavigate: true,
                 });
               }, 1800);
             }} data-buttontype="itemUpgrade" />}
+
             {buttons.includes("socket") && hasSocket && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:22}} onClick={(e) => {//소켓
               e.stopPropagation();
               const shopIdx = gameData.shopName.findIndex((shop) => shop === 'blacksmith');
               if (shopIdx < 0) {
-                showMsg(true);
-                msgText(gameData.msg.sentence.noBlacksmith[lang]);
+                setShowMsg(true);
+                setMsg(gameData.msg.sentence.noBlacksmith[lang]);
                 return;
               }
-              showMsg(true);
-              msgText(gameData.msg.sentence.goForge[lang]);
+              setShowMsg(true);
+              setMsg(gameData.msg.sentence.goForge[lang]);
               timeoutRef.current = setTimeout(() => {
                 util.saveHistory({
-                  prevLocation: dataObj[type].location.name,
+                  prevLocation: location.pathname.replace(/\//g, ""),
                   location: 'blacksmith',
                   navigate: navigate,
                   callback: () => {},
@@ -1236,7 +1164,9 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                     itemSaveSlot: dataObj[type].itemSaveSlot,
                   },
                   prevState: {
-                    tab: dataObj[type].location.tab || "",
+                    tab: dataObj.tab || "",
+                    ...(dataObj.chSlotIdx !== undefined ? {chSlotIdx: dataObj.chSlotIdx, } : {}),
+                    ...(dataObj.isAllEntry !== undefined ? {isAllEntry: true} : {}),
                   },
                   isNavigate: true,
                 });
@@ -1248,86 +1178,122 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
               //   saveData: saveData,
               //   changeSaveData: changeSaveData,
               //   gameData: gameData,
-              //   msgText: msgText,
-              //   showMsg: showMsg,
-              //   showPopup: showPopup,
+              //   setMsg: setMsg,
+              //   setShowMsg: setShowMsg,
+              //   setShowPopup: setShowPopup,
               //   lang: lang,
               // });
             }} data-buttontype="itemSocket" />}
+
             {buttons.includes("wear") && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:20}} onClick={(e) => {//장착
               e.stopPropagation();
-              const shopIdx = gameData.shopName.findIndex((shop) => shop === 'home');
-              if (shopIdx < 0) {
-                showMsg(true);
-                msgText(gameData.msg.sentence.noHome[lang]);
+              const shopIdx = location.pathname.includes('cards');
+              if (!shopIdx) {
+                setShowMsg(true);
+                setMsg(gameData.msg.sentence.goHeroEquipment[lang]);
+                timeoutRef.current = setTimeout(() => {
+                  util.saveHistory({
+                    prevLocation: location.pathname.replace(/\//g, ""),
+                    location: 'cards',
+                    navigate: navigate,
+                    callback: () => {},
+                    state: {
+                      chSlotIdx: 0,
+                      itemBoxOpened: true,
+                      itemEquipType: saveItem.part,
+                    },
+                    prevState: {
+                      tab: dataObj.tab || "",
+                    },
+                    isNavigate: true,
+                  });
+                }, 1800);
                 return;
               }
-              showMsg(true);
-              msgText(gameData.msg.sentence.goItemEquip[lang]);
-              util.saveHistory({
-                prevLocation: dataObj[type].location.name,
-                location: 'cards',
-                navigate: navigate,
-                callback: () => {},
-                state: {
-                  chSlotIdx: 0,
-                  chTabIdx: 5,
-                  itemBoxOpened: true,
-                  itemEquipType: saveItem.part,
-                },
-                prevState: {
-                  tab: dataObj[type].location.tab || "",
-                },
-                isNavigate: true,
-              });
-              // util.buttonEvent({
-              //   event: e,
-              //   type: 'itemEquip',
-              //   data: dataObj,
-              //   saveData: saveData,
-              //   changeSaveData: changeSaveData,
-              //   gameData: gameData,
-              //   msgText: msgText,
-              //   showMsg: showMsg,
-              //   showPopup: showPopup,
-              //   lang: lang,
-              // });
-            }} data-buttontype="itemEquip" />}
-            {buttons.includes("release") && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:27}} onClick={(e) => {//해제
-              e.stopPropagation();
               util.buttonEvent({
                 event: e,
-                type: 'itemRelease',
-                data: dataObj[type],
+                type: 'itemEquip',
+                data: {
+                  saveItemData: dataObj[type].saveItemData,
+                  gameItem: dataObj[type].gameItem,
+                  itemSaveSlot: dataObj[type].itemSaveSlot,
+                  chSlotIdx: dataObj.chSlotIdx || 0,
+                  type: dataObj[type].type,
+                },
                 saveData: saveData,
                 changeSaveData: changeSaveData,
                 gameData: gameData,
-                msgText: msgText,
-                showMsg: showMsg,
-                showPopup: showPopup,
+                setMsg: setMsg,
+                setShowMsg: setShowMsg,
+                setShowPopup: setShowPopup,
+                lang: lang,
+              });
+            }} data-buttontype="itemEquip" />}
+
+            {buttons.includes("release") && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:27}} onClick={(e) => {//해제
+              e.stopPropagation();
+              const shopIdx = location.pathname.includes('cards');
+              if (!shopIdx) {
+                setShowMsg(true);
+                setMsg(gameData.msg.sentence.goHeroEquipment[lang]);
+                timeoutRef.current = setTimeout(() => {
+                  util.saveHistory({
+                    prevLocation: location.pathname.replace(/\//g, ""),
+                    location: 'cards',
+                    navigate: navigate,
+                    callback: () => {},
+                    state: {
+                      chSlotIdx: 0,
+                      itemBoxOpened: true,
+                      itemEquipType: saveItem.part,
+                    },
+                    prevState: {
+                      tab: dataObj.tab || "",
+                    },
+                    isNavigate: true,
+                  });
+                }, 1800);
+                return;
+              }
+              util.buttonEvent({
+                event: e,
+                type: 'itemRelease',
+                data: {
+                  saveItemData: dataObj[type].saveItemData,
+                  gameItem: dataObj[type].gameItem,
+                  itemSaveSlot: dataObj[type].itemSaveSlot,
+                  chSlotIdx: dataObj.chSlotIdx || 0,
+                  type: dataObj[type].type,
+                },
+                saveData: saveData,
+                changeSaveData: changeSaveData,
+                gameData: gameData,
+                setMsg: setMsg,
+                setShowMsg: setShowMsg,
+                setShowPopup: setShowPopup,
                 lang: lang,
               });
               // navigate('../cards', {state: {
               //   dataObj: {
               //     chSlotIdx: dataObj[type].chSlotIdx,
-              //     chTabIdx: 5,
               //     invenOpened: true,
               //   }
               // }});
             }} data-buttontype="itemRelease" />}
+
             {buttons.includes("evaluate") && sealed &&  <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:25}} onClick={(e) => {//감정
               e.stopPropagation();
               const shopIdx = gameData.shopName.findIndex((shop) => shop === 'composite');
               if (shopIdx < 0) {
-                showMsg(true);
-                msgText(gameData.msg.sentence.noComposite[lang]);
+                setShowMsg(true);
+                setMsg(gameData.msg.sentence.noComposite[lang]);
                 return;
               }
-              showMsg(true);
-              msgText(gameData.msg.sentence.goLab[lang]);
+              setShowMsg(true);
+              setMsg(gameData.msg.sentence.goLab[lang]);
               timeoutRef.current = setTimeout(() => {
                 util.saveHistory({
-                  prevLocation: dataObj[type].location.name,
+                  prevLocation: location.pathname.replace(/\//g, ""),
                   location: 'composite',
                   navigate: navigate,
                   callback: () => {},
@@ -1340,7 +1306,9 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                     itemSaveSlot: dataObj[type].itemSaveSlot,
                   },
                   prevState: {
-                    tab: dataObj[type].location.tab || "",
+                    tab: dataObj.tab || "",
+                    ...(dataObj.chSlotIdx !== undefined ? {chSlotIdx: dataObj.chSlotIdx} : {}),
+                    ...(dataObj.isAllEntry !== undefined ? {isAllEntry: true} : {}),
                   },
                   isNavigate: true,
                 });
@@ -1609,7 +1577,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                   dataObj[type].setSelectIdx(idx);
                 } else {
                   dataObj[type].setMsg(gameData.msg.sentenceFn.selectSkillCh(lang, gameData.skill[skillIdx].na));
-                  dataObj[type].setMsgOn(true);
+                  dataObj[type].setShowMsg(true);
                 }
               }}>
                 <CharacterCard usedType="thumb" saveData={dataObj[type].ch} saveCharacter={data} />
@@ -1627,7 +1595,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
               sData.actionCh[dataObj[type].type].idx = dataObj[type].selectIdx;
               changeSaveData(sData);
             }
-            showPopup(false);
+            setShowPopup(false);
           }} data-buttontype="itemUse">{gameData.msg.button.confirm[lang]}</button>
         </ButtonArea>
       </ActionChWrap>
@@ -1644,19 +1612,20 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
 }
 
 const Popup = ({ 
-	showPopup,
+	setShowPopup,
 	type,
   saveData,
   changeSaveData,
 	dataObj,
-  msgText,
-  showMsg,
+  setMsg,
+  setShowMsg,
   setTooltip,
   setTooltipPos,
-  setTooltipOn,
+  setShowTooltip,
   theme,
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const context = useContext(AppContext);
   const lang = React.useMemo(() => {
     return context.setting.lang;
@@ -1682,32 +1651,27 @@ const Popup = ({
       changeSaveData: changeSaveData,
       gameData: gameData,
       imgSet: imgSet,
-      msgText: msgText,
-      showMsg: showMsg,
+      setMsg: setMsg,
+      setShowMsg: setShowMsg,
       setTooltip: setTooltip,
       setTooltipPos: setTooltipPos,
-      setTooltipOn: setTooltipOn,
-      showPopup: showPopup,
+      setShowTooltip: setShowTooltip,
+      setShowPopup: setShowPopup,
       theme: theme,
       lang: lang,
+      location: location,
       navigate: navigate,
       timeoutRef: timeoutRef
     }));
   }, [saveData, dataObj, selectIdx]);
   useEffect(() => {
-    // if (dataObj?.saveItemData?.sealed) {
-    //   setContent(typeAsContent(type, {
-    //     ...dataObj,
-    //     saveItemData: saveData.items[dataObj[type].type][dataObj[type].itemSaveSlot],
-    //   }, saveData, changeSaveData, gameData, imgSet, msgText, showMsg, showPopup, lang));
-    // }
   }, []);
 	return (
     <>
       <PopupContainer>
         <PopupWrap className="transition">
           <PopupCont className="popup_cont" onClick={(e) => {
-            showPopup(false);
+            setShowPopup(false);
           }}>
             {content}
           </PopupCont>

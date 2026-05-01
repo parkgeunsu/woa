@@ -294,12 +294,12 @@ const ShopFooter = ({
 	selectTab,
 	setPopupType,
 	setPopupInfo,
-	setPopupOn,
-	setMsgOn,
+	setShowPopup,
+	setShowMsg,
 	setMsg,
 	setTooltip,
 	setTooltipPos,
-	setTooltipOn,
+	setShowTooltip,
 	setItemPopup,
 	actionChIdx,
 	stayIdx,
@@ -354,7 +354,7 @@ const ShopFooter = ({
 		// 	saveItemData: saveItemData,
 		// 	type: itemType,
 		// });
-    setPopupOn(prev => !prev);
+    setShowPopup(prev => !prev);
   }, [gameItem]);
 	return <>
 		{typeof selectedItem?.gameItem?.part === 'number' && (
@@ -421,7 +421,7 @@ const ShopFooter = ({
                       theme: theme,
                       lang: lang
                     }));
-                    setTooltipOn(true);
+                    setShowTooltip(true);
 									}}>
 										<ItemPic pic="itemEtc" type="hole" idx={holePic} />
 									</ItemHoleBack>
@@ -588,7 +588,7 @@ const ShopFooter = ({
 								if (shopType === 'equipment') {
 									if (selectedItem.gameItem?.part <= 3) { //무기이면
 										// if (actionCh.idx === '') {
-										// 	setMsgOn(true);
+										// 	setShowMsg(true);
 										// 	setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[201].na));
 										// 	return;
 										// }
@@ -612,9 +612,9 @@ const ShopFooter = ({
 											saveData: saveData,
 											changeSaveData: changeSaveData,
 											gameData: gameData,
-											msgText: setMsg,
-											showMsg: setMsgOn,
-											showPopup: setPopupOn,
+											setMsg: setMsg,
+											setShowMsg: setShowMsg,
+											setShowPopup: setShowPopup,
 											lang: lang,
 										});
 										const cloneSelectItem = [...selectItem];
@@ -628,7 +628,7 @@ const ShopFooter = ({
 										}
 										setSelectItem(cloneSelectItem);
 									} else {
-										setMsgOn(true);
+										setShowMsg(true);
 										setMsg(gameData.msg.sentence.goTool[lang]);
 										timeoutRef.current = setTimeout(() => {
 											util.saveHistory({
@@ -651,7 +651,7 @@ const ShopFooter = ({
 									}
 								} else if (shopType === 'tool') {
 									if (selectedItem.gameItem?.part <= 3) { //무기이면
-										setMsgOn(true);
+										setShowMsg(true);
 										setMsg(gameData.msg.sentence.goToolShop[lang]);
 										timeoutRef.current = setTimeout(() => {
 											util.save({
@@ -673,7 +673,7 @@ const ShopFooter = ({
 										}, 1800);
 									} else {
 										// if (actionCh.idx === '') {
-										// 	setMsgOn(true);
+										// 	setShowMsg(true);
 										// 	setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[201].na));
 										// 	return;
 										// }
@@ -695,9 +695,9 @@ const ShopFooter = ({
 												saveData: saveData,
 												changeSaveData: changeSaveData,
 												gameData: gameData,
-												msgText: setMsg,
-												showMsg: setMsgOn,
-												showPopup: setPopupOn,
+												setMsg: setMsg,
+												setShowMsg: setShowMsg,
+												setShowPopup: setShowPopup,
 												lang: lang,
 											});
 											const cloneSelectItem = [...selectItem];
@@ -711,7 +711,7 @@ const ShopFooter = ({
 											}
 											setSelectItem(cloneSelectItem);
 										// } else {
-										// 	setMsgOn(true);
+										// 	setShowMsg(true);
 										// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1[lang]));
 										// }
 									}
@@ -728,7 +728,7 @@ const ShopFooter = ({
 										if (selectedItem.gameItem?.part <= 3) { //투구,갑옷,무기이면
 											
 										} else {
-											setMsgOn(true);
+											setShowMsg(true);
 											setMsg(gameData.msg.sentence.goTool[lang]);
 											timeoutRef.current = setTimeout(() => {
 												util.saveHistory({
@@ -750,7 +750,7 @@ const ShopFooter = ({
 											}, 1800);
 										}
 									} else { //기타 도구이면
-										setMsgOn(true);
+										setShowMsg(true);
 										setMsg(gameData.msg.sentence.goTool[lang]);
 										timeoutRef.current = setTimeout(() => {
 											util.saveHistory({
@@ -774,7 +774,7 @@ const ShopFooter = ({
 								} else if (shopType === 'tool') {
 									if (typeof selectedItem.gameItem?.part === 'number') { //장비면
 										if (selectedItem.gameItem?.part <= 3) { //투구,갑옷,무기이면
-											setMsgOn(true);
+											setShowMsg(true);
 											setMsg(gameData.msg.sentence.goTool[lang]);
 											timeoutRef.current = setTimeout(() => {
 												util.saveHistory({
@@ -796,7 +796,7 @@ const ShopFooter = ({
 											}, 1800);
 										} else {
 											// if (actionCh.idx === '') {
-											// 	setMsgOn(true);
+											// 	setShowMsg(true);
 											// 	setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[201].na));
 											// 	return;
 											// }
@@ -817,9 +817,9 @@ const ShopFooter = ({
 												saveData: saveD,
 												changeSaveData: changeSaveData,
 												gameData: gameData,
-												msgText: setMsg,
-												showMsg: setMsgOn,
-												showPopup: setPopupOn,
+												setMsg: setMsg,
+												setShowMsg: setShowMsg,
+												setShowPopup: setShowPopup,
 												lang: lang,
 											}, () => {
 												console.log(selectedItem);
@@ -847,12 +847,12 @@ const ShopFooter = ({
 												// }
 											});
 											// } else {
-											// 	setMsgOn(true);
+											// 	setShowMsg(true);
 											// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1[lang]));
 										}
 									} else { //기타 도구이면
 										// if (actionCh.idx === '') {
-										// 	setMsgOn(true);
+										// 	setShowMsg(true);
 										// 	setMsg(gameData.msg.sentenceFn.selectSkillCh(lang,gameData.skill[201].na));
 										// 	return;
 										// }
@@ -873,9 +873,9 @@ const ShopFooter = ({
 											saveData: saveD,
 											changeSaveData: changeSaveData,
 											gameData: gameData,
-											msgText: setMsg,
-											showMsg: setMsgOn,
-											showPopup: setPopupOn,
+											setMsg: setMsg,
+											setShowMsg: setShowMsg,
+											setShowPopup: setShowPopup,
 											lang: lang,
 										}, () => {
 											console.log(selectedItem);
@@ -903,13 +903,13 @@ const ShopFooter = ({
 											// }
 										});
 										// } else {
-										// 	setMsgOn(true);
+										// 	setShowMsg(true);
 										// 	setMsg(gameData.msg.sentenceFn.lackActionPoint(lang, gameData.ch[saveD.ch[actionCh.idx].idx].na1[lang]));
 									}
 								} else if (shopType === 'inven') {
 									if (typeof selectedItem.gameItem?.part === 'number') { //장비면
 										if (selectedItem.gameItem?.part <= 3) { //무기이면
-											setMsgOn(true);
+											setShowMsg(true);
 											setMsg(gameData.msg.sentence.goEquipmentShop[lang]);
 											timeoutRef.current = setTimeout(() => {
 												util.saveHistory({
@@ -930,7 +930,7 @@ const ShopFooter = ({
 												});
 											}, 1800);
 										} else {
-											setMsgOn(true);
+											setShowMsg(true);
 											setMsg(gameData.msg.sentence.goTool[lang]);
 											timeoutRef.current = setTimeout(() => {
 												util.saveHistory({
@@ -952,7 +952,7 @@ const ShopFooter = ({
 											}, 1800);
 										}
 									} else { //기타 도구이면
-										setMsgOn(true);
+										setShowMsg(true);
 										setMsg(gameData.msg.sentence.goTool[lang]);
 										timeoutRef.current = setTimeout(() => {
 											util.saveHistory({
@@ -979,7 +979,7 @@ const ShopFooter = ({
 					case 'equip':
 						return (
 							<StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:20}} key={`button${idx}`} onClick={(e) => {
-								setMsgOn(true);
+								setShowMsg(true);
 								setMsg(gameData.msg.sentence.goItemEquip[lang]);
 								timeoutRef.current = setTimeout(() => {
 									util.saveHistory({
@@ -989,7 +989,6 @@ const ShopFooter = ({
 										state: {
 											dataObj: {
 												chSlotIdx: 0,
-												chTabIdx: 5,
 												invenOpened: true,
 											}
 										},
@@ -1001,7 +1000,7 @@ const ShopFooter = ({
 					case 'enhance':
 						return (
 							<StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:21}} key={`button${idx}`} onClick={(e) => {
-								setMsgOn(true);
+								setShowMsg(true);
 								setMsg(gameData.msg.sentence.goForge[lang]);
 								timeoutRef.current = setTimeout(() => {
 									util.saveHistory({
@@ -1024,7 +1023,7 @@ const ShopFooter = ({
 					case 'socket':
 						return (
 							<StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:22}} key={`button${idx}`} onClick={(e) => {
-								setMsgOn(true);
+								setShowMsg(true);
 								setMsg(gameData.msg.sentence.goForge[lang]);
 								timeoutRef.current = setTimeout(() => {
 									util.saveHistory({
@@ -1064,9 +1063,9 @@ const ShopFooter = ({
 										saveData: saveD,
 										changeSaveData: changeSaveData,
 										gameData: gameData,
-										msgText: setMsg,
-										showMsg: setMsgOn,
-										showPopup: setPopupOn,
+										setMsg: setMsg,
+										setShowMsg: setShowMsg,
+										setShowPopup: setShowPopup,
 										setItemPopup: setItemPopup,
 										lang: lang,
 									}, () => {
@@ -1088,7 +1087,7 @@ const ShopFooter = ({
 										});
 									});
 								} else {
-									setMsgOn(true);
+									setShowMsg(true);
 								setMsg(gameData.msg.sentence.goInven[lang]);
 									timeoutRef.current = setTimeout(() => {
 										util.saveHistory({
@@ -1129,9 +1128,9 @@ const ShopFooter = ({
 									saveData: saveD,
 									changeSaveData: changeSaveData,
 									gameData: gameData,
-									msgText: setMsg,
-									showMsg: setMsgOn,
-									showPopup: setPopupOn,
+									setMsg: setMsg,
+									setShowMsg: setShowMsg,
+									setShowPopup: setShowPopup,
 									lang: lang,
 								});
 								const cloneSelectItem = [...selectItem];

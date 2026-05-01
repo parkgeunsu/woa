@@ -539,8 +539,8 @@ const removeSocket = (data, saveData, gameData, changeSaveData, lang) => {
 		// saveColor[0] = mColor;
 		data.setMainColor(mColor);
 		
-		data.showMsg(true);
-		data.msgText(`<span remove>-500</span><br/><span remove>-1 ${gameData.items.etc[22].na[lang]}</span>`);
+		data.setShowMsg(true);
+		data.setMsg(`<span remove>-500</span><br/><span remove>-1 ${gameData.items.etc[22].na[lang]}</span>`);
 
 		const finalSaveData = {
 			...saveData,
@@ -549,8 +549,8 @@ const removeSocket = (data, saveData, gameData, changeSaveData, lang) => {
 		};
 		changeSaveData(finalSaveData);
 	} else {
-		data.showMsg(true);
-		data.msgText(gameData.msg.sentenceFn.lackItem(lang, gameData.items.etc[22].na));
+		data.setShowMsg(true);
+		data.setMsg(gameData.msg.sentenceFn.lackItem(lang, gameData.items.etc[22].na));
 	}
 }
 const upgrade = (data, saveData, gameData, changeSaveData, lang) => {
@@ -588,8 +588,8 @@ const upgrade = (data, saveData, gameData, changeSaveData, lang) => {
 			}, 3000);
 		}
 	} else {
-		data.showMsg(true);
-		data.msgText(gameData.msg.sentenceFn.lackItem(lang, gameData.items.etc[7 + data.upgradeItem.game.grade].na));
+		data.setShowMsg(true);
+		data.setMsg(gameData.msg.sentenceFn.lackItem(lang, gameData.items.etc[7 + data.upgradeItem.game.grade].na));
 	}
 	console.log(data, data.upgradeItem.save.grade)
 }
@@ -636,10 +636,10 @@ const Blacksmith = ({
   const [modalOn, setModalOn] = useState(false);
 	const [modalInfo, setModalInfo] = useState({});
   const [modalType] = useState('confirm');
-	const [popupOn, setPopupOn] = useState(false);
+	const [showPopup, setShowPopup] = useState(false);
 	const [popupType, setPopupType] = useState('');
 	const [popupInfo, setPopupInfo] = useState({});
-  const [msgOn, setMsgOn] = useState(false);
+  const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
 	const [selectTab, setSelectTab] = useState(typeof state?.tab === "number" ? state.tab : "");
 	const entries = React.useMemo(() => {
@@ -693,8 +693,8 @@ const Blacksmith = ({
 					item:selectItem1,
 					socket:selectItem2,
 					socketIdx:socketIdx,
-					showMsg:setMsgOn,
-					msgText:setMsg,
+					setShowMsg:setShowMsg,
+					setMsg:setMsg,
 					setMainColor:setMainColor,
 				},
 				bt: [{txt:gameData.msg.button.use[lang],action:'itemEn'},{txt:gameData.msg.button.cancel[lang],action:'popClose'}],
@@ -705,8 +705,8 @@ const Blacksmith = ({
 				msg: gameData.msg.sentence.upgradeQuestion[lang],
 				info: {
 					item:selectItem1,
-					showMsg:setMsgOn,
-					msgText:setMsg,
+					setShowMsg:setShowMsg,
+					setMsg:setMsg,
 					upgradeItem:selectItem3,
 					setUpgradeItem:setSelectItem3,
 					setUpgradeOn:setUpgradeOn,
@@ -851,15 +851,12 @@ const Blacksmith = ({
 										saveItemData: selectItem1.save,
 										type: 'blacksmith',
 										buttons: [],
-										location: {
-											name: 'blacksmith',
-											tab: 0,
-										},
 										callback: () => {
 										},
-									}
+									},
+									tab: 0,
 								}));
-								setPopupOn(prev => !prev);
+								setShowPopup(prev => !prev);
 							}}>
 								{Object.keys(selectItem1.save).length !== 0 && <ItemLayout
 									gameItem={gameData.items}
@@ -871,6 +868,7 @@ const Blacksmith = ({
 										largeQuestion: true,
 									}}
 									num={1}
+									tier={selectItem1.save.tier || 0}
 									sealed={selectItem1.save.sealed}
 								/>}
 							</ColorantItem>
@@ -943,7 +941,7 @@ const Blacksmith = ({
 								console.log('업그레이드');
 								if (typeof selectItem3.select === 'number') {
 									if (selectItem1.save.grade > 3) {
-										setMsgOn(true);
+										setShowMsg(true);
 										setMsg(gameData.msg.sentence.maxGrade[lang]);
 									} else {
 										console.log(selectItem1.save, selectItem3.save)
@@ -955,7 +953,7 @@ const Blacksmith = ({
 												});
 												handleModal('upgrade');
 											} else {
-												setMsgOn(true);
+												setShowMsg(true);
 												setMsg(gameData.msg.sentence.selectWhetstone[lang]);
 											}
 										} else { //방어구면
@@ -966,13 +964,13 @@ const Blacksmith = ({
 												});
 												handleModal('upgrade');
 											} else {
-												setMsgOn(true);
+												setShowMsg(true);
 												setMsg(gameData.msg.sentence.selectHammer[lang]);
 											}
 										}
 									}
 								} else {
-									setMsgOn(true);
+									setShowMsg(true);
 									setMsg(gameData.msg.sentence.selectUpgradeTools[lang]);
 								}
 							}}>{gameData.msg.button.upgrade[lang]}</button>
@@ -990,15 +988,12 @@ const Blacksmith = ({
 										saveItemData: selectItem1.save,
 										type: 'blacsmith',
 										buttons: [],
-										location: {
-											name: 'blacsmith',
-											tab: 1,
-										},
 										callback: () => {
 										},
+										tab: 1,
 									}
 								}));
-								setPopupOn(prev => !prev);
+								setShowPopup(prev => !prev);
 							}}>
 								{Object.keys(selectItem1.save).length !== 0 && 
 								<ItemLayout
@@ -1012,6 +1007,7 @@ const Blacksmith = ({
 									}}
 									num={1}
 									color={selectItem1.save.colorantSet ? selectItem1.save.colorantColor : mainColor || selectItem1.save.color}
+									tier={selectItem1.save.tier || 0}
 									sealed={selectItem1.save.sealed}
 								/>}
 							</UpgradeItem>
@@ -1025,6 +1021,7 @@ const Blacksmith = ({
 										idx: selectItem3.game.display
 									}}
 									num={1}
+									tier={selectItem3.save.tier || 0}
 									onClick={() => {
 										setSelectItem3({save:{},select:'',game:{}});
 									}}/>
@@ -1057,6 +1054,7 @@ const Blacksmith = ({
 										key={`hole_${idx}`}
 										itemsHole={itemsHole}
 										grade={grade}
+										tier={data.tier || 0}
 										selectColor={selectItem1.select === idx ? 1 : ""}
 										onClick={() => {//하단 좌측 장비 클릭
 											//setMainColor(data.color);//상단 장비 합성배경 색상
@@ -1161,6 +1159,7 @@ const Blacksmith = ({
 										itemsHole={itemsHole}
 										key={`upgrade_${idx}`}
 										grade={grade}
+										tier={data.tier || 0}
 										selectColor={selectItem1.select === idx ? 1 : ""}
 										onClick={() => {//하단 좌측 장비 클릭
 											let baseSelectItem = {save:[],select:[],game:[]};data.hole.forEach((holeData,idx) => {//박혀 있는 hole셋팅
@@ -1194,6 +1193,7 @@ const Blacksmith = ({
 										num={3}
 										key={`hole_${idx}`}
 										grade={grade}
+										tier={data.tier || 0}
 										selectColor={selectItem3.select === idx ? 2 : ""}
 										onClick={() => {//하단 우측 홀 클릭
 											setUpgradePercent(setPercent(selectItem1.save, items));
@@ -1216,11 +1216,11 @@ const Blacksmith = ({
 								actionChIdx: actionChIdx,
 								type: 'blacksmith',
 								setMsg: setMsg,
-								setMsgOn: setMsgOn,
+								setShowMsg: setShowMsg,
 							}
 						}));
 						setPopupType('selectCh');
-						setPopupOn(true);
+						setShowPopup(true);
 					}}>
 					<MergedPic isAbsolute pic="card" idx={40 + (saveCh?.grade || 0)} />
 					{!actionChIdx && <NoneChText code="t1" color="red">{gameData.msg.sentence.noneSelectCh[lang]}</NoneChText>}
@@ -1235,10 +1235,10 @@ const Blacksmith = ({
 				}} gameData={gameData}/>}
 			</ModalContainer>
 			<PopupContainer>
-        {popupOn && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} showPopup={setPopupOn} msgText={setMsg} showMsg={setMsgOn} />}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} />}
       </PopupContainer>
       <MsgContainer>
-        {msgOn && <Msg text={msg} showMsg={setMsgOn}></Msg>}
+        {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
 		</>
   );
