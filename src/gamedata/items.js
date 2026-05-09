@@ -4,8 +4,21 @@
 export const items = {
   quality:{ko:['투명한','빛이나는','어두운'],en:['Transparent','Shiny','Dark'],jp:['透明な','輝く','暗い']},
   condition:{ko:['낡은','','고급','완벽한'],en:['Worn','Advanced','Perfect'],jp:['古びた','高級','完璧な']},
-  slotModifier:{ko:['','사파이어의','에메랄드의','루비의','다이아몬드의'],en:['','Sapphire\'s','Emerald\'s','Ruby\'s','Diamond\'s'],jp:['','サファイアの','エメラルドの','ルビーの','ダイヤモンドの']},
-  markModifier:{ko:['','','두마리','세마리','네마리'],en:['','a','two','three','four'],jp:['','','二匹','三匹','四匹']},
+  slotModifier:[
+    {ko:'',en:'',jp:''},
+    {ko:'균열된',en:'Cracked',jp:'割れた'},
+    {ko:'확장된',en:'Expanded',jp:'拡張された'},
+    {ko:'심연의',en:'Abyssal',jp:'深淵の'},
+    {ko:'은밀한',en:'Secret',jp:'秘密の'},
+    {ko:'축복받은',en:'Blessed',jp:'祝福された'},
+  ],
+  markModifier:[
+    {ko:'',en:'',jp:''},
+    {ko:'의',en:'of',jp:'の'},
+    {ko:'형제의',en:'Pair of',jp:'兄弟の'},
+    {ko:'가족의',en:'Family of',jp:'家族の'},
+    {ko:'무리의',en:'Swarm of',jp:'スウォームの'},
+  ],
   item_point_light:['#ffdf8b','#00ff00','#d9e506','#ff00bf','#f00a36','#ed3b21','#ff6908','#ffc719','#ae9a64','#8ba753','#598c14','#dbe0e3','#fff','#FFD1D8','#FFFFD1','#FFE39B','#9CFFE6','#b0a696','#2dde98','#4a8594','#1fb3e0','#2e9df7'],
   item_point_dark:['#8e43e7','#52057f','#cd3292','#bf033b','#335238','#213e97','#003666','#051736','#706357'],
   item_point_color:['#8e43e7','#52057f','#cd3292','#ff00bf','#bf033b','#f00a36','#ed3b21','#ff6908','#ffc719','#ffdf8b','#d9e506','#ae9a64','#8ba753','#598c14','#335238','#2dde98','#00ff00','#4a8594','#1fb3e0','#2e9df7','#213e97','#003666','#051736','#706357','#b0a696','#dbe0e3','#fff','#FFD1D8','#FFFFD1','#FFE39B','#9CFFE6'],//아이템 포인트 컬러
@@ -579,19 +592,19 @@ export const items = {
 
           {idx:1,part:5,grade:1,pic:"equip",display:300,na:{ko:'금목걸이',en:'Gold Necklace',jp:'金のネックレス'},kg:0.1,price:3000,socket:1,txt:{ko:'목에 착용하는 악세사리.',en:'An accessory worn around the neck.',jp:'首に着用するアクセサリー。'},eff:[],actionType:"",requiredSlot:1,category:0,country:'',set:0},
 
-          {idx:2,part:5,grade:1,pic:"equip",display:301,na:{ko:'해골목걸이',en:'Skull Necklace',jp:'パールネックレス'},kg:0.1,price:500,socket:1,txt:{ko:'목에 착용하는 악세사리. 해골로 장식되어 있다.',en:'An accessory worn around the neck. Decorated with skulls',jp:'首につけるアクセサリー。頭蓋骨で飾られている'},eff:[],actionType:"",requiredSlot:1,category:1,country:'',set:0},
+          {idx:2,part:5,grade:1,pic:"equip",display:302,na:{ko:'해골목걸이',en:'Skull Necklace',jp:'パールネックレス'},kg:0.1,price:500,socket:1,txt:{ko:'목에 착용하는 악세사리. 해골로 장식되어 있다.',en:'An accessory worn around the neck. Decorated with skulls',jp:'首につけるアクセサリー。頭蓋骨で飾られている'},eff:[],actionType:"",requiredSlot:1,category:1,country:'',set:0},
 
-          {idx:3,part:5,grade:1,pic:"equip",display:302,na:{ko:'다이아몬드목걸이',en:'Diamond Necklace',jp:'ダイヤモンドのネックレス'},kg:0.1,price:5000,socket:1,txt:{ko:'목에 착용하는 악세사리. 다이아몬드로 장식되어 있다.',en:'An accessory worn around the neck. Decorated with diamonds',jp:'首につけるアクセサリー。ダイヤモンドで飾られている'},eff:[],actionType:"",requiredSlot:1,category:2,country:'',set:0},
+          {idx:3,part:5,grade:1,pic:"equip",display:303,na:{ko:'다이아몬드목걸이',en:'Diamond Necklace',jp:'ダイヤモンドのネックレス'},kg:0.1,price:5000,socket:1,txt:{ko:'목에 착용하는 악세사리. 다이아몬드로 장식되어 있다.',en:'An accessory worn around the neck. Decorated with diamonds',jp:'首につけるアクセサリー。ダイヤモンドで飾られている'},eff:[],actionType:"",requiredSlot:1,category:2,country:'',set:0},
 
-          {idx:4,part:5,grade:1,pic:"equip",display:303,na:{ko:'에메랄드목걸이',en:'Emerald Necklace',jp:'エメラルドのネックレス'},kg:0.1,price:5000,socket:1,txt:{ko:'목에 착용하는 악세사리. 에메랄드로 장식되어 있다.',en:'An accessory worn around the neck. Decorated with emeralds',jp:'首につけるアクセサリー。エメラルドで飾られている'},eff:[],actionType:"",requiredSlot:1,category:2,country:'',set:0},
+          {idx:4,part:5,grade:1,pic:"equip",display:304,na:{ko:'에메랄드목걸이',en:'Emerald Necklace',jp:'エメラルドのネックレス'},kg:0.1,price:5000,socket:1,txt:{ko:'목에 착용하는 악세사리. 에메랄드로 장식되어 있다.',en:'An accessory worn around the neck. Decorated with emeralds',jp:'首につけるアクセサリー。エメラルドで飾られている'},eff:[],actionType:"",requiredSlot:1,category:2,country:'',set:0},
 
-          {idx:5,part:5,grade:1,pic:"equip",display:304,na:{ko:'자수정목걸이',en:'Amethyst Necklace',jp:'アメジストのネックレス'},kg:0.1,price:5000,socket:1,txt:{ko:'목에 착용하는 악세사리. 자수정으로 장식되어 있다.',en:'An accessory worn around the neck. Decorated with amethysts',jp:'首につけるアクセサリー。アメジストで飾られている'},eff:[],actionType:"",requiredSlot:1,category:2,country:'',set:0},
+          {idx:5,part:5,grade:1,pic:"equip",display:305,na:{ko:'자수정목걸이',en:'Amethyst Necklace',jp:'アメジストのネックレス'},kg:0.1,price:5000,socket:1,txt:{ko:'목에 착용하는 악세사리. 자수정으로 장식되어 있다.',en:'An accessory worn around the neck. Decorated with amethysts',jp:'首につけるアクセサリー。アメジストで飾られている'},eff:[],actionType:"",requiredSlot:1,category:2,country:'',set:0},
 
-          {idx:6,part:5,grade:1,pic:"equip",display:305,na:{ko:'사파이어목걸이',en:'Sapphire Necklace',jp:'サファイアのネックレス'},kg:0.1,price:5000,socket:1,txt:{ko:'목에 착용하는 악세사리. 사파이어로 장식되어 있다.',en:'An accessory worn around the neck. Decorated with sapphires',jp:'首につけるアクセサリー。サファイアで飾られている'},eff:[],actionType:"",requiredSlot:1,category:2,country:'',set:0},
+          {idx:6,part:5,grade:1,pic:"equip",display:306,na:{ko:'사파이어목걸이',en:'Sapphire Necklace',jp:'サファイアのネックレス'},kg:0.1,price:5000,socket:1,txt:{ko:'목에 착용하는 악세사리. 사파이어로 장식되어 있다.',en:'An accessory worn around the neck. Decorated with sapphires',jp:'首につけるアクセサリー。サファイアで飾られている'},eff:[],actionType:"",requiredSlot:1,category:2,country:'',set:0},
 
-          {idx:7,part:5,grade:1,pic:"equip",display:306,na:{ko:'토파즈목걸이',en:'Topaz Necklace',jp:'トパーズのネックレス'},kg:0.1,price:5000,socket:1,txt:{ko:'목에 착용하는 악세사리. 토파즈로 장식되어 있다.',en:'An accessory worn around the neck. Decorated with topaz',jp:'首につけるアクセサリー。トパーズで飾られている'},eff:[],actionType:"",requiredSlot:1,category:2,country:'',set:0},
+          {idx:7,part:5,grade:1,pic:"equip",display:307,na:{ko:'토파즈목걸이',en:'Topaz Necklace',jp:'トパーズのネックレス'},kg:0.1,price:5000,socket:1,txt:{ko:'목에 착용하는 악세사리. 토파즈로 장식되어 있다.',en:'An accessory worn around the neck. Decorated with topaz',jp:'首につけるアクセサリー。トパーズで飾られている'},eff:[],actionType:"",requiredSlot:1,category:2,country:'',set:0},
 
-          {idx:8,part:5,grade:1,pic:"equip",display:307,na:{ko:'루비목걸이',en:'Ruby Necklace',jp:'ルビーのネックレス'},kg:0.1,price:5000,socket:1,txt:{ko:'목에 착용하는 악세사리. 루비로 장식되어 있다.',en:'An accessory worn around the neck. Decorated with rubies',jp:'首につけるアクセサリー。ルビーで飾られている'},eff:[],actionType:"",requiredSlot:1,category:2,country:'',set:0},
+          {idx:8,part:5,grade:1,pic:"equip",display:308,na:{ko:'루비목걸이',en:'Ruby Necklace',jp:'ルビーのネックレス'},kg:0.1,price:5000,socket:1,txt:{ko:'목에 착용하는 악세사리. 루비로 장식되어 있다.',en:'An accessory worn around the neck. Decorated with rubies',jp:'首につけるアクセサリー。ルビーで飾られている'},eff:[],actionType:"",requiredSlot:1,category:2,country:'',set:0},
         ],
         [//unique
         ],

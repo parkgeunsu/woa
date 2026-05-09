@@ -288,7 +288,7 @@ export const ActionChDisplay = ({
       <div>
         <TextArea direction="column" alignItems="flex-end">
           <Text font="point" lineHeight="1.2" code="t1" color="main">{`${chList[actionChIdx].actionPoint} / ${chList[actionChIdx].actionMax}`}</Text>
-          <Text font="point" lineHeight="1.2" code="t1" color="main">{`${gameData.skill[skillIdx].na[lang]} Lv.${skillLv}`}</Text>
+          {skillIdx > 0 && <Text font="point" lineHeight="1.2" code="t1" color="main">{`${gameData.skill[skillIdx].na[lang]} Lv.${skillLv}`}</Text>}
         </TextArea>
 				<MergedPic isAbsolute pic="card" idx={40} />
         <ChCard usedType="actionCh" saveCharacter={chList[actionChIdx]} saveData={true} slotIdx={actionChIdx} />

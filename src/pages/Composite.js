@@ -1,4 +1,5 @@
 import { Text } from 'components/Atom';
+import { TextButton } from 'components/Button';
 import { ActionChDisplay } from 'components/Components';
 import { FlexBox } from 'components/Container';
 import { MergedPic } from 'components/ImagePic';
@@ -15,7 +16,7 @@ import TooltipContainer from 'components/TooltipContainer';
 import { AppContext } from 'contexts/app-context';
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
 const Wrap = styled(FlexBox)`
 	position: absolute;
@@ -55,12 +56,14 @@ const ItemShadow = styled.div`
 	pointer-events: none;
 	animation: item_shadow 2s linear infinite alternate;
 `;
-const ButtonGroup = styled.div`
+const ButtonGroup = styled(FlexBox)`
 	position: absolute;
-	right: 5%;
-	bottom: 10px;
+	right: 2%;
+	left: 2%;
+	bottom: 2%;
+	width: auto;
+	height: auto;
 	z-index: 1;
-	transition: all .5s;
 `;
 const CombineBox = styled(FlexBox)`
 	position: relative;
@@ -160,6 +163,7 @@ const Composite = ({
 	setLoading,
 }) => {
 	const navigate = useNavigate();
+	const theme = useTheme();
   const context = useContext(AppContext);
 	const {state} = useLocation();
   const lang = React.useMemo(() => {
@@ -186,8 +190,12 @@ const Composite = ({
 	const [selectItemTab, setSelectItemTab] = useState(0);
 	const [item, setItem] = useState([]);
 	const [selectIdx, setSelectIdx] = useState(0);
-	const [selectItem0, setSelectItem0] = useState(state?.items ? {
+	const [selectItem0, setSelectItem0] = useState(state?.items ? sData.items.equip[state.itemSaveSlot].sealed ? {
 		save: state.items.saveItemData,
+		game: state.items.gameItem,
+		select: state.itemSaveSlot,
+	} : {
+		save: sData.items.equip[state.itemSaveSlot],
 		game: state.items.gameItem,
 		select: state.itemSaveSlot,
 	} : {});
@@ -266,15 +274,12 @@ const Composite = ({
 								...prev,
 								item: {
 									isMoveEvent: false,
-									itemAreaType: selectItem0?.game.type,//아직 안쓰임
+									itemAreaType: 'composite',
 									gameItem: selectItem0?.game,
 									itemSaveSlot: selectItem0?.select,
 									saveItemData: selectItem0?.save,
-									type: 'composite',
+									type: selectItem0?.game.type,
 									buttons: ['sell'],
-									callback: () => {
-									},
-									tab: 1,
 								}
 							}));
 							setShowPopup(prev => !prev);
@@ -293,41 +298,106 @@ const Composite = ({
 								sealed={selectItem0?.save.sealed}
 							/>
 						</EvaluateItem>}
-						<ButtonGroup>
-							<button className="button_big" text="true" onClick={(e) => {
+						<ButtonGroup justifyContent="space-between" alignItems="flex-end">
+							<TextButton type="big" onClick={(e) => {
+								e.stopPropagation();
+								console.log('감정 부탁하기');
+								if (!selectItem0.save) {
+									setShowMsg(true);
+									setMsg(gameData.msg.sentence.noneSelectItem[lang]);
+									return;
+								}
+								if (!selectItem0.save.sealed) {
+									setShowMsg(true);
+									setMsg(gameData.msg.sentence.sealedItem[lang]);
+									return;
+								}
+								util.payMoney({
+									gameData: gameData,
+									saveData: sData,
+									shop: "composite",
+									type: "emotionsRequest",
+									changeSaveData: changeSaveData,
+									setShowMsg: setShowMsg,
+									setMsg: setMsg,
+									lang: lang,
+									callback: () => {
+										util.buttonEvent({
+											event: e,
+											type: 'itemEvaluate',
+											data: {
+												slotIdx: 0,
+												selectItem: selectItem0,
+												gameItem: selectItem0.game,
+												itemSaveSlot: selectItem0.select,
+												saveItemData: selectItem0.save,
+												type: 'equip',
+											},
+											saveData: sData,
+											changeSaveData: changeSaveData,
+											gameData: gameData,
+											setMsg: setMsg,
+											setShowMsg: setShowMsg,
+											setShowPopup: setShowPopup,
+											theme: theme,
+											lang: lang,
+										}, (openedItem) => {
+											setSelectItem0({
+												save: openedItem,
+												game: selectItem0.game,
+												select: selectItem0.select,
+											});
+										});
+									}
+								});
+							}}>
+								<Text code="t2" color="point1">{util.comma(gameData.prices.composite.emotionsRequest.price)}</Text>{gameData.msg.button.emotionsRequest[lang]}
+							</TextButton>
+							<TextButton type="big" onClick={(e) => {
 								e.stopPropagation();
 								console.log('감정');
 								if (selectItem0.save.sealed) {
-									util.buttonEvent({
-										event: e,
-										type: 'itemEvaluate',
-										data: {
-											slotIdx: 0,
-											selectItem: selectItem0,
-											gameItem: selectItem0.game,
-											itemSaveSlot: selectItem0.select,
-											saveItemData: selectItem0.save,
-											type: 'equip',
-										},
-										saveData: sData,
-										changeSaveData: changeSaveData,
+									const actionCh = saveData.ch[saveData.actionCh['composite'].idx];
+									util.payActionPoint({
 										gameData: gameData,
-										setMsg: setMsg,
+										actionCh: actionCh,
 										setShowMsg: setShowMsg,
-										setShowPopup: setShowPopup,
+										setMsg: setMsg,
 										lang: lang,
-									}, (openedItem) => {
-										setSelectItem0({
-											save: openedItem,
-											game: selectItem0.game,
-											select: selectItem0.select,
-										});
+										callback: () => {
+											util.buttonEvent({
+												event: e,
+												type: 'itemEvaluate',
+												data: {
+													slotIdx: 0,
+													selectItem: selectItem0,
+													gameItem: selectItem0.game,
+													itemSaveSlot: selectItem0.select,
+													saveItemData: selectItem0.save,
+													type: 'equip',
+												},
+												saveData: sData,
+												changeSaveData: changeSaveData,
+												gameData: gameData,
+												setMsg: setMsg,
+												setShowMsg: setShowMsg,
+												setShowPopup: setShowPopup,
+												theme: theme,
+												lang: lang,
+											}, (openedItem) => {
+												setSelectItem0({
+													save: openedItem,
+													game: selectItem0.game,
+													select: selectItem0.select,
+												});
+											});
+										}
 									});
 								} else {
 									setShowMsg(true);
 									setMsg(gameData.msg.sentence.sealedItem[lang]);
 								}
-							}}>{gameData.msg.button.emotions[lang]}</button>
+							}}>{gameData.msg.button.emotions[lang]}</TextButton>
 						</ButtonGroup>
 						<ItemShadow className={`itemEn_shadowArea`} gradeColor={gameData.itemGrade.color[selectItem0?.save?.grade]} />
 					</>}
@@ -379,7 +449,7 @@ const Composite = ({
 								</ItemBox>
 							</CombineBox>
 							<ItemButton direction="column" justifyContent="center" alignItems="center">
-								<button className="button_big" text="true" onClick={(e) => {
+								<TextButton type="big" onClick={(e) => {
 									e.stopPropagation();
 									if (actionChIdx === '' || actionChIdx === undefined) {
 										setShowMsg(true);
@@ -470,6 +540,7 @@ const Composite = ({
 																	},
 																	option: option,
 																	isSave: true,
+																	theme: theme,
 																	lang: lang
 																});
 																continue;
@@ -492,8 +563,8 @@ const Composite = ({
 											setMsg(gameData.msg.sentence?.none?.[lang] || "No Recipe found");
 										}
 									}
-								}}>{gameData.msg.button?.composite?.[lang] || "Synthesis"}</button>
-								<button className="button_big" text="true" onClick={(e) => {
+								}}>{gameData.msg.button?.composite?.[lang] || "Synthesis"}</TextButton>
+								<TextButton type="big" onClick={(e) => {
 									e.stopPropagation();
 									setSelectItem1({
 										save: Array.from({ length: 16 }, () => ({})),
@@ -502,7 +573,7 @@ const Composite = ({
 										selectTab: Array.from({ length: 16 }, () => (''))
 									});
 									console.log('슬롯 비우기');
-								}}>{gameData.msg.button?.reset?.[lang] || "Reset"}</button>
+								}}>{gameData.msg.button?.reset?.[lang] || "Reset"}</TextButton>
 							</ItemButton>
 						</>
 					}
@@ -547,7 +618,6 @@ const Composite = ({
 									selectColor={select ? 0 : ""}
 									onClick={() => {
 										if (selectTab === 0) {
-											console.log(data, items, idx)
 											setSelectItem0({
 												save: data,
 												game: items,
@@ -600,7 +670,7 @@ const Composite = ({
 				</UserContainer>
 			</Wrap>
 			<PopupContainer>
-        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} setTooltip={setTooltip} setTooltipPos={setTooltipPos} setShowTooltip={setShowTooltip} />}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} setTooltip={setTooltip} setTooltipPos={setTooltipPos} setShowTooltip={setShowTooltip} theme={theme}/>}
       </PopupContainer>
       <MsgContainer>
         {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}

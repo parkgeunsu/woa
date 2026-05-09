@@ -245,10 +245,10 @@ export const util = { //this.loadImage();
               skLv: eff.skLv,
             });
           } else {
-            if (eff.num[item.grade - 1].indexOf('%') > 0) {
-              effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num[item.grade - 1]);
+            if (eff.num[item.tier || 0].indexOf('%') > 0) {
+              effData[eff.type].percent = effData[eff.type].percent + parseInt(eff.num[item.tier || 0]);
             } else {
-              effData[eff.type].number = effData[eff.type].number + parseInt(eff.num[item.grade - 1]);
+              effData[eff.type].number = effData[eff.type].number + parseInt(eff.num[item.tier || 0]);
             }
           }
         }
@@ -605,7 +605,9 @@ export const util = { //this.loadImage();
   getTotalEff: ({saveItem, gameData, cate}) => {
     if (cate !== "equip" && cate !== "hole") return "";
     let totalEff = [];
-    const grade = saveItem.hole ? saveItem.grade : 1;
+    const grade = saveItem.hole ? saveItem.grade : 1,
+      tier = saveItem.tier || 0;
+    console.log(tier);
     if (cate === "hole") {
       gameData.items[cate][saveItem.idx].eff.forEach((data, _) => {
         if (totalEff[data.type] === undefined) {
@@ -621,7 +623,7 @@ export const util = { //this.loadImage();
       if (data.num.indexOf('~') >= 0) {
         totalEff[data.type].base = data.num;
       } else {
-        totalEff[data.type].base += parseInt(data.num[grade - 1]);
+        totalEff[data.type].base += parseInt(data.num[tier]);
       }
     });
     saveItem.addEff?.forEach((data, _) => {
@@ -634,7 +636,7 @@ export const util = { //this.loadImage();
           idx: data.skIdx,
         });
       } else {//스킬이 아닐때
-        const baseNum = saveItem.baseEff.find(baseType => baseType.type === data.type)?.num[grade - 1];
+        const baseNum = saveItem.baseEff.find(baseType => baseType.type === data.type)?.num[tier];
         if (data.num[0].includes("%")) {//퍼센트일때
           const percent = 1 + parseFloat(data.num[0]) / 100;
           console.log(parseFloat(baseNum) * percent);
@@ -1894,6 +1896,41 @@ export const util = { //this.loadImage();
     }
     return svg;
   },
+  getMidHex: (colorArr) => {
+    const toRgb = (hex) => {
+      hex = hex.replace('#', '');
+      if (hex.length === 3) {
+        hex = hex.split('').map(c => c + c).join('');
+      }
+      const v = parseInt(hex, 16);
+      return [
+        (v >> 16) & 255,
+        (v >> 8) & 255,
+        v & 255,
+      ];
+    };
+
+    const toHex = ([r, g, b]) =>
+      '#' +
+      [r, g, b]
+        .map(v => Math.round(v).toString(16).padStart(2, '0'))
+        .join('');
+
+    const sum = colorArr
+      .map(toRgb)
+      .reduce(
+        (acc, [r, g, b]) => {
+          acc[0] += r;
+          acc[1] += g;
+          acc[2] += b;
+          return acc;
+        },
+        [0, 0, 0]
+      );
+
+    const len = colorArr.length;
+    return toHex(sum.map(v => v / len));
+  },
   getRgbColor: () => {
     const r = Math.round(Math.random() * 255);
     const g = Math.round(Math.random() * 255);
@@ -2025,16 +2062,28 @@ export const util = { //this.loadImage();
 
     return hslaType; 
   },
-  getItemGrade: () => {
+  getItemGrade: ({
+    itemPart
+  }) => {
     const gradeNum = Math.random();
-    if (gradeNum < 0.05) { //에픽등급
-      return 4;
-    } else if (gradeNum < 0.2) { //레어등급
-      return 3;
-    } else if (gradeNum < 0.6) { //매직등급
-      return 2;
-    } else {
-      return 1;
+    if (itemPart === 4 || itemPart === 5) {//장신구
+      if (gradeNum < 0.05) { //에픽등급
+        return 4;
+      } else if (gradeNum < 0.1) { //레어등급
+        return 3;
+      } else { //매직등급
+        return 2;
+      }
+    } else {//장비
+      if (gradeNum < 0.03) { //에픽등급
+        return 4;
+      } else if (gradeNum < 0.1) { //레어등급
+        return 3;
+      } else if (gradeNum < 0.5) { //매직등급
+        return 2;
+      } else {
+        return 1;
+      }
     }
   },
   getDistanceToEvent: (arr1, arr2, baseNum) => {//지도 거리 대비 이벤트 갯수
@@ -2310,7 +2359,7 @@ export const util = { //this.loadImage();
     }
   },
   getItem: ({
-    saveData, gameData, changeSaveData, option, isSave, lang
+    saveData, gameData, changeSaveData, option, isSave, theme, lang
   }) => {
     // console.log('option', option);
     let save = {...saveData};//장비 아이템 복사
@@ -2377,7 +2426,7 @@ export const util = { //this.loadImage();
         itemData = gameData.items[type][option.items];
       }
     }
-    const getAddEff = (grade, itemPart) => {
+    const getAddEff = ({grade, itemPart, optionNum}) => {
       const effList = [// 레어, 에픽, 매직
         [[100,200],[200,400],[100,1000]], //체력
         [[1,5],[5,10],[1,15]], //행동력
@@ -2459,7 +2508,7 @@ export const util = { //this.loadImage();
 
       let effType = 0;
       const chance1 = Math.random();
-      const armorEff = [0,4,6],
+      const armorEff = [0,4,6],//장비 종류에 따른 필수 옵션
         weaponEff = [3,5],
         accEff = [1,2,7,8,9],
         etcEff = [0,8,9],
@@ -2470,105 +2519,109 @@ export const util = { //this.loadImage();
       //Math.round(Math.random() * 2) + 38 or 10 치,회,적,반격 타입
       //Math.round(Math.random() * 7) + 70 상태 면역타입
       //Math.round(Math.random() * 5) + 11, Math.round(Math.random() * 5) + 23 물리,마법 타입
-      if (itemPart === '1') {//1:투구
-        if (chance1 < 0.025) {//5% 물리,마법 공격 타입
-          effType = Math.round(Math.random() * 5) + 11;
-        } else if (chance1 < 0.05) {
-          effType = Math.round(Math.random() * 5) + 23;
-        } else if (chance1 < 0.12) {//10% 치,회,적,반격 타입
-          effType = Math.round(Math.random() * 2) + 38;
-        } else if (chance1 < 0.15){
-          effType = 10;
-        } else if (chance1 < 0.35) {//20% 상태 저항타입
-          effType = Math.round(Math.random() * 7) + 60;
-        } else if (chance1 < 0.55) {//40% 물리,마법 저항타입
-          effType = Math.round(Math.random() * 5) + 17;
-        } else if (chance1 < 0.75) {
-          effType = Math.round(Math.random() * 5) + 29;
-        } else if (chance1 < 0.995) {//20% 방어이펙트타입
-          const chanceIdx = Math.floor(Math.random() * armorEff.length);
-          effType = armorEff[chanceIdx];
-        } else {//0.5% 스킬 아이템
-          effType = 100;
+      if (typeof optionNum === "number") {
+        effType = optionNum;
+      } else {
+        if (itemPart === '1') {//1:투구
+          if (chance1 < 0.025) {//5% 물리,마법 공격 타입
+            effType = Math.round(Math.random() * 5) + 11;
+          } else if (chance1 < 0.05) {
+            effType = Math.round(Math.random() * 5) + 23;
+          } else if (chance1 < 0.12) {//10% 치,회,적,반격 타입
+            effType = Math.round(Math.random() * 2) + 38;
+          } else if (chance1 < 0.15){
+            effType = 10;
+          } else if (chance1 < 0.35) {//20% 상태 저항타입
+            effType = Math.round(Math.random() * 7) + 60;
+          } else if (chance1 < 0.55) {//40% 물리,마법 저항타입
+            effType = Math.round(Math.random() * 5) + 17;
+          } else if (chance1 < 0.75) {
+            effType = Math.round(Math.random() * 5) + 29;
+          } else if (chance1 < 0.995) {//20% 방어이펙트타입
+            const chanceIdx = Math.floor(Math.random() * armorEff.length);
+            effType = armorEff[chanceIdx];
+          } else {//0.5% 스킬 아이템
+            effType = 100;
+          }
+        } else if (itemPart === '2') {//2:갑옷
+          if (chance1 < 0.025) {//5% 물리,마법 공격 타입
+            effType = Math.round(Math.random() * 5) + 11;
+          } else if (chance1 < 0.05) {
+            effType = Math.round(Math.random() * 5) + 23;
+          } else if (chance1 < 0.25) {//20% 상태 저항타입
+            effType = Math.round(Math.random() * 7) + 60;
+          } else if (chance1 < 0.4) {//30% 물리,마법 저항타입
+            effType = Math.round(Math.random() * 5) + 17;
+          } else if (chance1 < 0.55) {
+            effType = Math.round(Math.random() * 5) + 29;
+          } else if (chance1 < 0.8) {//45% 방어이펙트타입
+            const chanceIdx = Math.floor(Math.random() * armorEff.length);
+            effType = armorEff[chanceIdx];
+          } else if (chance1 < 0.995) {
+            const chanceIdx = Math.floor(Math.random() * etcEff.length);
+            effType = etcEff[chanceIdx];
+          } else {//0.5% 스킬 아이템
+            effType = 100;
+          }
+        } else if (itemPart === '3') {//3:무기
+          if (chance1 < 0.2) {//40% 물리,마법 공격 타입
+            effType = Math.round(Math.random() * 5) + 11;
+          } else if (chance1 < 0.4) {
+            effType = Math.round(Math.random() * 5) + 23;
+          } else if (chance1 < 0.6) {//25% 치,회,적,반격 타입
+            effType = Math.round(Math.random() * 2) + 38;
+          } else if (chance1 < 0.65) {
+            effType = 10;
+          } else if (chance1 < 0.7) {//10% 물리,마법 저항타입
+            effType = Math.round(Math.random() * 5) + 17;
+          } else if (chance1 < 0.75) {
+            effType = Math.round(Math.random() * 5) + 29;
+          } else if (chance1 < 0.99) {//25% 무기이펙트타입
+            const chanceIdx = Math.floor(Math.random() * weaponEff.length);
+            effType = weaponEff[chanceIdx];
+          } else  {//1% 스킬 아이템
+            effType = 100;
+          }
+        } else if (itemPart === '4') {//4:반지
+          if (chance1 < 0.15) {//20% 치,회,적,반격 타입
+            effType = Math.round(Math.random() * 2) + 38;
+          } else if (chance1 < 0.2){
+            effType = 10;
+          } else if (chance1 < 0.35) {//15% 상태 저항타입
+            effType = Math.round(Math.random() * 7) + 60;
+          } else if (chance1 < 0.5) {//30% 물리,마법 저항타입
+            effType = Math.round(Math.random() * 5) + 17;
+          } else if (chance1 < 0.65) {
+            effType = Math.round(Math.random() * 5) + 29;
+          } else if (chance1 < 0.825) {//35% 악세사리이펙트타입
+            const chanceIdx = Math.floor(Math.random() * etcEff.length);
+            effType = etcEff[chanceIdx];
+          } else if (chance1 < 0.97) {
+            const chanceIdx = Math.floor(Math.random() * accEff.length);
+            effType = accEff[chanceIdx];
+          } else {//3% 스킬 아이템
+            effType = 100;
+          }
+        } else if (itemPart === '5') {//5:목걸이
+          if (chance1 < 0.1) {//10% 상태 면역타입
+            effType = Math.round(Math.random() * 7) + 70;
+          } else if (chance1 < 0.3) {//40% 물리,마법 저항타입
+            effType = Math.round(Math.random() * 5) + 17;
+          } else if (chance1 < 0.5) {
+            effType = Math.round(Math.random() * 5) + 29;
+          } else if (chance1 < 0.75) {//50% 악세사리이펙트타입
+            const chanceIdx = Math.floor(Math.random() * etcEff.length);
+            effType = etcEff[chanceIdx];
+          } else if (chance1 < 0.97) {
+            const chanceIdx = Math.floor(Math.random() * accEff.length);
+            effType = accEff[chanceIdx];
+          } else {//3% 스킬 아이템
+            effType = 100;
+          }
+        } else { // 보석
+          effType = Math.floor(Math.random() * effList.length);
+          effType = effList[effType] ? effType : Math.round(Math.random() * 9);
         }
-      } else if (itemPart === '2') {//2:갑옷
-        if (chance1 < 0.025) {//5% 물리,마법 공격 타입
-          effType = Math.round(Math.random() * 5) + 11;
-        } else if (chance1 < 0.05) {
-          effType = Math.round(Math.random() * 5) + 23;
-        } else if (chance1 < 0.25) {//20% 상태 저항타입
-          effType = Math.round(Math.random() * 7) + 60;
-        } else if (chance1 < 0.4) {//30% 물리,마법 저항타입
-          effType = Math.round(Math.random() * 5) + 17;
-        } else if (chance1 < 0.55) {
-          effType = Math.round(Math.random() * 5) + 29;
-        } else if (chance1 < 0.8) {//45% 방어이펙트타입
-          const chanceIdx = Math.floor(Math.random() * armorEff.length);
-          effType = armorEff[chanceIdx];
-        } else if (chance1 < 0.995) {
-          const chanceIdx = Math.floor(Math.random() * etcEff.length);
-          effType = etcEff[chanceIdx];
-        } else {//0.5% 스킬 아이템
-          effType = 100;
-        }
-      } else if (itemPart === '3') {//3:무기
-        if (chance1 < 0.2) {//40% 물리,마법 공격 타입
-          effType = Math.round(Math.random() * 5) + 11;
-        } else if (chance1 < 0.4) {
-          effType = Math.round(Math.random() * 5) + 23;
-        } else if (chance1 < 0.6) {//25% 치,회,적,반격 타입
-          effType = Math.round(Math.random() * 2) + 38;
-        } else if (chance1 < 0.65) {
-          effType = 10;
-        } else if (chance1 < 0.7) {//10% 물리,마법 저항타입
-          effType = Math.round(Math.random() * 5) + 17;
-        } else if (chance1 < 0.75) {
-          effType = Math.round(Math.random() * 5) + 29;
-        } else if (chance1 < 0.99) {//25% 무기이펙트타입
-          const chanceIdx = Math.floor(Math.random() * weaponEff.length);
-          effType = weaponEff[chanceIdx];
-        } else  {//1% 스킬 아이템
-          effType = 100;
-        }
-      } else if (itemPart === '4') {//4:반지
-        if (chance1 < 0.15) {//20% 치,회,적,반격 타입
-          effType = Math.round(Math.random() * 2) + 38;
-        } else if (chance1 < 0.2){
-          effType = 10;
-        } else if (chance1 < 0.35) {//15% 상태 저항타입
-          effType = Math.round(Math.random() * 7) + 60;
-        } else if (chance1 < 0.5) {//30% 물리,마법 저항타입
-          effType = Math.round(Math.random() * 5) + 17;
-        } else if (chance1 < 0.65) {
-          effType = Math.round(Math.random() * 5) + 29;
-        } else if (chance1 < 0.825) {//35% 악세사리이펙트타입
-          const chanceIdx = Math.floor(Math.random() * etcEff.length);
-          effType = etcEff[chanceIdx];
-        } else if (chance1 < 0.97) {
-          const chanceIdx = Math.floor(Math.random() * accEff.length);
-          effType = accEff[chanceIdx];
-        } else {//3% 스킬 아이템
-          effType = 100;
-        }
-      } else if (itemPart === '5') {//5:목걸이
-        if (chance1 < 0.1) {//10% 상태 면역타입
-          effType = Math.round(Math.random() * 7) + 70;
-        } else if (chance1 < 0.3) {//40% 물리,마법 저항타입
-          effType = Math.round(Math.random() * 5) + 17;
-        } else if (chance1 < 0.5) {
-          effType = Math.round(Math.random() * 5) + 29;
-        } else if (chance1 < 0.75) {//50% 악세사리이펙트타입
-          const chanceIdx = Math.floor(Math.random() * etcEff.length);
-          effType = etcEff[chanceIdx];
-        } else if (chance1 < 0.97) {
-          const chanceIdx = Math.floor(Math.random() * accEff.length);
-          effType = accEff[chanceIdx];
-        } else {//3% 스킬 아이템
-          effType = 100;
-        }
-      } else { // 보석
-        effType = Math.floor(Math.random() * effList.length);
-        effType = effList[effType] ? effType : Math.round(Math.random() * 9);
       }
 
       let effRandomNum = [];
@@ -2625,7 +2678,10 @@ export const util = { //this.loadImage();
           for (let i = 0; i < addEffLength; ++i) {
             if (itemLv > 25) {
               itemLv -= 25;
-              addEff.push(getAddEff(grade, "0"));
+              addEff.push(getAddEff({
+                grade: grade,
+                itemPart: "0",
+              }));
             } else {
               break;
             }
@@ -2635,7 +2691,10 @@ export const util = { //this.loadImage();
           for (let i = 0; i < addEffLength; ++i) {
             if (itemLv > 20) {
               itemLv -= 20;
-              addEff.push(getAddEff(grade, "0"));
+              addEff.push(getAddEff({
+                grade: grade,
+                itemPart: "0",
+              }));
             } else {
               break;
             }
@@ -2645,7 +2704,10 @@ export const util = { //this.loadImage();
           for (let i = 0; i < addEffLength; ++i) {
             if (itemLv > 15) {
               itemLv -= 15;
-              addEff.push(getAddEff(grade, "0"));
+              addEff.push(getAddEff({
+                grade: grade,
+                itemPart: "0",
+              }));
             } else {
               break;
             }
@@ -2681,7 +2743,11 @@ export const util = { //this.loadImage();
       // const itemIdx = Math.floor(Math.random() * item.length),//아이템 번호
       //const selectItem = item[itemIdx];
       const id = Math.random().toString(36).substring(2, 11);
-      const grade = (option.grade >= 1 ? option.grade : util.getItemGrade()) || util.getItemGrade();
+      const grade = (option.grade >= 1 ? option.grade : util.getItemGrade({
+        itemPart: itemData.part,
+      })) || util.getItemGrade({
+        itemPart: itemData.part,
+      });
       if (option.sealed) {
         const itemObj = {
           id: id,
@@ -2709,8 +2775,6 @@ export const util = { //this.loadImage();
         changeSaveData(save);
         return;
       }
-      const color = util.getRgbColor();
-      // const color = util.getHslColor(Math.floor(Math.random() * 3),1);
       
       const tier = (() => {//normal:0, exceptional:1, elite:2,
         if (itemData.part !== 1 && itemData.part !== 2 && itemData.part !== 3) {
@@ -2735,7 +2799,9 @@ export const util = { //this.loadImage();
         let num = [];
         num[0] = String(Math.round(Math.random() * (Number(data.num[1]) - Number(data.num[0]))) + (Number(data.num[1]) - Number(data.num[0])));
         for (let i = 1; i < 4; ++i) {
-          num[i] = String(Number(num[i - 1]) + Math.round(Number(data.num[0]) * 0.25 + Math.random() * (Number(data.num[0]) * .25)));
+          num[i] = String(Number(num[i - 1]) + Math.round(
+            Number(data.num[0]) * .25 + 
+            Math.random() * (Number(data.num[0]) * .25)));
         }
         return {
           type: data.type,
@@ -2746,17 +2812,35 @@ export const util = { //this.loadImage();
   
       //슬롯
       const slotNum = (() => {
-        if ((itemData.part === 4 || itemData.part === 5) && itemData.idx === 2) {//해골목걸이, 해골반지 경우 무조건 1개
-          return 1;
-        }
-        if (grade === 1) {
-          if (Math.random() < 0.3) {
-            return Math.round(Math.random() * (itemData.socket - 1)) + 1;
-          } else {
-            return Math.round(Math.random() * itemData.socket);
+        if (itemData.part === 4 || itemData.part === 5) {
+          if (itemData.idx === 2) {//해골목걸이, 해골반지 경우 무조건 1개
+            return 1;
+          } else {//장신구는 슬롯 없음  
+            return 0;
           }
-        } else {
-          return Math.round(Math.random() * itemData.socket);
+        }
+        const randomCount = Math.random();
+        switch (grade) {
+          case 1://일반
+            if (randomCount < 0.5) {
+              return Math.round(Math.random() * (itemData.socket - 1)) + 1;
+            } else {
+              return 0;
+            }
+          case 2://매직
+          case 3://레어
+          case 4://에픽
+            if (randomCount < 0.3) {
+              return Math.ceil(Math.random() * 2);
+            } else {
+              return 0;
+            }
+          default: //유니크, 전설, 신화
+            if (randomCount < 0.1) {
+              return 1;
+            } else {
+              return 0;
+            }
         }
       })();
       itemLv -= slotNum * 10;
@@ -2767,7 +2851,10 @@ export const util = { //this.loadImage();
           for (let i = 0; i < addEffLength; ++i) {
             if (itemLv > 20) {
               itemLv -= 20;
-              addEff.push(getAddEff(grade, itemPart));
+              addEff.push(getAddEff({
+                grade: grade,
+                itemPart: itemPart,
+              }));
             } else {
               break;
             }
@@ -2777,7 +2864,10 @@ export const util = { //this.loadImage();
           for (let i = 0; i < addEffLength; ++i) {
             if (itemLv > 15) {
               itemLv -= 15;
-              addEff.push(getAddEff(grade, itemPart));
+              addEff.push(getAddEff({
+                grade: grade,
+                itemPart: itemPart,
+              }));
             } else {
               break;
             }
@@ -2787,38 +2877,83 @@ export const util = { //this.loadImage();
           for (let i = 0; i < addEffLength; ++i) {
             if (itemLv > 12) {
               itemLv -= 12;
-              addEff.push(getAddEff(grade, itemPart));
+              addEff.push(getAddEff({
+                grade: grade,
+                itemPart: itemPart,
+              }));
             } else {
               break;
             }
           }
         }
       }
+      if (itemData.part === 4 || itemData.part === 5) {//장신구
+        switch (itemData.idx) {
+          case 3://다이아몬드(술방)
+            addEff.push(getAddEff({
+              grade: grade,
+              itemPart: itemData.part,
+              optionNum: 6,
+            }));
+            break;
+          case 4://에메랄드(체력)
+            addEff.push(getAddEff({
+              grade: grade,
+              itemPart: itemData.part,
+              optionNum: 0,
+            }));
+            break;
+          case 5://자수정(술공)
+            addEff.push(getAddEff({
+              grade: grade,
+              itemPart: itemData.part,
+              optionNum: 5,
+            }));
+            break;
+          case 6://사파이어(물방)
+            addEff.push(getAddEff({
+              grade: grade,
+              itemPart: itemData.part,
+              optionNum: 4,
+            }));
+            break;
+          case 7://토파즈(속도)
+            addEff.push(getAddEff({
+              grade: grade,
+              itemPart: itemData.part,
+              optionNum: 8,
+            }));
+            break;
+          case 8://루비(물공)
+            addEff.push(getAddEff({
+              grade: grade,
+              itemPart: itemData.part,
+              optionNum: 3,
+            }));
+            break;
+          break;
+        }
+      }
+      const effColorArr = addEff.map((addEffData) => {
+        return theme.color["st" + addEffData.type];
+      });
+      const color = effColorArr.length > 0 ? util.getMidHex(effColorArr) : util.getRgbColor();
       //동물벳지
       const mark = Math.random() < .8 ? Math.round(Math.random() * 24) : '';
       const markNum = mark === '' ? 0 : (() => {
         const randomCount = Math.random();
-        if (randomCount < .1) {
+        if (randomCount < .05) {
           return 4;
-        } else if (randomCount < .3) {
+        } else if (randomCount < .15) {
           return 3;
-        } else if (randomCount < .6) {
+        } else if (randomCount < .3) {
           return 2;
-        } else {
+        } else if (randomCount < .5) {
           return 1;
+        } else {
+          return 0;
         }
       })();
-      const animalModifier = [
-        `${mark !== '' ? gameData.animalType[mark].na.ko : ''}${gameData.items.markModifier.ko[markNum]}`,
-        `${gameData.items.markModifier.en[markNum]} ${mark !== '' ? gameData.animalType[mark].na.en : ''}${markNum > 1 ? 's' : ''}`,
-        `${mark !== '' ? gameData.animalType[mark].na.jp : ''}${gameData.items.markModifier.jp[markNum]}`,
-      ];
-      const modifier = {
-        ko:gameData.items.slotModifier.ko[slotNum] + ' ' + animalModifier[0],
-        en:gameData.items.slotModifier.en[slotNum] + ' ' + animalModifier[1],
-        jp:gameData.items.slotModifier.jp[slotNum] + ' ' + animalModifier[2],
-      };
-      itemLv -= slotNum * 5;
       const itemObj = {
         id: id,
         idx: itemData.idx,
@@ -2833,7 +2968,6 @@ export const util = { //this.loadImage();
         addEff: addEff,
         mark: mark,
         markNum: markNum,
-        modifier: modifier,
         weaponType: weaponType,
         sealed: false,
         favorite: option.favorite || 0,
@@ -3034,8 +3168,9 @@ export const util = { //this.loadImage();
       dataObj.changeSaveData(sData);//데이터 저장
       dataObj.setShowPopup(false);
     } else if (dataObj.type === 'itemBuy') { //아이템 구입
-      if (sData.info.money >= dataObj.price) {
-        sData.info.money -= dataObj.price * (dataObj.data.saveItemData.num || 1);//돈 계산
+      const payNum = dataObj.data.payType === "exp" ? sData.ch[sData.actionCh.mystery.idx].hasExp : dataObj.data.payType === "life" ? sData.info.heroSoul : sData.info.money
+      if (payNum >= dataObj.price) {
+        payNum -= dataObj.price * (dataObj.data.saveItemData.num || 1);//돈 계산
   
         if (!dataObj.data.saveItemData.num) { //아이템 갯수가 존재하면
           sData.items[itemType].unshift({...saveItem});//아이템 추가
@@ -3053,7 +3188,13 @@ export const util = { //this.loadImage();
         dataObj.setShowPopup(false);
       } else {
         dataObj.setShowMsg(true);
-        dataObj.setMsg(`<span caution>${gameData.msg.sentence.lackMoney[dataObj.lang]}</span>`);
+        if (dataObj.data.payType === "exp") {
+          dataObj.setMsg(`<span caution>${gameData.msg.sentence.lackHeroExp[dataObj.lang]}</span>`);
+        } else if (dataObj.data.payType === "life") {
+          dataObj.setMsg(`<span caution>${gameData.msg.sentence.lackHeroSoul[dataObj.lang]}</span>`);
+        } else {
+          dataObj.setMsg(`<span caution>${gameData.msg.sentence.lackMoney[dataObj.lang]}</span>`);
+        }
       }
     } else if (dataObj.type === 'itemSell') { //아이템 판매
       sData.info.money += dataObj.price * (dataObj.data.num || 1);//돈 계산
@@ -3071,7 +3212,6 @@ export const util = { //this.loadImage();
       dataObj.changeSaveData(sData);//데이터 저장
       dataObj.setShowPopup(false);
     } else if (dataObj.type === 'itemEvaluate') { //아이템 확인
-      // sData.items[dataObj.data.type].splice(dataObj.data.itemSaveSlot,1);//인벤에서 아이템 제거
       const itemInfo = saveItem.part === 3 ? `${saveItem.part}-${saveItem.weaponType}-${saveItem.idx}` : `${saveItem.part}-${saveItem.idx}`;
       const option = {
         type: itemType,
@@ -3090,6 +3230,7 @@ export const util = { //this.loadImage();
         changeSaveData: dataObj.changeSaveData,
         option: option,
         isSave: true,
+        theme: dataObj.theme,
         lang: dataObj.lang
       });
       dataObj.changeSaveData(sData);//데이터 저장
@@ -3104,6 +3245,26 @@ export const util = { //this.loadImage();
       console.log('itemUpgrade')
     }
     callback && callback();
+  },
+  payMoney: ({
+    gameData,
+    saveData,
+    shop,
+    type,
+    changeSaveData,
+    setShowMsg,
+    setMsg,
+    lang,
+    callback,
+  }) => {
+    if (saveData.info.money >= gameData.prices[shop][type].price) {
+      saveData.info.money -= gameData.prices[shop][type].price;
+      changeSaveData(saveData);
+      callback && callback();
+    } else {
+      setShowMsg(true);
+      setMsg(`<span caution>${gameData.msg.sentence.lackMoney[lang]}</span>`);
+    }
   },
   payActionPoint: ({
     gameData,
@@ -4177,24 +4338,55 @@ export const util = { //this.loadImage();
     });
     return skillLv ? skillLv.lv : 0;
   },
-  itemPrice: ({gameItem, saveItemData, skill, skLv}) => {
+  itemPrice: ({gameItem, saveItemData, payType, skill, skLv}) => {
     const itemGrade = saveItemData.grade || gameItem.grade,
+      itemTier = saveItemData.tier || 0,
       isSealed = saveItemData.sealed,
       isPrice = [gameItem.price * 2, gameItem.price * 0.5],//buy, sell
       addEffNum = saveItemData.addEff ? saveItemData.addEff.length : 0,
       socketNum = saveItemData.hole ? saveItemData.hole.length : 0,
       coinNum = saveItemData.markNum ? saveItemData.markNum : 0;
-    const price = [isPrice[0] + Math.round(isPrice[0] * (skLv === "" ? 1 : Number(skill.eff[0].num[skLv]) / 100)), isPrice[1] + Math.round(isPrice[1] * (skLv === "" ? 1 : Number(skill.eff[0].num[skLv]) / 100))];
-    return {
-      buy: {
-        str: `${util.comma(price[0] * itemGrade + price[0] * addEffNum + price[0] * socketNum + price[0] * coinNum)}`,
-        num: price[0] * itemGrade + price[0] * addEffNum + price[0] * socketNum + price[0] * coinNum,
-      }, 
-      sell: {
-        str: `${util.comma(isSealed ? price[1] : price[1] * itemGrade)}`,
-        num: isSealed ? price[1] : price[1] * itemGrade,
-      },
-    };
+    const skillLvPrice = [isPrice[0] + Math.round(isPrice[0] * (skLv === "" ? 1 : Number(skill.eff[0].num[skLv]) / 100)), isPrice[1] + Math.round(isPrice[1] * (skLv === "" ? 1 : Number(skill.eff[0].num[skLv]) / 100))],
+      price = [
+        skillLvPrice[0] * itemGrade + itemTier * 30000 + 30000 * addEffNum + 10000 * socketNum + 20000 * coinNum,
+        isSealed ? skillLvPrice[1] : skillLvPrice[1] * itemGrade
+      ]
+      console.log(skillLvPrice[0], price[0], itemGrade)
+    switch (payType) {
+      case "exp":
+        return {
+          buy: {
+            str: util.comma(gameItem.price),
+            num: gameItem.price,
+          },
+          sell: {
+            str: util.comma(gameItem.price),
+            num: gameItem.price,
+          },
+        };
+      case "life":
+        return {
+          buy: {
+            str: util.comma(Math.ceil(price[0] / 40000)),
+            num: Math.ceil(price[0] / 40000),
+          },
+          sell: {
+            str: util.comma(price[1]),
+            num: price[1],
+          },
+        };
+      default:
+        return {
+          buy: {
+            str: util.comma(price[0]),
+            num: price[0],
+          }, 
+          sell: {
+            str: util.comma(price[1]),
+            num: price[1],
+          },
+        };
+    }
   },
   makeCard: ({
     heroArr, //영웅분류

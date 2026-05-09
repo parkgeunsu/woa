@@ -7,11 +7,24 @@ export const prices = {
 			[{type:'g',price:2000}],
 		]
 	},
+	composite:{
+		emotionsRequest:{
+			price: 3000,
+		},
+		compositeRequest:{
+			price: 3000,
+		}
+	},
 	shop:{
 
 	},
 	blacksmith:{
-
+		socketRequest:{
+			price: 3000,
+		},
+		enhanceRequest:{
+			price: 3000,
+		}
 	},
 	training:{
 		socketRemove:[

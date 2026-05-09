@@ -1,4 +1,5 @@
 import { Text } from 'components/Atom';
+import { TextButton } from 'components/Button';
 import { ActionChDisplay } from 'components/Components';
 import { FlexBox } from 'components/Container';
 import { IconPic, ItemPic, MergedPic } from 'components/ImagePic';
@@ -11,10 +12,12 @@ import MsgContainer from 'components/MsgContainer';
 import Npc from 'components/Npc';
 import Popup from 'components/Popup';
 import PopupContainer from 'components/PopupContainer';
+import Tooltip from 'components/Tooltip';
+import TooltipContainer from 'components/TooltipContainer';
 import { AppContext } from 'contexts/app-context';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 /* .itemEn_colorArea .colorant:before{
 content:'';position:absolute;left:0;top:0;width:100%;height:100%;border-radius:15px;background:linear-gradient(135deg, rgba(255,255,255,0) 10%,rgba(255,255,255,.5) 20%,rgba(255,255,255,0) 30%);z-index:1;
 }
@@ -465,14 +468,16 @@ const LockIcon = styled(IconPic)`
 	border: 2px solid #000;
 	box-sizing: border-box;
 `;
-const ButtonGroup = styled.div`
+const ButtonGroup = styled(FlexBox)`
 	position: absolute;
-	right: 5%;
-	bottom: 10px;
+	right: 2%;
+	left: 2%;
+	bottom: 2%;
+	width: auto;
+	height: auto;
 	z-index: 1;
-	transition: all .5s;
 	${({isShow}) => isShow ? `
-		display: block;
+		display: flex;
 	` : `
 		display: none;
 	`}
@@ -632,6 +637,7 @@ const Blacksmith = ({
   const gameItem = React.useMemo(() => {
     return gameData.items;
   }, [gameData]);
+	const theme = useTheme();
 	const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const [modalOn, setModalOn] = useState(false);
 	const [modalInfo, setModalInfo] = useState({});
@@ -641,6 +647,9 @@ const Blacksmith = ({
 	const [popupInfo, setPopupInfo] = useState({});
   const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
+	const [showTooltip, setShowTooltip] = useState(false);
+	const [tooltip, setTooltip] = useState('');
+	const [tooltipPos, setTooltipPos] = useState([0,0]);
 	const [selectTab, setSelectTab] = useState(typeof state?.tab === "number" ? state.tab : "");
 	const entries = React.useMemo(() => {
 		return sData.entry.map((entryIdx) => {
@@ -772,8 +781,27 @@ const Blacksmith = ({
 					{selectTab === 0 && <SocketContent direction="row" justifyContent="center" alignItems="flex-start" onClick={(e) => {
 						e.stopPropagation();
 					}}>
-						<ButtonGroup isShow={Object.keys(selectItem1.save).length > 0} className="button_group">
-							<button className="button_big" text="true" onClick={(e) => {
+						<ButtonGroup justifyContent="space-between" alignItems="flex-end" isShow={Object.keys(selectItem1.save).length > 0}>
+							<TextButton type="big" onClick={(e) => {
+								e.stopPropagation();
+								console.log('소켓 부탁하기');
+								util.payMoney({
+									gameData: gameData,
+									saveData: sData,
+									shop: "blacksmith",
+									type: "socketRequest",
+									changeSaveData: changeSaveData,
+									setShowMsg: setShowMsg,
+									setMsg: setMsg,
+									lang: lang,
+									callback: () => {
+										console.log('확정');
+									}
+								});
+							}}>
+								<Text code="t2" color="point1">{util.comma(gameData.prices.blacksmith.socketRequest.price)}</Text>{gameData.msg.button.socketRequest[lang]}
+							</TextButton>
+							<TextButton type="big" onClick={(e) => {
 								e.stopPropagation();
 								let pHole = [],
 									possibleColorantIdx = '';
@@ -836,7 +864,7 @@ const Blacksmith = ({
 								changeSaveData(finalSaveData);
 								setPossibleHole(pHole);
 								setColorantIdx(possibleColorantIdx);
-							}}>{gameData.msg.button.confirm[lang]}</button>
+							}}>{gameData.msg.button.confirm[lang]}</TextButton>
 						</ButtonGroup>
 						<ColorArea mainColor={mainColor} color={selectItem2.game}>
 							<ColorantItem onClick={() => {
@@ -845,14 +873,12 @@ const Blacksmith = ({
 									...prev,
 									item: {
 										isMoveEvent: false,
-										itemAreaType: selectItem1.game.type,//아직 안쓰임
+										itemAreaType: 'blacksmith',
 										gameItem: selectItem1.game,
 										itemSaveSlot: selectItem1.select,
 										saveItemData: selectItem1.save,
-										type: 'blacksmith',
-										buttons: [],
-										callback: () => {
-										},
+										type: selectItem1.game.type,
+										buttons: ["sell"],
 									},
 									tab: 0,
 								}));
@@ -935,8 +961,27 @@ const Blacksmith = ({
 					{selectTab === 1 && <UpgradeContent direction="row" justifyContent="center" alignItems="flex-start" onClick={(e) => {
 						e.stopPropagation();
 					}}>
-						<ButtonGroup isShow={Object.keys(selectItem1.save).length > 0} className="button_group">
-							<button className="button_big" text="true" onClick={(e) => {
+						<ButtonGroup justifyContent="space-between" alignItems="flex-end" isShow={Object.keys(selectItem1.save).length > 0}>
+							<TextButton type="big" onClick={(e) => {
+								e.stopPropagation();
+								console.log('강화 부탁하기');
+								util.payMoney({
+									gameData: gameData,
+									saveData: sData,
+									shop: "blacksmith",
+									type: "enhanceRequest",
+									changeSaveData: changeSaveData,
+									setShowMsg: setShowMsg,
+									setMsg: setMsg,
+									lang: lang,
+									callback: () => {
+										console.log('확정');
+									}
+								});
+							}}>
+								<Text code="t2" color="point1">{util.comma(gameData.prices.blacksmith.enhanceRequest.price)}</Text>{gameData.msg.button.enhanceRequest[lang]}
+							</TextButton>
+							<TextButton type="big" onClick={(e) => {
 								e.stopPropagation();
 								console.log('업그레이드');
 								if (typeof selectItem3.select === 'number') {
@@ -973,7 +1018,7 @@ const Blacksmith = ({
 									setShowMsg(true);
 									setMsg(gameData.msg.sentence.selectUpgradeTools[lang]);
 								}
-							}}>{gameData.msg.button.upgrade[lang]}</button>
+							}}>{gameData.msg.button.upgrade[lang]}</TextButton>
 						</ButtonGroup>
 						<UpgradeArea>
 							<UpgradeItem onClick={() => {
@@ -982,16 +1027,14 @@ const Blacksmith = ({
 									...prev,
 									item: {
 										isMoveEvent: false,
-										itemAreaType: selectItem1.game.type,//아직 안쓰임
+										itemAreaType: 'blacksmith',
 										gameItem: selectItem1.game,
 										itemSaveSlot: selectItem1.select,
 										saveItemData: selectItem1.save,
-										type: 'blacsmith',
-										buttons: [],
-										callback: () => {
-										},
-										tab: 1,
-									}
+										type: selectItem1.game.type,
+										buttons: ["sell"],
+									},
+									tab: 1,
 								}));
 								setShowPopup(prev => !prev);
 							}}>
@@ -1235,11 +1278,14 @@ const Blacksmith = ({
 				}} gameData={gameData}/>}
 			</ModalContainer>
 			<PopupContainer>
-        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} />}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} setTooltip={setTooltip} setTooltipPos={setTooltipPos} setShowTooltip={setShowTooltip} theme={theme}/>}
       </PopupContainer>
       <MsgContainer>
         {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
       </MsgContainer>
+			<TooltipContainer>
+				{showTooltip && <Tooltip isDark={true} pos={tooltipPos} text={tooltip} setShowTooltip={setShowTooltip} />}
+			</TooltipContainer>
 		</>
   );
 }

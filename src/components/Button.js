@@ -120,5 +120,37 @@ const IconButton = ({
     </IconBtn>
   )
 }
-export { Button, IconButton };
+
+const StyledTextButton = styled.button`
+  ${({type}) => type === "big" && `
+    margin: 5px 3px;
+    padding: 8px 14px;
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(255, 255, 255, 0.5));
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 1px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0, 0, 0, 1);
+  `}
+  ${({type}) => type === "small" && `
+    margin: 5px 3px;
+    padding: 5px 10px;
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.75), rgba(255, 255, 255, 0.5));
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 1px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0, 0, 0, 1);
+    border-radius: 20px;
+  `}
+  border-radius: 20px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1;
+  font-size: 1rem;
+  border: none;
+  outline: none;
+`;
+const TextButton = ({
+  type,
+  children,
+  ...rest
+}) => {
+  return <StyledTextButton type={type} {...rest}>
+    {children}
+  </StyledTextButton>
+}
+
+export { Button, IconButton, TextButton };
 

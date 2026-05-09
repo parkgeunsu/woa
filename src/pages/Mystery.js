@@ -14,7 +14,7 @@ import TooltipContainer from 'components/TooltipContainer';
 import { AppContext } from 'contexts/app-context';
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
 const Wrap = styled(FlexBox)`
   position: absolute;
@@ -69,6 +69,9 @@ const InfoGroup = styled(FlexBox)`
 	height: 100%;
 	box-sizing: border-box;
 	background: rgba(0,0,0,.8);
+`;
+const Payment = styled(FlexBox)`
+  height: auto;
 `;
 const PossibleEquipItem = styled(FlexBox)`
   overflow-y: auto;
@@ -132,6 +135,7 @@ const Mystery = ({
   const gameItem = React.useMemo(() => {
     return gameData.items;
   }, [gameData]);
+  const theme = useTheme();
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const stayIdx = React.useMemo(() => util.getRegionToIdx(sData?.info?.stay), [sData]);
   const [showPopup, setShowPopup] = useState(false);
@@ -151,7 +155,6 @@ const Mystery = ({
     });
   }, [sData]);
   const actionChIdx = React.useMemo(() => {
-    console.log(sData.actionCh.mystery.idx);
     return sData.actionCh.mystery.idx <= entries.length - 1 ? sData.actionCh.mystery.idx : "";
   }, [entries, sData]);
   const saveCh = React.useMemo(() => entries[actionChIdx] || {}, [entries, actionChIdx]);
@@ -188,6 +191,7 @@ const Mystery = ({
         <MysteryContent frameBack={imgSet.etc.frameChBack}>
           {selectTab === "" && <GreetingText code="t4" color="main" wordBreak="keep-all">{greeting}</GreetingText>}
           {shopItem.map((scrollData, scrollIdx) => {
+            const payType = scrollIdx === 0 ? "exp" : scrollIdx === 1 ? "money" : "life";
             return <ShopItem selected={selectTab === scrollIdx} key={`scrollContent${scrollIdx}`}>
               {scrollData.map((itemData, itemIdx) => {
                 if (typeof itemData.part === 'number') {
@@ -196,6 +200,7 @@ const Mystery = ({
                   const itemPrice = util.itemPrice({
                     gameItem: items,
                     saveItemData: itemData,
+                    payType: payType,
                     skill: gameData.skill[15],//협상
                     skLv: util.getHasSkillLv({
                       saveData: sData,
@@ -218,19 +223,19 @@ const Mystery = ({
                     text={itemPrice.buy.str}
                     selectColor={itemData.color}
                     onClick={() => {
+                      console.log(itemPrice.buy.str);
                       setPopupType("item");
                       setPopupInfo(prev => ({
                         ...prev,
                         item: {
                           isMoveEvent: false,
-                          itemAreaType: 'mystery',//아직 안쓰임
+                          itemAreaType: 'mystery',
                           gameItem: items,
                           itemSaveSlot: itemData.slot,
                           saveItemData: itemData,
                           type: "equip",
+                          payType: payType,
                           buttons: ['buy'],
-                          callback: () => {
-                          },
                           tab: selectTab,
                         }
                       }));
@@ -238,7 +243,18 @@ const Mystery = ({
                     }}/>
                 } else {
 				          const items = gameItem[itemData.type][itemData.idx];
-				          const grade = itemData.grade || items?.grade || 0;
+				          const itemsGrade = itemData.grade || items?.grade || 0;
+                  const itemPrice = util.itemPrice({
+                    gameItem: items,
+                    saveItemData: itemData,
+                    payType: payType,
+                    skill: gameData.skill[15],//협상
+                    skLv: util.getHasSkillLv({
+                      saveData: sData,
+                      skillIdx: 15,
+                      chData: sData.ch[sData.actionCh?.["mystery"]?.idx],
+                    }),
+                  });
                   const isPossible = actionChIdx !== "" && saveCh.possibleEquipment.flat()[itemData.idx - 50];
                   return <PossibleItemLayout 
                     isPossible={!isPossible}
@@ -251,9 +267,9 @@ const Mystery = ({
                     }}
                     num={5}
                     key={`items${itemIdx}`}
-                    grade={grade}
+                    grade={itemsGrade}
                     tier={itemData.tier || 0}
-                    text={util.comma(items.price)}
+                    text={itemPrice.buy.str}
                     onClick={() => {
                       if (selectTab === 0 && actionChIdx === "") {
                         setShowMsg(true);
@@ -270,11 +286,12 @@ const Mystery = ({
                         ...prev,
                         item: {
                           isMoveEvent: false,
-                          itemAreaType: 'mystery',//아직 안쓰임
+                          itemAreaType: 'mystery',
                           gameItem: items,
                           itemSaveSlot: itemData.slot,
                           saveItemData: itemData,
                           type: itemData.type,
+                          payType: payType,
                           buttons: ['buy'],
                           callback: () => {
                           },
@@ -290,7 +307,19 @@ const Mystery = ({
           })}
         </MysteryContent>
         <UserContainer justifyContent="space-between">
-          <InfoGroup>
+          <InfoGroup direction="column" justifyContent="flex-start">
+            <Payment justifyContent="space-between">
+              <Text code="t3" color="main">
+                {selectTab === 0 && gameData.msg.info.hasExp[lang]}
+                {selectTab === 1 && gameData.msg.title.money[lang]}
+                {selectTab === 2 && gameData.msg.info.hasSoul[lang]}
+              </Text>
+              <Text code="t4" color="point2">
+                {selectTab === 0 && util.comma(sData.ch[sData.actionCh.mystery.idx].hasExp)}
+                {selectTab === 1 && util.comma(sData.info.money)}
+                {selectTab === 2 && util.comma(sData.info.heroSoul || 0)}
+              </Text>
+            </Payment>
             {selectTab === 0 && <PossibleEquipItem direction="row" flexWrap="wrap" justifyContent="flex-start" alignItems="flex-start" alignContent="flex-start">
               {actionChIdx !== "" && saveCh.possibleEquipment.map((itemGroup, index) => {
                 return (itemGroup.map((item, itemIndex) => {
@@ -328,7 +357,7 @@ const Mystery = ({
         </UserContainer>
       </Wrap>
 			<PopupContainer>
-        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} setTooltip={setTooltip} setTooltipPos={setTooltipPos} setShowTooltip={setShowTooltip} />}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} setTooltip={setTooltip} setTooltipPos={setTooltipPos} setShowTooltip={setShowTooltip} theme={theme}/>}
       </PopupContainer>
       <MsgContainer>
         {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}

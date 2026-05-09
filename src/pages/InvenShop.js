@@ -16,7 +16,7 @@ import { AppContext } from 'contexts/app-context';
 import 'css/shop.css';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
 const ShopWrap = styled.div`
 	display: flex;
@@ -162,11 +162,11 @@ const ShopList = ({
 							...prev,
 							item: {
 								isMoveEvent: false,
-          			itemAreaType: 'equipment',//아직 안쓰임
+          			itemAreaType: shopType,
 								gameItem: items,
           			itemSaveSlot: idx,
 								saveItemData: itemData,
-								type: shopType,
+								type: itemData.type,
 								buttons: buttons,
 								callback: () => {
 									// saveData.city[stayIdx][shopType][typeList[selectTab].na].splice(selectedItem.itemSaveSlot, 1);//도시 아이템 삭제
@@ -224,11 +224,11 @@ const ShopList = ({
 							...prev,
 							item: {
 								isMoveEvent: false,
-          			itemAreaType: 'equipment',//아직 안쓰임
+          			itemAreaType: shopType,
 								gameItem: items,
           			itemSaveSlot: idx,
 								saveItemData: itemData,
-								type: shopType,
+								type: itemData.type,
 								buttons: buttons,
 								callback: () => {
 									// saveData.city[stayIdx][shopType][typeList[selectTab].na].splice(selectedItem.itemSaveSlot, 1);//도시 아이템 삭제
@@ -312,6 +312,7 @@ const InvenShop = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
+	const theme = useTheme();
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
 	const stayIdx = React.useMemo(() => util.getRegionToIdx(sData?.info?.stay), [sData]);
   const [showPopup, setShowPopup] = useState(state?.items ? true : false);
@@ -530,7 +531,7 @@ const InvenShop = ({
 				}
 			</ShopWrap>
 			<PopupContainer>
-        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={sData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} setTooltip={setTooltip} setTooltipPos={setTooltipPos} setShowTooltip={setShowTooltip} />}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={sData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} setTooltip={setTooltip} setTooltipPos={setTooltipPos} setShowTooltip={setShowTooltip} theme={theme}/>}
       </PopupContainer>
       <MsgContainer>
         {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}

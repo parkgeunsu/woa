@@ -12,7 +12,7 @@ import PopupContainer from 'components/PopupContainer';
 import { AppContext } from 'contexts/app-context';
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
 const Wrap = styled(FlexBox)`
 	position: absolute;
@@ -132,6 +132,7 @@ const TradingPost = ({
 	setLoading,
 }) => {
 	const navigate = useNavigate();
+	const theme = useTheme();
   const context = useContext(AppContext);
 	const {state} = useLocation();
 	const [selectTab, setSelectTab] = useState(typeof state?.tab === "number" ? state.tab : "");
@@ -316,6 +317,7 @@ const TradingPost = ({
 																setMsg: setMsg,
 																setShowMsg: setShowMsg,
 																setShowPopup: setShowPopup,
+                        				theme: theme,
 																lang: lang,
 															});
 															setRangeValue(0);
@@ -358,6 +360,7 @@ const TradingPost = ({
 																setMsg: setMsg,
 																setShowMsg: setShowMsg,
 																setShowPopup: setShowPopup,
+                        				theme: theme,
 																lang: lang,
 															});
 															setSelectItem({save:{},game:{},select:'',selectTab:'',buttonType:[]});

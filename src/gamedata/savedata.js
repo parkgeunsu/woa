@@ -1,5 +1,4 @@
 const saveNew = {
-  "ship":[],
   "ch":[],
   "items":{
     "equip":[

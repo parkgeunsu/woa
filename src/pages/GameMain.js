@@ -9,7 +9,7 @@ import Roulette from 'pages/Roulette';
 import Scenario from 'pages/Scenario';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
 const Wrap = styled(FlexBox)``;
 
@@ -65,6 +65,7 @@ const GameMain = ({
 }) => {
   const navigate = useNavigate();
   const {state} = useLocation();
+  const theme = useTheme();
   const context = useContext(AppContext);
   const classification = React.useMemo(() => {
     return context.classification;
@@ -153,6 +154,7 @@ const GameMain = ({
               sealed:true,
             },
             isSave: true,
+            theme: theme,
             lang: lang,
           });
         }}>아이템 추가</button><br/>
@@ -225,6 +227,7 @@ const GameMain = ({
             changeSaveData: changeSaveData,
             option: option,
             isSave: true,
+            theme: theme,
             lang: lang,
           });
         }}>동물스킬 리셋</button> */}

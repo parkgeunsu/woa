@@ -1,5 +1,5 @@
 import { Text } from 'components/Atom';
-import { Button } from 'components/Button';
+import { Button, TextButton } from 'components/Button';
 import { FlexBox } from 'components/Container';
 import { ChPic, IconPic, ItemPic, MarkPic, MergedPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
@@ -800,6 +800,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
       itemCate = saveItem.type,
       gameItem = gameData.items,
       itemGrade = saveItem.grade ? saveItem.grade : dataObj[type].gameItem.grade,
+      payType = dataObj[type].payType,
       areaType = dataObj[type].itemAreaType,//아직 안쓰임
       buttons = dataObj[type].buttons;
     const items = itemData({
@@ -830,19 +831,24 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
     const itemPrice = util.itemPrice({
       gameItem: items,
       saveItemData: saveItem,
+      payType: payType,
       skill: gameData.skill[15],
       skLv: util.getHasSkillLv({
         saveData: saveData,
         skillIdx: 15,//협상
-        chData: saveData.ch[saveData.actionCh?.[location]?.idx],
+        chData: saveData.ch[saveData.actionCh?.[areaType]?.idx],
       })
-    });
+    }),
+      priceSubText = payType === "exp" ? gameData.msg.info.hasExp[lang] : payType === "life" ?gameData.msg.info.hasSoul[lang] : gameData.msg.title.money[lang];
     console.log(buttons);
-    const modifyName = (saveItem.colorantSet ? util.getColorant(saveItem.colorantSet, gameData).na[lang] : '') + (saveItem.modifier ? saveItem.modifier[lang] : '');
+    const animalModifier = `${saveItem.mark !== "" ? gameData.animalType[saveItem.mark].na[lang] : ''} ${gameData.items.markModifier[saveItem.markNum][lang]}`,
+      slotModifier = saveItem.slot ? gameData.items.slotModifier[saveItem.slot][lang] : '';
+    const modifyName = `${saveItem.colorantSet ? util.getColorant(saveItem.colorantSet, gameData).na[lang] : ''} ${animalModifier} ${slotModifier}`;
     const itemName = (part === 1 || part === 2 || part === 3) ? items.na[saveItem.tier || 0][lang] : items.na[lang];
+    console.log(saveItem, items);
     return <PopupItemContainer frameBack={imgSet.etc.frameChBack}>
       <PopupItemList type="header" frameBack={imgSet.etc.frameChBack}>
-        <PopupItemName code="t3" grade={gameData.itemGrade.color[itemGrade]} color="main" weight="600" dangerouslySetInnerHTML={{__html: `${modifyName ? modifyName + '<br/>' + itemName : itemName}`}}/>
+        <PopupItemName code="t3" grade={gameData.itemGrade.color[itemGrade]} color="main" weight="600" dangerouslySetInnerHTML={{__html: `${modifyName.trim().length !== 0 ? modifyName + '<br/>' + itemName : itemName}`}}/>
       </PopupItemList>
       <PopupItemList>
         <PopupItem part={part} grade={itemGrade} sealed={sealed}>
@@ -976,18 +982,18 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
         </div>}
         <PopupItemList frameBack={imgSet.etc.frameChBack} type="footer">
           <PopupItemPrice justifyContent="flex-start">
-            <PopupItemPriceText code="t3" weight="600" color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}</PopupItemPriceText>
+            <PopupItemPriceText code="t3" weight="600" lineHeight={1.2} color="#c80">{gameData.msg.itemInfo.sellPrice[lang]}<br/>({priceSubText})</PopupItemPriceText>
             <PopupItemPriceText code="t4" weight="600" margin={10} color="main">{`${itemPrice[buttons[0]].str}`}</PopupItemPriceText>
           </PopupItemPrice>
           {!isMoveEvent && <ButtonArea justifyContent="flex-end">
 
             {buttons.includes("buy") && <StyledButton type="icon" icon={{type:'commonBtn', pic:'icon100', idx:24}} onClick={(e) => {//구입
               e.stopPropagation();
-              const shopName = itemCateShopName({
+              const shopName = location.pathname.includes("mystery") ? "mystery" : location.pathname.includes(itemCateShopName({
                 itemCate: itemCate,
                 saveItem: saveItem,
-              });
-              if (location.pathname.includes("mystery") || location.pathname.includes(shopName)) {
+              }));
+              if (shopName) {
                 const actionCh = saveData.ch[saveData.
                 actionCh[shopName].idx];
                 util.payActionPoint({
@@ -1007,6 +1013,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                           gameItem: dataObj[type].gameItem,
                           itemSaveSlot: dataObj[type].itemSaveSlot,
                           type: dataObj[type].type,
+                          payType: payType,
                         },
                         saveData: saveData,
                         changeSaveData: changeSaveData,
@@ -1014,6 +1021,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                         setMsg: setMsg,
                         setShowMsg: setShowMsg,
                         setShowPopup: setShowPopup,
+                        theme: theme,
                         lang: lang,
                       });
                     }
@@ -1069,6 +1077,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                         setMsg: setMsg,
                         setShowMsg: setShowMsg,
                         setShowPopup: setShowPopup,
+                        theme: theme,
                         lang: lang,
                       });
                     } 
@@ -1102,6 +1111,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                 setMsg: setMsg,
                 setShowMsg: setShowMsg,
                 setShowPopup: setShowPopup,
+                theme: theme,
                 lang: lang,
               })
             }} data-buttontype="itemUse" />}
@@ -1181,6 +1191,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
               //   setMsg: setMsg,
               //   setShowMsg: setShowMsg,
               //   setShowPopup: setShowPopup,
+              //   theme: theme,
               //   lang: lang,
               // });
             }} data-buttontype="itemSocket" />}
@@ -1226,6 +1237,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                 setMsg: setMsg,
                 setShowMsg: setShowMsg,
                 setShowPopup: setShowPopup,
+                theme: theme,
                 lang: lang,
               });
             }} data-buttontype="itemEquip" />}
@@ -1271,6 +1283,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
                 setMsg: setMsg,
                 setShowMsg: setShowMsg,
                 setShowPopup: setShowPopup,
+                theme: theme,
                 lang: lang,
               });
               // navigate('../cards', {state: {
@@ -1588,7 +1601,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
           {possibleCh === 0 && <NoneSkill code="t2" color="red" weight="600">{gameData.msg.sentenceFn.noneHaveSkill(lang, gameData.skill[skillIdx].na)}</NoneSkill>}
         </ChList>
         <ButtonArea justifyContent="flex-end">
-          <button className="button_big" text="true" onClick={(e) => {
+          <TextButton type="big" onClick={(e) => {
             e.stopPropagation();
             let sData = JSON.parse(JSON.stringify(saveData));
             if (sData.actionCh?.[dataObj[type].type]) {
@@ -1596,7 +1609,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
               changeSaveData(sData);
             }
             setShowPopup(false);
-          }} data-buttontype="itemUse">{gameData.msg.button.confirm[lang]}</button>
+          }} data-buttontype="itemUse">{gameData.msg.button.confirm[lang]}</TextButton>
         </ButtonArea>
       </ActionChWrap>
 		);

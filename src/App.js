@@ -166,6 +166,7 @@ const setCity = ({
   countryData,
   goodsData,
   classification,
+  theme,
   lang
 }) => {
   const cityD = Array.from({length:countryData.length}, (v, idx) => {
@@ -195,6 +196,7 @@ const setCity = ({
               sealed:false,
             },
             isSave: false,
+            theme: theme,
             lang:lang
           })}
         }),
@@ -211,6 +213,7 @@ const setCity = ({
               sealed:false,
             },
             isSave: false,
+            theme: theme,
             lang:lang
           })}
         }),
@@ -230,6 +233,7 @@ const setCity = ({
               sealed:false,
             },
             isSave: false,
+            theme: theme,
             lang:lang
           })}
         }),
@@ -246,6 +250,7 @@ const setCity = ({
               sealed:false,
             },
             isSave: false,
+            theme: theme,
             lang:lang
           })}
         }),
@@ -262,6 +267,7 @@ const setCity = ({
               sealed: false,
             },
             isSave: false,
+            theme: theme,
             lang:lang
           })}
         }),
@@ -277,26 +283,11 @@ const setCity = ({
               items: Math.floor(Math.random() * 23) + 50,
             },
             isSave: false,
+            theme: theme,
             lang:lang
           })}
         }),
         money: Array.from({length:24}, () => {
-          return {...util.getItem({
-            saveData: false,
-            gameData: gameData,
-            changeSaveData: false,
-            option: {
-              type:'equip',
-              items: Math.ceil(Math.random() * 5),
-              grade: Math.ceil(Math.random() * 2) + 2,
-              lv: Math.round(Math.random()*100),
-              sealed: false,
-            },
-            isSave: false,
-            lang:lang
-          })}
-        }),
-        life: Array.from({length:24}, () => {
           return {...util.getItem({
             saveData: false,
             gameData: gameData,
@@ -309,6 +300,24 @@ const setCity = ({
               sealed: false,
             },
             isSave: false,
+            theme: theme,
+            lang:lang
+          })}
+        }),
+        life: Array.from({length:24}, () => {
+          return {...util.getItem({
+            saveData: false,
+            gameData: gameData,
+            changeSaveData: false,
+            option: {
+              type:'equip',
+              items: Math.ceil(Math.random() * 5),
+              grade: Math.ceil(Math.random() * 2) + 2,
+              lv: Math.round(Math.random()*100),
+              sealed: false,
+            },
+            isSave: false,
+            theme: theme,
             lang:lang
           })}
         }),
@@ -495,8 +504,8 @@ const makeSaveData = (saveData) => {
     stay:0,
     leaderIdx:0,
     shipIdx:0,
+    heroSoul:0,
   }
-  saveData.testMode = true;
   saveData.entry = [0];
   saveData.lineup = {
     select: 0,
@@ -873,10 +882,12 @@ const App = ({
         countryData: gameData.country.regions,
         goodsData: gameData.items.material,
         classification: classificationData,
+        theme: theme,
         lang: contextData.setting.lang
       });
       util.saveData("saveData", sData);
       util.saveData("version", version);
+      util.saveData("testMode", true);
       localStorage.setItem('lastCityReset', new Date().getTime().toString());
       util.saveData("setting", {
         lang: 'ko',
@@ -914,6 +925,7 @@ const App = ({
           countryData: gameData.country.regions,
           goodsData: gameData.items.material,
           classification: classificationData,
+          theme: theme,
           lang: setting.lang,
         });
         cloneCity.prison = useSaveData.city.prison;
@@ -986,6 +998,7 @@ const App = ({
           countryData: gameData.country.regions,
           goodsData: gameData.items.material,
           classification: classificationData,
+          theme: theme,
           lang: lang,
         });
         cloneCity.prison = cloneData.city.prison;

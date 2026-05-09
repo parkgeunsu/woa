@@ -616,6 +616,11 @@ export const msg = {
 			en:'Has Exp',
 			jp:'保有経験値',
 		},
+		hasSoul:{
+			ko:'영웅의 혼',
+			en:'Hero Soul',
+			jp:'英雄の魂',
+		},
 		shipBuilder:{
 			ko:'선박 제조가',
 			en:'Ship Builder',
@@ -1226,6 +1231,26 @@ export const msg = {
 			ko:'판매',
 			en:'Sell',
 			jp:'販売',
+		},
+		compositeRequest:{
+			ko:'합성 의뢰하기',
+			en:'Request Composite',
+			jp:'合成依頼',
+		},
+		emotionsRequest:{
+			ko:'감정 의뢰하기',
+			en:'Request emotions',
+			jp:'鑑定依頼',
+		},
+		socketRequest:{
+			ko:'소켓 의뢰하기',
+			en:'Request socket',
+			jp:'ソケット依頼',
+		},
+		enhanceRequest:{
+			ko:'강화 의뢰하기',
+			en:'Request enhance',
+			jp:'強化依頼',
 		},
 		emotions:{
 			ko:'감정',
@@ -2102,6 +2127,11 @@ export const msg = {
 		},
 	},
 	sentence:{
+		noneSelectItem: {
+			ko:"선택된 장비가 없습니다.",
+			en:"Selected equipment is empty.",
+			jp:"選択された装備がありません。",
+		},
 		equippedItem:{
 			ko:"이미 착용 가능한 장비입니다.",
 			en:"This equipment is already equipped.",
@@ -2346,6 +2376,16 @@ export const msg = {
 			ko:'소지금이 부족합니다.',
 			en:'You don\'t have enough money.',
 			jp:'所持金が不足しています。',
+		},
+		lackHeroSoul:{
+			ko:'영혼이 부족합니다.',
+			en:'You don\'t have enough soul.',
+			jp:'魂が不足しています。',
+		},
+		lackHeroExp:{
+			ko:'영웅의 경험치가 부족합니다.',
+			en:'You don\'t have enough hero exp.',
+			jp:'英雄の経験値が不足しています。',
 		},
 		lackMorality: {
 			ko:'도덕심이 부족합니다.',

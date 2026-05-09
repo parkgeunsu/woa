@@ -401,12 +401,13 @@ const Cards = ({
         ...prev,
         item: {
           isMoveEvent: isMoveEvent,
-          chSlotIdx: slotIdx,
+          itemAreaType: 'cards',
           gameItem: gameItemData,
           itemSaveSlot: itemSaveSlot,
           saveItemData: saveItemData,
           type: itemType === 'hequip' ? 'equip' : itemType,
           buttons: buttons,
+          chSlotIdx: slotIdx,
         }
       }));
     }

@@ -11,7 +11,7 @@ import { AppContext } from 'contexts/app-context';
 import CharacterCard from 'pages/CharacterCard';
 import React, { useCallback, useContext, useLayoutEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
 // const StyledIconPic = styled(IconPic)`
 // 	position: absolute;
@@ -3782,6 +3782,7 @@ const Battle = ({
   changeSaveData,
 }) => {
   const navigate = useNavigate();
+	const theme = useTheme();
   const context = useContext(AppContext);
   const lang = React.useMemo(() => {
     return context.setting.lang;
@@ -4937,6 +4938,7 @@ const Battle = ({
 								sealed: true,
 							},
 							isSave: true,
+							theme: theme,
 							lang: lang,
 						});
 					} else {

@@ -13,7 +13,7 @@ import GameMainFooter from 'pages/GameMainFooter';
 import QuickMenu from 'pages/QuickMenu';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
 const EVENT_HEIGHT = 80;
 const Wrap = styled.div`
@@ -381,6 +381,7 @@ const MoveEvent = ({
   setShowDim,
 }) => {
   const navigate = useNavigate();
+  const theme = useTheme();
   const context = useContext(AppContext);
   const classification = React.useMemo(() => {
     return context.classification;
@@ -590,6 +591,7 @@ const MoveEvent = ({
                       sealed: false,
                     },
                     isSave: true,
+                    theme: theme,
                     lang: lang,
                   });
                   const itemCate = itemType.split('-')

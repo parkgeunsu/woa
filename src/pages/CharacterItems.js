@@ -12,7 +12,7 @@ import Tooltip from 'components/Tooltip';
 import TooltipContainer from 'components/TooltipContainer';
 import { AppContext } from 'contexts/app-context';
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 
 const Wrap = styled(FlexBox)`
   position: absolute;
@@ -253,6 +253,7 @@ const CharacterItems = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
+  const theme = useTheme();
   const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
   const gameItem = React.useMemo(() => gameData.items, [gameData]);
   const saveCh = React.useMemo(() => chList ? chList[slotIdx] : saveData.ch[slotIdx] || {}, [chList, saveData, slotIdx]);
@@ -546,20 +547,7 @@ const CharacterItems = ({
         </InfoGroup>
       </Wrap>
       <PopupContainer>
-        {showPopup && (
-          <Popup
-            type={popupType}
-            dataObj={popupInfo}
-            saveData={saveData}
-            changeSaveData={changeSaveData}
-            setShowPopup={setShowPopup}
-            setMsg={setMsg}
-            setShowMsg={setShowMsg}
-            setTooltip={setTooltip}
-            setTooltipPos={setTooltipPos}
-            setShowTooltip={setShowTooltip}
-          />
-        )}
+        {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} setTooltip={setTooltip} setTooltipPos={setTooltipPos} setShowTooltip={setShowTooltip} theme={theme}/>}
       </PopupContainer>
       <MsgContainer>
         {showMsg && <Msg text={msg} setShowMsg={setShowMsg}></Msg>}
