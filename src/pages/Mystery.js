@@ -315,7 +315,7 @@ const Mystery = ({
                 {selectTab === 2 && gameData.msg.info.hasSoul[lang]}
               </Text>
               <Text code="t4" color="point2">
-                {selectTab === 0 && util.comma(sData.ch[sData.actionCh.mystery.idx]?.hasExp)}
+                {selectTab === 0 && util.comma(sData.ch[sData.actionCh.mystery.idx]?.hasExp || 0)}
                 {selectTab === 1 && util.comma(sData.info.money)}
                 {selectTab === 2 && util.comma(sData.info.heroSoul || 0)}
               </Text>
