@@ -2625,12 +2625,19 @@ export const util = { //this.loadImage();
       }
 
       let effRandomNum = [];
-      if (grade === 2) {
-        effRandomNum = effList[effType][2];
-      } else if (grade === 3) {
-        effRandomNum = effList[effType][0];
-      } else if (grade === 4) {
-        effRandomNum = effList[effType][1];
+      switch (grade) {
+        case 2:
+          effRandomNum = effList[effType][2];
+          break;
+        case 1:
+        case 3:
+          effRandomNum = effList[effType][0];
+          break;
+        case 4:
+          effRandomNum = effList[effType][1];
+          break;
+        default:
+          effRandomNum = 0;
       }
       const effNum = Math.floor(Math.random()*(effRandomNum[1] - effRandomNum[0])) + effRandomNum[0];
       if (effType === 100) {
