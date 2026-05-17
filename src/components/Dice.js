@@ -2,7 +2,7 @@ import { Text } from 'components/Atom';
 import { IconPic, MergedPic } from 'components/ImagePic';
 import { util } from 'components/Libs';
 import { AppContext } from 'contexts/app-context';
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const Scene = styled.div`
@@ -105,8 +105,6 @@ const Dice = ({
   num = 2,
   width = 50,
   isPlay,
-  setMsg,
-  setShowMsg,
   setShowDice,
   onClick,
   callback,
@@ -114,12 +112,14 @@ const Dice = ({
 }) => {
   const context = useContext(AppContext);
   const diceCount = useRef(0);
+  const timeoutRef = useRef(null);
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
+  const [successText, setSuccessText] = useState(gameData.msg.title.diceSum[lang] + ": " + successNum);
   const diceColor = React.useMemo(() => {
     switch(color) {
       case "red":
@@ -132,6 +132,11 @@ const Dice = ({
   }, [color]);
   const [diceSelect, setDiceSelect] = useState(Array.from({length: num}, (_) => ""));
   const [isSuccess, setIsSuccess] = useState(false);
+  useEffect(() => {
+    return () => {
+      clearTimeout(timeoutRef.current);
+    }
+  }, []);
   return (
     <Scene onClick={(e) => {
       e.stopPropagation();
@@ -143,13 +148,16 @@ const Dice = ({
       if (diceSelect[0] !== "") {
         setDiceSelect(Array.from({length: num}, (_) => ""));
       } else {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
+          setShowDice(false);
+        }, 1500);
         const countArr = diceSelect.map(() => Math.floor(Math.random() * 6) + 1);
-        setShowMsg(true);
         if (util.getSum(countArr) >= successNum) {
           setIsSuccess(true);
-          setMsg(gameData.msg.sentence['diceSuccess'][lang]);
+          setSuccessText(gameData.msg.sentence['diceSuccess'][lang]);
         } else {
-          setMsg(gameData.msg.sentence['diceFailed'][lang]);
+          setSuccessText(gameData.msg.sentence['diceFailed'][lang]);
         }
         setDiceSelect(countArr);
         callback && callback({
@@ -160,7 +168,7 @@ const Dice = ({
       }
       onClick && onClick();
     }}>
-      {successNum && <SuccessText code="t4" color="main" weight="bold">{gameData.msg.title.diceSum[lang] + ": " + successNum}</SuccessText>}
+      {successNum && <SuccessText code="t4" color="main" weight="bold">{successText}</SuccessText>}
       <DiceGroup width={width}>
         {diceSelect.map((_, idx) => {
           return <RollContainer select={diceSelect[idx]} idx={idx} num={num} width={width} key={idx}>

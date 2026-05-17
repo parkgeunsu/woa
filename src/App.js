@@ -438,8 +438,8 @@ const classification = (gameData) => {
     }
     classification.grade[chData.grade].push(chData.idx);
 
-    const chCountry = util.getCountryToIdx(chData.region);
-    if (!chCountry) return;
+    const chCountry = util.getStringToCountryIdx(chData.region);
+    if (typeof chCountry !== "number") return;
     if (!classification.country[chCountry]) {
       classification.country[chCountry] = [];
     }

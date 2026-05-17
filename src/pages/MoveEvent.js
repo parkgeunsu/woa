@@ -185,7 +185,7 @@ const getItemType = (spType) => {
       return "hero";
     case 1:
     case 2:
-      return spType - 1;
+      return spType;
     case 3:
     case 4:
     case 5:
@@ -206,31 +206,52 @@ const getItemType = (spType) => {
 }
 const actionDice = ({
   diceNum,
-  type,
   blockType,
+  type,
+  gameData,
+  saveData,
+  changeSaveData,
   eventPhase,
+  increaseStep,
   setEventPhase,
+  setEventBack,
   limitDiceCount,
   timeoutRef,
-  increaseStep,
+  setMsg,
+  setShowMsg,
+  navigate,
+  lang,
 }) => {
   const isSuccess = limitDiceCount <= diceNum;
   clearTimeout(timeoutRef.current);
   timeoutRef.current = setTimeout(() => {
     switch (blockType) {
-      case 0:
+      case 0://몬스터
         switch (type) {
+          case "save":
+            if (isSuccess) {
+              if (saveData.info) saveData.info.morality += 3;
+              changeSaveData(saveData);
+              setMsg(gameData.msg.sentenceFn.increaseDecrease(lang, gameData.msg.info.moral?.[lang] || "Morality", 3));
+              setShowMsg(true);
+              setEventPhase(2);
+            } else {
+              if (saveData.info) saveData.info.morality += 1;
+              setMsg(gameData.msg.sentenceFn.increaseDecrease(lang, gameData.msg.info.moral?.[lang] || "Morality", 1));
+              setShowMsg(true);
+              setEventPhase(1);
+            }
+            break;
           case "run":
-              setEventPhase(eventPhase === 0 ? 1 : 3);
             if (isSuccess) {
               increaseStep();
             } else {
               setEventPhase(eventPhase === 0 ? 1 : 3);
             }
-          break;
+            break;
         }
         break;
-      case 1:
+      case 1://강력한 몬스터
         switch (type) {
           case "run":
             if (isSuccess) {
@@ -238,25 +259,130 @@ const actionDice = ({
             } else {
               setEventPhase(1);
             }
+            break;
+        }
+        break;
+      case 2://금화
+        break;
+      case 3://보물
+        break;
+      case 4://성채
+        break;
+      case 5://함정
+        break;
+      case 6://포탈
+        break;
+      case 7://우물
+        break;
+      case 8://신성한 우물
+        break;
+      case 9://생명 우물
+        break;
+      case 10://민가
+        switch (type) {
+          case "run":
+            if (isSuccess) {
+              increaseStep();
+            } else {
+              console.log("실패");
+            }
           break;
         }
         break;
-      case 2:
+      case 11://상점
+        switch (type) {
+          case "run":
+            if (isSuccess) {
+              increaseStep();
+            } else {
+              console.log("실패");
+            }
+          break;
+        }
         break;
-      case 3:
+      case 12://경비병
+        switch (type) {
+          case "run":
+            if (isSuccess) {
+              increaseStep();
+            } else {
+              console.log("실패");
+            }
+          break;
+          case "run":
+            if (isSuccess) {
+              increaseStep();
+            } else {
+              console.log("실패");
+            }
+          break;
+        }
         break;
-      case 4:
+      case 13://여행자
+        switch (type) {
+          case "run":
+            if (isSuccess) {
+              increaseStep();
+            } else {
+              console.log("실패");
+            }
+          break;
+          case "run":
+            if (isSuccess) {
+              increaseStep();
+            } else {
+              console.log("실패");
+            }
+          break;
+        }
+        break;
+      case 14://주민
+        switch (type) {
+          case "run":
+            if (isSuccess) {
+              increaseStep();
+            } else {
+              console.log("실패");
+            }
+          break;
+          case "run":
+            if (isSuccess) {
+              increaseStep();
+            } else {
+              console.log("실패");
+            }
+          break;
+        }
+        break;
+      case 15://수상한자
+        switch (type) {
+          case "run":
+            if (isSuccess) {
+              increaseStep();
+            } else {
+              console.log("실패");
+            }
+          break;
+          case "run":
+            if (isSuccess) {
+              increaseStep();
+            } else {
+              console.log("실패");
+            }
+          break;
+        }
         break;
     }
   }, 500);
 }
 const action = ({
+  blockType,
   type,
   gameData,
   saveData,
   changeSaveData,
+  eventPhase,
   increaseStep,
-  setShowDice,
   setEventPhase,
   setEventBack,
   timeoutRef,
@@ -265,48 +391,110 @@ const action = ({
   navigate,
   lang,
 }) => {
+  const isEmptyEntry = () => {
+    let isEmpty = true;
+    saveData.eventLineup.save_slot[saveData.eventLineup.select].entry.forEach((entryData) => {
+      if (entryData !== '') {
+        isEmpty = false;
+      }
+    });
+    if (isEmpty) {
+      setShowMsg(true);
+      setMsg(gameData.msg.sentence['organizeCard'][lang]);
+      return true;
+    }
+    return false;
+  }
+  const moveEvent = saveData && saveData.moveEvent;
+  if (!moveEvent) return;
+  //attack 변수
+  let lv = 1,
+    enemyNum = 1,
+    heroNum = 0,
+    enemyPenalty = "",
+    allyPenalty = "";
+  switch (blockType) {
+    case 0://몬스터
+      switch(type) {
+        case "attack":
+          if (isEmptyEntry()) return;
+          lv = Math.max((saveData.info?.lv || 1) + Math.round(Math.random() * 10 - 5), 2);
+          enemyNum = util.battleEnemyNum(3);
+          heroNum = util.appearedBattleHero("moveEvent");
+          enemyPenalty = eventPhase === 0 ? util.battlePenalty() : "";
+          allyPenalty = eventPhase === 1 ? {
+            type: "hp",
+            num: "-20",
+          } : eventPhase === 3 ? {
+            type: "hp",
+            num: "-40",
+          } : "";
+          break;
+        case "save":
+          break;
+      }
+      break;
+    case 1://강력한 몬스터
+      switch(type) {
+        case "attack":
+          if (isEmptyEntry()) return;
+          lv = (saveData.info?.lv || 1) + Math.round(Math.random() * 5 + 5);
+          enemyNum = util.battleEnemyNum(7);
+          heroNum = util.appearedBattleHero("moveEventStrong");
+          enemyPenalty = eventPhase === 0 ? util.battlePenalty() : "";
+          allyPenalty = eventPhase === 1 ? {
+            type: "hp",
+            num: "-50",
+          } : "";
+          break;
+      }
+      break;
+    case 2://금화
+      break;
+    case 3://보물
+      break;
+    case 4://성채
+      break;
+    case 5://함정
+      break;
+    case 6://포탈
+      break;
+    case 7://우물
+      break;
+    case 8://신성한 우물
+      break;
+    case 9://생명 우물
+      break;
+    case 10://민가
+      break;
+    case 11://상점
+      break;
+    case 12://경비병
+      break;
+    case 13://여행자
+      break;
+    case 14://주민
+      break;
+    case 15://수상한자
+      break;
+  }
+  //공통 처리
   switch(type) {
     case "attack":
-      let lv = 2,
-        enemyNum = 0;
-      const currentMoveEvent = saveData && saveData.moveEvent;
-      if (!currentMoveEvent) return;
-      let isEmptyEntry = true;
-      saveData.eventLineup.save_slot[saveData.eventLineup.select].entry.forEach((entryData) => {
-        if (entryData !== '') {
-          isEmptyEntry = false;
-        }
-      });
-      if (isEmptyEntry) {
-        setShowMsg(true);
-        setMsg(gameData.msg.sentence['organizeCard'][lang]);
-        return;
-      }
-      if (currentMoveEvent.blockArr?.type?.[currentMoveEvent.currentStep] === 0) {
-        lv = Math.max((saveData.info?.lv || 1) + Math.round(Math.random() * 10 - 5), 2);
-        enemyNum = util.battleEnemyNum(3);
-      } else {
-        lv = (saveData.info?.lv || 1) + Math.round(Math.random() * 5 + 5);
-        enemyNum = util.battleEnemyNum(7);
-      }
       console.log("attack");
-      const lv1Hero = util.appearedLv1Hero("moveEvent"),
-        enemyPenalty = util.battlePenalty();
-      
       const battleDataObj = {
         type: "moveEvent",
-        title: gameData.msg.moveEvent[ currentMoveEvent.currentStep === 0 ? "enemy" : "sEnemy"]?.[lang] || "Battle",
-        region: currentMoveEvent.moveTo,
+        title: `${gameData.country.regions[saveData.moveEvent.moveTo].name[lang]}${gameData.msg.grammar.conjunction[lang]} ${gameData.msg.moveEvent[moveEvent.blockType === 0 ? "enemy" : "sEnemy"]?.[lang]}`,
+        region: moveEvent.moveTo,
         enemy: {
           lv: lv,
-          lv1Hero: lv1Hero,
+          heroNum: heroNum,
           enemyNum: enemyNum,
           enemyPenalty: enemyPenalty,
-          allyPenalty: "",
+          allyPenalty: allyPenalty,
           helper: [],
         },
       };
-
       util.saveHistory({
         prevLocation: 'moveEvent',
         location: 'battle',
@@ -324,51 +512,8 @@ const action = ({
         isNavigate: true,
       });
       break;
-    case "save":
-      setShowDice(true);
-      if ((saveData.info?.morality || 0) + Math.random() * 100 > 100) {
-        //setEventBack(21);
-        //timeoutRef = setTimeout(() => {
-          const cloneSaveData = JSON.parse(JSON.stringify(saveData));
-          if (cloneSaveData.info) cloneSaveData.info.morality += 1;
-          setMsg(gameData.msg.sentenceFn.increaseDecrease(lang, gameData.msg.info.moral?.[lang] || "Morality", 1));
-          setShowMsg(true);
-          changeSaveData(cloneSaveData);
-        //}, 2000);
-      } else {
-        setEventPhase(1);
-      }
-      console.log(saveData.info?.morality)
-      break;
-    case "run":
-      setShowDice(true);
-      //increaseStep();
-      break;
-    case "drink":
-      break;
-    case "ignore":
-      setShowDice(true);
-      //increaseStep();
-      break;
-    case "conversation":
-      break;
-    case "gamble":
-      break;
-    case "steal":
+    case "next":
       increaseStep();
-      break;
-    case "touchGrail":
-      break;
-    case "putMoney":
-      break;
-    case "putItem":
-      break;
-    case "dont":
-      increaseStep();
-      break;
-    case "use":
-      break;
-    default:
       break;
   }
 }
@@ -402,7 +547,9 @@ const MoveEvent = ({
   const [showMsg, setShowMsg] = useState(false);
   const [msg, setMsg] = useState("");
   const [currentStep, setCurrentStep] = useState(sData.moveEvent.currentStep);
-  const blockType = sData.moveEvent.blockArr?.type?.[currentStep] || 0;
+  const blockType = React.useMemo(() => {
+    return sData.moveEvent.blockArr?.type?.[currentStep] || 0;
+  }, [sData, currentStep]);
   const [eventPhase, setEventPhase] = useState(0);
   const actionData = React.useMemo(() => {
     if (currentStep + 1 === sData.moveEvent.distance) {
@@ -466,8 +613,8 @@ const MoveEvent = ({
   const [showDice, setShowDice] = useState(false);
   const [actionType, setActionType] = useState("");
   const limitDiceCount = React.useMemo(() => {
-    return gameData.diceCount.moveEvent[actionType];
-  }, [gameData, actionType]);
+    return gameData.diceCount.moveEvent[blockType][actionType];
+  }, [gameData, blockType, actionType]);
   const leaderDiceSkill = React.useMemo(() => {
     let hasSkill = [false, false];
     for (const [idx, skillData] of sData.ch[sData.info.leaderIdx].hasSkill.entries()) {
@@ -594,9 +741,11 @@ const MoveEvent = ({
                     theme: theme,
                     lang: lang,
                   });
-                  const itemCate = itemType.split('-')
+                  console.log(String(itemType).indexOf("-"));
+                  const itemCate = String(itemType).indexOf("-") >= 0 ? itemType.split('-') : [itemType, "0"];
                   const gameItemData = gameData.items.equip[itemCate[0]][itemCate[1]][0][acquiredThings.idx];
-                  setPopupType("hequip");
+                  console.log(acquiredThings);
+                  setPopupType("item");
                   setPopupInfo(prev => ({
                     ...prev,
                     hequip: {
@@ -641,21 +790,42 @@ const MoveEvent = ({
             <EventText className="eventOrderText" direction="column" alignItems="flex-start">
               {gameData.events.lastEvent[`action${eventPhase}`].list.map((aData, aIdx) => {
                 return <Button key={`action_${aIdx}`} size="small" onClick={(e) => {
-                  action({
-                    type: aData.name,
-                    gameData: gameData,
-                    saveData: sData,
-                    changeSaveData: changeSaveData,
-                    setShowDice: setShowDice,
-                    increaseStep: increaseStep,
-                    setEventPhase: setEventPhase,
-                    setEventBack: setEventBack,
-                    timeoutRef: timeoutRef.current,
-                    setMsg: setMsg,
-                    setShowMsg: setShowMsg,
-                    navigate: navigate,
-                    lang: lang,
-                  });
+                  switch(aData.name) {
+                    case "save":
+                    case "run":
+                    case "ignore":
+                    case "steal":
+                    case "dont":
+                      setShowDice(true);
+                      break;
+                    case "attack":
+                    case "drink":
+                    case "conversation":
+                    case "gamble":
+                    case "touchGrail":
+                    case "putMoney":
+                    case "putItem":
+                    case "use":
+                      action({
+                        blockType: blockType,
+                        type: aData.name,
+                        gameData: gameData,
+                        saveData: sData,
+                        changeSaveData: changeSaveData,
+                        eventPhase: eventPhase,
+                        increaseStep: increaseStep,
+                        setEventPhase: setEventPhase,
+                        setEventBack: setEventBack,
+                        timeoutRef: timeoutRef,
+                        setMsg: setMsg,
+                        setShowMsg: setShowMsg,
+                        navigate: navigate,
+                        lang: lang,
+                      });
+                      break;
+                    default:
+                      break;
+                  }
                   setActionType(aData.name);
                   e.stopPropagation();
                 }}>{aIdx + 1}. {gameData.msg.moveEvent[aData.name][lang]}</Button>
@@ -669,21 +839,43 @@ const MoveEvent = ({
             <EventText className="eventOrderText" direction="column" alignItems="flex-start">
               {gameData.events.eventProcess[blockType][`action${eventPhase}`].list.map((aData, aIdx) => {
                 return <Button key={`action_${aIdx}`} size="small" onClick={(e) => {
-                  action({
-                    type: aData.name,
-                    gameData: gameData,
-                    saveData: sData,
-                    changeSaveData: changeSaveData,
-                    setShowDice: setShowDice,
-                    increaseStep: increaseStep,
-                    setEventPhase: setEventPhase,
-                    setEventBack: setEventBack,
-                    timeoutRef: timeoutRef.current,
-                    setMsg: setMsg,
-                    setShowMsg: setShowMsg,
-                    navigate: navigate,
-                    lang: lang,
-                  });
+                  switch(aData.name) {
+                    case "save":
+                    case "run":
+                    case "ignore":
+                    case "steal":
+                    case "dont":
+                      setShowDice(true);
+                      break;
+                    case "attack":
+                    case "next":
+                    case "drink":
+                    case "conversation":
+                    case "gamble":
+                    case "touchGrail":
+                    case "putMoney":
+                    case "putItem":
+                    case "use":
+                      action({
+                        blockType: blockType,
+                        type: aData.name,
+                        gameData: gameData,
+                        saveData: sData,
+                        changeSaveData: changeSaveData,
+                        eventPhase: eventPhase,
+                        increaseStep: increaseStep,
+                        setEventPhase: setEventPhase,
+                        setEventBack: setEventBack,
+                        timeoutRef: timeoutRef,
+                        setMsg: setMsg,
+                        setShowMsg: setShowMsg,
+                        navigate: navigate,
+                        lang: lang,
+                      });
+                      break;
+                    default:
+                      break;
+                  }
                   setActionType(aData.name);
                   e.stopPropagation();
                 }}>{aIdx + 1}. {gameData.msg.moveEvent[aData.name][lang]}</Button>
@@ -692,20 +884,28 @@ const MoveEvent = ({
           </>
         )}
       </EventView>
-      {showDice && <Dice successNum={limitDiceCount} bg={0} num={leaderDiceSkill[1] ? 3 : 2} isPlay={leaderDiceSkill[0] ? 2 : 1} setShowDice={setShowDice} setMsg={setMsg} setShowMsg={setShowMsg}callback={(v) => {
+      {showDice && <Dice successNum={limitDiceCount} bg={0} num={leaderDiceSkill[1] ? 3 : 2} isPlay={leaderDiceSkill[0] ? 2 : 1} setShowDice={setShowDice} callback={(v) => {
         actionDice({
           diceNum: util.getSum(v.diceArr),
           blockType: blockType,
           type: actionType,
+          gameData: gameData,
+          saveData: sData,
+          changeSaveData: changeSaveData,
           eventPhase: eventPhase,
-          setEventPhase: setEventPhase,
-          limitDiceCount: limitDiceCount,
           increaseStep: increaseStep,
+          setEventPhase: setEventPhase,
+          setEventBack: setEventBack,
+          limitDiceCount: limitDiceCount,
           timeoutRef: timeoutRef,
+          setMsg: setMsg,
+          setShowMsg: setShowMsg,
+          navigate: navigate,
+          lang: lang,
         });
       }} />}
     </Wrap>
-    <GameMainFooter saveData={sData} gameMode={"moveEvent"} setGameMode={setGameMode} stay={sData.info.stay} moveData={sData.moveEvent} actionData={actionData} showEvent={showEvent} setShowEvent={setShowEvent} setShowDim={setShowDim} eventPhase={eventPhase} />
+    <GameMainFooter saveData={sData} changeSaveData={changeSaveData} gameMode={"moveEvent"} setGameMode={setGameMode} stay={sData.info.stay} moveData={sData.moveEvent} actionData={actionData} showEvent={showEvent} setShowEvent={setShowEvent} setShowDim={setShowDim} eventPhase={eventPhase} />
     <PopupContainer>
       {showPopup && <Popup type={popupType} dataObj={popupInfo} saveData={saveData} changeSaveData={changeSaveData} setShowPopup={setShowPopup} setMsg={setMsg} setShowMsg={setShowMsg} />}
     </PopupContainer>

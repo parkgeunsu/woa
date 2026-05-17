@@ -88,7 +88,7 @@ const ChracterList = ({
     });
   }, [sData]);
   const chData = React.useMemo(() => {
-    const ch = isMoveEvent ? util.loadData("historyParam").moveEvent.ch : entries;
+    const ch = isMoveEvent ? sData.moveEvent.ch : entries;
     if (isMoveEvent) {
 			return {
 				moveCh: ch.map((c) => ({

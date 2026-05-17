@@ -19,7 +19,7 @@ export const events = {
     { idx: 5, name: "town" },
     { idx: 6, name: "shop" },
   ],
-  lastEvent: {
+  lastEvent: {//수문장
     action0: {
       picIdx: 54, 
       title: "eventText16",
@@ -35,7 +35,7 @@ export const events = {
     ]},
   },
   eventProcess: [
-    { idx: 0, action0: {
+    { idx: 0, action0: {//몬스터
       picIdx: 0, 
       title: "eventText0",
       list:[
@@ -60,7 +60,7 @@ export const events = {
         { name: "attack" },
       ]
     }},
-    { idx: 1, action0: {
+    { idx: 1, action0: {//강력한 몬스터
       picIdx: 4, 
       title: "eventText1",
       list:[
@@ -72,19 +72,19 @@ export const events = {
       list:[
         { name: "attack" },
     ]}},
-    { idx: 2, action0: {
+    { idx: 2, action0: {//금화
       picIdx: 6, 
       title: "eventText2",
       list:[
         { name: "getGold" },
     ]}},
-    { idx: 3, action0: {
+    { idx: 3, action0: {//보물
       picIdx: 7, 
       title: "eventText3",
       list:[
         { name: 'getTreasure' },
     ]}},
-    { idx: 4, action0: {
+    { idx: 4, action0: {//성채
       picIdx: 8, 
       title: "eventText4",
       list:[
@@ -93,7 +93,7 @@ export const events = {
         { name: "putItem" },
         { name: "dont" },
     ]}},
-    { idx: 5, action0: {
+    { idx: 5, action0: {//함정
       picIdx: 9, 
       title: "eventText5",
       list:[
@@ -110,35 +110,35 @@ export const events = {
       list:[
         { name: "ignore" },
     ]}},
-    { idx: 6, action0: {
+    { idx: 6, action0: {//포탈
       picIdx: 12, 
       title: "eventText6",
       list:[
         { name: "use" },
         { name: "ignore" },
     ]}},
-    { idx: 7, action0: {
+    { idx: 7, action0: {//우물
       picIdx: 13, 
       title: "eventText7",
       list:[
         { name: "drink" },
         { name: "ignore" },
     ]}},
-    { idx: 8, action0: {
+    { idx: 8, action0: {//신성한 우물
       picIdx: 14, 
       title: "eventText8",
       list:[
         { name: "drink" },
         { name: "ignore" },
     ]}},
-    { idx: 9, action0: {
+    { idx: 9, action0: {//생명 우물
       picIdx: 15, 
       title: "eventText9",
       list:[
         { name: "drink" },
         { name: "ignore" },
     ]}},
-    { idx: 10, action0: {
+    { idx: 10, action0: {//민가
       picIdx: 16, 
       title: "eventText10",
       list:[
@@ -168,7 +168,7 @@ export const events = {
       list:[
         { name: "next" },
     ]}},
-    { idx: 11, action0: {
+    { idx: 11, action0: {//상점
       picIdx: 20, 
       title: "eventText11",
       list:[
@@ -187,7 +187,7 @@ export const events = {
       list:[
         { name: "attack" },
     ]}},
-    { idx: 12, action0: {
+    { idx: 12, action0: {//경비병
       picIdx: 23, 
       title: "eventText12",
       list:[ //경비병
@@ -220,7 +220,7 @@ export const events = {
         { name: "conversation1" },
         { name: "conversation2" },
     ]}},
-    { idx: 13, action0: {
+    { idx: 13, action0: {//여행자
       picIdx: 28, 
       title: "eventText13",
       list:[ //여행자
@@ -254,10 +254,10 @@ export const events = {
         { name: "conversation2" },
         { name: "conversation3" },
     ]}},
-    { idx: 14, action0: {
+    { idx: 14, action0: {//주민
       picIdx: 33, 
       title: "eventText14", 
-      list:[ //주민
+      list:[
         { name: "conversation" },
         { name: "attack" },
         { name: "steal" },
@@ -286,10 +286,10 @@ export const events = {
         { name: "conversation0" },
         { name: "conversation2" },
     ]}},
-    { idx: 15, action0: {
+    { idx: 15, action0: {//수상한자
       picIdx: 38, 
       title: "eventText15",
-      list:[ //수상한자
+      list:[ 
         { name: "conversation" },
         { name: "gamble" },
         { name: "attack" },

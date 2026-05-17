@@ -79,9 +79,9 @@ const QuickMenu = ({
   const gameData = React.useMemo(() => {
     return context.gameData;
   }, [context]);
-  const sData = React.useMemo(() => Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
-  const isMoveEvent = React.useMemo(() => sData?.moveEvent && Object.keys(sData?.moveEvent)?.length > 0
-	, []);
+  const sData = React.useMemo(() => saveData && Object.keys(saveData).length === 0 ? util.loadData('saveData') : saveData, [saveData]);
+  const isMoveEvent = React.useMemo(() => type === "move"
+	, [type]);
   return <QuickMenuBox showDim={showDim} type={type} gameMode={gameMode} className="transition">
     <QuickMenuTitle onClick={() => {
       setShowDim(prev => !prev);
@@ -98,13 +98,6 @@ const QuickMenu = ({
           callback: () => {},
           isNavigate: true,
         });//히스토리 저장
-        // const sData = {...saveData};
-        //   const aa = sData.ch.concat(sData.ch);
-        //   const bb = aa.concat(aa);
-        //   const cc = bb.concat(bb);
-        //   const dd = cc.concat(cc);
-        //   sData.ch = dd;
-        //   changeSaveData(sData);
       }}/><Text className="text">{gameData.msg?.button?.['cards']?.[lang] || "Cards"}</Text></li>}
       <li><IconPic type="quickMenu" pic="icon100" idx={1} onClick={() => {
         util.saveHistory({
@@ -128,6 +121,7 @@ const QuickMenu = ({
       }}/><Text className="text">{gameData.msg?.button?.['chat']?.[lang] || "Chat"}</Text></li>
       <li><IconPic type="quickMenu" pic="icon100" idx={7} onClick={() => {
         util.saveHistory({
+          prevLocation: isMoveEvent ? 'moveEvent' : 'gameMain',
           location: 'setup',
           navigate: navigate,
           callback: () => {},

@@ -1,3 +1,4 @@
+import { TextButton } from 'components/Button';
 import { Prices } from 'components/Components';
 import { FlexBox } from 'components/Container';
 import ModalContainer from 'components/ModalContainer';
@@ -76,6 +77,7 @@ const ModalClose = styled.div`
 		}
 	}
 `;
+const ButtonGroup = styled(FlexBox)``;
 const buttonEvent = (dataInfo, btInfo, submitFn, saveData, gameData, changeSaveData, lang) => {
 	switch(btInfo.action) {
 		case 'gacha':
@@ -93,25 +95,25 @@ const buttonEvent = (dataInfo, btInfo, submitFn, saveData, gameData, changeSaveD
 const typeAsContent = (type, dataObj, submitFn, saveData, gameData, changeSaveData, lang) => {
 	if (type === 'confirm') {
 		return (
-			<div className="bt_box" flex="true">
+			<ButtonGroup className="bt_box" flex="true">
 				{dataObj?.bt && dataObj.bt.map((btData, idx) => {
-					return <button className="button_small" key={idx} onClick={() => {
+					return <TextButton type="small" key={idx} onClick={() => {
 							buttonEvent(dataObj.info, dataObj.bt[idx], submitFn, saveData, gameData, changeSaveData, lang);
-						}} msg="true">{btData.txt}</button>
+						}} msg="true">{btData.txt}</TextButton>
 				})}
-			</div>
+			</ButtonGroup>
 		);
 	} else if (type === 'prompt') {
 		return (
 			<>
 				<input type="text" placeholder={dataObj.hint} />
-				<div className="bt_box" flex="true">
+				<ButtonGroup className="bt_box" flex="true">
 					{dataObj?.bt && dataObj.bt.map((btData, idx) => {
-						return <button className="button_small" key={idx} onClick={() => {
+						return <TextButton type="small" key={idx} onClick={() => {
 							buttonEvent(dataObj.info, dataObj.bt[idx], submitFn);
-						}} msg="true">{btData.txt}</button>
+						}} msg="true">{btData.txt}</TextButton>
 					})}
-				</div>
+				</ButtonGroup>
 			</>
 		);
 	} else if (type === 'alert') {
@@ -139,7 +141,6 @@ const Modal = ({
   const lang = React.useMemo(() => {
     return context.setting.lang;
   }, [context]);
-	console.log(payment, gameData.prices.training[payment]);
 	return (
 		<ModalContainer>
 			<ModalWrap className="transition">

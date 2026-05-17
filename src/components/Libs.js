@@ -2217,54 +2217,6 @@ export const util = { //this.loadImage();
         return '';
     }
   },
-  getCountryToIdx: (country) => {
-    switch(country) {
-      case 'japan0':
-      case 'japan1':
-      case 'japan2':
-        return 0;
-      case 'korea0':
-      case 'korea1':
-      case 'korea2':
-        return 1;
-      case 'mongolia0':
-      case 'mongolia1':
-      case 'mongolia2':
-      case 'mongolia3':
-      case 'mongolia4':
-        return 2;
-      case 'china0':
-      case 'china1':
-      case 'china2':
-      case 'china3':
-      case 'china4':
-      case 'china5':
-      case 'china6':
-      case 'china7':
-        return 3;
-      case 'saudiArabia0':
-        return 4;
-      case 'egypt0':
-        return 5;
-      case 'greece0':
-        return 6;
-      case 'italy0':
-        return 7;
-      case 'france0':
-        return 8;
-      case 'spain0':
-        return 9;
-      case 'portugal0':
-        return 10;
-      case 'unitedKingdom0':
-      case 'unitedKingdom1':
-        return 11;
-      case 'etc':
-        return 100;
-      default:
-        return '';
-    }
-  },
   getStringToCountryIdx: (country) => {
     switch(country) {
       case 'japan0':
@@ -2335,6 +2287,9 @@ export const util = { //this.loadImage();
       case 26:
       case 27:
         return 11;
+      case 'etc':
+      case 100:
+        return 100;
       default:
         return '';
     }
@@ -2410,6 +2365,7 @@ export const util = { //this.loadImage();
               break;
           }
         } else {
+          console.log(gameData.items[type][cate], cate)
           const itemTypeLength = gameData.items[type][cate].length,
             itemType = String(Math.floor(Math.random() * itemTypeLength));
           if(cate === "3") {//무기일 경우
@@ -4242,11 +4198,11 @@ export const util = { //this.loadImage();
     const diffCount = Math.random();
     if (diffCount < 0.03) {//1~25
       return Math.round(Math.random() * 24 + 1);
-    } else if (diffCount < 0.1) {//7~12
+    } else if (diffCount < 0.1) {//4~9 + num
       return Math.round(Math.random() * 5 + (num + 4));
-    } else if (diffCount < 0.5) {//4~7
+    } else if (diffCount < 0.5) {//1~4 + num
       return Math.round(Math.random() * 3 + (num + 1));
-    } else {//3~5
+    } else {//0~2 + num
       return Math.round(Math.random() * 2 + num);
     }
   },
@@ -4255,17 +4211,17 @@ export const util = { //this.loadImage();
     if (penaltyCoun < 0.01) {
       return {
         type: "hp",
-        num: "-30%",
+        num: "-30",
       }
     } else if (penaltyCoun < 0.05) {
       return {
         type: "hp",
-        num: "-20%",
+        num: "-20",
       }
     } else if (penaltyCoun < 0.1) {
       return {
         type: "hp",
-        num: "-10%",
+        num: "-10",
       }
     } else if (penaltyCoun < 0.15) {
       return {
@@ -4283,13 +4239,21 @@ export const util = { //this.loadImage();
       return "";
     }
   },
-  appearedLv1Hero: (battleType) => {
+  appearedBattleHero: (battleType) => {
     const num = Math.random();
     switch (battleType) {
-      case "moveEvent":
-        if (num < 0.01) {
+      case "moveEventStrong":
+        if (num < 0.1) {
+          return 3;
+        } else if (num < 0.2) {
           return 2;
-        } else if (num < 0.1) {
+        } else {
+          return 1;
+        }
+      case "moveEvent":
+        if (num < 0.1) {
+          return 2;
+        } else if (num < 0.3) {
           return 1;
         } else {
           return 0;
@@ -4297,15 +4261,15 @@ export const util = { //this.loadImage();
       case "scenarioRegion":
         if (num < 0.01) {
           return 2;
-        } else if (num < 0.2) {
+        } else if (num < 0.1) {
           return 1;
         } else {
           return 0;
         }
       case "exploring":
-        if (num < 0.01) {
+        if (num < 0.05) {
           return 2;
-        } else if (num < 0.3) {
+        } else if (num < 0.2) {
           return 1;
         } else {
           return 0;
@@ -4358,7 +4322,6 @@ export const util = { //this.loadImage();
         skillLvPrice[0] * itemGrade + itemTier * 30000 + 30000 * addEffNum + 10000 * socketNum + 20000 * coinNum,
         isSealed ? skillLvPrice[1] : skillLvPrice[1] * itemGrade
       ]
-      console.log(skillLvPrice[0], price[0], itemGrade)
     switch (payType) {
       case "exp":
         return {
@@ -4823,5 +4786,15 @@ export const util = { //this.loadImage();
       default:
         return 0;
     }
+  },
+  getRandomUnique: (arr, length) => {
+    if (!Array.isArray(arr)) return [];
+    const copy = [...arr];
+    const size = Math.min(length, arr.length);
+    for (let i = copy.length - 1; i > copy.length - 1 - size; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy.slice(copy.length - size);
   }
 }

@@ -78,11 +78,40 @@ export const actionPoint = {
 }
 
 export const diceCount = {
-	moveEvent: {
-		steal: 10,
-		save: 8,
-		run: 5,
-	}
+	moveEvent: [
+		{//몬스터
+			run: 5,
+			save: 8,
+		},
+		{//강력한 몬스터
+			run: 10,
+		},
+		{},{},{},{},{},{},{},{},
+		{//민가
+			run: 5,
+			steal: 10,
+		},
+		{//상점
+			run: 9,
+			steal: 12,
+		},
+		{//경비병
+			run: 10,
+			steal: 12,
+		},
+		{//여행자
+			run: 9,
+			steal: 10,
+		},
+		{//주민
+			run: 9,
+			steal: 10,
+		},
+		{//수상한자
+			run: 9,
+			steal: 12,
+		},
+	]
 }
 
 export const reward = {

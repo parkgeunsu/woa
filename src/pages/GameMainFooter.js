@@ -285,12 +285,11 @@ const GameMainFooter = ({
         {gameMode === "moveEvent" && <ButtonWrap alignItems="self-end" gameMode={gameMode === "moveEvent"}>
           <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="smallSize"  onClick={() => {
             setGameMode('');
-            util.historyBack(navigate);
-            const historyP = JSON.parse(JSON.stringify(util.loadData('historyParam') || {}));
-            util.saveData("historyParam", {
-              ...historyP,
+            changeSaveData(prev => ({
+              ...prev,
               moveEvent: {},
-            });
+            }))
+            util.historyBack(navigate);
           }}>{gameData.msg.button['cancel'][lang]}</StyledButton>
           <StyledButton width="100%" btnImg={imgSet.button.btnSD} className="smallSize"  onClick={() => {
             props.setShowEvent(prev => !prev);

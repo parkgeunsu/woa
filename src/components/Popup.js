@@ -841,7 +841,7 @@ const typeAsContent = ({type, dataObj, saveData, changeSaveData, chPage, setChPa
     }),
       priceSubText = payType === "exp" ? gameData.msg.info.hasExp[lang] : payType === "life" ?gameData.msg.info.hasSoul[lang] : gameData.msg.title.money[lang];
     console.log(buttons);
-    const animalModifier = `${saveItem.mark !== "" ? gameData.animalType[saveItem.mark].na[lang] : ''} ${gameData.items.markModifier[saveItem.markNum][lang]}`,
+    const animalModifier = `${saveItem.mark != undefined && saveItem.mark !== "" ? gameData.animalType[saveItem.mark]?.na[lang] : ''} ${gameData.items.markModifier[saveItem.markNum]?.[lang]}`,
       slotModifier = saveItem.slot ? gameData.items.slotModifier[saveItem.slot][lang] : '';
     const modifyName = `${saveItem.colorantSet ? util.getColorant(saveItem.colorantSet, gameData).na[lang] : ''} ${animalModifier} ${slotModifier}`;
     const itemName = (part === 1 || part === 2 || part === 3) ? items.na[saveItem.tier || 0][lang] : items.na[lang];

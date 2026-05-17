@@ -835,19 +835,19 @@ export const items = {
     {idx:2,grade:3,imgCate:'itemEtc',pic:"itemEtc",display:2,na:{ko:'동전더미(금)',en:'Stack of Coins (Gold)',jp:'コイン山(金)'},kg:30,price:10000,
     action:99,invenUse:true,txt:{ko:'G조각 10000개로 판매할 수 있다.',en:'G can be sold for 10000 pieces.',jp:'Gピース10000個で販売できる。'},eff:10000},
 
-    {idx:3,grade:4,imgCate:'itemEtc',displayText:'I',pic:"itemEtc",display:22,na:{ko:'경험의 서I',en:'Book of ExperiencesI',jp:'経験の書I'},kg:0.1,price:100,
+    {idx:3,grade:1,imgCate:'itemEtc',displayText:'I',pic:"itemEtc",display:22,na:{ko:'경험의 서I',en:'Book of ExperiencesI',jp:'経験の書I'},kg:0.1,price:100,
     action:98,invenUse:false,txt:{ko:'100의 경험치를 획득 할 수 있다.',en:'You can earn 100 experience points.',jp:'100の経験値を獲得できる。'},eff:100},
 
-    {idx:4,grade:5,imgCate:'itemEtc',displayText:'II',pic:"itemEtc",display:22,na:{ko:'경험의 서II',en:'Book of ExperiencesII',jp:'経験の書II'},kg:0.1,price:1000,
+    {idx:4,grade:2,imgCate:'itemEtc',displayText:'II',pic:"itemEtc",display:22,na:{ko:'경험의 서II',en:'Book of ExperiencesII',jp:'経験の書II'},kg:0.1,price:1000,
     action:98,invenUse:false,txt:{ko:'1000의 경험치를 획득 할 수 있다.',en:'You can earn 1000 experience points.',jp:'1000の経験値を獲得できる。'},eff:1000},
 
-    {idx:5,grade:5,imgCate:'itemEtc',displayText:'III',pic:"itemEtc",display:22,na:{ko:'경험의 서III',en:'Book of ExperiencesIII',jp:'経験の書III'},kg:0.1,price:10000,
+    {idx:5,grade:3,imgCate:'itemEtc',displayText:'III',pic:"itemEtc",display:22,na:{ko:'경험의 서III',en:'Book of ExperiencesIII',jp:'経験の書III'},kg:0.1,price:10000,
     action:98,invenUse:false,txt:{ko:'10000의 경험치를 획득 할 수 있다.',en:'You can earn 10000 experience points.',jp:'10000の経験値を獲得できる。'},eff:10000},
 
-    {idx:6,grade:6,imgCate:'itemEtc',displayText:'IV',pic:"itemEtc",display:22,na:{ko:'경험의 서IV',en:'Book of ExperiencesIV',jp:'経験の書IV'},kg:0.1,price:50000,
+    {idx:6,grade:3,imgCate:'itemEtc',displayText:'IV',pic:"itemEtc",display:22,na:{ko:'경험의 서IV',en:'Book of ExperiencesIV',jp:'経験の書IV'},kg:0.1,price:50000,
     action:98,invenUse:false,txt:{ko:'50000의 경험치를 획득 할 수 있다.',en:'You can earn 50000 experience points.',jp:'50000の経験値を獲得できる。'},eff:50000},
 
-    {idx:7,grade:6,imgCate:'itemEtc',displayText:'V',pic:"itemEtc",display:22,na:{ko:'경험의 서V',en:'Book of ExperiencesV',jp:'経験の書V'},kg:0.1,price:100000,
+    {idx:7,grade:4,imgCate:'itemEtc',displayText:'V',pic:"itemEtc",display:22,na:{ko:'경험의 서V',en:'Book of ExperiencesV',jp:'経験の書V'},kg:0.1,price:100000,
     action:98,invenUse:false,txt:{ko:'100000의 경험치를 획득 할 수 있다.',en:'You can earn 100000 experience points.',jp:'100000の経験値を獲得できる。'},eff:100000},
 
     {idx:8,grade:1,imgCate:'itemEtc',displayText:'I',pic:"itemEtc",display:23,na:{ko:'아이템 강화서I',en:'Item Enhancement Scroll I',jp:'アイテム強化書I'},kg:0.1,price:100,

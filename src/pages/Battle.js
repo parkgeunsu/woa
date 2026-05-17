@@ -3840,7 +3840,7 @@ const Battle = ({
 		} 
 		if (battleType === "exploring") {
 			const chRegionArr = classification.region?.[util.getRegionToIdx(sData?.info?.stay)],
-				chCountryArr = classification.country?.[util.getCountryToIdx(sData?.info?.stay)];
+				chCountryArr = classification.country?.[util.getStringToCountryIdx(sData?.info?.stay)];
 			let chArr = [];
 			if (chRegionArr && chRegionArr.length > 0) {
 				chArr = chRegionArr;
@@ -3853,7 +3853,7 @@ const Battle = ({
 			const difficult = difficultLv[util.getRegionToIdx(sData?.info?.stay)];
 			const enemyCount = paramData.roulette.base.color.length + paramData.roulette.add.color.length,
 				lv = Math.max(difficult - paramData.roulette.lv.num, 10),
-				grade = Math.floor(Math.random() * 4);
+				itemLv = Math.floor(paramData.roulette.lv.num / 10) * 10;
 			const posArr = Array.from({ length: 25 }, (_, idx) => idx);
 			const entryEntries = Array.from({ length: 25 }, (_, idx) => {return {idx:'', lv:1 }});
 			for(let i = 0; i < enemyCount; i++) {
@@ -3861,13 +3861,18 @@ const Battle = ({
 				const posIdx = Math.floor(Math.random() * posArr.length),
 					chIdx = isHero ? Math.floor(Math.random() * chArr.length) : Math.floor(Math.random() * 4 + 200),
 					pos = posArr[posIdx],
-					ch = chArr[chIdx];
+					ch = chArr[chIdx],
+					grade = Math.floor(Math.random() * 4);
 				posArr.splice(posIdx, 1);
 				chArr.splice(chIdx, 1);
 				entryEntries[pos] = {
-					pos:pos,idx:ch,lv:lv,grade:grade,items: [
-						gameData.items.enemyItem[`armor${lv}`],
-						gameData.items.enemyItem[`weapon${lv}`],
+					pos: pos,
+					idx: ch,
+					lv: lv,
+					grade: grade,
+					items: [
+						gameData.items.enemyItem[`armor${itemLv}`],
+						gameData.items.enemyItem[`weapon${itemLv}`],
 						gameData.items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
 						gameData.items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
 						gameData.items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
@@ -3887,11 +3892,40 @@ const Battle = ({
 						land = num % 3;
 					return (5 * landType) + land;
 				}),
-				entry:entryEntries,// 적군 생성
+				entry:entryEntries,
 			}
 		}
 		if (battleType === "moveEvent") {
-			const regionHeros = classification.region?.[paramData.battle.region] || classification.region?.[100];
+			const chArr = classification.region?.[paramData.battle.region] || classification.country[util.getStringToCountryIdx(paramData.battle.region)];
+			const itemLv = Math.floor(paramData.battle.enemy.lv / 10) * 10,
+				enemyCount = paramData.battle.enemy.enemyNum;
+			const heroArr = util.getRandomUnique(chArr, paramData.battle.enemy.heroNum),
+				posArr = Array.from({ length: 25 }, (_, idx) => idx);
+			const entryEntries = Array.from({ length: 25 }, (_) => {return {idx:'', lv:1 }});
+			for(let i = 0; i < enemyCount; i++) {
+				const isHero = heroArr[i];
+				const posIdx = Math.floor(Math.random() * posArr.length),
+					ch = typeof isHero === "number" ? heroArr[i] : Math.floor(Math.random() * 4 + 200),
+					pos = posArr[posIdx],
+					grade = Math.floor(Math.random() * 4);
+				posArr.splice(posIdx, 1);
+				entryEntries[pos] = {
+					pos: pos,
+					idx: ch,
+					lv: paramData.battle.enemy.lv,
+					grade: grade,
+					items: [
+						gameData.items.enemyItem[`armor${itemLv}`],
+						gameData.items.enemyItem[`weapon${itemLv}`],
+						gameData.items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+						gameData.items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+						gameData.items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+						gameData.items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+						gameData.items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+						gameData.items.enemyItem[`accessory${Math.floor(Math.random() * 14)}`],
+					]
+				}
+			}
 			return {
 				title: paramData.battle.title,
 				lineup: 0,
@@ -3901,16 +3935,7 @@ const Battle = ({
 						land = num % 3;
 					return (5 * landType) + land;
 				}),
-				entry: Array.from({length:10}, (v, idx) => ({pos:idx,idx:regionHeros[Math.round(Math.random() * (regionHeros.length - 1))],lv:1,grade:1,items:[
-					{idx:0, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
-					{idx:1, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
-					{idx:2, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
-					{idx:4, slot:0, hole:[],grade:1,color:["#fff","#0f0"],baseEff:[{type:4,num:['112']}],addEff:[]},
-					{},
-					{},
-					{},
-					{},
-				]})),
+				entry: entryEntries,
 			}
 		}
 	}, [gameData, battleType, paramData]);
@@ -4150,7 +4175,7 @@ const Battle = ({
 				fireR = saveCh.el9 + saveCh.iSt32 + (effData?.rtSt32 || 0),
 				windR = saveCh.el10 + saveCh.iSt33 + (effData?.rtSt33 || 0),
 				earthR = saveCh.el11 + saveCh.iSt34 + (effData?.rtSt34 || 0);
-			battleAlly.current.push({
+			const allyData = {
 				...saveCh,
 				na1: gameData.ch[saveCh.idx].na1[lang],
 				animal_type: gameData.ch[saveCh.idx].animal_type,
@@ -4205,7 +4230,10 @@ const Battle = ({
 				fireR:fireR,
 				windR:windR,
 				earthR:earthR,
-			});
+			}
+			allyData[paramData.battle.enemy.allyPenalty.type] *= (1 + (paramData.battle.enemy.allyPenalty.num / 100));
+			console.log(allyData[paramData.battle.enemy.allyPenalty.type]);
+			battleAlly.current.push(allyData);
 		});
 		allyPos.current = pos;
 		enemyPos.current = enemyP;
@@ -4902,7 +4930,7 @@ const Battle = ({
 					gameData.drop.country[enemyData.country],
 					gameData.drop.lv[Math.min(4, Math.floor(enemyData.lv / 10))],
 					gameData.drop.job[Array.isArray(enemyData.job) ? enemyData.job[0] : enemyData.job],
-					gameData.drop.stay[util.getCountryToIdx(util.loadData("saveData").info.stay)],
+					gameData.drop.stay[util.getStringToCountryIdx(util.loadData("saveData").info.stay)],
 				]);
 				const getItemNum = Math.max(1, Math.floor(Math.random() * gameData.drop.itemNum[battleType]));
 				

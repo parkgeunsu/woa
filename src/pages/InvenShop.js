@@ -199,7 +199,7 @@ const ShopList = ({
 					num={SHOP_HORIZONTAL_NUM}
 					key={`items${idx}`}
 					grade={grade}
-					{...(!isInven && {text: itemPrice.buy.str})}
+					{...(!isInven ? {text: itemPrice.buy.str} : {text: itemData?.num})}
 					onClick={() => {
 						setPopupType("item");
 						let buttons = [];
@@ -467,7 +467,6 @@ const InvenShop = ({
 													saveData={sData}
 													shopType={shopType} 
 													list={invenData}
-													isInven={true}
 													selectTab={selectTab} 
 													setPopupType={setPopupType}
 													setPopupInfo={setPopupInfo}
@@ -518,6 +517,7 @@ const InvenShop = ({
 										saveData={sData}
 										shopType={shopType}
 										list={scrollData}
+										isInven={true}
 										selectTab={selectTab}
 										setPopupType={setPopupType}
 										setPopupInfo={setPopupInfo}
